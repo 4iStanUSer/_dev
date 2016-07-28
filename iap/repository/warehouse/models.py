@@ -1,7 +1,7 @@
 '''
 Module contains db models definition.
 '''
-from flask_login import UserMixin
+#from flask_login import UserMixin
 from sqlalchemy import (Table, Column, Integer, String, Float, Boolean, 
                         MetaData, ForeignKey, Date)
 from sqlalchemy.orm import relationship, backref

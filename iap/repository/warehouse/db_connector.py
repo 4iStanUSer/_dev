@@ -34,4 +34,4 @@ class DBConnector():
         '''
         return self.__db_session
 
-    
+

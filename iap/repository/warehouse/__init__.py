@@ -3,7 +3,7 @@ DB Pakage works directly with database via interface.
 db_connector is instance of base connection to data base.
 warh_... instances of warehouse managers.
 '''
-
+'''
 from .db_connector import DBConnector
 from .warehouse_common import WarehouseCommon
 from .warehouse_access import WarehouseAccess
@@ -137,5 +137,5 @@ def test():
         get_role_perm1 = warh_access.get_role_perms(new_role_perm1)
         new_role_perm1 = warh_access.update_role_perms(new_role2, [6, 7])
 
-
+'''
 
