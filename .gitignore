@@ -1,0 +1,7 @@
+
+*.sqlite
+*.pyc
+env/
+__pycache__/
+.idea/
+data_processing/test_inputs/

@@ -1,0 +1,12 @@
+.menu-row {
+    background: #205081;
+    color: #fff;
+    border-bottom-color: #2e3d54;
+    padding: 5px 10px;
+}
+.menu-item-link {
+    color:#fff;
+}
+.menu-item-link.disabled {
+    color:gray;
+}

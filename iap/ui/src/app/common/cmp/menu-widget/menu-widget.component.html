@@ -1,0 +1,34 @@
+<div class="menu-row">
+    <ul class="list-inline">
+        <li class="dropdown inline" *ngFor="let item of items; let idx = index">
+            <a type="button"
+               href="#"
+               role="button"
+               class="menu-item-link dropdown-toggle"
+               data-toggle="dropdown"
+               [attr.disabled]="item.disabled"
+               [class.disabled]="item.disabled"
+               [attr.id]="'header-menu-' + idx"
+               (click)="_onClickItem($event, item)">
+                <span [outerHTML]="item.name"></span>
+                <b *ngIf="item.children && item.children.length" class="caret"></b>
+            </a>
+
+            <ul *ngIf="item.children && item.children.length"
+                class="dropdown-menu"
+                role="menu"
+                [attr.aria-labelledby]="'header-menu-' + idx">
+                <li *ngFor="let subitem of item.children">
+                    <a tabindex="-1"
+                       href="#"
+                       class="menu-item-link"
+                       [attr.disabled]="subitem.disabled"
+                       [class.disabled]="subitem.disabled"
+                       (click)="_onClickItem($event, subitem)">
+                        <span [outerHTML]="subitem.name"></span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>

@@ -1,0 +1,3 @@
+[run]
+source = iap
+omit = iap/test*
