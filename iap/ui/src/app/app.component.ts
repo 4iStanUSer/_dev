@@ -4,14 +4,17 @@ import { Router } from '@angular/router';
 import * as _ from 'lodash';
 import { MenuWidgetComponent } from './common/cmp/menu-widget/';
 //import { DatepickerComponent } from './components/datepicker.component';
-//import { RequestService, Loading } from './services/request.service';
-//import { MachineGunnerService } from './services/machinegunner.service';
+import { AjaxService, Loading } from './common/service/request.service';
+import { MachineGunnerService } from './common/service/machine-gunner.service';
+import { IndexPageService } from "./forecast/service/index-page.service";
+
+
 
 @Component({
     moduleId: module.id,
     selector: 'app-root',
     directives: [ROUTER_DIRECTIVES, MenuWidgetComponent],
-    //providers: [RequestService, Loading, MachineGunnerService],
+    providers: [AjaxService, Loading, MachineGunnerService], //IndexPageService
     templateUrl: 'app.component.html',
     styleUrls: ['app.component.css']
 })

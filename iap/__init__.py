@@ -10,7 +10,9 @@ def common_routing(config):
     """
     Configure common routing
     """
-    config.add_static_view(name='static', path='iap.ui:dist') #, cache_max_age=3600
+    config.add_static_view(name='static', path='iap.ui:dist')
+    config.add_static_view(name='images', path='iap.ui:images',
+                           cache_max_age=3600)
 
     config.add_notfound_view(common.notfound_view)
     config.add_forbidden_view(common.forbidden_view)
@@ -44,8 +46,17 @@ def forecast_routing(config):
     config.add_route('forecast.index', '/')
     config.add_view(forecast.index, route_name='forecast.index')
 
-    config.add_route('forecast.get_time_series', '/get_time_series')
-    config.add_view(forecast.get_time_series, route_name='forecast.get_time_series', renderer='json')
+    config.add_route('forecast.get_time_series',
+                     '/get_time_series')
+    config.add_view(forecast.get_time_series,
+                    route_name='forecast.get_time_series',
+                    request_method='POST', renderer='json')
+
+    config.add_route('forecast.get_dimension_selector',
+                     '/get_dimension_selector')
+    config.add_view(forecast.get_dimension_selector,
+                    route_name='forecast.get_dimension_selector',
+                    request_method='POST', renderer='json')
 
 
 

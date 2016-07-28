@@ -3,7 +3,9 @@ import { TimeseriesWidgetComponent } from './../../common/cmp/timeseries-widget/
 import { HierarchyWidgetComponent } from './../../common/cmp/hierarchy-widget/';
 import { DropdownComponent } from './../../common/cmp/dropdown/';
 // import { NavagationPanelComponent } from './../components/navigation_panel.component';
-// import { RequestService } from './../services/request.service';
+import { IndexPageService } from './../service/index-page.service';
+
+// import { AjaxService } from './../../common/service/request.service';
 
 @Component({
     moduleId: module.id,
@@ -14,7 +16,7 @@ import { DropdownComponent } from './../../common/cmp/dropdown/';
         // NavagationPanelComponent,
         DropdownComponent
     ],
-    providers: [],
+    providers: [IndexPageService],
     styles: [
         `#nav_panel {
 background: #908c8c;
@@ -64,23 +66,64 @@ export class IndexPageComponent {
     //    //    { newItem: newMenuItem, position: 0 });
     //}
 
-    // constructor(private request: RequestService) { }
+    constructor(private pageService: IndexPageService) { }
 
-    private get_data_: Object = {};
+    public hierarchyItemSelect(item) {
+        console.info(item);
+        this.pageService
+            .get_time_series()
+            .subscribe((d) => {
+                this.__TIMESERIES = d;
+            });
+    }
+    public __TIMESERIES: any = null; //Array<Object>
+    public __HIERARCHY_ITEMS: any = null; //Array<Object>
+    public __HIERARCHY_ITEMS1: any = null; //Array<Object>
     ngOnInit() {
+
+        this.pageService
+            .get_time_series()
+            .subscribe((d) => {
+                this.__TIMESERIES = d;
+            });
+        this.pageService
+            .get_dimension('one')
+            .subscribe((d) => {
+                this.__HIERARCHY_ITEMS = d;
+            });
+        this.pageService
+            .get_dimension('two')
+            .subscribe((d) => {
+                this.__HIERARCHY_ITEMS1 = d;
+            });
         // this.request
         //     .get({
-        //         url: '/forecasting/get_data',
+        //         url: '/forecast/get_dimension_selector',
         //         data: {
-        //             param: '123',
-        //             param2: 456,
-        //             param3: [7, 8, 9]
+        //             dimension: 'one'
         //         }
         //     })
         //     .subscribe(
         //         (d) => {
-        //             console.log(d);
-        //             this.get_data_ = d;
+        //             this.__HIERARCHY_ITEMS = d;
+        //         },
+        //         (e) => {
+        //             console.log(e);
+        //         },
+        //         () => {
+        //             console.log('Complete!');
+        //         }
+        // );
+        // this.request
+        //     .get({
+        //         url: '/forecast/get_dimension_selector',
+        //         data: {
+        //             dimension: 'two'
+        //         }
+        //     })
+        //     .subscribe(
+        //         (d) => {
+        //             this.__HIERARCHY_ITEMS1 = d;
         //         },
         //         (e) => {
         //             console.log(e);
@@ -136,202 +179,199 @@ export class IndexPageComponent {
     ];
     /***********DROPDOWN*************/
     /***********TIMESERIES*************/
-    public __TIMESERIES: Array<Object> = [
-        {
-            head: [
-                {
-                    value: 'Population',
-                    meta: 'Variable'
-                },
-                {
-                    value: 'Billion',
-                    meta: 'Metric'
-                }
-            ],
-            cells: [
-                {
-                    value: 123,
-                    valueType: 'int',
-                    meta: 'April'
-                },
-                {
-                    value: 124,
-                    valueType: 'int',
-                    meta: 'May'
-                },
-                {
-                    value: 125,
-                    valueType: 'int',
-                    meta: 'June'
-                },
-                {
-                    value: 126,
-                    valueType: 'int',
-                    meta: 'July'
-                }
-            ],
-            options: {}
-        },
-        {
-            head: [
-                {
-                    value: 'GDP',
-                    meta: 'Variable'
-                },
-                {
-                    value: '$',
-                    meta: 'Metric'
-                }
-            ],
-            cells: [
-                {
-                    value: 1230,
-                    valueType: 'int',
-                    meta: 'April'
-                },
-                {
-                    value: 1240,
-                    valueType: 'int',
-                    meta: 'May'
-                },
-                {
-                    value: 1250,
-                    valueType: 'int',
-                    meta: 'June'
-                },
-                {
-                    value: 1260,
-                    valueType: 'int',
-                    meta: 'July'
-                }
-            ],
-            options: {}
-        }
-    ]
+    // public __TIMESERIES: Array<Object> = [
+    //     {
+    //         head: [
+    //             {
+    //                 value: 'Population',
+    //                 meta: 'Variable'
+    //             },
+    //             {
+    //                 value: 'Billion',
+    //                 meta: 'Metric'
+    //             }
+    //         ],
+    //         cells: [
+    //             {
+    //                 value: 123,
+    //                 valueType: 'int',
+    //                 meta: 'April'
+    //             },
+    //             {
+    //                 value: 124,
+    //                 valueType: 'int',
+    //                 meta: 'May'
+    //             },
+    //             {
+    //                 value: 125,
+    //                 valueType: 'int',
+    //                 meta: 'June'
+    //             },
+    //             {
+    //                 value: 126,
+    //                 valueType: 'int',
+    //                 meta: 'July'
+    //             }
+    //         ],
+    //         options: {}
+    //     },
+    //     {
+    //         head: [
+    //             {
+    //                 value: 'GDP',
+    //                 meta: 'Variable'
+    //             },
+    //             {
+    //                 value: '$',
+    //                 meta: 'Metric'
+    //             }
+    //         ],
+    //         cells: [
+    //             {
+    //                 value: 1230,
+    //                 valueType: 'int',
+    //                 meta: 'April'
+    //             },
+    //             {
+    //                 value: 1240,
+    //                 valueType: 'int',
+    //                 meta: 'May'
+    //             },
+    //             {
+    //                 value: 1250,
+    //                 valueType: 'int',
+    //                 meta: 'June'
+    //             },
+    //             {
+    //                 value: 1260,
+    //                 valueType: 'int',
+    //                 meta: 'July'
+    //             }
+    //         ],
+    //         options: {}
+    //     }
+    // ]
     public __TIMESERIES_OPT = {}
 
     /***********.TIMESERIES*************/
 
     /***********HIERARCHY_WIDGET*************/
-    public hierarchyItemSelect(item) {
-        console.info('App Component, in hierarchy widget selected item');
-        console.info(item)
-    }
-    public __HIERARCHY_ITEMS: Array<Object> = [
-        {
-            "id": 27536, "text": "New node", "type": "parent",
-            "state": {
-                "opened": true,
-                "disabled": false,
-                "selected": true
-            },
-            "children": [
-                { "id": 27524, "text": "ss", "type": "parent", "children": false },
-                { "id": 27521, "text": "ss", "type": "child", "children": false }
-            ]
-        },
-        {
-            "id": 27529, "text": "New node", "type": "parent", "children": false
-        },
-        {
-            "id": 27532, "text": "New node", "type": "child",
-            "state": {
-                "opened": false,
-                "disabled": true,
-                "selected": false
-            },
-            "children": false
-        },
-        {
-            "id": 27538, "text": "New node", "type": "parent",
-            "state": {
-                "opened": false,
-                "disabled": false,
-                "selected": false
-            },
-            "children": [
-                { "id": 7524, "text": "ss", "type": "parent", "children": false },
-                { "id": 7521, "text": "ss", "type": "child", "children": false }
-            ]
-        }
-    ];
-    public __HIERARCHY_ITEMS1 = [
-        {
-            id: 1, text: 'root1',
-            "state": {
-                "opened": false,
-                "disabled": false,
-                "selected": false
-            },
-            children: [
-                {
-                    id: 2,
-                    text: 'child1',
-                    "state": {
-                        "opened": false,
-                        "disabled": false,
-                        "selected": true
-                    },
-                }, {
-                    id: 3,
-                    text: 'child2',
-                    "state": {
-                        "opened": false,
-                        "disabled": false,
-                        "selected": false
-                    },
-                }
-            ]
-        },
-        {
-            id: 4,
-            text: 'root2',
-            "state": {
-                "opened": true,
-                "disabled": true,
-                "selected": false
-            },
-            children: [
-                {
-                    id: 5,
-                    text: 'child2.1',
-                    "state": {
-                        "opened": false,
-                        "disabled": false,
-                        "selected": false
-                    },
-                },
-                {
-                    id: 6,
-                    text: 'child2.2',
-                    "state": {
-                        "opened": false,
-                        "disabled": false,
-                        "selected": false
-                    },
-                    children: [
-                        {
-                            id: 7,
-                            text: 'subsub',
-                            "state": {
-                                "opened": false,
-                                "disabled": false,
-                                "selected": false
-                            },
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            id: 8,
-            text: 'asyncroot',
-            "state": {
-                "opened": false,
-                "disabled": false,
-                "selected": false
-            },
-        }
-    ];
+
+    // public __HIERARCHY_ITEMS: Array<Object> = [
+    //     {
+    //         "id": 27536, "text": "New node", "type": "parent",
+    //         "state": {
+    //             "opened": true,
+    //             "disabled": false,
+    //             "selected": true
+    //         },
+    //         "children": [
+    //             { "id": 27524, "text": "ss", "type": "parent", "children": false },
+    //             { "id": 27521, "text": "ss", "type": "child", "children": false }
+    //         ]
+    //     },
+    //     {
+    //         "id": 27529, "text": "New node", "type": "parent", "children": false
+    //     },
+    //     {
+    //         "id": 27532, "text": "New node", "type": "child",
+    //         "state": {
+    //             "opened": false,
+    //             "disabled": true,
+    //             "selected": false
+    //         },
+    //         "children": false
+    //     },
+    //     {
+    //         "id": 27538, "text": "New node", "type": "parent",
+    //         "state": {
+    //             "opened": false,
+    //             "disabled": false,
+    //             "selected": false
+    //         },
+    //         "children": [
+    //             { "id": 7524, "text": "ss", "type": "parent", "children": false },
+    //             { "id": 7521, "text": "ss", "type": "child", "children": false }
+    //         ]
+    //     }
+    // ];
+    // public __HIERARCHY_ITEMS1 = [
+    //     {
+    //         id: 1, text: 'root1',
+    //         "state": {
+    //             "opened": false,
+    //             "disabled": false,
+    //             "selected": false
+    //         },
+    //         children: [
+    //             {
+    //                 id: 2,
+    //                 text: 'child1',
+    //                 "state": {
+    //                     "opened": false,
+    //                     "disabled": false,
+    //                     "selected": true
+    //                 },
+    //             }, {
+    //                 id: 3,
+    //                 text: 'child2',
+    //                 "state": {
+    //                     "opened": false,
+    //                     "disabled": false,
+    //                     "selected": false
+    //                 },
+    //             }
+    //         ]
+    //     },
+    //     {
+    //         id: 4,
+    //         text: 'root2',
+    //         "state": {
+    //             "opened": true,
+    //             "disabled": true,
+    //             "selected": false
+    //         },
+    //         children: [
+    //             {
+    //                 id: 5,
+    //                 text: 'child2.1',
+    //                 "state": {
+    //                     "opened": false,
+    //                     "disabled": false,
+    //                     "selected": false
+    //                 },
+    //             },
+    //             {
+    //                 id: 6,
+    //                 text: 'child2.2',
+    //                 "state": {
+    //                     "opened": false,
+    //                     "disabled": false,
+    //                     "selected": false
+    //                 },
+    //                 children: [
+    //                     {
+    //                         id: 7,
+    //                         text: 'subsub',
+    //                         "state": {
+    //                             "opened": false,
+    //                             "disabled": false,
+    //                             "selected": false
+    //                         },
+    //                     }
+    //                 ]
+    //             }
+    //         ]
+    //     },
+    //     {
+    //         id: 8,
+    //         text: 'asyncroot',
+    //         "state": {
+    //             "opened": false,
+    //             "disabled": false,
+    //             "selected": false
+    //         },
+    //     }
+    // ];
     /***********.HIERARCHY_WIDGET*************/
 }

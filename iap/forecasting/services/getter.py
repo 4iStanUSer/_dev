@@ -73,3 +73,138 @@ def get_time_series():
             'options': {}
         }
     ]
+
+
+def get_hierarchy():
+    return [
+        {
+            "id": 27536, "text": "New node", "type": "parent",
+            "state": {
+                "opened": True,
+                "disabled": False,
+                "selected": True
+            },
+            "children": [
+                {
+                    "id": 27524, "text": "ss", "type": "parent",
+                    "children": False
+                },
+                {
+                    "id": 27521, "text": "ss", "type": "child",
+                    "children": False
+                }
+            ]
+        },
+        {
+            "id": 27529, "text": "New node", "type": "parent",
+            "children": False
+        },
+        {
+            "id": 27532, "text": "New node", "type": "child",
+            "state": {
+                "opened": False,
+                "disabled": True,
+                "selected": False
+            },
+            "children": False
+        },
+        {
+            "id": 27538, "text": "New node", "type": "parent",
+            "state": {
+                "opened": False,
+                "disabled": False,
+                "selected": False
+            },
+            "children": [
+                {
+                    "id": 7524, "text": "ss", "type": "parent",
+                    "children": False
+                },
+                {
+                    "id": 7521, "text": "ss", "type": "child",
+                    "children": False
+                }
+            ]
+        }
+    ]
+
+
+def get_hierarchy1():
+    return [
+        {
+            'id': 1, 'text': 'root1',
+            "state": {
+                "opened": False,
+                "disabled": False,
+                "selected": False
+            },
+            'children': [
+                {
+                    'id': 2,
+                    'text': 'child1',
+                    "state": {
+                        "opened": False,
+                        "disabled": False,
+                        "selected": True
+                    },
+                }, {
+                    'id': 3,
+                    'text': 'child2',
+                    "state": {
+                        "opened": False,
+                        "disabled": False,
+                        "selected": False
+                    },
+                }
+            ]
+        },
+        {
+            'id': 4,
+            'text': 'root2',
+            "state": {
+                "opened": True,
+                "disabled": True,
+                "selected": False
+            },
+            'children': [
+                {
+                    'id': 5,
+                    'text': 'child2.1',
+                    "state": {
+                        "opened": False,
+                        "disabled": False,
+                        "selected": False
+                    },
+                },
+                {
+                    'id': 6,
+                    'text': 'child2.2',
+                    "state": {
+                        "opened": False,
+                        "disabled": False,
+                        "selected": False
+                    },
+                    'children': [
+                        {
+                            'id': 7,
+                            'text': 'subsub',
+                            "state": {
+                                "opened": False,
+                                "disabled": False,
+                                "selected": False
+                            },
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            'id': 8,
+            'text': 'asyncroot',
+            "state": {
+                "opened": False,
+                "disabled": False,
+                "selected": False
+            },
+        }
+    ]
