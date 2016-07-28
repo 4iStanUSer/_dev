@@ -1,5 +1,5 @@
-from IAP.repository.warehouse import exceptions as ex
-from IAP.data_processing.processors.common import date_func, get_last_col
+from iap.repository.warehouse import exceptions as ex
+from iap.data_processing.processors.common import date_func, get_last_col
 
 def jj_aoc(wb, meta_cols, data_cols, dates_cols):
     #ws = wb.sheet_by_index(1)

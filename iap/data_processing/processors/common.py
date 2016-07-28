@@ -1,4 +1,4 @@
-from IAP.repository.warehouse import exceptions as ex
+from iap.repository.warehouse import exceptions as ex
 
 def date_func(date_cols, data_row, index=-1):
     for key, val in date_cols.items():
@@ -17,7 +17,7 @@ def get_last_col(ws, header_row):
     last_col = 0
     for col_index in range(len(header_row)):
         if header_row[col_index].ctype == 0:
-            last_col = col_index
+            last_col = col_index + 1
             break
         if col_index == 0:
             continue
