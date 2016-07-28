@@ -38,9 +38,15 @@ def forecast_routing(config):
     # config.add_static_view('forecast.static', 'static', cache_max_age=3600)#CONFIGURE
 
     # http://docs.pylonsproject.org/projects/pyramid/en/latest/api/config.html#pyramid.config.Configurator.add_view
-    config.add_route('forecast.index', '/')
+
     # TODO Add redirect
+    #context='myproject.resources.Hello', renderer='json' !!!!!!
+    config.add_route('forecast.index', '/')
     config.add_view(forecast.index, route_name='forecast.index')
+
+    config.add_route('forecast.get_time_series', '/get_time_series')
+    config.add_view(forecast.get_time_series, route_name='forecast.get_time_series', renderer='json')
+
 
 
 # def wsgi_app(global_config, **settings):
