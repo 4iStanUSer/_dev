@@ -31,7 +31,7 @@ def index_view(request):
     #user = request.user
     #if user is None:
     #    raise HTTPForbidden
-    test_jj_oc_data()
+    # test_jj_oc_data()
     # test_processing_data()
 
     #return Response('<h1>Hello world!</h1>')
