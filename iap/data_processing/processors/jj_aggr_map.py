@@ -1,4 +1,4 @@
-from IAP.repository.warehouse import exceptions as ex
+from iap.repository.warehouse import exceptions as ex
 
 def data_aggr_processor(proc_data, map_func):
     aggr = DataAggregate(proc_data, dates_souce='weekly', 
