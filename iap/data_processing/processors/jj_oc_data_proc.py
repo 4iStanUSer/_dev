@@ -3,8 +3,8 @@ from iap.data_processing.processors.common import get_last_col
 import collections
 
 
-def jj_oc_sales(wb, info, meta_cols, name_col_num, dates_info, prop_info,
-                date_func):
+def jj_oc_data_proc(wb, info, meta_cols, name_col_num, dates_info, prop_info,
+                    date_func):
     ws = wb.sheet_by_index(0)
     output = []
     # Initialize data start

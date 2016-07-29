@@ -1,6 +1,6 @@
 import os
 from iap.data_processing.data_proc_manager import DataUploadManager
-from iap.data_processing.processors import jj_aoc, jj_extract, jj_oc_sales
+from iap.data_processing.processors import jj_aoc, jj_extract, jj_oc_data_proc
 from iap.data_processing.processors.jj_aggr_map import DataAggregate
 from iap.data_processing.processors.common import date_year_month, date_year
 import collections
@@ -8,7 +8,7 @@ import collections
 
 def test_jj_oc_data():
     func_list = {'jj_oc_input_sales_data':
-                    {'func': jj_oc_sales,
+                    {'func': jj_oc_data_proc,
                      'date_func': date_year_month,
                      'info': {'header_row': 2, 'data_row': 3},
                      'meta_cols': collections.OrderedDict(
@@ -20,7 +20,7 @@ def test_jj_oc_data():
                                     'start_column': 6,
                                     'end_column': ''}},
                  'jj_oc_input_trends':
-                    {'func': jj_oc_sales,
+                    {'func': jj_oc_data_proc,
                      'date_func': date_year,
                      'info': {'header_row': 1, 'data_row': 2},
                      'meta_cols': collections.OrderedDict({0: ''}),
@@ -38,7 +38,6 @@ def test_jj_oc_data():
     file_path = os.path.join(data_proc_path, 'test_inputs',
                              'jj_oc_input_trends.xlsx')
     upload_manager.jj_oc_process_files(file_path, func_list)
-    print('Done!')
 
 
 def test_processing_data():
