@@ -1,17 +1,17 @@
 from iap.repository.warehouse import exceptions as ex
 from iap.data_processing.processors.common import date_func, get_last_col
 
+
 def jj_aoc(wb, meta_cols, data_cols, dates_cols):
-    #ws = wb.sheet_by_index(1)
+    # ws = wb.sheet_by_index(1)
     ws = wb.sheet_by_name('Report1')
     output = []
     # Initialize data start
     data_header_row_index = 0
     start_meta_row = 0
-    last_meta_row = 0
     for row_index in range(ws.nrows):
         desc_val = str(ws.cell(row_index, 0).value)
-        #if  isinstance(curr_val, str):
+        # if  isinstance(curr_val, str):
         desc_val = desc_val.strip().lower()
         if desc_val == 'description':
             data_header_row_index = row_index
@@ -33,7 +33,7 @@ def jj_aoc(wb, meta_cols, data_cols, dates_cols):
             last_facts_row = __get_last_facts_row(ws, row_index+1, ws.nrows, 
                                                   last_col)
             # Looking for rows which go by columns
-            for col_index in range(1,last_col):
+            for col_index in range(1, last_col):
                 new_row = {}
                 data_column = ws.col(col_index)
                 meta = __get_meta(meta_column, meta_cols, start_meta_row, 
@@ -51,6 +51,7 @@ def jj_aoc(wb, meta_cols, data_cols, dates_cols):
         row_index = row_index + 1
     return output
 
+
 def __get_data(data_column, meta_column, start_facts_row, last_facts_row):
     new_data = {}
     for row_index in range(start_facts_row, last_facts_row + 1):
@@ -58,6 +59,7 @@ def __get_data(data_column, meta_column, start_facts_row, last_facts_row):
         desc_val = str(meta_column[row_index].value).strip()
         new_data[desc_val] = data_val
     return new_data
+
 
 def __get_meta(meta_column, meta_cols, start_meta_row, last_meta_row):
     new_meta = {}
@@ -67,6 +69,7 @@ def __get_meta(meta_column, meta_cols, start_meta_row, last_meta_row):
         new_meta[meta_cols[meta_index]] = desc_val
         meta_index = meta_index + 1
     return new_meta
+
 
 def __get_last_facts_row(ws, start_facts_row, last_row, last_col):
     last_facts_row = 0

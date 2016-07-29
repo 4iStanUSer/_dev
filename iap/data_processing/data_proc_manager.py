@@ -2,10 +2,7 @@ import os
 import io
 import xlrd
 from csv import DictReader
-
-
 from datetime import datetime
-
 
 
 class DataUploadManager():
@@ -14,7 +11,7 @@ class DataUploadManager():
         func_list is a dictionary with a:
         1) list of functions which append
         to the file path
-        2) list of meta columns: names and numbers
+        2) list of meta columns: ordered names and numbers (+hierarchy)
         3) list of data column: names and numbers
         4) list of dates columns: string and numbers
         '''
@@ -27,6 +24,7 @@ class DataUploadManager():
             # Define options for the file
             options_list = func_list[file_name]
             info = options_list['info']
+            date_func = options_list['date_func']
             prop_cols = options_list['properties']
             run_method = options_list['func']
             meta_cols = options_list['meta_cols']
@@ -34,7 +32,7 @@ class DataUploadManager():
             dates_cols = options_list['dates_cols']
             # Run method
             output = run_method(read_obj, info, meta_cols, name_col_num,
-                                dates_cols, prop_cols)
+                                dates_cols, prop_cols, date_func)
             return output
         except Exception as err:
             print('Exception')
@@ -76,6 +74,7 @@ class DataUploadManager():
             wb = xlrd.open_workbook(file_contents=file.read())
             return wb
         return None
+
 
 class InsDictReader(DictReader):
 

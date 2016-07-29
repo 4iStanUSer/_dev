@@ -2,32 +2,44 @@ import os
 from iap.data_processing.data_proc_manager import DataUploadManager
 from iap.data_processing.processors import jj_aoc, jj_extract, jj_oc_sales
 from iap.data_processing.processors.jj_aggr_map import DataAggregate
+from iap.data_processing.processors.common import date_year_month, date_year
 import collections
+
 
 def test_jj_oc_data():
     func_list = {'jj_oc_input_sales_data':
                     {'func': jj_oc_sales,
+                     'date_func': date_year_month,
                      'info': {'header_row': 2, 'data_row': 3},
                      'meta_cols': collections.OrderedDict(
                          {0: '', 1: '', 2: 'NewBrand', 3: ''}),
                      'name_col': 4,
                      'properties': {5: 'Metric'},
                      'dates_cols': {'scale': 'monthly',
-                                    'date_name_rows': [0, 1, 2],
+                                    'date_name_rows': [0, 2],
                                     'start_column': 6,
                                     'end_column': ''}},
-                 'xxx':
-                    {'func': 'y',
-                     'meta_cols': {3: 'LVL1', 5: 'LVL2', 6: ''},
-                     'data_cols': {8: 'A', 10: 'B', 11: 'C', 12: 'D'},
-                     'dates_cols': {0: 'campaign'}}
+                 'jj_oc_input_trends':
+                    {'func': jj_oc_sales,
+                     'date_func': date_year,
+                     'info': {'header_row': 1, 'data_row': 2},
+                     'meta_cols': collections.OrderedDict({0: ''}),
+                     'name_col': 1,
+                     'properties': {2: 'Facts', 3: '', 4: ''},
+                     'dates_cols': {'scale': 'years',
+                                    'date_name_rows': [1],
+                                    'start_column': 5,
+                                    'end_column': ''}},
                  }
     data_proc_path = os.path.dirname(os.path.abspath(__file__))
     upload_manager = DataUploadManager()
+    # file_path = os.path.join(data_proc_path, 'test_inputs',
+    #                          'jj_oc_input_sales_data.xlsx')
     file_path = os.path.join(data_proc_path, 'test_inputs',
-                             'jj_oc_input_sales_data.xlsx')
+                             'jj_oc_input_trends.xlsx')
     upload_manager.jj_oc_process_files(file_path, func_list)
     print('Done!')
+
 
 def test_processing_data():
     func_list = {'MyReport (Benadryl SI Other Accaunts)': 
