@@ -1,4 +1,4 @@
-from iap.repository.warehouse import exceptions as ex
+from iap.repository import exceptions as ex
 import datetime
 
 def date_func(date_cols, data_row, index=-1):

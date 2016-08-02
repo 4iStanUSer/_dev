@@ -1,4 +1,4 @@
-from iap.repository.warehouse import exceptions as ex
+from iap.repository import exceptions as ex
 from iap.data_processing.processors.common import get_last_col
 import collections
 
