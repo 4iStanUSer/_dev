@@ -208,3 +208,43 @@ def get_hierarchy1():
             },
         }
     ]
+
+
+def get_dropdown():
+    return [
+        {
+            "id": 27524, "text": "First variant",
+            "state": {
+                "disabled": False,
+                "selected": False
+            },
+        },
+        {
+            "id": 27525, "text": "ss1",
+            "state": {
+                "disabled": True,
+                "selected": False
+            },
+        },
+        {
+            "id": 27526, "text": "ss2",
+            "state": {
+                "disabled": False,
+                "selected": False
+            },
+        },
+        {
+            "id": 27527, "text": "dd",
+            "state": {
+                "disabled": False,
+                "selected": False
+            },
+        },
+        {
+            "id": 27530, "text": "Some another",
+            "state": {
+                "disabled": False,
+                "selected": True
+            },
+        },
+    ]

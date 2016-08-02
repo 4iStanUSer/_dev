@@ -23,19 +23,39 @@ def index(req):
                               request=req)
 
 
-def get_time_series(req):
-    return do_success_response(getter_service.get_time_series())
-
-
-def get_dimension_selector(req):
-    if not req.json.get('dimension') or \
-                    req.json.get('dimension') not in ['one', 'two']:
-        return do_error_response('Wrong dimension')
-
-    if req.json.get('dimension') == 'one':
-        data = getter_service.get_hierarchy()
-    elif req.json.get('dimension') == 'two':
-        data = getter_service.get_hierarchy1()
-
+def get_index_page_data(req):
+    # Get input data
+    data = {
+        'nav_panel': {
+            'order': ['product_dimension', 'region_dimension', 'timeseria_dimension'],
+            'dimensions': [
+                {
+                    'name': 'product_dimension',
+                    'widget': 'hierarchy',
+                    'data': getter_service.get_hierarchy()
+                },
+                {
+                    'name': 'region_dimension',
+                    'widget': 'hierarchy',
+                    'data': getter_service.get_hierarchy1()
+                },
+                {
+                    'name': 'timeseria_dimension',
+                    'widget': 'dropdown',
+                    'data': getter_service.get_dropdown()
+                }
+            ]
+        },
+        'content': {
+            'order': ['drivers_grid'],
+            'zones': [
+                {
+                    'name': 'drivers_grid',
+                    'widget': 'timeseries',
+                    'data': getter_service.get_time_series()
+                }
+            ]
+        }
+    }
     return do_success_response(data)
 

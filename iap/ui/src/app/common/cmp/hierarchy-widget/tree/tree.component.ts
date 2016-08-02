@@ -153,15 +153,36 @@ export class TreeComponent implements OnChanges {
     private _selectedNodes: Array<TreeNodeModel> = [];
     private _mapping: Object = {};
 
-    @Input() set items(items: Array<Object>) { };
+    @Input() set items(items: Array<Object>) {
+        console.info('TreeComponent: set items');
+        this._selectedNodes = []; //TODO TEST
+        let root = {
+            virtual: true,
+            id: '#',
+            children: (items.length) ? items : []
+        };
+        this._root = this._generateTree(root, null);
+        // get selected nodes
+        this._nodes = this._root.children;
+        // Fire up current selection
+        if (!this._options.multiple) { // Single
+            let selection = (this._selectedNodes && this._selectedNodes[0])
+                ? this._selectedNodes[0].id : null;
+            this.currentSelection.emit({
+                'id': selection
+            });
+        } else { // TODO Multiple
+        }
+    };
     @Input() set options(options: TreeOptions) { };
     @Input() set forcedSelect(node_id: string) { };
     @Output() changeSelection = new EventEmitter();
+    @Output() currentSelection = new EventEmitter();
 
     constructor() { }
 
     ngOnChanges(c) {
-        console.log('TreeComponent ngOnChanges');
+        console.info('TreeComponent ngOnChanges');
         let options = ('options' in c) ? c.options.currentValue : null;
         let items = ('items' in c) ? c.items.currentValue : null;
         let forcedSelect = ('forcedSelect' in c)
@@ -170,16 +191,7 @@ export class TreeComponent implements OnChanges {
         if (options) {
             this._options = new TreeOptions(c['options']);
         }
-        if (items) {
-            let root = {
-                virtual: true,
-                id: '#',
-                children: (items.length) ? items : []
-            };
-            this._root = this._generateTree(root, null);
-            // get selected nodes
-            this._nodes = this._root.children;
-        }
+        if (items) { }
         if (forcedSelect) {
             if (forcedSelect == '#') {
                 this._deselectAllSelected();

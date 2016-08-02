@@ -6,29 +6,10 @@ export class IndexPageService {
 
     constructor(private req: AjaxService) { }
 
-    public get_dimension(dimension_name: string) {
-
+    public get_index_page_data(selection){
         return this.req.get({
-            url: '/forecast/get_dimension_selector',
-            data: {
-                dimension: dimension_name,
-                asd: {
-                    asd1: 123,
-                    asd2: [1, 2, 'rty']
-                },
-                qwe: [
-                    1, 2, 'rty'
-                ]
-            }
+            url: '/forecast/get_index_page_data',
+            data: selection
         });
     }
-
-    public get_time_series() {
-        return this.req.get({
-            url: '/forecast/get_time_series',
-            data: { }
-        });
-    }
-
-
 }

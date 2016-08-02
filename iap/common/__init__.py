@@ -20,19 +20,17 @@ def notfound_view(request):
     request.response.status = 404
     return {}
 
+
 def forbidden_view(request):
     next_url = request.route_url('common.login', _query={'next': request.url})
     return HTTPFound(location=next_url)
 
-def index_view(request):
-    #user = request.user
-    #if user is None:
-    #    raise HTTPForbidden
 
-    #return Response('<h1>Hello world!</h1>')
+def index_view(request):
     return render_to_response('templates/index.jinja2',
-                       {'title': 'Forecast index'},
-                       request=request)
+                              {'title': 'Forecast index'},
+                              request=request)
+
 
 def login_view(request):
     next_url = request.params.get('next', request.referrer)
@@ -58,6 +56,7 @@ def login_view(request):
     return render_to_response('templates/login.jinja2',
                               data,
                               request=request)
+
 
 def logout_view(request):
     headers = forget(request)

@@ -46,18 +46,11 @@ def forecast_routing(config):
     config.add_route('forecast.index', '/')
     config.add_view(forecast.index, route_name='forecast.index')
 
-    config.add_route('forecast.get_time_series',
-                     '/get_time_series')
-    config.add_view(forecast.get_time_series,
-                    route_name='forecast.get_time_series',
+    config.add_route('forecast.get_index_page_data',
+                     '/get_index_page_data')
+    config.add_view(forecast.get_index_page_data,
+                    route_name='forecast.get_index_page_data',
                     request_method='POST', renderer='json')
-
-    config.add_route('forecast.get_dimension_selector',
-                     '/get_dimension_selector')
-    config.add_view(forecast.get_dimension_selector,
-                    route_name='forecast.get_dimension_selector',
-                    request_method='POST', renderer='json')
-
 
 
 # def wsgi_app(global_config, **settings):

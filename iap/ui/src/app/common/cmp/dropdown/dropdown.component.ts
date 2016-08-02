@@ -38,15 +38,29 @@ export class DropdownComponent {
     private bodyKeysListener: Function = null;
     private bodyClickListener: Function = null;
 
+    @Output() changeSelection = new EventEmitter();
+    @Output() currentSelection = new EventEmitter();
+
     @Input() set items(items: Array<any>) {
+        console.info('DropdownComponent: set items');
+        this.hoveredIndex = null;
         this._items = items; // May DO some transformation
         this.makeDropdownList(items);
+        if (!this.config.multiple) {
+            let selection = (this.selected && this.selected[0])
+                ? this.selected[0].id : null;
+            this.currentSelection.emit({
+                'id': selection
+            });
+        } else { // TODO Multiple
+        }
+
     };
 
     @Input() set configuration(config: DropdownConfig) {
         this.config = new DropdownConfig(config);
     };
-    @Output() changeSelection = new EventEmitter();
+
 
     constructor(private rndr: Renderer, private elRef: ElementRef) { }
 
@@ -146,7 +160,7 @@ export class DropdownComponent {
                         selection = this.selected[0].id;
                     }
                     this.changeSelection.emit({
-                        'selected': selection
+                        'id': selection
                     });
                 }
             } else { // TODO For multiple dropdown

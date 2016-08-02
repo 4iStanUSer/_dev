@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { ROUTER_DIRECTIVES } from '@angular/router';
-import { Router } from '@angular/router';
+import { ROUTER_DIRECTIVES, Router } from '@angular/router';
 import * as _ from 'lodash';
 import { MenuWidgetComponent } from './common/cmp/menu-widget/';
 //import { DatepickerComponent } from './components/datepicker.component';
 import { AjaxService, Loading } from './common/service/request.service';
+import { ComponentFactoryService } from './common/service/component-factory.service';
 import { MachineGunnerService } from './common/service/machine-gunner.service';
 import { IndexPageService } from "./forecast/service/index-page.service";
 
@@ -14,7 +14,7 @@ import { IndexPageService } from "./forecast/service/index-page.service";
     moduleId: module.id,
     selector: 'app-root',
     directives: [ROUTER_DIRECTIVES, MenuWidgetComponent],
-    providers: [AjaxService, Loading, MachineGunnerService], //IndexPageService
+    providers: [AjaxService, Loading, MachineGunnerService, ComponentFactoryService], //IndexPageService
     templateUrl: 'app.component.html',
     styleUrls: ['app.component.css']
 })

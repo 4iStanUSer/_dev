@@ -1,0 +1,68 @@
+<div *ngIf="dateInputError != ''" class="alert alert-danger" role="alert">
+            {{dateInputError}}
+        </div>
+<div class="datepicker-widget" id="datepicker_widget">
+        <div class="input-group date-input-group" (click)="togglePopupStatus($event)" >
+            <input class="form-control date-input" id="date_input" value="{{ niceSelectedDate }}" (keyup)="onKey($event)" maxlength = "10">
+            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+        </div>
+
+<div class="calendar" id="calendar" *ngIf="showCalendar == true">
+        <div *ngIf="viewState == 'dayGrid'" class="block-with-arrows" >
+            <button (click)=changeMonthDown() type="button" class="btn btn-link  btn-lg">
+                <span class="glyphicon glyphicon-chevron-left"></span>
+            </button>
+            <button (click)=showMonthsGrid() type="button" class="btn btn-link" >
+                {{monthArr[_activeDate.getMonth()]}} {{_activeDate.getFullYear()}}
+            </button>
+            <button (click)=changeMonthUp() type="button" class="btn btn-link btn-lg">
+                <span class="glyphicon glyphicon-chevron-right"></span>
+            </button>
+
+        </div>
+        <div *ngIf="viewState == 'monthGrid'" class="block-with-arrows" >
+            <button (click)=changeYearDown() type="button" class="btn btn-link btn-lg">
+                <span class="glyphicon glyphicon-chevron-left"></span>
+            </button>
+            <button type="button" class="btn btn-link">
+                {{_activeDate.getFullYear()}}
+            </button>
+            <button (click)=changeYearUp() type="button" class="btn btn-link btn-lg">
+                <span class="glyphicon glyphicon-chevron-right"></span>
+            </button>
+
+        </div>
+        <table *ngIf="viewState == 'dayGrid'" >
+          <thead>
+              <tr>
+                  <th *ngFor="let week of weekArr" class="weeks">
+                    {{week}}
+                  </th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr *ngFor="let row of daysRows">
+                  <td *ngFor="let date of row">
+                    <button id="{{date[2]}}" (click)=changeDate(date[0]) type="button" class="btn btn-default btn-{{date[1]}} btn-sm pull-right">
+                        {{date[0].getDate()}}
+                    </button>
+
+                  </td>
+              </tr>
+          </tbody>
+      </table>
+      <table *ngIf="viewState == 'monthGrid'" >
+          <tbody>
+              <tr *ngFor="let rowM of monthsRows">
+                  <td *ngFor="let month of rowM">
+                    <button id="{{month[2]}}" style="min-width:60px;min-height:60px;" (click)=changeSelectedMonth(month[0]) type="button" class="btn btn-default btn-{{month[1]}}  btn-sm pull-right">
+                        {{month[3]}}
+                    </button>
+
+                  </td>
+              </tr>
+          </tbody>
+      </table>
+
+</div>
+</div>

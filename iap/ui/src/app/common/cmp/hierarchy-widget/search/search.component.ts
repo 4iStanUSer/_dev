@@ -42,7 +42,13 @@ import { Component, Input, Output, ViewChild,
 })
 export class SearchComponent implements OnChanges, AfterViewInit, OnDestroy {
 
-    @Input() items: Array<Object>;
+    // @Input() items: Array<Object>;
+    @Input() set items(items: Array<Object>) {
+        this.inputted = '';
+        this.hoverIndex = null;
+        this._nodesFiltered = [];
+        this._nodes = this._initNodesFromItems((items) ? items : []);
+    }
 
     @Output() nodeSelected = new EventEmitter();
 
@@ -64,8 +70,8 @@ export class SearchComponent implements OnChanges, AfterViewInit, OnDestroy {
         //console.log(this.searchField);
     }
     ngOnChanges(changes) {
-        let items = (changes.items) ? changes.items.currentValue : [];
-        this._nodes = this._initNodesFromItems(items);
+        // let items = (changes.items) ? changes.items.currentValue : [];
+        // this._nodes = this._initNodesFromItems(items);
     }
     ngOnDestroy() {
         this._closeContainer();

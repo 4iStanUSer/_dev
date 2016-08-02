@@ -17,7 +17,7 @@ module.exports = function(defaults) {
             'rxjs/**/*.+(js|js.map)',
             '@angular/**/*.+(js|js.map)',
 
-            'lodash/core.js',
+            'lodash/lodash.js',
             'font-awesome/css/*.min.css',
             'font-awesome/fonts/*.*',
             'bootstrap/dist/**/*.min.+(js|css)',
