@@ -9,6 +9,7 @@ import {SearchComponent} from './search/';
     moduleId: module.id,
     selector: 'hierarchy-widget',
     directives: [TreeComponent, SearchComponent],
+    styleUrls: ['hierarchy-widget.component.css'],
     template: `
     <div class="widget-container">
         <div class="container-fluid">
@@ -18,18 +19,7 @@ import {SearchComponent} from './search/';
             <tree [items]="items" [forcedSelect]="_searchSelected" (changeSelection)="treeNodeSelected($event)" (currentSelection)="nowSelected($event)"></tree>
         </div>
     </div>
-    `,
-    styles: [ `
-.widget-container {
-    position:relative;
-    border:1px solid #ccc;
-    padding: 10px;
-}
-.tree-container {
-    margin-top:10px;
-}
-`
-    ]
+    `
 })
 export class HierarchyWidgetComponent {
     @Input() items: Array<Object>;

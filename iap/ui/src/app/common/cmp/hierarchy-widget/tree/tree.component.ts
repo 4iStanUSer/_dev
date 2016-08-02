@@ -61,59 +61,33 @@ class TreeNodeModel {
 @Component({
     selector: 'tree-node',
     directives: [TreeNodeComponent],
-    //encapsulation: ViewEncapsulation.None,
-    styles: [
-        '.tree-children { padding-left: 20px }',
-        `.node-content-wrapper {
-      display: inline-block;
-      padding: 2px 5px;
-      border-radius: 2px;
-      transition: background-color .15s,box-shadow .15s;
-    }`,
-        '.tree-node-active > .node-content-wrapper { background: #beebff }',
-        '.tree-node-active.tree-node-focused > .node-content-wrapper { background: #beebff }',
-        '.tree-node-focused > .node-content-wrapper { background: #e7f4f9 }',
-        '.node-content-wrapper:hover { background: #f7fbff }',
-        '.tree-node-active > .node-content-wrapper, .tree-node-focused > .node-content-wrapper, .node-content-wrapper:hover { box-shadow: inset 0 0 1px #999; }',
-        `.toggle-children-placeholder {
-        display: inline-block;
-        height: 10px;
-        width: 10px;
-        position: relative;
-        top: 1px;
-    }`,
-        '.toggle-children-button {cursor:pointer}',
-        '.node-content-wrapper{cursor:pointer;}',
-        '.tree-node-disabled > .node-content-wrapper{color:gray;}',
-        '.tree-node-disabled:hover > .node-content-wrapper{cursor:normal;background:none;}',
-    ],
     template: `
     <div class="tree-node tree-node-level-{{ node.level }}"
         [class.tree-node-disabled]="node.isDisabled"
         [class.tree-node-active]="node.isSelected">
 
-        <i
+        <div class="tree-node-content-and-symbol-wrapper">
+         <i
             *ngIf="node.hasChildren"
             (click)="toggleExpanded($event)"
-            [class.fa-minus]="node.hasChildren && node.isExpanded"
-            [class.fa-plus]="node.hasChildren && !node.isExpanded"
+            [class.fa-minus-square]="node.hasChildren && node.isExpanded"
+            [class.fa-plus-square]="node.hasChildren && !node.isExpanded"
             class="fa toggle-children-button" 
             aria-hidden="true"></i>
-
-        <span
-        *ngIf="!node.hasChildren"
-        class="toggle-children-placeholder">
-        </span>
+        <i
+            *ngIf="!node.hasChildren"
+            class="fa fa-square" 
+            aria-hidden="true"></i>
         <div class="node-content-wrapper" (click)="nodeClicked($event)">
             {{ node.text }}
         </div>
+    </div>
       <div class="tree-children" *ngIf="node.isExpanded">
         <div *ngIf="node.children">
           <tree-node *ngFor="let node of node.children" [node]="node"></tree-node>
         </div>
       </div>
-    </div>
-    `
+    </div>`
 })
 export class TreeNodeComponent implements AfterViewInit {
     @Input() node: TreeNodeModel;
@@ -124,7 +98,7 @@ export class TreeNodeComponent implements AfterViewInit {
         this.node.elementRef = this.elementRef;
     }
     nodeClicked(e) {
-        this.node.treeComponent.nodeCkicked(this.node.id);
+        this.node.treeComponent.nodeClicked(this.node.id);
     }
     toggleExpanded(e) {
         this.node.isExpanded = !this.node.isExpanded;
@@ -137,9 +111,7 @@ export class TreeNodeComponent implements AfterViewInit {
     selector: 'tree',
     directives: [TreeNodeComponent],
     encapsulation: ViewEncapsulation.None,
-    styles: [
-        '.tree-children { padding-left: 20px }'
-    ],
+    styleUrls: ['tree.component.css'],
     template: `
         <div class="tree">
             <tree-node *ngFor="let node of _nodes" [node]="node"></tree-node>
@@ -201,7 +173,7 @@ export class TreeComponent implements OnChanges {
         }
     }
 
-    nodeCkicked(node_id) {
+    nodeClicked(node_id) {
         this.selectionProcedure(node_id);
     }
     selectionProcedure(node_id) {
