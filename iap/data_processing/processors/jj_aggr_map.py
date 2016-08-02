@@ -1,12 +1,15 @@
-from IAP.repository.warehouse import exceptions as ex
+from iap.repository.warehouse import exceptions as ex
 
-def data_aggr_processor(proc_data, map_func):
+
+def data_aggr_processor(proc_data):
     aggr = DataAggregate(proc_data, dates_souce='weekly', 
                          dates_target='monthly')
 
-class DataAggregate():
+
+class DataAggregate:
     dates_source = ''
     dates_target = ''
+
     def __init__(self, data, sum_rules, map_rules, **kwargs):
         '''
         Args: 
@@ -44,9 +47,10 @@ class DataAggregate():
 
     def sum_by_meta(self):
         new_output = []
-        new_row = self.data_sum_by_rules([self.data[1], self.data[2], self.data[3]],
-                                 self.sum_rules)
-        new_output.append({'meta': self.data[1]['meta'], 'dates': self.data[1]['dates'], 'data': new_row})
+        new_row = self.data_sum_by_rules(
+            [self.data[1], self.data[2], self.data[3]], self.sum_rules)
+        new_output.append({'meta': self.data[1]['meta'],
+                           'dates': self.data[1]['dates'], 'data': new_row})
         return new_output
 
     def data_sum_by_rules(self, data_rows, sum_rules):
@@ -65,10 +69,10 @@ class DataAggregate():
                         raise ex.EmptyInputsError('No function match to the\
                         sum method')
                     break
-            if col_found == False:
+            if not col_found:
                 raise ex.EmptyInputsError('No sum rule fot the data column ' 
                                           + str(col_name))
-            #sum all rows that has col_name
+            # sum all rows that has col_name
             sum_data = []
             for row in data_rows:
                 data_value = row['data'][col_name]

@@ -16,6 +16,9 @@ from . import tweens
 from . import security
 from . import service
 
+from iap.data_processing.test_init_data import test_processing_data, \
+    test_jj_oc_data
+
 def notfound_view(request):
     request.response.status = 404
     return {}
@@ -28,6 +31,8 @@ def index_view(request):
     #user = request.user
     #if user is None:
     #    raise HTTPForbidden
+    # test_jj_oc_data()
+    # test_processing_data()
 
     #return Response('<h1>Hello world!</h1>')
     return render_to_response('templates/index.jinja2',
