@@ -52,6 +52,6 @@ setup(name='IAP',
       [paste.app_factory]
       main = iap:main
       [console_scripts]
-      initialize_IAP_db = iap.repository.warehouse.init_scripts.initializedb:main
+      initialize_IAP_db = iap.repository.initializedb:main
       """,
       )

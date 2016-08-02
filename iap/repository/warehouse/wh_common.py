@@ -1,6 +1,85 @@
 from sqlalchemy import or_, and_
+
+from ...repository import exceptions as ex
 from .models import *
-from ..warehouse import exceptions as ex
+
+
+def add_client(ssn, name, code):
+    # search for duplicate by name or code
+    __check_dupl_client(ssn, name, code)
+    new_client = Client(name=name, code=code)
+    ssn.add(new_client)
+    return new_client
+
+
+def __check_dupl_client(ssn, name, code):
+    clients = ssn.query(Client)\
+        .filter(or_(Client.code == code,
+                    Client.name == name)).all()
+    if len(clients) > 0:
+        if clients[0].code == code and clients[0].name == name:
+            raise ex.AlreadyExistsError('Client', 'code', code)
+        elif clients[0].code == code:
+            raise ex.AlreadyExistsError('Client', 'code', code)
+        else:
+            raise ex.AlreadyExistsError('Client', 'name', name)
+
+
+def add_user(ssn, email, password, client):
+
+    __check_none_obj(client=client)
+    existed_user = ssn.query(User).filter(User.email == email).one_or_none()
+    if existed_user is not None:
+        class_name = existed_user.__class__.__name__
+        raise ex.AlreadyExistsError(class_name, 'email', email)
+    new_user = User(email=email, password=password)
+    client.users.append(new_user)
+    return new_user
+
+
+def __check_none_obj(**kwargs):
+    ''' Args:
+    -- object=object
+    '''
+    for key, value in kwargs.items():
+        if value is None:
+            raise ex.EmptyInputsError(key)
+
+"""
+
+# endregion Clients
+
+
+
+def add_user(db, email, password, client):
+
+    #self.__check_none_obj(client=client)
+    #existed_user = self.get_user(email=email)
+
+    #if existed_user is not None:
+    #    class_name = existed_user.__class__.__name__
+    #    raise ex.AlreadyExistsError(class_name, 'email', email)
+    new_user = User(email=email, password=password)
+    client.users.append(new_user)
+    return new_user
+
+
+def get_user(db, **kwargs):
+    '''Possible keys:
+    -- id
+    -- email
+    '''
+    if 'id' in kwargs:
+        id = int(kwargs['id'])
+        return db.query(User).get(id)
+    if 'email' in kwargs:
+        email = kwargs['email']
+        return db.query(User) \
+            .filter(User.email == email).one_or_none()
+    raise ex.WrongArgsError('get_user')
+
+
+
 
 class WarehouseCommon():
     '''
@@ -9,19 +88,10 @@ class WarehouseCommon():
     def __init__(self, db_connector):
         self.db = db_connector
 
+
+
     #region Users
-    def add_user(self, email, password, client):
-        self.__check_none_obj(client=client)
-        existed_user = self.get_user(email=email)
-        if existed_user is not None:
-            class_name = existed_user.__class__.__name__
-            raise ex.AlreadyExistsError(class_name, 'email', email)
-        new_user = User()
-        new_user.email = email
-        new_user.password = password
-        client.users.append(new_user)
-        self.db.session.commit()
-        return new_user
+
         
     def delete_user(self, id):
         existed_user = self.get_user(id=int(id))
@@ -154,7 +224,7 @@ class WarehouseCommon():
             raise ex.NotExistsError('Client', 'id', id)
         if existed_client.name != new_name or existed_client.code != new_code:
             duplicates = self.db.session.query(Client)\
-                .filter(or_(Client.name == new_name, 
+                .filter(or_(Client.name == new_name,
                             Client.code == new_code)).all()
             if len(duplicates) > 0:
                 dupl_proj = duplicates[0]
@@ -162,7 +232,7 @@ class WarehouseCommon():
                 if dupl_proj.name == new_name:
                     raise ex.AlreadyExistsError(class_name, 'name', new_name)
                 elif dupl_proj.code == new_code:
-                    raise ex.AlreadyExistsError(class_name, 'code', new_code) 
+                    raise ex.AlreadyExistsError(class_name, 'code', new_code)
             existed_client.name = new_name
             existed_client.code = new_code
             self.db.session.commit()
@@ -471,3 +541,4 @@ class WarehouseCommon():
         for key, value in kwargs.items():
             if value is None:
                 raise ex.EmptyInputsError(key)
+"""
