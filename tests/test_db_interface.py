@@ -1,17 +1,11 @@
 import pytest
 import os
-from iap.repository.warehouse.meta import Base
 from iap.repository.warehouse import (
     get_engine,
     get_session_factory,
     get_tm_session,
     )
 import transaction
-import sys
-import sqlalchemy
-from sqlalchemy import engine_from_config
-from sqlalchemy.orm import sessionmaker
-import zope.sqlalchemy
 from pyramid import testing
 from iap.repository.warehouse.wh_common import *
 
@@ -36,7 +30,6 @@ class TestDbInterface:
         self.engine = get_engine(settings)
         Base.metadata.create_all(self.engine)
         session_factory = get_session_factory(self.engine)
-        # self.session = get_tm_session(session_factory, transaction.manager)
         self.db_session = get_tm_session(session_factory, transaction.manager)
 
         self.test = 'test'
