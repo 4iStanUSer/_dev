@@ -4,6 +4,41 @@ from ...repository import exceptions as ex
 from .models import *
 
 
+def add_variables(ssn, properties_map):
+    for variable, properties in properties_map.items():
+        pass
+
+
+def set_dimensions(ssn, dimension_map):
+    """
+
+    Args:
+        ssn: db.session
+        project_id: project id
+        dimension_map: dict with keys=dimension level,
+        values - list of dimensions
+
+    """
+    for level_name, dimensions in dimension_map.items():
+        for dimension in dimensions:
+            new_dimension = Dimension()
+            new_dimension.name = dimension
+            # depth?
+            new_level = DimensionLevel()
+            new_level.name = level_name
+            new_dimension.levels.append(new_level)
+        ssn.add(new_level)
+
+
+def add_timescales(ssn, project_id, time_periods_map):
+    for period_name, time_scales in time_periods_map:
+        for time_scale in time_scales:
+            new_time_scale = Timescale(name=time_scale, project_id=project_id)
+            new_period = TimePeriod(name=period_name)
+            new_period.timescale.append(new_time_scale)
+            ssn.add(new_period)
+
+
 def add_client(ssn, name, code):
     # search for duplicate by name or code
     __check_dupl_client(ssn, name, code)
