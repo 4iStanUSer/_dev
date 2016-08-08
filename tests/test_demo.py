@@ -1,4 +1,9 @@
 import pytest
+import os
+
+# This is your Project Root
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+print(BASE_DIR)
 
 
 def demo_1(int_list):

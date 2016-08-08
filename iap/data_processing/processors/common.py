@@ -35,6 +35,12 @@ def date_year(date_values):
     return datetime.datetime(year, 1, 1)
 
 
+def date_1week(date_values):
+    # TODO convert string to week
+    year = int(float(date_values[0]))
+    return datetime.datetime(year, 1, 1)
+
+
 def get_cell_range(start_col, start_row, end_col, end_row, ws):
     return [ws.row_slice(row, start_colx=start_col, end_colx=end_col) 
             for row in range(start_row, end_row)]
