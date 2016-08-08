@@ -1,5 +1,4 @@
-import { Component, Input, Output, OnInit, ElementRef,
-    EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import {TreeComponent} from './tree/';
 import {SearchComponent} from './search/';
 
@@ -10,40 +9,28 @@ import {SearchComponent} from './search/';
     moduleId: module.id,
     selector: 'hierarchy-widget',
     directives: [TreeComponent, SearchComponent],
+    styleUrls: ['hierarchy-widget.component.css'],
     template: `
     <div class="widget-container">
         <div class="container-fluid">
             <search [items]="items" (nodeSelected)="searchNodeSelected($event)"></search>
         </div>
         <div class="container-fluid tree-container">
-            <tree [items]="items" [forcedSelect]="_searchSelected" (changeSelection)="treeNodeSelected($event)"></tree>
+            <tree [items]="items" [forcedSelect]="_searchSelected" (changeSelection)="treeNodeSelected($event)" (currentSelection)="nowSelected($event)"></tree>
         </div>
     </div>
-    `,
-    styles: [ `
-.widget-container {
-    position:relative;
-    border:1px solid #ccc;
-    padding: 10px;
-}
-.tree-container {
-    margin-top:10px;
-}
-`
-    ]
+    `
 })
-export class HierarchyWidgetComponent implements OnInit {
+export class HierarchyWidgetComponent {
     @Input() items: Array<Object>;
 
     @Output() itemSelected = new EventEmitter();
+    @Output() currentSelection = new EventEmitter();
 
     private _searchSelected: string = null;
+    // private
 
-    constructor(private elementRef: ElementRef) { }
-
-    ngOnInit() {
-        //console.log(this.items)
-    }
+    constructor() { }
 
     treeNodeSelected(selected_id: string) {
         console.info('HierarchyWidget Component, in tree selected item');
@@ -56,5 +43,9 @@ export class HierarchyWidgetComponent implements OnInit {
     searchNodeSelected(selected: Object) {
         console.info('HierarchyWidget Component, in search selected item');
         this._searchSelected = selected['id'];
+    }
+
+    nowSelected(selection){
+        this.currentSelection.emit(selection);
     }
 }

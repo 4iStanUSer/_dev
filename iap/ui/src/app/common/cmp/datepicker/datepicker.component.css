@@ -1,0 +1,77 @@
+/**temp*/
+/*.datepicker-widget {
+    display: table;
+}
+#cont_panel, forecast-page {
+    display: none;
+}*/
+/**temp*/
+.calendar {
+    display: table;
+    background: #222;
+    border: 1px solid #000;
+}
+.block-with-arrows {
+    text-align: center;
+}
+.calendar th.weeks {
+    text-align: center;
+    color: #fff;
+    font-size: 15px;
+}
+.btn-info,
+.btn-primary,
+.btn-secondary {
+    min-width:40px;
+	border-radius: 0;
+    background: #222;
+    border-color: #222;
+    border-width: 3px;
+    border-style: double;
+}
+/*.btn-primary {
+    border-color: #fff;
+}*/
+.btn-primary,
+.btn-primary:hover,
+.btn-primary:focus {
+    border-style: double;
+    color: #fff;
+    background-color: #888;
+    border-color: #222;
+    outline:0;
+}
+.btn-secondary,
+.btn-secondary:hover,
+.btn-secondary:focus {
+    color: #888;
+    outline:0;
+}
+.btn-info:hover,
+.btn-secondary:hover,
+.btn-info:focus,
+.btn-secondary:focus {
+    background: #222;
+    border-color: #fff;
+    outline:0;
+}
+.btn-link {
+    color: #fff;
+    font-weight: bold;
+    border: none;
+    /*border-radius: 0;
+    border-width: 3px;
+    border-style: double;
+    border-color: #222;*/
+}
+.btn-link:hover,
+.btn-link:focus {
+    /*border-color: #222;*/
+    color: #fff;
+    text-decoration: none;
+    border: none;
+    outline:0;
+}
+.date-input-group {
+    max-width: 300px;
+}

@@ -10,7 +10,9 @@ def common_routing(config):
     """
     Configure common routing
     """
-    config.add_static_view(name='static', path='iap.ui:dist') #, cache_max_age=3600
+    config.add_static_view(name='static', path='iap.ui:dist')
+    config.add_static_view(name='images', path='iap.ui:images',
+                           cache_max_age=3600)
 
     config.add_notfound_view(common.notfound_view)
     config.add_forbidden_view(common.forbidden_view)
@@ -38,9 +40,17 @@ def forecast_routing(config):
     # config.add_static_view('forecast.static', 'static', cache_max_age=3600)#CONFIGURE
 
     # http://docs.pylonsproject.org/projects/pyramid/en/latest/api/config.html#pyramid.config.Configurator.add_view
-    config.add_route('forecast.index', '/')
+
     # TODO Add redirect
+    #context='myproject.resources.Hello', renderer='json' !!!!!!
+    config.add_route('forecast.index', '/')
     config.add_view(forecast.index, route_name='forecast.index')
+
+    config.add_route('forecast.get_index_page_data',
+                     '/get_index_page_data')
+    config.add_view(forecast.get_index_page_data,
+                    route_name='forecast.get_index_page_data',
+                    request_method='POST', renderer='json')
 
 
 # def wsgi_app(global_config, **settings):

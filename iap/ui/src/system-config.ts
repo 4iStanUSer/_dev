@@ -9,7 +9,7 @@
  **********************************************************************************************/
 /** Map relative paths to URLs. */
 const map: any = {
-    'lodash': 'vendor/lodash/core.js'
+    'lodash': 'vendor/lodash/lodash.js'
 };
 
 /** User packages configuration. */
@@ -50,6 +50,7 @@ const barrels: string[] = [
   'app/forecast/edit-page',
   'app/common/cmp/hierarchy-widget/tree',
   'app/common/cmp/hierarchy-widget/search',
+  'app/common/cmp/datepicker',
   /** @cli-barrel */
 ];
 

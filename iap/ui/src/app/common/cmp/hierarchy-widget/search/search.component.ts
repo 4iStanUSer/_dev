@@ -6,19 +6,7 @@ import { Component, Input, Output, ViewChild,
 @Component({
     moduleId: module.id,
     selector: 'search',
-    styles: [
-        `
-:host{
-    position: relative;
-    display: block;
-}
-.variants-container {position:absolute;background:#999;z-index:2;width:100%;border:1px solid #ccc;}
-.nodes-container > * {border-bottom:1px solid #000}
-.nodes-container > *:last-child {border-bottom:none}
-.nodes-container > *.is_hovered {background:#cecece}
-.nodes-container > *.is_disabled {color:gray}
-`
-    ],
+    styleUrls: ['search.component.css'],
     template: `
         <input #searchField type="text" class="form-control" [(ngModel)]="inputted" (keyup)="_onKeyup(inputted, $event)">
         <div class="variants-container" *ngIf="_showNodesStatus">
@@ -42,7 +30,13 @@ import { Component, Input, Output, ViewChild,
 })
 export class SearchComponent implements OnChanges, AfterViewInit, OnDestroy {
 
-    @Input() items: Array<Object>;
+    // @Input() items: Array<Object>;
+    @Input() set items(items: Array<Object>) {
+        this.inputted = '';
+        this.hoverIndex = null;
+        this._nodesFiltered = [];
+        this._nodes = this._initNodesFromItems((items) ? items : []);
+    }
 
     @Output() nodeSelected = new EventEmitter();
 
@@ -64,8 +58,8 @@ export class SearchComponent implements OnChanges, AfterViewInit, OnDestroy {
         //console.log(this.searchField);
     }
     ngOnChanges(changes) {
-        let items = (changes.items) ? changes.items.currentValue : [];
-        this._nodes = this._initNodesFromItems(items);
+        // let items = (changes.items) ? changes.items.currentValue : [];
+        // this._nodes = this._initNodesFromItems(items);
     }
     ngOnDestroy() {
         this._closeContainer();

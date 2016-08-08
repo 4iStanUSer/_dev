@@ -1,0 +1,11 @@
+/*hierarchy-widget.component*/
+.widget-container {
+    position:relative;
+    border:1px solid #ccc;
+    padding: 10px;
+}
+.tree-container {
+    margin-top:10px;
+}
+/*hierarchy-widget.component*/
+
