@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AjaxService } from "./../../common/service/request.service";
+import { AjaxService } from "./../../common/service/ajax.service";
 
 @Injectable()
 export class IndexPageService {

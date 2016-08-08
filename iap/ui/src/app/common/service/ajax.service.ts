@@ -5,6 +5,7 @@ import { Observable }     from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import * as _ from 'lodash';
 import './../rxjs-operators';
+import { LoadingService } from './loading.service';
 
 class ServiceConf {
     //request: RequestConf = new RequestConf('ajax');
@@ -34,24 +35,6 @@ interface IRequestOptions {
     //...
 }
 
-@Injectable()
-export class Loading { // Service || Component ?
-    private queue: Array<string> = [];
-
-    public show(id: string) {
-        this.queue.push(id);
-        console.log('---show loading');
-    }
-    public hide(id: string) {
-        let index = this.queue.indexOf(id);
-        if (index != -1) {
-            this.queue.splice(index, 1);
-        }
-        if (this.queue.length == 0) {
-            console.log('---hide loading');
-        }
-    }
-}
 
 /**
  * Using:
@@ -81,19 +64,19 @@ export class AjaxService {
     private serviceConf: ServiceConf = new ServiceConf();
     private counter: number = 0;
 
-    constructor(private http: Http, private loading: Loading) { }
+    constructor(private http: Http, private loading: LoadingService) { }
 
     public configure(serv_config: Object = {}) {
         _.extend(this.serviceConf, serv_config);
     }
 
-    public get(options: IRequestOptions): Observable<Subject<any>> {
+    public get(options: IRequestOptions) : Observable<Subject<any>> {
         options.method = 'post';
         let req = this._makeRequestInst(options);
 
         return this._query(req);
     }
-    public post(options: IRequestOptions): Observable<Subject<any>> {
+    public post(options: IRequestOptions) : Observable<Subject<any>> {
         options.method = 'post';
         let req = this._makeRequestInst(options);
 
@@ -115,8 +98,26 @@ export class AjaxService {
                 _.extend(resp, body);
                 return resp;
             });
+        console.log(r);
+        console.log(blackBox);
+        // r.subscribe( // TODO check unsubscribe for blackbox subscription
+        //     (res: ServerResponse) => {
+        //         if (res.hasError()) {
+        //             this._handleSiteError(res, blackBox);
+        //         } else {
+        //             blackBox.next(res.data);
+        //         }
+        //         this.loading.hide(pid);
+        //     },
+        //     (err: Response) => {
+        //         this.loading.hide(pid);
+        //         this._handleServerError(err, blackBox);
+        //     }
+        // );
+        // return r;
         r.subscribe( // TODO check unsubscribe for blackbox subscription
             (res: ServerResponse) => {
+                console.log(res);
                 if (res.hasError()) {
                     this._handleSiteError(res, blackBox);
                 } else {
@@ -129,7 +130,8 @@ export class AjaxService {
                 this._handleServerError(err, blackBox);
             }
         );
-        return blackBox.asObservable();
+        // return blackBox.asObservable();
+        return blackBox;
     }
 
     private _handleSiteError(res: ServerResponse, blackBox: Subject<any>) {

@@ -147,7 +147,15 @@ export class TreeComponent implements OnChanges {
         }
     };
     @Input() set options(options: TreeOptions) { };
-    @Input() set forcedSelect(node_id: string) { };
+    @Input() set forcedSelect(node_id: string) {
+        if (node_id) {
+            if (node_id == '#') {
+                this._deselectAllSelected();
+            } else {
+                this.selectionProcedure(node_id);
+            }
+        }
+    };
     @Output() changeSelection = new EventEmitter();
     @Output() currentSelection = new EventEmitter();
 
@@ -165,11 +173,11 @@ export class TreeComponent implements OnChanges {
         }
         if (items) { }
         if (forcedSelect) {
-            if (forcedSelect == '#') {
-                this._deselectAllSelected();
-            } else {
-                this.selectionProcedure(forcedSelect);
-            }
+            // if (forcedSelect == '#') {
+            //     this._deselectAllSelected();
+            // } else {
+            //     this.selectionProcedure(forcedSelect);
+            // }
         }
     }
 

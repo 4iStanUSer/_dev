@@ -14,4 +14,4 @@ bootstrap(AppComponent, [
     APP_ROUTER_PROVIDERS,
     { provide: LocationStrategy, useClass: HashLocationStrategy }
 ])
-//.catch(err => console.error(err))
+.catch(err => console.error(err))

@@ -17,25 +17,30 @@ export class DatepickerComponent implements OnInit {
     @Output() dateChanged = new EventEmitter();
     private bodyClickListener: Function = null;
 
-    public constructor(private elRef: ElementRef, private rndr: Renderer){ }
+    public constructor(private elRef: ElementRef, private rndr: Renderer) { }
 
-    private togglePopupStatus(e: Event = null){
-        this.showCalendar = !this.showCalendar;
-        if (this.showCalendar) {
-            if (this.bodyClickListener == null) {
-                this.bodyClickListener = this.rndr.listenGlobal(
-                    'document', 'click', (event) => {
-                        if (!this.elRef.nativeElement.contains(event.target)) {
-                            this.togglePopupStatus(event)
-                        }
-                        console.log('1');
-                    });
-            }
-        } else {
-            if (this.bodyClickListener != null) {
-                this.bodyClickListener();
-                this.bodyClickListener = null;
-            }
+    private toHideCalendar(e: Event = null) {
+        console.log('toHideCalendar');
+        this.showCalendar = false;
+        if (this.bodyClickListener != null) {
+            this.bodyClickListener();
+            this.bodyClickListener = null;
+        }
+    }
+    private toShowCalendar(e: Event = null) {
+        console.log('toShowCalendar');
+        this.showCalendar = true;
+        if (this.bodyClickListener == null) {
+            this.bodyClickListener = this.rndr.listenGlobal(
+                'document', 'click', (event) => {
+                    if (!this.elRef.nativeElement.contains(event.target)
+                        && event.target.getAttribute('id') != 'show_months_grid'
+                        && !event.target.classList.contains('month-item')) {
+
+                        this.toHideCalendar();
+                        console.log('event.target.classList', event.target.classList);
+                    }
+                });
         }
     }
 
@@ -45,10 +50,9 @@ export class DatepickerComponent implements OnInit {
     public selectedDate: Date = _.cloneDeep(this._today);
     public niceSelectedDate: string;
     public weekDay: number = this._activeDate.getDay();
-    // TODO move to server side
     public weekArr: Array<string> = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
     public todayWeekName: string = this.weekArr[this.weekDay];
-    // TODO move to server side
+
     public monthArr: Array<string> = [
         "January",
         "February",
@@ -80,8 +84,6 @@ export class DatepickerComponent implements OnInit {
     public monthsRows: Array<any>;
 
     public showCalendar: boolean = false;
-
-
 
     public ngOnInit(): void {
 
@@ -127,7 +129,6 @@ export class DatepickerComponent implements OnInit {
         let className:string = '';
         for (i = 0; i < len; ++i) {
             id = this.getElemId(dates[i]);
-            //if (dates[i].getMonth() == this.selectedDate.getMonth()) {
             if (dates[i].getMonth() == activeDate.getMonth()) {
 
                 className = "info";
@@ -136,9 +137,6 @@ export class DatepickerComponent implements OnInit {
                     && dates[i].getFullYear() == this.selectedDate.getFullYear()) {
                     className = "primary";
                 }
-                //} else {
-                //    className = "primary";
-                //}
             } else {
                 className = "secondary";
             }
@@ -170,20 +168,6 @@ export class DatepickerComponent implements OnInit {
         return firstDate;
     }
 
-    public updateActiveDateView(newDate: Date): void {
-        let currentActive: Date = _.cloneDeep(this.selectedDate);
-        let currentActiveId = this.getElemId(currentActive);
-        let newActive: Date = newDate;
-        let newActiveId = this.getElemId(newActive);
-        console.log('currentActive', currentActive);
-        console.log('newActive', newActive);
-        let currentElem = document.getElementById(currentActiveId);
-        let newElem = document.getElementById(newActiveId);
-        console.log('currentElem', currentElem);
-        console.log('newElem', newElem);
-        currentElem.setAttribute('class', 'btn btn-default btn-info btn-sm pull-right');
-        newElem.setAttribute('class', 'btn btn-default btn-primary btn-sm pull-right');
-    }
     public getElemId(date: Date): string {
         let id: string = "" + date.getDate() + "" + date.getMonth() + "" + date.getFullYear() + "";
         return id;
@@ -240,19 +224,15 @@ export class DatepickerComponent implements OnInit {
                 let year = Number(dateArr[2]);
                 if (this.isValidDay(year, month, day)) {
                     dateFromInput = new Date(year, month, day);
-                    //this._activeDate = _.cloneDeep(dateFromInput);
                     this._activeDate = _.cloneDeep(dateFromInput);
-                    //this.selectedDate = _.cloneDeep(dateFromInput);
                     this.selectedDate = _.cloneDeep(dateFromInput);
                     this.niceSelectedDate = this.format(this.selectedDate, this.dateFormat);
 
                     this.firstDayOfMonth.setMonth(month);
                     this.firstDayOfMonth.setFullYear(year);
-                    //this.firstDayOfMonth.setDate(day);
 
                     this.buildCalendar(this.firstDayOfMonth);
                     this.dateInputError = '';
-                    //this.showCalendar = false; //27-07-16 !!!
                 } else {
                     this.dateInputError = 'That month has less days';
                 }
@@ -328,7 +308,6 @@ export class DatepickerComponent implements OnInit {
 
     public changeYearUp(): void {
         let newYear: number = this._activeDate.getFullYear() + 1;
-        //let newDate: Date = this._activeDate;
         let newDate: Date = _.cloneDeep(this._activeDate);
         newDate.setDate(1);
         newDate.setFullYear(newYear);
@@ -338,7 +317,6 @@ export class DatepickerComponent implements OnInit {
     }
     public changeYearDown(): void {
         let newYear: number = this._activeDate.getFullYear()- 1;
-        //let newDate: Date = this._activeDate;
         let newDate: Date = _.cloneDeep(this._activeDate);
         newDate.setDate(1);
         newDate.setFullYear(newYear);
@@ -347,24 +325,7 @@ export class DatepickerComponent implements OnInit {
         this.dateInputError = '';
     }
 
-    // public toShowCalendar(e: Event): void {
-    //     event.preventDefault();
-    //     this.showCalendar = true;
-    //
-    // }
-
-
-
-
-
-
     public changeDate(newDate: Date): void {
-
-        console.log('--------changeDate called----------');
-        //console.log('newDate', newDate);
-        //console.log('this._activeDate', this._activeDate);
-        //console.log('this.selectedDate', this.selectedDate);
-        //console.log('------------------');
 
         this._activeDate = _.cloneDeep(newDate);
         this.selectedDate = _.cloneDeep(newDate);
@@ -373,29 +334,15 @@ export class DatepickerComponent implements OnInit {
         this.firstDayOfMonth.setFullYear(newDate.getFullYear());
 
         this.buildCalendar(this.firstDayOfMonth);
-        //}
-        //if (this.viewState != "monthGrid") {
-            //this.showCalendar = false; //27-07-16 !!!
-            this.niceSelectedDate = this.format(this.selectedDate, this.dateFormat);
-        //}
-        //this.showCalendar = false;
-        if (this.viewState != "monthGrid") {
-            this.togglePopupStatus();
-        }
-
+		this.niceSelectedDate = this.format(this.selectedDate, this.dateFormat);
+        this.toHideCalendar();
 
         this.viewState = 'dayGrid';
         this.dateInputError = '';
-
-        this.dateChanged.emit({
-            new_date: this.niceSelectedDate
-        });
     }
 
     public changeSelectedMonth(newDate: Date): void {
-        console.log('--------changeSelectedMonth called----------');
         this._activeDate = _.cloneDeep(newDate);
-        //this.selectedDate = _.cloneDeep(newDate);
 
         this.firstDayOfMonth.setMonth(newDate.getMonth());
         this.firstDayOfMonth.setFullYear(newDate.getFullYear());

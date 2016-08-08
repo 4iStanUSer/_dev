@@ -2,19 +2,17 @@ import { Component } from '@angular/core';
 import { ROUTER_DIRECTIVES, Router } from '@angular/router';
 import * as _ from 'lodash';
 import { MenuWidgetComponent } from './common/cmp/menu-widget/';
-//import { DatepickerComponent } from './components/datepicker.component';
-import { AjaxService, Loading } from './common/service/request.service';
+import { AjaxService } from './common/service/ajax.service';
+import { LoadingService } from './common/service/loading.service';
 import { ComponentFactoryService } from './common/service/component-factory.service';
-import { MachineGunnerService } from './common/service/machine-gunner.service';
+// import { MachineGunnerService } from './common/service/machine-gunner.service';
 import { IndexPageService } from "./forecast/service/index-page.service";
-
-
 
 @Component({
     moduleId: module.id,
     selector: 'app-root',
     directives: [ROUTER_DIRECTIVES, MenuWidgetComponent],
-    providers: [AjaxService, Loading, MachineGunnerService, ComponentFactoryService], //IndexPageService
+    providers: [AjaxService, LoadingService, ComponentFactoryService, IndexPageService], //MachineGunnerService
     templateUrl: 'app.component.html',
     styleUrls: ['app.component.css']
 })

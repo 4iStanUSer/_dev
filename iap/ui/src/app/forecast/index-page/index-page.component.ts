@@ -4,11 +4,11 @@ import {
     ViewContainerRef,
 } from '@angular/core';
 
+import { IndexPageService } from './../service/index-page.service';
 import { ComponentFactoryService } from './../../common/service/component-factory.service';
 import { TimeseriesWidgetComponent } from './../../common/cmp/timeseries-widget/';
 import { HierarchyWidgetComponent } from './../../common/cmp/hierarchy-widget/';
 import { DropdownComponent } from './../../common/cmp/dropdown/';
-import { IndexPageService } from './../service/index-page.service';
 import { DatepickerComponent } from "./../../common/cmp/datepicker/";
 
 @Component({
@@ -62,7 +62,6 @@ interface IPageData {
         HierarchyWidgetComponent,
         DropdownComponent,
         DatepickerComponent,
-
         NavagationPanelComponent
     ],
     providers: [IndexPageService],
