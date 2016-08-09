@@ -6,7 +6,7 @@ import collections
 from iap.data_processing.processors import jj_brand, jj_extract, jj_oc_data_proc
 from iap.data_processing.processors.jj_aggr_map import DataAggregate
 from iap.data_processing.processors.common import date_year_month, date_year,\
-    date_1week
+    date_jj_1week
 
 
 class Loader:
@@ -39,7 +39,7 @@ class Loader:
                                 'end_column': ''}},
             'MyReport (Benadryl SI Other Accaunts)':
                 {'func': jj_brand,
-                 'date_func': date_1week,
+                 'date_func': date_jj_1week,
                  'info': 'N/A',
                  'meta_cols': ['Category', 'Segment', 'SubSegment', 'Brand',
                                'SubBrand'],

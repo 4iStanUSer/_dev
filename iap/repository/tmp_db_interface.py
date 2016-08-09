@@ -23,3 +23,7 @@ class TimeSeries:
     def get():
         return None
 
+    @staticmethod
+    def set_data(start_point, values):
+        start_point = start_point
+        values = values
