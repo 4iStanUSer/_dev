@@ -35,6 +35,19 @@ def date_year(date_values):
     return datetime.datetime(year, 1, 1)
 
 
+def date_jj_1week(date_string):
+    try:
+        tmp_split = date_string.split(' ')
+        date_split = tmp_split[2].split('/')
+        month = int(date_split[0])
+        day = int(date_split[1])
+        year = int('20' + str(date_split[2]))
+        return datetime.datetime(year=year, month=month, day=day)
+    except Exception as err:
+        print(err.args)
+        return 0
+
+
 def get_cell_range(start_col, start_row, end_col, end_row, ws):
     return [ws.row_slice(row, start_colx=start_col, end_colx=end_col) 
             for row in range(start_row, end_row)]
