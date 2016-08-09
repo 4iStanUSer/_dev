@@ -15,7 +15,8 @@ class Entity:
 class Variable:
     @staticmethod
     def force_series(name):
-        return name
+        times_series = TimeSeries()
+        return times_series
 
 
 class TimeSeries:

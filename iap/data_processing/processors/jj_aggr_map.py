@@ -30,9 +30,10 @@ class DataAggregate:
         self.sum_func_map = {'average': self.__average_sum,
                              'sum': self.__simple_sum}
 
-    def meta_map_by_rules(self):
-        for row in self.data:
-            for rule in self.map_rules:
+    @staticmethod
+    def meta_map_by_rules(data, map_rules):
+        for row in data:
+            for rule in map_rules:
                 # Looking for rules match
                 is_matched = True
                 for meta_name, val in rule['in'].items():
@@ -43,7 +44,7 @@ class DataAggregate:
                     # Write updated info
                     for meta_name, val in rule['out'].items():
                         row['meta'][meta_name] = val
-        return self.data
+        return data
 
     def sum_by_meta(self):
         new_output = []

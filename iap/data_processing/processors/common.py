@@ -1,6 +1,7 @@
 from iap.repository import exceptions as ex
 import datetime
 
+
 def date_func(date_cols, data_row, index=-1):
     for key, val in date_cols.items():
         if val == 'campaign':
@@ -28,6 +29,12 @@ def date_year_month(date_values):
               'december': 12}
     month_num = months[month.lower()]
     return datetime.datetime(year, month_num, 1)
+
+
+def date_yyyymm(date_string):
+    year = int(date_string[:3])
+    month = int(date_string[4:])
+    return datetime.datetime(year=year, month=month, day=1)
 
 
 def date_year(date_values):
