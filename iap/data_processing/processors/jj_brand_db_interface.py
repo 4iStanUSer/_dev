@@ -1,5 +1,6 @@
 from iap.repository import exceptions as ex
-from iap.data_processing.processors.common import get_last_col, get_cell_range
+from iap.data_processing.processors.common import get_last_col, \
+    get_cell_range, mapping
 from iap.repository.tmp_db_interface import *
 import collections
 from iap.data_processing.processors.jj_aggr_map import DataAggregate
@@ -28,32 +29,35 @@ def jj_brand_extract(wb, options_list):
             raise ex.NotExistsError('DataProcessing', 'column', key)
         if val == '':
             data_cols[key] = header_row[key].value
-    for key, val in dates_src_cols.items():
-        if key >= last_col:
-            raise ex.NotExistsError('DataProcessing', 'column', key)
+    if date_col >= last_col:
+        raise ex.NotExistsError('DataProcessing', 'column', key)
     # Create output: Append data
     output = []
+    if 'mapping_rule' in options_list:
+        mapping_rule = options_list['mapping_rule']
+    else:
+        mapping_rule = None
     data = get_cell_range(0, 0, ws.ncols, ws.nrows, ws)
     for row_index in range(1, ws.nrows):
         meta = []
+        meta_dict = collections.OrderedDict({})
         for key, val in meta_cols.items():
-            # TODO what if meta value=''?
+            meta_dict[val] = data[row_index][key].value
             meta.append(data[row_index][key].value)
+        if mapping_rule is not None:
+            new_meta_dict = mapping(meta_dict, mapping_rule)
+            meta = []
+            for key, value in new_meta_dict.items():
+                meta.append(value)
         entity = Warehouse.get(meta)
-        this_date = date_func(data[row_index][date_col])
+        this_date = date_func(data[row_index][date_col].value)
         for key, val in data_cols.items():
             value = data[row_index][key].value
             variable = entity.force_data_by_name(val)
             time_series = variable.force_series(series_name)
-            time_series.set_data(this_date, value)
-        # new_row = {'meta': collections.OrderedDict({}),
-            # 'data': {}, 'dates': 0}
-        # for key, val in meta_cols.items():
-        #     new_row['meta'][val] = data[row_index][key].value
-        # for key, val in data_cols.items():
-        #     new_row['data'][val] = data[row_index][key].value
-        # new_row['dates'] = date_func(dates_src_cols, data[row_index])
-        # output.append(new_row)
+            history_values = time_series.get_by_point(this_date, 1)
+            new_value = history_values[0] + value
+            time_series.set_data(this_date, new_value)
     # collect similar date
     # output_pivot = []
     # if 'mapping_rule' in options_list:

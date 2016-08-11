@@ -6,7 +6,7 @@ import collections
 from iap.data_processing.processors import jj_brand, jj_brand_extract, \
     jj_oc_data_proc
 from iap.data_processing.processors.common import date_year_month, date_year,\
-    date_jj_1week
+    date_jj_1week, date_yyyyww
 
 
 class Loader:
@@ -51,7 +51,7 @@ class Loader:
                                 'end_column': ''}},
             'JNJ_SALES_EXTRACT_FOR_4I_201603':
                 {'func': jj_brand_extract,
-                 'data_func': date_year_month,
+                 'data_func': date_yyyyww,
                  'info': 'N/A',
                  'meta_cols': collections.OrderedDict({3: 'LVL1', 5: 'LVL2',
                                                        6: ''}),
@@ -59,15 +59,15 @@ class Loader:
                  'properties': 'N/A',
                  'dates_cols': {'scale': 'monthly',
                                 'date_col': 0},
-                 'data_cols': {8: 'A', 10: 'B', 11: 'C', 12: 'D'},
+                 'data_cols': {10: '', 11: 'C', 12: 'D'},
                  'sum_rule':
-                     [{'Name': 'A', 'TimeScale': 'sum', 'FactScale': 'sum'},
-                      {'Name': 'B', 'TimeScale': 'sum', 'FactScale': 'sum'},
+                     [{'Name': 'B', 'TimeScale': 'sum', 'FactScale': 'sum'},
                       {'Name': 'C', 'TimeScale': 'sum', 'FactScale': 'sum'},
-                      {'Name': 'C', 'TimeScale': 'sum', 'FactScale': 'sum'}],
-                 'mapping_rule': [{'in': {'LVL1': 'DRUG CHANNEL',
-                                          'LVL2': 'RITE AID'},
-                                   'out': {'LVL1': 'Ecommerce'}}]
+                      {'Name': 'D', 'TimeScale': 'sum', 'FactScale': 'sum'}],
+                 'mapping_rule':
+                     [{'in': collections.OrderedDict(
+                         {'LVL1': 'DRUG CHANNEL', 'LVL2': 'RITE AID'}),
+                       'out': collections.OrderedDict({'LVL1': 'Ecommerce'})}]
                  }
         }
         self.files_map = ('.xlsx', '.csv')
@@ -95,7 +95,6 @@ class Loader:
                 # output = run_method(read_obj, info, meta_cols, name_col_num,
                 #                     dates_cols, prop_cols, date_func)
                 output = run_method(read_obj, options_list)
-                print(output[1])
             except Exception as err:
                 print(err.args)
 

@@ -24,3 +24,8 @@ def test_1():
     pytest.raises(ZeroDivisionError, demo_1, [2, 0, 2])
     # Will check if function return wright result
     assert demo_1([1]) == 'OK'
+
+
+@pytest.mark.skip(reason="no need to test now")
+def test_2():
+    print('Something')
