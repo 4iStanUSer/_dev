@@ -36,9 +36,8 @@ class TestProcessFiles:
         #
         # self.test = 'test'
 
-
-    @xfail(run=True)
     def test_dimensions(self):
         loader = Loader('jj')
         loader.load()
-        assert 5 == 5
+        # assert 5 == 5
+        print('ss')

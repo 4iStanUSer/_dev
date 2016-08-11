@@ -1,6 +1,26 @@
 from iap.repository import exceptions as ex
 import datetime
 
+
+def mapping(in_meta_dict, rules_dict):
+    # Check rules match
+    for rule in rules_dict:
+        is_matched = True
+        input_rule = rule['in']
+        for meta_name, value in input_rule.items():
+            if meta_name not in in_meta_dict:
+                is_matched = False
+                break
+            elif value != in_meta_dict[meta_name]:
+                is_matched = False
+                break
+        # generate output meta dict
+        if is_matched:
+            out_meta = rule['out']
+            return out_meta
+    return in_meta_dict
+
+
 def date_func(date_cols, data_row, index=-1):
     for key, val in date_cols.items():
         if val == 'campaign':
@@ -9,6 +29,10 @@ def date_func(date_cols, data_row, index=-1):
             if index < 0:
                 raise ex.WrongArgsError('date_func', 'index')
             return str(data_row[index].value)
+
+
+def date_yyyyww(date_value):
+    return int(date_value)
 
 
 def date_year_month(date_values):
@@ -28,6 +52,12 @@ def date_year_month(date_values):
               'december': 12}
     month_num = months[month.lower()]
     return datetime.datetime(year, month_num, 1)
+
+
+def date_yyyymm(date_string):
+    year = int(date_string[:3])
+    month = int(date_string[4:])
+    return datetime.datetime(year=year, month=month, day=1)
 
 
 def date_year(date_values):

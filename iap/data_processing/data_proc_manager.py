@@ -3,10 +3,10 @@ import io
 import xlrd
 from csv import DictReader
 import collections
-from iap.data_processing.processors import jj_brand, jj_extract, jj_oc_data_proc
-from iap.data_processing.processors.jj_aggr_map import DataAggregate
+from iap.data_processing.processors import jj_brand, jj_brand_extract, \
+    jj_oc_data_proc
 from iap.data_processing.processors.common import date_year_month, date_year,\
-    date_jj_1week
+    date_jj_1week, date_yyyyww
 
 
 class Loader:
@@ -48,7 +48,27 @@ class Loader:
                  'dates_cols': {'scale': '1week',
                                 'date_name_rows': 'N/A',
                                 'start_column': 1,
-                                'end_column': ''}}
+                                'end_column': ''}},
+            'JNJ_SALES_EXTRACT_FOR_4I_201603':
+                {'func': jj_brand_extract,
+                 'data_func': date_yyyyww,
+                 'info': 'N/A',
+                 'meta_cols': collections.OrderedDict({3: 'LVL1', 5: 'LVL2',
+                                                       6: ''}),
+                 'name_col': 'N/A',
+                 'properties': 'N/A',
+                 'dates_cols': {'scale': 'monthly',
+                                'date_col': 0},
+                 'data_cols': {10: '', 11: 'C', 12: 'D'},
+                 'sum_rule':
+                     [{'Name': 'B', 'TimeScale': 'sum', 'FactScale': 'sum'},
+                      {'Name': 'C', 'TimeScale': 'sum', 'FactScale': 'sum'},
+                      {'Name': 'D', 'TimeScale': 'sum', 'FactScale': 'sum'}],
+                 'mapping_rule':
+                     [{'in': collections.OrderedDict(
+                         {'LVL1': 'DRUG CHANNEL', 'LVL2': 'RITE AID'}),
+                       'out': collections.OrderedDict({'LVL1': 'Ecommerce'})}]
+                 }
         }
         self.files_map = ('.xlsx', '.csv')
 
@@ -61,20 +81,20 @@ class Loader:
 
     def __process_file(self, file_name, extension, file_path):
         options_list = self.func_list[file_name]
-        info = options_list['info']
-        date_func = options_list['date_func']
-        prop_cols = options_list['properties']
+        # info = options_list['info']
+        # date_func = options_list['date_func']
+        # prop_cols = options_list['properties']
         run_method = options_list['func']
-        meta_cols = options_list['meta_cols']
-        name_col_num = options_list['name_col']
-        dates_cols = options_list['dates_cols']
+        # meta_cols = options_list['meta_cols']
+        # name_col_num = options_list['name_col']
+        # dates_cols = options_list['dates_cols']
         with open(file_path, 'rb') as file:
             read_obj = read_file(extension, file)
             # Run method
             try:
-                output = run_method(read_obj, info, meta_cols, name_col_num,
-                                    dates_cols, prop_cols, date_func)
-                print(output[1])
+                # output = run_method(read_obj, info, meta_cols, name_col_num,
+                #                     dates_cols, prop_cols, date_func)
+                output = run_method(read_obj, options_list)
             except Exception as err:
                 print(err.args)
 
