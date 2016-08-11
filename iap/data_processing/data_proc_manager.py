@@ -4,9 +4,9 @@ import xlrd
 from csv import DictReader
 import collections
 from iap.data_processing.processors import jj_brand, jj_brand_extract, \
-    jj_oc_data_proc
+    jj_oc_data_proc, jj_oral_care_sku
 from iap.data_processing.processors.common import date_year_month, date_year,\
-    date_jj_1week, date_yyyyww
+    date_jj_1week, date_yyyyww, date_excel_number
 
 
 class Loader:
@@ -68,6 +68,18 @@ class Loader:
                      [{'in': collections.OrderedDict(
                          {'LVL1': 'DRUG CHANNEL', 'LVL2': 'RITE AID'}),
                        'out': collections.OrderedDict({'LVL1': 'Ecommerce'})}]
+                 },
+            'jj_oral_care_sku_data':
+                {'func': jj_oral_care_sku,
+                 'date_func': date_excel_number,
+                 'info': {'header_row': 0, 'data_row': 1},
+                 'meta_cols': collections.OrderedDict(
+                     {0: 'Region', 1: '', 2: '', 3: ''}),
+                 'name_col': 4,
+                 'map_names': {'Value Sales LC': 'Values_sales_lc'},
+                 'dates_info': {'scale': 'monthly',
+                                'start_column': 5,
+                                'end_column': ''}
                  }
         }
         self.files_map = ('.xlsx', '.csv')
@@ -80,23 +92,24 @@ class Loader:
                 self.__process_file(base_name, extension, file_path)
 
     def __process_file(self, file_name, extension, file_path):
-        options_list = self.func_list[file_name]
-        # info = options_list['info']
-        # date_func = options_list['date_func']
-        # prop_cols = options_list['properties']
-        run_method = options_list['func']
-        # meta_cols = options_list['meta_cols']
-        # name_col_num = options_list['name_col']
-        # dates_cols = options_list['dates_cols']
-        with open(file_path, 'rb') as file:
-            read_obj = read_file(extension, file)
-            # Run method
-            try:
-                # output = run_method(read_obj, info, meta_cols, name_col_num,
-                #                     dates_cols, prop_cols, date_func)
-                output = run_method(read_obj, options_list)
-            except Exception as err:
-                print(err.args)
+        if file_name in self.func_list:
+            options_list = self.func_list[file_name]
+            # info = options_list['info']
+            # date_func = options_list['date_func']
+            # prop_cols = options_list['properties']
+            run_method = options_list['func']
+            # meta_cols = options_list['meta_cols']
+            # name_col_num = options_list['name_col']
+            # dates_cols = options_list['dates_cols']
+            with open(file_path, 'rb') as file:
+                read_obj = read_file(extension, file)
+                # Run method
+                try:
+                    # output = run_method(read_obj, info, meta_cols, name_col_num,
+                    #                     dates_cols, prop_cols, date_func)
+                    output = run_method(read_obj, options_list)
+                except Exception as err:
+                    print(err.args)
 
 
 class DataUploadManager:
