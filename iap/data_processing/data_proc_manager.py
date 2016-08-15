@@ -4,7 +4,8 @@ import xlrd
 from csv import DictReader
 import collections
 from iap.data_processing.processors import jj_brand, jj_brand_extract, \
-    jj_oc_data_proc, jj_oral_care_sku
+    jj_oc_data_proc, jj_oral_care_sku, jj_oral_care_media_spend, \
+    jj_oral_care_rgm_sales
 from iap.data_processing.processors.common import date_year_month, date_year,\
     date_jj_1week, date_yyyyww, date_excel_number
 
@@ -80,6 +81,30 @@ class Loader:
                  'dates_info': {'scale': 'monthly',
                                 'start_column': 5,
                                 'end_column': ''}
+                 },
+            'jj_oral_care_sku_data_media_spend':
+                {'func': jj_oral_care_media_spend,
+                 'date_func': date_year_month,
+                 'info': {'header_row': 2, 'data_row': 3},
+                 'meta_cols': collections.OrderedDict(
+                     {0: '', 1: '', 2: '', 3: '', 4: ''}),
+                 'name_col': 5,
+                 'dates_info': {'scale': 'monthly',
+                                'start_column': 6,
+                                'end_column': '',
+                                'dates_rows': [0, 2]}
+                 },
+            'jj_oral_care_rgm_sales':
+                {'func': jj_oral_care_rgm_sales,
+                 'date_func': date_year_month,
+                 'info': {'header_row': 11, 'data_row': 12},
+                 'meta_cols': collections.OrderedDict(
+                     {0: '', 1: '', 2: '', 3: ''}),
+                 'name_col': 4,
+                 'dates_info': {'scale': 'monthly',
+                                'start_column': 5,
+                                'end_column': '',
+                                'dates_rows': [9, 11]}
                  }
         }
         self.files_map = ('.xlsx', '.csv')
