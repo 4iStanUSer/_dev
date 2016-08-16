@@ -106,6 +106,7 @@ frcast_perm_node_hier_tbl = Table("forecast_perm_node_hier", Base.metadata,
 class FrcastPermNode(Base):
     __tablename__ = 'forecast_perm_node'
     id = Column(Integer, primary_key=True)
+    name = Column(String(length=255))
     node_type = Column(String(length=16))
     perm_values = relationship("FrcastPermValue")
 

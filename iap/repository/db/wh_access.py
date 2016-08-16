@@ -4,7 +4,7 @@ Module for work with access entities
 from sqlalchemy import and_, or_
 from sqlalchemy.orm import aliased
 
-from ..warehouse import access_models as mdls
+from ..warehouse import models_access as mdls
 
 # from sqlalchemy.sql.expression import func
 # from ...repository import exceptions as ex
@@ -13,6 +13,24 @@ from ..warehouse import access_models as mdls
 def _get_tool_model(tool_name, model):
     return mdls.PERMS_MODELS_MAP[tool_name.lower()][model.lower()]
 
+def get_default_perms_to_tool(sess, tool):
+    _n = aliased(_get_tool_model(tool.name, 'node'))
+    _np = aliased(_get_tool_model(tool.name, 'node'))
+    _v = aliased(_get_tool_model(tool.name, 'value'))
+
+    query = sess.query(_v.user_id.label("user_id"),
+                       _n.id.label("node_id"),
+                       _np.id.label("parent_node_id"),
+                       _v.value.label('mask'),
+                       _n.node_type) \
+        .outerjoin(_np, _n.parents) \
+        .outerjoin(_v, _n.perm_values) \
+        .filter(and_(_v.user_id == None)) \
+        .group_by(_n.id)
+
+    perms = query.all()
+
+    return perms
 
 def get_user_perms_to_tool(sess, tool, user):
     _n = aliased(_get_tool_model(tool.name, 'node'))
