@@ -58,12 +58,12 @@ def main(global_config, **settings):
     """
     This function returns a Pyramid WSGI application.
     """
-    # TODO bootstrap pserv via vusual studio
     # TODO learn logging package
-    # TODO drink double coffe
+    # TODO drink double coffee
     config = Configurator(settings=settings)
 
     config.include('pyramid_jinja2')
+    config.include('iap.repository.warehouse')
     config.include(common_routing)
     config.include(forecast_routing, route_prefix='/forecast')
     # Add routing for another tools
