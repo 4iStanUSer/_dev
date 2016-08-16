@@ -1,5 +1,6 @@
 from iap.repository import exceptions as ex
 import datetime
+import xlrd
 
 
 def mapping(in_meta_dict, rules_dict):
@@ -19,6 +20,16 @@ def mapping(in_meta_dict, rules_dict):
             out_meta = rule['out']
             return out_meta
     return in_meta_dict
+
+
+def date_excel_number(date_string, date_mod):
+    try:
+        year, month, day, hour, minute, second = xlrd.xldate_as_tuple(
+            int(date_string), date_mod)
+        return datetime.datetime(year=year, month=month, day=day)
+    except Exception as err:
+        print(err.args)
+        return 0
 
 
 def date_func(date_cols, data_row, index=-1):
