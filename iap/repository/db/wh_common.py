@@ -6,6 +6,7 @@ from .access_models import *
 
 
 def add_variables(ssn, properties_map):
+
     for variable, properties in properties_map.items():
         pass
 
