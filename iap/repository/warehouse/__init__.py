@@ -3,10 +3,11 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm import configure_mappers
 import zope.sqlalchemy
 
-# import or define all models here to ensure they are attached to the
 # Base.metadata prior to any initialization routines
 from .models import *
-from . import wh_common
+from .access_models import *
+from .meta import Base
+# from . import wh_common
 # run configure_mappers after defining all of the models to ensure
 # all relationships can be setup
 configure_mappers()
@@ -42,6 +43,14 @@ def get_tm_session(session_factory, transaction_manager):
     zope.sqlalchemy.register(
         dbsession, transaction_manager=transaction_manager)
     return dbsession
+
+
+def recreate_db(request):
+    _engine = request.dbsession.bind.engine
+    # Drop all tables
+    Base.metadata.drop_all(_engine)
+    # Create all tables
+    Base.metadata.create_all(_engine)
 
 
 def includeme(config):

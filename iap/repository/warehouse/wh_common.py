@@ -2,6 +2,7 @@ from sqlalchemy import or_, and_
 
 from ...repository import exceptions as ex
 from .models import *
+from .access_models import *
 
 
 def add_variables(ssn, properties_map):
@@ -39,14 +40,6 @@ def add_timescales(ssn, project_id, time_periods_map):
             ssn.add(new_period)
 
 
-def add_client(ssn, name, code):
-    # search for duplicate by name or code
-    __check_dupl_client(ssn, name, code)
-    new_client = Client(name=name, code=code)
-    ssn.add(new_client)
-    return new_client
-
-
 def __check_dupl_client(ssn, name, code):
     clients = ssn.query(Client)\
         .filter(or_(Client.code == code,
@@ -58,18 +51,6 @@ def __check_dupl_client(ssn, name, code):
             raise ex.AlreadyExistsError('Client', 'code', code)
         else:
             raise ex.AlreadyExistsError('Client', 'name', name)
-
-
-def add_user(ssn, email, password, client):
-
-    __check_none_obj(client=client)
-    existed_user = ssn.query(User).filter(User.email == email).one_or_none()
-    if existed_user is not None:
-        class_name = existed_user.__class__.__name__
-        raise ex.AlreadyExistsError(class_name, 'email', email)
-    new_user = User(email=email, password=password)
-    client.users.append(new_user)
-    return new_user
 
 
 def __check_none_obj(**kwargs):

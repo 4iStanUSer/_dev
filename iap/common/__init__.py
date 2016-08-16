@@ -19,25 +19,32 @@ from . import service
 from iap.data_processing.test_init_data import test_processing_data, \
     test_jj_oc_data
 
-def notfound_view(request):
-    request.response.status = 404
-    return {}
+
+def notfound_view(req):
+    req.response.status = 404
+    return render_to_response('templates/404.jinja2',
+                              {'title': '404 Not Found'},
+                              request=req)
 
 
-def forbidden_view(request):
-    next_url = request.route_url('common.login', _query={'next': request.url})
+def forbidden_view(req):
+    next_url = req.route_url('common.login', _query={'next': req.url})
     return HTTPFound(location=next_url)
 
 
-def index_view(request):
-    #user = request.user
+def index_view(req):
+    #user = req.user
     #if user is None:
     #    raise HTTPForbidden
 
-    #return Response('<h1>Hello world!</h1>')
+    service.fillin_db(req)
+    service.init_permissions(req)
+    permissions = service.get_permissions(req)
+    print(permissions)
+
     return render_to_response('templates/index.jinja2',
                               {'title': 'Forecast index'},
-                              request=request)
+                              request=req)
 
 
 def login_view(request):
