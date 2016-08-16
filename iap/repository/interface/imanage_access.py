@@ -1,9 +1,28 @@
-from ...repository import exceptions as ex
-from ..warehouse import wh_access as wha
-from . import (
-    get_int_id_or_err as _get_int_id_or_err,
-    get_str_or_err as _get_str_or_err
-)
+from .. import exceptions as ex
+from ..db import layer_access as wha
+
+
+def _get_int_id_or_err(value, name):
+    try:
+        integer = int(value)
+        if integer < 1:
+            raise ex.WrongArgEx(name, value)
+        return integer
+    except TypeError:
+        raise ex.EmptyInputsError(name)
+    except ValueError:
+        raise ex.WrongArgEx(name, value)
+
+
+def _get_str_or_err(value, name):
+    try:
+        if not isinstance(value, str) or len(value) == 0:
+            raise ex.WrongArgEx(name, value)
+        return value
+    except TypeError:
+        raise ex.EmptyInputsError(name)
+    except ValueError:
+        raise ex.WrongArgEx(name, value)
 
 
 def get_role(ssn, **kwargs):

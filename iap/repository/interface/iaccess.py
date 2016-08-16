@@ -1,6 +1,5 @@
-from ...repository import exceptions as ex
-from ..warehouse import wh_access as wha
-from . import get_int_id_or_err as _get_int_id_or_err
+from .. import exceptions as ex
+from ..db import layer_access as wha
 
 
 def get_permissions(req, tool_id, user_id):
@@ -22,4 +21,16 @@ def get_permissions(req, tool_id, user_id):
         'permissions': wha.get_user_perms_to_tool(sess, tool, user),
         'features': wha.get_user_features_to_tool(sess, tool, user)
     }
+
+
+def _get_int_id_or_err(value, name):
+    try:
+        integer = int(value)
+        if integer < 1:
+            raise ex.WrongArgEx(name, value)
+        return integer
+    except TypeError:
+        raise ex.EmptyInputsError(name)
+    except ValueError:
+        raise ex.WrongArgEx(name, value)
 

@@ -63,7 +63,7 @@ def main(global_config, **settings):
     config = Configurator(settings=settings)
 
     config.include('pyramid_jinja2')
-    config.include('iap.repository.warehouse')
+    config.include('iap.repository.db')
     config.include(common_routing)
     config.include(forecast_routing, route_prefix='/forecast')
     # Add routing for another tools
