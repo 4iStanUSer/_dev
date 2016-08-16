@@ -37,10 +37,11 @@ def index_view(req):
     #if user is None:
     #    raise HTTPForbidden
 
-    service.fillin_db(req)
-    service.init_permissions(req)
-    permissions = service.get_permissions(req)
-    print(permissions)
+    # service.recreate_db(req)
+    # service.fillin_db(req)
+    # service.init_permissions(req)
+    # permissions = service.get_permissions(req)
+    # print(permissions)
 
     return render_to_response('templates/index.jinja2',
                               {'title': 'Forecast index'},

@@ -4,7 +4,6 @@
 env/
 __pycache__/
 .idea/
-data_processing/test_inputs/
+test_inputs/
 IAP.egg-info/
-iap/data_processing/test_inputs/
 .cache/

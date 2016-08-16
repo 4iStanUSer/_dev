@@ -5,7 +5,7 @@ import zope.sqlalchemy
 
 # Base.metadata prior to any initialization routines
 from .models import *
-from .access_models import *
+from .models_access import *
 from .meta import Base
 # from . import wh_common
 # run configure_mappers after defining all of the models to ensure
