@@ -1,11 +1,12 @@
 from iap.repository import exceptions as ex
 from iap.data_processing.processors.common import get_last_col, \
     get_cell_range, mapping
-from iap.repository.tmp_db_interface import *
+from iap.repository.interface.iwarehouse import IWarehouse
+# from iap.repository.tmp_db_interface import *
 import collections
 
 
-def jj_oral_care_rgm_sales(wb, options_list):
+def jj_oral_care_rgm_sales(ssn, wb, options_list):
     ws = wb.sheet_by_index(0)
     meta_cols = options_list['meta_cols']
     date_func = options_list['date_func']
@@ -38,8 +39,12 @@ def jj_oral_care_rgm_sales(wb, options_list):
     date_rows = options_list['dates_info']['dates_rows']
     for row_index in date_rows:
         date_values.append(ws.cell(row_index, start_date_col).value)
-    this_date = date_func(date_values)
+    num_of_dates = last_col - start_date_col
+    first_label, time_line = date_func(date_values, num_of_dates)
+    IWarehouse.add_time_scale(ssn, series_name, time_line)
+    counter = 0
     for row_index in range(start_data_row, ws.nrows):
+        counter += 1
         data_row = ws.row(row_index)
         meta = []
         meta_dict = collections.OrderedDict({})
@@ -56,13 +61,18 @@ def jj_oral_care_rgm_sales(wb, options_list):
         if has_map_names:
             if var_name in map_names:
                 var_name = map_names[var_name]
-        entity = Warehouse.get(meta)
-        variable = entity.force_data_by_name(var_name)
-        time_series = variable.force_series(series_name)
+        # entity = Warehouse.get(meta)
+        entity = IWarehouse.add_entity(ssn, meta)
+        # variable = entity.force_data_by_name(var_name)
+        variable = entity.force_variable(var_name, 'float')
+        time_series = variable.force_time_series(series_name)
         values = []
         for col_index in range(start_date_col, last_col):
-            values.append(data_row[col_index].value)
-        time_series.set_data(this_date, values)
+            value = data_row[col_index].value
+            if value == '':
+                value = 0.0
+            values.append(value)
+        time_series.set_values(first_label, values)
 
 
 def jj_oral_care_media_spend(wb, options_list):

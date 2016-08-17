@@ -1,6 +1,7 @@
 from iap.repository import exceptions as ex
 import datetime
 import xlrd
+import collections
 
 
 def mapping(in_meta_dict, rules_dict):
@@ -46,8 +47,10 @@ def date_yyyyww(date_value):
     return int(date_value)
 
 
-def date_year_month(date_values):
-    year = int(float(date_values[0]))
+def date_year_month(date_values, num_of_dates):
+    first_label = ''
+    output = collections.OrderedDict({})
+    new_year = int(float(date_values[0]))
     month = date_values[1]
     months = {'january': 1,
               'february': 2,
@@ -61,8 +64,31 @@ def date_year_month(date_values):
               'october': 10,
               'november': 11,
               'december': 12}
-    month_num = months[month.lower()]
-    return datetime.datetime(year, month_num, 1)
+    output_months = {1: 'Jan',
+                     2: 'Feb',
+                     3: 'Mar',
+                     4: 'Apr',
+                     5: 'May',
+                     6: 'Jun',
+                     7: 'Jul',
+                     8: 'Aug',
+                     9: 'Sep',
+                     10: 'Oct',
+                     11: 'Nov',
+                     12: 'Dec'}
+    # Init vars for month loop
+    new_month_num = months[month.lower()]
+    for i in range(num_of_dates):
+        if new_month_num > 12:
+            new_year += 1
+            new_month_num -= 12
+        month_string = output_months[new_month_num]
+        new_key = month_string + ' ' + str(new_year)
+        output[new_key] = datetime.datetime(new_year, new_month_num, 1)
+        if i == 0:
+            first_label = new_key
+        new_month_num += 1
+    return first_label, output
 
 
 def date_yyyymm(date_string):

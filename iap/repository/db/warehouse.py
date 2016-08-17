@@ -204,6 +204,7 @@ class Entity(Base):
         new_var = Variable(_name=name, _data_type=type_enum.value,
                            _default_value=default_value)
         self._variables.append(new_var)
+        return new_var
 
 
 class Variable(Base):
