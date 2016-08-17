@@ -23,11 +23,37 @@ def mapping(in_meta_dict, rules_dict):
     return in_meta_dict
 
 
-def date_excel_number(date_string, date_mod):
+def date_monthly_excel_number(date_string, date_mod, num_of_dates):
+    output = collections.OrderedDict({})
+    first_label = ''
+    output_months = {1: 'Jan',
+                     2: 'Feb',
+                     3: 'Mar',
+                     4: 'Apr',
+                     5: 'May',
+                     6: 'Jun',
+                     7: 'Jul',
+                     8: 'Aug',
+                     9: 'Sep',
+                     10: 'Oct',
+                     11: 'Nov',
+                     12: 'Dec'}
     try:
         year, month, day, hour, minute, second = xlrd.xldate_as_tuple(
             int(date_string), date_mod)
-        return datetime.datetime(year=year, month=month, day=day)
+        for i in range(num_of_dates):
+            if month > 12:
+                year += 1
+                month -= 12
+            month_string = output_months[month]
+            new_key = month_string + ' ' + str(year)
+            output[new_key] = datetime.datetime(year=year, month=month,
+                                                day=1)
+            if i == 0:
+                first_label = new_key
+            month += 1
+        return first_label, output
+        # return datetime.datetime(year=year, month=month, day=day)
     except Exception as err:
         print(err.args)
         return 0

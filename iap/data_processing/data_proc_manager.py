@@ -7,7 +7,7 @@ from iap.data_processing.processors import jj_brand, jj_brand_extract, \
     jj_oc_data_proc, jj_oral_care_sku, jj_oral_care_media_spend, \
     jj_oral_care_rgm_sales
 from iap.data_processing.processors.common import date_year_month, date_year,\
-    date_jj_1week, date_yyyyww, date_excel_number
+    date_jj_1week, date_yyyyww, date_monthly_excel_number
 
 
 class Loader:
@@ -73,7 +73,7 @@ class Loader:
                  },
             'jj_oral_care_sku_data':
                 {'func': jj_oral_care_sku,
-                 'date_func': date_excel_number,
+                 'date_func': date_monthly_excel_number,
                  'info': {'header_row': 0, 'data_row': 1},
                  'meta_cols': collections.OrderedDict(
                      {0: 'Region', 1: '', 2: '', 3: ''}),
