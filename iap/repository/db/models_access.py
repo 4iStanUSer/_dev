@@ -19,12 +19,19 @@ class Tool(Base):
     roles = relationship("Role", backref="tool")
     # Maybe configure join  via...
     features = relationship("Feature", backref="tool")
+    user_groups = relationship("UserGroup", backref="tool")
 
 
 user_role_tbl = Table(
     'user_roles', Base.metadata,
     Column('user_id', Integer, ForeignKey('users.id')),
     Column('role_id', Integer, ForeignKey('roles.id'))
+)
+
+user_ugroup_tbl = Table(
+    'user_ugroup', Base.metadata,
+    Column('user_id', Integer, ForeignKey('users.id')),
+    Column('group_id', Integer, ForeignKey('user_groups.id'))
 )
 
 
@@ -38,6 +45,8 @@ class User(Base):
                            back_populates='user')
     roles = relationship('Role', secondary=user_role_tbl,
                          back_populates='users')
+    groups = relationship('UserGroup', secondary=user_ugroup_tbl,
+                          back_populates='users')
 
 
 role_features_tbl = Table(
@@ -89,6 +98,11 @@ class UserGroup(Base):
     __tablename__ = 'user_groups'
     id = Column(Integer, primary_key=True)
     name = Column(String(length=255))
+
+    #  there is variable-link to tool
+
+    users = relationship('User', secondary=user_ugroup_tbl,
+                         back_populates='groups')
 
 
 # region Models For User's Permissions to ForecastTool
@@ -143,25 +157,25 @@ PERMS_MODELS_MAP = {
 }
 
 
-# class UserDataAccess(Base):
-#     __tablename__ = 'user_data_access'
-#
-#     user_id = Column(Integer, ForeignKey('users.id'), primary_key=True)
-#     feature_id = Column(Integer,
-#                         ForeignKey('features.id'),
-#                         primary_key=True)
-#     variable_id = Column(Integer, ForeignKey('variable.id'), primary_key=True)
-#     decline_flag = Column(Boolean(create_constraint=True, name='validator'),
-#                           default=False)
-#
-#
-# class UserGroupDataAccess(Base):
-#     __tablename__ = 'user_group_data_access'
-#
-#     user_id = Column(Integer, ForeignKey('users.id'), primary_key=True)
-#     feature_id = Column(Integer,
-#                         ForeignKey('features.id'),
-#                         primary_key=True)
-#     variable_id = Column(Integer, ForeignKey('variable.id'), primary_key=True)
-#     decline_flag = Column(Boolean(create_constraint=True, name='validator'),
-#                           default=False)
+class UserDataAccess(Base):
+    __tablename__ = 'user_data_access'
+
+    user_id = Column(Integer, ForeignKey('users.id'), primary_key=True)
+    feature_id = Column(Integer,
+                        ForeignKey('features.id'),
+                        primary_key=True)
+    variable_id = Column(Integer, ForeignKey('variable.id'), primary_key=True)
+    decline_flag = Column(Boolean(create_constraint=True, name='validator'),
+                          default=False)
+
+
+class UserGroupDataAccess(Base):
+    __tablename__ = 'user_group_data_access'
+
+    user_id = Column(Integer, ForeignKey('users.id'), primary_key=True)
+    feature_id = Column(Integer,
+                        ForeignKey('features.id'),
+                        primary_key=True)
+    variable_id = Column(Integer, ForeignKey('variable.id'), primary_key=True)
+    decline_flag = Column(Boolean(create_constraint=True, name='validator'),
+                          default=False)

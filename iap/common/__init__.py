@@ -40,8 +40,8 @@ def index_view(req):
     # service.recreate_db(req)
     # service.fillin_db(req)
     # service.init_permissions(req)
-    # permissions = service.get_permissions(req)
-    # print(permissions)
+    permissions = service.get_permissions(req)
+    print(permissions)
 
     return render_to_response('templates/index.jinja2',
                               {'title': 'Forecast index'},

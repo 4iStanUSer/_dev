@@ -10,24 +10,58 @@ def _get_tool_model(tool_name, model):
     return mdls.PERMS_MODELS_MAP[tool_name.lower()][model.lower()]
 
 
-def get_default_perms_to_tool(ssn, tool):
+def get_perms_to_tool(ssn, tool, user_id=None):
     _n = aliased(_get_tool_model(tool.name, 'node'))
     _np = aliased(_get_tool_model(tool.name, 'node'))
     _v = aliased(_get_tool_model(tool.name, 'value'))
 
-    query = ssn.query(_v.user_id.label("user_id"),
-                       _n.id.label("node_id"),
-                       _np.id.label("parent_node_id"),
-                       _v.value.label('mask'),
-                       _n.node_type) \
+    query = ssn.query(_v,
+                      _n,
+                      _v.user_id.label("user_id"),
+                      _v.value.label('mask'),
+                      _n.name.label("node_name"),
+                      _n.node_type.label("node_type"),
+                      _n.id.label("node_id"),
+                      _np.id.label("parent_node_id")) \
+        .outerjoin(_n) \
         .outerjoin(_np, _n.parents) \
-        .outerjoin(_v, _n.perm_values) \
-        .filter(and_(_v.user_id == None)) \
-        .group_by(_n.id)
+        .filter(and_(_v.user_id.is_(user_id)))
 
     perms = query.all()
 
-    return perms
+    permissions = []
+    if perms is not None:
+        for ind, perm in enumerate(perms):
+            node_parents = _get_all_perm_node_parents(perm[1])
+            if node_parents is not None:
+                node_parents.reverse()
+                node_parents = [x.name for x in node_parents]
+            else:
+                node_parents = []
+
+            permissions.append({
+                'name': perm.node_name,
+                'user_id': perm.user_id,
+                'mask': perm.mask,
+                'path': node_parents,
+                'node_type': perm.node_type
+            })
+
+    return permissions
+
+
+def _get_all_perm_node_parents(perm_node, include_this=False):
+    parents = []
+    if perm_node is not None:
+        if include_this:
+            parents.append(perm_node)
+        if perm_node.parents and len(perm_node.parents):
+            # TODO WARN
+            p = _get_all_perm_node_parents(perm_node.parents[0], True)
+            if p and len(p):
+                parents.extend(p)
+        return parents
+    return None
 
 
 def get_user_perms_to_tool(ssn, tool, user):
@@ -82,49 +116,22 @@ def add_role(ssn, name):  # , client=None, tool=None
     return new_role
 
 
-def add_role_to_tool(ssn, role, tool):
-    return tool.roles.append(role)
+# def add_role_to_tool(ssn, role, tool):
+#     return tool.roles.append(role)
 
 
-def add_user(ssn, email, password, role=None):
+def add_user(ssn, email, password, roles=None):
     new_user = mdls.User(email=email, password=password)
-    if role is None:
+    if roles is None:
         ssn.add(new_user)
     else:
-        role.users.append(new_user)
+        for role in roles:
+            role.users.append(new_user)
     return new_user
 
 
 def add_role_to_user(ssn, user, role):
     return user.roles.append(role)
-
-
-def get_user_by_id(ssn, user_id):
-    return ssn.query(mdls.User).get(user_id)
-
-
-def get_user_by_email(ssn, email):
-    return ssn.query(mdls.User).filter(mdls.User.email == email).one_or_none()
-
-
-def get_feature_by_id(ssn, feature_id):
-    return ssn.query(mdls.Feature).get(feature_id)
-
-
-def get_feature_by_name_in_tool(ssn, name, tool):
-    features = tool.features
-    for feature in features:
-        if feature.name == name:
-            return feature
-    return None
-
-
-def get_feature_by_name_in_role(ssn, name, role):
-    features = role.features
-    for feature in features:
-        if feature.name == name:
-            return feature
-    return None
 
 
 def add_tool(ssn, name):
@@ -161,9 +168,9 @@ def add_feature_to_role(ssn, role, feature):
     return role.features.append(feature)
 
 
-def add_perm_node(ssn, tool, node_type, parent=None):
+def add_perm_node(ssn, tool, node_type, name, parent=None):
     node_model = _get_tool_model(tool.name, 'node')
-    new_node = node_model(node_type=node_type)
+    new_node = node_model(node_type=node_type, name=name)
     if parent is not None:
         parent.children.append(new_node)
     else:
@@ -192,3 +199,80 @@ def add_default_perm_value(ssn, tool, perm_node, value):
     new_perm_value = value_model(value=value)
     perm_node.perm_values.append(new_perm_value)
     return new_perm_value
+
+
+# region Users methods
+
+def get_user_by_id(ssn, user_id):
+    return ssn.query(mdls.User).get(user_id)
+
+
+def get_user_by_email(ssn, email):
+    return ssn.query(mdls.User).filter(mdls.User.email == email).one_or_none()
+
+
+def get_users_by_tool(ssn, tool):
+    return ssn.query(mdls.User) \
+        .join(mdls.Role, mdls.User.roles) \
+        .join(mdls.Tool, mdls.Role.tool_id) \
+        .filter(and_(mdls.Tool.id == tool.id)) \
+        .all()
+
+
+def get_all_users(ssn):
+    return ssn.query(mdls.User).all()
+
+# endregion
+
+
+# region Groups methods
+
+def add_user_group(ssn, name, tool):
+    new_group = mdls.UserGroup(name=name)
+    return tool.user_groups.append(new_group)
+
+def get_user_group_by_id(ssn, group_id):
+    return ssn.query(mdls.UserGroup).get(group_id)
+
+# endregion
+
+
+# region Features methods
+
+def get_features_by_tool(ssn, tool):
+    return tool.features
+
+
+def add_features_to_role(ssn, role, features):
+    for feature in features:
+        role.append(feature)
+
+
+def del_features_from_role(ssn, role, features_id):
+    return ssn.query(mdls.Feature) \
+        .join(mdls.Role, mdls.Feature.roles) \
+        .filter(and_(mdls.Role.id.in_(features_id),
+                     mdls.Role.id == role.id)) \
+        .delete()
+
+
+def get_feature_by_id(ssn, feature_id):
+    return ssn.query(mdls.Feature).get(feature_id)
+
+
+def get_feature_by_name_in_tool(ssn, name, tool):
+    features = tool.features
+    for feature in features:
+        if feature.name == name:
+            return feature
+    return None
+
+
+def get_feature_by_name_in_role(ssn, name, role):
+    features = role.features
+    for feature in features:
+        if feature.name == name:
+            return feature
+    return None
+
+# endregion
