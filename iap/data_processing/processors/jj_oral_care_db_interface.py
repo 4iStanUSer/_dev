@@ -42,9 +42,7 @@ def jj_oral_care_rgm_sales(ssn, wb, options_list):
     num_of_dates = last_col - start_date_col
     first_label, time_line = date_func(date_values, num_of_dates)
     IWarehouse.add_time_scale(ssn, series_name, time_line)
-    counter = 0
     for row_index in range(start_data_row, ws.nrows):
-        counter += 1
         data_row = ws.row(row_index)
         meta = []
         meta_dict = collections.OrderedDict({})

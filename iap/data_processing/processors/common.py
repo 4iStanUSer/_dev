@@ -69,8 +69,14 @@ def date_func(date_cols, data_row, index=-1):
             return str(data_row[index].value)
 
 
-def date_yyyyww(date_value):
-    return int(date_value)
+def date_yyyyww(date_value, num_of_dates):
+    string_date = str(int(date_value))
+    time_line = datetime.datetime.strptime(string_date + '-0', "%Y%W-%w")
+    year = time_line.year
+    week = time_line.isocalendar()[1]
+    key = str(year) + ' W' + str(week)
+    return key
+    # return int(date_value)
 
 
 def date_year_month(date_values, num_of_dates):
@@ -128,14 +134,28 @@ def date_year(date_values):
     return datetime.datetime(year, 1, 1)
 
 
-def date_jj_1week(date_string):
+def date_jj_1week(date_string, num_of_dates):
+    first_label = ''
+    output = collections.OrderedDict({})
     try:
         tmp_split = date_string.split(' ')
         date_split = tmp_split[2].split('/')
         month = int(date_split[0])
         day = int(date_split[1])
         year = int('20' + str(date_split[2]))
-        return datetime.datetime(year=year, month=month, day=day)
+        time_stamp = datetime.datetime(year=year, month=month, day=day)
+        week = time_stamp.isocalendar()[1]
+        for i in range(num_of_dates):
+            if week > 52:
+                year += 1
+                week -= 52
+            new_key = str(year) + ' W' + str(week)
+            output[new_key] = time_stamp
+            if i == 0:
+                first_label = new_key
+            week += 1
+            time_stamp += datetime.timedelta(days=7)
+        return first_label, output
     except Exception as err:
         print(err.args)
         return 0

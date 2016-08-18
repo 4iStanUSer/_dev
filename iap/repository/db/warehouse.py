@@ -349,7 +349,8 @@ class TimeSeries(Base):
                 .filter(TimePoint.time_scale_id == self._id,
                         TimePoint.name == start_label).one_or_none()
             if start_point is None:
-                raise Exception
+                return []
+                # raise Exception
             else:
                 start = start_point.timestamp
             # Get all points from start.
