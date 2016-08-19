@@ -7,11 +7,12 @@ from iap.data_processing.processors import jj_brand, jj_brand_extract, \
     jj_oc_data_proc, jj_oral_care_sku, jj_oral_care_media_spend, \
     jj_oral_care_rgm_sales
 from iap.data_processing.processors.common import date_year_month, date_year,\
-    date_jj_1week, date_yyyyww, date_excel_number
+    date_jj_1week, date_yyyyww, date_monthly_excel_number
 
 
 class Loader:
-    def __init__(self, data_load_command='jj'):
+    def __init__(self, ssn, data_load_command='jj'):
+        self.ssn = ssn
         BASE_DIR = os.path.dirname(os.path.dirname(__file__))
         self.lake_src = os.path.join(BASE_DIR, 'repository', 'data_lake')
         self.func_list = {
@@ -46,7 +47,7 @@ class Loader:
                                'SubBrand'],
                  'name_col': 0,
                  'properties': 'N/A',
-                 'dates_cols': {'scale': '1week',
+                 'dates_cols': {'scale': 'weekly',
                                 'date_name_rows': 'N/A',
                                 'start_column': 1,
                                 'end_column': ''}},
@@ -58,8 +59,8 @@ class Loader:
                                                        6: ''}),
                  'name_col': 'N/A',
                  'properties': 'N/A',
-                 'dates_cols': {'scale': 'monthly',
-                                'date_col': 0},
+                 'dates_cols': {'scale': 'weekly',
+                                'date_col': 1},
                  'data_cols': {10: '', 11: 'C', 12: 'D'},
                  'sum_rule':
                      [{'Name': 'B', 'TimeScale': 'sum', 'FactScale': 'sum'},
@@ -72,7 +73,7 @@ class Loader:
                  },
             'jj_oral_care_sku_data':
                 {'func': jj_oral_care_sku,
-                 'date_func': date_excel_number,
+                 'date_func': date_monthly_excel_number,
                  'info': {'header_row': 0, 'data_row': 1},
                  'meta_cols': collections.OrderedDict(
                      {0: 'Region', 1: '', 2: '', 3: ''}),
@@ -132,7 +133,7 @@ class Loader:
                 try:
                     # output = run_method(read_obj, info, meta_cols, name_col_num,
                     #                     dates_cols, prop_cols, date_func)
-                    output = run_method(read_obj, options_list)
+                    output = run_method(self.ssn, read_obj, options_list)
                 except Exception as err:
                     print(err.args)
 

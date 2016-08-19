@@ -204,6 +204,7 @@ class Entity(Base):
         new_var = Variable(_name=name, _data_type=type_enum.value,
                            _default_value=default_value)
         self._variables.append(new_var)
+        return new_var
 
 
 class Variable(Base):
@@ -348,7 +349,8 @@ class TimeSeries(Base):
                 .filter(TimePoint.time_scale_id == self._id,
                         TimePoint.name == start_label).one_or_none()
             if start_point is None:
-                raise Exception
+                return []
+                # raise Exception
             else:
                 start = start_point.timestamp
             # Get all points from start.
