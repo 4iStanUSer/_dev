@@ -11,8 +11,8 @@ from iap.data_processing.processors.common import date_year_month, date_year,\
 
 
 class Loader:
-    def __init__(self, ssn, data_load_command='jj'):
-        self.ssn = ssn
+    def __init__(self, warehouse, data_load_command='jj'):
+        self.warehouse = warehouse
         BASE_DIR = os.path.dirname(os.path.dirname(__file__))
         self.lake_src = os.path.join(BASE_DIR, 'repository', 'data_lake')
         self.func_list = {
@@ -131,9 +131,8 @@ class Loader:
                 read_obj = read_file(extension, file)
                 # Run method
                 try:
-                    # output = run_method(read_obj, info, meta_cols, name_col_num,
-                    #                     dates_cols, prop_cols, date_func)
-                    output = run_method(self.ssn, read_obj, options_list)
+                    run_method(self.warehouse, read_obj, options_list)
+                    self.warehouse.commit()
                 except Exception as err:
                     print(err.args)
 

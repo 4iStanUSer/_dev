@@ -10,6 +10,8 @@ import transaction
 from pyramid import testing
 from iap.repository.db.warehouse import Entity
 from iap.data_processing.data_proc_manager import Loader
+from iap.repository import get_wh_interface
+from iap.repository.db.warehouse import Warehouse
 
 xfail = pytest.mark.xfail
 
@@ -33,16 +35,24 @@ class TestProcessFiles:
         Base.metadata.drop_all(self.engine)
         Base.metadata.create_all(self.engine)
         session_factory = get_session_factory(self.engine)
-        self.db_session = get_tm_session(session_factory, transaction.manager)
+
         root = Entity(name='root')
-        self.db_session.add(root)
-        transaction.manager.commit()
-        #
-        # self.test = 'test'
+        curr_ssn = session_factory()
+        curr_ssn.add(root)
+        curr_ssn.commit()
+
+        self.wh = Warehouse(session_factory)
+
+        # self.db_session = get_tm_session(session_factory,
+        # transaction.manager)
+
+        # self.db_session.add(root)
+        # transaction.manager.commit()
+
 
     def test_dimensions(self):
-        loader = Loader(self.db_session, data_load_command='jj')
+        loader = Loader(self.wh, data_load_command='jj')
         loader.load()
-        transaction.manager.commit()
+        # transaction.manager.commit()
         # assert 5 == 5
         print('ss')

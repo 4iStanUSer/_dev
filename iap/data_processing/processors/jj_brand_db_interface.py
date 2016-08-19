@@ -1,13 +1,12 @@
 from iap.repository import exceptions as ex
 from iap.data_processing.processors.common import get_last_col, \
     get_cell_range, mapping
-from iap.repository.interface.iwarehouse import IWarehouse
 import collections
 from iap.data_processing.processors.jj_aggr_map import DataAggregate
 import datetime
 
 
-def jj_brand_extract(ssn, wb, options_list):
+def jj_brand_extract_speed_test(warehouse, wb, options_list):
     meta_cols = options_list['meta_cols']
     data_cols = options_list['data_cols']
     dates_src_cols = options_list['dates_cols']
@@ -43,7 +42,8 @@ def jj_brand_extract(ssn, wb, options_list):
     for row_index in range(1, ws.nrows):
         date_values.append(data[row_index][date_col].value)
     time_line = get_time_line(date_values)
-    IWarehouse.add_time_scale(ssn, series_name, time_line)
+    warehouse.add_time_scale(series_name, time_line)
+    warehouse.commit()
     for row_index in range(1, ws.nrows):
         # if row_index == 1 or row_index == 63:
         print(row_index)
@@ -61,17 +61,99 @@ def jj_brand_extract(ssn, wb, options_list):
         date_value = data[row_index][date_col].value
         start_label = date_func(date_value, num_of_dates)
         # IWarehouse.add_time_scale(ssn, series_name, time_line)
-        entity = IWarehouse.add_entity(ssn, meta)
+        entity = warehouse.add_entity(meta)
         for key, val in data_cols.items():
             value = data[row_index][key].value
             variable = entity.force_variable(val, 'float')
             time_series = variable.force_time_series(series_name)
-            history_value = time_series.get_values(start_label, 1)
+            history_value = time_series.get_value(start_label)
             if not history_value:
                 new_value = [value]
             else:
                 new_value = [history_value[0] + value]
             time_series.set_values(start_label, new_value)
+    return output
+
+
+def jj_brand_extract(warehouse, wb, options_list):
+    t1 = datetime.now()
+
+    meta_cols = options_list['meta_cols']
+    data_cols = options_list['data_cols']
+    dates_src_cols = options_list['dates_cols']
+    date_func = options_list['data_func']
+    date_col = options_list['dates_cols']['date_col']
+    series_name = options_list['dates_cols']['scale']
+    ws = wb.sheet_by_index(0)
+    if ws.nrows <= 1:
+        raise ex.EmptyInputsError('jj_extract')
+    header_row = ws.row(0)
+    last_col = get_last_col(ws, header_row)
+    # Init headers cols: names
+    for key, val in meta_cols.items():
+        if key >= last_col:
+            raise ex.NotExistsError('DataProcessing', 'column', key)
+        if val == '':
+            meta_cols[key] = header_row[key].value
+    for key, val in data_cols.items():
+        if key >= last_col:
+            raise ex.NotExistsError('DataProcessing', 'column', key)
+        if val == '':
+            data_cols[key] = header_row[key].value
+    if date_col >= last_col:
+        raise ex.NotExistsError('DataProcessing', 'column', key)
+    # Create output: Append data
+    output = []
+    if 'mapping_rule' in options_list:
+        mapping_rule = options_list['mapping_rule']
+    else:
+        mapping_rule = None
+    data = get_cell_range(0, 0, ws.ncols, ws.nrows, ws)
+    date_values = []
+    for row_index in range(1, ws.nrows):
+        date_values.append(data[row_index][date_col].value)
+    time_line = get_time_line(date_values)
+    warehouse.add_time_scale(series_name, time_line)
+    warehouse.commit()
+    for row_index in range(1, ws.nrows):
+        # if row_index == 1 or row_index == 63:
+        print(row_index)
+        meta = []
+        meta_dict = collections.OrderedDict({})
+        for key, val in meta_cols.items():
+            meta_dict[val] = data[row_index][key].value
+            meta.append(data[row_index][key].value)
+        if mapping_rule is not None:
+            new_meta_dict = mapping(meta_dict, mapping_rule)
+            meta = []
+            for key, value in new_meta_dict.items():
+                meta.append(value)
+        num_of_dates = 1
+        date_value = data[row_index][date_col].value
+        start_label = date_func(date_value, num_of_dates)
+        # IWarehouse.add_time_scale(ssn, series_name, time_line)
+        entity = warehouse.add_entity(meta)
+        for key, val in data_cols.items():
+            value = data[row_index][key].value
+            variable = entity.force_variable(val, 'float')
+            time_series = variable.force_time_series(series_name)
+            history_value = time_series.get_value(start_label)
+            if not history_value:
+                new_value = [value]
+            else:
+                new_value = [history_value[0] + value]
+            time_series.set_values(start_label, new_value)
+        if row_index == 134:
+            t3 = datetime.now()
+            delta = (t3 - t1)
+            minutes_delta_time = delta.seconds/60.0
+            print('Algorithm 134 takes minutes:' + str(minutes_delta_time))
+            print('Algorithm 143 takes seconds:' + str(delta.seconds))
+    t2 = datetime.now()
+    delta = (t2 - t1)
+    minutes_delta_time = delta.seconds/60.0
+    print('Algorithm takes minutes:' + str(minutes_delta_time))
+    print('Algorithm takes seconds:' + str(delta.seconds))
     return output
 
 
@@ -102,7 +184,7 @@ def get_time_line(date_values):
     return output
 
 
-def jj_brand(ssn, wb, options_list):
+def jj_brand(warehouse, wb, options_list):
     date_func = options_list['date_func']
     meta_new_names = options_list['meta_cols']
     name_col_num = options_list['name_col']
@@ -136,7 +218,7 @@ def jj_brand(ssn, wb, options_list):
                                        num_of_dates)
     # start_date_point = date_func(header_row[start_dates_col].value)
     series_name = dates_info['scale']
-    IWarehouse.add_time_scale(ssn, series_name, time_line)
+    warehouse.add_time_scale(series_name, time_line)
     while row_index < ws.nrows:
         desc_val = str(meta_column[row_index].value)
         # Add meta and data to output only if facts exist
@@ -148,7 +230,7 @@ def jj_brand(ssn, wb, options_list):
             # using db interface
             meta = __get_meta(meta_column, meta_new_names, start_meta_row,
                               last_meta_row)
-            entity = IWarehouse.add_entity(ssn, meta)
+            entity = warehouse.add_entity(meta)
             for row_index in range(row_index+1, last_facts_row + 1):
                 data_row = ws.row(row_index)
                 fact_name = meta_column[row_index].value

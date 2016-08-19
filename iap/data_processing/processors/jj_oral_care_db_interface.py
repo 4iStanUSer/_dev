@@ -1,12 +1,11 @@
 from iap.repository import exceptions as ex
 from iap.data_processing.processors.common import get_last_col, \
     get_cell_range, mapping
-from iap.repository.interface.iwarehouse import IWarehouse
 # from iap.repository.tmp_db_interface import *
 import collections
 
 
-def jj_oral_care_rgm_sales(ssn, wb, options_list):
+def jj_oral_care_rgm_sales(warehouse, wb, options_list):
     ws = wb.sheet_by_index(0)
     meta_cols = options_list['meta_cols']
     date_func = options_list['date_func']
@@ -41,7 +40,7 @@ def jj_oral_care_rgm_sales(ssn, wb, options_list):
         date_values.append(ws.cell(row_index, start_date_col).value)
     num_of_dates = last_col - start_date_col
     first_label, time_line = date_func(date_values, num_of_dates)
-    IWarehouse.add_time_scale(ssn, series_name, time_line)
+    warehouse.add_time_scale(series_name, time_line)
     for row_index in range(start_data_row, ws.nrows):
         data_row = ws.row(row_index)
         meta = []
@@ -59,7 +58,7 @@ def jj_oral_care_rgm_sales(ssn, wb, options_list):
         if has_map_names:
             if var_name in map_names:
                 var_name = map_names[var_name]
-        entity = IWarehouse.add_entity(ssn, meta)
+        entity = warehouse.add_entity(meta)
         variable = entity.force_variable(var_name, 'float')
         time_series = variable.force_time_series(series_name)
         values = []
@@ -136,7 +135,7 @@ def jj_oral_care_media_spend(ssn, wb, options_list):
         time_series.set_values(first_label, values)
 
 
-def jj_oral_care_sku(ssn, wb, options_list):
+def jj_oral_care_sku(warehouse, wb, options_list):
     ws = wb.sheet_by_index(0)
     meta_cols = options_list['meta_cols']
     date_func = options_list['date_func']
@@ -163,7 +162,7 @@ def jj_oral_care_sku(ssn, wb, options_list):
     num_of_dates = last_col - start_date_col
     first_label, time_line = date_func(header_row[start_date_col].value,
                                        wb.datemode, num_of_dates)
-    IWarehouse.add_time_scale(ssn, series_name, time_line)
+    warehouse.add_time_scale(series_name, time_line)
     for row_index in range(start_data_row, ws.nrows):
         data_row = ws.row(row_index)
         meta = []
@@ -180,7 +179,7 @@ def jj_oral_care_sku(ssn, wb, options_list):
         var_name = data_row[name_col].value
         if var_name in map_names:
             var_name = map_names[var_name]
-        entity = IWarehouse.add_entity(ssn, meta)
+        entity = warehouse.add_entity(meta)
         variable = entity.force_variable(var_name, 'float')
         time_series = variable.force_time_series(series_name)
         values = []
