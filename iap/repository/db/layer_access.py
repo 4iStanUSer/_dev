@@ -10,11 +10,12 @@ def _get_tool_model(tool_name, model):
     return mdls.PERMS_MODELS_MAP[tool_name.lower()][model.lower()]
 
 
-def get_perms_to_tool(ssn, tool, user_id=None):
+def get_perms_to_tool(ssn, tool, user=None):
     _n = aliased(_get_tool_model(tool.name, 'node'))
     _np = aliased(_get_tool_model(tool.name, 'node'))
     _v = aliased(_get_tool_model(tool.name, 'value'))
 
+    user_id = None if user is None else user.id
     query = ssn.query(_v,
                       _n,
                       _v.user_id.label("user_id"),
@@ -64,24 +65,24 @@ def _get_all_perm_node_parents(perm_node, include_this=False):
     return None
 
 
-def get_user_perms_to_tool(ssn, tool, user):
-    _n = aliased(_get_tool_model(tool.name, 'node'))
-    _np = aliased(_get_tool_model(tool.name, 'node'))
-    _v = aliased(_get_tool_model(tool.name, 'value'))
-
-    query = ssn.query(_v.user_id.label("user_id"),
-                       _n.id.label("node_id"),
-                       _np.id.label("parent_node_id"),
-                       _v.value.label('mask'),
-                       _n.node_type) \
-        .outerjoin(_np, _n.parents) \
-        .outerjoin(_v, _n.perm_values) \
-        .filter(and_(_v.user_id == user.id)) \
-        .group_by(_n.id)
-
-    perms = query.all()
-
-    return perms
+# def get_user_perms_to_tool(ssn, tool, user):
+#     _n = aliased(_get_tool_model(tool.name, 'node'))
+#     _np = aliased(_get_tool_model(tool.name, 'node'))
+#     _v = aliased(_get_tool_model(tool.name, 'value'))
+#
+#     query = ssn.query(_v.user_id.label("user_id"),
+#                        _n.id.label("node_id"),
+#                        _np.id.label("parent_node_id"),
+#                        _v.value.label('mask'),
+#                        _n.node_type) \
+#         .outerjoin(_np, _n.parents) \
+#         .outerjoin(_v, _n.perm_values) \
+#         .filter(and_(_v.user_id == user.id)) \
+#         .group_by(_n.id)
+#
+#     perms = query.all()
+#
+#     return perms
 
 
 def get_user_features_to_tool(ssn, tool, user):
@@ -222,6 +223,15 @@ def get_users_by_tool(ssn, tool):
 def get_all_users(ssn):
     return ssn.query(mdls.User).all()
 
+
+def get_user_role_in_tool(ssn, user, tool):
+    return ssn.query(mdls.Role) \
+        .join(mdls.User, mdls.Role.users) \
+        .join(mdls.Tool, mdls.Role.tool_id) \
+        .filter(and_(mdls.Tool.id == tool.id,
+                     mdls.User.id == user.id)) \
+        .one_or_none()  # TODO Question
+
 # endregion
 
 
@@ -274,5 +284,21 @@ def get_feature_by_name_in_role(ssn, name, role):
         if feature.name == name:
             return feature
     return None
+
+# endregion
+
+
+# region Permissions methods
+
+def get_raw_perm_values_for_user(ssn, tool, user_id=None):
+    _v = aliased(_get_tool_model(tool.name, 'value'))
+
+    return ssn.query(_v).filter(and_(_v.user_id.is_(user_id))).all()
+
+
+def get_nodes_by_name(ssn, tool, name):
+    _n = aliased(_get_tool_model(tool.name, 'node'))
+
+    return ssn.query(_n).filter(and_(_n.name == name)).all()
 
 # endregion

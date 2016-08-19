@@ -23,10 +23,10 @@ class IAccess:
         if user is None:
             raise ex.NotExistsError('User', 'id', user_id)
 
-        default_perms = wha.get_perms_to_tool(ssn, tool)
+        # default_perms = wha.get_perms_to_tool(ssn, tool)
         # wha.get_user_perms_to_tool(sess, tool, user),
 
         return {
-            'permissions': default_perms,
+            'permissions': wha.get_perms_to_tool(ssn, tool, user),
             'features': wha.get_user_features_to_tool(ssn, tool, user)
         }

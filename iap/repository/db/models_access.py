@@ -98,6 +98,7 @@ class UserGroup(Base):
     __tablename__ = 'user_groups'
     id = Column(Integer, primary_key=True)
     name = Column(String(length=255))
+    tool_id = Column(Integer, ForeignKey('tool.id'))
 
     #  there is variable-link to tool
 
@@ -122,7 +123,7 @@ class FrcastPermNode(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String(length=255))
     node_type = Column(String(length=16))
-    perm_values = relationship("FrcastPermValue")
+    perm_values = relationship("FrcastPermValue", back_populates='perm_node')
 
     children = relationship("FrcastPermNode",
                             secondary=frcast_perm_node_hier_tbl,
@@ -148,6 +149,8 @@ class FrcastPermValue(Base):
     value = Column(Integer)
     user_id = Column(Integer)
 
+    perm_node = relationship("FrcastPermNode", back_populates='perm_values')
+
 # endregion
 
 PERMS_MODELS_MAP = {
@@ -157,25 +160,25 @@ PERMS_MODELS_MAP = {
 }
 
 
-class UserDataAccess(Base):
-    __tablename__ = 'user_data_access'
-
-    user_id = Column(Integer, ForeignKey('users.id'), primary_key=True)
-    feature_id = Column(Integer,
-                        ForeignKey('features.id'),
-                        primary_key=True)
-    variable_id = Column(Integer, ForeignKey('variable.id'), primary_key=True)
-    decline_flag = Column(Boolean(create_constraint=True, name='validator'),
-                          default=False)
-
-
-class UserGroupDataAccess(Base):
-    __tablename__ = 'user_group_data_access'
-
-    user_id = Column(Integer, ForeignKey('users.id'), primary_key=True)
-    feature_id = Column(Integer,
-                        ForeignKey('features.id'),
-                        primary_key=True)
-    variable_id = Column(Integer, ForeignKey('variable.id'), primary_key=True)
-    decline_flag = Column(Boolean(create_constraint=True, name='validator'),
-                          default=False)
+# class UserDataAccess(Base):
+#     __tablename__ = 'user_data_access'
+#
+#     user_id = Column(Integer, ForeignKey('users.id'), primary_key=True)
+#     feature_id = Column(Integer,
+#                         ForeignKey('features.id'),
+#                         primary_key=True)
+#     variable_id = Column(Integer, ForeignKey('variable.id'), primary_key=True)
+#     decline_flag = Column(Boolean(create_constraint=True, name='validator'),
+#                           default=False)
+#
+#
+# class UserGroupDataAccess(Base):
+#     __tablename__ = 'user_group_data_access'
+#
+#     user_id = Column(Integer, ForeignKey('users.id'), primary_key=True)
+#     feature_id = Column(Integer,
+#                         ForeignKey('features.id'),
+#                         primary_key=True)
+#     variable_id = Column(Integer, ForeignKey('variable.id'), primary_key=True)
+#     decline_flag = Column(Boolean(create_constraint=True, name='validator'),
+#                           default=False)
