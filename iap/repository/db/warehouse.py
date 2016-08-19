@@ -12,6 +12,7 @@ from sqlalchemy.ext.hybrid import hybrid_property
 from datetime import datetime
 import enum
 
+
 from .meta import Base
 
 
@@ -39,24 +40,34 @@ def cast_value(type_index, value):
         return str(value)
 
 
-def add_entity(ssn, path):
-    root = ssn.query(Entity).filter(Entity.name == 'root').one_or_none()
-    return root._add_node_by_path(path, 0)
+class Warehouse:
 
+    def __init__(self, ssn_factory):
+        self._ssn = ssn_factory()
+        self._root = self._ssn.query(Entity)\
+            .filter(Entity.name == 'root').one_or_none()
 
-def get_entity_by_id(ssn, entity_id):
-    return ssn.query(Entity).get(entity_id).one_or_none()
+    def add_entity(self, path):
+        return self._root._add_node_by_path(path, 0)
 
+    def get_entity_by_id(self, entity_id):
+        return self._ssn.query(Entity).get(entity_id).one_or_none()
 
-def add_time_scale(ssn, name, time_line):
-    time_scale = ssn.query(TimeScale)\
-        .filter(TimeScale.name == name).one_or_none()
-    if time_scale is None:
-        time_scale = TimeScale(name=name)
-        for period_name, period_stamp in time_line.items():
-            tp = TimePoint(name=period_name, timestamp=period_stamp)
-            time_scale.timeline.append(tp)
-        ssn.add(time_scale)
+    def add_time_scale(self, name, time_line):
+        time_scale = self._ssn.query(TimeScale) \
+            .filter(TimeScale.name == name).one_or_none()
+        if time_scale is None:
+            time_scale = TimeScale(name=name)
+            for period_name, period_stamp in time_line.items():
+                tp = TimePoint(name=period_name, timestamp=period_stamp)
+                time_scale.timeline.append(tp)
+            self._ssn.add(time_scale)
+
+    def commit(self):
+        self._ssn.commit()
+
+    def rollback(self):
+        self._ssn.rollback()
 
 
 class TimeScale(Base):
@@ -367,7 +378,19 @@ class TimeSeries(Base):
         return [x.get() for x in points]
 
     def get_value(self, time_label):
-        return self.get_values(time_label, 1)
+        ssn = object_session(self)
+        timestamp = ssn.query(TimePoint) \
+            .filter(TimePoint.time_scale_id == self._id,
+                    TimePoint.name == time_label).one_or_none()
+        if timestamp is None:
+            raise Exception
+        point = ssn.query(Value) \
+            .filter(Value.time_series_id == self._id,
+                    Value.timestamp == timestamp) \
+            .order_by(Value.timestamp).one_or_none()
+        if point is not None:
+            return point.get()
+        return None
 
 
 class Value(Base):
