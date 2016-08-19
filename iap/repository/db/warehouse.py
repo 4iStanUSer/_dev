@@ -74,34 +74,30 @@ class TimeScale(Base):
     __tablename__ = 'time_scales'
     id = Column(Integer, primary_key=True)
     name = Column(String(length=255))
-    timeline = relationship('TimePoint', back_populates='timescale')
+    timeline = relationship('TimePoint', back_populates='time_scale')
+
+    def get_stamp_by_label(self, label):
+        try:
+            timestamp = next(x.timestamp for x in self.timeline
+                             if x.name == label)
+            return timestamp
+        except StopIteration:
+            raise Exception
 
     def get_stamps_by_start_label(self, start_label, length):
-        ssn = object_session(self)
-        start_point = ssn.query(TimePoint)\
-            .filter(TimePoint.time_scale_id == self.id,
-                    TimePoint.name == start_label).one_or_none()
-        if start_point is None:
+        start_timestamp = self.get_stamp_by_label(start_label)
+        timestamps = sorted([x.timestamp for x in self.timeline
+                             if x.timestamp >= start_timestamp])
+        if len(timestamps) < length:
             raise Exception
-        points = ssn.query(TimePoint)\
-            .filter(TimePoint.time_scale_id == self.id,
-                    TimePoint.timestamp >= start_point.timestamp)\
-            .order_by(TimePoint.timestamp).limit(length).all()
-        if len(points) < length:
-            raise Exception
-        return [x.timestamp for x in points]
+        return timestamps[:length]
 
     def get_stamps_for_range(self, start_point, end_point):
-        ssn = object_session(self)
-        points = ssn.query(TimePoint)\
-            .filter(TimePoint.time_scale_id == self.id,
-                    TimePoint.timestamp >= start_point,
-                    TimePoint.timestamp <= end_point)\
-            .order_by(TimePoint.timestamp).all()
-        if points[0].timestamp != start_point or \
-                points[-1].timestamp != end_point:
+        timestamps = sorted([x.timestamp for x in self.timeline
+                             if start_point <= x.timestamp <= end_point])
+        if timestamps[0] != start_point or timestamps[-1] != end_point:
             raise Exception
-        return [x.timestamp for x in points]
+        return timestamps
 
 
 class TimePoint(Base):
@@ -110,7 +106,7 @@ class TimePoint(Base):
     time_scale_id = Column(Integer, ForeignKey('time_scales.id'))
     name = Column(String(length=255))
     timestamp = Column(DateTime)
-    timescale = relationship('TimeScale', back_populates='timeline')
+    time_scale = relationship('TimeScale', back_populates='timeline')
 
 
 entities_edge = Table(
@@ -348,49 +344,29 @@ class TimeSeries(Base):
                 point_to_set.set(values[ind])
 
     def get_values(self, start_label=None, length=None):
-        ssn = object_session(self)
         if start_label is None:
             # Get all points
-            points = ssn.query(Value) \
-                .filter(Value.time_series_id == self._id) \
-                .order_by(Value.timestamp).all()
+            return [x.get() for x in
+                    sorted(self._values, key=lambda y: y.timestamp)]
         else:
-            # Get timestamp from label.
-            start_point = ssn.query(TimePoint) \
-                .filter(TimePoint.time_scale_id == self._id,
-                        TimePoint.name == start_label).one_or_none()
-            if start_point is None:
-                return []
-                # raise Exception
-            else:
-                start = start_point.timestamp
+            # Get timestamp from start label.
+            start = self._time_scale.get_stamp_by_label(start_label)
             # Get all points from start.
-            points = ssn.query(Value) \
-                .filter(Value.time_series_id == self._id,
-                        Value.timestamp >= start) \
-                .order_by(Value.timestamp).all()
+            points = sorted([x for x in self._values if x.timestamp >= start])
             # Limit length, if length is less than expected throw exception.
             if length is not None:
                 if len(points) < length:
                     raise Exception
                 points = points[:length]
-        # Return values of points found.
-        return [x.get() for x in points]
+            return [x.get() for x in points]
 
     def get_value(self, time_label):
-        ssn = object_session(self)
-        timestamp = ssn.query(TimePoint) \
-            .filter(TimePoint.time_scale_id == self._id,
-                    TimePoint.name == time_label).one_or_none()
-        if timestamp is None:
+        timestamp = self._time_scale.get_stamp_by_label(time_label)
+        try:
+            return next(x.get() for x in self._values
+                        if x.timestamp == timestamp)
+        except StopIteration:
             raise Exception
-        point = ssn.query(Value) \
-            .filter(Value.time_series_id == self._id,
-                    Value.timestamp == timestamp) \
-            .order_by(Value.timestamp).one_or_none()
-        if point is not None:
-            return point.get()
-        return None
 
 
 class Value(Base):
