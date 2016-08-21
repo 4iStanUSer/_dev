@@ -301,4 +301,12 @@ def get_nodes_by_name(ssn, tool, name):
 
     return ssn.query(_n).filter(and_(_n.name == name)).all()
 
+
+def del_perm_values_for_user(ssn, tool, user):
+    _v = _get_tool_model(tool.name, 'value')
+
+    results = ssn.query(_v).filter(and_(_v.user_id.is_(user.id))).all()
+    for res in results:
+        ssn.delete(res)
+
 # endregion

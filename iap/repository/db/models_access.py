@@ -48,6 +48,8 @@ class User(Base):
     groups = relationship('UserGroup', secondary=user_ugroup_tbl,
                           back_populates='users')
 
+    foreacst_perm_values = relationship("FrcastPermValue")
+
 
 role_features_tbl = Table(
     'role_feature', Base.metadata,
@@ -147,7 +149,7 @@ class FrcastPermValue(Base):
     id = Column(Integer, primary_key=True)
     perm_node_id = Column(Integer, ForeignKey('forecast_perm_node.id'))
     value = Column(Integer)
-    user_id = Column(Integer)
+    user_id = Column(Integer, ForeignKey('users.id'))
 
     perm_node = relationship("FrcastPermNode", back_populates='perm_values')
 
