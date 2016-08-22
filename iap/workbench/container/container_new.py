@@ -123,14 +123,14 @@ class CVariable:
         self._entity_data.get_default_value(self._var_name)
 
     def get_time_series(self, ts_name):
-        if self._entity_data.does_cointain_ts(ts_name):
+        if self._entity_data.does_cointain_ts(self._var_name, ts_name):
             return CTimeSeries(self._entity_data, self._var_name, ts_name)
         else:
             return None
 
     def force_time_series(self, ts_name):
         if not self._entity_data.does_contain_ts(ts_name):
-            self._entity_data.add_time_series(ts_name)
+            self._entity_data.add_time_series(self._var_name, ts_name)
         return CTimeSeries(self._entity_data, self._var_name, ts_name)
 
 
