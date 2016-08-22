@@ -366,7 +366,7 @@ class TimeSeries(Base):
             return next(x.get() for x in self._values
                         if x.timestamp == timestamp)
         except StopIteration:
-            raise Exception
+            return None
 
 
 class Value(Base):
