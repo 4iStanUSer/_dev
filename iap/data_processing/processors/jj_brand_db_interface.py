@@ -2,79 +2,7 @@ from iap.repository import exceptions as ex
 from iap.data_processing.processors.common import get_last_col, \
     get_cell_range, mapping
 import collections
-from iap.data_processing.processors.jj_aggr_map import DataAggregate
 import datetime
-
-
-def jj_brand_extract_speed_test(warehouse, wb, options_list):
-    meta_cols = options_list['meta_cols']
-    data_cols = options_list['data_cols']
-    dates_src_cols = options_list['dates_cols']
-    date_func = options_list['data_func']
-    date_col = options_list['dates_cols']['date_col']
-    series_name = options_list['dates_cols']['scale']
-    ws = wb.sheet_by_index(0)
-    list_data = [ws.cell(row, col).value for row in range(ws.nrows) for col in
-                 range(ws.ncols)]
-    if ws.nrows <= 1:
-        raise ex.EmptyInputsError('jj_extract')
-    header_row = ws.row(0)
-    last_col = get_last_col(ws, header_row)
-    # Init headers cols: names
-    for key, val in meta_cols.items():
-        if key >= last_col:
-            raise ex.NotExistsError('DataProcessing', 'column', key)
-        if val == '':
-            meta_cols[key] = header_row[key].value
-    for key, val in data_cols.items():
-        if key >= last_col:
-            raise ex.NotExistsError('DataProcessing', 'column', key)
-        if val == '':
-            data_cols[key] = header_row[key].value
-    if date_col >= last_col:
-        raise ex.NotExistsError('DataProcessing', 'column', key)
-    # Create output: Append data
-    output = []
-    if 'mapping_rule' in options_list:
-        mapping_rule = options_list['mapping_rule']
-    else:
-        mapping_rule = None
-    data = get_cell_range(0, 0, ws.ncols, ws.nrows, ws)
-    date_values = []
-    for row_index in range(1, ws.nrows):
-        date_values.append(data[row_index][date_col].value)
-    time_line = get_time_line(date_values)
-    warehouse.add_time_scale(series_name, time_line)
-    warehouse.commit()
-    for row_index in range(1, ws.nrows):
-        # if row_index == 1 or row_index == 63:
-        print(row_index)
-        meta = []
-        meta_dict = collections.OrderedDict({})
-        for key, val in meta_cols.items():
-            meta_dict[val] = data[row_index][key].value
-            meta.append(data[row_index][key].value)
-        if mapping_rule is not None:
-            new_meta_dict = mapping(meta_dict, mapping_rule)
-            meta = []
-            for key, value in new_meta_dict.items():
-                meta.append(value)
-        num_of_dates = 1
-        date_value = data[row_index][date_col].value
-        start_label = date_func(date_value, num_of_dates)
-        # IWarehouse.add_time_scale(ssn, series_name, time_line)
-        entity = warehouse.add_entity(meta)
-        for key, val in data_cols.items():
-            value = data[row_index][key].value
-            variable = entity.force_variable(val, 'float')
-            time_series = variable.force_time_series(series_name)
-            history_value = time_series.get_value(start_label)
-            if not history_value:
-                new_value = [value]
-            else:
-                new_value = [history_value + value]
-            time_series.set_values(start_label, new_value)
-    return output
 
 
 def jj_brand_extract(warehouse, wb, options_list):
@@ -112,13 +40,11 @@ def jj_brand_extract(warehouse, wb, options_list):
         mapping_rule = None
     data = get_cell_range(0, 0, ws.ncols, ws.nrows, ws)
     date_values = []
-    for row_index in range(1, ws.nrows):
+    for row_index in range(1, len(data)):
         date_values.append(data[row_index][date_col].value)
     time_line = get_time_line(date_values)
-    warehouse.add_time_scale(series_name, time_line)
-    # warehouse.commit()
+    times_series = warehouse.add_time_scale(series_name, time_line)
     for row_index in range(1, ws.nrows):
-        # if row_index == 1 or row_index == 63:
         # print(row_index)
         meta = []
         meta_dict = collections.OrderedDict({})
@@ -138,7 +64,7 @@ def jj_brand_extract(warehouse, wb, options_list):
         for key, val in data_cols.items():
             value = data[row_index][key].value
             variable = entity.force_variable(val, 'float')
-            time_series = variable.force_time_series(series_name)
+            time_series = variable.force_time_series(times_series)
             history_value = time_series.get_value(start_label)
             if not history_value:
                 new_value = [value]
