@@ -319,14 +319,16 @@ class TimeSeries(Base):
                               data_type=self._variable.data_type)
                 point.set(self._variable.default_value)
                 self._values.append(point)
-
+        existing_points = \
+            sorted([x for x in self._values
+                    if new_stamps[0] <= x.timestamp <= new_stamps[-1]])
         # Set new values.
-        ssn = object_session(self)
+        #ssn = object_session(self)
         # Get existing points from range defined in inputs.
-        existing_points = ssn.query(Value)\
-            .filter(Value.time_series_id == self._id,
-                    Value.timestamp.in_(new_stamps))\
-            .order_by(Value.timestamp).all()
+        #existing_points = ssn.query(Value)\
+        #    .filter(Value.time_series_id == self._id,
+        #            Value.timestamp.in_(new_stamps))\
+        #    .order_by(Value.timestamp).all()
         # For range defined in inputs find old points or create new.
         # Set new values.
         for ind, stamp in enumerate(new_stamps):
