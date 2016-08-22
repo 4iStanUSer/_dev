@@ -5,10 +5,10 @@ from csv import DictReader
 import collections
 from iap.data_processing.processors import jj_brand, jj_brand_extract, \
     jj_oc_data_proc, jj_oral_care_sku, jj_oral_care_media_spend, \
-    jj_oral_care_rgm_sales
+    jj_oral_care_rgm_sales, jj_brand_extract_speed_test
 from iap.data_processing.processors.common import date_year_month, date_year,\
     date_jj_1week, date_yyyyww, date_monthly_excel_number
-
+import datetime
 
 class Loader:
     def __init__(self, warehouse, data_load_command='jj'):
@@ -127,8 +127,14 @@ class Loader:
             # meta_cols = options_list['meta_cols']
             # name_col_num = options_list['name_col']
             # dates_cols = options_list['dates_cols']
+            t1 = datetime.datetime.now()
             with open(file_path, 'rb') as file:
                 read_obj = read_file(extension, file)
+                t2 = datetime.datetime.now()
+                delta = (t2 - t1)
+                # minutes_delta_time = delta.seconds / 60.0
+                # print('Read file takes minutes:' + str(minutes_delta_time))
+                print('Read file takes seconds:' + str(delta.seconds))
                 # Run method
                 try:
                     run_method(self.warehouse, read_obj, options_list)

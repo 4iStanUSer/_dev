@@ -14,6 +14,8 @@ def jj_brand_extract_speed_test(warehouse, wb, options_list):
     date_col = options_list['dates_cols']['date_col']
     series_name = options_list['dates_cols']['scale']
     ws = wb.sheet_by_index(0)
+    list_data = [ws.cell(row, col).value for row in range(ws.nrows) for col in
+                 range(ws.ncols)]
     if ws.nrows <= 1:
         raise ex.EmptyInputsError('jj_extract')
     header_row = ws.row(0)
@@ -70,7 +72,7 @@ def jj_brand_extract_speed_test(warehouse, wb, options_list):
             if not history_value:
                 new_value = [value]
             else:
-                new_value = [history_value[0] + value]
+                new_value = [history_value + value]
             time_series.set_values(start_label, new_value)
     return output
 
@@ -114,10 +116,10 @@ def jj_brand_extract(warehouse, wb, options_list):
         date_values.append(data[row_index][date_col].value)
     time_line = get_time_line(date_values)
     warehouse.add_time_scale(series_name, time_line)
-    warehouse.commit()
+    # warehouse.commit()
     for row_index in range(1, ws.nrows):
         # if row_index == 1 or row_index == 63:
-        print(row_index)
+        # print(row_index)
         meta = []
         meta_dict = collections.OrderedDict({})
         for key, val in meta_cols.items():
@@ -141,14 +143,14 @@ def jj_brand_extract(warehouse, wb, options_list):
             if not history_value:
                 new_value = [value]
             else:
-                new_value = [history_value[0] + value]
+                new_value = [history_value + value]
             time_series.set_values(start_label, new_value)
-        if row_index == 134:
-            t3 = datetime.datetime.now()
-            delta = (t3 - t1)
-            minutes_delta_time = delta.seconds/60.0
-            print('Algorithm 134 takes minutes:' + str(minutes_delta_time))
-            print('Algorithm 143 takes seconds:' + str(delta.seconds))
+        # if row_index == 134:
+        #     t3 = datetime.datetime.now()
+        #     delta = (t3 - t1)
+        #     minutes_delta_time = delta.seconds/60.0
+        #     print('Algorithm 134 takes minutes:' + str(minutes_delta_time))
+        #     print('Algorithm 134 takes seconds:' + str(delta.seconds))
     t2 = datetime.datetime.now()
     delta = (t2 - t1)
     minutes_delta_time = delta.seconds/60.0
