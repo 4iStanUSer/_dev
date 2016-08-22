@@ -252,15 +252,12 @@ class Variable(Base):
         return None
 
     def force_time_series(self, time_scale):
+        if time_scale is None:
+            raise Exception
         ts_name = time_scale.name
         for ts in self._time_series:
             if ts.name == ts_name:
                 return ts
-        #ssn = object_session(self)
-        #time_scale = ssn.query(TimeScale)\
-        #    .filter(TimeScale.name == ts_name).one_or_none()
-        if time_scale is None:
-            raise Exception
         time_series = TimeSeries(_name=ts_name)
         time_series._time_scale = time_scale
         self._time_series.append(time_series)
