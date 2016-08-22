@@ -62,6 +62,7 @@ class Warehouse:
                 tp = TimePoint(name=period_name, timestamp=period_stamp)
                 time_scale.timeline.append(tp)
             self._ssn.add(time_scale)
+        return time_scale
 
     def commit(self):
         self._ssn.commit()
@@ -250,13 +251,14 @@ class Variable(Base):
                 return ts
         return None
 
-    def force_time_series(self, ts_name):
+    def force_time_series(self, time_scale):
+        ts_name = time_scale.name
         for ts in self._time_series:
             if ts.name == ts_name:
                 return ts
-        ssn = object_session(self)
-        time_scale = ssn.query(TimeScale)\
-            .filter(TimeScale.name == ts_name).one_or_none()
+        #ssn = object_session(self)
+        #time_scale = ssn.query(TimeScale)\
+        #    .filter(TimeScale.name == ts_name).one_or_none()
         if time_scale is None:
             raise Exception
         time_series = TimeSeries(_name=ts_name)
@@ -319,16 +321,12 @@ class TimeSeries(Base):
                               data_type=self._variable.data_type)
                 point.set(self._variable.default_value)
                 self._values.append(point)
+
+        # Set new values.
+        # Get existing points from range defined in inputs.
         existing_points = \
             sorted([x for x in self._values
                     if new_stamps[0] <= x.timestamp <= new_stamps[-1]])
-        # Set new values.
-        #ssn = object_session(self)
-        # Get existing points from range defined in inputs.
-        #existing_points = ssn.query(Value)\
-        #    .filter(Value.time_series_id == self._id,
-        #            Value.timestamp.in_(new_stamps))\
-        #    .order_by(Value.timestamp).all()
         # For range defined in inputs find old points or create new.
         # Set new values.
         for ind, stamp in enumerate(new_stamps):
