@@ -1,4 +1,6 @@
 from .timelines_new import TimeLineManager
+from .entity_data import EntityData
+
 
 class Container:
 
@@ -18,22 +20,7 @@ class Container:
             return None
 
     def add_time_scale(self, name, time_line):
-        pass
-
-
-
-
-
-
-class DataStorage:
-    def __init__(self):
-        variables = {'name': name, 'time_series': {'ts_name': []}}
-
-    def add_variable(self, name):
-        pass
-
-
-
+        self.timeline.add_time_line(self, name, time_line)
 
 
 class CEntity:
@@ -42,7 +29,7 @@ class CEntity:
         self._name = name
         self._parents = None
         self._children = None
-        self._data_storage = DataStorage()
+        self._data = EntityData()
 
     @property
     def name(self):
@@ -50,7 +37,11 @@ class CEntity:
 
     @name.setter
     def name(self, name):
-        pass
+        for parent in self.parents:
+            if name in [x.name for x in parent.children
+                        if x.name != self._name]:
+                raise Exception
+        self._name = name
 
     @property
     def parents(self):
@@ -76,32 +67,6 @@ class CEntity:
             self._parents.append(new_parent)
         return new_parent
 
-    def add_child(self, name):
-        for child in self._children:
-            if child.name == name:
-                return child
-        new_child = CEntity(name)
-        self._children.append(new_child)
-        return new_child
-
-    def get_variables_names(self):
-        return [x.name for x in self._variables]
-
-    def get_variable(self, name):
-        for var in self._variables:
-            if var.name == name:
-                return var
-        return None
-
-    def force_variable(self, name, data_type, default_value=None):
-        # Check if variable with the name already exists.
-        for var in self._variables:
-            if var.name == name:
-                return var
-        # Create new variable.
-        new_var = CVariable(name, self)
-        self._variables.append(new_var)
-
     def add_node_by_path(self, path, depth):
         node = None
         for child in self._children:
@@ -115,42 +80,64 @@ class CEntity:
         else:
             return node
 
+    def add_child(self, name):
+        for child in self._children:
+            if child.name == name:
+                return child
+        new_child = CEntity(name)
+        self._children.append(new_child)
+        return new_child
 
+    def get_variables_names(self):
+        return self._data.get_var_names()
 
+    def get_variable(self, name):
+        if self._data.does_contain_var(name):
+            return CVariable(self._data, name)
+        else:
+            return None
 
-
-
+    def force_variable(self, name, default_value=None):
+        if not self._data.does_contain_var(name):
+            self._data.add_var(name, default_value)
+        return CVariable(self._data, name)
 
 
 class CVariable:
 
-    def __init__(self, name, entity):
-
+    def __init__(self, entity_data, var_name):
+        self._entity_data = entity_data
+        self._var_name = var_name
 
     @property
     def name(self):
-        pass
+        return self._var_name
 
     @name.setter
     def name(self, name):
-        pass
+        self._entity_data.rename_variable(self._var_name, name)
+        self._var_name = name
 
     @property
     def default_value(self):
-        pass
+        self._entity_data.get_default_value(self._var_name)
 
     def get_time_series(self, ts_name):
-        pass
+        if self._entity_data.does_cointain_ts(ts_name):
+            return CTimeSeries(self._entity_data, self._var_name, ts_name)
+        else:
+            return None
 
     def force_time_series(self, ts_name):
-        pass
-
+        if not self._entity_data.does_contain_ts(ts_name):
+            self._entity_data.add_time_series(ts_name)
+        return CTimeSeries(self._entity_data, self._var_name, ts_name)
 
 
 class CTimeSeries:
 
-    def __init__(self, node_data, var_name, ts_name):
-        self._node_data = node_data
+    def __init__(self, entity_data, var_name, ts_name):
+        self._entity_data = entity_data
         self._var_name = var_name
         self._ts_name = ts_name
 
@@ -161,26 +148,26 @@ class CTimeSeries:
 
     @property
     def start_point(self):
-        return self._node_data.get_start(self._var_name, self._ts_name)
+        return self._entity_data.get_ts_start(self._var_name, self._ts_name)
 
     @property
     def end_point(self):
-        return self._node_data.get_end(self._var_name, self._ts_name)
+        return self._entity_data.get_ts_end(self._var_name, self._ts_name)
 
     def set_values(self, start_label, values):
-        return self._node_data.set_values(self._var_name,
-                                          self._ts_name,
-                                          start_label,
-                                          values)
+        return self._entity_data.set_values(self._var_name,
+                                            self._ts_name,
+                                            start_label,
+                                            values)
 
     def get_values(self, start_label=None, length=None):
-        return self._node_data.get_values(self._var_name,
-                                          self._ts_name,
-                                          start_label,
-                                          length)
+        return self._entity_data.get_values(self._var_name,
+                                            self._ts_name,
+                                            start_label,
+                                            length)
 
     def get_value(self, time_label):
-        return self._node_data.get_values(self._var_name,
-                                          self._ts_name,
-                                          time_label,
-                                          1)
+        return self._entity_data.get_values(self._var_name,
+                                            self._ts_name,
+                                            time_label,
+                                            1)
