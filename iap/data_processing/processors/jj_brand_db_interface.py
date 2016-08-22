@@ -10,10 +10,10 @@ def jj_brand_extract(warehouse, wb, options_list):
 
     meta_cols = options_list['meta_cols']
     data_cols = options_list['data_cols']
-    dates_src_cols = options_list['dates_cols']
+    dates_info = options_list['dates_cols']
     date_func = options_list['data_func']
-    date_col = options_list['dates_cols']['date_col']
-    series_name = options_list['dates_cols']['scale']
+    date_col = dates_info['date_col']
+    series_name = dates_info['scale']
     ws = wb.sheet_by_index(0)
     if ws.nrows <= 1:
         raise ex.EmptyInputsError('jj_extract')
@@ -59,7 +59,6 @@ def jj_brand_extract(warehouse, wb, options_list):
         num_of_dates = 1
         date_value = data[row_index][date_col].value
         start_label = date_func(date_value, num_of_dates)
-        # IWarehouse.add_time_scale(ssn, series_name, time_line)
         entity = warehouse.add_entity(meta)
         for key, val in data_cols.items():
             value = data[row_index][key].value
@@ -113,6 +112,8 @@ def get_time_line(date_values):
 
 
 def jj_brand(warehouse, wb, options_list):
+    t1 = datetime.datetime.now()
+
     date_func = options_list['date_func']
     meta_new_names = options_list['meta_cols']
     name_col_num = options_list['name_col']
@@ -146,7 +147,7 @@ def jj_brand(warehouse, wb, options_list):
                                        num_of_dates)
     # start_date_point = date_func(header_row[start_dates_col].value)
     series_name = dates_info['scale']
-    warehouse.add_time_scale(series_name, time_line)
+    times_series = warehouse.add_time_scale(series_name, time_line)
     while row_index < ws.nrows:
         desc_val = str(meta_column[row_index].value)
         # Add meta and data to output only if facts exist
@@ -160,17 +161,23 @@ def jj_brand(warehouse, wb, options_list):
                               last_meta_row)
             entity = warehouse.add_entity(meta)
             for row_index in range(row_index+1, last_facts_row + 1):
+                print(row_index)
                 data_row = ws.row(row_index)
                 fact_name = meta_column[row_index].value
                 variable = entity.force_variable(fact_name, 'float')
                 values = []
                 for col_index in range(start_dates_col, end_dates_col):
                     values.append(data_row[col_index].value)
-                time_series = variable.force_time_series(series_name)
+                time_series = variable.force_time_series(times_series)
                 time_series.set_values(first_label, values)
             row_index = last_facts_row
             start_meta_row = last_facts_row + 1
         row_index += 1
+    t2 = datetime.datetime.now()
+    delta = (t2 - t1)
+    minutes_delta_time = delta.seconds / 60.0
+    print('Algorithm takes minutes:' + str(minutes_delta_time))
+    print('Algorithm takes seconds:' + str(delta.seconds))
 
 
 def __get_meta(meta_column, meta_new_names, start_meta_row, last_meta_row):
