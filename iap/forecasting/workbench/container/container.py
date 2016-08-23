@@ -1,17 +1,15 @@
-from .timelines_new import TimeLineManager
+from .timelines import TimeLineManager
 from .entity_data import EntityData
 
 
 class Container:
 
     def __init__(self):
-        self._root = CEntity()
-        self._last_id = 0
-        self._nodes_dict = {'0': self._root}
         self.timeline = TimeLineManager()
+        self._root = CEntity('root', self.timeline)
 
     def add_entity(self, path):
-        self._root.add_node_by_path(path, 0)
+        return self._root.add_node_by_path(path, 0)
 
     def get_entity_by_id(self, entity_id):
         try:
@@ -20,16 +18,16 @@ class Container:
             return None
 
     def add_time_scale(self, name, time_line):
-        self.timeline.add_time_line(self, name, time_line)
+        self.timeline.add_time_line(name, time_line)
 
 
 class CEntity:
 
-    def __init__(self, name):
+    def __init__(self, name, time_line_manager):
         self._name = name
-        self._parents = None
-        self._children = None
-        self._data = EntityData()
+        self._parents = []
+        self._children = []
+        self._data = EntityData(time_line_manager)
 
     @property
     def name(self):
@@ -84,7 +82,7 @@ class CEntity:
         for child in self._children:
             if child.name == name:
                 return child
-        new_child = CEntity(name)
+        new_child = CEntity(name, self._data.time_manager)
         self._children.append(new_child)
         return new_child
 
@@ -129,7 +127,7 @@ class CVariable:
             return None
 
     def force_time_series(self, ts_name):
-        if not self._entity_data.does_contain_ts(ts_name):
+        if not self._entity_data.does_contain_ts(self._var_name, ts_name):
             self._entity_data.add_time_series(self._var_name, ts_name)
         return CTimeSeries(self._entity_data, self._var_name, ts_name)
 
