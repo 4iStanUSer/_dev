@@ -8,11 +8,11 @@ from iap.data_processing.processors import jj_brand, jj_brand_extract, \
     jj_oral_care_rgm_sales
 from iap.data_processing.processors.common import date_year_month, date_year,\
     date_jj_1week, date_yyyyww, date_monthly_excel_number
-
+import datetime
 
 class Loader:
-    def __init__(self, ssn, data_load_command='jj'):
-        self.ssn = ssn
+    def __init__(self, warehouse, data_load_command='jj'):
+        self.warehouse = warehouse
         BASE_DIR = os.path.dirname(os.path.dirname(__file__))
         self.lake_src = os.path.join(BASE_DIR, 'repository', 'data_lake')
         self.func_list = {
@@ -43,8 +43,10 @@ class Loader:
                 {'func': jj_brand,
                  'date_func': date_jj_1week,
                  'info': 'N/A',
-                 'meta_cols': ['Category', 'Segment', 'SubSegment', 'Brand',
-                               'SubBrand'],
+                 # 'meta_cols': ['Category', 'Segment', 'SubSegment', 'Brand',
+                 #               'SubBrand'],
+                 'meta_cols': ['', '', '', '',
+                               ''],
                  'name_col': 0,
                  'properties': 'N/A',
                  'dates_cols': {'scale': 'weekly',
@@ -127,13 +129,18 @@ class Loader:
             # meta_cols = options_list['meta_cols']
             # name_col_num = options_list['name_col']
             # dates_cols = options_list['dates_cols']
+            t1 = datetime.datetime.now()
             with open(file_path, 'rb') as file:
                 read_obj = read_file(extension, file)
+                t2 = datetime.datetime.now()
+                delta = (t2 - t1)
+                # minutes_delta_time = delta.seconds / 60.0
+                # print('Read file takes minutes:' + str(minutes_delta_time))
+                print('Read file takes seconds:' + str(delta.seconds))
                 # Run method
                 try:
-                    # output = run_method(read_obj, info, meta_cols, name_col_num,
-                    #                     dates_cols, prop_cols, date_func)
-                    output = run_method(self.ssn, read_obj, options_list)
+                    run_method(self.warehouse, read_obj, options_list)
+                    self.warehouse.commit()
                 except Exception as err:
                     print(err.args)
 

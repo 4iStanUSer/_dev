@@ -10,6 +10,10 @@ import transaction
 from pyramid import testing
 from iap.repository.db.warehouse import Entity
 from iap.data_processing.data_proc_manager import Loader
+from iap.repository.db.warehouse import Warehouse
+
+
+from sqlalchemy.orm import sessionmaker
 
 xfail = pytest.mark.xfail
 
@@ -32,17 +36,28 @@ class TestProcessFiles:
         self.engine = get_engine(settings)
         Base.metadata.drop_all(self.engine)
         Base.metadata.create_all(self.engine)
-        session_factory = get_session_factory(self.engine)
-        self.db_session = get_tm_session(session_factory, transaction.manager)
+        session_factory = sessionmaker(autoflush=False)
+        session_factory.configure(bind=self.engine)
+
+        # session_factory = get_session_factory(self.engine)
+
         root = Entity(name='root')
-        self.db_session.add(root)
-        transaction.manager.commit()
-        #
-        # self.test = 'test'
+        curr_ssn = session_factory()
+        curr_ssn.add(root)
+        curr_ssn.commit()
+
+        self.wh = Warehouse(session_factory)
+
+        # self.db_session = get_tm_session(session_factory,
+        # transaction.manager)
+
+        # self.db_session.add(root)
+        # transaction.manager.commit()
+
 
     def test_dimensions(self):
-        loader = Loader(self.db_session, data_load_command='jj')
+        loader = Loader(self.wh, data_load_command='jj')
         loader.load()
-        transaction.manager.commit()
+        # transaction.manager.commit()
         # assert 5 == 5
         print('ss')

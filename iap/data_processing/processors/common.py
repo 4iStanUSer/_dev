@@ -166,14 +166,14 @@ def get_cell_range(start_col, start_row, end_col, end_row, ws):
             for row in range(start_row, end_row)]
 
 
-def get_last_col(ws, header_row):
+def get_last_col(data, header_row_index):
     last_col = 0
-    for col_index in range(len(header_row)):
-        if header_row[col_index].ctype == 0:
+    for col_index in range(len(data[header_row_index])):
+        if data[header_row_index][col_index].ctype == 0:
             last_col = col_index + 1
             break
         if col_index == 0:
             continue
     if last_col == 0:
-        last_col = ws.ncols
+        last_col = len(data[0])
     return last_col
