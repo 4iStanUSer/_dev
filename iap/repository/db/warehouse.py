@@ -15,6 +15,8 @@ import enum
 
 from .meta import Base
 
+from operator import attrgetter
+
 
 class DataType(enum.IntEnum):
     float = 0
@@ -62,6 +64,34 @@ class Warehouse:
                 tp = TimePoint(name=period_name, timestamp=period_stamp)
                 time_scale.timeline.append(tp)
             self._ssn.add(time_scale)
+        else:
+            # Init values
+            min_old_stamp = min(time_scale.timeline,
+                                key=attrgetter('timestamp')).timestamp
+            max_old_stamp = max(time_scale.timeline,
+                                key=attrgetter('timestamp')).timestamp
+            min_new_stamp = None
+            for key in time_line:
+                min_new_stamp = time_line[key]
+                break
+            max_new_stamp = next(reversed(time_line.values()))
+            # Check values on Exception
+            if max_new_stamp < min_old_stamp:
+                delta = min_old_stamp - max_new_stamp
+                if delta.days > 31:
+                    raise Exception
+            if min_new_stamp is None:
+                raise Exception
+            if min_new_stamp > max_old_stamp:
+                delta = min_new_stamp - max_old_stamp
+                if delta.days > 31:
+                    raise Exception
+            # Add new TimePoints
+            for period_name, period_stamp in time_line.items():
+                if period_stamp < min_old_stamp\
+                        or period_stamp > max_old_stamp:
+                    tp = TimePoint(name=period_name, timestamp=period_stamp)
+                    time_scale.timeline.append(tp)
         return time_scale
 
     def commit(self):

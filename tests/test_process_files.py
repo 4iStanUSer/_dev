@@ -10,8 +10,10 @@ import transaction
 from pyramid import testing
 from iap.repository.db.warehouse import Entity
 from iap.data_processing.data_proc_manager import Loader
-from iap.repository import get_wh_interface
 from iap.repository.db.warehouse import Warehouse
+
+
+from sqlalchemy.orm import sessionmaker
 
 xfail = pytest.mark.xfail
 
@@ -34,7 +36,10 @@ class TestProcessFiles:
         self.engine = get_engine(settings)
         Base.metadata.drop_all(self.engine)
         Base.metadata.create_all(self.engine)
-        session_factory = get_session_factory(self.engine)
+        session_factory = sessionmaker(autoflush=False)
+        session_factory.configure(bind=self.engine)
+
+        # session_factory = get_session_factory(self.engine)
 
         root = Entity(name='root')
         curr_ssn = session_factory()
