@@ -6,7 +6,7 @@ import datetime
 
 
 def jj_brand_extract(warehouse, wb, options_list):
-    t1 = datetime.datetime.now()
+    # t1 = datetime.datetime.now()
 
     meta_cols = options_list['meta_cols']
     data_cols = options_list['data_cols']
@@ -68,17 +68,11 @@ def jj_brand_extract(warehouse, wb, options_list):
             else:
                 new_value = [history_value + value]
             time_series.set_values(start_label, new_value)
-        # if row_index == 134:
-        #     t3 = datetime.datetime.now()
-        #     delta = (t3 - t1)
-        #     minutes_delta_time = delta.seconds/60.0
-        #     print('Algorithm 134 takes minutes:' + str(minutes_delta_time))
-        #     print('Algorithm 134 takes seconds:' + str(delta.seconds))
-    t2 = datetime.datetime.now()
-    delta = (t2 - t1)
-    minutes_delta_time = delta.seconds/60.0
-    print('Algorithm takes minutes:' + str(minutes_delta_time))
-    print('Algorithm takes seconds:' + str(delta.seconds))
+    # t2 = datetime.datetime.now()
+    # delta = (t2 - t1)
+    # minutes_delta_time = delta.seconds/60.0
+    # print('Algorithm takes minutes:' + str(minutes_delta_time))
+    # print('Algorithm takes seconds:' + str(delta.seconds))
 
 
 def get_time_line(date_values):

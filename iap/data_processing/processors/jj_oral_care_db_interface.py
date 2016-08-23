@@ -7,7 +7,7 @@ import datetime
 
 
 def jj_oral_care_rgm_sales(warehouse, wb, options_list):
-    t1 = datetime.datetime.now()
+    # t1 = datetime.datetime.now()
 
     ws = wb.sheet_by_index(0)
     data = get_cell_range(0, 0, ws.ncols, ws.nrows, ws)
@@ -71,16 +71,14 @@ def jj_oral_care_rgm_sales(warehouse, wb, options_list):
                 value = 0.0
             values.append(value)
         time_series.set_values(first_label, values)
-    t2 = datetime.datetime.now()
-    delta = (t2 - t1)
-    minutes_delta_time = delta.seconds / 60.0
-    print('Algorithm rgm sales takes minutes:' + str(minutes_delta_time))
-    print('Algorithm rgm sales takes seconds:' + str(delta.seconds))
+    # t2 = datetime.datetime.now()
+    # delta = (t2 - t1)
+    # minutes_delta_time = delta.seconds / 60.0
+    # print('Algorithm rgm sales takes minutes:' + str(minutes_delta_time))
+    # print('Algorithm rgm sales takes seconds:' + str(delta.seconds))
 
 
 def jj_oral_care_media_spend(warehouse, wb, options_list):
-    t1 = datetime.datetime.now()
-
     ws = wb.sheet_by_index(0)
     data = get_cell_range(0, 0, ws.ncols, ws.nrows, ws)
     meta_cols = options_list['meta_cols']
@@ -143,11 +141,6 @@ def jj_oral_care_media_spend(warehouse, wb, options_list):
                 value = 0.0
             values.append(value)
         time_series.set_values(first_label, values)
-    t2 = datetime.datetime.now()
-    delta = (t2 - t1)
-    minutes_delta_time = delta.seconds / 60.0
-    print('Algorithm media spend takes minutes:' + str(minutes_delta_time))
-    print('Algorithm media spend takes seconds:' + str(delta.seconds))
 
 
 def jj_oral_care_sku(warehouse, wb, options_list):
