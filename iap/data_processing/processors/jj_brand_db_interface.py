@@ -104,7 +104,13 @@ def get_time_line(date_values):
 
 def jj_brand(warehouse, wb, options_list):
     date_func = options_list['date_func']
-    meta_new_names = options_list['meta_cols']
+    meta_cols = options_list['meta_cols']
+    # meta_new_names = options_list['meta_cols']
+    # TODO updare name with layer and dimension name
+    # meta_new_names = []
+    # for item in meta_cols:
+    #     meta_new_names.append(item['Name'])
+
     name_col_num = options_list['name_col']
     dates_info = options_list['dates_cols']
 
@@ -145,7 +151,7 @@ def jj_brand(warehouse, wb, options_list):
                                                   end_dates_col)
             # Looking for facts by rows and data by columns, add data to db
             # using db interface
-            meta = __get_meta(data, name_col_num, meta_new_names,
+            meta = __get_meta(data, name_col_num, meta_cols,
                               start_meta_row,
                               last_meta_row)
             entity = warehouse.add_entity(meta)
@@ -162,18 +168,18 @@ def jj_brand(warehouse, wb, options_list):
         row_index += 1
 
 
-def __get_meta(data, meta_column, meta_new_names, start_meta_row,
+def __get_meta(data, meta_column, meta_cols, start_meta_row,
                last_meta_row):
-    meta = []
+    name_desc = 'Name'
     index = 0
     for row_index in range(start_meta_row, last_meta_row + 1):
-        if meta_new_names[index] == '':
+        if meta_cols[index][name_desc] == '':
             desc_val = str(data[row_index][meta_column].value)
         else:
-            desc_val = meta_new_names[index]
-        meta.append(desc_val)
+            desc_val = meta_cols[index][name_desc]
+        meta_cols[index][name_desc] = desc_val
         index += 1
-    return meta
+    return meta_cols
 
 
 def __get_last_facts_row(data, start_facts_row, last_row, last_col):
