@@ -170,16 +170,19 @@ def jj_brand(warehouse, wb, options_list):
 
 def __get_meta(data, meta_column, meta_cols, start_meta_row,
                last_meta_row):
+    meta = []
     name_desc = 'Name'
     index = 0
     for row_index in range(start_meta_row, last_meta_row + 1):
+        new_dict = meta_cols[index].copy()
         if meta_cols[index][name_desc] == '':
             desc_val = str(data[row_index][meta_column].value)
         else:
             desc_val = meta_cols[index][name_desc]
-        meta_cols[index][name_desc] = desc_val
+        new_dict[name_desc] = desc_val
+        meta.append(new_dict)
         index += 1
-    return meta_cols
+    return meta
 
 
 def __get_last_facts_row(data, start_facts_row, last_row, last_col):
