@@ -8,7 +8,7 @@ interface IMenuItem {
 }
 
 @Component({
-  moduleId: module.id,
+  // moduleId: module.id,
   selector: 'menu-widget',
   templateUrl: 'menu-widget.component.html',
   styleUrls: ['menu-widget.component.css']
@@ -44,7 +44,7 @@ export class MenuWidgetComponent implements OnInit {
      */
     private _onClickItem(e: Event, item: IMenuItem) {
         e.preventDefault();
-        // && !item.disabled 
+        // && !item.disabled
         if (item && !e.srcElement.classList.contains('caret')) {
             this.menuClicked.emit(item);
         }

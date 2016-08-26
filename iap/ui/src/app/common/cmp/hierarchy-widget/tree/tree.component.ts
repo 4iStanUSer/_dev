@@ -107,7 +107,6 @@ export class TreeNodeComponent implements AfterViewInit {
 
 
 @Component({
-    moduleId: module.id,
     selector: 'tree',
     directives: [TreeNodeComponent],
     encapsulation: ViewEncapsulation.None,
@@ -131,7 +130,7 @@ export class TreeComponent implements OnChanges {
         let root = {
             virtual: true,
             id: '#',
-            children: (items.length) ? items : []
+            children: (items && items.length) ? items : []
         };
         this._root = this._generateTree(root, null);
         // get selected nodes

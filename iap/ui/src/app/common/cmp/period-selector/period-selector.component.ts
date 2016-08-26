@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { RangeSliderComponent, RangeSliderChange } from './../range-slider/';
 
 @Component({
-    moduleId: module.id,
+    // moduleId: module.id,
     selector: 'period-selector',
     directives: [RangeSliderComponent],
     template: `

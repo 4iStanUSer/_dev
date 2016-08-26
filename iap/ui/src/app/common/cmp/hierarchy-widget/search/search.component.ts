@@ -4,7 +4,7 @@ import { Component, Input, Output, ViewChild,
 
 
 @Component({
-    moduleId: module.id,
+    // moduleId: module.id,
     selector: 'search',
     styleUrls: ['search.component.css'],
     template: `

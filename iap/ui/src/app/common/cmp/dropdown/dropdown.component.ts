@@ -21,7 +21,7 @@ class DropdownItem {
 }
 
 @Component({
-    moduleId: module.id,
+    // moduleId: module.id,
     selector: 'dropdown',
     templateUrl: 'dropdown.component.html',
     styleUrls: ['dropdown.component.css']

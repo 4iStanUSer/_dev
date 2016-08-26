@@ -1,0 +1,11 @@
+#nav_panel {
+    background: #908c8c;
+    height: 100%;
+    overflow-y: auto;
+}
+
+#cont_panel {
+    background: #cecece;
+    height: 100%;
+    overflow-y: auto;
+}
