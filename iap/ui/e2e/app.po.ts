@@ -1,4 +1,4 @@
-export class UiPage {
+export class IapPage {
   navigateTo() {
     return browser.get('/');
   }

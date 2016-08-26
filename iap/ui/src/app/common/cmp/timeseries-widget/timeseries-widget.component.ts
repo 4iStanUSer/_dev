@@ -36,7 +36,7 @@ interface IRow {
 }
 
 @Component({
-    moduleId: module.id,
+    // moduleId: module.id,
     selector: 'timeseries-widget',
     directives: [],
     template: `

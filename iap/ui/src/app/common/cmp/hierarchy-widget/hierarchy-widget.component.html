@@ -1,3 +1,8 @@
-<p>
-  hierarchy-widget works!
-</p>
+<div class="widget-container">
+    <div class="container-fluid">
+        <search [items]="items" (nodeSelected)="searchNodeSelected($event)"></search>
+    </div>
+    <div class="container-fluid tree-container">
+        <tree [items]="items" [forcedSelect]="_searchSelected" (changeSelection)="treeNodeSelected($event)" (currentSelection)="nowSelected($event)"></tree>
+    </div>
+</div>

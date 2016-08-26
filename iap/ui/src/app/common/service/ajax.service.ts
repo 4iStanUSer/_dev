@@ -98,8 +98,7 @@ export class AjaxService {
                 _.extend(resp, body);
                 return resp;
             });
-        console.log(r);
-        console.log(blackBox);
+
         // r.subscribe( // TODO check unsubscribe for blackbox subscription
         //     (res: ServerResponse) => {
         //         if (res.hasError()) {
@@ -117,7 +116,6 @@ export class AjaxService {
         // return r;
         r.subscribe( // TODO check unsubscribe for blackbox subscription
             (res: ServerResponse) => {
-                console.log(res);
                 if (res.hasError()) {
                     this._handleSiteError(res, blackBox);
                 } else {
@@ -136,7 +134,7 @@ export class AjaxService {
 
     private _handleSiteError(res: ServerResponse, blackBox: Subject<any>) {
         // TODO Show error at view
-        console.log('Error message on view');
+        console.error('Error message on view');
         blackBox.error(res.getError());
     }
 
@@ -146,7 +144,7 @@ export class AjaxService {
         } else if (error.status === 404) {
         }
         // TODO Show error at view
-        console.log('Error message on view');
+        console.error('Error message on view');
         blackBox.error(error.status); // TODO Refactor returning data
     }
 

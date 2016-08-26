@@ -1,10 +1,10 @@
-import { UiPage } from './app.po';
+import { IapPage } from './app.po';
 
-describe('ui App', function() {
-  let page: UiPage;
+describe('iap App', function() {
+  let page: IapPage;
 
   beforeEach(() => {
-    page = new UiPage();
+    page = new IapPage();
   });
 
   it('should display message saying app works', () => {

@@ -6,20 +6,10 @@ import {SearchComponent} from './search/';
 //TODO - change event name from itemSelected to changeSelection
 
 @Component({
-    moduleId: module.id,
     selector: 'hierarchy-widget',
     directives: [TreeComponent, SearchComponent],
     styleUrls: ['hierarchy-widget.component.css'],
-    template: `
-    <div class="widget-container">
-        <div class="container-fluid">
-            <search [items]="items" (nodeSelected)="searchNodeSelected($event)"></search>
-        </div>
-        <div class="container-fluid tree-container">
-            <tree [items]="items" [forcedSelect]="_searchSelected" (changeSelection)="treeNodeSelected($event)" (currentSelection)="nowSelected($event)"></tree>
-        </div>
-    </div>
-    `
+    templateUrl: 'hierarchy-widget.component.html',
 })
 export class HierarchyWidgetComponent {
     @Input() items: Array<Object>;
@@ -28,7 +18,6 @@ export class HierarchyWidgetComponent {
     @Output() currentSelection = new EventEmitter();
 
     private _searchSelected: string = null;
-    // private
 
     constructor() { }
 

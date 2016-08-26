@@ -19,12 +19,19 @@ class Tool(Base):
     roles = relationship("Role", backref="tool")
     # Maybe configure join  via...
     features = relationship("Feature", backref="tool")
+    user_groups = relationship("UserGroup", backref="tool")
 
 
 user_role_tbl = Table(
     'user_roles', Base.metadata,
     Column('user_id', Integer, ForeignKey('users.id')),
     Column('role_id', Integer, ForeignKey('roles.id'))
+)
+
+user_ugroup_tbl = Table(
+    'user_ugroup', Base.metadata,
+    Column('user_id', Integer, ForeignKey('users.id')),
+    Column('group_id', Integer, ForeignKey('user_groups.id'))
 )
 
 
@@ -38,6 +45,10 @@ class User(Base):
                            back_populates='user')
     roles = relationship('Role', secondary=user_role_tbl,
                          back_populates='users')
+    groups = relationship('UserGroup', secondary=user_ugroup_tbl,
+                          back_populates='users')
+
+    foreacst_perm_values = relationship("FrcastPermValue")
 
 
 role_features_tbl = Table(
@@ -89,6 +100,12 @@ class UserGroup(Base):
     __tablename__ = 'user_groups'
     id = Column(Integer, primary_key=True)
     name = Column(String(length=255))
+    tool_id = Column(Integer, ForeignKey('tool.id'))
+
+    #  there is variable-link to tool
+
+    users = relationship('User', secondary=user_ugroup_tbl,
+                         back_populates='groups')
 
 
 # region Models For User's Permissions to ForecastTool
@@ -108,7 +125,7 @@ class FrcastPermNode(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String(length=255))
     node_type = Column(String(length=16))
-    perm_values = relationship("FrcastPermValue")
+    perm_values = relationship("FrcastPermValue", back_populates='perm_node')
 
     children = relationship("FrcastPermNode",
                             secondary=frcast_perm_node_hier_tbl,
@@ -132,7 +149,9 @@ class FrcastPermValue(Base):
     id = Column(Integer, primary_key=True)
     perm_node_id = Column(Integer, ForeignKey('forecast_perm_node.id'))
     value = Column(Integer)
-    user_id = Column(Integer)
+    user_id = Column(Integer, ForeignKey('users.id'))
+
+    perm_node = relationship("FrcastPermNode", back_populates='perm_values')
 
 # endregion
 

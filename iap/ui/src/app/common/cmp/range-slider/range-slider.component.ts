@@ -10,7 +10,6 @@ export class RangeSliderChange {
 }
 
 @Component({
-    moduleId: module.id,
     selector: 'range-slider',
     template: `<div class="rangeSlider"></div>`,
     styles: [`

@@ -2,47 +2,32 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Ui</title>
+    <title>Forecast</title>
     <base href="{{ request.route_url('forecast.index') }}">
+
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" type="image/x-icon"
           href="{{ request.static_url('iap.ui:images/favicon.ico') }}">
 
+    <!--TODO REMOVE THIS-->
     <link rel="stylesheet"
-          href="{{ request.static_url('iap.ui:dist/vendor/bootstrap/dist/css/bootstrap.min.css') }}">
+          href="{{ request.static_url('iap.ui:dist/css/bootstrap.min.css') }}"/>
     <link rel="stylesheet"
-          href="{{ request.static_url('iap.ui:dist/vendor/font-awesome/css/font-awesome.min.css') }}">
-    <link rel="stylesheet"
-          href="{{ request.static_url('iap.ui:dist/vendor/nouislider/distribute/nouislider.min.css') }}">
+          href="{{ request.static_url('iap.ui:dist/css/font-awesome.min.css') }}"/>
+    <script src="{{ request.static_url('iap.ui:dist/js/jquery.min.js') }}"></script>
+    <script src="{{ request.static_url('iap.ui:dist/js/bootstrap.min.js') }}"></script>
+    <!--/TODO REMOVE THIS-->
 
-    <script src="{{ request.static_url('iap.ui:dist/vendor/jquery/dist/jquery.min.js') }}"></script>
-    <script src="{{ request.static_url('iap.ui:dist/vendor/bootstrap/dist/js/bootstrap.min.js') }}"></script>
-    <script src="{{ request.static_url('iap.ui:dist/vendor/nouislider/distribute/nouislider.min.js') }}"></script>
-
-    <script src="{{ request.static_url('iap.ui:dist/vendor/es6-shim/es6-shim.js') }}"></script>
-    <script src="{{ request.static_url('iap.ui:dist/vendor/reflect-metadata/Reflect.js') }}"></script>
-    <script src="{{ request.static_url('iap.ui:dist/vendor/systemjs/dist/system.src.js') }}"></script>
-    <script src="{{ request.static_url('iap.ui:dist/vendor/zone.js/dist/zone.js') }}"></script>
-    <script src="{{ request.static_url('iap.ui:dist/vendor/lodash/lodash.js') }}"></script>
-
-    <script>
-        System.baseURL = "{{ request.static_url('iap.ui:dist/') }}";
-
-        System.import('system-config.js').then(function () {
-            System.import('main');
-        }).catch(console.error.bind(console));
-    </script>
 </head>
 <body>
-
-
 <app-root>
     <div style="position:fixed;width:100%;height:100%;top:0;left:0;background:rgba(0,0,0,0.5);text-align:center;">
         <img src="{{ request.static_url('iap.ui:images/loading.gif') }}"
              alt="">
     </div>
 </app-root>
-
-
+<script src="{{ request.static_url('iap.ui:dist/inline.js') }}"></script>
+<script src="{{ request.static_url('iap.ui:dist/polyfills.bundle.js') }}"></script>
+<script src="{{ request.static_url('iap.ui:dist/main.bundle.js') }}"></script>
 </body>
 </html>

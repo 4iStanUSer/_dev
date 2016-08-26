@@ -16,9 +16,6 @@ from . import tweens
 from . import security
 from . import service
 
-from iap.data_processing.test_init_data import test_processing_data, \
-    test_jj_oc_data
-
 
 def notfound_view(req):
     req.response.status = 404
@@ -39,12 +36,13 @@ def index_view(req):
 
     # service.recreate_db(req)
     # service.fillin_db(req)
-    # service.init_permissions(req)
-    # permissions = service.get_permissions(req)
-    # print(permissions)
+    # service.set_permissions_template(req)
+    # service.init_user_wb(req, 1, 1)
+    # service.update_user_perms(req)
+    # u_perms = service.get_permissions(req, 1, 1)
 
     return render_to_response('templates/index.jinja2',
-                              {'title': 'Forecast index'},
+                              {'title': 'Home page'},
                               request=req)
 
 
@@ -54,14 +52,14 @@ def login_view(request):
         next_url = request.route_url('common.index')
     message = ''
     email = ''
-    if 'form.submitted' in request.params:
-        email = request.params['email']
-        password = request.params['password']
-        user = service.get_user_by_email(email)
-        if user is not None: # and user.check_password(password)
-            headers = remember(request, user.id)
-            return HTTPFound(location=next_url, headers=headers)
-        message = 'Failed login'
+    # if 'form.submitted' in request.params:
+    #     email = request.params['email']
+    #     password = request.params['password']
+    #     user = service.get_user_by_email(email)
+    #     if user is not None: # and user.check_password(password)
+    #         headers = remember(request, user.id)
+    #         return HTTPFound(location=next_url, headers=headers)
+    #     message = 'Failed login'
 
     data = dict(
         message=message,
@@ -72,6 +70,7 @@ def login_view(request):
     return render_to_response('templates/login.jinja2',
                               data,
                               request=request)
+
 
 def logout_view(request):
     headers = forget(request)

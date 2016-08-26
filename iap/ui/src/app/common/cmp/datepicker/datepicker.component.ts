@@ -6,7 +6,7 @@ import * as _ from 'lodash';
 //const TODAY: Date = new Date(TODAY2.getFullYear(), TODAY2.getMonth(), TODAY2.getDate(),0,0,0,0);
 
 @Component({
-    moduleId: module.id,
+    // moduleId: module.id,
     selector: 'datepicker',
     templateUrl: 'datepicker.component.html',
     styleUrls: ['datepicker.component.css']

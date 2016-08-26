@@ -55,7 +55,6 @@ interface IPageData {
 // -->
 
 @Component({
-    moduleId: module.id,
     selector: 'forecast-index-page',
     directives: [
         TimeseriesWidgetComponent,
@@ -65,18 +64,7 @@ interface IPageData {
         NavagationPanelComponent
     ],
     providers: [IndexPageService],
-    styles: [
-        `#nav_panel {
-background: #908c8c;
-height:100%;
-overflow-y:auto;
-}`,
-        `#cont_panel {
-background: #cecece;
-height:100%;
-overflow-y:auto;
-}`
-    ],
+    styleUrls: ['index-page.component.css'],
     template: `
 <div class="row">
     <navigation-panel class="col-sm-3">
@@ -176,38 +164,35 @@ export class IndexPageComponent {
                 if (this.pageData.nav_panel && this.pageData.nav_panel.dimensions) {
                     // clear navigation
                     let dimensions = this.pageData.nav_panel.dimensions; // Array<IWidget>
-                    for (let i=0 ; i<dimensions.length; i++){
+                    for (let i=0 ; i<dimensions.length; i++) {
                         let block = dimensions[i];
                         this.currentSelection[block['name']] = null;
-                        let cmp = this.cmpFactoryServ.generate(block['widget'], this.navPanel, this);
-                        if (cmp) {
-                            cmp.then((component) => {
+                        let cmpInstance = this.cmpFactoryServ.generate(block['widget'], this.navPanel, this);
 
-                                this.pageData.nav_panel.dimensions[i].component = component;
+                        if (cmpInstance) {
+                            this.pageData.nav_panel.dimensions[i].component = cmpInstance;
+                            let that = this;
 
-                                let that = this;
-                                if (block['widget'] == 'hierarchy') {
-                                    component['currentSelection'].subscribe(function(event){
-                                        console.log('currentSelection');
-                                        that.currentSelection[block['name']] = event;
-                                    });
-                                    component['itemSelected'].subscribe(function(event){
-                                        that.hierarchySelectionChanged(event, block['name']);
-                                    });
-                                    component['items'] = block.data;
+                            if (block['widget'] == 'hierarchy') {
+                                cmpInstance['currentSelection'].subscribe(function (event) {
+                                    that.currentSelection[block['name']] = event;
+                                });
+                                cmpInstance['itemSelected'].subscribe(function (event) {
+                                    that.hierarchySelectionChanged(event, block['name']);
+                                });
+                                cmpInstance['items'] = block.data;
+                            } else if (block['widget'] == 'dropdown') {
+                                this.pageData.nav_panel.dimensions[i].component = cmpInstance;
 
-                                } else if (block['widget'] == 'dropdown') {
-                                    component['currentSelection'].subscribe(function(event){
-                                        console.log('currentSelection');
-                                        that.currentSelection[block['name']] = event;
-                                    });
-                                    component['changeSelection'].subscribe(function(event){
-                                        that.dropdownSelectionChanged(event, block['name']);
-                                    });
-                                    component['items'] = block.data;
-                                    component['configuration'] = that.__DROPDOWN_CONFIG;
-                                }
-                            });
+                                cmpInstance['currentSelection'].subscribe(function (event) {
+                                    that.currentSelection[block['name']] = event;
+                                });
+                                cmpInstance['changeSelection'].subscribe(function (event) {
+                                    that.dropdownSelectionChanged(event, block['name']);
+                                });
+                                cmpInstance['items'] = block.data;
+                                cmpInstance['configuration'] = that.__DROPDOWN_CONFIG;
+                            }
                         }
                     }
                 }
@@ -217,16 +202,12 @@ export class IndexPageComponent {
                     for (let i=0 ; i<zones.length; i++){
                         let block = zones[i];
 
-                        let cmp = this.cmpFactoryServ.generate(block['widget'], this.contentZone, this);
-                        if (cmp) {
-                            cmp.then((component) => {
-
-                                this.pageData.content.zones[i].component = component;
-
-                                if (block['widget'] == 'timeseries') {
-                                    component['timeseries'] = block.data;
-                                }
-                            });
+                        let cmpInstance = this.cmpFactoryServ.generate(block['widget'], this.contentZone, this);
+                        if (cmpInstance) {
+                            this.pageData.content.zones[i].component = cmpInstance;
+                            if (block['widget'] == 'timeseries') {
+                                cmpInstance['timeseries'] = block.data;
+                            }
                         }
                     }
                 }
@@ -478,11 +459,4 @@ export class IndexPageComponent {
     // ];
     /***********.HIERARCHY_WIDGET*************/
 
-
-
-    // status: Object = {
-    //     navigation_panel: {
-    //         collapsed: false
-    //     }
-    // };
 }
