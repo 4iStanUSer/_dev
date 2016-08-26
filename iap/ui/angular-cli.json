@@ -7,7 +7,7 @@
         {
             "main": "src/main.ts",
             "tsconfig": "src/tsconfig.json",
-            "mobile": false,
+            "mobile": false
         }
     ],
     "addons": [],

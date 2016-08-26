@@ -7,7 +7,7 @@ from .service import (
     get_int_id_or_err as _get_id_or_err,
     get_str_or_err as _get_str_or_err
 )
-from iap.repository import iaccess
+from ...repository import iaccess
 
 
 class IManageAccess:

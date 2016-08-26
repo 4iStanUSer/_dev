@@ -3,7 +3,7 @@ from pyramid.config import Configurator
 from pyramid.response import Response
 
 from . import common
-from . import forecasting as forecast
+from .forecasting.views import default as forecast
 
 
 def common_routing(config):
