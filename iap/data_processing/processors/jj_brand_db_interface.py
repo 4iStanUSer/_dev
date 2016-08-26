@@ -18,13 +18,15 @@ def jj_brand_extract(warehouse, wb, options_list):
     if ws.nrows <= 1:
         raise ex.EmptyInputsError('jj_extract')
     data = get_cell_range(0, 0, ws.ncols, ws.nrows, ws)
-    last_col = get_last_col(data, data[0])
+    header_row_index = 0
+    last_col = get_last_col(data, header_row_index)
     # Init headers cols: names
-    for key, val in meta_cols.items():
-        if key >= last_col:
-            raise ex.NotExistsError('DataProcessing', 'column', key)
-        if val == '':
-            meta_cols[key] = data[0][key].value
+    for item in meta_cols:
+        column_number = item['Col_number']
+        if column_number >= last_col:
+            raise ex.NotExistsError('DataProcessing', 'column', column_number)
+        if item['Dimension_name'] == '':
+            item['Dimension_name'] = data[0][column_number].value
     for key, val in data_cols.items():
         if key >= last_col:
             raise ex.NotExistsError('DataProcessing', 'column', key)
@@ -45,15 +47,15 @@ def jj_brand_extract(warehouse, wb, options_list):
     for row_index in range(1, len(data)):
         # print(row_index)
         meta = []
-        meta_dict = collections.OrderedDict({})
-        for key, val in meta_cols.items():
-            meta_dict[val] = data[row_index][key].value
-            meta.append(data[row_index][key].value)
+        for item in meta_cols:
+            copy_item = item.copy()
+            column_index = copy_item['Col_number']
+            copy_item['Name'] = data[row_index][column_index].value
+            meta.append(copy_item)
         if mapping_rule is not None:
-            new_meta_dict = mapping(meta_dict, mapping_rule)
-            meta = []
-            for key, value in new_meta_dict.items():
-                meta.append(value)
+            new_meta, is_mapped = mapping(meta, mapping_rule)
+            if is_mapped:
+                meta = new_meta
         num_of_dates = 1
         date_value = data[row_index][date_col].value
         start_label = date_func(date_value, num_of_dates)
@@ -105,12 +107,6 @@ def get_time_line(date_values):
 def jj_brand(warehouse, wb, options_list):
     date_func = options_list['date_func']
     meta_cols = options_list['meta_cols']
-    # meta_new_names = options_list['meta_cols']
-    # TODO updare name with layer and dimension name
-    # meta_new_names = []
-    # for item in meta_cols:
-    #     meta_new_names.append(item['Name'])
-
     name_col_num = options_list['name_col']
     dates_info = options_list['dates_cols']
 

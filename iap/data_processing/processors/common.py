@@ -4,7 +4,8 @@ import xlrd
 import collections
 
 
-def mapping(in_meta_dict, rules_dict):
+# TODO delete this old method
+def __mapping(in_meta_dict, rules_dict):
     # Check rules match
     for rule in rules_dict:
         is_matched = True
@@ -21,6 +22,39 @@ def mapping(in_meta_dict, rules_dict):
             out_meta = rule['out']
             return out_meta
     return in_meta_dict
+
+
+def mapping(in_list_of_dict, rules_dict):
+    # Check rules match
+    out_meta = []
+    for rule in rules_dict:
+        input_rule = rule['in']
+        for dimension_value, name_value in input_rule.items():
+            is_matched = False
+            for item in in_list_of_dict:
+                if item['Dimension_name'] == dimension_value\
+                        and item['Name'] == name_value:
+                    is_matched = True
+                    break
+            if not is_matched:
+                break
+        # generate output meta
+        if is_matched:
+            # one rule for one row
+            out_rule = rule['out']
+            for dimension_value, name_value in out_rule.items():
+                is_matched = False
+                for item in in_list_of_dict:
+                    # We will change(map) names if dimension name was matched
+                    if item['Dimension_name'] == dimension_value:
+                        is_matched = True
+                        copy_item = item.copy()
+                        break
+                if is_matched:
+                    copy_item['Name'] = name_value
+                    out_meta.append(copy_item)
+            return out_meta, True
+    return in_list_of_dict, False
 
 
 def date_monthly_excel_number(date_string, date_mod, num_of_dates):
@@ -162,8 +196,12 @@ def date_jj_1week(date_string, num_of_dates):
 
 
 def get_cell_range(start_col, start_row, end_col, end_row, ws):
-    return [ws.row_slice(row, start_colx=start_col, end_colx=end_col) 
+    return [ws.row_slice(row, start_colx=start_col, end_colx=end_col)
             for row in range(start_row, end_row)]
+    # return [ws.cell(row, column).value for row in range(start_row, end_row)
+    #         for column in range(start_col, end_col)]
+    # return [ws.row_values(row, start_colx=start_col, end_colx=end_col)
+    #         for row in range(start_row, end_row)]
 
 
 def get_last_col(data, header_row_index):

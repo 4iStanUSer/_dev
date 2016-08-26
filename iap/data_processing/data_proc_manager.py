@@ -15,6 +15,7 @@ class Loader:
         self.warehouse = warehouse
         BASE_DIR = os.path.dirname(os.path.dirname(__file__))
         self.lake_src = os.path.join(BASE_DIR, 'repository', 'data_lake')
+        # TODO corrected oral care files with new entity structure
         self.func_list = {
             'jj_oc_input_sales_data':
                 {'func': jj_oc_data_proc,
@@ -67,8 +68,13 @@ class Loader:
                 {'func': jj_brand_extract,
                  'data_func': date_yyyyww,
                  'info': 'N/A',
-                 'meta_cols': collections.OrderedDict({3: 'LVL1', 5: 'LVL2',
-                                                       6: ''}),
+                 'meta_cols':
+                     [{'Layer': 'Products', 'Dimension_name': 'Store',
+                       'Name': '', 'Col_number': 3},
+                      {'Layer': 'Products', 'Dimension_name': 'Brand',
+                       'Name': '', 'Col_number': 5},
+                      {'Layer': 'Products', 'Dimension_name': 'SubBrand',
+                       'Name': '', 'Col_number': 6}],
                  'name_col': 'N/A',
                  'properties': 'N/A',
                  'dates_cols': {'scale': 'weekly',
@@ -80,8 +86,8 @@ class Loader:
                       {'Name': 'D', 'TimeScale': 'sum', 'FactScale': 'sum'}],
                  'mapping_rule':
                      [{'in': collections.OrderedDict(
-                         {'LVL1': 'DRUG CHANNEL', 'LVL2': 'RITE AID'}),
-                       'out': collections.OrderedDict({'LVL1': 'Ecommerce'})}]
+                         {'Store': 'DRUG CHANNEL', 'Brand': 'RITE AID'}),
+                       'out': collections.OrderedDict({'Store': 'Ecommerce'})}]
                  },
             'jj_oral_care_sku_data':
                 {'func': jj_oral_care_sku,
