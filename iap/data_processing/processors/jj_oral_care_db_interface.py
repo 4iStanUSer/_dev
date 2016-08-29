@@ -26,13 +26,14 @@ def jj_oral_care_rgm_sales(warehouse, wb, options_list):
     last_col = options_list['dates_info']['end_column']
     if last_col == '':
         last_col = get_last_col(data, header_row_index)
-    # Rename headers cols: names
-    for key, val in meta_cols.items():
-        if key >= last_col:
-            raise ex.NotExistsError('DataProcessing', 'column', key)
-        if val == '':
-            meta_cols[key] = data[header_row_index][key].value
-    # Data processing
+    # Init headers cols: names
+    for item in meta_cols:
+        column_number = item['Col_number']
+        if column_number >= last_col:
+            raise ex.NotExistsError('DataProcessing', 'column', column_number)
+        if item['Dimension_name'] == '':
+            item['Dimension_name'] = data[header_row_index][column_number]\
+                .value
     if 'mapping_rule' in options_list:
         mapping_rule = options_list['mapping_rule']
     else:
@@ -47,15 +48,15 @@ def jj_oral_care_rgm_sales(warehouse, wb, options_list):
     times_series = warehouse.add_time_scale(series_name, time_line)
     for row_index in range(start_data_row, len(data)):
         meta = []
-        meta_dict = collections.OrderedDict({})
-        for key, val in meta_cols.items():
-            meta_dict[val] = data[row_index][key].value
-            meta.append(data[row_index][key].value)
+        for item in meta_cols:
+            copy_item = item.copy()
+            column_index = copy_item['Col_number']
+            copy_item['Name'] = data[row_index][column_index].value.strip()
+            meta.append(copy_item)
         if mapping_rule is not None:
-            new_meta_dict = mapping(meta_dict, mapping_rule)
-            meta = []
-            for key, value in new_meta_dict.items():
-                meta.append(value)
+            new_meta, is_mapped = mapping(meta, mapping_rule)
+            if is_mapped:
+                meta = new_meta
         # Using db interface
         var_name = data[row_index][name_col].value
         if has_map_names:
@@ -160,12 +161,13 @@ def jj_oral_care_sku(warehouse, wb, options_list):
     if last_col == '':
         last_col = get_last_col(data, header_row_index)
     # Rename headers cols: names
-    for key, val in meta_cols.items():
-        if key >= last_col:
-            raise ex.NotExistsError('DataProcessing', 'column', key)
-        if val == '':
-            meta_cols[key] = data[header_row_index][key].value
-    # Data processing
+    for item in meta_cols:
+        column_number = item['Col_number']
+        if column_number >= last_col:
+            raise ex.NotExistsError('DataProcessing', 'column', column_number)
+        if item['Dimension_name'] == '':
+            item['Dimension_name'] = data[header_row_index][column_number]\
+                .value
     if 'mapping_rule' in options_list:
         mapping_rule = options_list['mapping_rule']
     else:
@@ -177,15 +179,15 @@ def jj_oral_care_sku(warehouse, wb, options_list):
     times_series = warehouse.add_time_scale(series_name, time_line)
     for row_index in range(start_data_row, len(data)):
         meta = []
-        meta_dict = collections.OrderedDict({})
-        for key, val in meta_cols.items():
-            meta_dict[val] = data[row_index][key].value
-            meta.append(data[row_index][key].value)
+        for item in meta_cols:
+            copy_item = item.copy()
+            column_index = copy_item['Col_number']
+            copy_item['Name'] = data[row_index][column_index].value.strip()
+            meta.append(copy_item)
         if mapping_rule is not None:
-            new_meta_dict = mapping(meta_dict, mapping_rule)
-            meta = []
-            for key, value in new_meta_dict.items():
-                meta.append(value)
+            new_meta, is_mapped = mapping(meta, mapping_rule)
+            if is_mapped:
+                meta = new_meta
         # Using db interface
         var_name = data[row_index][name_col].value
         if var_name in map_names:

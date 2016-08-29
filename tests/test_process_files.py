@@ -41,7 +41,7 @@ class TestProcessFiles:
 
         # session_factory = get_session_factory(self.engine)
 
-        root = Entity(name='root')
+        root = Entity(name='root', layer='root', dimension='root')
         curr_ssn = session_factory()
         curr_ssn.add(root)
         curr_ssn.commit()

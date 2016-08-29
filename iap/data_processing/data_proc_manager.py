@@ -93,8 +93,16 @@ class Loader:
                 {'func': jj_oral_care_sku,
                  'date_func': date_monthly_excel_number,
                  'info': {'header_row': 0, 'data_row': 1},
-                 'meta_cols': collections.OrderedDict(
-                     {0: 'Region', 1: '', 2: '', 3: ''}),
+                 'meta_cols': [
+                     {'Layer': 'Geography', 'Dimension_name': 'Region',
+                      'Name': '', 'Col_number': 0},
+                     {'Layer': 'Products', 'Dimension_name': '',
+                      'Name': '', 'Col_number': 1},
+                     {'Layer': 'Products', 'Dimension_name': '',
+                      'Name': '', 'Col_number': 2},
+                     {'Layer': 'Products', 'Dimension_name': '',
+                      'Name': '', 'Col_number': 3}
+                 ],
                  'name_col': 4,
                  'map_names': {'Value Sales LC': 'Values_sales_lc'},
                  'dates_info': {'scale': 'monthly',
@@ -117,8 +125,16 @@ class Loader:
                 {'func': jj_oral_care_rgm_sales,
                  'date_func': date_year_month,
                  'info': {'header_row': 11, 'data_row': 12},
-                 'meta_cols': collections.OrderedDict(
-                     {0: '', 1: '', 2: '', 3: ''}),
+                 'meta_cols': [
+                     {'Layer': 'Geography', 'Dimension_name': 'Country',
+                      'Name': '', 'Col_number': 0},
+                     {'Layer': 'Products', 'Dimension_name': '',
+                      'Name': '', 'Col_number': 1},
+                     {'Layer': 'Products', 'Dimension_name': '',
+                      'Name': '', 'Col_number': 2},
+                     {'Layer': 'Products', 'Dimension_name': '',
+                      'Name': '', 'Col_number': 3}
+                 ],
                  'name_col': 4,
                  'dates_info': {'scale': 'monthly',
                                 'start_column': 5,
