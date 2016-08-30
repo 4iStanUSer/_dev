@@ -15,7 +15,6 @@ class Loader:
         self.warehouse = warehouse
         BASE_DIR = os.path.dirname(os.path.dirname(__file__))
         self.lake_src = os.path.join(BASE_DIR, 'repository', 'data_lake')
-        # TODO corrected oral care files with new entity structure
         self.func_list = {
             'jj_oc_input_sales_data':
                 {'func': jj_oc_data_proc,
@@ -44,14 +43,32 @@ class Loader:
                 {'func': jj_brand,
                  'date_func': date_jj_1week,
                  'info': 'N/A',
-                 # 'meta_cols': ['Category', 'Segment', 'SubSegment', 'Brand',
-                 #               'SubBrand'],
                  'meta_cols': [
                      {'Layer': 'Products', 'Dimension_name': 'Total_market',
                       'Name': ''},
                      {'Layer': 'Products', 'Dimension_name': 'Total_category',
                       'Name': ''},
                      {'Layer': 'Products', 'Dimension_name': 'Category',
+                      'Name': ''},
+                     {'Layer': 'Products', 'Dimension_name': 'Brand',
+                      'Name': ''},
+                     {'Layer': 'Products', 'Dimension_name': 'SubBrand',
+                      'Name': ''}
+                 ],
+                 'name_col': 0,
+                 'properties': 'N/A',
+                 'dates_cols': {'scale': 'weekly',
+                                'date_name_rows': 'N/A',
+                                'start_column': 1,
+                                'end_column': ''}},
+            'MyReport (Band-aid Other Accaunts)':
+                {'func': jj_brand,
+                 'date_func': date_jj_1week,
+                 'info': 'N/A',
+                 'meta_cols': [
+                     {'Layer': 'Products', 'Dimension_name': 'Total_market',
+                      'Name': ''},
+                     {'Layer': 'Products', 'Dimension_name': 'Total_brand',
                       'Name': ''},
                      {'Layer': 'Products', 'Dimension_name': 'Brand',
                       'Name': ''},

@@ -138,6 +138,7 @@ def jj_brand(warehouse, wb, options_list):
     # start_date_point = date_func(header_row[start_dates_col].value)
     series_name = dates_info['scale']
     times_series = warehouse.add_time_scale(series_name, time_line)
+    full_meta = []
     while row_index < len(data):
         desc_val = str(data[row_index][name_col_num].value)
         # Add meta and data to output only if facts exist
@@ -147,9 +148,22 @@ def jj_brand(warehouse, wb, options_list):
                                                   end_dates_col)
             # Looking for facts by rows and data by columns, add data to db
             # using db interface
+            # collecting meta
             meta = __get_meta(data, name_col_num, meta_cols,
                               start_meta_row,
                               last_meta_row)
+            len_meta = len(meta)
+            if not full_meta:
+                for item in meta:
+                    full_meta.append(item.copy())
+            elif len_meta > len(full_meta):
+                # TODO Exception
+                raise Exception
+            elif len_meta <= len(full_meta):
+                for i in range(len_meta):
+                    full_meta[-len_meta+i] = meta[i].copy()
+                meta = full_meta
+            # working with WH interface
             entity = warehouse.add_entity(meta)
             for row_index in range(row_index+1, last_facts_row + 1):
                 fact_name = data[row_index][name_col_num].value
@@ -169,8 +183,9 @@ def __get_meta(data, meta_column, meta_cols, start_meta_row,
     meta = []
     name_desc = 'Name'
     index = 0
+    reverse_index = (last_meta_row - start_meta_row) + 1
     for row_index in range(start_meta_row, last_meta_row + 1):
-        new_dict = meta_cols[index].copy()
+        new_dict = meta_cols[-reverse_index].copy()
         if meta_cols[index][name_desc] == '':
             desc_val = str(data[row_index][meta_column].value)
         else:
@@ -178,6 +193,7 @@ def __get_meta(data, meta_column, meta_cols, start_meta_row,
         new_dict[name_desc] = desc_val
         meta.append(new_dict)
         index += 1
+        reverse_index -= 1
     return meta
 
 
