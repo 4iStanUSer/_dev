@@ -113,8 +113,18 @@ class Loader:
                 {'func': jj_oral_care_media_spend,
                  'date_func': date_year_month,
                  'info': {'header_row': 2, 'data_row': 3},
-                 'meta_cols': collections.OrderedDict(
-                     {0: '', 1: '', 2: '', 3: '', 4: ''}),
+                 'meta_cols': [
+                     {'Layer': 'Geography', 'Dimension_name': 'Country',
+                      'Name': '', 'Col_number': 0},
+                     {'Layer': 'Products', 'Dimension_name': '',
+                      'Name': '', 'Col_number': 1},
+                     {'Layer': 'Products', 'Dimension_name': '',
+                      'Name': '', 'Col_number': 2},
+                     {'Layer': 'Products', 'Dimension_name': '',
+                      'Name': '', 'Col_number': 3},
+                     {'Layer': 'Products', 'Dimension_name': '',
+                      'Name': '', 'Col_number': 4}
+                 ],
                  'name_col': 5,
                  'dates_info': {'scale': 'monthly',
                                 'start_column': 6,
