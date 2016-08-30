@@ -8,18 +8,15 @@ from .db.warehouse import Warehouse
 
 from ..repository.storage import *
 from ..repository.interface.istorage import *
-
 from ..repository.interface.iaccess import IAccess as __IAccess
-iaccess = __IAccess()
-
-from ..repository.interface.imanage_access import \
-    IManageAccess as __IManageAccess
-imanage_access = __IManageAccess()
+from ..repository.interface.imanage_access import  IManageAccess as __IManAcc
 
 storage = Storage()
 backup = IBackup(storage)
 template = ITemplate(storage)
 istorage = IStorage(backup, template)
+iaccess = __IAccess()
+imanage_access = __IManAcc(iaccess, istorage)
 
 
 def get_wh_interface():

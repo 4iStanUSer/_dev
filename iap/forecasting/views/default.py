@@ -17,7 +17,16 @@ def do_error_response(data):
     }
 
 
-def index(req):
+def index_view(req):
+    # service.recreate_db(req)
+    # service.fillin_db(req)
+    # getter_service.set_permissions_template(req)
+    # getter_service.init_user_wb(req, 1, 1)
+    # getter_service.update_user_perms(req)
+    # u_perms = getter_service.get_permissions(req, 1, 1)
+
+    getter_service.tmp_workbench(req)
+
     return render_to_response('iap.forecasting:templates/index.jinja2',
                               {'title': 'Forecast index'},
                               request=req)

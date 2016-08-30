@@ -1,18 +1,20 @@
-import os
+# import os
+# import json
+# import transaction
 import copy
-import json
 from .. import exceptions as ex
 from ..db import layer_access as wha
 from .service import (
     get_int_id_or_err as _get_id_or_err,
     get_str_or_err as _get_str_or_err
 )
-from ...repository import iaccess
 
+# TODO REMOVE SSN rope
 
 class IManageAccess:
-    def __init__(self):
-        pass
+    def __init__(self, iaccess, istorage):
+        self.iaccess = iaccess
+        self.istorage = istorage
 
     def set_permissions_template(self, ssn, tool_id, template):
         # Validate inputs
@@ -51,6 +53,8 @@ class IManageAccess:
             for f in features_to_add:
                 wha.add_feature(ssn, f['name'], tool)
 
+        return None
+
     def init_user_wb(self, ssn, user_id, tool_id):
         # Validate inputs
         tool_id = _get_id_or_err(tool_id, 'tool_id')
@@ -75,15 +79,17 @@ class IManageAccess:
             wha.add_perm_value(ssn, tool, perm_node, per_v.value, user)
 
         # Get recently created permissions for user
-        u_perms = iaccess.get_permissions(ssn, tool_id, user_id)
+        u_perms = self.iaccess.get_permissions(ssn, tool_id, user_id)
 
-        # Make backup file
-        dir_path = os.path.dirname(os.path.realpath(__file__))
-        file_name = "backup_tool_" + str(tool_id) + "_user_" \
-                    + str(user_id) + ".json"
-        file_path = os.path.join(dir_path, file_name)
-        with open(file_path, "w+") as backup_file:
-            json.dump(u_perms, backup_file)
+        self.istorage.backup.save(user_id, tool_id, u_perms, 'access')
+
+        # # Make backup file
+        # dir_path = os.path.dirname(os.path.realpath(__file__))
+        # file_name = "backup_tool_" + str(tool_id) + "_user_" \
+        #             + str(user_id) + ".json"
+        # file_path = os.path.join(dir_path, file_name)
+        # with open(file_path, "w+") as backup_file:
+        #     json.dump(u_perms, backup_file)
 
         pass  # TODO Confirm This Realization
 

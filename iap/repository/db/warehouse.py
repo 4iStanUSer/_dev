@@ -152,6 +152,8 @@ class Entity(Base):
     __tablename__ = 'entities'
     _id = Column(Integer, primary_key=True)
     _name = Column(String(length=255))
+    _layer = Column(String(length=255))
+    _dimension_name = Column(String(length=255))
     children = relationship('Entity',
                             secondary=entities_edge,
                             primaryjoin=_id == entities_edge.c.parent_id,
