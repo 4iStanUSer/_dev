@@ -1,5 +1,5 @@
 from iap.repository import exceptions as ex
-from iap.data_processing.processors.common import date_func, get_cell_range,\
+from iap.data_processing.data_loading.common import date_func, get_cell_range,\
     get_last_col
 
 def jj_extract(wb, meta_cols, data_cols, dates_cols):
