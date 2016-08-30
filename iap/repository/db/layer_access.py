@@ -5,6 +5,7 @@ from sqlalchemy import and_
 from sqlalchemy.orm import aliased
 from iap.repository.db import models_access as mdls
 
+# TODO Class implementation & ssn factory
 
 def _get_tool_model(tool_name, model):
     return mdls.PERMS_MODELS_MAP[tool_name.lower()][model.lower()]

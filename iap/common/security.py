@@ -10,12 +10,14 @@ class MyAuthenticationPolicy(AuthTktAuthenticationPolicy):
         if user is not None:
             return user.id
 
+
 def get_user(request):
     user_id = request.unauthenticated_userid
     if user_id is not None:
         #user = request.dbsession.query(User).get(user_id)
         user = service.get_user_by_id(user_id)
         return user
+
 
 def includeme(config):
     settings = config.get_settings()

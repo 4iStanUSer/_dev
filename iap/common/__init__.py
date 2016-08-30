@@ -36,10 +36,7 @@ def index_view(req):
 
     # service.recreate_db(req)
     # service.fillin_db(req)
-    # service.set_permissions_template(req)
-    # service.init_user_wb(req, 1, 1)
-    # service.update_user_perms(req)
-    # u_perms = service.get_permissions(req, 1, 1)
+
 
     return render_to_response('templates/index.jinja2',
                               {'title': 'Home page'},
