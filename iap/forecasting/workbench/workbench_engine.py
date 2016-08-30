@@ -22,16 +22,7 @@ class WorkbenchEngine:
         self.dimensions = Dimensions()
 
     def load_data_from_repository(self, warehouse):
-        # TODO rework the following line
-        root = warehouse._root
-        if root is None:
-            return False
-        else:
-            centities_list = []
-            for child_ent in root.children:
-                centities_list += self.__get_all_entities(child_ent, [child_ent.name])
-            # TODO remove or replace return value
-            return centities_list
+        pass
 
     def __get_all_entities(self, entity, path=[], visited=[], cent_list=[]):
         # TODO rework function add parenting somewhere else(not in CEntity method), now adding only one parent
