@@ -15,6 +15,7 @@ class Loader:
         self.warehouse = warehouse
         BASE_DIR = os.path.dirname(os.path.dirname(__file__))
         self.lake_src = os.path.join(BASE_DIR, 'repository', 'data_lake')
+        # TODO corrected oral care files with new entity structure
         self.func_list = {
             'jj_oc_input_sales_data':
                 {'func': jj_oc_data_proc,
@@ -45,8 +46,18 @@ class Loader:
                  'info': 'N/A',
                  # 'meta_cols': ['Category', 'Segment', 'SubSegment', 'Brand',
                  #               'SubBrand'],
-                 'meta_cols': ['', '', '', '',
-                               ''],
+                 'meta_cols': [
+                     {'Layer': 'Products', 'Dimension_name': 'Total_market',
+                      'Name': ''},
+                     {'Layer': 'Products', 'Dimension_name': 'Total_category',
+                      'Name': ''},
+                     {'Layer': 'Products', 'Dimension_name': 'Category',
+                      'Name': ''},
+                     {'Layer': 'Products', 'Dimension_name': 'Brand',
+                      'Name': ''},
+                     {'Layer': 'Products', 'Dimension_name': 'SubBrand',
+                      'Name': ''}
+                 ],
                  'name_col': 0,
                  'properties': 'N/A',
                  'dates_cols': {'scale': 'weekly',
@@ -57,8 +68,13 @@ class Loader:
                 {'func': jj_brand_extract,
                  'data_func': date_yyyyww,
                  'info': 'N/A',
-                 'meta_cols': collections.OrderedDict({3: 'LVL1', 5: 'LVL2',
-                                                       6: ''}),
+                 'meta_cols':
+                     [{'Layer': 'Products', 'Dimension_name': 'Store',
+                       'Name': '', 'Col_number': 3},
+                      {'Layer': 'Products', 'Dimension_name': 'Brand',
+                       'Name': '', 'Col_number': 5},
+                      {'Layer': 'Products', 'Dimension_name': 'SubBrand',
+                       'Name': '', 'Col_number': 6}],
                  'name_col': 'N/A',
                  'properties': 'N/A',
                  'dates_cols': {'scale': 'weekly',
@@ -70,15 +86,23 @@ class Loader:
                       {'Name': 'D', 'TimeScale': 'sum', 'FactScale': 'sum'}],
                  'mapping_rule':
                      [{'in': collections.OrderedDict(
-                         {'LVL1': 'DRUG CHANNEL', 'LVL2': 'RITE AID'}),
-                       'out': collections.OrderedDict({'LVL1': 'Ecommerce'})}]
+                         {'Store': 'DRUG CHANNEL', 'Brand': 'RITE AID'}),
+                       'out': collections.OrderedDict({'Store': 'Ecommerce'})}]
                  },
             'jj_oral_care_sku_data':
                 {'func': jj_oral_care_sku,
                  'date_func': date_monthly_excel_number,
                  'info': {'header_row': 0, 'data_row': 1},
-                 'meta_cols': collections.OrderedDict(
-                     {0: 'Region', 1: '', 2: '', 3: ''}),
+                 'meta_cols': [
+                     {'Layer': 'Geography', 'Dimension_name': 'Region',
+                      'Name': '', 'Col_number': 0},
+                     {'Layer': 'Products', 'Dimension_name': '',
+                      'Name': '', 'Col_number': 1},
+                     {'Layer': 'Products', 'Dimension_name': '',
+                      'Name': '', 'Col_number': 2},
+                     {'Layer': 'Products', 'Dimension_name': '',
+                      'Name': '', 'Col_number': 3}
+                 ],
                  'name_col': 4,
                  'map_names': {'Value Sales LC': 'Values_sales_lc'},
                  'dates_info': {'scale': 'monthly',
@@ -89,8 +113,18 @@ class Loader:
                 {'func': jj_oral_care_media_spend,
                  'date_func': date_year_month,
                  'info': {'header_row': 2, 'data_row': 3},
-                 'meta_cols': collections.OrderedDict(
-                     {0: '', 1: '', 2: '', 3: '', 4: ''}),
+                 'meta_cols': [
+                     {'Layer': 'Geography', 'Dimension_name': 'Country',
+                      'Name': '', 'Col_number': 0},
+                     {'Layer': 'Products', 'Dimension_name': '',
+                      'Name': '', 'Col_number': 1},
+                     {'Layer': 'Products', 'Dimension_name': '',
+                      'Name': '', 'Col_number': 2},
+                     {'Layer': 'Products', 'Dimension_name': '',
+                      'Name': '', 'Col_number': 3},
+                     {'Layer': 'Products', 'Dimension_name': '',
+                      'Name': '', 'Col_number': 4}
+                 ],
                  'name_col': 5,
                  'dates_info': {'scale': 'monthly',
                                 'start_column': 6,
@@ -101,8 +135,16 @@ class Loader:
                 {'func': jj_oral_care_rgm_sales,
                  'date_func': date_year_month,
                  'info': {'header_row': 11, 'data_row': 12},
-                 'meta_cols': collections.OrderedDict(
-                     {0: '', 1: '', 2: '', 3: ''}),
+                 'meta_cols': [
+                     {'Layer': 'Geography', 'Dimension_name': 'Country',
+                      'Name': '', 'Col_number': 0},
+                     {'Layer': 'Products', 'Dimension_name': '',
+                      'Name': '', 'Col_number': 1},
+                     {'Layer': 'Products', 'Dimension_name': '',
+                      'Name': '', 'Col_number': 2},
+                     {'Layer': 'Products', 'Dimension_name': '',
+                      'Name': '', 'Col_number': 3}
+                 ],
                  'name_col': 4,
                  'dates_info': {'scale': 'monthly',
                                 'start_column': 5,

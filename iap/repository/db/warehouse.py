@@ -152,6 +152,8 @@ class Entity(Base):
     __tablename__ = 'entities'
     _id = Column(Integer, primary_key=True)
     _name = Column(String(length=255))
+    _layer = Column(String(length=255))
+    _dimension_name = Column(String(length=255))
     children = relationship('Entity',
                             secondary=entities_edge,
                             primaryjoin=_id == entities_edge.c.parent_id,
@@ -174,6 +176,30 @@ class Entity(Base):
                 raise Exception
         self._name = name
 
+    @hybrid_property
+    def dimension(self):
+        return self._dimension_name
+
+    @dimension.setter
+    def dimension(self, dimension_name):
+        for parent in self.parents:
+            if dimension_name in [x.dimension for x in parent.children if x.id
+                    != self.id]:
+                raise Exception
+        self._dimension_name = dimension_name
+
+    @hybrid_property
+    def layer(self):
+        return self._layer
+
+    @layer.setter
+    def layer(self, layer):
+        for parent in self.parents:
+            if layer in [x.layer for x in parent.children if x.id
+                    != self.id]:
+                raise Exception
+        self._layer = layer
+
     def add_parent(self, path):
         root = self._get_root()
         new_parent = root._add_node_by_path(path, 0)
@@ -183,18 +209,26 @@ class Entity(Base):
             self.parents.append(new_parent)
         return new_parent
 
-    def add_child(self, name):
+    def add_child(self, item):
+        name = 'Name'
+        layer = 'Layer'
+        dimension = 'Dimension_name'
         for child in self.children:
-            if child.name == name:
+            if child.name == item[name] \
+                    and child.dimension == item[dimension]\
+                    and child.layer == item[layer]:
                 return child
-        new_child = Entity(_name=name)
+        new_child = Entity(_name=item[name], _dimension_name=item[dimension],
+                           _layer=item[layer])
         self.children.append(new_child)
         return new_child
 
     def _add_node_by_path(self, path, depth):
         node = None
         for child in self.children:
-            if child.name == path[depth]:
+            if child.dimension == path[depth]['Dimension_name']\
+                    and child.name == path[depth]['Name']\
+                    and child.layer == path[depth]['Layer']:
                 node = child
                 break
         if node is None:
