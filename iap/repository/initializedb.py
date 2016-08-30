@@ -10,6 +10,9 @@ from .db.meta import Base
 from .db import (get_engine, get_session_factory, get_tm_session)
 from .db.warehouse import Entity
 
+from ..repository import iaccess, imanage_access
+from ..forecasting.template import tool_template
+
 
 def usage(argv):
     cmd = os.path.basename(argv[0])
@@ -32,6 +35,7 @@ def main(argv=sys.argv):
 
     with transaction.manager:
         ssn = get_tm_session(session_factory, transaction.manager)
+
         # TODO remove procedure of removing all rows
         # Drop all tables
         Base.metadata.drop_all(engine)
@@ -40,4 +44,53 @@ def main(argv=sys.argv):
         # Add root to entities tree.
         root = Entity(name='root')
         ssn.add(root)
+
+        ##
+        argentina = root.add_child('Argentina')
+        brazil = root.add_child('Brazil')
+        capacityA = argentina.force_variable('CapacityA', 'string', 'testA')
+        capacityB = brazil.force_variable('CapacityB', 'string', 'testB')
+        ##
+
         transaction.manager.commit()
+
+        # Add tools
+        tool_forecast = imanage_access.add_tool(ssn, 'Forecast')
+        tool_ppt = imanage_access.add_tool(ssn, 'PPT')
+        tool_mmm = imanage_access.add_tool(ssn, 'MMM')
+
+        transaction.manager.commit()
+
+        tool_forecast = imanage_access.get_tool(ssn, name='Forecast')
+        f_tool_id = tool_forecast.id
+
+        # Add roles
+        role_jj_admin = imanage_access.add_role(ssn, 'jj_role_admin',
+                                                f_tool_id)
+        role_jj_manager = imanage_access.add_role(ssn, 'jj_role_manager',
+                                                  f_tool_id)
+
+        transaction.manager.commit()
+
+        role_jj_admin = imanage_access.get_role(ssn, name='jj_role_admin')
+        role_jj_manager = imanage_access.get_role(ssn, name='jj_role_manager')
+
+        role_admin_id = role_jj_admin.id
+        role_manager_id = role_jj_manager.id
+
+        # Add users
+        user_jj_admin = imanage_access.add_user(ssn, 'jj_admin@gmail.com',
+                                                'pass', [role_admin_id])
+        user_jj_manager = imanage_access.add_user(ssn, 'jj_manager@gmail.com',
+                                                  'pass', [role_manager_id])
+
+        transaction.manager.commit()
+
+        user_jj_admin = imanage_access.get_user(ssn,
+                                                email='jj_admin@gmail.com')
+        user_admin_id = user_jj_admin.id
+
+        imanage_access.set_permissions_template(ssn, f_tool_id, tool_template)
+
+        imanage_access.init_user_wb(ssn, f_tool_id, user_admin_id)
+        # imanage_access.update_user_data_permissions(ssn, 1, 1, permissions)

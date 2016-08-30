@@ -1,3 +1,119 @@
+from iap.repository import istorage, imanage_access, iaccess
+from ..workbench import WorkbenchEngine
+
+from ..template import tool_template  # TODO - REMOVE THIS
+# import transaction
+
+tool_id = 1  # TODO via - imanage_access.get_tool(ssn, name='Forecast')
+
+def _get_ssn(req):
+    return req.dbsession
+
+
+def get_permissions(req, tool_id, user_id):
+    ssn = _get_ssn(req)
+    return iaccess.get_permissions(ssn, tool_id, user_id)
+
+
+def tmp_workbench(req):
+    ssn = _get_ssn(req)
+    user_id = 1
+
+    wb = WorkbenchEngine(user_id, imanage_access, ssn)
+    wb.load_backup(tool_template)
+
+
+# def init_user_wb(req, tool_id, user_id):
+#     ssn = _get_ssn(req)
+#     #with transaction.manager:
+#     return imanage_access.init_user_wb(ssn, tool_id, user_id)
+
+
+# def update_user_perms(req):
+#     ssn = _get_ssn(req)
+#
+#     permissions = [
+#         {
+#             'mask': 9,
+#             'path': ['Argentina', 'Chocolate'],
+#             'name': 'Praline',
+#             'node_type': 'ent'
+#         },
+#         {
+#             'mask': 7,
+#             'path': ['Argentina', 'Chocolate', 'Praline'],
+#             'name': 'Unit',
+#             'node_type': 'var'
+#         },
+#         {
+#             'mask': 5,
+#             'path': ['Argentina', 'Chocolate', 'Praline',
+#                      'Unit'],
+#             'name': 'Quarterly',
+#             'node_type': 'ts'
+#         },
+#         {
+#             'mask': 4,
+#             'path': ['Argentina', 'Chocolate', 'Praline',
+#                      'Unit'],
+#             'name': 'Annual',
+#             'node_type': 'ts'
+#         },
+#         {
+#             'mask': 3,
+#             'path': ['Argentina', 'Chocolate', 'Praline',
+#                      'Unit',
+#                      'Annual'],
+#             'name': '2014',
+#             'node_type': 'tp'
+#         },
+#         {
+#             'mask': 2,
+#             'path': ['Argentina', 'Chocolate', 'Praline',
+#                      'Unit',
+#                      'Annual'],
+#             'name': '2015',
+#             'node_type': 'tp'
+#         },
+#         {
+#             'mask': 6,
+#             'path': ['Argentina', 'Chocolate', 'Praline'],
+#             'name': 'Dollars',
+#             'node_type': 'var'
+#         },
+#         {
+#             'mask': 8,
+#             'path': ['Brazil', 'Chocolate'],
+#             'name': 'Praline',
+#             'node_type': 'ent'
+#         },
+#         {
+#             'mask': 1,
+#             'path': ['Brazil', 'Chocolate', 'Praline', 'Unit', 'Annual'],
+#             'name': '2015',
+#             'node_type': 'tp'
+#
+#         },
+#     ]
+#
+#     #with transaction.manager:
+#     imanage_access.update_user_data_permissions(ssn, 1, 1, permissions)
+
+
+# def set_permissions_template(req):
+#     ssn = _get_ssn(req)
+#
+#     template = tool_template
+#
+#     #with transaction.manager:
+#     imanage_access.set_permissions_template(ssn, tool_id, template)
+#     #transaction.manager.commit()
+
+
+
+
+
+
 
 
 def get_time_series():

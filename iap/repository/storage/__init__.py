@@ -5,14 +5,16 @@ import datetime
 from . import exceptions as ex
 
 FILE_EXTENSION = '.pickle'
-BACKUP_STORAGE_PATH = 'for_backup_storage'
-TPL_STORAGE_PATH = 'for_tpl_storage'
-CONFIG_STORAGE_PATH = 'for_config_storage'
+BACKUP_STORAGE_PATH = 'for_backup_storage'  # TODO Absolute path
+TPL_STORAGE_PATH = 'for_tpl_storage'  # TODO Absolute path
+CONFIG_STORAGE_PATH = 'for_config_storage'  # TODO Absolute path
 
 
 class Storage:
-    def save_backup(self, user_id, tool_id, data_to_save, backup_name='default'):
-        if not os.path.exists(self.__get_user_backup_dir_path(user_id, tool_id)):
+    def save_backup(self, user_id, tool_id, data_to_save,
+                    backup_name='default'):
+        if not os.path.exists(
+                self.__get_user_backup_dir_path(user_id, tool_id)):
             os.makedirs(self.__get_user_backup_dir_path(user_id, tool_id))
         file_path = self.__get_backup_file_path(user_id, tool_id, backup_name)
         file_info = {
@@ -80,11 +82,13 @@ class Storage:
             return files_list
         ext_len = len(FILE_EXTENSION)
         for user_id in users_ids:
-            user_backup_dir_path = self.__get_user_backup_dir_path(user_id, tool_id)
+            user_backup_dir_path = self.__get_user_backup_dir_path(user_id,
+                                                                   tool_id)
             for entry in os.scandir(user_backup_dir_path):
                 if not entry.name.startswith('.') and entry.is_file():
                     no_ext_name = entry.name[:-ext_len]
-                    saved_content = self.load_backup(user_id, tool_id, no_ext_name)
+                    saved_content = self.load_backup(user_id, tool_id,
+                                                     no_ext_name)
                     if saved_content:
                         files_list.append(saved_content['info'])
         return files_list
@@ -92,21 +96,23 @@ class Storage:
     @staticmethod
     def __get_backup_file_path(user_id, tool_id, backup_name):
         file_name = backup_name + FILE_EXTENSION
-        file_path = BACKUP_STORAGE_PATH + '/' + tool_id + '/' + user_id + '/' + file_name
+        file_path = BACKUP_STORAGE_PATH + '/' + str(tool_id) + '/' + \
+                    str(user_id) + '/' + file_name
         return file_path
 
     @staticmethod
     def __get_user_backup_dir_path(user_id, tool_id):
-        user_backup_dir_path = BACKUP_STORAGE_PATH + '/' + tool_id + '/' + user_id
+        user_backup_dir_path = BACKUP_STORAGE_PATH + '/' + \
+                               str(tool_id) + '/' + str(user_id)
         return user_backup_dir_path
 
     @staticmethod
     def __get_tpl_file_path(tool_id, tpl_name):
         file_name = tpl_name + FILE_EXTENSION
-        file_path = TPL_STORAGE_PATH + '/' + tool_id + '/' + file_name
+        file_path = TPL_STORAGE_PATH + '/' + str(tool_id) + '/' + file_name
         return file_path
 
     @staticmethod
     def __get_tpl_dir_path(tool_id):
-        tpl_dir_path = TPL_STORAGE_PATH + '/' + tool_id
+        tpl_dir_path = TPL_STORAGE_PATH + '/' + str(tool_id)
         return tpl_dir_path
