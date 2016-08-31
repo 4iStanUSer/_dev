@@ -157,8 +157,11 @@ def jj_brand(warehouse, wb, options_list):
                 for item in meta:
                     full_meta.append(item.copy())
             elif len_meta > len(full_meta):
-                # TODO Exception
-                raise Exception
+                raise ex.WrongValueError(len_meta,
+                                         'value >= ' + str(len(full_meta)),
+                                         'length of sub meta must be <= '
+                                         'length of meta',
+                                         'jj_brand')
             elif len_meta <= len(full_meta):
                 for i in range(len_meta):
                     full_meta[-len_meta+i] = meta[i].copy()
@@ -172,6 +175,12 @@ def jj_brand(warehouse, wb, options_list):
                 for col_index in range(start_dates_col, end_dates_col):
                     values.append(data[row_index][col_index].value)
                 time_series = variable.force_time_series(times_series)
+                # TODO look for history values
+                # history_values = time_series.get_values(first_label)
+                # if not history_values:
+                #     new_value = values
+                # else:
+                #     new_value = [history_value + value]
                 time_series.set_values(first_label, values)
             row_index = last_facts_row
             start_meta_row = last_facts_row + 1
