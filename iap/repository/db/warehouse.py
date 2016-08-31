@@ -309,6 +309,9 @@ class Variable(Base):
     def default_value(self):
         return self._default_value
 
+    def get_time_series_names(self):
+        return [x.name for x in self._time_series]
+
     def get_time_series(self, ts_name):
         for ts in self._time_series:
             if ts.name == ts_name:

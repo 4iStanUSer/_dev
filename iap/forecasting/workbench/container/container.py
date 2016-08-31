@@ -84,6 +84,8 @@ class CEntity:
                 return child
         new_child = CEntity(name, self._data.time_manager)
         self._children.append(new_child)
+        # TODO add parenting somewhere else, following allows adding only one parent
+        new_child._parents.append(self)
         return new_child
 
     def get_variables_names(self):
