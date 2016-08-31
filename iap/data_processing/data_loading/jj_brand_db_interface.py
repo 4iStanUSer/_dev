@@ -1,5 +1,5 @@
 from iap.repository import exceptions as ex
-from iap.data_processing.processors.common import get_last_col, \
+from iap.data_processing.data_loading.common import get_last_col, \
     get_cell_range, mapping
 import collections
 import datetime

@@ -1,8 +1,8 @@
 import os
 from iap.data_processing.data_proc_manager import DataUploadManager
-from iap.data_processing.processors import jj_aoc, jj_extract, jj_oc_data_proc
-from iap.data_processing.processors.jj_aggr_map import DataAggregate
-from iap.data_processing.processors.common import date_year_month, date_year
+from iap.data_processing.data_loading import jj_aoc, jj_extract, jj_oc_data_proc
+from iap.data_processing.data_loading.jj_aggr_map import DataAggregate
+from iap.data_processing.data_loading.common import date_year_month, date_year
 import collections
 
 

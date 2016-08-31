@@ -1,3 +1,4 @@
+from iap.data_processing import exceptions as ex
 from sqlalchemy import (
     Table,
     ForeignKey,
@@ -74,18 +75,32 @@ class Warehouse:
             for key in time_line:
                 min_new_stamp = time_line[key]
                 break
-            max_new_stamp = next(reversed(time_line.values()))
+            try:
+                max_new_stamp = next(reversed(time_line.values()))
+            except:
+                ex.NotExistsError('TimeStamp', 'max_new_stamp',
+                                  'No time_stamps in time_line',
+                                  'add_time_scale')
             # Check values on Exception
             if max_new_stamp < min_old_stamp:
                 delta = min_old_stamp - max_new_stamp
                 if delta.days > 31:
-                    raise Exception
+                    raise ex.WrongValueError(
+                        delta.days, 'value < 31',
+                        'Less then one month length',
+                        'add_time_scale')
             if min_new_stamp is None:
-                raise Exception
+                raise ex.NotExistsError('TimeStamp', 'min_new_stamp',
+                                        'No time_stamps in time_line',
+                                        'add_time_scale')
             if min_new_stamp > max_old_stamp:
                 delta = min_new_stamp - max_old_stamp
                 if delta.days > 31:
-                    raise Exception
+                    raise ex.WrongValueError(
+                        delta.days, 'value <= 31',
+                        'Difference between timestamps limits must be not '
+                        'higher then one month',
+                        'add_time_scale')
             # Add new TimePoints
             for period_name, period_stamp in time_line.items():
                 if period_stamp < min_old_stamp\
@@ -113,21 +128,30 @@ class TimeScale(Base):
                              if x.name == label)
             return timestamp
         except StopIteration:
-            raise Exception
+            raise ex.NotFoundError('TimeStamp', 'label', label,
+                                   'No timestamp was found by label',
+                                   'get_stamp_by_label')
 
     def get_stamps_by_start_label(self, start_label, length):
         start_timestamp = self.get_stamp_by_label(start_label)
         timestamps = sorted([x.timestamp for x in self.timeline
                              if x.timestamp >= start_timestamp])
         if len(timestamps) < length:
-            raise Exception
+            raise ex.WrongValueError(len(timestamps),
+                                     'length >= ' + str(length),
+                                     'Wrong timestamps length',
+                                     'get_stamps_by_start_label')
         return timestamps[:length]
 
     def get_stamps_for_range(self, start_point, end_point):
         timestamps = sorted([x.timestamp for x in self.timeline
                              if start_point <= x.timestamp <= end_point])
         if timestamps[0] != start_point or timestamps[-1] != end_point:
-            raise Exception
+            raise ex.WrongValueError(
+                str(timestamps[0]) + ' or ' + str(timestamps[-1]),
+                str(start_point) + ' or ' + str(end_point),
+                'Query result not equals to the filter',
+                'get_stamps_for_range')
         return timestamps
 
 
@@ -173,7 +197,7 @@ class Entity(Base):
     def name(self, name):
         for parent in self.parents:
             if name in [x.name for x in parent.children if x.id != self.id]:
-                raise Exception
+                raise ex.AlreadyExistsError('Entity', 'name', name, 'name')
         self._name = name
 
     @hybrid_property
@@ -185,7 +209,8 @@ class Entity(Base):
         for parent in self.parents:
             if dimension_name in [x.dimension for x in parent.children if x.id
                     != self.id]:
-                raise Exception
+                raise ex.AlreadyExistsError(
+                    'Entity', 'dimension_name', dimension_name, 'dimension')
         self._dimension_name = dimension_name
 
     @hybrid_property
@@ -197,7 +222,7 @@ class Entity(Base):
         for parent in self.parents:
             if layer in [x.layer for x in parent.children if x.id
                     != self.id]:
-                raise Exception
+                raise ex.AlreadyExistsError('Entity', 'layer', layer, 'layer')
         self._layer = layer
 
     def add_parent(self, path):
@@ -205,7 +230,8 @@ class Entity(Base):
         new_parent = root._add_node_by_path(path, 0)
         if new_parent not in self.parents:
             if self.name in [x.name for x in new_parent.children]:
-                raise Exception
+                raise ex.AlreadyExistsError('Entity', 'name', self.name,
+                                            'add_parent')
             self.parents.append(new_parent)
         return new_parent
 
@@ -243,7 +269,7 @@ class Entity(Base):
             return self
         for parent in self.parents:
             return parent._get_root()
-        raise Exception
+        raise ex.NotFoundError('Entity', 'root', 'root', '', '_get_root')
 
     def get_variables_names(self):
         return [x.name for x in self._variables]
@@ -263,13 +289,17 @@ class Entity(Base):
         try:
             type_enum = DataType[data_type]
         except KeyError:
-            raise Exception
+            raise ex.NotFoundError('DataType', 'DataType', data_type,
+                                   'Not found value in dict by key',
+                                   'force_variable')
         # Validate default value.
         if default_value is not None:
             try:
                 cast_value(type_enum, default_value)
             except ValueError:
-                raise Exception
+                raise ex.WrongValueError(default_value, type_enum,
+                                         'Value not from enum',
+                                         'force_variable')
         else:
             default_value = get_default_value(type_enum)
         # Create new variable.
@@ -298,7 +328,7 @@ class Variable(Base):
         if self._name == name:
             return
         if name in self._entity.get_variables_names():
-            raise Exception
+            raise ex.AlreadyExistsError('Variable', 'name', name, 'name')
         self._name = name
 
     @property
@@ -317,7 +347,8 @@ class Variable(Base):
 
     def force_time_series(self, time_scale):
         if time_scale is None:
-            raise Exception
+            raise ex.NotExistsError('TimeScale', 'time_scale', '',
+                                    'force_time_series')
         ts_name = time_scale.name
         for ts in self._time_series:
             if ts.name == ts_name:
@@ -417,7 +448,9 @@ class TimeSeries(Base):
             # Limit length, if length is less than expected throw exception.
             if length is not None:
                 if len(points) < length:
-                    raise Exception
+                    raise ex.WrongValueError(
+                        len(points), 'length >= ' + str(length),
+                        'length is less than expected', 'get_values')
                 points = points[:length]
             return [x.get() for x in points]
 

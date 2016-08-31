@@ -29,6 +29,7 @@ def mapping(in_list_of_dict, rules_dict):
     out_meta = []
     for rule in rules_dict:
         input_rule = rule['in']
+        is_matched = False
         for dimension_value, name_value in input_rule.items():
             is_matched = False
             for item in in_list_of_dict:
@@ -60,18 +61,7 @@ def mapping(in_list_of_dict, rules_dict):
 def date_monthly_excel_number(date_string, date_mod, num_of_dates):
     output = collections.OrderedDict({})
     first_label = ''
-    output_months = {1: 'Jan',
-                     2: 'Feb',
-                     3: 'Mar',
-                     4: 'Apr',
-                     5: 'May',
-                     6: 'Jun',
-                     7: 'Jul',
-                     8: 'Aug',
-                     9: 'Sep',
-                     10: 'Oct',
-                     11: 'Nov',
-                     12: 'Dec'}
+    output_months = __get_short_months_with_num_keys()
     try:
         year, month, day, hour, minute, second = xlrd.xldate_as_tuple(
             int(date_string), date_mod)
@@ -118,30 +108,8 @@ def date_year_month(date_values, num_of_dates):
     output = collections.OrderedDict({})
     new_year = int(float(date_values[0]))
     month = date_values[1]
-    months = {'january': 1,
-              'february': 2,
-              'march': 3,
-              'april': 4,
-              'may': 5,
-              'june': 6,
-              'july': 7,
-              'august': 8,
-              'september': 9,
-              'october': 10,
-              'november': 11,
-              'december': 12}
-    output_months = {1: 'Jan',
-                     2: 'Feb',
-                     3: 'Mar',
-                     4: 'Apr',
-                     5: 'May',
-                     6: 'Jun',
-                     7: 'Jul',
-                     8: 'Aug',
-                     9: 'Sep',
-                     10: 'Oct',
-                     11: 'Nov',
-                     12: 'Dec'}
+    months = __get_months_with_name_keys()
+    output_months = __get_short_months_with_num_keys()
     # Init vars for month loop
     new_month_num = months[month.lower()]
     for i in range(num_of_dates):
@@ -155,6 +123,38 @@ def date_year_month(date_values, num_of_dates):
             first_label = new_key
         new_month_num += 1
     return first_label, output
+
+
+def __get_months_with_name_keys():
+    months = {'january': 1,
+              'february': 2,
+              'march': 3,
+              'april': 4,
+              'may': 5,
+              'june': 6,
+              'july': 7,
+              'august': 8,
+              'september': 9,
+              'october': 10,
+              'november': 11,
+              'december': 12}
+    return months
+
+
+def __get_short_months_with_num_keys():
+    output_months = {1: 'Jan',
+                     2: 'Feb',
+                     3: 'Mar',
+                     4: 'Apr',
+                     5: 'May',
+                     6: 'Jun',
+                     7: 'Jul',
+                     8: 'Aug',
+                     9: 'Sep',
+                     10: 'Oct',
+                     11: 'Nov',
+                     12: 'Dec'}
+    return output_months
 
 
 def date_yyyymm(date_string):

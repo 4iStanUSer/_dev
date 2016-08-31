@@ -3,10 +3,10 @@ import io
 import xlrd
 from csv import DictReader
 import collections
-from iap.data_processing.processors import jj_brand, jj_brand_extract, \
+from iap.data_processing.data_loading import jj_brand, jj_brand_extract, \
     jj_oc_data_proc, jj_oral_care_sku, jj_oral_care_media_spend, \
     jj_oral_care_rgm_sales
-from iap.data_processing.processors.common import date_year_month, date_year,\
+from iap.data_processing.data_loading.common import date_year_month, date_year,\
     date_jj_1week, date_yyyyww, date_monthly_excel_number
 import datetime
 
