@@ -1,4 +1,4 @@
-from iap.data_processing import exceptions as ex
+from iap.repository import exceptions as ex
 from sqlalchemy import (
     Table,
     ForeignKey,
@@ -78,9 +78,9 @@ class Warehouse:
             try:
                 max_new_stamp = next(reversed(time_line.values()))
             except:
-                ex.NotExistsError('TimeStamp', 'max_new_stamp',
-                                  'No time_stamps in time_line',
-                                  'add_time_scale')
+                ex.NotExistsValueError('TimeStamp', 'max_new_stamp',
+                                       'No time_stamps in time_line',
+                                       'add_time_scale')
             # Check values on Exception
             if max_new_stamp < min_old_stamp:
                 delta = min_old_stamp - max_new_stamp
@@ -90,9 +90,9 @@ class Warehouse:
                         'Less then one month length',
                         'add_time_scale')
             if min_new_stamp is None:
-                raise ex.NotExistsError('TimeStamp', 'min_new_stamp',
-                                        'No time_stamps in time_line',
-                                        'add_time_scale')
+                raise ex.NotExistsValueError('TimeStamp', 'min_new_stamp',
+                                             'No time_stamps in time_line',
+                                             'add_time_scale')
             if min_new_stamp > max_old_stamp:
                 delta = min_new_stamp - max_old_stamp
                 if delta.days > 31:
@@ -347,8 +347,8 @@ class Variable(Base):
 
     def force_time_series(self, time_scale):
         if time_scale is None:
-            raise ex.NotExistsError('TimeScale', 'time_scale', '',
-                                    'force_time_series')
+            raise ex.NotExistsValueError('TimeScale', 'time_scale', '',
+                                         'force_time_series')
         ts_name = time_scale.name
         for ts in self._time_series:
             if ts.name == ts_name:

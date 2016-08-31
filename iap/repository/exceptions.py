@@ -1,35 +1,39 @@
 class EmptyInputsError(Exception):
-    '''Raised when input object is none.
+    """Custom Exception.
+    Raised when input object is none.
     
     Attributes:
         key -- name of empty object
-    '''
+    """
     def __init__(self, key):
         self.key = key
 
 
 class AlreadyExistsError(Exception):
-    '''Raised when user tries to add new object, 
+    """Custom Exception.
+    Raised when user tries to add new object,
     but such object already exists.
 
     Attributes:
         par_name -- name of dublicated parameter
         par_value -- duplicated value 
-    '''
-    def __init__(self, class_name, par_name, par_value):
+    """
+    def __init__(self, class_name, par_name, par_value, func_name=''):
         self.class_name = class_name
         self.par_name = par_name
         self.par_value = par_value
+        self.func_name = func_name
 
 
 class NotExistsError(Exception):
-    '''Raised when object not exists
+    """Custom Exception.
+    Raised when object not exists
  
     Attributes:
         name -- object name
         property -- field that object was searched on
         property_val -- field value
-    '''
+    """
     def __init__(self, name, property, property_val):
         self.name = name
         self.property = property
@@ -37,22 +41,24 @@ class NotExistsError(Exception):
 
 
 class WrongArgsError(Exception):
-    '''Raised when input object is none.
+    """Custom Exception.
+    Raised when input object is none.
     
     Attributes:
         func_name -- name of the method which has wrong args 
-    '''
+    """
     def __init__(self, func_name):
         self.func_name = func_name
 
 
 class NoCnahgesError(Exception):
-    '''Raised when input object is none.
+    """Custom Exception.
+    Raised when input object is none.
     
     Attributes:
         class_name -- object class name
         func_name -- method name
-    '''
+    """
     def __init__(self, class_name, func_name):
         self.class_name = class_name
         self.func_name = func_name
@@ -83,3 +89,51 @@ class CreatingError(Exception):
         self.name = name
         if data is not None:
             self.data = data
+
+
+class WrongValueError(Exception):
+    """Custom Exception.
+    Raised when value is incorrect.
+
+    Attributes:
+        value -- value that raised exception
+        expected_value -- expected value
+    """
+    def __init__(self, value, expected_value='', explanation='', func_name=''):
+        self.value = value
+        self.expected_value = expected_value
+        self.explanation = explanation
+        self.func_name = func_name
+
+
+class NotExistsValueError(Exception):
+    """Custom Exception.
+    Raised when object or value not exists
+
+    Attributes:
+        obj_name -- object name or class name
+        name -- variable name
+    """
+    def __init__(self, obj_name, name, explanation='', func_name=''):
+        self.obj_name = obj_name
+        self.name = name
+        self.explanation = explanation
+        self.func_name = func_name
+
+
+class NotFoundError(Exception):
+    """Custom Exception.
+    Raised when object or value not exists
+
+    Attributes:
+        obj_name -- object name or class name
+        name -- variable name
+        by_value -- filtered value
+        explanation -- text explanation
+    """
+    def __init__(self, obj_name, name, by_value, explanation='', func_name=''):
+        self.obj_name = obj_name
+        self.name = name
+        self.by_value = by_value
+        self.explanation = explanation
+        self.func_name = func_name
