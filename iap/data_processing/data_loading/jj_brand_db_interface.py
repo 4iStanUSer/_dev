@@ -5,6 +5,41 @@ import collections
 import datetime
 
 
+# TODO
+def jj_brand_media_spend(warehouse, wb, options_list):
+    meta_cols = options_list['meta_cols']
+    data_cols = options_list['data_cols']
+    dates_info = options_list['dates_cols']
+    date_func = options_list['data_func']
+    date_col = dates_info['date_col']
+    series_name = dates_info['scale']
+    ws = wb.sheet_by_index(0)
+    if ws.nrows <= 1:
+        raise ex.EmptyInputsError('jj_extract')
+    data = get_cell_range(0, 0, ws.ncols, ws.nrows, ws)
+    header_row_index = 0
+    last_col = get_last_col(data, header_row_index)
+    # Init headers cols: names
+    for item in meta_cols:
+        column_number = item['Col_number']
+        if column_number >= last_col:
+            raise ex.NotExistsError('DataProcessing', 'column', column_number)
+        if item['Dimension_name'] == '':
+            item['Dimension_name'] = data[0][column_number].value
+    for key, val in data_cols.items():
+        if key[0] >= last_col:
+            raise ex.NotExistsError('DataProcessing', 'column', key)
+        if val == '':
+            data_cols[key] = data[0][key[0]].value
+    if date_col >= last_col:
+        raise ex.NotExistsError('DataProcessing', 'column', key[0])
+    # Create output: Append data
+    if 'mapping_rule' in options_list:
+        mapping_rule = options_list['mapping_rule']
+    else:
+        mapping_rule = None
+
+
 def jj_brand_extract(warehouse, wb, options_list):
     # t1 = datetime.datetime.now()
 
