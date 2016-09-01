@@ -6,6 +6,7 @@ from ..template import tool_template  # TODO - REMOVE THIS
 
 tool_id = 1  # TODO via - imanage_access.get_tool(ssn, name='Forecast')
 
+
 def _get_ssn(req):
     return req.dbsession
 
@@ -21,6 +22,20 @@ def tmp_workbench(req):
 
     wb = WorkbenchEngine(user_id, imanage_access, ssn)
     wb.load_backup(tool_template)
+
+    selection = {
+        'geography': 2,
+        'time': 3,  # 3
+        'products': 5
+    }
+    dims = wb.dimensions.get_dimensions()
+    dims_hier = {}
+    if dims:
+        for dim in dims:
+            items = wb.dimensions.get_dimension_items(dim, selection)
+            dims_hier[dim] = wb.dimensions.make_hierarchical(dim, items)
+
+    print(1)
 
 
 # def init_user_wb(req, tool_id, user_id):
