@@ -11,6 +11,7 @@ class TimeLineManager:
             return len(self.time_scales[ts_name])
         except KeyError:
             raise Exception
+
     def get_index_by_label(self, ts_name, label):
         try:
             return self.time_scales[ts_name].index(label)

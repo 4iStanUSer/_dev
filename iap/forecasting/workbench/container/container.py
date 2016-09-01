@@ -84,6 +84,8 @@ class CEntity:
                 return child
         new_child = CEntity(name, self._data.time_manager)
         self._children.append(new_child)
+        # TODO add parenting somewhere else, following allows adding only one parent
+        new_child._parents.append(self)
         return new_child
 
     def get_variables_names(self):
@@ -126,9 +128,9 @@ class CVariable:
         else:
             return None
 
-    def force_time_series(self, ts_name):
+    def force_time_series(self, ts_name, start_date, end_date):
         if not self._entity_data.does_contain_ts(self._var_name, ts_name):
-            self._entity_data.add_time_series(self._var_name, ts_name)
+            self._entity_data.add_time_series(self._var_name, ts_name, start_date, end_date)
         return CTimeSeries(self._entity_data, self._var_name, ts_name)
 
 
