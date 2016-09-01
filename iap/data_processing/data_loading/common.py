@@ -2,6 +2,7 @@ from iap.repository import exceptions as ex
 import datetime
 import xlrd
 import collections
+from iap.repository.db.warehouse import DataType, get_default_value
 
 
 # TODO delete this old method
@@ -22,6 +23,31 @@ def __mapping(in_meta_dict, rules_dict):
             out_meta = rule['out']
             return out_meta
     return in_meta_dict
+
+
+def convert_value(value, data_type):
+    if value == '':
+        result = get_default_value(DataType[data_type])
+        return result
+    if data_type == 'float':
+        try:
+            result = float(value)
+        except:
+            raise ex.WrongFormatError('float', value, '', 'convert_value')
+    elif data_type == 'int':
+        try:
+            result = int(value)
+        except:
+            raise ex.WrongFormatError('int', value, '', 'convert_value')
+    elif data_type == 'string':
+        try:
+            result = str(value)
+        except:
+            raise ex.WrongFormatError('str', value, '', 'convert_value')
+    else:
+        raise ex.WrongValueError(value, 'DataType', 'Wrong value type',
+                                 'convert_value')
+    return result
 
 
 def mapping(in_list_of_dict, rules_dict):

@@ -137,3 +137,20 @@ class NotFoundError(Exception):
         self.by_value = by_value
         self.explanation = explanation
         self.func_name = func_name
+
+
+class WrongFormatError(Exception):
+    """Custom Exception.
+    Raised when object or value not exists
+
+    Attributes:
+        obj_name -- object name or class name
+        name -- variable name
+        by_value -- filtered value
+        explanation -- text explanation
+    """
+    def __init__(self, target_format, value, explanation='', func_name=''):
+        self.target_format = target_format
+        self.value = value
+        self.explanation = explanation
+        self.func_name = func_name

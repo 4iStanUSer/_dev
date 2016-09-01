@@ -96,7 +96,8 @@ class Loader:
                  'properties': 'N/A',
                  'dates_cols': {'scale': 'weekly',
                                 'date_col': 1},
-                 'data_cols': {10: '', 11: 'C', 12: 'D'},
+                 'data_cols': {(10, 'int'): '', (11, 'float'): 'C',
+                               (12, 'int'): 'D'},
                  'sum_rule':
                      [{'Name': 'B', 'TimeScale': 'sum', 'FactScale': 'sum'},
                       {'Name': 'C', 'TimeScale': 'sum', 'FactScale': 'sum'},
