@@ -8,10 +8,11 @@ from pyramid.scripts.common import parse_vars
 
 from .db.meta import Base
 from .db import (get_engine, get_session_factory, get_tm_session)
-from .db.warehouse import Entity
+from .db.warehouse import Entity, Warehouse
 
-from ..repository import iaccess, imanage_access
+from ..repository import imanage_access
 from ..forecasting.template import tool_template
+from iap.data_processing.data_proc_manager import Loader
 
 
 def usage(argv):
@@ -42,15 +43,14 @@ def main(argv=sys.argv):
         # Create all tables
         Base.metadata.create_all(engine)
         # Add root to entities tree.
-        root = Entity(name='root')
+        root = Entity(name='root', layer='root', dimension='root')
         ssn.add(root)
 
-        ##
-        argentina = root.add_child('Argentina')
-        brazil = root.add_child('Brazil')
-        capacityA = argentina.force_variable('CapacityA', 'string', 'testA')
-        capacityB = brazil.force_variable('CapacityB', 'string', 'testB')
-        ##
+        transaction.manager.commit()
+
+        wh = Warehouse(session_factory)
+        loader = Loader(wh, data_load_command='jj')
+        loader.load()
 
         transaction.manager.commit()
 

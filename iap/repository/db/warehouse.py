@@ -53,7 +53,7 @@ class Warehouse:
         return self._root._add_node_by_path(path, 0)
 
     def get_entity_by_id(self, entity_id):
-        return self._ssn.query(Entity).get(entity_id).one_or_none()
+        return self._ssn.query(Entity).get(entity_id)  # .one_or_none()
 
     def add_time_scale(self, name, time_line):
         time_scale = self._ssn.query(TimeScale) \
