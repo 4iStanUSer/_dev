@@ -128,9 +128,9 @@ class CVariable:
         else:
             return None
 
-    def force_time_series(self, ts_name):
+    def force_time_series(self, ts_name, start_date, end_date):
         if not self._entity_data.does_contain_ts(self._var_name, ts_name):
-            self._entity_data.add_time_series(self._var_name, ts_name)
+            self._entity_data.add_time_series(self._var_name, ts_name, start_date, end_date)
         return CTimeSeries(self._entity_data, self._var_name, ts_name)
 
 

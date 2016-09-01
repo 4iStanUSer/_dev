@@ -44,14 +44,20 @@ class EntityData:
     def does_contain_ts(self, var_name, ts_name):
         return ts_name in self._get_var(var_name)['time_series']
 
-    def add_time_series(self, var_name, ts_name):
+    # TODO review passing start and end dates
+    def add_time_series(self, var_name, ts_name, start_date, end_date):
+    # def add_time_series(self, var_name, ts_name):
         var = self._get_var(var_name)
         length = self.time_manager.get_time_length(ts_name)
         def_value = var['default_value']
-        var['time_series'][ts_name] = {'start': None,
-                                       'end': None,
+        var['time_series'][ts_name] = {'start': start_date,
+                                       'end': end_date,
                                        'values': [def_value]*length
                                        }
+        # var['time_series'][ts_name] = {'start': None,
+        #                                'end': None,
+        #                                'values': [def_value]*length
+        #                                }
 
     def get_ts_start(self, var_name, ts_name):
         return self._get_ts(var_name, ts_name)['start']
