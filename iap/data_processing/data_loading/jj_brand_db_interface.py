@@ -1,6 +1,6 @@
 from iap.repository import exceptions as ex
 from iap.data_processing.data_loading.common import get_last_col, \
-    get_cell_range, mapping
+    get_cell_range, mapping, convert_value
 import collections
 import datetime
 
@@ -28,12 +28,12 @@ def jj_brand_extract(warehouse, wb, options_list):
         if item['Dimension_name'] == '':
             item['Dimension_name'] = data[0][column_number].value
     for key, val in data_cols.items():
-        if key >= last_col:
+        if key[0] >= last_col:
             raise ex.NotExistsError('DataProcessing', 'column', key)
         if val == '':
-            data_cols[key] = data[0][key].value
+            data_cols[key] = data[0][key[0]].value
     if date_col >= last_col:
-        raise ex.NotExistsError('DataProcessing', 'column', key)
+        raise ex.NotExistsError('DataProcessing', 'column', key[0])
     # Create output: Append data
     if 'mapping_rule' in options_list:
         mapping_rule = options_list['mapping_rule']
@@ -61,8 +61,9 @@ def jj_brand_extract(warehouse, wb, options_list):
         start_label = date_func(date_value, num_of_dates)
         entity = warehouse.add_entity(meta)
         for key, val in data_cols.items():
-            value = data[row_index][key].value
-            variable = entity.force_variable(val, 'float')
+            value = data[row_index][key[0]].value
+            value = convert_value(value, key[1])
+            variable = entity.force_variable(val, key[1])
             time_series = variable.force_time_series(times_series)
             history_value = time_series.get_value(start_label)
             if not history_value:
@@ -173,14 +174,20 @@ def jj_brand(warehouse, wb, options_list):
                 variable = entity.force_variable(fact_name, 'float')
                 values = []
                 for col_index in range(start_dates_col, end_dates_col):
-                    values.append(data[row_index][col_index].value)
+                    value = convert_value(data[row_index][col_index].value,
+                                          'float')
+                    values.append(value)
                 time_series = variable.force_time_series(times_series)
-                # TODO look for history values
-                # history_values = time_series.get_values(first_label)
-                # if not history_values:
-                #     new_value = values
-                # else:
-                #     new_value = [history_value + value]
+                history_values = time_series.get_values(first_label)
+                if history_values:
+                    if len(history_values) != len(values):
+                        raise ex.WrongValueError(
+                            len(values), len(history_values),
+                            'length values must be equal to the history '
+                            'values length', 'jj_brand')
+                    for i in range(len(history_values)):
+                        if history_values[i] != '':
+                            values[i] += history_values[i]
                 time_series.set_values(first_label, values)
             row_index = last_facts_row
             start_meta_row = last_facts_row + 1

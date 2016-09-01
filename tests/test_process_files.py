@@ -54,8 +54,7 @@ class TestProcessFiles:
         # self.db_session.add(root)
         # transaction.manager.commit()
 
-
-    def test_dimensions(self):
+    def test_loader(self):
         loader = Loader(self.wh, data_load_command='jj')
         loader.load()
         # transaction.manager.commit()
