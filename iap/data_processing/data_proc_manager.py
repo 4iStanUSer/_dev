@@ -84,7 +84,7 @@ class Loader:
                                 'end_column': ''}},
             'JNJ_lean_media_spend':
                 {'func': jj_brand_media_spend,
-                 'date_func': date_mmddyyyy,
+                 'date_func': date_monthly_excel_number,
                  'info': 'N/A',
                  'meta_cols': [
                      {'Layer': 'Products', 'Dimension_name': '',
@@ -104,7 +104,7 @@ class Loader:
                                 'end_column': ''}},
             'JNJ_SALES_EXTRACT_FOR_4I_201603':
                 {'func': jj_brand_extract,
-                 'data_func': date_yyyyww,
+                 'date_func': date_yyyyww,
                  'info': 'N/A',
                  'meta_cols':
                      [{'Layer': 'Products', 'Dimension_name': 'Store',
