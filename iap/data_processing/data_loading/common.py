@@ -3,6 +3,7 @@ import datetime
 import xlrd
 import collections
 from iap.repository.db.warehouse import DataType, get_default_value
+import math
 
 
 # TODO delete this old method
@@ -23,6 +24,49 @@ def __mapping(in_meta_dict, rules_dict):
             out_meta = rule['out']
             return out_meta
     return in_meta_dict
+
+
+# time line converter
+def tl_weekly_to_month_445(time_stamp, num_of_dates, first_week_num=0):
+    first_label = ''
+    output = collections.OrderedDict({})
+    divider = 4.34
+    year = time_stamp.year
+    if first_week_num == 0:
+        week_num = time_stamp.isocalendar()[1]
+    else:
+        week_num = first_week_num
+    output_months = __get_short_months_with_num_keys()
+    for i in range(num_of_dates):
+        this_month = week_num/divider
+        this_month = math.ceil(this_month)
+        # Init vars for month loop
+        if this_month > 12:
+            year += 1
+            this_month -= 12
+            week_num = 1
+        month_string = output_months[this_month]
+        new_key = month_label(month_string, year)
+        if new_key not in output:
+            output[new_key] = datetime.datetime(year, this_month, 1)
+        if i == 0:
+            first_label = new_key
+        week_num += 1
+    return first_label, output
+
+
+def week_to_month(yyyy, week_num):
+    divider = 4.34
+    output_months = __get_short_months_with_num_keys()
+    this_month = week_num / divider
+    this_month = math.ceil(this_month)
+    month_string = output_months[this_month]
+    date_label = month_label(month_string, yyyy)
+    return date_label
+
+
+def month_label(month_string, yyyy):
+    return month_string + ' ' + str(yyyy)
 
 
 def convert_value(value, data_type):
@@ -96,7 +140,7 @@ def date_monthly_excel_number(date_string, date_mod, num_of_dates):
                 year += 1
                 month -= 12
             month_string = output_months[month]
-            new_key = month_string + ' ' + str(year)
+            new_key = month_label(month_string, year)
             output[new_key] = datetime.datetime(year=year, month=month, day=1)
             if i == 0:
                 first_label = new_key
@@ -108,6 +152,7 @@ def date_monthly_excel_number(date_string, date_mod, num_of_dates):
         return 0
 
 
+# TODO delete, not used
 def date_func(date_cols, data_row, index=-1):
     for key, val in date_cols.items():
         if val == 'campaign':
@@ -118,6 +163,7 @@ def date_func(date_cols, data_row, index=-1):
             return str(data_row[index].value)
 
 
+# TODO update or delete. Not used
 def date_yyyyww(date_value, num_of_dates):
     string_date = str(int(date_value))
     time_line = datetime.datetime.strptime(string_date + '-0', "%Y%W-%w")
@@ -142,7 +188,7 @@ def date_year_month(date_values, num_of_dates):
             new_year += 1
             new_month_num -= 12
         month_string = output_months[new_month_num]
-        new_key = month_string + ' ' + str(new_year)
+        new_key = month_label(month_string, new_year)
         output[new_key] = datetime.datetime(new_year, new_month_num, 1)
         if i == 0:
             first_label = new_key
@@ -201,7 +247,7 @@ def date_mmddyyyy(date_string, num_of_dates):
             year += 1
             month_num -= 12
         month_string = output_months[month_num]
-        new_key = month_string + ' ' + str(year)
+        new_key = month_label(month_string, year)
         output[new_key] = datetime.datetime(year, month_num, 1)
         if i == 0:
             first_label = new_key

@@ -11,15 +11,13 @@ from pyramid import testing
 from iap.repository.db.warehouse import Entity
 from iap.data_processing.data_proc_manager import Loader
 from iap.repository.db.warehouse import Warehouse
-
-
 from sqlalchemy.orm import sessionmaker
+from iap.data_processing.data_loading.common import tl_weekly_to_month_445,\
+    week_to_month
+import datetime
 
 xfail = pytest.mark.xfail
 
-
-# def dummy_request(dbsession):
-#     return testing.DummyRequest(dbsession=dbsession)
 
 
 class TestProcessFiles:
@@ -60,3 +58,13 @@ class TestProcessFiles:
         # transaction.manager.commit()
         # assert 5 == 5
         print('ss')
+
+    @pytest.mark.skip(reason="no need to test now")
+    def test_weekly_converter(self):
+        label = week_to_month(2016, 13)
+        print(label)
+        start_date = datetime.datetime(year=2015, month=1, day=1)
+        first_label, time_line = tl_weekly_to_month_445(start_date, 53, 1)
+        print(first_label)
+        for key in time_line:
+            print(time_line[key])
