@@ -97,15 +97,14 @@ def date_monthly_excel_number(date_string, date_mod, num_of_dates):
                 month -= 12
             month_string = output_months[month]
             new_key = month_string + ' ' + str(year)
-            output[new_key] = datetime.datetime(year=year, month=month,
-                                                day=1)
+            output[new_key] = datetime.datetime(year=year, month=month, day=1)
             if i == 0:
                 first_label = new_key
             month += 1
         return first_label, output
-        # return datetime.datetime(year=year, month=month, day=day)
-    except Exception as err:
-        print(err.args)
+    except:
+        ex.WrongValueError(date_string, 'date as an excel number', '',
+                           'date_monthly_excel_number')
         return 0
 
 
@@ -187,6 +186,27 @@ def date_yyyymm(date_string):
     year = int(date_string[:3])
     month = int(date_string[4:])
     return datetime.datetime(year=year, month=month, day=1)
+
+
+def date_mmddyyyy(date_string, num_of_dates):
+    date_split = date_string.split('/')
+    year = int(date_split[2])
+    month_num = int(date_split[1])
+    first_label = ''
+    output = collections.OrderedDict({})
+    output_months = __get_short_months_with_num_keys()
+    # Init vars for month loop
+    for i in range(num_of_dates):
+        if month_num > 12:
+            year += 1
+            month_num -= 12
+        month_string = output_months[month_num]
+        new_key = month_string + ' ' + str(year)
+        output[new_key] = datetime.datetime(year, month_num, 1)
+        if i == 0:
+            first_label = new_key
+            month_num += 1
+    return first_label, output
 
 
 def date_year(date_values):

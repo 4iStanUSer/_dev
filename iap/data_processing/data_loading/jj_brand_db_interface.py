@@ -5,13 +5,87 @@ import collections
 import datetime
 
 
+# TODO
+def jj_brand_media_spend(warehouse, wb, options_list):
+    meta_cols = options_list['meta_cols']
+    dates_info = options_list['dates_cols']
+    date_func = options_list['date_func']
+    name_col_num = options_list['name_col']
+    series_name = dates_info['scale']
+    ws = wb.sheet_by_index(0)
+    if ws.nrows <= 1:
+        raise ex.EmptyInputsError('jj_brand_media_spend')
+    data = get_cell_range(0, 0, ws.ncols, ws.nrows, ws)
+    header_row_index = 0
+    # Assign header_row(dates header) and last column(not higher then ws.ncols)
+    start_dates_col = dates_info['start_column']
+    end_dates_col = dates_info['end_column']
+    if end_dates_col == '':
+        end_dates_col = get_last_col(data, header_row_index)
+    if start_dates_col > end_dates_col:
+        raise ex.WrongValueError(start_dates_col, 'value <= ' + end_dates_col,
+                                 '', 'jj_brand_media_spend')
+    # Init headers cols: names
+    for item in meta_cols:
+        column_number = item['Col_number']
+        if column_number >= end_dates_col:
+            raise ex.WrongValueError(column_number, 'value <= ' +
+                                     end_dates_col, '', 'jj_brand_media_spend')
+        if item['Dimension_name'] == '':
+            item['Dimension_name'] = data[0][column_number].value
+    # Create output: Append data
+    if 'mapping_rule' in options_list:
+        mapping_rule = options_list['mapping_rule']
+    else:
+        mapping_rule = None
+    # Initialize data: meta table and data table
+    num_of_dates = end_dates_col - start_dates_col
+    first_label, time_line = date_func(
+        data[header_row_index][start_dates_col].value, wb.datemode,
+        num_of_dates)
+    # start_date_point = date_func(header_row[start_dates_col].value)
+    times_series = warehouse.add_time_scale(series_name, time_line)
+    for row_index in range(header_row_index + 1, len(data)):
+        # print(row_index)
+        meta = []
+        for item in meta_cols:
+            copy_item = item.copy()
+            column_index = copy_item['Col_number']
+            copy_item['Name'] = data[row_index][column_index].value
+            meta.append(copy_item)
+        if mapping_rule is not None:
+            new_meta, is_mapped = mapping(meta, mapping_rule)
+            if is_mapped:
+                meta = new_meta
+        # working with WH interface
+        entity = warehouse.add_entity(meta)
+        fact_name = data[row_index][name_col_num].value
+        variable = entity.force_variable(fact_name, 'float')
+        values = []
+        for col_index in range(start_dates_col, end_dates_col):
+            value = convert_value(data[row_index][col_index].value, 'float')
+            values.append(value)
+        time_series = variable.force_time_series(times_series)
+        history_values = time_series.get_values(first_label)
+        if history_values:
+            if len(history_values) != len(values):
+                raise ex.WrongValueError(
+                    len(values), len(history_values),
+                    'length values must be equal to the history '
+                    'values length', 'jj_brand')
+            for i in range(len(history_values)):
+                if history_values[i] != '':
+                    values[i] += history_values[i]
+        time_series.set_values(first_label, values)
+
+
 def jj_brand_extract(warehouse, wb, options_list):
     # t1 = datetime.datetime.now()
 
     meta_cols = options_list['meta_cols']
     data_cols = options_list['data_cols']
     dates_info = options_list['dates_cols']
-    date_func = options_list['data_func']
+    date_func = options_list['date_func']
     date_col = dates_info['date_col']
     series_name = dates_info['scale']
     ws = wb.sheet_by_index(0)
