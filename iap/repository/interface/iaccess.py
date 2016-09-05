@@ -1,4 +1,4 @@
-from .. import exceptions as ex
+from ...repository import exceptions as ex
 from ..db import layer_access as wha
 from .service import (
     get_int_id_or_err as _get_id_or_err,
@@ -8,8 +8,8 @@ from .service import (
 
 class IAccess:
 
-    def __init__(self, ssn):
-        self.ssn = ssn
+    def __init__(self, ssn_factory):
+        self.ssn = ssn_factory()
 
     def get_permissions(self, tool_id, user_id):
         tool_id = _get_id_or_err(tool_id, 'tool_id')
