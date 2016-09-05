@@ -20,6 +20,17 @@ class Container:
     def add_time_scale(self, name, time_line):
         self.timeline.add_time_line(name, time_line)
 
+    def load(self, backup):
+        pass
+
+    def save(self):
+        if self._root is None:
+            return False
+        return {
+            'c_entities': self._root.save(),
+            'time_line': self.timeline.time_scales
+        }
+
 
 class CEntity:
 
@@ -101,6 +112,13 @@ class CEntity:
         if not self._data.does_contain_var(name):
             self._data.add_var(name, default_value)
         return CVariable(self._data, name)
+
+    def save(self):
+        return {
+            'name': self._name,
+            'data': self._data.save(),
+            'children': [child.save() for child in self._children]
+        }
 
 
 class CVariable:

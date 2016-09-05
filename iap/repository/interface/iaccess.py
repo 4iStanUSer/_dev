@@ -8,15 +8,15 @@ from .service import (
 
 class IAccess:
 
-    def __init__(self):
-        pass
+    def __init__(self, ssn):
+        self.ssn = ssn
 
-    def get_permissions(self, ssn, tool_id, user_id):
+    def get_permissions(self, tool_id, user_id):
         tool_id = _get_id_or_err(tool_id, 'tool_id')
         user_id = _get_id_or_err(user_id, 'user_id')
 
-        tool = wha.get_tool_by_id(ssn, tool_id)
-        user = wha.get_user_by_id(ssn, user_id)
+        tool = wha.get_tool_by_id(self.ssn, tool_id)
+        user = wha.get_user_by_id(self.ssn, user_id)
 
         if tool is None:
             raise ex.NotExistsError('Tool', 'id', tool_id)
@@ -27,6 +27,6 @@ class IAccess:
         # wha.get_user_perms_to_tool(sess, tool, user),
 
         return {
-            'permissions': wha.get_perms_to_tool(ssn, tool, user),
-            'features': wha.get_user_features_to_tool(ssn, tool, user)
+            'permissions': wha.get_perms_to_tool(self.ssn, tool, user),
+            'features': wha.get_user_features_to_tool(self.ssn, tool, user)
         }

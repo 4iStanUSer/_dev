@@ -1,39 +1,46 @@
-from iap.repository import istorage, imanage_access, iaccess
-from ..workbench import WorkbenchEngine
+from iap.common.RunTimeCollection import RunTimeCollection
+
+from iap.repository import (get_wh_interface, get_access_interface,
+                            get_manage_access_interface)
 
 from ..template import tool_template  # TODO - REMOVE THIS
-# import transaction
 
 tool_id = 1  # TODO via - imanage_access.get_tool(ssn, name='Forecast')
+tool_name = 'forecasting'  # TODO Change
 
-
-def _get_ssn(req):
-    return req.dbsession
+run_time_collection = RunTimeCollection(tool_name)
 
 
 def get_permissions(req, tool_id, user_id):
-    ssn = _get_ssn(req)
-    return iaccess.get_permissions(ssn, tool_id, user_id)
+    # ssn = _get_ssn(req)
+    iaccess = get_access_interface()
+    return iaccess.get_permissions(tool_id, user_id)
 
 
 def tmp_workbench(req):
-    ssn = _get_ssn(req)
+    warehouse = get_wh_interface()
+
     user_id = 1
 
-    wb = WorkbenchEngine(user_id, imanage_access, ssn)
-    wb.load_backup(tool_template)
+    wb = run_time_collection.get(user_id)
+    wb.load_data_from_repository(warehouse)
+    new_backup = wb.get_data_for_backup()
 
-    selection = {
-        'geography': 2,
-        'time': 3,  # 3
-        'products': 5
-    }
-    dims = wb.dimensions.get_dimensions()
-    dims_hier = {}
-    if dims:
-        for dim in dims:
-            items = wb.dimensions.get_dimension_items(dim, selection)
-            dims_hier[dim] = wb.dimensions.make_hierarchical(dim, items)
+    # wb.load_backup(new_backup)
+
+    # wb.load_backup(tool_template)
+    #
+    # selection = {
+    #     'geography': 2,
+    #     'time': 3,  # 3
+    #     'products': 5
+    # }
+    # dims = wb.dimensions.get_dimensions()
+    # dims_hier = {}
+    # if dims:
+    #     for dim in dims:
+    #         items = wb.dimensions.get_dimension_items(dim, selection)
+    #         dims_hier[dim] = wb.dimensions.make_hierarchical(dim, items)
 
     print(1)
 

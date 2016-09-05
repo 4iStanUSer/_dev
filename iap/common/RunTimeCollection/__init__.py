@@ -1,5 +1,7 @@
 from . import exceptions as ex
 from iap.repository.storage import *
+from iap.forecasting.workbench import WorkbenchEngine
+from iap.repository import get_manage_access_interface
 
 
 class RunTimeCollection:
@@ -30,22 +32,28 @@ class RunTimeCollection:
         s = Storage()
         data = s.load_backup(user_id, self.tool_name, 'default')
         if data:
-            instance = self.__create_instance(self.tool_name)
+            instance = self.__create_instance(self.tool_name, user_id)
             instance.load(data)
             return instance
         else:
             raise ex.BackupNotFound(user_id, self.tool_name)
 
-    def __create_instance(self, tool_name):
+    def __create_instance(self, tool_name, user_id):
         if tool_name == 'forecasting':
-            instance = ForecastForDemoInstance()
+            # instance = ForecastForDemoInstance()
+            # TODO Question about this
+            i_manage_access = get_manage_access_interface()
+            user_roles = i_manage_access.get_user_roles(user_id)
+            user_roles_id = [x.id for x in user_roles]
+
+            instance = WorkbenchEngine(user_id, user_roles_id)
         else:
             raise ex.InstanceCanNotBeCreated(tool_name)
         return instance
 
 
-class ForecastForDemoInstance:
-    data = {}
-
-    def load(self, data):
-        self.data = data
+# class ForecastForDemoInstance:
+#     data = {}
+#
+#     def load(self, data):
+#         self.data = data

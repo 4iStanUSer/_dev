@@ -3,6 +3,9 @@ class EntityData:
         self._variables = {}
         self.time_manager = time_manager
 
+    def save(self):
+        return self._variables
+
     def _get_var(self, var_name):
         try:
             return self._variables[var_name]
@@ -45,19 +48,15 @@ class EntityData:
         return ts_name in self._get_var(var_name)['time_series']
 
     # TODO review passing start and end dates
-    def add_time_series(self, var_name, ts_name, start_date, end_date):
     # def add_time_series(self, var_name, ts_name):
+    def add_time_series(self, var_name, ts_name, start_date, end_date):
         var = self._get_var(var_name)
         length = self.time_manager.get_time_length(ts_name)
         def_value = var['default_value']
-        var['time_series'][ts_name] = {'start': start_date,
-                                       'end': end_date,
+        var['time_series'][ts_name] = {'start': start_date,  # None,
+                                       'end': end_date,  # None,
                                        'values': [def_value]*length
                                        }
-        # var['time_series'][ts_name] = {'start': None,
-        #                                'end': None,
-        #                                'values': [def_value]*length
-        #                                }
 
     def get_ts_start(self, var_name, ts_name):
         return self._get_ts(var_name, ts_name)['start']

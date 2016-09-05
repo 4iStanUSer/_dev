@@ -1,6 +1,3 @@
-# import os
-# import json
-# import transaction
 import copy
 from .. import exceptions as ex
 from ..db import layer_access as wha
@@ -8,15 +5,13 @@ from .service import (
     get_int_id_or_err as _get_id_or_err,
     get_str_or_err as _get_str_or_err
 )
-
-# TODO REMOVE SSN rope
+from .iaccess import IAccess as _IAccess
 
 class IManageAccess:
-    def __init__(self, iaccess, istorage):
-        self.iaccess = iaccess
-        self.istorage = istorage
+    def __init__(self, ssn):
+        self.ssn = ssn
 
-    def set_permissions_template(self, ssn, tool_id, template):
+    def set_permissions_template(self, tool_id, template):
         # Validate inputs
         tool_id = _get_id_or_err(tool_id, 'tool_id')
         if 'permissions' not in template or \
@@ -31,7 +26,7 @@ class IManageAccess:
         perms = template['permissions']
 
         # Get objects
-        tool = wha.get_tool_by_id(ssn, tool_id)
+        tool = wha.get_tool_by_id(self.ssn, tool_id)
         if tool is None:
             raise ex.NotExistsError('Tool', 'id', tool_id)
 
@@ -46,42 +41,43 @@ class IManageAccess:
         perms = sorted(perms, key=lambda perm: len(perm['path']))
         storage = {}
         for perm in perms:
-            self._add_permission(ssn, tool, storage, perm)
+            self._add_permission(tool, storage, perm)
 
         # Add default features for tool
         if len(features_to_add) > 0:
             for f in features_to_add:
-                wha.add_feature(ssn, f['name'], tool)
+                wha.add_feature(self.ssn, f['name'], tool)
 
         return None
 
-    def init_user_wb(self, ssn, user_id, tool_id):
+    def init_user_wb(self, user_id, tool_id):
         # Validate inputs
         tool_id = _get_id_or_err(tool_id, 'tool_id')
         user_id = _get_id_or_err(user_id, 'user_id')
 
         # Get Objects
-        tool = wha.get_tool_by_id(ssn, tool_id)
+        tool = wha.get_tool_by_id(self.ssn, tool_id)
         if tool is None:
             raise ex.NotExistsError('Tool', 'id', tool_id)
-        user = wha.get_user_by_id(ssn, user_id)
+        user = wha.get_user_by_id(self.ssn, user_id)
         if user is None:
             raise ex.NotExistsError('User', 'id', user_id)
 
         # Version 2
         # Get raw data from table with masks
-        raw_perm_values = wha.get_raw_perm_values_for_user(ssn, tool, None)
+        raw_perm_values = wha.get_raw_perm_values_for_user(self.ssn, tool, None)
 
         # Copy/Insert this raw data for specified user
         # TODO - check if there is no data for this user!!!
         for per_v in raw_perm_values:
             perm_node = per_v.perm_node
-            wha.add_perm_value(ssn, tool, perm_node, per_v.value, user)
+            wha.add_perm_value(self.ssn, tool, perm_node, per_v.value, user)
 
         # Get recently created permissions for user
-        u_perms = self.iaccess.get_permissions(ssn, tool_id, user_id)
+        iaccess = _IAccess(self.ssn)
+        u_perms = iaccess.get_permissions(tool_id, user_id)
 
-        self.istorage.backup.save(user_id, tool_id, u_perms, 'access')
+        # self.istorage.backup.save(user_id, tool_id, u_perms, 'access')
 
         # # Make backup file
         # dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -93,7 +89,7 @@ class IManageAccess:
 
         pass  # TODO Confirm This Realization
 
-    def add_user(self, ssn, email, password, roles_id=None):
+    def add_user(self, email, password, roles_id=None):
         # Validate inputs
         email = _get_str_or_err(email, 'email')
         password = _get_str_or_err(password, 'password')  # TODO Hashing Pass
@@ -103,25 +99,25 @@ class IManageAccess:
         if roles_id is not None and isinstance(roles_id, list):
             for role_id in roles_id:
                 role_id = _get_id_or_err(role_id, 'id')
-                role = wha.get_role_by_id(ssn, role_id)
+                role = wha.get_role_by_id(self.ssn, role_id)
                 if role is None:
                     raise ex.NotExistsError('Role', 'id', role_id)
                 else:
                     roles.append(role)
 
-        existing = wha.get_user_by_email(ssn, email)
+        existing = wha.get_user_by_email(self.ssn, email)
         if existing is not None:
             raise ex.AlreadyExistsError('User', 'email', email)
 
-        return wha.add_user(ssn, email, password, roles)
+        return wha.add_user(self.ssn, email, password, roles)
 
-    def add_role(self, ssn, name, tool_id):
+    def add_role(self, name, tool_id):
         # Validate inputs
         name = _get_str_or_err(name, 'name')
         tool_id = _get_id_or_err(tool_id, 'tool_id')
 
         # Get Objects
-        tool = wha.get_tool_by_id(ssn, tool_id)
+        tool = wha.get_tool_by_id(self.ssn, tool_id)
         if tool is None:
             raise ex.NotExistsError('Tool', 'id', tool_id)
 
@@ -129,64 +125,72 @@ class IManageAccess:
         if existing is not None and len(existing) > 0:
             raise ex.AlreadyExistsError('Role', 'name', name)
 
-        new_role = wha.add_role(ssn, name)
-        # wha.add_role_to_tool(ssn, new_role, tool)
+        new_role = wha.add_role(self.ssn, name)
+        # wha.add_role_to_tool(self.ssn, new_role, tool)
         tool.roles.append(new_role)
         return new_role
 
-    def get_users(self, ssn, tool_id=None):
+    def get_users(self, tool_id=None):
         # Validate inputs & Get object
         if tool_id is not None:
             tool_id = _get_id_or_err(tool_id, 'tool_id')
-            tool = wha.get_tool_by_id(ssn, tool_id)
+            tool = wha.get_tool_by_id(self.ssn, tool_id)
             if tool is None:
                 raise ex.NotExistsError('Tool', 'id', tool_id)
 
-            return wha.get_users_by_tool(ssn, tool)
+            return wha.get_users_by_tool(self.ssn, tool)
 
-        return wha.get_all_users(ssn)
+        return wha.get_all_users(self.ssn)
 
-    def get_roles(self, ssn, tool_id):
+    def get_user_roles(self, user_id):
+        user_id = _get_id_or_err(user_id, 'user_id')
+        user = wha.get_user_by_id(self.ssn, user_id)
+        if user is None:
+            raise ex.NotExistsError('User', 'id', user_id)
+
+        return user.roles
+
+    def get_roles(self, tool_id):
         # Validate inputs
         tool_id = _get_id_or_err(tool_id, 'tool_id')
 
         # Get Objects
-        tool = wha.get_tool_by_id(ssn, tool_id)
+        tool = wha.get_tool_by_id(self.ssn, tool_id)
         if tool is None:
             raise ex.NotExistsError('Tool', 'id', tool_id)
 
         return tool.roles
 
-    def get_features(self, ssn, tool_id):
+    def get_features(self, tool_id):
         # Validate inputs
         tool_id = _get_id_or_err(tool_id, 'tool_id')
 
         # Get Objects
-        tool = wha.get_tool_by_id(ssn, tool_id)
+        tool = wha.get_tool_by_id(self.ssn, tool_id)
         if tool is None:
             raise ex.NotExistsError('Tool', 'id', tool_id)
 
-        return wha.get_features_by_tool(ssn, tool)
+        return wha.get_features_by_tool(self.ssn, tool)
 
-    def get_role_features(self, ssn, role_id):
+    def get_role_features(self, role_id):
         # Validate inputs
         role_id = _get_id_or_err(role_id, 'id')
 
         # Get Objects
-        role = wha.get_role_by_id(ssn, role_id)
+        role = wha.get_role_by_id(self.ssn, role_id)
         if role is None:
             raise ex.NotExistsError('Role', 'id', role_id)
 
         return role.features
 
-    def update_role_features(self, ssn, role_id, features_id):
+    def update_role_features(self, role_id, features_id):
         # Validate inputs
         role_id = _get_id_or_err(role_id, 'id')
         if features_id is None or not isinstance(features_id, list):
             raise ex.WrongArgEx('features_id', features_id)
 
         # Get Objects
-        role = wha.get_role_by_id(ssn, role_id)
+        role = wha.get_role_by_id(self.ssn, role_id)
         if role is None:
             raise ex.NotExistsError('Role', 'id', role_id)
         new_features = []
@@ -204,22 +208,22 @@ class IManageAccess:
         # Delete
         if len(old_f) > len(to_keep):
             delete_ids = set(old_f) - set(to_keep)
-            wha.del_features_from_role(ssn, role, delete_ids)
+            wha.del_features_from_role(self.ssn, role, delete_ids)
         # Add
         if len(new_f) > len(to_keep):
             add = set(new_f) - set(to_keep)
             to_add_features = [x for x in new_features if x.id in add]
-            wha.add_features_to_role(ssn, role, to_add_features)
+            wha.add_features_to_role(self.ssn, role, to_add_features)
 
         return role.features
 
-    def add_group(self, ssn, name, tool_id):
+    def add_group(self, name, tool_id):
         # Validate inputs
         name = _get_str_or_err(name, 'name')
         tool_id = _get_id_or_err(tool_id, 'tool_id')
 
         # Get Objects
-        tool = wha.get_tool_by_id(ssn, tool_id)
+        tool = wha.get_tool_by_id(self.ssn, tool_id)
         if tool is None:
             raise ex.NotExistsError('Tool', 'id', tool_id)
 
@@ -228,45 +232,45 @@ class IManageAccess:
         if existing is not None and isinstance(existing, list):
             raise ex.AlreadyExistsError('UserGroup', 'name', name)
 
-        return wha.add_user_group(ssn, name, tool)
+        return wha.add_user_group(self.ssn, name, tool)
 
-    def get_group_users(self, ssn, group_id):
+    def get_group_users(self, group_id):
         # Validate inputs
         group_id = _get_id_or_err(group_id, 'group_id')
 
         # Get objects
-        group = wha.get_user_group_by_id(ssn, group_id)
+        group = wha.get_user_group_by_id(self.ssn, group_id)
         if group is None:
             raise ex.NotExistsError('UserGroup', 'id', group_id)
 
         return group.users
 
-    def get_group_data_perimissions(self, ssn, group_id, tool_id):
+    def get_group_data_perimissions(self, group_id, tool_id):
         # Validate inputs
         tool_id = _get_id_or_err(tool_id, 'tool_id')
         group_id = _get_id_or_err(group_id, 'group_id')
 
         # Get objects
-        tool = wha.get_tool_by_id(ssn, tool_id)
+        tool = wha.get_tool_by_id(self.ssn, tool_id)
         if tool is None:
             raise ex.NotExistsError('Tool', 'id', tool_id)
 
-        group = wha.get_user_group_by_id(ssn, group_id)
+        group = wha.get_user_group_by_id(self.ssn, group_id)
         if group is None:
             raise ex.NotExistsError('UserGroup', 'id', group_id)
 
         pass  # TODO Realize
 
-    def add_user_to_group(self, ssn, user_id, group_id):
+    def add_user_to_group(self, user_id, group_id):
         # Validate inputs
         user_id = _get_id_or_err(user_id, 'user_id')
         group_id = _get_id_or_err(group_id, 'group_id')
 
         # Get objects
-        user = wha.get_user_by_id(ssn, user_id)
+        user = wha.get_user_by_id(self.ssn, user_id)
         if user is None:
             raise ex.NotExistsError('User', 'id', user_id)
-        group = wha.get_user_group_by_id(ssn, group_id)
+        group = wha.get_user_group_by_id(self.ssn, group_id)
         if group is None:
             raise ex.NotExistsError('UserGroup', 'id', group_id)
 
@@ -281,41 +285,40 @@ class IManageAccess:
     def update_group_data_permissions(self):
         pass  # TODO Realize
 
-    def update_user_data_permissions(self, ssn, tool_id, user_id, permissions):
+    def update_user_data_permissions(self, tool_id, user_id, permissions):
         # Validate inputs
         tool_id = _get_id_or_err(tool_id, 'user_id')
         user_id = _get_id_or_err(user_id, 'user_id')
 
         # Get objects
-        tool = wha.get_tool_by_id(ssn, tool_id)
+        tool = wha.get_tool_by_id(self.ssn, tool_id)
         if tool is None:
             raise ex.NotExistsError('Tool', 'id', tool_id)
-        user = wha.get_user_by_id(ssn, user_id)
+        user = wha.get_user_by_id(self.ssn, user_id)
         if user is None:
             raise ex.NotExistsError('User', 'id', user_id)
 
         # TODO Validating paths for nodes
 
         # Delete previous permissions for user
-        wha.del_perm_values_for_user(ssn, tool, user)
+        wha.del_perm_values_for_user(self.ssn, tool, user)
 
         # Get objects
         storage = {}
         permissions = sorted(permissions, key=lambda p: len(p['path']))
         for perm in permissions:
-            self._add_permission(ssn, tool, storage, perm, user)
+            self._add_permission(tool, storage, perm, user)
 
-    def _add_permission(self, ssn, tool, storage, perm, user=None):
+    def _add_permission(self, tool, storage, perm, user=None):
         """
         Adds permission node(PermNode obj) into variable 'storage'.
         Looks for existing parent and adds into him as child node.
         Inserts all not existing parents.
-        :param ssn: Session obj
         :param tool: Tool obj
         :param storage: dictionary for store nodes for future adding
         :param perm: dictionary, keys: node_type, name, path, mask
         :param user: User obj
-        :return:
+        :return: created PermNode obj
         """
         n_type = perm.get('node_type')
         n_name = perm.get('name')
@@ -332,10 +335,10 @@ class IManageAccess:
 
         # Create Node
         if n_path_storage not in storage:
-            node = self._get_permission_node(ssn, tool, n_path,
+            node = self._get_permission_node(tool, n_path,
                                              n_name)
             if node is None:
-                storage[n_path_storage] = wha.add_perm_node(ssn, tool, n_type,
+                storage[n_path_storage] = wha.add_perm_node(self.ssn, tool, n_type,
                                                             n_name)
             else:
                 storage[n_path_storage] = node
@@ -343,10 +346,10 @@ class IManageAccess:
         # Create Value(mask) & connect with created Node (if mask exists)
         if n_mask is not None:
             if user is None:
-                wha.add_default_perm_value(ssn, tool, storage[n_path_storage],
+                wha.add_default_perm_value(self.ssn, tool, storage[n_path_storage],
                                            n_mask)
             else:
-                wha.add_perm_value(ssn, tool, storage[n_path_storage], n_mask,
+                wha.add_perm_value(self.ssn, tool, storage[n_path_storage], n_mask,
                                    user)
 
         # Get Node's parent & inject node into parent's children
@@ -365,13 +368,12 @@ class IManageAccess:
                     'name': par_n_name,
                     'path': par_n_path
                 }
-                par_node = self._get_permission_node(ssn, tool, par_n_path,
+                par_node = self._get_permission_node(tool, par_n_path,
                                                      par_n_name)
                 if par_node is not None:
                     storage[n_path_tpl] = par_node
                 else:
-                    storage[n_path_tpl] = self._add_permission(ssn,
-                                                               tool,
+                    storage[n_path_tpl] = self._add_permission(tool,
                                                                storage,
                                                                par_perm)
 
@@ -388,7 +390,7 @@ class IManageAccess:
         :param name: string - name of node
         :return: PermNode object | None
         """
-        nodes = wha.get_nodes_by_name(ssn, tool, name)
+        nodes = wha.get_nodes_by_name(self.ssn, tool, name)
         if len(nodes) == 0:
             return None
 
@@ -459,189 +461,185 @@ class IManageAccess:
 
     ###########################
 
-    def get_role(self, ssn, **kwargs):
+    def get_role(self, **kwargs):
         """
         Args:
-            ssn
             **kwargs: id|name
         """
         if 'id' in kwargs:
             role_id = _get_id_or_err(kwargs['id'], 'id')
-            return wha.get_role_by_id(ssn, role_id)
+            return wha.get_role_by_id(self.ssn, role_id)
 
         elif 'name' in kwargs:
             name = _get_str_or_err(kwargs['name'], 'name')
-            return wha.get_role_by_name(ssn, name)
+            return wha.get_role_by_name(self.ssn, name)
 
-    def get_user(self, ssn, **kwargs):
+    def get_user(self, **kwargs):
         """
         Args:
-            ssn
             **kwargs: id|email
         """
         if 'id' in kwargs:
             user_id = _get_id_or_err(kwargs['id'], 'id')
-            return wha.get_user_by_id(ssn, user_id)
+            return wha.get_user_by_id(self.ssn, user_id)
 
         elif 'email' in kwargs:
             email = _get_str_or_err(kwargs['email'], 'email')
-            return wha.get_user_by_email(ssn, email)
+            return wha.get_user_by_email(self.ssn, email)
 
-    def get_tool(self, ssn, **kwargs):
+    def get_tool(self, **kwargs):
         """
         Args:
-            ssn
             **kwargs: id|email
         """
         if 'id' in kwargs:
             tool_id = _get_id_or_err(kwargs['id'], 'id')
-            return wha.get_tool_by_id(ssn, tool_id)
+            return wha.get_tool_by_id(self.ssn, tool_id)
 
         elif 'name' in kwargs:
             name = _get_str_or_err(kwargs['name'], 'name')
-            return wha.get_tool_by_name(ssn, name)
+            return wha.get_tool_by_name(self.ssn, name)
 
-    def get_feature(self, ssn, **kwargs):
+    def get_feature(self, **kwargs):
         """
         Args:
-            ssn
             **kwargs: id|name & tool_id
         """
         if 'id' in kwargs:
             feature_id = _get_id_or_err(kwargs['id'], 'id')
-            return wha.get_feature_by_id(ssn, feature_id)
+            return wha.get_feature_by_id(self.ssn, feature_id)
 
         elif 'name' in kwargs and 'tool_id' in kwargs:
             name = _get_str_or_err(kwargs['name'], 'name')
             tool_id = _get_id_or_err(kwargs['tool_id'], 'tool_id')
-            tool = wha.get_tool_by_id(ssn, tool_id)
+            tool = wha.get_tool_by_id(self.ssn, tool_id)
             if tool is None:
                 raise ex.NotExistsError('Tool', 'id', tool_id)
-            return wha.get_feature_by_name_in_tool(ssn, name, tool)
+            return wha.get_feature_by_name_in_tool(self.ssn, name, tool)
 
-    # def add_role_to_tool(self, ssn, role_id, tool_id):
+    # def add_role_to_tool(self, role_id, tool_id):
     #     role_id = _get_id_or_err(role_id, 'id')
     #     tool_id = _get_id_or_err(tool_id, 'tool_id')
     #
-    #     role = wha.get_role_by_id(ssn, role_id)
+    #     role = wha.get_role_by_id(self.ssn, role_id)
     #     if role is None:
     #         raise ex.NotExistsError('Role', 'id', role_id)
     #
-    #     tool = wha.get_tool_by_id(ssn, tool_id)
+    #     tool = wha.get_tool_by_id(self.ssn, tool_id)
     #     if tool is None:
     #         raise ex.NotExistsError('Tool', 'id', tool_id)
     #
     #     # TODO Check Existed
-    #     return wha.add_role_to_tool(ssn, role, tool)
+    #     return wha.add_role_to_tool(self.ssn, role, tool)
 
-    # def add_role_to_user(self, ssn, user_id, role_id):
+    # def add_role_to_user(self, user_id, role_id):
     #     user_id = _get_id_or_err(user_id, 'id')
     #     role_id = _get_id_or_err(role_id, 'id')
     #
-    #     role = wha.get_role_by_id(ssn, role_id)
+    #     role = wha.get_role_by_id(self.ssn, role_id)
     #     if role is None:
     #         raise ex.NotExistsError('Role', 'id', role_id)
     #
-    #     user = wha.get_user_by_id(ssn, user_id)
+    #     user = wha.get_user_by_id(self.ssn, user_id)
     #     if user is None:
     #         raise ex.NotExistsError('User', 'id', user_id)
     #
-    #     return wha.add_role_to_user(ssn, user, role)
+    #     return wha.add_role_to_user(self.ssn, user, role)
 
-    def add_tool(self, ssn, name):
+    def add_tool(self, name):
         name = _get_str_or_err(name, 'name')
-        existing = wha.get_tool_by_name(ssn, name)
+        existing = wha.get_tool_by_name(self.ssn, name)
         if existing is not None:
             raise ex.AlreadyExistsError('Tool', 'name', name)
-        return wha.add_tool(ssn, name)
+        return wha.add_tool(self.ssn, name)
 
-    # def add_feature(self, ssn, name, tool_id=None, role_id=None):
+    # def add_feature(self, name, tool_id=None, role_id=None):
     #     name = _get_str_or_err(name, 'name')
     #     tool = None
     #     if tool_id is not None:
     #         tool_id = _get_id_or_err(tool_id, 'tool_id')
-    #         tool = wha.get_tool_by_id(ssn, tool_id)
+    #         tool = wha.get_tool_by_id(self.ssn, tool_id)
     #         if tool is None:
     #             raise ex.NotExistsError('Tool', 'id', tool_id)
     #
-    #         existing = wha.get_feature_by_name_in_tool(ssn, name, tool)
+    #         existing = wha.get_feature_by_name_in_tool(self.ssn, name, tool)
     #         if existing is not None:
     #             raise ex.AlreadyExistsError('Feature', 'name', name)
     #
     #     role = None
     #     if role_id is not None:
     #         role_id = _get_id_or_err(role_id, 'role_id')
-    #         role = wha.get_role_by_id(ssn, role_id)
+    #         role = wha.get_role_by_id(self.ssn, role_id)
     #         if role is None:
     #             raise ex.NotExistsError('Role', 'id', role_id)
     #
-    #         existing = wha.get_feature_by_name_in_role(ssn, name, role)
+    #         existing = wha.get_feature_by_name_in_role(self.ssn, name, role)
     #         if existing is not None:
     #             raise ex.AlreadyExistsError('Feature', 'name', name)
     #
-    #     return wha.add_feature(ssn, name, tool, role)
+    #     return wha.add_feature(self.ssn, name, tool, role)
 
-    # def add_feature_to_tool(self, ssn, feature_id, tool_id):
+    # def add_feature_to_tool(self, feature_id, tool_id):
     #     tool_id = _get_id_or_err(tool_id, 'tool_id')
     #     feature_id = _get_id_or_err(feature_id, 'feature_id')
     #
-    #     feature = wha.get_feature_by_id(ssn, feature_id)
+    #     feature = wha.get_feature_by_id(self.ssn, feature_id)
     #     if feature is None:
     #         raise ex.NotExistsError('Feature', 'id', feature_id)
     #
-    #     tool = wha.get_tool_by_id(ssn, tool_id)
+    #     tool = wha.get_tool_by_id(self.ssn, tool_id)
     #     if tool is None:
     #         raise ex.NotExistsError('Tool', 'id', tool_id)
     #
-    #     return wha.add_feature_to_tool(ssn, feature, tool)
+    #     return wha.add_feature_to_tool(self.ssn, feature, tool)
 
-    # def add_feature_to_role(self, ssn, feature_id, role_id):
+    # def add_feature_to_role(self, feature_id, role_id):
     #     role_id = _get_id_or_err(role_id, 'tool_id')
     #     feature_id = _get_id_or_err(feature_id, 'feature_id')
     #
-    #     feature = wha.get_feature_by_id(ssn, feature_id)
+    #     feature = wha.get_feature_by_id(self.ssn, feature_id)
     #     if feature is None:
     #         raise ex.NotExistsError('Feature', 'id', feature_id)
     #
-    #     role = wha.get_role_by_id(ssn, role_id)
+    #     role = wha.get_role_by_id(self.ssn, role_id)
     #     if role is None:
     #         raise ex.NotExistsError('Role', 'id', role_id)
     #
-    #     return wha.add_feature_to_role(ssn, role, feature)
+    #     return wha.add_feature_to_role(self.ssn, role, feature)
 
-    def add_permission(self, ssn, tool_id, node_type, name, parent_id=None):
+    def add_permission(self, tool_id, node_type, name, parent_id=None):
         tool_id = _get_id_or_err(tool_id, 'tool_id')
         node_type = _get_str_or_err(node_type, 'node_type')  # Defined string
         name = _get_str_or_err(name, 'name')
 
-        tool = wha.get_tool_by_id(ssn, tool_id)
+        tool = wha.get_tool_by_id(self.ssn, tool_id)
         if tool is None:
             raise ex.NotExistsError('Tool', 'id', tool_id)
 
         parent = None
         if parent_id is not None:
             parent_id = _get_id_or_err(parent_id, 'parent_id')
-            parent = wha.get_perm_node_in_tool(ssn, parent_id, tool)
+            parent = wha.get_perm_node_in_tool(self.ssn, parent_id, tool)
             if parent is None:
                 raise ex.NotExistsError('PermNode', 'id', parent_id)
 
-        return wha.add_perm_node(ssn, tool, node_type, name, parent)
+        return wha.add_perm_node(self.ssn, tool, node_type, name, parent)
 
-    def add_permission_value(self, ssn, tool_id, perm_node_id, value, user_id):
+    def add_permission_value(self, tool_id, perm_node_id, value, user_id):
         tool_id = _get_id_or_err(tool_id, 'tool_id')
         perm_node_id = _get_id_or_err(perm_node_id, 'perm_node_id')
         user_id = _get_id_or_err(user_id, 'user_id')
 
-        tool = wha.get_tool_by_id(ssn, tool_id)
+        tool = wha.get_tool_by_id(self.ssn, tool_id)
         if tool is None:
             raise ex.NotExistsError('Tool', 'id', tool_id)
 
-        user = wha.get_user_by_id(ssn, user_id)
+        user = wha.get_user_by_id(self.ssn, user_id)
         if user is None:
             raise ex.NotExistsError('User', 'id', user_id)
 
-        perm_node = wha.get_perm_node_in_tool(ssn, perm_node_id, tool)
+        perm_node = wha.get_perm_node_in_tool(self.ssn, perm_node_id, tool)
         if perm_node is None:
             raise ex.NotExistsError('PermNode', 'id', perm_node_id)
 
-        return wha.add_perm_value(ssn, tool, perm_node, value, user)
+        return wha.add_perm_value(self.ssn, tool, perm_node, value, user)
