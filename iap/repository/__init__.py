@@ -23,13 +23,19 @@ def get_wh_interface():
     return wh
 
 
-def get_access_interface():
-    reg = pyramid.threadlocal.get_current_registry()
-    iaccess = __IAccess(reg['dbsession_factory'])
+def get_access_interface(ssn=None):
+    if ssn is None:
+        reg = pyramid.threadlocal.get_current_registry()
+        iaccess = __IAccess(ssn_factory=reg['dbsession_factory'])
+    else:
+        iaccess = __IAccess(ssn=ssn)
     return iaccess
 
 
-def get_manage_access_interface():
-    reg = pyramid.threadlocal.get_current_registry()
-    iaccess = __IManAcc(reg['dbsession_factory'])
-    return iaccess
+def get_manage_access_interface(ssn=None):
+    if ssn is None:
+        reg = pyramid.threadlocal.get_current_registry()
+        imanager_access = __IManAcc(ssn_factory=reg['dbsession_factory'])
+    else:
+        imanager_access = __IManAcc(ssn=ssn)
+    return imanager_access

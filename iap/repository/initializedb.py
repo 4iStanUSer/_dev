@@ -54,7 +54,7 @@ def main(argv=sys.argv):
 
         transaction.manager.commit()
 
-        imanage_access = IManageAccess(session_factory)
+        imanage_access = IManageAccess(ssn=ssn)
         # Add tools
         tool_forecast = imanage_access.add_tool('Forecast')
         tool_ppt = imanage_access.add_tool('PPT')

@@ -9,9 +9,13 @@ from .iaccess import IAccess as _IAccess
 
 
 class IManageAccess:
-    def __init__(self, ssn_factory):
-        self.ssn = ssn_factory()
-        self.ssn_factory = ssn_factory
+
+    def __init__(self, **kwargs):
+        try:
+            self.ssn = kwargs['ssn'] if kwargs.get('ssn') is not None \
+                else kwargs['ssn_factory']()
+        except KeyError:
+            raise Exception  # TODO update
 
     def set_permissions_template(self, tool_id, template):
         # Validate inputs
@@ -77,8 +81,8 @@ class IManageAccess:
 
         # TODO Fix bug with initialize db
         # # Get recently created permissions for user
-        # iaccess = _IAccess(self.ssn_factory)
-        # u_perms = iaccess.get_permissions(tool_id, user_id)
+        iaccess = _IAccess(ssn=self.ssn)
+        u_perms = iaccess.get_permissions(tool_id, user_id)
 
         # self.istorage.backup.save(user_id, tool_id, u_perms, 'access')
 
