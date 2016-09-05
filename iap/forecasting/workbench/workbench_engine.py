@@ -5,8 +5,6 @@ from .access import Access
 from .dimensions import Dimensions
 from .configuration import Configuration
 
-# from ...repository import get_wh_interface  # TODO REMOVE
-
 
 class WorkbenchEngine:
     _storage = {}
@@ -32,17 +30,19 @@ class WorkbenchEngine:
     def load_backup(self, backup):
         # instance = pickle.loads(backup)
         # return True
+        data = backup.get('data') \
+            if 'data' in backup else dict()
         config = backup.get('configuration') \
             if 'configuration' in backup else dict()
         access = backup.get('access') \
             if 'access' in backup else dict()
-        # dimensions = backup.get('dimensions') \
-        #     if 'dimensions' in backup else dict()
-        wh = get_wh_interface()
+        dimensions = backup.get('dimensions') \
+            if 'dimensions' in backup else dict()
 
-        self.config.load(config)  # TODO clean
-        self.access.load(access)  # TODO clean
-        self.dimensions.load(wh.get_entity_by_id(1))  # TODO clean
+        self.container.load(data)
+        self.config.load(config)
+        self.access.load(access)
+        self.dimensions.load(dimensions)
 
         return True
 
