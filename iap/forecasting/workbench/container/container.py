@@ -20,7 +20,24 @@ class Container:
     def add_time_scale(self, name, time_line):
         self.timeline.add_time_line(name, time_line)
 
+    ##################
+    def get_entity_by_path(self, path):
+        if self._root is None:
+            return False
+        return self._root.get_by_path(path)
+
+    def get_entity_data(self, entity, timescale):
+        variables = entity.get_variables_names()
+        data = {}
+        if variables:
+            for variable in variables:
+                c_variable = entity.get_variable(variable)
+                c_time_series = c_variable.get_time_series(timescale)
+                data[variable] = c_time_series.get_values()
+        return data
+
     def load(self, backup):
+        # TODO
         pass
 
     def save(self):
@@ -120,6 +137,18 @@ class CEntity:
             'children': [child.save() for child in self._children]
         }
 
+    def get_by_path(self, path):
+        # TODO look for ONLY entity
+        if len(path) == 0:
+            return self
+        elif self._children:
+            for child in self._children:
+                if child.name == path[0]:
+                    res = child.get_by_path(path[1:])
+                    if res:
+                        return res
+        return False
+
 
 class CVariable:
 
@@ -141,7 +170,7 @@ class CVariable:
         self._entity_data.get_default_value(self._var_name)
 
     def get_time_series(self, ts_name):
-        if self._entity_data.does_cointain_ts(self._var_name, ts_name):
+        if self._entity_data.does_contain_ts(self._var_name, ts_name):
             return CTimeSeries(self._entity_data, self._var_name, ts_name)
         else:
             return None

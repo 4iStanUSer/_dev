@@ -1,5 +1,5 @@
 from . import exceptions as ex
-from iap.repository.storage import *
+from iap.repository.storage import Storage
 from iap.forecasting.workbench import WorkbenchEngine
 from iap.repository import get_manage_access_interface
 

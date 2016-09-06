@@ -1,18 +1,16 @@
 import os
 import sys
+
 import transaction
-
 from pyramid.paster import (get_appsettings, setup_logging)
-
 from pyramid.scripts.common import parse_vars
 
-from .db.meta import Base
-from .db import (get_engine, get_session_factory, get_tm_session)
-from .db.warehouse import Entity, Warehouse
-
-from ..repository.interface.imanage_access import IManageAccess
-from ..forecasting.template import tool_template
 from iap.data_processing.data_proc_manager import Loader
+from iap.repository.template import tool_template
+from .db import (get_engine, get_session_factory, get_tm_session)
+from .db.meta import Base
+from .db.warehouse import Entity, Warehouse
+from ..repository.interface.imanage_access import IManageAccess
 
 
 def usage(argv):

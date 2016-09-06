@@ -16,6 +16,12 @@ from . import tweens
 from . import security
 from . import service
 
+# TODO (1.0) REMOVE THIS
+from ..forecasting.services.getter import run_time_collection, runTimeEx
+from ..forecasting.workbench.workbench_engine import WorkbenchEngine
+from ..repository import get_manage_access_interface, get_wh_interface
+from ..repository.storage import Storage
+
 
 def notfound_view(req):
     req.response.status = 404
@@ -36,6 +42,28 @@ def index_view(req):
 
     # service.recreate_db(req)
     # service.fillin_db(req)
+
+    user_id = 1
+    tool_id = 1
+    # TODO(1.0) - REMOVE
+    try:
+        wb = run_time_collection.get(user_id)
+    except runTimeEx.BackupNotFound as error:
+        # TODO(1.0) - Move this
+        iman_acc = get_manage_access_interface(ssn=req.dbsession)
+        user_roles = iman_acc.get_user_roles(user_id)
+        user_roles_id = [x.id for x in user_roles]
+
+        # Load into RAM
+        wb = WorkbenchEngine(user_id, user_roles_id)
+        warehouse = get_wh_interface()
+        wb.load_data_from_repository(warehouse)
+        run_time_collection.add(user_id, wb)
+
+        # Save into storage
+        new_backup = wb.get_data_for_backup()
+        s = Storage()
+        s.save_backup(user_id, tool_id, new_backup, 'default')
 
 
     return render_to_response('templates/index.jinja2',

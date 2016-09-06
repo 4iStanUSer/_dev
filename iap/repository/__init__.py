@@ -4,8 +4,8 @@ Describe package here.
 
 import pyramid
 
-from ..repository.storage import *
-from ..repository.interface.istorage import *
+from ..repository.storage import Storage
+from ..repository.interface.istorage import IStorage, IBackup, ITemplate
 
 from ..repository.db.warehouse import Warehouse as __Warehouse
 from ..repository.interface.iaccess import IAccess as __IAccess
