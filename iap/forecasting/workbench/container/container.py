@@ -1,3 +1,4 @@
+from .. import exceptions as ex
 from .timelines import TimeLineManager
 from .entity_data import EntityData
 
@@ -49,7 +50,8 @@ class CEntity:
         for parent in self.parents:
             if name in [x.name for x in parent.children
                         if x.name != self._name]:
-                raise Exception
+                # raise Exception
+                raise ex.ContAlreadyExistentCEntityName(name)
         self._name = name
 
     @property
@@ -65,14 +67,16 @@ class CEntity:
             return self
         for parent in self.parents:
             return parent._get_root()
-        raise Exception
+        # raise Exception
+        raise ex.ContRootNotFound(self.name)
 
     def add_parent(self, path):
         root = self._get_root()
         new_parent = root.add_node_by_path(path, 0)
         if new_parent not in self._parents:
             if self.name in [x.name for x in new_parent._children]:
-                raise Exception
+                # raise Exception
+                raise ex.ContAlreadyExistentCEntityName(self.name)
             self._parents.append(new_parent)
         return new_parent
 

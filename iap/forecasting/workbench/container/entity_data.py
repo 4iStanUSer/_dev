@@ -1,3 +1,6 @@
+from .. import exceptions as ex
+
+
 class EntityData:
     def __init__(self, time_manager):
         self._variables = {}
@@ -10,17 +13,20 @@ class EntityData:
         try:
             return self._variables[var_name]
         except KeyError:
-            raise Exception
+            # raise Exception
+            raise ex.EdNonExistentVarName(var_name)
 
     def _get_ts(self, var_name, ts_name):
         try:
             var = self._variables[var_name]
         except KeyError:
-            raise Exception
+            # raise Exception
+            raise ex.EdNonExistentVarName(var_name)
         try:
             return var['time_series'][ts_name]
         except KeyError:
-            raise Exception
+            # raise Exception
+            raise ex.EdNonExistentTsName(var_name, ts_name)
 
     def get_var_names(self):
         return list(self._variables.keys())
@@ -37,7 +43,8 @@ class EntityData:
 
     def rename_variable(self, old_name, new_name):
         if new_name in self._variables:
-            return Exception
+            # return Exception
+            return ex.EdAlreadyExistentVarName(new_name)
         self._variables[new_name] = self._get_var(old_name)
         self._variables.pop(old_name)
 
