@@ -5,7 +5,6 @@ import collections
 import datetime
 
 
-# TODO
 def jj_brand_media_spend(warehouse, wb, options_list):
     meta_cols = options_list['meta_cols']
     dates_info = options_list['dates_cols']

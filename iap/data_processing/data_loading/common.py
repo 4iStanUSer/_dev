@@ -113,6 +113,15 @@ def mapping(in_list_of_dict, rules_dict):
         if is_matched:
             # one rule for one row
             out_rule = rule['out']
+            change_rule = rule['rule']
+            if change_rule == 'rename':
+                for item in in_list_of_dict:
+                    for dimension_value, name_value in out_rule.items():
+                        if item['Dimension_name'] == dimension_value:
+                            item['Name'] = name_value
+                            break
+                return in_list_of_dict, False
+            # else we will replace out result using out rule
             for dimension_value, name_value in out_rule.items():
                 is_matched = False
                 for item in in_list_of_dict:

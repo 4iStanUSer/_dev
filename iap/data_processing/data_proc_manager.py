@@ -107,26 +107,92 @@ class Loader:
                  'date_func': date_yyyyww,
                  'info': 'N/A',
                  'meta_cols':
-                     [{'Layer': 'Products', 'Dimension_name': 'Store',
-                       'Name': '', 'Col_number': 3},
-                      {'Layer': 'Products', 'Dimension_name': 'Brand',
-                       'Name': '', 'Col_number': 5},
-                      {'Layer': 'Products', 'Dimension_name': 'SubBrand',
-                       'Name': '', 'Col_number': 6}],
+                     [{'Layer': 'Products', 'Dimension_name': 'Market',
+                       'Name': '', 'Col_number': 4},
+                      {'Layer': 'Products', 'Dimension_name': 'Segments',
+                       'Name': '', 'Col_number': 7}],
                  'name_col': 'N/A',
                  'properties': 'N/A',
                  'dates_cols': {'scale': 'weekly',
                                 'date_col': 1},
-                 'data_cols': {(10, 'int'): '', (11, 'float'): 'C',
-                               (12, 'int'): 'D'},
-                 'sum_rule':
-                     [{'Name': 'B', 'TimeScale': 'sum', 'FactScale': 'sum'},
-                      {'Name': 'C', 'TimeScale': 'sum', 'FactScale': 'sum'},
-                      {'Name': 'D', 'TimeScale': 'sum', 'FactScale': 'sum'}],
+                 'data_cols': {(10, 'int'): '', (11, 'float'): '',
+                               (12, 'int'): '', (13, 'float'): '',
+                               (14, 'int'): '', (15, 'float'): ''},
+                 # 'sum_rule':
+                 #     [{'Name': 'B', 'TimeScale': 'sum', 'FactScale': 'sum'},
+                 #      {'Name': 'C', 'TimeScale': 'sum', 'FactScale': 'sum'},
+                 #      {'Name': 'D', 'TimeScale': 'sum', 'FactScale': 'sum'}],
                  'mapping_rule':
                      [{'in': collections.OrderedDict(
-                         {'Store': 'DRUG CHANNEL', 'Brand': 'RITE AID'}),
-                       'out': collections.OrderedDict({'Store': 'Ecommerce'})}]
+                         {'Segments': 'BAND-AID BRAND ADH BDGS OTHER'}),
+                       'out': collections.OrderedDict(
+                           {'Segments': 'Premium'}),
+                       'rule': 'rename'},
+                      {'in': collections.OrderedDict(
+                         {'Segments': 'BAND-AID BRAND ADHESIVE PADS'}),
+                       'out': collections.OrderedDict(
+                         {'Segments': 'Premium'}),
+                          'rule': 'rename'},
+                      {'in': collections.OrderedDict(
+                         {'Segments': 'BAND-AID BRAND ANTIBIOTIC BNDGES'}),
+                       'out': collections.OrderedDict(
+                         {'Segments': 'Premium'}),
+                          'rule': 'rename'},
+                      {'in': collections.OrderedDict(
+                         {'Segments': 'BAND-AID BRAND BLISTER'}),
+                       'out': collections.OrderedDict(
+                         {'Segments': 'Premium'}),
+                          'rule': 'rename'},
+                      {'in': collections.OrderedDict(
+                         {'Segments': 'BAND-AID BRAND FLEXIBLE FABRIC'}),
+                       'out': collections.OrderedDict(
+                         {'Segments': 'Premium'}),
+                          'rule': 'rename'},
+                      {'in': collections.OrderedDict(
+                         {'Segments': 'BAND-AID BRAND SPORT STRIP'}),
+                       'out': collections.OrderedDict(
+                         {'Segments': 'Premium'}),
+                          'rule': 'rename'},
+                      {'in': collections.OrderedDict(
+                         {'Segments': 'BAND-AID BRAND TOUGH STRIP'}),
+                       'out': collections.OrderedDict(
+                         {'Segments': 'Premium'}),
+                          'rule': 'rename'},
+                      {'in': collections.OrderedDict(
+                         {'Segments': 'BAND-AID BRAND VARIETY'}),
+                       'out': collections.OrderedDict(
+                         {'Segments': 'Premium'}),
+                          'rule': 'rename'},
+                      {'in': collections.OrderedDict(
+                         {'Segments': 'BAND-AID BRAND WATERBLOCK'}),
+                       'out': collections.OrderedDict(
+                         {'Segments': 'Premium'}),
+                          'rule': 'rename'},
+                      {'in': collections.OrderedDict(
+                         {'Segments': 'BAND-AID BRAND CLEAR'}),
+                       'out': collections.OrderedDict(
+                         {'Segments': 'Value'}),
+                          'rule': 'rename'},
+                      {'in': collections.OrderedDict(
+                         {'Segments': 'BAND-AID BRAND PLASTIC'}),
+                       'out': collections.OrderedDict(
+                         {'Segments': 'Value'}),
+                          'rule': 'rename'},
+                      {'in': collections.OrderedDict(
+                         {'Segments': 'BAND-AID BRAND SHEER'}),
+                       'out': collections.OrderedDict(
+                         {'Segments': 'Value'}),
+                          'rule': 'rename'},
+                      {'in': collections.OrderedDict(
+                         {'Segments': 'BAND-AID BRAND DECORATED'}),
+                       'out': collections.OrderedDict(
+                         {'Segments': 'Deco'}),
+                          'rule': 'rename'},
+                      {'in': collections.OrderedDict(
+                         {'Segments': 'BENADRYL BASE ADULT'}),
+                       'out': collections.OrderedDict(
+                         {'Segments': 'Benadryl'}),
+                          'rule': 'rename'}]
                  },
             'jj_oral_care_sku_data':
                 {'func': jj_oral_care_sku,
