@@ -24,8 +24,11 @@ class WorkbenchEngine:
         if root is None:
             return False
         else:
+            # Fill in modules: container & dimensions
             for child in root.children:
                 self._go_crawl(child, [child.name], {})
+
+        # TODO - add configuration & access & permissions
 
     def load_backup(self, backup):
         # instance = pickle.loads(backup)
@@ -113,8 +116,9 @@ class WorkbenchEngine:
 
         # Collect entities
         if entity._id not in self.dimensions.entities:
-            self.dimensions.entities[entity._id] = {
-                'name': entity.name  # entity
+            self.dimensions.entities[entity.id] = {
+                'name': entity.name,  # entity
+                'id': entity.id
             }
 
         # TODO REVIEW THIS because it is one-to-many
@@ -122,14 +126,14 @@ class WorkbenchEngine:
         parent = l_p[dim_name][len(l_p[dim_name]) - 1] \
             if l_p.get(dim_name) and len(l_p[dim_name]) else None
         self.dimensions.dim_ent_hier[dim_name].append({
-            'ui_id': entity._id,
+            'ui_id': entity.id,
             'par_ui_id': parent
         })
 
         # Parent replacement
         if dim_name not in last_parents:
             last_parents[dim_name] = []
-        last_parents[dim_name].append(entity._id)
+        last_parents[dim_name].append(entity.id)
 
         # FOR ALL MODULES - Apply method for entity's children
         if entity.children:
@@ -137,6 +141,13 @@ class WorkbenchEngine:
                 self._go_crawl(child, path + [child.name], last_parents)
 
         # FOR DIMENSIONS MODULE
+        if len(self.dimensions.dim_list) == len(last_parents):
+            key = []
+            for dim in self.dimensions.dim_list:
+                ind = len(last_parents[dim])-1
+                key.append(last_parents[dim][ind])
+            self.dimensions.entity_by_path[tuple(key)] = path
+
         self.dimensions.formatting(self.dimensions.data,
                                    self.dimensions.dim_list,
                                    last_parents)

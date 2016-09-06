@@ -1,11 +1,6 @@
-# import transaction  # Temporary
 
-from iap.repository import imanage_access
-# from iap.repository.db import recreate_db  # TODO DELETE THIS
-
-
-def _get_ssn(req):
-    return req.dbsession
+# def _get_ssn(req):
+#     return req.dbsession
 
 
 def get_user_by_id(id):

@@ -1,5 +1,5 @@
 import copy
-from .. import exceptions as ex
+from ...repository import exceptions as ex
 from ..db import layer_access as wha
 from .service import (
     get_int_id_or_err as _get_id_or_err,
@@ -7,9 +7,15 @@ from .service import (
 )
 from .iaccess import IAccess as _IAccess
 
+
 class IManageAccess:
-    def __init__(self, ssn):
-        self.ssn = ssn
+
+    def __init__(self, **kwargs):
+        try:
+            self.ssn = kwargs['ssn'] if kwargs.get('ssn') is not None \
+                else kwargs['ssn_factory']()
+        except KeyError:
+            raise Exception  # TODO update
 
     def set_permissions_template(self, tool_id, template):
         # Validate inputs
@@ -73,8 +79,9 @@ class IManageAccess:
             perm_node = per_v.perm_node
             wha.add_perm_value(self.ssn, tool, perm_node, per_v.value, user)
 
-        # Get recently created permissions for user
-        iaccess = _IAccess(self.ssn)
+        # TODO Fix bug with initialize db
+        # # Get recently created permissions for user
+        iaccess = _IAccess(ssn=self.ssn)
         u_perms = iaccess.get_permissions(tool_id, user_id)
 
         # self.istorage.backup.save(user_id, tool_id, u_perms, 'access')
@@ -381,10 +388,9 @@ class IManageAccess:
 
         return storage[n_path_storage]
 
-    def _get_permission_node(self, ssn, tool, path, name):
+    def _get_permission_node(self, tool, path, name):
         """
         Look for permission node in DB for tool by name and path
-        :param ssn: Session
         :param tool: Tool instance
         :param path: list strings(parents' names)
         :param name: string - name of node

@@ -1,11 +1,22 @@
 import copy
 
 
+class DimNode(dict):
+    _path = None
+
+    def set_path(self, path):
+        self._path = path
+
+    def get_path(self):
+        return self._path
+
+
 class Dimensions:
     dim_list = []
     entities = {}
     dim_ent_hier = {}
     data = {}
+    entity_by_path = {}
 
     def __init__(self):
         pass
@@ -99,9 +110,19 @@ class Dimensions:
                 for parent in parents[d]:
                     if parent not in dict_link:
                         dict_link[parent] = {}
+                        # node = DimNode()
+                        # node.set_path(path)
+                        # dict_link[parent] = node
+
                     if len(dim_list) > 1:
                         self.formatting(dict_link[parent], dim_list[1:],
                                         parents)
+
+    def get_c_entity_path_by_selection(self, selection):
+        key = []
+        for dim in self.dim_list:
+            key.append(selection[dim])
+        return self.entity_by_path.get(tuple(key))
 
     def get_dimension_items(self, dimension, selection):
         """
@@ -126,7 +147,16 @@ class Dimensions:
             tmp = tmp[selection[dim]]
 
     def correct_selection(self, selection):
-        pass
+        tmp = self.data
+        for dim in self.dim_list:
+            if selection.get(dim) is None \
+                    or tmp.get(selection[dim]) is None:  # Fail
+                first_ind = next(iter(tmp.keys()))
+                selection[dim] = first_ind
+
+            tmp = tmp[selection[dim]]
+
+        return selection
 
     def make_hierarchical(self, dimension, items):
         if dimension not in self.dim_ent_hier:

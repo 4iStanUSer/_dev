@@ -4,8 +4,8 @@ Describe package here.
 
 import pyramid
 
-from ..repository.storage import *
-from ..repository.interface.istorage import *
+from ..repository.storage import Storage
+from ..repository.interface.istorage import IStorage, IBackup, ITemplate
 
 from ..repository.db.warehouse import Warehouse as __Warehouse
 from ..repository.interface.iaccess import IAccess as __IAccess
@@ -23,13 +23,19 @@ def get_wh_interface():
     return wh
 
 
-def get_access_interface():
-    reg = pyramid.threadlocal.get_current_registry()
-    iaccess = __IAccess(reg['dbsession_factory'])
+def get_access_interface(ssn=None):
+    if ssn is None:
+        reg = pyramid.threadlocal.get_current_registry()
+        iaccess = __IAccess(ssn_factory=reg['dbsession_factory'])
+    else:
+        iaccess = __IAccess(ssn=ssn)
     return iaccess
 
 
-def get_manage_access_interface():
-    reg = pyramid.threadlocal.get_current_registry()
-    iaccess = __IManAcc(reg['dbsession_factory'])
-    return iaccess
+def get_manage_access_interface(ssn=None):
+    if ssn is None:
+        reg = pyramid.threadlocal.get_current_registry()
+        imanager_access = __IManAcc(ssn_factory=reg['dbsession_factory'])
+    else:
+        imanager_access = __IManAcc(ssn=ssn)
+    return imanager_access

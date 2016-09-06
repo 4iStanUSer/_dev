@@ -108,7 +108,7 @@ export class IndexPageComponent {
                 block.component['items'] = data;
             }
         }
-        for (let i=0; i<this.pageData.content.zones.length;i++){ //this.pageData.nav_panel.order
+        for (let i=0; i<this.pageData.content.zones.length;i++){
             block = this.pageData.content.zones[i];
             name = this.pageData.content.zones[i].name;
             newData = d.content.zones.filter(function(zone){
@@ -116,7 +116,7 @@ export class IndexPageComponent {
             });
             data = (newData && newData[0]) ? newData[0].data : [];
             if (block['widget'] == 'timeseries') {
-                block.component['timeseries'] = block.data;
+                block.component['timeseries'] = data;
             }
         }
     }

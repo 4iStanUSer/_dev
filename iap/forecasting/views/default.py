@@ -25,7 +25,7 @@ def index_view(req):
     # getter_service.update_user_perms(req)
     # u_perms = getter_service.get_permissions(req, 1, 1)
 
-    getter_service.tmp_workbench(req)
+    # getter_service.tmp_workbench(req)
 
     return render_to_response('iap.forecasting:templates/index.jinja2',
                               {'title': 'Forecast index'},
@@ -41,37 +41,39 @@ def get_index_page_data(req):
     # 5.Get type of each block
     # 6.Get data for content blocks (depends on values in bullet no.3)
 
-    data = {
-        'nav_panel': {
-            'order': ['product_dimension', 'region_dimension', 'timeseria_dimension'],
-            'dimensions': [
-                {
-                    'name': 'product_dimension',
-                    'widget': 'hierarchy',
-                    'data': getter_service.get_hierarchy()
-                },
-                {
-                    'name': 'region_dimension',
-                    'widget': 'hierarchy',
-                    'data': getter_service.get_hierarchy1()
-                },
-                {
-                    'name': 'timeseria_dimension',
-                    'widget': 'dropdown',
-                    'data': getter_service.get_dropdown()
-                }
-            ]
-        },
-        'content': {
-            'order': ['drivers_grid'],
-            'zones': [
-                {
-                    'name': 'drivers_grid',
-                    'widget': 'timeseries',
-                    'data': getter_service.get_time_series()
-                }
-            ]
-        }
-    }
+    # data = {
+    #     'nav_panel': {
+    #         'order': ['product_dimension', 'region_dimension', 'timeseria_dimension'],
+    #         'dimensions': [
+    #             {
+    #                 'name': 'product_dimension',
+    #                 'widget': 'hierarchy',
+    #                 'data': getter_service.get_hierarchy()
+    #             },
+    #             {
+    #                 'name': 'region_dimension',
+    #                 'widget': 'hierarchy',
+    #                 'data': getter_service.get_hierarchy1()
+    #             },
+    #             {
+    #                 'name': 'timeseria_dimension',
+    #                 'widget': 'dropdown',
+    #                 'data': getter_service.get_dropdown()
+    #             }
+    #         ]
+    #     },
+    #     'content': {
+    #         'order': ['drivers_grid'],
+    #         'zones': [
+    #             {
+    #                 'name': 'drivers_grid',
+    #                 'widget': 'timeseries',
+    #                 'data': getter_service.get_time_series()
+    #             }
+    #         ]
+    #     }
+    # }
+    data = getter_service.tmp_workbench(req)
+
     return do_success_response(data)
 

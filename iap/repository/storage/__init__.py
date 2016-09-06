@@ -5,9 +5,10 @@ import datetime
 from . import exceptions as ex
 
 FILE_EXTENSION = '.pickle'
-BACKUP_STORAGE_PATH = 'for_backup_storage'  # TODO Absolute path
-TPL_STORAGE_PATH = 'for_tpl_storage'  # TODO Absolute path
-CONFIG_STORAGE_PATH = 'for_config_storage'  # TODO Absolute path
+STORAGE_FOLDER_PATH = os.path.dirname(os.path.realpath(__file__))
+BACKUP_STORAGE_PATH = STORAGE_FOLDER_PATH + '/' + 'for_backup_storage'
+TPL_STORAGE_PATH = STORAGE_FOLDER_PATH + '/' + 'for_tpl_storage'
+CONFIG_STORAGE_PATH = STORAGE_FOLDER_PATH + '/' + 'for_config_storage'
 
 
 class Storage:
