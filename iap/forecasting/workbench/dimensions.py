@@ -29,13 +29,15 @@ class Dimensions:
         self.data = backup['data']
         self.dim_ent_hier = backup['hierarchy']
         self.entities = backup['entities']
+        self.entity_by_path = backup['entity_by_path']
 
     def save(self):
         return {
             'dimensions': self.dim_list,
             'data': self.data,
             'hierarchy': self.dim_ent_hier,
-            'entities': self.entities
+            'entities': self.entities,
+            'entity_by_path': self.entity_by_path
         }
 
     # def load(self, root):

@@ -1,14 +1,14 @@
-#TODO move Login package here
+# TODO move Login package here
 
 from pyramid.httpexceptions import (
     HTTPForbidden,
     HTTPFound,
     HTTPNotFound,
-    )
+)
 from pyramid.security import (
     remember,
     forget,
-    )
+)
 from pyramid.response import Response
 from pyramid.renderers import render_to_response
 
@@ -19,8 +19,10 @@ from . import service
 # TODO (1.0) REMOVE THIS
 from ..forecasting.services.getter import run_time_collection, runTimeEx
 from ..forecasting.workbench.workbench_engine import WorkbenchEngine
-from ..repository import get_manage_access_interface, get_wh_interface
+from ..repository import (get_manage_access_interface, get_wh_interface,
+                          get_access_interface)
 from ..repository.storage import Storage
+from ..forecasting import TOOL_NAME as forecast_tool_name
 
 
 def notfound_view(req):
@@ -36,35 +38,36 @@ def forbidden_view(req):
 
 
 def index_view(req):
-    #user = req.user
-    #if user is None:
+    # user = req.user
+    # if user is None:
     #    raise HTTPForbidden
 
     # service.recreate_db(req)
     # service.fillin_db(req)
 
     user_id = 1
-    tool_id = 1
+    tool_name = forecast_tool_name
     # TODO(1.0) - REMOVE
     try:
         wb = run_time_collection.get(user_id)
     except runTimeEx.BackupNotFound as error:
         # TODO(1.0) - Move this
-        iman_acc = get_manage_access_interface(ssn=req.dbsession)
-        user_roles = iman_acc.get_user_roles(user_id)
+        i_access = get_access_interface(ssn=req.dbsession)
+        i_man_acc = get_manage_access_interface(ssn=req.dbsession)
+        user_roles = i_man_acc.get_user_roles(user_id)
         user_roles_id = [x.id for x in user_roles]
 
         # Load into RAM
         wb = WorkbenchEngine(user_id, user_roles_id)
         warehouse = get_wh_interface()
-        wb.load_data_from_repository(warehouse)
+
+        wb.load_data_from_repository(warehouse, i_access, i_man_acc)
         run_time_collection.add(user_id, wb)
 
         # Save into storage
         new_backup = wb.get_data_for_backup()
         s = Storage()
-        s.save_backup(user_id, tool_id, new_backup, 'default')
-
+        s.save_backup(user_id, tool_name, new_backup, 'default')
 
     return render_to_response('templates/index.jinja2',
                               {'title': 'Home page'},
@@ -91,7 +94,7 @@ def login_view(request):
         url=request.route_url('common.login'),
         next_url=next_url,
         email=email,
-        )
+    )
     return render_to_response('templates/login.jinja2',
                               data,
                               request=request)

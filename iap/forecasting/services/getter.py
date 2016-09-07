@@ -2,13 +2,15 @@ from iap.common.RunTimeCollection import (RunTimeCollection,
                                           exceptions as runTimeEx)
 from iap.repository import (get_wh_interface, get_access_interface)
 
+from .. import TOOL_NAME
+
 # from ..workbench.workbench_engine import WorkbenchEngine  # TODO(1.0) - remove
 # from ...repository import get_manage_access_interface  # TODO(1.0) - remove
 # from iap.repository.storage import Storage  # TODO(1.0) - remove
 
 
 tool_id = 1  # TODO via - imanage_access.get_tool(ssn, name='Forecast')
-tool_name = 'forecasting'  # TODO Change
+tool_name = TOOL_NAME
 run_time_collection = RunTimeCollection(tool_name)
 
 
@@ -59,8 +61,8 @@ def tmp_workbench(req):
                 'state': {
                     'opened': True,
                     'disabled': False,
-                    'selected': True if node['data']['id'] == selected \
-                        else False
+                    'selected': True
+                    if node['data']['id'] == selected else False
                 },
                 'children': []
             }
@@ -77,12 +79,12 @@ def tmp_workbench(req):
     }
 
     selection = {
-        'geography': req.json_body['geography']['id'] \
-            if req.json_body.get('geography') else def_sel['geography'],
-        'time': req.json_body['time']['id'] \
-            if req.json_body.get('time') else def_sel['time'],
-        'products': req.json_body['products']['id'] \
-            if req.json_body.get('products') else def_sel['products'],
+        'geography': req.json_body['geography']['id']
+        if req.json_body.get('geography') else def_sel['geography'],
+        'time': req.json_body['time']['id']
+        if req.json_body.get('time') else def_sel['time'],
+        'products': req.json_body['products']['id']
+        if req.json_body.get('products') else def_sel['products'],
     }
     selection = wb.dimensions.correct_selection(selection)
 
@@ -105,10 +107,6 @@ def tmp_workbench(req):
                             {
                                 'meta': 'Variable',
                                 'value': var_name
-                            },
-                            {
-                                'meta': 'Metric',
-                                'value': '$'
                             }
                         ],
                         'cells': [{
@@ -129,7 +127,7 @@ def tmp_workbench(req):
                 {
                     'name': 'drivers_grid',
                     'widget': 'timeseries',
-                    'data': time_series  #get_time_series()
+                    'data': time_series
                 }
             ]
         }

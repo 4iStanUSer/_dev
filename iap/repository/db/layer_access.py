@@ -256,7 +256,7 @@ def get_features_by_tool(ssn, tool):
 
 def add_features_to_role(ssn, role, features):
     for feature in features:
-        role.append(feature)
+        role.features.append(feature)
 
 
 def del_features_from_role(ssn, role, features_id):

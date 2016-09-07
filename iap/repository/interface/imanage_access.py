@@ -202,7 +202,7 @@ class IManageAccess:
             raise ex.NotExistsError('Role', 'id', role_id)
         new_features = []
         for fid in features_id:
-            f = wha.get_feature_by_id(fid)
+            f = wha.get_feature_by_id(self.ssn, fid)
             if f is not None:
                 new_features.append(f)
             else:

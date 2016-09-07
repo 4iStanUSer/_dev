@@ -38,8 +38,16 @@ class Container:
         return data
 
     def load(self, backup):
-        # TODO
-        pass
+        time_lines = backup['time_line'] if backup.get('time_line') else {}
+        c_entities = backup.get('c_entities')
+
+        if time_lines:
+            for timescale, timeline in time_lines.items():
+                self.add_time_scale(timescale, timeline)
+
+        if c_entities is not None and isinstance(c_entities, list):
+            for c_entity in c_entities:
+                self._root.load(c_entity)
 
     def save(self):
         if self._root is None:
@@ -134,12 +142,46 @@ class CEntity:
             self._data.add_var(name, default_value)
         return CVariable(self._data, name)
 
+    def load(self, entity_dict):  #, path=[]
+        name = entity_dict.get('name')
+        data = entity_dict.get('data')
+        children = entity_dict.get('children')
+        if name:
+            c_entity = self.add_child(name)
+            if data:
+                for var_name, var_dict in data.items():
+                    default_val = var_dict.get('default_value')
+                    time_series = var_dict.get('time_series')
+
+                    c_variable = c_entity.force_variable(var_name, default_val)
+                    if time_series:
+                        for ts_name, ts_val in time_series.items():
+                            start = ts_val.get('start')
+                            end = ts_val.get('end')
+                            values = ts_val.get('values')
+                            c_ts = c_variable.force_time_series(ts_name,
+                                                                start,
+                                                                end)
+                            # TODO Question
+                            start_label = self._data.time_manager. \
+                                get_label_by_index(ts_name, 0)
+
+                            c_ts.set_values(start_label, values)
+
+            if children:
+                for child in children:
+                    c_entity.load(child)
+        # pass
+
     def save(self):
-        return {
-            'name': self._name,
-            'data': self._data.save(),
-            'children': [child.save() for child in self._children]
-        }
+        if self._name != 'root':
+            return {
+                'name': self._name,
+                'data': self._data.save(),
+                'children': [child.save() for child in self._children]
+            }
+        else:
+            return [child.save() for child in self._children]
 
     def get_by_path(self, path):
         # TODO look for ONLY entity

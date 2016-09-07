@@ -6,9 +6,9 @@ from . import exceptions as ex
 
 FILE_EXTENSION = '.pickle'
 STORAGE_FOLDER_PATH = os.path.dirname(os.path.realpath(__file__))
-BACKUP_STORAGE_PATH = STORAGE_FOLDER_PATH + '/' + 'for_backup_storage'
-TPL_STORAGE_PATH = STORAGE_FOLDER_PATH + '/' + 'for_tpl_storage'
-CONFIG_STORAGE_PATH = STORAGE_FOLDER_PATH + '/' + 'for_config_storage'
+BACKUP_STORAGE_PATH = os.path.join(STORAGE_FOLDER_PATH, 'for_backup_storage')
+TPL_STORAGE_PATH = os.path.join(STORAGE_FOLDER_PATH, 'for_tpl_storage')
+CONFIG_STORAGE_PATH = os.path.join(STORAGE_FOLDER_PATH, 'for_config_storage')
 
 
 class Storage:
@@ -97,23 +97,23 @@ class Storage:
     @staticmethod
     def __get_backup_file_path(user_id, tool_id, backup_name):
         file_name = backup_name + FILE_EXTENSION
-        file_path = BACKUP_STORAGE_PATH + '/' + str(tool_id) + '/' + \
-                    str(user_id) + '/' + file_name
+        file_path = os.path.join(BACKUP_STORAGE_PATH, str(tool_id),
+                                 str(user_id), file_name)
         return file_path
 
     @staticmethod
     def __get_user_backup_dir_path(user_id, tool_id):
-        user_backup_dir_path = BACKUP_STORAGE_PATH + '/' + \
-                               str(tool_id) + '/' + str(user_id)
+        user_backup_dir_path = os.path.join(BACKUP_STORAGE_PATH, str(tool_id),
+                                            str(user_id))
         return user_backup_dir_path
 
     @staticmethod
     def __get_tpl_file_path(tool_id, tpl_name):
         file_name = tpl_name + FILE_EXTENSION
-        file_path = TPL_STORAGE_PATH + '/' + str(tool_id) + '/' + file_name
+        file_path = os.path.join(TPL_STORAGE_PATH, str(tool_id), file_name)
         return file_path
 
     @staticmethod
     def __get_tpl_dir_path(tool_id):
-        tpl_dir_path = TPL_STORAGE_PATH + '/' + str(tool_id)
+        tpl_dir_path = os.path.join(TPL_STORAGE_PATH, str(tool_id))
         return tpl_dir_path

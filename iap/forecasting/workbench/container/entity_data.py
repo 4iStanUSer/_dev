@@ -6,9 +6,6 @@ class EntityData:
         self._variables = {}
         self.time_manager = time_manager
 
-    def save(self):
-        return self._variables
-
     def _get_var(self, var_name):
         try:
             return self._variables[var_name]
@@ -90,6 +87,12 @@ class EntityData:
         for ind, item in enumerate(values):
             adj_index = start_index + ind
             time_series['values'][adj_index] = item
+
+    def save(self):
+        return self._variables
+
+    def load(self):
+        pass
 
 
 

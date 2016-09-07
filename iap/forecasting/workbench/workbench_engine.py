@@ -5,6 +5,8 @@ from .access import Access
 from .dimensions import Dimensions
 from .configuration import Configuration
 
+from ...repository.tmp_template import tool_template as tpl  # TODO temp
+
 
 class WorkbenchEngine:
     _storage = {}
@@ -16,25 +18,39 @@ class WorkbenchEngine:
         self.container = Container()
         self.kernel = None
         self.config = Configuration()
-        self.access = Access(self._user, self._user_roles)
+        self.access = Access()
         self.dimensions = Dimensions()
 
-    def load_data_from_repository(self, warehouse):
+    def load_data_from_repository(self, warehouse, i_access, i_man_access):
         root = warehouse.get_root()
-        if root is None:
-            return False
-        else:
-            # Fill in modules: container & dimensions
+
+        tool_id = 1  # TODO Change this
+
+        u_perms = i_access.get_permissions(tool_id, self._user)
+
+        # Fill in access module
+        features = [{'name': f.name} for f in u_perms['features']] \
+            if u_perms.get('features') is not None else []
+        self.access.load(features)
+
+        # Fill in config module
+        config = tpl['configuration'] \
+            if tpl.get('configuration') is not None else []
+        self.config.load(config)
+
+        # Fill in container & dimensions modules
+        if root is not None:
             for child in root.children:
                 self._go_crawl(child, [child.name], {})
 
         # TODO - add configuration & access & permissions
 
-    def load_backup(self, backup):
+    def load(self, backup_):
         # instance = pickle.loads(backup)
         # return True
-        data = backup.get('data') \
-            if 'data' in backup else dict()
+        backup = pickle.loads(backup_)
+        container = backup.get('container') \
+            if 'container' in backup else dict()
         config = backup.get('configuration') \
             if 'configuration' in backup else dict()
         access = backup.get('access') \
@@ -42,7 +58,7 @@ class WorkbenchEngine:
         dimensions = backup.get('dimensions') \
             if 'dimensions' in backup else dict()
 
-        self.container.load(data)
+        self.container.load(container)
         self.config.load(config)
         self.access.load(access)
         self.dimensions.load(dimensions)
@@ -56,12 +72,12 @@ class WorkbenchEngine:
         dimensions = self.dimensions.save()
         container = self.container.save()
 
-        return {
+        return pickle.dumps({
             'configuration': config,
             'access': access,
             'dimensions': dimensions,
             'container': container
-        }
+        })
 
     def _go_crawl(self, entity, path, l_p):
         # TODO rework function add parenting somewhere

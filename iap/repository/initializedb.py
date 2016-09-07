@@ -6,7 +6,7 @@ from pyramid.paster import (get_appsettings, setup_logging)
 from pyramid.scripts.common import parse_vars
 
 from iap.data_processing.data_proc_manager import Loader
-from iap.repository.template import tool_template
+from iap.repository.tmp_template import tool_template
 from .db import (get_engine, get_session_factory, get_tm_session)
 from .db.meta import Base
 from .db.warehouse import Entity, Warehouse
@@ -92,3 +92,11 @@ def main(argv=sys.argv):
 
         imanage_access.init_user_wb(f_tool_id, user_admin_id)
         # imanage_access.update_user_data_permissions(1, 1, permissions)
+
+        transaction.manager.commit()
+
+        features = imanage_access.get_features(f_tool_id)
+        imanage_access.update_role_features(role_admin_id,
+                                            [f.id for f in features])
+
+        transaction.manager.commit()

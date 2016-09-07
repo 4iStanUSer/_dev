@@ -33,7 +33,7 @@ class RunTimeCollection:
         data = s.load_backup(user_id, self.tool_name, 'default')
         if data:
             instance = self.__create_instance(self.tool_name, user_id)
-            instance.load(data)
+            instance.load(data['data'])
             return instance
         else:
             raise ex.BackupNotFound(user_id, self.tool_name)

@@ -2,10 +2,7 @@
 class Access:
     _data = {}
 
-    def __init__(self, user_id, user_role_ids, data=None):
-        self._user = user_id
-        self._user_role = set(user_role_ids)
-
+    def __init__(self, data=None):
         if data is not None:
             self.load(data)
 
@@ -14,35 +11,26 @@ class Access:
         Proceed and clean(by role features) access data.
 
         :param data: list of dictionaries
-        with 'name'(string) & 'roles_id'(list) keys
+        with 'name'(string) key
         Example:
             [
                 {
-                    'name': 'new_view_feature',
-                    'roles_id': [1, 2]
+                    'name': 'new_view_feature'
                 },
                 {
-                    'name': 'new_edit_feature',
-                    'roles_id': [1]
+                    'name': 'new_edit_feature'
                 },
                 ...
             ]
         :return: True|False
         """
-        self._data = {}
         if data is not None and isinstance(data, list):
+            self._data = {}
             for item in data:
                 name = item.get('name')
                 if name is None:
                     continue
-
-                roles_id = item.get('roles_id')
-                if roles_id is not None:  # and len(roles_id) > 0
-                    intersect = set(roles_id).intersection(self._user_role)
-                    if not intersect or len(intersect) == 0:
-                        continue
-                self._data[name] = item.get('value')
-
+                self._data[name] = True
             return True
         return False
 
@@ -51,22 +39,17 @@ class Access:
         Prepare data structure for saving into backup
         :return: [
             {
-                'name': 'new_view_feature',
-                'roles_id': [1]
+                'name': 'new_view_feature'
             },
             {
-                'name': 'new_edit_feature',
-                'roles_id': [1]
+                'name': 'new_edit_feature'
             },
             ...
         ]
         """
-        data = []
-        for key, value in self._data.items():
-            data.append({
-                'name': key,
-                'value': value
-            })
+        data = [{
+                    'name': key
+                } for key, value in self._data.items()]
         return data
 
     def get(self, conf_name):
