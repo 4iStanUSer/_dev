@@ -50,11 +50,14 @@ class Warehouse:
         self._root = self._ssn.query(Entity)\
             .filter(Entity.name == 'root').one_or_none()
 
+    def get_root(self):
+        return self._root
+
     def add_entity(self, path):
         return self._root._add_node_by_path(path, 0)
 
     def get_entity_by_id(self, entity_id):
-        return self._ssn.query(Entity).get(entity_id).one_or_none()
+        return self._ssn.query(Entity).get(entity_id)  # .one_or_none()
 
     def add_time_scale(self, name, time_line):
         time_scale = self._ssn.query(TimeScale) \
@@ -381,6 +384,13 @@ class TimeSeries(Base):
     @property
     def start_point(self):
         return self._start
+
+    @property
+    def end_point(self):
+        return self._end
+
+    def get_timeline(self):
+        return self._time_scale.timeline
 
     def set_values(self, start_label, values):
         # Get timestamps for new values.

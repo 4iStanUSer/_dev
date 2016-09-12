@@ -1,1 +1,1 @@
-
+TOOL_NAME = 'forecasting'

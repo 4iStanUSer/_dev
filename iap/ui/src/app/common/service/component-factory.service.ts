@@ -1,14 +1,11 @@
-// import {
-//     Injectable,
-//     ComponentResolver,
-//     ViewContainerRef,
-//     Component
-// } from '@angular/core';
-
-import {Injectable, ViewContainerRef, ComponentFactoryResolver} from '@angular/core';
-import { HierarchyWidgetComponent } from './../cmp/hierarchy-widget/';
-import { DropdownComponent } from './../cmp/dropdown/';
-import { TimeseriesWidgetComponent } from './../cmp/timeseries-widget/';
+import {
+    Injectable,
+    ViewContainerRef,
+    ComponentFactoryResolver
+} from '@angular/core';
+import {HierarchyWidgetComponent} from './../cmp/hierarchy-widget/';
+import {DropdownComponent} from './../cmp/dropdown/';
+import {TimeseriesWidgetComponent} from './../cmp/timeseries-widget/';
 
 @Injectable()
 export class ComponentFactoryService {
@@ -20,13 +17,12 @@ export class ComponentFactoryService {
 
     constructor(private resolver: ComponentFactoryResolver) { }
 
-    public generate(cmp_type: string, container: ViewContainerRef, context: any){ //: Observable<Component>
+    public generate(cmp_type: string, container: ViewContainerRef, context: any) { //: Observable<Component>
         const widgetCmp = this.resolver.resolveComponentFactory(this.types[cmp_type]);
         let componentRef = container.createComponent(widgetCmp);
         return componentRef.instance;
     }
 }
-
 
 
 // @Injectable()

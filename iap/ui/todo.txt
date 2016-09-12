@@ -1,0 +1,8 @@
+=====================
+src/tsconfig.json
+changed:
+"module": "es6" -> "module": "commonjs"
+=====================
+src/typings.d.ts
+added:
+declare var lodash: any;

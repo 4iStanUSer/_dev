@@ -60,7 +60,6 @@ class TreeNodeModel {
 
 @Component({
     selector: 'tree-node',
-    directives: [TreeNodeComponent],
     template: `
     <div class="tree-node tree-node-level-{{ node.level }}"
         [class.tree-node-disabled]="node.isDisabled"
@@ -108,14 +107,9 @@ export class TreeNodeComponent implements AfterViewInit {
 
 @Component({
     selector: 'tree',
-    directives: [TreeNodeComponent],
     encapsulation: ViewEncapsulation.None,
     styleUrls: ['tree.component.css'],
-    template: `
-        <div class="tree">
-            <tree-node *ngFor="let node of _nodes" [node]="node"></tree-node>
-        </div>
-    `
+    templateUrl: 'tree.component.html'
 })
 export class TreeComponent implements OnChanges {
     private _root: TreeNodeModel;

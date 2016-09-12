@@ -1,3 +1,6 @@
+from .. import exceptions as ex
+
+
 class TimeLineManager:
 
     def __init__(self):
@@ -10,20 +13,25 @@ class TimeLineManager:
         try:
             return len(self.time_scales[ts_name])
         except KeyError:
-            raise Exception
+            # raise Exception
+            raise ex.TlmNonExistentName(ts_name)
 
     def get_index_by_label(self, ts_name, label):
         try:
             return self.time_scales[ts_name].index(label)
         except ValueError:
-            raise Exception
+            # raise Exception
+            raise ex.TlmNonExistentLabel(ts_name, label)
         except KeyError:
-            raise Exception
+            # raise Exception
+            raise ex.TlmNonExistentName(ts_name)
 
     def get_label_by_index(self, ts_name, index):
         try:
             return self.time_scales[ts_name][index]
         except IndexError:
-            raise Exception
+            # raise Exception
+            raise ex.TlmNonExistentLabelIndex(ts_name, index)
         except KeyError:
-            raise Exception
+            # raise Exception
+            raise ex.TlmNonExistentName(ts_name)

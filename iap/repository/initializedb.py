@@ -1,14 +1,16 @@
 import os
 import sys
+
 import transaction
-
 from pyramid.paster import (get_appsettings, setup_logging)
-
 from pyramid.scripts.common import parse_vars
 
-from .db.meta import Base
+from iap.data_processing.data_proc_manager import Loader
+from iap.repository.tmp_template import tool_template
 from .db import (get_engine, get_session_factory, get_tm_session)
-from .db.warehouse import Entity
+from .db.meta import Base
+from .db.warehouse import Entity, Warehouse
+from ..repository.interface.imanage_access import IManageAccess
 
 
 def usage(argv):
@@ -32,12 +34,69 @@ def main(argv=sys.argv):
 
     with transaction.manager:
         ssn = get_tm_session(session_factory, transaction.manager)
+
         # TODO remove procedure of removing all rows
         # Drop all tables
         Base.metadata.drop_all(engine)
         # Create all tables
         Base.metadata.create_all(engine)
         # Add root to entities tree.
-        root = Entity(name='root')
+        root = Entity(name='root', layer='root', dimension='root')
         ssn.add(root)
+
+        transaction.manager.commit()
+
+        wh = Warehouse(session_factory)
+        loader = Loader(wh, data_load_command='jj')
+        loader.load()
+
+        transaction.manager.commit()
+
+        imanage_access = IManageAccess(ssn=ssn)
+        # Add tools
+        tool_forecast = imanage_access.add_tool('Forecast')
+        tool_ppt = imanage_access.add_tool('PPT')
+        tool_mmm = imanage_access.add_tool('MMM')
+
+        transaction.manager.commit()
+
+        tool_forecast = imanage_access.get_tool(name='Forecast')
+        f_tool_id = tool_forecast.id
+
+        # Add roles
+        role_jj_admin = imanage_access.add_role('jj_role_admin',
+                                                f_tool_id)
+        role_jj_manager = imanage_access.add_role('jj_role_manager',
+                                                  f_tool_id)
+
+        transaction.manager.commit()
+
+        role_jj_admin = imanage_access.get_role(name='jj_role_admin')
+        role_jj_manager = imanage_access.get_role(name='jj_role_manager')
+
+        role_admin_id = role_jj_admin.id
+        role_manager_id = role_jj_manager.id
+
+        # Add users
+        user_jj_admin = imanage_access.add_user('jj_admin@gmail.com',
+                                                'pass', [role_admin_id])
+        user_jj_manager = imanage_access.add_user('jj_manager@gmail.com',
+                                                  'pass', [role_manager_id])
+
+        transaction.manager.commit()
+
+        user_jj_admin = imanage_access.get_user(email='jj_admin@gmail.com')
+        user_admin_id = user_jj_admin.id
+
+        imanage_access.set_permissions_template(f_tool_id, tool_template)
+
+        imanage_access.init_user_wb(f_tool_id, user_admin_id)
+        # imanage_access.update_user_data_permissions(1, 1, permissions)
+
+        transaction.manager.commit()
+
+        features = imanage_access.get_features(f_tool_id)
+        imanage_access.update_role_features(role_admin_id,
+                                            [f.id for f in features])
+
         transaction.manager.commit()

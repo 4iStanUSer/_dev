@@ -1,3 +1,6 @@
+from .. import exceptions as ex
+
+
 class EntityData:
     def __init__(self, time_manager):
         self._variables = {}
@@ -7,17 +10,20 @@ class EntityData:
         try:
             return self._variables[var_name]
         except KeyError:
-            raise Exception
+            # raise Exception
+            raise ex.EdNonExistentVarName(var_name)
 
     def _get_ts(self, var_name, ts_name):
         try:
             var = self._variables[var_name]
         except KeyError:
-            raise Exception
+            # raise Exception
+            raise ex.EdNonExistentVarName(var_name)
         try:
             return var['time_series'][ts_name]
         except KeyError:
-            raise Exception
+            # raise Exception
+            raise ex.EdNonExistentTsName(var_name, ts_name)
 
     def get_var_names(self):
         return list(self._variables.keys())
@@ -34,7 +40,8 @@ class EntityData:
 
     def rename_variable(self, old_name, new_name):
         if new_name in self._variables:
-            return Exception
+            # return Exception
+            return ex.EdAlreadyExistentVarName(new_name)
         self._variables[new_name] = self._get_var(old_name)
         self._variables.pop(old_name)
 
@@ -45,19 +52,15 @@ class EntityData:
         return ts_name in self._get_var(var_name)['time_series']
 
     # TODO review passing start and end dates
-    def add_time_series(self, var_name, ts_name, start_date, end_date):
     # def add_time_series(self, var_name, ts_name):
+    def add_time_series(self, var_name, ts_name, start_date, end_date):
         var = self._get_var(var_name)
         length = self.time_manager.get_time_length(ts_name)
         def_value = var['default_value']
-        var['time_series'][ts_name] = {'start': start_date,
-                                       'end': end_date,
+        var['time_series'][ts_name] = {'start': start_date,  # None,
+                                       'end': end_date,  # None,
                                        'values': [def_value]*length
                                        }
-        # var['time_series'][ts_name] = {'start': None,
-        #                                'end': None,
-        #                                'values': [def_value]*length
-        #                                }
 
     def get_ts_start(self, var_name, ts_name):
         return self._get_ts(var_name, ts_name)['start']
@@ -84,6 +87,12 @@ class EntityData:
         for ind, item in enumerate(values):
             adj_index = start_index + ind
             time_series['values'][adj_index] = item
+
+    def save(self):
+        return self._variables
+
+    def load(self):
+        pass
 
 
 

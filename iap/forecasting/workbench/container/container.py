@@ -1,3 +1,4 @@
+from .. import exceptions as ex
 from .timelines import TimeLineManager
 from .entity_data import EntityData
 
@@ -20,6 +21,42 @@ class Container:
     def add_time_scale(self, name, time_line):
         self.timeline.add_time_line(name, time_line)
 
+    ##################
+    def get_entity_by_path(self, path):
+        if self._root is None:
+            return False
+        return self._root.get_by_path(path)
+
+    def get_entity_data(self, entity, timescale):
+        variables = entity.get_variables_names()
+        data = {}
+        if variables:
+            for variable in variables:
+                c_variable = entity.get_variable(variable)
+                c_time_series = c_variable.get_time_series(timescale)
+                data[variable] = c_time_series.get_values()
+        return data
+
+    def load(self, backup):
+        time_lines = backup['time_line'] if backup.get('time_line') else {}
+        c_entities = backup.get('c_entities')
+
+        if time_lines:
+            for timescale, timeline in time_lines.items():
+                self.add_time_scale(timescale, timeline)
+
+        if c_entities is not None and isinstance(c_entities, list):
+            for c_entity in c_entities:
+                self._root.load(c_entity)
+
+    def save(self):
+        if self._root is None:
+            return False
+        return {
+            'c_entities': self._root.save(),
+            'time_line': self.timeline.time_scales
+        }
+
 
 class CEntity:
 
@@ -38,7 +75,8 @@ class CEntity:
         for parent in self.parents:
             if name in [x.name for x in parent.children
                         if x.name != self._name]:
-                raise Exception
+                # raise Exception
+                raise ex.ContAlreadyExistentCEntityName(name)
         self._name = name
 
     @property
@@ -54,14 +92,16 @@ class CEntity:
             return self
         for parent in self.parents:
             return parent._get_root()
-        raise Exception
+        # raise Exception
+        raise ex.ContRootNotFound(self.name)
 
     def add_parent(self, path):
         root = self._get_root()
         new_parent = root.add_node_by_path(path, 0)
         if new_parent not in self._parents:
             if self.name in [x.name for x in new_parent._children]:
-                raise Exception
+                # raise Exception
+                raise ex.ContAlreadyExistentCEntityName(self.name)
             self._parents.append(new_parent)
         return new_parent
 
@@ -102,6 +142,59 @@ class CEntity:
             self._data.add_var(name, default_value)
         return CVariable(self._data, name)
 
+    def load(self, entity_dict):  #, path=[]
+        name = entity_dict.get('name')
+        data = entity_dict.get('data')
+        children = entity_dict.get('children')
+        if name:
+            c_entity = self.add_child(name)
+            if data:
+                for var_name, var_dict in data.items():
+                    default_val = var_dict.get('default_value')
+                    time_series = var_dict.get('time_series')
+
+                    c_variable = c_entity.force_variable(var_name, default_val)
+                    if time_series:
+                        for ts_name, ts_val in time_series.items():
+                            start = ts_val.get('start')
+                            end = ts_val.get('end')
+                            values = ts_val.get('values')
+                            c_ts = c_variable.force_time_series(ts_name,
+                                                                start,
+                                                                end)
+                            # TODO Question
+                            start_label = self._data.time_manager. \
+                                get_label_by_index(ts_name, 0)
+
+                            c_ts.set_values(start_label, values)
+
+            if children:
+                for child in children:
+                    c_entity.load(child)
+        # pass
+
+    def save(self):
+        if self._name != 'root':
+            return {
+                'name': self._name,
+                'data': self._data.save(),
+                'children': [child.save() for child in self._children]
+            }
+        else:
+            return [child.save() for child in self._children]
+
+    def get_by_path(self, path):
+        # TODO look for ONLY entity
+        if len(path) == 0:
+            return self
+        elif self._children:
+            for child in self._children:
+                if child.name == path[0]:
+                    res = child.get_by_path(path[1:])
+                    if res:
+                        return res
+        return False
+
 
 class CVariable:
 
@@ -123,7 +216,7 @@ class CVariable:
         self._entity_data.get_default_value(self._var_name)
 
     def get_time_series(self, ts_name):
-        if self._entity_data.does_cointain_ts(self._var_name, ts_name):
+        if self._entity_data.does_contain_ts(self._var_name, ts_name):
             return CTimeSeries(self._entity_data, self._var_name, ts_name)
         else:
             return None

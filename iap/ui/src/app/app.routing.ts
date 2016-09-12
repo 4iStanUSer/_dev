@@ -21,7 +21,7 @@
 import { Routes, RouterModule } from '@angular/router';
 import {
     IndexPageComponent as ForecastIndexPageComponent
-} from './forecast/index-page/';
+} from './forecast/index-page/index-page.component';
 import {
     EditPageComponent as ForecastEditPageComponent
 } from './forecast/edit-page/';

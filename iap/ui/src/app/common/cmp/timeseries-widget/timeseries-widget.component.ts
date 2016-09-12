@@ -36,16 +36,14 @@ interface IRow {
 }
 
 @Component({
-    // moduleId: module.id,
     selector: 'timeseries-widget',
-    directives: [],
     template: `
 <table class="table table-striped">
     <thead>
         <tr>
-            <th *ngFor="let col of _cols">
+            <td *ngFor="let col of _cols">
             {{ col }}
-            </th>
+            </td>
         </tr>
     </thead>
     <tbody>
@@ -96,7 +94,7 @@ export class TimeseriesWidgetComponent implements OnChanges {
                             _c.push(cell.meta);
                         }
 
-                        _row.push(cell); ////
+                        _row.push(cell);
                     }
                 }
                 if (_row.length > 0) {

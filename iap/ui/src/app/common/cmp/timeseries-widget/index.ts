@@ -1,1 +1,2 @@
-export * from './timeseries-widget.component';
+export {TimeseriesWidgetModule} from './timeseries-widget.module';
+export {TimeseriesWidgetComponent} from "./timeseries-widget.component";
