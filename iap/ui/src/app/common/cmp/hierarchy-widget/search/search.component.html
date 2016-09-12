@@ -1,3 +1,18 @@
-<p>
-  search works!
-</p>
+<input #searchField type="text" class="form-control" [(ngModel)]="inputted" (keyup)="_onKeyup(inputted, $event)">
+<div class="variants-container" *ngIf="_showNodesStatus">
+    <span *ngIf="_nodesFiltered.length==0">
+        No match
+    </span>
+    <ul class="nodes-container" *ngIf="_nodesFiltered.length>0">
+        <li
+            class="search-node"
+            [class.is_hovered]="node.isHovered"
+            [class.is_disabled]="node.isDisabled"
+
+            *ngFor="let node of _nodesFiltered; let i = index"
+
+            (click)="_onSelect(i)"
+            (mouseenter)="_onHover(i)"
+            >{{ node.text }}</li>
+    </ul>
+</div>

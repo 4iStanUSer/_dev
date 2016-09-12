@@ -1,13 +1,10 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import {TreeComponent} from './tree/';
-import {SearchComponent} from './search/';
 
 //TODO - tree and search component depends on same inputed data structure - REFACTOR
 //TODO - change event name from itemSelected to changeSelection
 
 @Component({
     selector: 'hierarchy-widget',
-    directives: [TreeComponent, SearchComponent],
     styleUrls: ['hierarchy-widget.component.css'],
     templateUrl: 'hierarchy-widget.component.html',
 })

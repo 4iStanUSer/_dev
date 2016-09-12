@@ -1,15 +1,7 @@
-import {
-    Component,
-    ViewChild,
-    ViewContainerRef,
-} from '@angular/core';
+import {Component, ViewChild, ViewContainerRef} from '@angular/core';
 
 import { IndexPageService } from './../service/index-page.service';
 import { ComponentFactoryService } from './../../common/service/component-factory.service';
-import { TimeseriesWidgetComponent } from './../../common/cmp/timeseries-widget/';
-import { HierarchyWidgetComponent } from './../../common/cmp/hierarchy-widget/';
-import { DropdownComponent } from './../../common/cmp/dropdown/';
-import { DatepickerComponent } from "./../../common/cmp/datepicker/";
 
 @Component({
     selector: 'navigation-panel',
@@ -44,41 +36,10 @@ interface IPageData {
 }
 
 
-// <!--
-//         <dropdown [items]="__DROPDOWN_ITEMS" [configuration]="__DROPDOWN_CONFIG" (changeSelection)="dropdownSelectionChanged($event)"></dropdown>
-//
-//         <hierarchy-widget [items]="__HIERARCHY_ITEMS" (itemSelected)="hierarchyItemSelect($event)"></hierarchy-widget>
-//
-//         <hierarchy-widget [items]="__HIERARCHY_ITEMS1" (itemSelected)="hierarchyItemSelect($event)"></hierarchy-widget>
-//
-//         <datepicker [date]="__CURRENT_DATE" (dateChanged)="dateChanged($event)"></datepicker>
-// -->
-
 @Component({
     selector: 'forecast-index-page',
-    directives: [
-        TimeseriesWidgetComponent,
-        HierarchyWidgetComponent,
-        DropdownComponent,
-        DatepickerComponent,
-        NavagationPanelComponent
-    ],
-    providers: [IndexPageService],
     styleUrls: ['index-page.component.css'],
-    template: `
-<div class="row">
-    <navigation-panel class="col-sm-3">
-        <div #navPanel></div>
-    </navigation-panel>
-
-    <div class="col-sm-9" id="cont_panel">
-        <h1>main content</h1>
-{{currentSelection | json}}
-        <div #contentZone></div>
-
-    </div>
-</div>
-`
+    templateUrl: 'index-page.component.html'
 })
 export class IndexPageComponent {
     private pageData: any = null;// TODO via Interface IPageOptions
@@ -95,7 +56,7 @@ export class IndexPageComponent {
         let data = null;
         let name = null;
         let newData = null;
-        for (let i=0; i<this.pageData.nav_panel.dimensions.length;i++){ //this.pageData.nav_panel.order
+        for (let i=0; i<this.pageData.nav_panel.dimensions.length;i++) { //this.pageData.nav_panel.order
             block = this.pageData.nav_panel.dimensions[i];
             name = this.pageData.nav_panel.dimensions[i].name;
             newData = d.nav_panel.dimensions.filter(function(dim){

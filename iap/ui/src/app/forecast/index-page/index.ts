@@ -1,1 +1,1 @@
-export * from './index-page.component';
+export * from './index-page.module';

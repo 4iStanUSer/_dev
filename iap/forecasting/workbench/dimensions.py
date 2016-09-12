@@ -1,17 +1,18 @@
 import copy
 
 
-class DimNode(dict):
-    _path = None
-
-    def set_path(self, path):
-        self._path = path
-
-    def get_path(self):
-        return self._path
+# class DimNode(dict):
+#     _path = None
+#
+#     def set_path(self, path):
+#         self._path = path
+#
+#     def get_path(self):
+#         return self._path
 
 
 class Dimensions:
+    time_periods = []  #
     dim_list = []
     entities = {}
     dim_ent_hier = {}

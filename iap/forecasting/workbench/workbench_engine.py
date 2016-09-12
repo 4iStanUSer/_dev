@@ -27,6 +27,7 @@ class WorkbenchEngine:
         tool_id = 1  # TODO Change this
 
         u_perms = i_access.get_permissions(tool_id, self._user)
+        permissions = u_perms.get('permissions')
 
         # Fill in access module
         features = [{'name': f.name} for f in u_perms['features']] \
@@ -43,7 +44,7 @@ class WorkbenchEngine:
             for child in root.children:
                 self._go_crawl(child, [child.name], {})
 
-        # TODO - add configuration & access & permissions
+        # TODO - add permissions
 
     def load(self, backup_):
         # instance = pickle.loads(backup)
@@ -131,7 +132,7 @@ class WorkbenchEngine:
             self.dimensions.dim_ent_hier[dim_name] = []
 
         # Collect entities
-        if entity._id not in self.dimensions.entities:
+        if entity.id not in self.dimensions.entities:
             self.dimensions.entities[entity.id] = {
                 'name': entity.name,  # entity
                 'id': entity.id

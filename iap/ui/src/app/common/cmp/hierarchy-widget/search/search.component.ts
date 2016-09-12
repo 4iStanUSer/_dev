@@ -1,36 +1,22 @@
-import { Component, Input, Output, ViewChild,
+import {
+    Component, Input, Output, ViewChild,
     OnChanges, OnDestroy, AfterViewInit,
-    ElementRef, Renderer, EventEmitter } from '@angular/core';
+    ElementRef, Renderer, EventEmitter
+} from '@angular/core';
 
+class SearchNode {
+    public isHovered: boolean = false
+    constructor(public type: string, public id: string, public text: string,
+        public isDisabled: boolean = false) { }
+}
 
 @Component({
-    // moduleId: module.id,
     selector: 'search',
     styleUrls: ['search.component.css'],
-    template: `
-        <input #searchField type="text" class="form-control" [(ngModel)]="inputted" (keyup)="_onKeyup(inputted, $event)">
-        <div class="variants-container" *ngIf="_showNodesStatus">
-            <span *ngIf="_nodesFiltered.length==0">
-                No match
-            </span>
-            <ul class="nodes-container" *ngIf="_nodesFiltered.length>0">
-                <li 
-                    class="search-node"
-                    [class.is_hovered]="node.isHovered"
-                    [class.is_disabled]="node.isDisabled"
-
-                    *ngFor="let node of _nodesFiltered; let i = index"
-                
-                    (click)="_onSelect(i)"
-                    (mouseenter)="_onHover(i)"
-                    >{{ node.text }}</li>
-            </ul>
-        </div>
-    `,
+    templateUrl: 'search.component.html',
 })
 export class SearchComponent implements OnChanges, AfterViewInit, OnDestroy {
 
-    // @Input() items: Array<Object>;
     @Input() set items(items: Array<Object>) {
         this.inputted = '';
         this.hoverIndex = null;
@@ -215,10 +201,3 @@ export class SearchComponent implements OnChanges, AfterViewInit, OnDestroy {
 
     }
 }
-
-class SearchNode {
-    public isHovered: boolean = false
-    constructor(public type: string, public id: string, public text: string,
-        public isDisabled: boolean = false) { }
-}
-

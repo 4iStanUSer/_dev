@@ -1,1 +1,2 @@
-export * from './hierarchy-widget.component';
+export { HierarchyWidgetModule } from './hierarchy-widget.module';
+export { HierarchyWidgetComponent } from './hierarchy-widget.component';
