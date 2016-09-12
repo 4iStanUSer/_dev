@@ -10,6 +10,9 @@ import { TimeseriesWidgetComponent } from './../../common/cmp/timeseries-widget/
 import { HierarchyWidgetComponent } from './../../common/cmp/hierarchy-widget/';
 import { DropdownComponent } from './../../common/cmp/dropdown/';
 import { DatepickerComponent } from "./../../common/cmp/datepicker/";
+import {LoginWidgetComponent} from "../../common/cmp/login-widget/";
+import {LoginService} from "../../common/service/login.service";
+// import {LoginModule} from "../../common/module/login.module";
 
 @Component({
     selector: 'navigation-panel',
@@ -61,6 +64,7 @@ interface IPageData {
         HierarchyWidgetComponent,
         DropdownComponent,
         DatepickerComponent,
+        LoginWidgetComponent,
         NavagationPanelComponent
     ],
     providers: [IndexPageService],
@@ -87,7 +91,8 @@ export class IndexPageComponent {
 
     constructor(
         private pageService: IndexPageService,
-        private cmpFactoryServ: ComponentFactoryService
+        private cmpFactoryServ: ComponentFactoryService,
+        private loginService: LoginService
     ) { }
 
     private updateDimensionsData(d){

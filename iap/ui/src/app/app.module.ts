@@ -25,6 +25,8 @@ import {IndexPageService} from "./forecast/service/index-page.service";
 import {IndexPageComponent as ForecastIndexPageCmp} from "./forecast/index-page/";
 import {EditPageComponent as ForecastEditPageCmp} from "./forecast/edit-page/";
 
+import {LoginModule} from "./common/module/login.module";
+
 @NgModule({
     imports: [
         BrowserModule,
@@ -32,6 +34,7 @@ import {EditPageComponent as ForecastEditPageCmp} from "./forecast/edit-page/";
         FormsModule,
         HttpModule,
         JsonpModule,
+        LoginModule,
         routing
     ],
     declarations: [
@@ -39,7 +42,6 @@ import {EditPageComponent as ForecastEditPageCmp} from "./forecast/edit-page/";
         MenuWidgetComponent,
         ForecastIndexPageCmp,
         ForecastEditPageCmp,
-
         HierarchyWidgetComponent,
         DropdownComponent,
         TimeseriesWidgetComponent
