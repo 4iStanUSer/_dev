@@ -1,0 +1,45 @@
+<div class="" [hidden]="submitted">
+  <div class="container">
+      <form class="form-signin"
+            (ngSubmit)="onSubmit()"
+            #userForm="ngForm">
+          <h1 class="form-signin-heading">Login Form</h1>
+          {{diagnostic}}
+          <div class="form-group">
+              <label for="email">E-mail</label>
+              <input type="email" class="form-control invalid" id="email"
+                     required
+                     [class.valid]="!validationErrorMessage('email')"
+                     [(ngModel)]="model.email" name="email"
+                     #email="ngModel">
+              <div [hidden]="email.pristine"
+                   *ngIf="validationErrorMessage('email')"
+                   class="alert alert-danger">
+                  {{ validationErrorMessage('email') }}
+              </div>
+          </div>
+          <div class="form-group">
+              <label for="password">Password</label>
+              <input type="password" class="form-control" id="password"
+                     required
+                     [class.valid]="!validationErrorMessage('password')"
+                     [(ngModel)]="model.password" name="password"
+                     #password="ngModel">
+              <div [hidden]="password.pristine"
+                   *ngIf="validationErrorMessage('password')"
+                   class="alert alert-danger">
+                  {{ validationErrorMessage('password') }}
+              </div>
+          </div>
+          <button type="submit" class="btn btn-default"
+                  [disabled]="validationErrorMessage('email') ||
+                  validationErrorMessage('password')">Submit</button>
+      </form>
+  </div>
+</div>
+<hr>
+<ul class="">
+    <li *ngFor="let user of users">
+        <span class="badge">{{user.id}}</span> {{user.email}}
+    </li>
+</ul>
