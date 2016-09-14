@@ -39,6 +39,7 @@ const appRoutes: Routes = [
     // { path: '**', component: PageNotFoundComponent }
     { path: '', pathMatch: 'full', redirectTo: 'forecast' },
     { path: 'forecast', component: ForecastIndexPageComponent }, //outlet: 'forecast',
+    // { path: 'crisis', loadChildren: 'app/crisis/crisis.module#CrisisModule' }
     { path: 'forecast/edit', component: ForecastEditPageComponent } //outlet: 'tree',
 ];
 
@@ -46,4 +47,5 @@ export const appRoutingProviders: any[] = [
 
 ];
 
-export const routing = RouterModule.forRoot(appRoutes);
+export const routing = RouterModule.forRoot(appRoutes); // Lazy Loading -> export const routing: ModuleWithProviders = RouterModule.forRoot(routes);
+

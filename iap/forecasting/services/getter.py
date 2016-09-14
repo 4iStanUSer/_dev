@@ -25,28 +25,6 @@ def tmp_workbench(req):
     user_id = 1
     wb = run_time_collection.get(user_id)
 
-    # # TODO(1.0) - Remake, because default backup exists always
-    # try:
-    #     wb = run_time_collection.get(user_id)
-    # except runTimeEx.BackupNotFound as error:
-    #     # TODO(1.0) - Move this
-    #     iman_acc = get_manage_access_interface(ssn=req.dbsession)
-    #     user_roles = iman_acc.get_user_roles(user_id)
-    #     user_roles_id = [x.id for x in user_roles]
-    #
-    #     # Load into RAM
-    #     wb = WorkbenchEngine(user_id, user_roles_id)
-    #     wb.load_data_from_repository(warehouse)
-    #     run_time_collection.add(user_id, wb)
-    #
-    #     # Save into storage
-    #     new_backup = wb.get_data_for_backup()
-    #     s = Storage()
-    #     s.save_backup(user_id, tool_id, new_backup, 'default')
-
-    # wb.load_backup(new_backup)
-    # wb.load_backup(tool_template)
-
     def _convert_hierarchy(node, selected):
         if isinstance(node, list):
             new_nodes = []
@@ -112,7 +90,11 @@ def tmp_workbench(req):
                         'cells': [{
                                       'value': value,
                                       'valueType': 'float',
-                                      'meta': time_labels[ind]
+                                      'meta': time_labels[ind],
+                                      'props': {
+                                          'is_editable': True,
+                                          'is_disabled': False
+                                      }
                                   } for ind, value in enumerate(values)]
                     })
 

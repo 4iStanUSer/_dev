@@ -1,3 +1,26 @@
-<p>
-  timeseries-widget works!
-</p>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <td *ngFor="let col of _cols">
+            {{ col }}
+            </td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let row of _rows">
+            <td
+                *ngFor="let cell_id of row"
+                [attr.data-cell_id]="cell_id">
+                <span *ngIf="storage[cell_id]['status']['mode'] == 'view'">
+                    {{ storage[cell_id].value }}
+                </span>
+                <span *ngIf="storage[cell_id]['status']['mode'] == 'edit'">
+                    <input
+                        #field_for_edit
+                        [(ngModel)]="storage[cell_id].value"
+                        (keyup)="_onInputKeyup(cell_id, $event)">
+                </span>
+            </td>
+        </tr>
+    </tbody>
+</table>

@@ -77,3 +77,24 @@ def get_index_page_data(req):
 
     return do_success_response(data)
 
+
+def get_ui_config(req):
+    ui_conf = {
+        'widgets': {
+            'hierarhy': {
+                'default': {
+
+                },
+                'geography': {
+
+                },
+                'product': {
+
+                }
+            }
+        },
+        'not_widgets': {
+
+        }
+    }
+    return do_success_response(ui_conf)
