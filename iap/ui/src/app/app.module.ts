@@ -15,13 +15,26 @@ import {EditPageComponent as ForecastEditPageCmp} from "./forecast/edit-page/";
 import {IndexPageModule as ForecastIndexPageModule} from "./forecast/index-page/";
 
 import {ComponentFactoryService} from './common/service/component-factory.service';
-import {HierarchyWidgetModule, HierarchyWidgetComponent} from './common/cmp/hierarchy-widget/';
+import {
+    HierarchyWidgetModule,
+    HierarchyWidgetComponent
+} from './common/cmp/hierarchy-widget/';
 import {DropdownModule, DropdownComponent} from './common/cmp/dropdown/';
-import {TimeseriesWidgetModule, TimeseriesWidgetComponent} from './common/cmp/timeseries-widget/';
+import {
+    TimeseriesWidgetModule,
+    TimeseriesWidgetComponent
+} from './common/cmp/timeseries-widget/';
+import {ScenariosListComponent} from './forecast/scenarios-list/';
+
+
+import {CommonModule} from '@angular/common';
 
 @NgModule({
     imports: [
         BrowserModule,
+
+        CommonModule,
+
         RouterModule,
         FormsModule,
         HttpModule,
@@ -32,12 +45,15 @@ import {TimeseriesWidgetModule, TimeseriesWidgetComponent} from './common/cmp/ti
         DropdownModule,
         TimeseriesWidgetModule,
 
-        ForecastIndexPageModule
+        ForecastIndexPageModule,
+        // ScenariosListModule
     ],
     declarations: [
         AppComponent,
         MenuWidgetComponent,
-        ForecastEditPageCmp
+        ForecastEditPageCmp,
+
+        ScenariosListComponent
     ],
     providers: [
         {provide: LocationStrategy, useClass: HashLocationStrategy},

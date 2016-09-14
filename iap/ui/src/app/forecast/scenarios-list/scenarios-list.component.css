@@ -1,0 +1,6 @@
+.selected {
+    background-color: rgba(0,0,0,0.5);
+}
+.disabled {
+    color:#908c8c;
+}

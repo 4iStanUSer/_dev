@@ -58,6 +58,12 @@ def forecast_routing(config):
                     route_name='forecast.get_ui_config',
                     request_method='POST', renderer='json')
 
+    config.add_route('forecast.get_scenarios_list',
+                     '/get_scenarios_list')
+    config.add_view(forecast.get_scenarios_list,
+                    route_name='forecast.get_scenarios_list',
+                    request_method='POST', renderer='json')
+
 
 # def wsgi_app(global_config, **settings):
 def main(global_config, **settings):

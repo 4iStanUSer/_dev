@@ -25,6 +25,9 @@ import {
 import {
     EditPageComponent as ForecastEditPageComponent
 } from './forecast/edit-page/';
+import {
+    ScenariosListComponent as ForecastScenariosCmp
+} from './forecast/scenarios-list/scenarios-list.component';
 
 const appRoutes: Routes = [
     // { path: 'crisis-center', component: CrisisCenterComponent },
@@ -40,7 +43,8 @@ const appRoutes: Routes = [
     { path: '', pathMatch: 'full', redirectTo: 'forecast' },
     { path: 'forecast', component: ForecastIndexPageComponent }, //outlet: 'forecast',
     // { path: 'crisis', loadChildren: 'app/crisis/crisis.module#CrisisModule' }
-    { path: 'forecast/edit', component: ForecastEditPageComponent } //outlet: 'tree',
+    { path: 'forecast/edit', component: ForecastEditPageComponent }, //outlet: 'tree',
+    { path: 'forecast/scenarios', component: ForecastScenariosCmp }
 ];
 
 export const appRoutingProviders: any[] = [

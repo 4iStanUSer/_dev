@@ -48,7 +48,12 @@ export class AppComponent {
                     "app_link": "forecast"
                 },
                 {
-                    "name": "Tree",
+                    "name": "Scenarios",
+                    "disabled": false,
+                    "app_link": "forecast/scenarios"
+                },
+                {
+                    "name": "Edit",
                     "disabled": false,
                     "app_link": "forecast/edit"
                 }

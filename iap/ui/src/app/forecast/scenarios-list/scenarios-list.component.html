@@ -1,0 +1,36 @@
+<table *ngIf="shown_sce && shown_sce.length" class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Author</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tr
+        *ngFor="let sce of shown_sce"
+        [class.disabled]="sce['status']['disabled']"
+        [class.selected]="sce['status']['selected']"
+    >
+        <td>{{ sce['id'] }}</td>
+        <td>{{ sce['name'] }}</td>
+        <td>{{ sce['author'] }}</td>
+        <td>
+            <span *ngIf="!sce['status']['disabled']">
+                <button *ngIf="sce['permissions']['view'] && !sce['status']['selected']" class="btn btn-success" (click)="clickView(sce['id'])">View</button>
+                <button *ngIf="sce['permissions']['edit']" class="btn btn-warning" (click)="clickEdit(sce['id'])">Edit</button>
+                <button *ngIf="sce['permissions']['delete']" class="btn btn-danger" (click)="clickDelete(sce['id'])">Delete</button>
+            </span>
+        </td>
+    </tr>
+</table>
+
+<ul class="pagination">
+    <li
+        *ngFor="let pageNo of pagesNo"
+        [class.active]="pageNo == currentPage"
+        (click)="showPage(pageNo)"
+    >
+        <a>{{ pageNo }}</a>
+    </li>
+</ul>

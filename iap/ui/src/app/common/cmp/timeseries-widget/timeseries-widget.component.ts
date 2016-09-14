@@ -119,30 +119,12 @@ export class TimeseriesWidgetComponent {
     }
 
     public _onInputKeyup(cell_id: number, e: Event) {
-        console.log(e);
         let keyCode = e['keyCode'];
         let id = cell_id;
         if (keyCode && keyCode == 13 && id && this.storage[id]) {
             this.storage[id]['status']['mode'] = 'view';
         }
     }
-
-    // public _onDblClick(cell_id: number, e: Event) {
-    //     e.preventDefault();
-    //     let id: number = cell_id;
-    //     if (id && this.storage[id]) {
-    //         let tmpInx: number = null;
-    //         for (let i=0; i<this._nowInEditMode.length; i++) {
-    //             tmpInx = this._nowInEditMode[i];
-    //             if (tmpInx && this.storage[tmpInx] && tmpInx != id) {
-    //                 this.storage[tmpInx]['status']['mode'] = 'view';
-    //             }
-    //         }
-    //         this._nowInEditMode = [];
-    //         this.storage[id]['status']['mode'] = 'edit';
-    //         this._nowInEditMode.push(id);
-    //     }
-    // }
 
     @Input() set timeseries(timeseries: Array<IRow>) {
         console.info('TimeseriesWidgetComponent: set timeseries');
