@@ -296,6 +296,43 @@ def date_jj_1week(date_string, num_of_dates):
         return 0
 
 
+# time line converter
+def tl_weekly_to_month_445_str(date_string, num_of_dates, first_week_num=0):
+    first_label = ''
+    output = collections.OrderedDict({})
+    divider = 4.34
+
+    tmp_split = date_string.split(' ')
+    date_split = tmp_split[2].split('/')
+    month = int(date_split[0])
+    day = int(date_split[1])
+    year = int('20' + str(date_split[2]))
+    time_stamp = datetime.datetime(year=year, month=month, day=day)
+
+    year = time_stamp.year
+    if first_week_num == 0:
+        week_num = time_stamp.isocalendar()[1]
+    else:
+        week_num = first_week_num
+    output_months = __get_short_months_with_num_keys()
+    for i in range(num_of_dates):
+        this_month = week_num/divider
+        this_month = math.ceil(this_month)
+        # Init vars for month loop
+        if this_month > 12:
+            year += 1
+            this_month -= 12
+            week_num = 1
+        month_string = output_months[this_month]
+        new_key = month_label(month_string, year)
+        if new_key not in output:
+            output[new_key] = datetime.datetime(year, this_month, 1)
+        if i == 0:
+            first_label = new_key
+        week_num += 1
+    return first_label, output
+
+
 def get_cell_range(start_col, start_row, end_col, end_row, ws):
     return [ws.row_slice(row, start_colx=start_col, end_colx=end_col)
             for row in range(start_row, end_row)]
