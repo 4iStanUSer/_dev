@@ -7,7 +7,7 @@ from iap.data_processing.data_loading import jj_brand, jj_brand_extract, \
     jj_oc_data_proc, jj_oral_care_sku, jj_oral_care_media_spend, \
     jj_oral_care_rgm_sales, jj_brand_media_spend
 from iap.data_processing.data_loading.common import date_year_month, date_year,\
-    date_jj_1week, date_yyyyww, date_monthly_excel_number, date_mmddyyyy
+    date_jj_1week, date_yyyyww, date_monthly_excel_number, date_mmddyyyy, tl_weekly_to_month_445_str
 import datetime
 
 
@@ -45,16 +45,16 @@ class Loader:
                  'date_func': date_jj_1week,
                  'info': 'N/A',
                  'meta_cols': [
-                     {'Layer': 'Geography', 'Dimension_name': 'Total_market',
-                      'Name': ''},
-                     {'Layer': 'Time', 'Dimension_name': 'Total_category',
-                      'Name': ''},
-                     {'Layer': 'Geography', 'Dimension_name': 'Category',
-                      'Name': ''},
-                     {'Layer': 'Products', 'Dimension_name': 'Brand',
-                      'Name': ''},
-                     {'Layer': 'Products', 'Dimension_name': 'SubBrand',
-                      'Name': ''}
+                     {'Layer': 'Chanel', 'Dimension_name': 'Chanel Distribution',
+                      'Name': '', 'Order': 3},
+                     {'Layer': 'None', 'Dimension_name': 'None',
+                      'Name': '', 'Order': 0},
+                     {'Layer': 'Nope', 'Dimension_name': 'None2',
+                      'Name': '', 'Order': 0},
+                     {'Layer': 'Brand', 'Dimension_name': 'Products',
+                      'Name': '', 'Order': 1},
+                     {'Layer': 'Segment', 'Dimension_name': 'Products',
+                      'Name': '', 'Order': 2}
                  ],
                  'name_col': 0,
                  'properties': 'N/A',
@@ -65,16 +65,38 @@ class Loader:
             'MyReport (Band-aid Other Accaunts)':
                 {'func': jj_brand,
                  'date_func': date_jj_1week,
+                 # 'date_func': tl_weekly_to_month_445_str,
                  'info': 'N/A',
                  'meta_cols': [
-                     {'Layer': 'Products', 'Dimension_name': 'Total_market',
-                      'Name': ''},
-                     {'Layer': 'Products', 'Dimension_name': 'Total_brand',
-                      'Name': ''},
-                     {'Layer': 'Products', 'Dimension_name': 'Brand',
-                      'Name': ''},
-                     {'Layer': 'Products', 'Dimension_name': 'SubBrand',
-                      'Name': ''}
+                     {'Layer': 'Chanel', 'Dimension_name': 'Chanel Distribution',
+                      'Name': '', 'Order': 3},
+                     {'Layer': 'None', 'Dimension_name': 'None',
+                      'Name': '', 'Order': 0},
+                     {'Layer': 'Brand', 'Dimension_name': 'Products',
+                      'Name': '', 'Order': 1},
+                     {'Layer': 'Segment', 'Dimension_name': 'Products',
+                      'Name': '', 'Order': 2}
+                 ],
+                 'name_col': 0,
+                 'properties': 'N/A',
+                 'dates_cols': {'scale': 'weekly',
+                 # 'dates_cols': {'scale': 'monthly',
+                                'date_name_rows': 'N/A',
+                                'start_column': 1,
+                                'end_column': ''}},
+            'MyReport (Wallmart)':
+                {'func': jj_brand,
+                 'date_func': date_jj_1week,
+                 'info': 'N/A',
+                 'meta_cols': [
+                     {'Layer': 'Chanel', 'Dimension_name': 'Chanel Distribution',
+                      'Name': '', 'Order': 3},
+                     {'Layer': 'Nope', 'Dimension_name': 'NopeNope',
+                      'Name': '', 'Order': 0},
+                     {'Layer': 'Brand', 'Dimension_name': 'Products',
+                      'Name': '', 'Order': 1},
+                     {'Layer': 'Segment', 'Dimension_name': 'Products',
+                      'Name': '', 'Order': 2}
                  ],
                  'name_col': 0,
                  'properties': 'N/A',
@@ -82,19 +104,13 @@ class Loader:
                                 'date_name_rows': 'N/A',
                                 'start_column': 1,
                                 'end_column': ''}},
-            'JNJ_lean_media_spend':
+            'JNJ_lean_media_Band-aid':
                 {'func': jj_brand_media_spend,
                  'date_func': date_monthly_excel_number,
                  'info': 'N/A',
                  'meta_cols': [
-                     {'Layer': 'Products', 'Dimension_name': '',
-                      'Name': '', 'Col_number': 0},
-                     {'Layer': 'Products', 'Dimension_name': 'Type',
-                      'Name': '', 'Col_number': 1},
-                     {'Layer': 'Products', 'Dimension_name': '',
-                      'Name': '', 'Col_number': 2},
-                     {'Layer': 'Products', 'Dimension_name': 'Segment',
-                      'Name': '', 'Col_number': 3},
+                     {'Layer': 'Country', 'Dimension_name': 'Geography', 'Name': 'US'},
+                     {'Layer': 'Brand', 'Dimension_name': 'Products', 'Name': 'BAND-AID'}
                  ],
                  'name_col': 4,
                  'properties': 'N/A',
@@ -102,6 +118,26 @@ class Loader:
                                 'date_name_rows': 'N/A',
                                 'start_column': 5,
                                 'end_column': ''}},
+            # 'JNJ_lean_media_spend':
+            #     {'func': jj_brand_media_spend,
+            #      'date_func': date_monthly_excel_number,
+            #      'info': 'N/A',
+            #      'meta_cols': [
+            #          {'Layer': 'Products', 'Dimension_name': '',
+            #           'Name': '', 'Col_number': 0},
+            #          {'Layer': 'Products', 'Dimension_name': 'Type',
+            #           'Name': '', 'Col_number': 1},
+            #          {'Layer': 'Products', 'Dimension_name': '',
+            #           'Name': '', 'Col_number': 2},
+            #          {'Layer': 'Products', 'Dimension_name': 'Segment',
+            #           'Name': '', 'Col_number': 3},
+            #      ],
+            #      'name_col': 4,
+            #      'properties': 'N/A',
+            #      'dates_cols': {'scale': 'monthly',
+            #                     'date_name_rows': 'N/A',
+            #                     'start_column': 5,
+            #                     'end_column': ''}},
             'JNJ_SALES_EXTRACT_FOR_4I_201603':
                 {'func': jj_brand_extract,
                  'date_func': date_yyyyww,

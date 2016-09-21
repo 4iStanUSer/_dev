@@ -24,19 +24,19 @@ def jj_brand_media_spend(warehouse, wb, options_list):
     if start_dates_col > end_dates_col:
         raise ex.WrongValueError(start_dates_col, 'value <= ' + end_dates_col,
                                  '', 'jj_brand_media_spend')
-    # Init headers cols: names
-    for item in meta_cols:
-        column_number = item['Col_number']
-        if column_number >= end_dates_col:
-            raise ex.WrongValueError(column_number, 'value <= ' +
-                                     end_dates_col, '', 'jj_brand_media_spend')
-        if item['Dimension_name'] == '':
-            item['Dimension_name'] = data[0][column_number].value
+    # # Init headers cols: names
+    # for item in meta_cols:
+    #     column_number = item['Col_number']
+    #     if column_number >= end_dates_col:
+    #         raise ex.WrongValueError(column_number, 'value <= ' +
+    #                                  end_dates_col, '', 'jj_brand_media_spend')
+    #     if item['Dimension_name'] == '':
+    #         item['Dimension_name'] = data[0][column_number].value
     # Create output: Append data
-    if 'mapping_rule' in options_list:
-        mapping_rule = options_list['mapping_rule']
-    else:
-        mapping_rule = None
+    # if 'mapping_rule' in options_list:
+    #     mapping_rule = options_list['mapping_rule']
+    # else:
+    #     mapping_rule = None
     # Initialize data: meta table and data table
     num_of_dates = end_dates_col - start_dates_col
     first_label, time_line = date_func(
@@ -44,20 +44,30 @@ def jj_brand_media_spend(warehouse, wb, options_list):
         num_of_dates)
     # start_date_point = date_func(header_row[start_dates_col].value)
     times_series = warehouse.add_time_scale(series_name, time_line)
+    # meta2 = [
+    #     {'Layer': 'Country', 'Dimension_name': 'Geography', 'Name': 'US'},
+    #     {'Layer': 'Brand', 'Dimension_name': 'Products', 'Name': 'BENADRYL'}
+    # ]
+    entity = warehouse.add_entity(meta_cols)
     for row_index in range(header_row_index + 1, len(data)):
         # print(row_index)
-        meta = []
-        for item in meta_cols:
-            copy_item = item.copy()
-            column_index = copy_item['Col_number']
-            copy_item['Name'] = data[row_index][column_index].value
-            meta.append(copy_item)
-        if mapping_rule is not None:
-            new_meta, is_mapped = mapping(meta, mapping_rule)
-            if is_mapped:
-                meta = new_meta
+        # meta = []
+        # for item in meta_cols:
+        #     copy_item = item.copy()
+        #     column_index = copy_item['Col_number']
+        #     copy_item['Name'] = data[row_index][column_index].value
+        #     meta.append(copy_item)
+        # if mapping_rule is not None:
+        #     new_meta, is_mapped = mapping(meta, mapping_rule)
+        #     if is_mapped:
+        #         meta = new_meta
         # working with WH interface
-        entity = warehouse.add_entity(meta)
+        # entity = warehouse.add_entity(meta)
+        # meta2 = [
+        #     {'Layer': 'Country', 'Dimension_name': 'Geography', 'Name': 'US'},
+        #     {'Layer': 'Brand', 'Dimension_name': 'Products', 'Name': 'BENADRYL'}
+        # ]
+        # entity = warehouse.add_entity(meta2)
         fact_name = data[row_index][name_col_num].value
         variable = entity.force_variable(fact_name, 'float')
         values = []
@@ -240,8 +250,10 @@ def jj_brand(warehouse, wb, options_list):
                 for i in range(len_meta):
                     full_meta[-len_meta+i] = meta[i].copy()
                 meta = full_meta
+            # TODO check __reorder_meta function
+            meta2 = __reorder_meta(meta)
             # working with WH interface
-            entity = warehouse.add_entity(meta)
+            entity = warehouse.add_entity(meta2)
             for row_index in range(row_index+1, last_facts_row + 1):
                 fact_name = data[row_index][name_col_num].value
                 variable = entity.force_variable(fact_name, 'float')
@@ -265,6 +277,19 @@ def jj_brand(warehouse, wb, options_list):
             row_index = last_facts_row
             start_meta_row = last_facts_row + 1
         row_index += 1
+
+
+def __reorder_meta(meta):
+    reordered_meta = []
+    # reorder by "Order"-key
+    reordered_meta = sorted(meta, key=lambda k: k['Order'])
+    # remove items with "Order"-key value 0
+    reordered_meta = [element for element in reordered_meta if element.get('Order', '') != 0]
+    # TODO add US as country in loader(data_proc_manager.py)
+    # add US as country
+    reordered_meta[:0] = [{'Layer': 'Country', 'Dimension_name': 'Geography', 'Name': 'US'}]
+
+    return reordered_meta
 
 
 def __get_meta(data, meta_column, meta_cols, start_meta_row,
