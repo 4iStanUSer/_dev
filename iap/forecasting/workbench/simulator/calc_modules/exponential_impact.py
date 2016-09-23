@@ -1,2 +1,0 @@
-class CMExponentialImpact:
-    pass

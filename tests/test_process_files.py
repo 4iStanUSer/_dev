@@ -52,6 +52,7 @@ class TestProcessFiles:
         # self.db_session.add(root)
         # transaction.manager.commit()
 
+    @pytest.mark.skip
     def test_loader(self):
         loader = Loader(self.wh, data_load_command='jj')
         loader.load()

@@ -1,2 +1,0 @@
-class CMLinearImpact:
-    pass
