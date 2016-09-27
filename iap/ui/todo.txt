@@ -1,8 +1,17 @@
-=====================
-src/tsconfig.json
-changed:
-"module": "es6" -> "module": "commonjs"
-=====================
-src/typings.d.ts
-added:
-declare var lodash: any;
+1. add into package.json to dev section - "@types/selenium-webdriver": "2.44.26"
+2. in the node_modules\@types\jquery\index.d.ts
+replace
+---------------------------------
+declare module "jquery" {
+    export = $;
+}
+declare var jQuery: JQueryStatic;
+declare var $: JQueryStatic;
+---------------------------------
+with
+---------------------------------
+declare module "jquery" {
+    export = jQuery;
+}
+declare var jQuery: JQueryStatic;
+---------------------------------

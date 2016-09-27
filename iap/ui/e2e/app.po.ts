@@ -1,6 +1,6 @@
 import { browser, element, by } from 'protractor/globals';
 
-export class AngularCliWebpack8Page {
+export class IapPage {
   navigateTo() {
     return browser.get('/');
   }
