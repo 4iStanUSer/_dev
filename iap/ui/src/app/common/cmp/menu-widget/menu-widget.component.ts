@@ -8,7 +8,6 @@ interface IMenuItem {
 }
 
 @Component({
-  // moduleId: module.id,
   selector: 'menu-widget',
   templateUrl: 'menu-widget.component.html',
   styleUrls: ['menu-widget.component.css']

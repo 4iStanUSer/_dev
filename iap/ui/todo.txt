@@ -15,3 +15,4 @@ declare module "jquery" {
 }
 declare var jQuery: JQueryStatic;
 ---------------------------------
+3. npm install -g npm@latest

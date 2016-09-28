@@ -1,6 +1,10 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
-import {LocationStrategy, HashLocationStrategy} from '@angular/common';
+import {
+    CommonModule,
+    LocationStrategy,
+    HashLocationStrategy
+} from '@angular/common';
 import {RouterModule} from '@angular/router';
 import {FormsModule} from '@angular/forms';
 import {HttpModule, JsonpModule} from '@angular/http';
@@ -11,8 +15,8 @@ import {MenuWidgetComponent} from './common/cmp/menu-widget/';
 import {AjaxService} from './common/service/ajax.service';
 import {LoadingService} from './common/service/loading.service';
 
-import {EditPageComponent as ForecastEditPageCmp} from "./forecast/edit-page/";
-import {IndexPageModule as ForecastIndexPageModule} from "./forecast/index-page/";
+import {EditPageComponent as ForecastEditPageCmp} from './forecast/edit-page/';
+import {IndexPageModule as ForecastIndexPageModule} from './forecast/index-page/';
 
 import {ComponentFactoryService} from './common/service/component-factory.service';
 import {
@@ -27,14 +31,10 @@ import {
 import {ScenariosListComponent} from './forecast/scenarios-list/';
 
 
-import {CommonModule} from '@angular/common';
-
 @NgModule({
     imports: [
         BrowserModule,
-
         CommonModule,
-
         RouterModule,
         FormsModule,
         HttpModule,
@@ -52,7 +52,6 @@ import {CommonModule} from '@angular/common';
         AppComponent,
         MenuWidgetComponent,
         ForecastEditPageCmp,
-
         ScenariosListComponent
     ],
     providers: [
