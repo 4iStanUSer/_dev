@@ -16,7 +16,7 @@ import {
 import {IndexPageService} from './../service/index-page.service';
 
 
-import { ChartModule } from './../../common/module/chart/';
+// import { ChartModule } from './../../common/module/chart/';
 
 
 @NgModule({
@@ -25,7 +25,7 @@ import { ChartModule } from './../../common/module/chart/';
         // ComponentFactoryModule
         // TimeseriesWidgetModule
 
-        ChartModule
+        // ChartModule
     ],
     declarations: [
         // TimeseriesWidgetComponent,
@@ -34,7 +34,7 @@ import { ChartModule } from './../../common/module/chart/';
         // DatepickerComponent,
         NavagationPanelComponent,
         IndexPageComponent,
-        DonutChartComponent
+        // DonutChartComponent
     ],
     exports: [
         IndexPageComponent

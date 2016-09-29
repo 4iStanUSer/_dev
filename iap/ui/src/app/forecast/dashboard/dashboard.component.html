@@ -1,0 +1,17 @@
+<div class="row">
+    <donut-chart [data]="donuts"></donut-chart>
+
+    <div class="container-fluid">
+        <div class="col-md-4" *ngFor="let bar of bars">
+
+            <bar-chart [data]="bar"></bar-chart>
+
+        </div>
+    </div>
+
+    <div class="container-fluid">
+
+        <waterfall-chart [data]="waterfall"></waterfall-chart>
+
+    </div>
+</div>

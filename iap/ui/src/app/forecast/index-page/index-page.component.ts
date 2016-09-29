@@ -419,19 +419,4 @@ export class IndexPageComponent {
     //     }
     // ];
     /***********.HIERARCHY_WIDGET*************/
-
-    private donuts:Array<Object> = [
-        {
-            name: 'One',
-            value: 86
-        },
-        {
-            name: 'Two',
-            value: 35
-        },
-        {
-            name: 'Three',
-            value: 49
-        }
-    ];
 }

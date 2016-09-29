@@ -25,7 +25,7 @@ export class DonutChartComponent implements OnInit {
                 dataLabels: {
                     distance: -150,
                     enabled: true,
-                    format: '{point.percentage:.1f} %',
+                    format: '{point.percentage} %',
                 }
             }
         },
@@ -37,10 +37,11 @@ export class DonutChartComponent implements OnInit {
 
     @Input() set data(series: Array<any>) {
         console.info('DonutChartComponent: set data');
+
         this.donuts = []; // TODO REMAKE - without recreating
         let config: Object = {};
         for (let i = 0; i<series.length; i++) {
-            config = _.extend({}, this.baseConfig);
+            config = _.extend({}, this.baseConfig); //
             // s = series[i];
             config['title']['text'] = series[i]['name'];
             config['series'] = [
