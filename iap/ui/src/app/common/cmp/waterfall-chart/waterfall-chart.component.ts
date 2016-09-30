@@ -13,70 +13,33 @@ export class WaterfallChartComponent implements OnInit {
 
     private waterfall: Chart;
 
+    pipsName: string = null;
+
     private baseConfig: Object = {
         chart: {
             type: 'waterfall'
         },
-
         title: {
-            text: 'Highcharts Waterfall'
+            text: ''
         },
-
         xAxis: {
             type: 'category'
         },
-
         yAxis: {
-            title: {
-                text: 'USD'
-            }
+            visible: false
         },
-
         legend: {
             enabled: false
         },
-
         tooltip: {
-            pointFormat: '<b>${point.y:,.2f}</b> USD'
+            enabled: false
         },
-
         series: [{
             upColor: Highcharts.getOptions().colors[2],
             color: Highcharts.getOptions().colors[3],
-            data: [{
-                name: 'Start',
-                y: 120000
-            }, {
-                name: 'Product Revenue',
-                y: 569000
-            }, {
-                name: 'Service Revenue',
-                y: 231000
-            }, {
-                name: 'Positive Balance',
-                y: 231000
-                // isIntermediateSum: true,
-                // color: Highcharts.getOptions().colors[1]
-            }, {
-                name: 'Fixed Costs',
-                y: -342000
-            }, {
-                name: 'Variable Costs',
-                y: -233000
-            }, {
-                name: 'Balance',
-                isSum: true,
-                color: '#0066FF'
-                // isSum: true,
-                // color: Highcharts.getOptions().colors[2]
-                // y: -233000,
-                // isIntermediateSum: true
-            }],
+            data: [],
             dataLabels: {
                 enabled: true,
-                formatter: function () {
-                    return Highcharts.numberFormat(this.y / 1000, 0, ',') + 'k';
-                },
                 style: {
                     fontWeight: 'bold'
                 }
@@ -89,18 +52,35 @@ export class WaterfallChartComponent implements OnInit {
         console.info('WaterfallChartComponent: set data');
 
         let config: Object = _.extend({}, this.baseConfig);
-        // config['title']['text'] = data['name'];
-        // config['series'][0]['name'] = data['name'];
-        // if (data['data'] && _.isArray(data['data'])) {
-        //     for (let i=0; i<data['data'].length; i++) {
-        //         config['series'][0]['data'].push([
-        //             data['data'][i]['name'],
-        //             data['data'][i]['value']
-        //         ]);
-        //     }
-        // }
+        config['title']['text'] = data['name'];
+
+        this.pipsName = data['pipsName'];
+
+        config['series'][0]['dataLabels']['formatter'] = this._formatter(this.pipsName);
+
+        if (data['data'] && _.isArray(data['data'])) {
+            for (let i=0; i<data['data'].length; i++) {
+                if (i == data['data'].length - 1) {
+                    config['series'][0]['data'].push({
+                        name: data['data'][i]['name'],
+                        isSum: true
+                    });
+                } else {
+                    config['series'][0]['data'].push({
+                        name: data['data'][i]['name'],
+                        y: data['data'][i]['value']
+                    });
+                }
+            }
+        }
         this.waterfall = new Chart(_.cloneDeep(config));
     };
+
+    private _formatter(pips) {
+        return function(){
+            return this.y + pips;
+        };
+    }
 
     constructor() { }
 

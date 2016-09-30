@@ -1,7 +1,8 @@
 import {
     CommonModule,
     LocationStrategy,
-    HashLocationStrategy
+    HashLocationStrategy,
+    Location
 } from '@angular/common';
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
@@ -73,6 +74,7 @@ import {WaterfallChartComponent} from "./common/cmp/waterfall-chart/waterfall-ch
     providers: [
         {provide: LocationStrategy, useClass: HashLocationStrategy},
         appRoutingProviders,
+        Location,
         /*Decide about bottom*/
         AjaxService,
         LoadingService,

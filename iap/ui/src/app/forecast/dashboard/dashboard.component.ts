@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import {Location} from '@angular/common';
 
 @Component({
     selector: 'dashboard',
@@ -6,8 +7,12 @@ import {Component, OnInit} from '@angular/core';
     styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
+    private blockView: Array<boolean> = [
+        false,
+        false
+    ];
 
-    private donuts:Array<Object> = [
+    private donuts: Array<Object> = [
         {
             name: 'One',
             value: 86
@@ -22,7 +27,7 @@ export class DashboardComponent implements OnInit {
         }
     ];
 
-    private bars:Array<Object> = [
+    private bars: Array<Object> = [
         {
             name: 'Sales, $ MM',
             data: [
@@ -76,12 +81,50 @@ export class DashboardComponent implements OnInit {
         },
     ];
 
-    private waterfall = [];
+    private waterfall: Object = {
+        name: 'Decomposition 2015-2020',
+        pipsName: '%',
+        data: [
+            {
+                name: '2015',
+                value: 100
+            }, {
+                name: 'Economy',
+                value: 10
+            }, {
+                name: 'Demographic',
+                value: 12
+            }, {
+                name: 'Inflation',
+                value: 15
+            }, {
+                name: 'Distribution',
+                value: 4
+            }, {
+                name: 'Pricing',
+                value: -5
+            }, {
+                name: '2020'
+            }
+        ]
+    };
 
-    constructor() {
+    constructor(private _location: Location) {
     }
 
     ngOnInit() {
+    }
+
+    private changedBlockView(index, value) {
+        this.blockView[index] = value;
+        let path = this._location.path();
+        console.log(path);
+        // this._location.go(path, 'a=1');
+
+        // let params = new URLSearchParams();
+        // params.set('first_block', (this.blockView[index])?'1':'0');
+        // console.log();
+        // console.log(event);
     }
 
 }
