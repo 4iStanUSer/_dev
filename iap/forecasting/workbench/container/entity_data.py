@@ -4,6 +4,7 @@ from .. import exceptions as ex
 class EntityData:
     def __init__(self, time_manager):
         self._variables = {}
+        self.coefficients = {}
         self.time_manager = time_manager
 
     def _get_var(self, var_name):
@@ -12,6 +13,13 @@ class EntityData:
         except KeyError:
             # raise Exception
             raise ex.EdNonExistentVarName(var_name)
+
+    def _get_coeff(self, name):
+        try:
+            return self._coefficients[name]
+        except KeyError:
+            # raise Exception
+            raise ex.EdNonExistentVarName(name)
 
     def _get_ts(self, var_name, ts_name):
         try:
@@ -94,7 +102,25 @@ class EntityData:
     def load(self):
         pass
 
+    def add_coeff(self, coeff_name, ts_name):
+        if coeff_name in self._coefficients:
+            self._coefficients[coeff_name][ts_name] = 0
+        else:
+            self._coefficients[coeff_name] = {ts_name: 0}
 
+    def get_coeff_value(self, coeff_name, ts_name):
+        coeff = self._get_coeff(coeff_name)
+        try:
+            return coeff[ts_name]
+        except KeyError:
+            raise Exception
+
+    def set_coeff_value(self, coeff_name, ts_name, value):
+        coeff = self._get_coeff(coeff_name)
+        try:
+            coeff[ts_name] = value
+        except KeyError:
+            raise Exception
 
 
 

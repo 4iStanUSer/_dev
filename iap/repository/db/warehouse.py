@@ -53,8 +53,11 @@ class Warehouse:
     def get_root(self):
         return self._root
 
-    def add_entity(self, path):
-        return self._root._add_node_by_path(path, 0)
+    def add_entity(self, path, meta):
+        return self._root._add_node_by_path(path, meta, 0)
+
+    def get_entity(self, path):
+        return self._root._find_node_by_path(path, 0)
 
     def get_entity_by_id(self, entity_id):
         return self._ssn.query(Entity).get(entity_id)  # .one_or_none()
@@ -203,67 +206,94 @@ class Entity(Base):
                 raise ex.AlreadyExistsError('Entity', 'name', name, 'name')
         self._name = name
 
-    @hybrid_property
-    def dimension(self):
-        return self._dimension_name
+    @property
+    def path(self):
+        p = []
+        self._get_path(p)
+        return p
 
-    @dimension.setter
-    def dimension(self, dimension_name):
-        for parent in self.parents:
-            if dimension_name in [x.dimension for x in parent.children if x.id
-                    != self.id]:
-                raise ex.AlreadyExistsError(
-                    'Entity', 'dimension_name', dimension_name, 'dimension')
-        self._dimension_name = dimension_name
+    @property
+    def path_meta(self):
+        p = []
+        self._get_path_meta(p)
+        return p
 
-    @hybrid_property
-    def layer(self):
-        return self._layer
+    @property
+    def meta(self):
+        return (self._dimension_name, self._layer)
 
-    @layer.setter
-    def layer(self, layer):
-        for parent in self.parents:
-            if layer in [x.layer for x in parent.children if x.id
-                    != self.id]:
-                raise ex.AlreadyExistsError('Entity', 'layer', layer, 'layer')
-        self._layer = layer
+    @property
+    def parent(self):
+        if len(self.parents) != 1:
+            return None
+        return self.parents[0]
 
-    def add_parent(self, path):
-        root = self._get_root()
-        new_parent = root._add_node_by_path(path, 0)
-        if new_parent not in self.parents:
-            if self.name in [x.name for x in new_parent.children]:
-                raise ex.AlreadyExistsError('Entity', 'name', self.name,
-                                            'add_parent')
-            self.parents.append(new_parent)
-        return new_parent
+    #@hybrid_property
+    #def dimension(self):
+    #    return self._dimension_name
 
-    def add_child(self, item):
-        name = 'Name'
-        layer = 'Layer'
-        dimension = 'Dimension_name'
+    #@dimension.setter
+    #def dimension(self, dimension_name):
+    #    for parent in self.parents:
+    #        if dimension_name in [x.dimension for x in parent.children if x.id
+    #                != self.id]:
+    #            raise ex.AlreadyExistsError(
+    #                'Entity', 'dimension_name', dimension_name, 'dimension')
+    #    self._dimension_name = dimension_name
+
+    #@hybrid_property
+    #def layer(self):
+    #    return self._layer
+
+    #@layer.setter
+    #def layer(self, layer):
+    #    for parent in self.parents:
+    #        if layer in [x.layer for x in parent.children if x.id
+    #                != self.id]:
+    #            raise ex.AlreadyExistsError('Entity', 'layer', layer, 'layer')
+    #    self._layer = layer
+
+    #def add_parent(self, path):
+    #    root = self._get_root()
+    #    new_parent = root._add_node_by_path(path, 0)
+    #    if new_parent not in self.parents:
+    #        if self.name in [x.name for x in new_parent.children]:
+    #            raise ex.AlreadyExistsError('Entity', 'name', self.name,
+    #                                        'add_parent')
+    #        self.parents.append(new_parent)
+    #    return new_parent
+
+    def add_child(self, name, meta):
         for child in self.children:
-            if child.name == item[name] \
-                    and child.dimension == item[dimension]\
-                    and child.layer == item[layer]:
+            if child.name == name:
                 return child
-        new_child = Entity(_name=item[name], _dimension_name=item[dimension],
-                           _layer=item[layer])
+        new_child = Entity(_name=name, _dimension_name=meta[0], _layer=meta[1])
         self.children.append(new_child)
         return new_child
 
-    def _add_node_by_path(self, path, depth):
+    def _add_node_by_path(self, path, meta, depth):
         node = None
         for child in self.children:
-            if child.dimension == path[depth]['Dimension_name']\
-                    and child.name == path[depth]['Name']\
-                    and child.layer == path[depth]['Layer']:
+            if child.name == path[depth]:
                 node = child
                 break
         if node is None:
-            node = self.add_child(path[depth])
+            node = self.add_child(path[depth], meta[depth])
         if depth != len(path) - 1:
-            return node._add_node_by_path(path, depth + 1)
+            return node._add_node_by_path(path, meta, depth + 1)
+        else:
+            return node
+
+    def _find_node_by_path(self, path, depth):
+        node = None
+        for child in self.children:
+            if child.name == path[depth]:
+                node = child
+                break
+        if node is None:
+            return None
+        if depth != len(path) - 1:
+            return node._find_node_by_path(path, depth + 1)
         else:
             return node
 
@@ -273,6 +303,20 @@ class Entity(Base):
         for parent in self.parents:
             return parent._get_root()
         raise ex.NotFoundError('Entity', 'root', 'root', '', '_get_root')
+
+    def _get_path(self, path):
+        if self.name == 'root':
+            return
+        path.insert(0, self.name)
+        if self.parent is not None:
+            self.parent._get_path(path)
+
+    def _get_path_meta(self, path_meta):
+        if self.name == 'root':
+            return
+        path_meta.insert(0, self.meta)
+        if self.parent is not None:
+            self.parent._get_path_meta(path_meta)
 
     def get_variables_names(self):
         return [x.name for x in self._variables]

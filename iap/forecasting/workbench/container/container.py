@@ -7,10 +7,12 @@ class Container:
 
     def __init__(self):
         self.timeline = TimeLineManager()
-        self._root = CEntity('root', self.timeline)
+        self._root = CEntity('root', None, self.timeline)
+        self._nodes = {}
 
-    def add_entity(self, path):
-        return self._root.add_node_by_path(path, 0)
+
+    def add_entity(self, path, meta):
+        return self._root.add_node_by_path(path, meta, 0)
 
     def get_entity_by_id(self, entity_id):
         try:
@@ -60,8 +62,9 @@ class Container:
 
 class CEntity:
 
-    def __init__(self, name, time_line_manager):
+    def __init__(self, name, meta, time_line_manager):
         self._name = name
+        self._meta = meta
         self._parents = []
         self._children = []
         self._data = EntityData(time_line_manager)
@@ -87,6 +90,22 @@ class CEntity:
     def children(self):
         return list(self._children)
 
+    @property
+    def path(self):
+        p = []
+        self._get_path(p)
+        return p
+
+    @property
+    def meta(self):
+        return self._meta
+
+    @property
+    def parent(self):
+        if len(self.parents) != 1:
+            return None
+        return self.parents[0]
+
     def _get_root(self):
         if self.name == 'root':
             return self
@@ -105,28 +124,35 @@ class CEntity:
             self._parents.append(new_parent)
         return new_parent
 
-    def add_node_by_path(self, path, depth):
+    def add_node_by_path(self, path, meta, depth):
         node = None
         for child in self._children:
             if child.name == path[depth]:
                 node = child
                 break
         if node is None:
-            node = self.add_child(path[depth])
+            node = self.add_child(path[depth], meta[depth])
         if depth != len(path) - 1:
-            return node.add_node_by_path(path, depth + 1)
+            return node.add_node_by_path(path, meta, depth + 1)
         else:
             return node
 
-    def add_child(self, name):
+    def add_child(self, name, meta):
         for child in self._children:
             if child.name == name:
                 return child
-        new_child = CEntity(name, self._data.time_manager)
+        new_child = CEntity(name, meta, self._data.time_manager)
         self._children.append(new_child)
         # TODO add parenting somewhere else, following allows adding only one parent
         new_child._parents.append(self)
         return new_child
+
+    def _get_path(self, path):
+        if self.name == 'root':
+            return
+        path.insert(0, self.name)
+        if self.parent is not None:
+            self.parent._get_path(path)
 
     def get_variables_names(self):
         return self._data.get_var_names()
@@ -141,6 +167,13 @@ class CEntity:
         if not self._data.does_contain_var(name):
             self._data.add_var(name, default_value)
         return CVariable(self._data, name)
+
+    def force_coefficient(self, coeff_name, ts_name):
+        self._data.add_coeff(coeff_name, ts_name)
+
+    def set_coeff_value(self, coeff_name, ts_name, value):
+        self._data.set_coeff_value(coeff_name, ts_name, value)
+
 
     def load(self, entity_dict):  #, path=[]
         name = entity_dict.get('name')
