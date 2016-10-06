@@ -4,7 +4,7 @@ from .. import exceptions as ex
 class EntityData:
     def __init__(self, time_manager):
         self._variables = {}
-        self.coefficients = {}
+        self._coefficients = {}
         self.time_manager = time_manager
 
     def _get_var(self, var_name):

@@ -25,8 +25,8 @@ dev_template = {
     'structure': [
         {
             'meta': ('Geography', 'Country'),
-            'variables': [],
-            'coefficients': []
+            'variables': {},
+            'coefficients': {}
         },
         {
             'meta': ('Products', 'Brand'),
@@ -119,33 +119,33 @@ dev_template = {
     ],
     'exchange_rules': [
         {
-            'meta': ('Products', 'Segment'),
+            'meta': ('Products', 'Brand'),
             'input_variables': [
                 {
                     'cont_var': 'Media Spend - TV',
                     'cont_ts': '4-4-5',
-                    'wh_var': 'Media Spend - TV',
+                    'wh_var': 'TV',
                     'wh_ts': '4-4-5',
                     'time_period': 'history'
                 },
                 {
                     'cont_var': 'Media Spend - Digital',
                     'cont_ts': '4-4-5',
-                    'wh_var': 'Media Spend - Digital',
+                    'wh_var': 'Digital',
                     'wh_ts': '4-4-5',
                     'time_period': 'history'
                 },
                 {
                     'cont_var': 'Media Spend - Partnership',
                     'cont_ts': '4-4-5',
-                    'wh_var': 'Media Spend - Partnership',
+                    'wh_var': 'Partnership',
                     'wh_ts': '4-4-5',
                     'time_period': 'history'
                 },
                 {
                     'cont_var': 'Media Spend - Print',
                     'cont_ts': '4-4-5',
-                    'wh_var': 'Media Spend - Print',
+                    'wh_var': 'Print',
                     'wh_ts': '4-4-5',
                     'time_period': 'history'
                 },
@@ -170,11 +170,12 @@ dev_template = {
                     'wh_ts': '4-4-5',
                     'time_period': 'history'
                 }
-            ]
+            ],
+            'output_variables': []
         },
         {
             'meta': ('Products', 'Segment'),
-            'variables': [
+            'input_variables': [
                 {
                     'cont_var': 'Value',
                     'cont_ts': '4-4-5',
@@ -266,11 +267,12 @@ dev_template = {
                     'wh_ts': '4-4-5',
                     'time_period': 'history'
                 }
-            ]
+            ],
+            'output_variables': []
         },
         {
             'meta': ('Chanel Distribution', 'Chanel'),
-            'variables': [
+            'input_variables': [
                 {
                     'cont_var': 'Value',
                     'cont_ts': '4-4-5',
@@ -390,12 +392,13 @@ dev_template = {
                     'wh_ts': '4-4-5',
                     'time_period': 'history'
                 }
-            ]
+            ],
+            'output_variables': []
         }
     ],
     'dev_storage': [
         {
-            'path': ['US', 'Band-Aid', 'Decorated'],
+            'path': ['US', 'BAND-AID', 'DECORATED BNDG'],
             'coefficients': {
                 'TDP Incrementality':  0.40 ,
                 'Everyday Price Elasticity':  -0.45,
@@ -414,7 +417,7 @@ dev_template = {
             }
         },
         {
-            'path': ['US', 'Band-Aid', 'Premium'],
+            'path': ['US', 'BAND-AID', 'PREMIUM BNDG'],
             'coefficients':{
                 'TDP Incrementality': 0.4,
                 'Everyday Price Elasticity': -0.25,
@@ -433,7 +436,7 @@ dev_template = {
             }
         },
         {
-            'path': ['US', 'Band-Aid', 'Value'],
+            'path': ['US', 'BAND-AID', 'VALUE BNDG'],
             'coefficients': {
                 'TDP Incrementality': 0.4,
                 'Everyday Price Elasticity': -0.3,
@@ -452,7 +455,7 @@ dev_template = {
             }
         },
         {
-            'path': ['US', 'Band-Aid', 'Decorated', 'Wal-mart'],
+            'path': ['US', 'BAND-AID', 'DECORATED BNDG', 'Walmart Total US TA'],
             'coefficients': {
                 'PPE': {'New @ $XX': -1.10, 'Buy @ $XX': -1.10, 'ADS': -1.10},
                 'QM Lift': {'New @ $XX': 1.15, 'Buy @ $XX': 1.06, 'ADS': 1.20},
@@ -461,7 +464,7 @@ dev_template = {
             }
         },
         {
-            'path': ['US', 'Band-Aid', 'Premium', 'Wal-mart'],
+            'path': ['US', 'BAND-AID', 'PREMIUM BNDG', 'Walmart Total US TA'],
             'coefficients': {
                 'PPE': {'Buy @ $XX': -1.3, 'ADS': -1.3},
                 'QM Lift': {'Buy @ $XX': 1.19, 'ADS': 1.4},
@@ -470,7 +473,7 @@ dev_template = {
             }
         },
         {
-            'path': ['US', 'Band-Aid', 'Value', 'Wal-mart'],
+            'path': ['US', 'BAND-AID', 'VALUE BNDG', 'Walmart Total US TA'],
             'coefficients': {
                 'PPE': {'ADS': -1.3},
                 'QM Lift': {'ADS': 1.4},

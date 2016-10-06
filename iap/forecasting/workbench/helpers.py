@@ -1,7 +1,7 @@
 from collections import namedtuple
 
 Variable = namedtuple('Variable', ['variable', 'timescale'])
-Meta = namedtuple('Variable', ['dimension', 'level'])
+Meta = namedtuple('Meta', ['dimension', 'level'])
 
 def is_equal_path(path1, path2):
     if len(path1) != len(path2):
@@ -12,6 +12,6 @@ def is_equal_path(path1, path2):
     return True
 
 def is_equal_meta(meta1, meta2):
-    if meta1.dimension == meta2.dimension and meta2.level == meta2.level:
+    if meta1.dimension == meta2.dimension and meta1.level == meta2.level:
         return True
     return False

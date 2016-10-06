@@ -17,6 +17,8 @@ class TimeLineManager:
             raise ex.TlmNonExistentName(ts_name)
 
     def get_index_by_label(self, ts_name, label):
+        if label is None:
+            return 0
         try:
             return self.time_scales[ts_name].index(label)
         except ValueError:

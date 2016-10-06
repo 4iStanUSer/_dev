@@ -19,8 +19,8 @@ class WorkbenchEngine:
         self.access = Access()
         self.dimensions = Dimensions()
 
-        self._wh_inputs = None
-        self._wh_outputs = None
+        self._wh_inputs = []
+        self._wh_outputs = []
 
     def load_data_from_repository(self, warehouse, i_access, i_man_access):
         root = warehouse.get_root()
@@ -180,8 +180,10 @@ class WorkbenchEngine:
         # Find top entity and run entity init function recursively.
         top_entity_path = dev_template['top_entity']['path']
         wh_ent = wh.get_entity(top_entity_path)
-        init_entity(wh_ent, dev_template, time_borders, self.container)
-        self.load_data_from_repository()
+        init_entity(dev_template, wh_ent, self.container, self._wh_inputs, self._wh_outputs)
+        load_dev_data(dev_template, self.container)
+        download_data_from_warehouse_to_container(wh, self.container, self._wh_inputs)
+        kk = 3
 
 
 def init_entity(dev_template, wh_ent, container, input_rules, output_rules):
@@ -189,7 +191,7 @@ def init_entity(dev_template, wh_ent, container, input_rules, output_rules):
     # Find level parameters in developers template.
     level_params = None
     for item in dev_template['structure']:
-        meta = helpers.Meta._make(item['meta'])
+        meta = helpers.Meta(item['meta'][0], item['meta'][1])
         if helpers.is_equal_meta(meta, cont_ent.meta):
             level_params = item
             break
@@ -206,8 +208,8 @@ def init_entity(dev_template, wh_ent, container, input_rules, output_rules):
             cont_ent.force_coefficient(coeff_name, ts_name)
     # Find exchange mapping rules in developer template.
     exchange_params = None
-    for item in dev_template['exchange_parameters']:
-        meta = helpers.Meta._make(item['meta'])
+    for item in dev_template['exchange_rules']:
+        meta = helpers.Meta(item['meta'][0], item['meta'][1])
         if helpers.is_equal_meta(meta, cont_ent.meta):
             exchange_params = item
             break
@@ -222,7 +224,7 @@ def init_entity(dev_template, wh_ent, container, input_rules, output_rules):
                        cont_var=helpers.Variable(rule['cont_var'],
                                                  rule['cont_ts']),
                        time_period=rule['time_period'])
-            if counter <= inputs_len:
+            if counter < inputs_len:
                 input_rules.append(row)
             else:
                 output_rules.append(row)
@@ -234,7 +236,7 @@ def init_entity(dev_template, wh_ent, container, input_rules, output_rules):
 def load_dev_data(dev_template, container):
     for item in dev_template['dev_storage']:
         entity = container.get_entity_by_path(item['path'])
-        for name, value in item['coefficients']:
+        for name, value in item['coefficients'].items():
             # TODO add timescale name (DR)
             entity.set_coeff_value(name, '4-4-5', value)
 
@@ -247,21 +249,26 @@ def download_data_from_warehouse_to_container(warehouse, container, mapping):
     prev_cont_entity = None
     for row in mapping:
         # Get warehouse entity is necessary.
-        if not helpers.is_equal_path(prev_wh_entity.path,row['wh_path']):
+        if prev_wh_entity is None or \
+                not helpers.is_equal_path(prev_wh_entity.path, row['wh_path']):
             wh_entity = warehouse.get_entity(row['wh_path'])
             prev_wh_entity = wh_entity
         # Get container entity if necessary.
-        if not prev_cont_entity.id == row['cont_entity_id']:
+        if prev_cont_entity is None or \
+                prev_cont_entity.id != row['cont_entity_id']:
             cont_entity = container.get_entity_by_id(row['cont_entity_id'])
             prev_cont_entity = cont_entity
         # Get data from warehouse.
-        wh_var = wh_entity.get_variable(row['wh_var'].var_name)
-        wh_ts = wh_var.get_timeseries(row['wh_var'].ts_name)
-        values = wh_ts.get_values(row['time_period'])
-        # Set data to container.
-        cont_var = cont_entity.get_variable(row['cont_var'].var_name)
-        cont_ts = cont_var.get_timeseries(row['cont_var'].ts_name)
-        cont_ts.set_values(values)
+        try:
+            wh_var = wh_entity.get_variable(row['wh_var'].variable)
+            wh_ts = wh_var.get_time_series(row['wh_var'].timescale)
+            values = wh_ts.get_values()
+            # Set data to container.
+            cont_var = cont_entity.get_variable(row['cont_var'].variable)
+            cont_ts = cont_var.get_time_series(row['cont_var'].timescale)
+            cont_ts.set_values(None, values)
+        except AttributeError:
+            continue
 
 def upload_data_from_container_to_warehouse(warehouse, container, mapping):
     pass
