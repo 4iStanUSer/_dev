@@ -91,16 +91,10 @@ class EntityData:
     def set_values(self, var_name, ts_name, start_label, values):
         time_series = self._get_ts(var_name, ts_name)
         start_index = \
-            self.time_manager.get_index_by_label(ts_name, start_label)
+            self.time_manager.get_index(ts_name, start_label)
         for ind, item in enumerate(values):
             adj_index = start_index + ind
             time_series['values'][adj_index] = item
-
-    def save(self):
-        return self._variables
-
-    def load(self):
-        pass
 
     def add_coeff(self, coeff_name, ts_name):
         if coeff_name in self._coefficients:
@@ -123,4 +117,10 @@ class EntityData:
             raise Exception
 
 
+def get_data_for_save(self):
+    pass
+
+
+def load(self):
+    pass
 

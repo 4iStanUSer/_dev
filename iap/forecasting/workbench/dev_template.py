@@ -1,27 +1,162 @@
 dev_template = {
-    'top_entity': {'path': ['US']},
-    'timescales': {
-        'annual': ['2011', '2012', '2013', '2014', '2015', '2016',
-                   '2017'],
-        '4-4-5': [
-            'Jan-11', 'Feb-11', 'Jan-11', 'Feb-11', 'Mar-11', 'Apr-11',
-            'May-11', 'Jun-11', 'Jul-11', 'Aug-11' 'Sep-11', 'Oct-11',
-            'Nov-11', 'Dec-11', 'Jan-12', 'Feb-12', 'Jan-12', 'Feb-12',
-            'Mar-12', 'Apr-12', 'May-12', 'Jun-12', 'Jul-12', 'Aug-12',
-            'Sep-12', 'Oct-12', 'Nov-12', 'Dec-12', 'Jan-13', 'Feb-13',
-            'Jan-13', 'Feb-13', 'Mar-13', 'Apr-13', 'May-13', 'Jun-13',
-            'Jul-13', 'Aug-13', 'Sep-13', 'Oct-13', 'Nov-13', 'Dec-13',
-            'Jan-14', 'Feb-14', 'Jan-14', 'Feb-14', 'Mar-14', 'Apr-14',
-            'May-14', 'Jun-14', 'Jul-14', 'Aug-14', 'Sep-14', 'Oct-14',
-            'Nov-14', 'Dec-14', 'Jan-15', 'Feb-15', 'Jan-15', 'Feb-15',
-            'Mar-15', 'Apr-15', 'May-15', 'Jun-15', 'Jul-15', 'Aug-15',
-            'Sep-15', 'Oct-15', 'Nov-15', 'Dec-15', 'Jan-16', 'Feb-16',
-            'Jan-16', 'Feb-16', 'Mar-16', 'Apr-16', 'May-16', 'Jun-16',
-            'Jul-16', 'Aug-16', 'Sep-16', 'Oct-16', 'Nov-16', 'Dec-16',
-            'Jan-17', 'Feb-17', 'Jan-17', 'Feb-17', 'Mar-17', 'Apr-17',
-            'May-17', 'Jun-17', 'Jul-17', 'Aug-17', 'Sep-17', 'Oct-17',
-            'Nov-17', 'Dec-17']
+    'tool_id': 1,
+    'configuration': [
+        {
+            'name': 'available_dimensions',
+            'value': [
+                'geography', 'category', 'time'
+            ]
         },
+        {
+            'name': 'dimension_geography_widget',
+            'value': 'hierarchy'
+        },
+        {
+            'name': 'dimension_category_widget',
+            'value': 'hierarchy'
+        },
+        {
+            'name': 'dimension_time_widget',
+            'value': 'dropdown'
+        },
+        {
+            'name': 'cell_bg',
+            'value': '#ccc'
+        }],
+    'top_entity': {'path': ['US']},
+    'timelines': {
+        'names': ['annual', '4-4-5'],
+        'alias': {'history': {'annual': ('2011', '2015'), '4-4-5': ('Jan-11', 'Dec-15')},
+                  'forecast': {'annual': ('2016', '2017'), '4-4-5': ('Jan-16', 'Dec-17')}},
+        'top_ts_points': [
+            {
+                'name_full': '2011',
+                'name_short': '2011',
+                'children': [
+                    {'name_full': 'Jan-11', 'name_short': 'Jan', 'children': []},
+                    {'name_full': 'Feb-11', 'name_short': 'Feb', 'children': []},
+                    {'name_full': 'Mar-11', 'name_short': 'Mar', 'children': []},
+                    {'name_full': 'Apr-11', 'name_short': 'Apr', 'children': []},
+                    {'name_full': 'May-11', 'name_short': 'May', 'children': []},
+                    {'name_full': 'Jun-11', 'name_short': 'Jum', 'children': []},
+                    {'name_full': 'Jul-11', 'name_short': 'Jul', 'children': []},
+                    {'name_full': 'Aug-11', 'name_short': 'Aug', 'children': []},
+                    {'name_full': 'Sep-11', 'name_short': 'Sep', 'children': []},
+                    {'name_full': 'Oct-11', 'name_short': 'Oct', 'children': []},
+                    {'name_full': 'Nov-11', 'name_short': 'Nov', 'children': []},
+                    {'name_full': 'Dec-11', 'name_short': 'Dec', 'children': []}
+                ]
+            },
+            {
+                'name_full': '2012',
+                'name_short': '2012',
+                'children': [
+                    {'name_full': 'Jan-12', 'name_short': 'Jan', 'children': []},
+                    {'name_full': 'Feb-12', 'name_short': 'Feb', 'children': []},
+                    {'name_full': 'Mar-12', 'name_short': 'Mar', 'children': []},
+                    {'name_full': 'Apr-12', 'name_short': 'Apr', 'children': []},
+                    {'name_full': 'May-12', 'name_short': 'May', 'children': []},
+                    {'name_full': 'Jun-12', 'name_short': 'Jum', 'children': []},
+                    {'name_full': 'Jul-12', 'name_short': 'Jul', 'children': []},
+                    {'name_full': 'Aug-12', 'name_short': 'Aug', 'children': []},
+                    {'name_full': 'Sep-12', 'name_short': 'Sep', 'children': []},
+                    {'name_full': 'Oct-12', 'name_short': 'Oct', 'children': []},
+                    {'name_full': 'Nov-12', 'name_short': 'Nov', 'children': []},
+                    {'name_full': 'Dec-12', 'name_short': 'Dec', 'children': []}
+                ]
+            },
+            {
+                'name_full': '2013',
+                'name_short': '2013',
+                'children': [
+                    {'name_full': 'Jan-13', 'name_short': 'Jan', 'children': []},
+                    {'name_full': 'Feb-13', 'name_short': 'Feb', 'children': []},
+                    {'name_full': 'Mar-13', 'name_short': 'Mar', 'children': []},
+                    {'name_full': 'Apr-13', 'name_short': 'Apr', 'children': []},
+                    {'name_full': 'May-13', 'name_short': 'May', 'children': []},
+                    {'name_full': 'Jun-13', 'name_short': 'Jum', 'children': []},
+                    {'name_full': 'Jul-13', 'name_short': 'Jul', 'children': []},
+                    {'name_full': 'Aug-13', 'name_short': 'Aug', 'children': []},
+                    {'name_full': 'Sep-13', 'name_short': 'Sep', 'children': []},
+                    {'name_full': 'Oct-13', 'name_short': 'Oct', 'children': []},
+                    {'name_full': 'Nov-13', 'name_short': 'Nov', 'children': []},
+                    {'name_full': 'Dec-13', 'name_short': 'Dec', 'children': []}
+                ]
+            },
+            {
+                'name_full': '2014',
+                'name_short': '2014',
+                'children': [
+                    {'name_full': 'Jan-14', 'name_short': 'Jan', 'children': []},
+                    {'name_full': 'Feb-14', 'name_short': 'Feb', 'children': []},
+                    {'name_full': 'Mar-14', 'name_short': 'Mar', 'children': []},
+                    {'name_full': 'Apr-14', 'name_short': 'Apr', 'children': []},
+                    {'name_full': 'May-14', 'name_short': 'May', 'children': []},
+                    {'name_full': 'Jun-14', 'name_short': 'Jum', 'children': []},
+                    {'name_full': 'Jul-14', 'name_short': 'Jul', 'children': []},
+                    {'name_full': 'Aug-14', 'name_short': 'Aug', 'children': []},
+                    {'name_full': 'Sep-14', 'name_short': 'Sep', 'children': []},
+                    {'name_full': 'Oct-14', 'name_short': 'Oct', 'children': []},
+                    {'name_full': 'Nov-14', 'name_short': 'Nov', 'children': []},
+                    {'name_full': 'Dec-14', 'name_short': 'Dec', 'children': []}
+                ]
+            },
+            {
+                'name_full': '2015',
+                'name_short': '2015',
+                'children': [
+                    {'name_full': 'Jan-15', 'name_short': 'Jan', 'children': []},
+                    {'name_full': 'Feb-15', 'name_short': 'Feb', 'children': []},
+                    {'name_full': 'Mar-15', 'name_short': 'Mar', 'children': []},
+                    {'name_full': 'Apr-15', 'name_short': 'Apr', 'children': []},
+                    {'name_full': 'May-15', 'name_short': 'May', 'children': []},
+                    {'name_full': 'Jun-15', 'name_short': 'Jum', 'children': []},
+                    {'name_full': 'Jul-15', 'name_short': 'Jul', 'children': []},
+                    {'name_full': 'Aug-15', 'name_short': 'Aug', 'children': []},
+                    {'name_full': 'Sep-15', 'name_short': 'Sep', 'children': []},
+                    {'name_full': 'Oct-15', 'name_short': 'Oct', 'children': []},
+                    {'name_full': 'Nov-15', 'name_short': 'Nov', 'children': []},
+                    {'name_full': 'Dec-15', 'name_short': 'Dec', 'children': []}
+                ]
+            },
+            {
+                'name_full': '2016',
+                'name_short': '2016',
+                'children': [
+                    {'name_full': 'Jan-16', 'name_short': 'Jan', 'children': []},
+                    {'name_full': 'Feb-16', 'name_short': 'Feb', 'children': []},
+                    {'name_full': 'Mar-16', 'name_short': 'Mar', 'children': []},
+                    {'name_full': 'Apr-16', 'name_short': 'Apr', 'children': []},
+                    {'name_full': 'May-16', 'name_short': 'May', 'children': []},
+                    {'name_full': 'Jun-16', 'name_short': 'Jum', 'children': []},
+                    {'name_full': 'Jul-16', 'name_short': 'Jul', 'children': []},
+                    {'name_full': 'Aug-16', 'name_short': 'Aug', 'children': []},
+                    {'name_full': 'Sep-16', 'name_short': 'Sep', 'children': []},
+                    {'name_full': 'Oct-16', 'name_short': 'Oct', 'children': []},
+                    {'name_full': 'Nov-16', 'name_short': 'Nov', 'children': []},
+                    {'name_full': 'Dec-16', 'name_short': 'Dec', 'children': []}
+                ]
+            },
+            {
+                'name_full': '2017',
+                'name_short': '2017',
+                'children': [
+                    {'name_full': 'Jan-17', 'name_short': 'Jan', 'children': []},
+                    {'name_full': 'Feb-17', 'name_short': 'Feb', 'children': []},
+                    {'name_full': 'Mar-17', 'name_short': 'Mar', 'children': []},
+                    {'name_full': 'Apr-17', 'name_short': 'Apr', 'children': []},
+                    {'name_full': 'May-17', 'name_short': 'May', 'children': []},
+                    {'name_full': 'Jun-17', 'name_short': 'Jum', 'children': []},
+                    {'name_full': 'Jul-17', 'name_short': 'Jul', 'children': []},
+                    {'name_full': 'Aug-17', 'name_short': 'Aug', 'children': []},
+                    {'name_full': 'Sep-17', 'name_short': 'Sep', 'children': []},
+                    {'name_full': 'Oct-17', 'name_short': 'Oct', 'children': []},
+                    {'name_full': 'Nov-17', 'name_short': 'Nov', 'children': []},
+                    {'name_full': 'Dec-17', 'name_short': 'Dec', 'children': []}
+                ]
+            }
+        ]
+    },
     'structure': [
         {
             'meta': ('Geography', 'Country'),

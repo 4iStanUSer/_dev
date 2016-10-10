@@ -1,4 +1,4 @@
 """
 Describe package here.
 """
-from .workbench_engine import WorkbenchEngine
+from .workbench import Workbench

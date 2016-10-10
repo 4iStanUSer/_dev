@@ -18,11 +18,13 @@ from . import service
 
 # TODO (1.0) REMOVE THIS
 from ..forecasting.services.getter import run_time_collection, runTimeEx
-from ..forecasting.workbench.workbench_engine import WorkbenchEngine
+from ..forecasting.workbench.workbench import Workbench
 from ..repository import (get_manage_access_interface, get_wh_interface,
                           get_access_interface)
 from ..repository.storage import Storage
 from ..forecasting import TOOL_NAME as forecast_tool_name
+
+from ..forecasting.workbench.dev_template import dev_template
 
 
 def notfound_view(req):
@@ -48,26 +50,26 @@ def index_view(req):
     user_id = 1
     tool_name = forecast_tool_name
     # TODO(1.0) - REMOVE
-    try:
-        wb = run_time_collection.get(user_id)
-    except runTimeEx.BackupNotFound as error:
+    #try:
+        #wb = run_time_collection.get(user_id)
+    #except runTimeEx.BackupNotFound as error:
         # TODO(1.0) - Move this
-        i_access = get_access_interface(ssn=req.dbsession)
-        i_man_acc = get_manage_access_interface(ssn=req.dbsession)
-        user_roles = i_man_acc.get_user_roles(user_id)
-        user_roles_id = [x.id for x in user_roles]
+    i_access = get_access_interface(ssn=req.dbsession)
+    i_man_acc = get_manage_access_interface(ssn=req.dbsession)
+    user_roles = i_man_acc.get_user_roles(user_id)
+    user_roles_id = [x.id for x in user_roles]
 
-        # Load into RAM
-        wb = WorkbenchEngine(user_id, user_roles_id)
-        warehouse = get_wh_interface()
+    # Load into RAM
+    wb = Workbench(user_id)
+    warehouse = get_wh_interface()
 
-        wb.load_data_from_repository(warehouse, i_access, i_man_acc)
-        run_time_collection.add(user_id, wb)
+    wb.init_load(warehouse, i_access, dev_template)
+    run_time_collection.add(user_id, wb)
 
-        # Save into storage
-        new_backup = wb.get_data_for_backup()
-        s = Storage()
-        s.save_backup(user_id, tool_name, new_backup, 'default')
+    # Save into storage
+    new_backup = wb.get_data_for_backup()
+    s = Storage()
+    s.save_backup(user_id, tool_name, new_backup, 'default')
 
     return render_to_response('templates/index.jinja2',
                               {'title': 'Home page'},

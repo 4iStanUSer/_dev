@@ -1,20 +1,7 @@
 from pyramid.renderers import render_to_response
 from ..services import getter as getter_service
+from ...common.service import send_success_response, send_error_response
 
-
-# TODO Move to common part
-def do_success_response(data):
-    return {
-        'error': False,
-        'data': data
-    }
-
-
-def do_error_response(data):
-    return {
-        'error': True,
-        'data': data
-    }
 
 
 def index_view(req):
@@ -75,7 +62,7 @@ def get_index_page_data(req):
     # }
     data = getter_service.tmp_workbench(req)
 
-    return do_success_response(data)
+    return send_success_response(data)
 
 
 def get_ui_config(req):
@@ -97,7 +84,7 @@ def get_ui_config(req):
 
         }
     }
-    return do_success_response(ui_conf)
+    return send_success_response(ui_conf)
 
 
 def get_scenarios_list(req):
@@ -215,4 +202,40 @@ def get_scenarios_list(req):
             }
         }
     ]
-    return do_success_response(scenarios)
+    return send_success_response(scenarios)
+
+
+def get_dashboard_data(req):
+
+    # entity id
+    # top timescale
+    # period
+
+    # get data for donuts
+    # get data for barcharts
+
+    # get data for decomposition
+    # get drivers info
+
+    #values for drivers
+    #values for outputs
+
+    # cagrs or growth rates for all variables
+
+    # timescale for cagrs
+    # data for all timescales
+
+
+
+
+    #'geography': req.json_body['geography']['id']
+    #if req.json_body.get('geography') else def_sel['geography'],
+    #'time': req.json_body['time']['id']
+    #if req.json_body.get('time') else def_sel['time'],
+    #'products': req.json_body['products']['id']
+    #if req.json_body.get('products') else def_sel['products'],
+
+
+
+    pass
+
