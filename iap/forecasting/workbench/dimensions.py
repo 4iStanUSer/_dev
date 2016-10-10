@@ -1,91 +1,59 @@
 import copy
 
-
-# class DimNode(dict):
-#     _path = None
-#
-#     def set_path(self, path):
-#         self._path = path
-#
-#     def get_path(self):
-#         return self._path
-
-
 class Dimensions:
-    time_periods = []  #
-    dim_list = []
-    entities = {}
-    dim_ent_hier = {}
-    data = {}
-    entity_by_path = {}
 
     def __init__(self):
-        pass
+        _dim_list = []
+        _entities = {}
+        _dim_ent_hier = {}
+        data = {}
+        entity_by_path = {}
 
     def get_dimensions(self):
         return self.dim_list
 
-    def load(self, backup):
-        self.dim_list = backup['dimensions']
-        self.data = backup['data']
-        self.dim_ent_hier = backup['hierarchy']
-        self.entities = backup['entities']
-        self.entity_by_path = backup['entity_by_path']
+    def build(self, container):
+        pass
+        #self._go_crawl(root, {}, False)
 
-    def save(self):
-        return {
-            'dimensions': self.dim_list,
-            'data': self.data,
-            'hierarchy': self.dim_ent_hier,
-            'entities': self.entities,
-            'entity_by_path': self.entity_by_path
-        }
 
-    # def load(self, root):
-    #     # null variables
-    #     # self._go_crawl(root, {}, False)  # TODO Question about parent as root
-    #     return True
+    def _go_crawl(self, entity, l_p={}, use_this=True):
+        if entity is None:
+            return False
+        last_parents = copy.deepcopy(l_p)
+        # Collect data
+        if use_this:
+            # Collect dimension
+            dim_name = copy.deepcopy(entity.layer)  # .dimension
+            dim_name = dim_name.lower()
 
-    # def _go_crawl(self, entity, l_p={}, use_this=True):
-    #     if entity is None:
-    #         return False
-    #
-    #     last_parents = copy.deepcopy(l_p)
-    #     # Collect data
-    #     if use_this:
-    #         # Collect dimension
-    #         dim_name = copy.deepcopy(entity.layer)  # .dimension
-    #         dim_name = dim_name.lower()
-    #
-    #         if dim_name not in self._dim_list:
-    #             self._dim_list.append(dim_name)
-    #             self._dim_ent_hier[dim_name] = []
-    #
-    #         # Collect entities
-    #         if entity._id not in self._entities:
-    #             self._entities[entity._id] = entity
-    #
-    #         # TODO REVIEW THIS because it is one-to-many
-    #         # Generate hierarchy
-    #         parent = l_p[dim_name][len(l_p[dim_name]) - 1] \
-    #             if l_p.get(dim_name) and len(l_p[dim_name]) else None
-    #         self._dim_ent_hier[dim_name].append({
-    #             'ui_id': entity._id,
-    #             'par_ui_id': parent
-    #         })
-    #
-    #         # Parent replacement
-    #         if dim_name not in last_parents:
-    #             last_parents[dim_name] = []
-    #         last_parents[dim_name].append(entity._id)
-    #
-    #     # Go into each child
-    #     if entity.children:
-    #         for child in entity.children:
-    #             self._go_crawl(child, last_parents)
-    #
-    #     if use_this:
-    #         self._proc(self._data, self._dim_list, last_parents)
+            if dim_name not in self._dim_list:
+                self._dim_list.append(dim_name)
+                self._dim_ent_hier[dim_name] = []
+
+            # Collect entities
+            if entity._id not in self._entities:
+                self._entities[entity._id] = entity
+
+            # TODO REVIEW THIS because it is one-to-many
+            # Generate hierarchy
+            parent = l_p[dim_name][len(l_p[dim_name]) - 1] \
+                if l_p.get(dim_name) and len(l_p[dim_name]) else None
+            self._dim_ent_hier[dim_name].append({
+                'ui_id': entity._id,
+                'par_ui_id': parent
+            })
+
+            # Parent replacement
+            if dim_name not in last_parents:
+                last_parents[dim_name] = []
+            last_parents[dim_name].append(entity._id)
+        # Go into each child
+        #if entity.children:
+        #    for child in entity.children:
+        #        self._go_crawl(child, last_parents)
+        if use_this:
+            self._proc(self._data, self._dim_list, last_parents)
     #
     #     # # Fill in main table
     #     # if use_this:
@@ -96,15 +64,15 @@ class Dimensions:
     #     #     key = tuple(key)
     #     #     self._data[key] = entity._id
     #
-    # def _proc(self, dict_link, dim_list, parents):
-    #     if len(dim_list) > 0:
-    #         d = dim_list[0]
-    #         if d in parents and parents[d] is not None:
-    #             for parent in parents[d]:
-    #                 if parent not in dict_link:
-    #                     dict_link[parent] = {}
-    #                 if len(dim_list) > 1:
-    #                     self._proc(dict_link[parent], dim_list[1:], parents)
+    def _proc(self, dict_link, dim_list, parents):
+        if len(dim_list) > 0:
+            d = dim_list[0]
+            if d in parents and parents[d] is not None:
+                for parent in parents[d]:
+                    if parent not in dict_link:
+                        dict_link[parent] = {}
+                    if len(dim_list) > 1:
+                        self._proc(dict_link[parent], dim_list[1:], parents)
 
     def formatting(self, dict_link, dim_list, parents):
         if len(dim_list) > 0:

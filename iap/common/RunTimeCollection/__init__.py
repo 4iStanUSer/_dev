@@ -1,6 +1,6 @@
 from . import exceptions as ex
 from iap.repository.storage import Storage
-from iap.forecasting.workbench import WorkbenchEngine
+from iap.forecasting.workbench import Workbench
 from iap.repository import get_manage_access_interface
 
 
@@ -46,7 +46,7 @@ class RunTimeCollection:
             user_roles = i_manage_access.get_user_roles(user_id)
             user_roles_id = [x.id for x in user_roles]
 
-            instance = WorkbenchEngine(user_id, user_roles_id)
+            instance = Workbench(user_id, user_roles_id)
         else:
             raise ex.InstanceCanNotBeCreated(tool_name)
         return instance

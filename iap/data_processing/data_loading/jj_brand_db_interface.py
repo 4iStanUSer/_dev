@@ -47,8 +47,10 @@ def jj_brand_media_spend(warehouse, wb, options_list):
     # meta2 = [
     #     {'Layer': 'Country', 'Dimension_name': 'Geography', 'Name': 'US'},
     #     {'Layer': 'Brand', 'Dimension_name': 'Products', 'Name': 'BENADRYL'}
-    # ]
-    entity = warehouse.add_entity(meta_cols)
+    #
+    path = [x['Name'] for x in options_list['meta_cols']]
+    meta = [(x['Dimension_name'], x['Layer']) for x in options_list['meta_cols']]
+    entity = warehouse.add_entity(path, meta)
     for row_index in range(header_row_index + 1, len(data)):
         # print(row_index)
         # meta = []
@@ -142,7 +144,9 @@ def jj_brand_extract(warehouse, wb, options_list):
         num_of_dates = 1
         date_value = data[row_index][date_col].value
         start_label = date_func(date_value, num_of_dates)
-        entity = warehouse.add_entity(meta)
+        path = [x['Name'] for x in meta]
+        item_meta = [(x['Dimension_name'], x['Layer']) for x in meta]
+        entity = warehouse.add_entity(path, item_meta)
         for key, val in data_cols.items():
             value = data[row_index][key[0]].value
             value = convert_value(value, key[1])
@@ -193,6 +197,11 @@ def jj_brand(warehouse, wb, options_list):
     meta_cols = options_list['meta_cols']
     name_col_num = options_list['name_col']
     dates_info = options_list['dates_cols']
+
+    if 'mapping_rule' in options_list:
+        mapping_rule = options_list['mapping_rule']
+    else:
+        mapping_rule = None
 
     ws = wb.sheet_by_name('Report1')
     # Initialize data start
@@ -252,8 +261,14 @@ def jj_brand(warehouse, wb, options_list):
                 meta = full_meta
             # TODO check __reorder_meta function
             meta2 = __reorder_meta(meta)
+            #if mapping_rule is not None:
+            #    new_meta, is_mapped = mapping(meta2, mapping_rule)
+            #    if is_mapped:
+            #        meta2 = new_meta
             # working with WH interface
-            entity = warehouse.add_entity(meta2)
+            path = [x['Name'] for x in meta2]
+            item_meta = [(x['Dimension_name'], x['Layer']) for x in meta2]
+            entity = warehouse.add_entity(path, item_meta)
             for row_index in range(row_index+1, last_facts_row + 1):
                 fact_name = data[row_index][name_col_num].value
                 variable = entity.force_variable(fact_name, 'float')
