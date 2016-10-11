@@ -21,7 +21,7 @@ export class SwitchSelectorComponent implements OnInit {
 
     private checked: boolean = null;
 
-    @Output() change = new EventEmitter();
+    @Output() changed = new EventEmitter();
 
     @Input() set data(d: Array<SwitchSelectorValue>) {
         if (d.length != 2) {
@@ -59,7 +59,7 @@ export class SwitchSelectorComponent implements OnInit {
         if (oldValue !== this.checked) {
             let value = (this.checked === true)
                     ? this._d[1]['value'] : this._d[0]['value'];
-            this.change.emit({
+            this.changed.emit({
                 'value': value
             });
             console.log('SwitchSelectorComponent changed to ' + value);
