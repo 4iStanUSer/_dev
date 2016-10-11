@@ -1,4 +1,4 @@
-import {Component, OnInit, Input} from '@angular/core';
+import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 
 interface SwitchSelectorValue {
     value: number|string;
@@ -21,7 +21,13 @@ export class SwitchSelectorComponent implements OnInit {
 
     private checked: boolean = null;
 
+    @Output() change = new EventEmitter();
+
     @Input() set data(d: Array<SwitchSelectorValue>) {
+        if (d.length != 2) {
+            console.error('SwitchSelectorComponent incorrect input data');
+            return;
+        }
         this._d = d;
         this.checked = null;
         this._d.forEach(function(el, i){
@@ -51,7 +57,12 @@ export class SwitchSelectorComponent implements OnInit {
             break;
         }
         if (oldValue !== this.checked) {
-            console.log('SwitchSelectorComponent changed to ' + this.checked);
+            let value = (this.checked === true)
+                    ? this._d[1]['value'] : this._d[0]['value'];
+            this.change.emit({
+                'value': value
+            });
+            console.log('SwitchSelectorComponent changed to ' + value);
         }
     }
 

@@ -35,6 +35,10 @@ export class DashboardComponent implements OnInit {
     ];
     public switchSelectorConfig: Object = {};
 
+    switchSelectorChanged(e) {
+        console.log(e);
+    }
+
     constructor(private dm: DataManagerService) { }
 
     ngOnInit() {
