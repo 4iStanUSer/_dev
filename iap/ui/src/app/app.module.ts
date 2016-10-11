@@ -24,6 +24,8 @@ import {
 import {MenuWidgetComponent} from './common/cmp/menu-widget/';
 import {AjaxService} from './common/service/ajax.service';
 import {LoadingService} from './common/service/loading.service';
+import {ConfigurationService} from "./common/service/configuration.service";
+import {LanguageService} from "./common/service/language.service";
 
 import {EditPageComponent as ForecastEditPageCmp} from './forecast/edit-page/';
 import {IndexPageModule as ForecastIndexPageModule} from './forecast/index-page/';
@@ -95,7 +97,9 @@ import {FilterListPipe} from "./common/pipes/filter-list.pipe";
         DashboardDM,
         AjaxService,
         LoadingService,
-        ComponentFactoryService
+        ComponentFactoryService,
+        LanguageService,
+        ConfigurationService
     ],
     entryComponents: [
         AppComponent,
