@@ -1,0 +1,18 @@
+td, th {
+    border-collapse: collapse;
+    border:1px solid #5e5e5e;
+    padding:0 2px;
+}
+.invisible {
+    visibility: hidden;
+}
+.expand-button {
+    cursor:pointer;
+}
+.is-header {
+    font-weight: bold;
+    text-align: center;
+}
+.is-meta {
+    font-weight: bold;
+}

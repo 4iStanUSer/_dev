@@ -13,7 +13,14 @@ export class WaterfallChartComponent implements OnInit {
 
     private waterfall: Chart;
 
-    pipsName: string = null;
+    private activeMode: Object = null;
+    private modes: Array<Object> = [];
+    private baseName: string = null;
+    private start: string = null;
+    private end: string = null;
+    private d: {[s: string]: Array<Object>} = {};
+
+    // pipsName: string = null;
 
     private baseConfig: Object = {
         chart: {
@@ -51,34 +58,58 @@ export class WaterfallChartComponent implements OnInit {
     @Input() set data(data: Array<any>) {
         console.info('WaterfallChartComponent: set data');
 
-        let config: Object = _.extend({}, this.baseConfig);
-        config['title']['text'] = data['name'];
+        let config: Object = _.cloneDeep(this.baseConfig);
+        this.modes = data['modes'];
+        this.activeMode = this.modes[0]; //
+        this.baseName = data['base_name'];
+        this.start = data['start'];
+        this.end = data['end'];
+        this.d = {};
+        this.modes.forEach(function(item){
+            this.d[item['key']] = data[item['key']];
+        }, this);
 
-        this.pipsName = data['pipsName'];
+        let name = this.baseName + ' ' + this.start.toString() +
+            '-' + this.end.toString();
 
-        config['series'][0]['dataLabels']['formatter'] = this._formatter(this.pipsName);
+        config['title']['text'] = name;
+        config['series'][0] = this._getSeriesForMode(this.activeMode);
+        this.waterfall = new Chart(_.cloneDeep(config));
+    };
 
-        if (data['data'] && _.isArray(data['data'])) {
-            for (let i=0; i<data['data'].length; i++) {
-                if (i == data['data'].length - 1) {
-                    config['series'][0]['data'].push({
-                        name: data['data'][i]['name'],
+    private onModeChange(e) {
+        this.activeMode = e;
+        let newSeries = this._getSeriesForMode(this.activeMode);
+
+        this.waterfall.removeSerie(0);
+        this.waterfall.addSerie(_.cloneDeep(newSeries));
+    }
+
+    private _getSeriesForMode(mode: Object){
+        let modeKey = mode['key'];
+        let newSeries = _.cloneDeep(this.baseConfig['series'][0]);
+        newSeries['dataLabels']['formatter'] = this._formatter(mode['metric']);
+        if (modeKey in this.d) {
+            for (let i=0; i<this.d[modeKey].length; i++) {
+                if (i == this.d[modeKey].length - 1) {
+                    newSeries['data'].push({
+                        name: this.d[modeKey][i]['name'],
                         isSum: true
                     });
                 } else {
-                    config['series'][0]['data'].push({
-                        name: data['data'][i]['name'],
-                        y: data['data'][i]['value']
+                    newSeries['data'].push({
+                        name: this.d[modeKey][i]['name'],
+                        y: this.d[modeKey][i]['value']
                     });
                 }
             }
         }
-        this.waterfall = new Chart(_.cloneDeep(config));
-    };
+        return newSeries;
+    }
 
-    private _formatter(pips) {
+    private _formatter(points) {
         return function(){
-            return this.y + pips;
+            return this.y + ' ' + points.toString();
         };
     }
 

@@ -1,4 +1,41 @@
-<div class="row">
+<div class="container-fluid">
+
+    <div #firstBlock>
+        <div class="container-fluid">
+            <input
+                type="checkbox"
+                [ngModel]="blockView[0]"
+                (ngModelChange)="changedBlockView(0, $event)"
+                >
+        </div>
+
+        <div *ngIf="!blockView[0]" class="container-fluid">
+            <donut-chart [data]="donutChartData"></donut-chart>
+        </div>
+        <div *ngIf="blockView[0]" class="container-fluid">
+            <div class="col-md-4" *ngFor="let bar of barChartData">
+                <bar-chart [data]="bar"></bar-chart>
+            </div>
+        </div>
+    </div>
+
+    <div #secondBlock>
+        <input type="checkbox" [(ngModel)]="blockView[1]">
+
+        <div class="container-fluid">
+            <waterfall-chart [data]="waterfallChartData"></waterfall-chart>
+        </div>
+    </div>
+
+    <div>
+        <accordion-table [data]="vTableData"></accordion-table>
+    </div>
+
+<!--
+    <div>
+        <accordion-table [data]="vTableData"></accordion-table>
+    </div>
+
     <div #firstBlock>
         <div class="container-fluid">
             <input
@@ -26,5 +63,5 @@
             <waterfall-chart [data]="waterfall"></waterfall-chart>
         </div>
     </div>
-
+-->
 </div>

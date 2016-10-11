@@ -1,1 +1,5 @@
+<select [ngModel]="activeMode" (ngModelChange)="onModeChange($event)">
+    <option *ngFor="let mode of modes" [ngValue]="mode">{{ mode['name'] }}</option>
+</select>
+
 <div [chart]="waterfall"></div>

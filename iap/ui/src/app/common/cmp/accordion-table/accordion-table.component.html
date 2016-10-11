@@ -1,0 +1,65 @@
+<a *ngFor="let depth of depthLevels" > {{ depth }} </a>
+
+<table>
+    <tr *ngFor="let row of headRows">
+        <th *ngFor="let meta of row.meta; let _first = first">
+            {{ meta['label'] }}
+        </th>
+        <th *ngFor="let column of columns">
+            {{ row.getData(column) }}
+        </th>
+    </tr>
+
+    <tr *ngFor="let i of visibleDataRows()">
+        <td *ngFor="let meta of bodyRows[i].meta; let _first = first">
+
+            <span *ngFor="let j of range(bodyRows[i].depth)">&emsp;</span>
+
+            <span
+                *ngIf="_first && !bodyRows[i].isHeader"
+            >
+                <span *ngIf="bodyRows[i].children && bodyRows[i].children.length" (click)="bodyRows[i].changeExpandStatus()" class="expand-button">
+                    <i class="fa" [ngClass]="{'fa-minus': bodyRows[i].isExpanded, 'fa-plus': !bodyRows[i].isExpanded}" aria-hidden="true"></i>
+                </span>
+                <span *ngIf="!bodyRows[i].children || !bodyRows[i].children.length">
+                    <i class="fa fa-minus invisible"  aria-hidden="true"></i>
+                </span>
+            </span>
+
+            {{ meta['label'] }}
+        </td>
+
+        <td *ngFor="let column of columns">
+            {{ bodyRows[i].getData(column) }}
+        </td>
+    </tr>
+</table>
+
+
+<!--
+<tr *ngFor="let row of (rows | filterList: {key: 'isShown', value: true})">
+
+    <td *ngFor="let item of row.meta; let _first = first" [attr.colspan]="(item['colspan'])?item['colspan']:1" [ngClass]="{'is-header': row.isHeader, 'is-meta': true}">
+
+        <span *ngFor="let i of range(row.depth)">&emsp;</span>
+
+        <span
+            *ngIf="_first && !row.isHeader"
+        >
+            <span *ngIf="row.children && row.children.length" (click)="row.changeExpandStatus()" class="expand-button">
+                <i class="fa" [ngClass]="{'fa-minus': row.isExpanded, 'fa-plus': !row.isExpanded}" aria-hidden="true"></i>
+            </span>
+            <span *ngIf="!row.children || !row.children.length">
+                <i class="fa fa-minus invisible"  aria-hidden="true"></i>
+            </span>
+        </span>
+
+        {{ item['text'] }}
+    </td>
+
+    <td *ngFor="let item of row.data" [attr.colspan]="(item['colspan'])?item['colspan']:1" [ngClass]="{'is-header': row.isHeader}">
+        {{ item['value'] }}
+    </td>
+
+</tr>
+-->

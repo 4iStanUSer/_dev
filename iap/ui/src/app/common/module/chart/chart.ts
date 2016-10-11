@@ -26,11 +26,14 @@ export class Chart {
     }
 
     removeSerie(serieIndex: number): void {
-        // TODO add try catch (empty)
         this.options.series.splice(serieIndex, 1);
         if (this.ref) {
             this.ref.series[serieIndex].remove(true);
         }
+    }
+
+    setData(): void {
+
     }
 
     // addPoint(point: Point, serieIndex = 0, redraw = true, shift = false): void {

@@ -12,9 +12,15 @@ import {HttpModule, JsonpModule} from '@angular/http';
 
 import {AppComponent} from './app.component';
 import {routing, appRoutingProviders} from './app.routing';
-import {DashboardComponent} from "./forecast/dashboard/dashboard.component";
 
-/*Decide about bottom*/
+/*Dashboard*/
+import {DashboardComponent} from './forecast/dashboard/dashboard.component';
+import {
+    DataManagerService as DashboardDM
+} from './forecast/dashboard/data-manager.service';
+/*.Dashboard*/
+
+/*Decide about below*/
 import {MenuWidgetComponent} from './common/cmp/menu-widget/';
 import {AjaxService} from './common/service/ajax.service';
 import {LoadingService} from './common/service/loading.service';
@@ -39,7 +45,12 @@ import {ChartModule} from './common/module/chart/';
 import {DonutChartComponent} from "./common/cmp/donut-chart/donut-chart.component";
 import {BarChartComponent} from "./common/cmp/bar-chart/bar-chart.component";
 import {WaterfallChartComponent} from "./common/cmp/waterfall-chart/waterfall-chart.component";
+import {AccordionTableComponent} from "./common/cmp/accordion-table/accordion-table.component";
 /*.Charts section*/
+
+/*Pipes section*/
+import {FilterListPipe} from "./common/pipes/filter-list.pipe";
+/*.Pipes section*/
 
 @NgModule({
     imports: [
@@ -51,7 +62,7 @@ import {WaterfallChartComponent} from "./common/cmp/waterfall-chart/waterfall-ch
         JsonpModule,
         routing,
 
-        /*Decide about bottom*/
+        /*Decide about below*/
         ChartModule,
         HierarchyWidgetModule,
         DropdownModule,
@@ -62,10 +73,12 @@ import {WaterfallChartComponent} from "./common/cmp/waterfall-chart/waterfall-ch
     declarations: [
         AppComponent,
         DashboardComponent,
-        /*Decide about bottom*/
+        /*Decide about below*/
+        FilterListPipe,
         DonutChartComponent,
         BarChartComponent,
         WaterfallChartComponent,
+        AccordionTableComponent,
 
         MenuWidgetComponent,
         ForecastEditPageCmp,
@@ -75,14 +88,16 @@ import {WaterfallChartComponent} from "./common/cmp/waterfall-chart/waterfall-ch
         {provide: LocationStrategy, useClass: HashLocationStrategy},
         appRoutingProviders,
         Location,
-        /*Decide about bottom*/
+
+        /*Decide about below*/
+        DashboardDM,
         AjaxService,
         LoadingService,
         ComponentFactoryService
     ],
     entryComponents: [
         AppComponent,
-        /*Decide about bottom*/
+        /*Decide about below*/
         HierarchyWidgetComponent,
         DropdownComponent,
         TimeseriesWidgetComponent

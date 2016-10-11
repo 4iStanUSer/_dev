@@ -1,5 +1,6 @@
 import * as Highcharts from 'highcharts';
 
-import 'highcharts-more-node'
+// import * as HighchartsMore from 'highcharts/highcharts-more';
+import 'highcharts-more-node';
 
 export { Highcharts };
