@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {DataManagerService} from './data-manager.service';
+import {StaticDataService} from "../../common/service/static-data.service";
 
 @Component({
     selector: 'dashboard',
@@ -7,6 +8,21 @@ import {DataManagerService} from './data-manager.service';
     styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
+
+    private localConfig: Object = {
+        'modes': [
+            'summary', 'detailed', 'drivers'
+        ],
+    };
+
+    private currMode: string = null;
+
+    public changeMode(mode: string) {
+        if (mode && this.localConfig['modes'].indexOf(mode) != -1) {
+            this.currMode = mode;
+        }
+    }
+
     private blockView: Array<boolean> = [
         false,
         false
@@ -21,6 +37,7 @@ export class DashboardComponent implements OnInit {
     public waterfallChartData: Object = {};
 
 
+    /*---switchSelector---*/
     public switchSelectorData: Array<Object> = [
         {
             value: 'absolute',
@@ -38,8 +55,11 @@ export class DashboardComponent implements OnInit {
     switchSelectorChanged(e) {
         console.log(e);
     }
+    /*---.switchSelector---*/
 
-    constructor(private dm: DataManagerService) { }
+    constructor(
+        private dm: DataManagerService,
+        private sds: StaticDataService) { }
 
     ngOnInit() {
         this.vTableData = this.dm.getData_VTable();

@@ -24,8 +24,8 @@ import {
 import {MenuWidgetComponent} from './common/cmp/menu-widget/';
 import {AjaxService} from './common/service/ajax.service';
 import {LoadingService} from './common/service/loading.service';
-import {ConfigurationService} from "./common/service/configuration.service";
-import {LanguageService} from "./common/service/language.service";
+import {StaticDataService} from "./common/service/static-data.service";
+import {StateService} from "./common/service/state.service";
 
 import {EditPageComponent as ForecastEditPageCmp} from './forecast/edit-page/';
 import {IndexPageModule as ForecastIndexPageModule} from './forecast/index-page/';
@@ -53,6 +53,7 @@ import {SwitchSelectorComponent} from "./common/cmp/switch-selector/switch-selec
 
 /*Pipes section*/
 import {FilterListPipe} from "./common/pipes/filter-list.pipe";
+
 /*.Pipes section*/
 
 @NgModule({
@@ -98,8 +99,8 @@ import {FilterListPipe} from "./common/pipes/filter-list.pipe";
         AjaxService,
         LoadingService,
         ComponentFactoryService,
-        LanguageService,
-        ConfigurationService
+        StaticDataService,
+        StateService
     ],
     entryComponents: [
         AppComponent,

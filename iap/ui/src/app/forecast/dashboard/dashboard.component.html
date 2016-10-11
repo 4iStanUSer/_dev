@@ -1,8 +1,25 @@
 <div class="container-fluid">
-    <switch-selector [data]="switchSelectorData" [config]="switchSelectorConfig" (changed)="switchSelectorChanged($event)"></switch-selector>
+    <div *ngIf="currMode == 'summary'">
+        <div #block1>
+
+        </div>
+        <div #block2>
+
+        </div>
+    </div>
+
+    <div *ngIf="currMode == 'detailed'">
+
+    </div>
+
+    <div *ngIf="currMode == 'drivers'">
+
+    </div>
+</div>
 
 
-
+<!--<div class="container-fluid">-->
+    <!--<switch-selector [data]="switchSelectorData" [config]="switchSelectorConfig" (changed)="switchSelectorChanged($event)"></switch-selector>-->
 
     <!--<div #firstBlock>-->
         <!--<div class="container-fluid">-->
@@ -34,4 +51,4 @@
     <!--<div>-->
         <!--<accordion-table [data]="vTableData"></accordion-table>-->
     <!--</div>-->
-</div>
+<!--</div>-->

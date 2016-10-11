@@ -1,8 +1,7 @@
 <div>
     <label (click)="onChange(0)" class="option-label" [ngClass]="{'selected-label': checked === false}">{{ _d[0]['name'] }}</label>
-    <label class="switch">
-        <input type="checkbox" [ngModel]="checked" (change)="onChange()">
-        <div class="slider round"></div>
+    <label (click)="onChange(null)" class="switch">
+        <div class="slider round" [ngClass]="{'checked': checked === true}"></div>
     </label>
     <label (click)="onChange(1)" class="option-label" [ngClass]="{'selected-label': checked === true}">{{ _d[1]['name'] }}</label>
 </div>
