@@ -20,6 +20,21 @@ export class DashboardComponent implements OnInit {
     public barChartData: Array<Object> = [];
     public waterfallChartData: Object = {};
 
+
+    public switchSelectorData: Array<Object> = [
+        {
+            value: 'absolute',
+            name: 'Absolute values',
+            selected: true
+        },
+        {
+            value: 'growth',
+            name: 'Growth rates',
+            selected: false
+        }
+    ];
+    public switchSelectorConfig: Object = {};
+
     constructor(private dm: DataManagerService) { }
 
     ngOnInit() {

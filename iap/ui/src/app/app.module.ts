@@ -46,6 +46,7 @@ import {DonutChartComponent} from "./common/cmp/donut-chart/donut-chart.componen
 import {BarChartComponent} from "./common/cmp/bar-chart/bar-chart.component";
 import {WaterfallChartComponent} from "./common/cmp/waterfall-chart/waterfall-chart.component";
 import {AccordionTableComponent} from "./common/cmp/accordion-table/accordion-table.component";
+import {SwitchSelectorComponent} from "./common/cmp/switch-selector/switch-selector.component";
 /*.Charts section*/
 
 /*Pipes section*/
@@ -79,6 +80,7 @@ import {FilterListPipe} from "./common/pipes/filter-list.pipe";
         BarChartComponent,
         WaterfallChartComponent,
         AccordionTableComponent,
+        SwitchSelectorComponent,
 
         MenuWidgetComponent,
         ForecastEditPageCmp,
