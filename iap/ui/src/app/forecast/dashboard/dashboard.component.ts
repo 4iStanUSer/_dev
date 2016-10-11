@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {DataManagerService} from './data-manager.service';
 import {StaticDataService} from "../../common/service/static-data.service";
+import {StateService, PageState} from "../../common/service/state.service";
 
 @Component({
     selector: 'dashboard',
@@ -22,6 +23,8 @@ export class DashboardComponent implements OnInit {
             this.currMode = mode;
         }
     }
+
+    private state: PageState;
 
     private blockView: Array<boolean> = [
         false,
@@ -59,7 +62,13 @@ export class DashboardComponent implements OnInit {
 
     constructor(
         private dm: DataManagerService,
-        private sds: StaticDataService) { }
+        private stateService: StateService, // TODO Review
+        private sds: StaticDataService
+    ) {
+        this.state = this.stateService.getPageState('dashboard');
+
+        console.log(this.state);
+    }
 
     ngOnInit() {
         this.vTableData = this.dm.getData_VTable();
