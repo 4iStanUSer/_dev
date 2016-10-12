@@ -4,6 +4,14 @@ import * as _ from 'lodash';
 
 // http://www.highcharts.com/docs/chart-and-series-types/waterfall-series
 
+
+// TODO Implement State feature for Waterfall Chart
+interface WaterfallChartState {
+    currentMode: string;
+    currentVariable: string;
+}
+
+
 @Component({
     selector: 'waterfall-chart',
     templateUrl: './waterfall-chart.component.html',
@@ -11,18 +19,20 @@ import * as _ from 'lodash';
 })
 export class WaterfallChartComponent implements OnInit {
 
-    private waterfall: Chart;
+    private localConfig: Object = {
+        'modes': [
+            {
+                'key': 'growth',
+                'name': 'Growth rate'
+            },
+            {
+                'key': 'value',
+                'name': 'Absolute'
+            }
+        ],
+    };
 
-    private activeMode: Object = null;
-    private modes: Array<Object> = [];
-    private baseName: string = null;
-    private start: string = null;
-    private end: string = null;
-    private d: {[s: string]: Array<Object>} = {};
-
-    // pipsName: string = null;
-
-    private baseConfig: Object = {
+    private baseChartConfig: Object = {
         chart: {
             type: 'waterfall'
         },
@@ -55,51 +65,92 @@ export class WaterfallChartComponent implements OnInit {
         }]
     };
 
-    @Input() set data(data: Array<any>) {
+    private waterfall: Chart;
+
+    private currentVar: string = null;
+    private currentMode: Object = null;
+    private variables: Array<string> = [];
+    private modes: Array<Object> = [];
+
+    private baseName: string = null;
+    private start: string = null;
+    private end: string = null;
+    private d: {[s: string]: Array<Object>} = {};
+
+    @Input() set data(data: Object) {
         console.info('WaterfallChartComponent: set data');
 
-        let config: Object = _.cloneDeep(this.baseConfig);
-        this.modes = data['modes'];
-        this.activeMode = this.modes[0]; //
+        let config: Object = _.cloneDeep(this.baseChartConfig);
+
+        // this.modes = data['modes'];
+        this.modes = this.localConfig['modes'];
+        this.variables = data['variables'];
         this.baseName = data['base_name'];
         this.start = data['start'];
         this.end = data['end'];
         this.d = {};
-        this.modes.forEach(function(item){
-            this.d[item['key']] = data[item['key']];
+
+        this.currentMode = this.modes[0]; // TODO Rewrite
+        this.currentVar = this.variables[0]; // TODO Rewrite
+
+        this.variables.forEach(function(variable){
+            this.d[variable['key']] = data[variable['key']];
         }, this);
 
         let name = this.baseName + ' ' + this.start.toString() +
             '-' + this.end.toString();
 
         config['title']['text'] = name;
-        config['series'][0] = this._getSeriesForMode(this.activeMode);
+        config['series'][0] = this._getSeriesForMode(this.currentVar,
+            this.currentMode);
         this.waterfall = new Chart(_.cloneDeep(config));
     };
 
-    private onModeChange(e) {
-        this.activeMode = e;
-        let newSeries = this._getSeriesForMode(this.activeMode);
+    public changeMode(mode: string) {
+        console.log(mode);
+        let m = ('absolute' == mode) ? 'value' : 'growth';
 
-        this.waterfall.removeSerie(0);
-        this.waterfall.addSerie(_.cloneDeep(newSeries));
+        if (m != this.currentMode['key']) {
+            this.modes.forEach(function(el, i){
+                if (m == el['key']) {
+                    this.currentMode = this.modes[i];
+                }
+            }, this);
+            let newSeries = this._getSeriesForMode(this.currentVar,
+                this.currentMode);
+            this.waterfall.removeSerie(0);
+            this.waterfall.addSerie(_.cloneDeep(newSeries));
+        }
     }
 
-    private _getSeriesForMode(mode: Object){
-        let modeKey = mode['key'];
-        let newSeries = _.cloneDeep(this.baseConfig['series'][0]);
-        newSeries['dataLabels']['formatter'] = this._formatter(mode['metric']);
-        if (modeKey in this.d) {
-            for (let i=0; i<this.d[modeKey].length; i++) {
-                if (i == this.d[modeKey].length - 1) {
+    private onVariableChange(variable) {
+        if (variable != this.currentVar) {
+            this.currentVar = variable;
+            let newSeries = this._getSeriesForMode(this.currentVar,
+                this.currentMode);
+
+            this.waterfall.removeSerie(0);
+            this.waterfall.addSerie(_.cloneDeep(newSeries));
+        }
+    }
+
+    private _getSeriesForMode(variable: Object, mode: Object) {
+        // let modeKey = mode['key'];
+        let newSeries = _.cloneDeep(this.baseChartConfig['series'][0]);
+        let metric = (mode['key']== 'growth') ? '%' : variable['metric'];
+
+        newSeries['dataLabels']['formatter'] = this._formatter(metric);
+        if (variable['key'] in this.d) {
+            for (let i=0; i<this.d[variable['key']].length; i++) {
+                if (i == this.d[variable['key']].length - 1) {
                     newSeries['data'].push({
-                        name: this.d[modeKey][i]['name'],
+                        name: this.d[variable['key']][i]['name'],
                         isSum: true
                     });
                 } else {
                     newSeries['data'].push({
-                        name: this.d[modeKey][i]['name'],
-                        y: this.d[modeKey][i]['value']
+                        name: this.d[variable['key']][i]['name'],
+                        y: this.d[variable['key']][i]['value']
                     });
                 }
             }

@@ -5,7 +5,10 @@ export class PageState {
     constructor(
         public state: {[s: string]: any},
         public page: string,
-        private service: StateService) { }
+        private service: StateService)
+    {
+        if (!this.state) this.state = {};
+    }
 
     public get(key: string) {
         return this.state[key];
@@ -43,6 +46,11 @@ export class StateService {
     }
 
     public setPageStateKey(page: string, key: string, value: any) {
+        try {
+            this.stateStorage[page][key];
+        } catch(e) {
+            this.stateStorage[page] = {};
+        }
         this.stateStorage[page][key] = value;
         this.saveOutside(page, key, value); // TODO Review
     }

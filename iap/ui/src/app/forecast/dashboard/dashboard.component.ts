@@ -1,7 +1,8 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {DataManagerService} from './data-manager.service';
 import {StaticDataService} from "../../common/service/static-data.service";
 import {StateService, PageState} from "../../common/service/state.service";
+import {WaterfallChartComponent} from "../../common/cmp/waterfall-chart/waterfall-chart.component";
 
 @Component({
     selector: 'dashboard',
@@ -10,90 +11,147 @@ import {StateService, PageState} from "../../common/service/state.service";
 })
 export class DashboardComponent implements OnInit {
 
+    private pageName: string = 'dashboard';
+    private currMode: string = 'summary';
+
     private localConfig: Object = {
         'modes': [
             'summary', 'detailed', 'drivers'
         ],
     };
 
-    private currMode: string = null;
+    @ViewChild('decomposition') decompositionObj: WaterfallChartComponent;
 
     public changeMode(mode: string) {
-        if (mode && this.localConfig['modes'].indexOf(mode) != -1) {
+        if (mode
+            && this.localConfig['modes']
+            && this.localConfig['modes'].indexOf(mode) != -1)
+        {
             this.currMode = mode;
         }
     }
 
     private state: PageState;
+    private lang: Object;
+    private config: Object;
 
-    private blockView: Array<boolean> = [
-        false,
-        false
-    ];
+    // private blockView: Array<boolean> = [
+    //     false,
+    //     false
+    // ];
 
-    public donutsPeriod = {'start': 2016, 'end': 2020};
-    public decompositionPeriod = {'start': 2010, 'end': 2015};
+    // public donutsPeriod = {'start': 2016, 'end': 2020};
+    // public decompositionPeriod = {'start': 2010, 'end': 2015};
+
 
     public vTableData: Object = {};
-    public donutChartData: Array<Object> = [];
-    public barChartData: Array<Object> = [];
-    public waterfallChartData: Object = {};
 
 
-    /*---switchSelector---*/
-    public switchSelectorData: Array<Object> = [
+    public period = {'start': 2016, 'end': 2020};
+    public summaryCagrsData: Array<Object> = null;
+    public summaryBarsData: Array<Object> = null;
+    public summaryDecompData: Object = null;
+
+    // private setModeForDecomp: string = null;
+    /*---valueOrGrowthSwitch---*/
+    public absOrRate: string = 'rate';
+    public absOrRateSwitchData: Array<Object> = [
         {
-            value: 'absolute',
+            key: 'absolute',
             name: 'Absolute values',
-            selected: true
+            selected: false
         },
         {
-            value: 'growth',
+            key: 'rate',
             name: 'Growth rates',
-            selected: false
+            selected: true
         }
     ];
-    public switchSelectorConfig: Object = {};
+    public absOrRateSwitchConfig: Object = {};
 
-    switchSelectorChanged(e) {
-        console.log(e);
+    public absOrRateSwitchChanged(e) {
+        console.log('absOrRateSwitchChanged');
+
+        this.absOrRate = e['key'];
+        this.state.set('abs_or_rate', this.absOrRate);
+
+        // this.absOrRateSwitchData.map(function(el, i){
+        //     if (el['key'] == this.absOrRate) {
+        //         this.absOrRateSwitchData[i]['selected'] = true;
+        //     } else {
+        //         this.absOrRateSwitchData[i]['selected'] = false;
+        //     }
+        // }, this);
+
+        // this.setModeForDecomp = this.absOrRate;
+        this.decompositionObj.changeMode(this.absOrRate);
+
+        if ('rate' == this.absOrRate && this.summaryCagrsData === null) {
+            this.summaryCagrsData = this.dm.getData_Donut(
+                this.period['start'],
+                this.period['end']
+            );
+        } else if (this.summaryBarsData === null) {
+            this.summaryBarsData = this.dm.getData_Bar('annual', ['CPI', 'GDP']);
+        }
     }
-    /*---.switchSelector---*/
+    /*---.valueOrGrowthSwitch---*/
+    /*---Decomposition---*/
+
+    /*---.Decomposition---*/
 
     constructor(
         private dm: DataManagerService,
         private stateService: StateService, // TODO Review
         private sds: StaticDataService
     ) {
-        this.state = this.stateService.getPageState('dashboard');
-
-        console.log(this.state);
+        this.state = this.stateService.getPageState(this.pageName);
+        this.lang = this.sds.getLangPack(this.pageName);
+        this.config = this.sds.getConfig(this.pageName);
     }
 
     ngOnInit() {
-        this.vTableData = this.dm.getData_VTable();
 
-        this.donutChartData = this.dm.getData_Donut(
-            this.donutsPeriod['start'].toString(),
-            this.donutsPeriod['end'].toString()
+        let absOrRate = this.state.get('abs_or_rate');
+        if (!absOrRate) {
+            absOrRate = this.absOrRate;
+            this.state.set('abs_or_rate', absOrRate);
+        } else {
+            this.absOrRate = absOrRate;
+        }
+        this.absOrRateSwitchData.forEach(function(el){
+            if (this.absOrRate == el['key']) {
+                el['selected'] = true;
+            } else {
+                el['selected'] = false;
+            }
+        }, this);
+
+        if ('rate' == this.absOrRate) {
+            this.summaryCagrsData = this.dm.getData_Donut(
+                this.period['start'],
+                this.period['end']
+            );
+
+        } else {
+            this.summaryBarsData = this.dm.getData_Bar(
+                'annual',
+                ['CPI', 'GDP']
+            );
+        }
+        this.summaryDecompData = this.dm.getData_Waterfall(
+            this.period['start'],
+            this.period['end']
         );
 
-        this.barChartData = this.dm.getData_Bar('annual', ['CPI', 'GDP']);
+        //////////////////////////////////////////////////////////////////////
 
-        this.waterfallChartData = this.dm.getData_Waterfall(
-            this.decompositionPeriod['start'].toString(),
-            this.decompositionPeriod['end'].toString(),
-            'values'
-        );
-    }
 
-    private changedBlockView(index, value) {
-        this.blockView[index] = value;
-        // let path = this._location.path();
-        // console.log(path);
-        // this._location.go(path, 'a=1');
+        // this.vTableData = this.dm.getData_VTable();
+
 
     }
+
 
 
     // NEW structures

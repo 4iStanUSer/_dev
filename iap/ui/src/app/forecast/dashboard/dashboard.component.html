@@ -1,18 +1,39 @@
 <div class="container-fluid">
-    <div *ngIf="currMode == 'summary'">
-        <div #block1 class="">
+    <div *ngIf="'summary' == currMode">
+        <div #block1 class="container-fluid">
+            {{ absOrRateSwitchData | json }}
+            <switch-selector
+                [(data)]="absOrRateSwitchData"
+                [config]="absOrRateSwitchConfig"
+                (changed)="absOrRateSwitchChanged($event)"></switch-selector>
+
+            <div [ngSwitch]="absOrRate">
+                <div *ngSwitchCase="'rate'">
+                    <donut-chart
+                        [data]="summaryCagrsData"></donut-chart>
+                </div>
+                <div *ngSwitchCase="'absolute'">
+                    <div class="col-md-4" *ngFor="let bar of summaryBarsData">
+                        <bar-chart
+                            [data]="bar"></bar-chart>
+                    </div>
+                </div>
+            </div>
 
         </div>
-        <div #block2 class="">
 
+        <div #block2 class="container-fluid">
+                <waterfall-chart
+                    #decomposition
+                    [data]="summaryDecompData"></waterfall-chart>
         </div>
     </div>
 
-    <div *ngIf="currMode == 'detailed'">
+    <div *ngIf="'detailed' == currMode">
 
     </div>
 
-    <div *ngIf="currMode == 'drivers'">
+    <div *ngIf="'drivers' == currMode">
 
     </div>
 </div>

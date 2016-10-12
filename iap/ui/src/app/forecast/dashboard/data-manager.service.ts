@@ -358,11 +358,11 @@ export class DataManagerService {
 
     private decomposition = [
         {
-            start: '2010',
-            end: '2015',
+            start: '2016',
+            end: '2020',
             values: [
                 {
-                    name: '2010',
+                    name: '2016',
                     value: 100,
                     growth: 100,
                     children: null
@@ -386,12 +386,12 @@ export class DataManagerService {
                     children: null
                 },
                 {
-                    name: '2015'
+                    name: '2020'
                 },
             ],
             volume: [
                 {
-                    name: '2015',
+                    name: '2016',
                     value: 15,
                     growth: 15,
                     children: null
@@ -409,7 +409,7 @@ export class DataManagerService {
                     children: null
                 },
                 {
-                    name: '2015'
+                    name: '2020'
                 }
             ]
         }
@@ -419,7 +419,7 @@ export class DataManagerService {
         this.recreateScales();
     }
 
-    public getData_Waterfall(start: string, end: string, key: string) {
+    public getData_Waterfall(start: number|string, end: number|string) {
         let found = false;
         let i = 0;
         while (i < this.decomposition.length && !found) {
@@ -434,15 +434,25 @@ export class DataManagerService {
         }
         if (found) {
             return {
-                'modes': [
+                // 'modes': [
+                //     {
+                //         'key': 'growth',
+                //         'name': 'Growth rate'
+                //     },
+                //     {
+                //         'key': 'value',
+                //         'name': 'Absolute'
+                //     }
+                // ],
+                'variables': [
                     {
-                        'key': 'values',
                         'name': 'Value',
-                        'metric': '%'
+                        'key': 'values',
+                        'metric': 'piece'
                     },
                     {
-                        'key': 'volume',
                         'name': 'Volume',
+                        'key': 'volume',
                         'metric': 'USD'
                     }
                 ],
@@ -478,7 +488,7 @@ export class DataManagerService {
         return bars;
     }
 
-    public getData_Donut(start: string, end: string) {
+    public getData_Donut(start: number|string, end: number|string) {
         let vars = ['CPI', 'GDP'];
         let donuts = [];
         for (let i = 0; i < vars.length; i++) {
