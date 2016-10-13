@@ -1,1 +1,38 @@
-<div [chart]="bar"></div>
+<div>
+    <div class="block-container">
+        Absolute
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        Cagrs
+    </div>
+    <div *ngFor="let block of blocks" class="block-container">
+        <div class="block-name">
+            {{ block['name'] }}
+
+
+            <br/>
+            <a>Expand</a>
+
+
+        </div>
+
+        <div [chart]="block['chart']"></div>
+
+        <table class="cagrs-table">
+            <tr>
+                <td
+                    *ngFor="let cagr of block['cagrs']"
+                >
+                    <div class="period-label">{{ cagr['start'] + '/' + cagr['end'] }}</div>
+                    {{ cagr['value'] }}
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+

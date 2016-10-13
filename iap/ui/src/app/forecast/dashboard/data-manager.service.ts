@@ -481,7 +481,8 @@ export class DataManagerService {
                             'name': this.timelabels[el['timelabels_index']]['name'].toString(),
                             'value': el['value']
                         };
-                    }, this)
+                    }, this),
+                    'cagrs': this.cagrs[variable]
                 });
             }
         }

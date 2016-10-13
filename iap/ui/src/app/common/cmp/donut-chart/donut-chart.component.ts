@@ -9,7 +9,8 @@ import * as _ from 'lodash';
 })
 export class DonutChartComponent implements OnInit {
     private donuts: Array<Chart> = [];
-    private baseConfig: Object = {
+
+    private baseChartConfig: Object = {
         chart: {
             type: 'pie',
             plotBackgroundColor: null,
@@ -41,7 +42,7 @@ export class DonutChartComponent implements OnInit {
         this.donuts = []; // TODO REMAKE - without recreating
         let config: Object = {};
         for (let i = 0; i<series.length; i++) {
-            config = _.extend({}, this.baseConfig); //
+            config = _.cloneDeep(this.baseChartConfig);
             // s = series[i];
             config['title']['text'] = series[i]['name'];
             config['series'] = [

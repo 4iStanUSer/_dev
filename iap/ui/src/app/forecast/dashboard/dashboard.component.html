@@ -1,7 +1,12 @@
 <div class="container-fluid">
+
+    <div class="mode-list-container">
+        <span *ngFor="let mode of localConfig['modes']" (click)="changeMode(mode['key'])">{{ mode['name'] }}</span>
+    </div>
+
+
     <div *ngIf="'summary' == currMode">
         <div #block1 class="container-fluid">
-            {{ absOrRateSwitchData | json }}
             <switch-selector
                 [(data)]="absOrRateSwitchData"
                 [config]="absOrRateSwitchConfig"
@@ -13,19 +18,19 @@
                         [data]="summaryCagrsData"></donut-chart>
                 </div>
                 <div *ngSwitchCase="'absolute'">
-                    <div class="col-md-4" *ngFor="let bar of summaryBarsData">
-                        <bar-chart
-                            [data]="bar"></bar-chart>
-                    </div>
+                    <bar-chart
+                        [data]="summaryBarsData"></bar-chart>
+                    <!--<div class="col-md-4" *ngFor="let bar of summaryBarsData">-->
+                        <!---->
+                    <!--</div>-->
                 </div>
             </div>
-
         </div>
 
         <div #block2 class="container-fluid">
-                <waterfall-chart
-                    #decomposition
-                    [data]="summaryDecompData"></waterfall-chart>
+            <waterfall-chart
+                #decomposition
+                [data]="summaryDecompData"></waterfall-chart>
         </div>
     </div>
 

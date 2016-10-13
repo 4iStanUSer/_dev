@@ -1,0 +1,13 @@
+.block-container {
+    display:inline-block;
+    width:33%;
+}
+.block-name {
+    font-weight:bold;
+}
+table.cagrs-table td {
+    text-align:center;
+}
+.period-label {
+    font-weight:bold;
+}

@@ -16,7 +16,18 @@ export class DashboardComponent implements OnInit {
 
     private localConfig: Object = {
         'modes': [
-            'summary', 'detailed', 'drivers'
+            {
+                'key': 'summary',
+                'name': 'Summary'
+            },
+            {
+                'key': 'detailed',
+                'name': 'Detailed'
+            },
+            {
+                'key': 'drivers',
+                'name': 'Drivers'
+            }
         ],
     };
 
@@ -24,8 +35,9 @@ export class DashboardComponent implements OnInit {
 
     public changeMode(mode: string) {
         if (mode
-            && this.localConfig['modes']
-            && this.localConfig['modes'].indexOf(mode) != -1)
+            && this.localConfig['modes'].filter(function(el){
+                return (el['key'] == mode) ? true : false;
+            }, this) != -1)
         {
             this.currMode = mode;
         }
@@ -75,15 +87,6 @@ export class DashboardComponent implements OnInit {
         this.absOrRate = e['key'];
         this.state.set('abs_or_rate', this.absOrRate);
 
-        // this.absOrRateSwitchData.map(function(el, i){
-        //     if (el['key'] == this.absOrRate) {
-        //         this.absOrRateSwitchData[i]['selected'] = true;
-        //     } else {
-        //         this.absOrRateSwitchData[i]['selected'] = false;
-        //     }
-        // }, this);
-
-        // this.setModeForDecomp = this.absOrRate;
         this.decompositionObj.changeMode(this.absOrRate);
 
         if ('rate' == this.absOrRate && this.summaryCagrsData === null) {

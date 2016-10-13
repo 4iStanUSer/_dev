@@ -9,9 +9,13 @@ import * as _ from 'lodash';
 })
 export class BarChartComponent implements OnInit {
 
-    private bar: Chart;
+    private blocks: Array<{
+        name: string;
+        cagrs: Array<Object>,
+        chart: Chart
+    }> = [];
 
-    private baseConfig: Object = {
+    private baseChartConfig: Object = {
         chart: {
             type: 'column'
         },
@@ -42,19 +46,25 @@ export class BarChartComponent implements OnInit {
 
     @Input() set data(data: Array<any>) {
         console.info('BarChartComponent: set data');
-
-        let config: Object = _.extend({}, this.baseConfig);
-        config['title']['text'] = data['name'];
-        config['series'][0]['name'] = data['name'];
-        if (data['data'] && _.isArray(data['data'])) {
-            for (let i=0; i<data['data'].length; i++) {
-                config['series'][0]['data'].push([
-                    data['data'][i]['name'],
-                    data['data'][i]['value']
-                ]);
+        console.log(data);
+        for (let i = 0; i < data.length; i++) {
+            let config: Object = _.cloneDeep(this.baseChartConfig);
+            // config['title']['text'] = data[i]['name'];
+            // config['series'][0]['name'] = data[i]['name'];
+            if (data[i]['data'] && _.isArray(data[i]['data'])) {
+                for (let j = 0; j < data[i]['data'].length; j++) {
+                    config['series'][0]['data'].push([
+                        data[i]['data'][j]['name'],
+                        data[i]['data'][j]['value']
+                    ]);
+                }
             }
+            this.blocks.push({
+                name: data[i]['name'],
+                cagrs: data[i]['cagrs'],
+                chart: new Chart(_.cloneDeep(config))
+            });
         }
-        this.bar = new Chart(_.cloneDeep(config));
     };
 
     constructor() {
