@@ -1,8 +1,11 @@
 .block-container {
     display:inline-block;
-    width:33%;
+    width:24%;
 }
 .block-name {
+    font-size:20px;
+}
+.block-name span {
     font-weight:bold;
 }
 table.cagrs-table td {

@@ -8,15 +8,13 @@
         <br/>
         Cagrs
     </div>
-    <div *ngFor="let block of blocks" class="block-container">
+    <div *ngFor="let block of blocks; let i = index" class="block-container">
         <div class="block-name">
-            {{ block['name'] }}
+            <span>{{ block['variable']['name'] }}</span>, {{ block['variable']['metric'] }}
+        </div>
 
-
-            <br/>
-            <a>Expand</a>
-
-
+        <div class="expand-button">
+            <a (click)="onExpandButtonClick(i)">Expand</a>
         </div>
 
         <div [chart]="block['chart']"></div>

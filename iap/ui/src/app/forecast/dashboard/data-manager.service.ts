@@ -178,12 +178,30 @@ export class DataManagerService {
             multiplier: null,
             type: 'driver',
             driver_type: 'economic'
+        },
+        sales: {
+            name: 'Sales',
+            metric: '$',
+            multiplier: 'MM',
+            type: 'output',
+        },
+        volume: {
+            name: 'Volume',
+            metric: 'EQ',
+            multiplier: 'Thousands',
+            type: 'output'
+        },
+        price: {
+            name: 'Price',
+            metric: 'per EQ',
+            multiplier: '$',
+            type: 'output'
         }
     };
 
     private data = {
         annual: {
-            CPI: [
+            sales: [
                 {
                     'timelabels_index': 0,
                     'value': 0,
@@ -208,7 +226,29 @@ export class DataManagerService {
                     'gr': 15
                 }
             ],
-            GDP: [
+            volume: [
+                {
+                    'timelabels_index': 0,
+                    'value': 4,
+                    'gr': 15
+                },
+                {
+                    'timelabels_index': 1,
+                    'value': 5,
+                    'gr': 15
+                },
+                {
+                    'timelabels_index': 2,
+                    'value': 6,
+                    'gr': 15
+                },
+                {
+                    'timelabels_index': 3,
+                    'value': 7,
+                    'gr': 15
+                }
+            ],
+            price: [
                 {
                     'timelabels_index': 0,
                     'value': 4,
@@ -232,7 +272,7 @@ export class DataManagerService {
             ]
         },
         quarterly: {
-            CPI: [
+            sales: [
                 {
                     'timelabels_index': 4,
                     'value': 8,
@@ -254,7 +294,29 @@ export class DataManagerService {
                     'gr': 15
                 },
             ],
-            GDP: [
+            volume: [
+                {
+                    'timelabels_index': 4,
+                    'value': 12,
+                    'gr': 15
+                },
+                {
+                    'timelabels_index': 5,
+                    'value': 13,
+                    'gr': 15
+                },
+                {
+                    'timelabels_index': 6,
+                    'value': 14,
+                    'gr': 15
+                },
+                {
+                    'timelabels_index': 7,
+                    'value': 15,
+                    'gr': 15
+                },
+            ],
+            price: [
                 {
                     'timelabels_index': 4,
                     'value': 12,
@@ -278,7 +340,7 @@ export class DataManagerService {
             ]
         },
         monthly: {
-            CPI: [
+            sales: [
                 {
                     'timelabels_index': 20,
                     'value': 16,
@@ -310,7 +372,39 @@ export class DataManagerService {
                     'gr': 15
                 }
             ],
-            GDP: [
+            volume: [
+                {
+                    'timelabels_index': 20,
+                    'value': 22,
+                    'gr': 15
+                },
+                {
+                    'timelabels_index': 21,
+                    'value': 23,
+                    'gr': 15
+                },
+                {
+                    'timelabels_index': 22,
+                    'value': 24,
+                    'gr': 15
+                },
+                {
+                    'timelabels_index': 23,
+                    'value': 25,
+                    'gr': 15
+                },
+                {
+                    'timelabels_index': 24,
+                    'value': 26,
+                    'gr': 15
+                },
+                {
+                    'timelabels_index': 25,
+                    'value': 27,
+                    'gr': 15
+                }
+            ],
+            price: [
                 {
                     'timelabels_index': 20,
                     'value': 22,
@@ -346,23 +440,30 @@ export class DataManagerService {
     };
 
     private cagrs = {
-        CPI: [
-            {'start': 2013, 'end': 2016, 'value': 0.12},
-            {'start': 2016, 'end': 2020, 'value': 0.13}
+        sales: [
+            {'start': 2010, 'end': 2013, 'value': 0.25},
+            {'start': 2010, 'end': 2012, 'value': 0.12},
+            {'start': 2012, 'end': 2013, 'value': 0.13}
         ],
-        GDP: [
-            {'start': 2013, 'end': 2016, 'value': 0.10},
-            {'start': 2016, 'end': 2020, 'value': 0.11}
+        volume: [
+            {'start': 2010, 'end': 2013, 'value': 0.25},
+            {'start': 2010, 'end': 2012, 'value': 0.10},
+            {'start': 2012, 'end': 2013, 'value': 0.15}
+        ],
+        price: [
+            {'start': 2010, 'end': 2013, 'value': 0.25},
+            {'start': 2010, 'end': 2012, 'value': 0.22},
+            {'start': 2012, 'end': 2013, 'value': 0.25}
         ]
     };
 
     private decomposition = [
         {
-            start: '2016',
-            end: '2020',
-            values: [
+            start: '2010',
+            end: '2013',
+            sales: [
                 {
-                    name: '2016',
+                    name: '2010',
                     value: 100,
                     growth: 100,
                     children: null
@@ -386,12 +487,12 @@ export class DataManagerService {
                     children: null
                 },
                 {
-                    name: '2020'
+                    name: '2013'
                 },
             ],
             volume: [
                 {
-                    name: '2016',
+                    name: '2010',
                     value: 15,
                     growth: 15,
                     children: null
@@ -409,7 +510,30 @@ export class DataManagerService {
                     children: null
                 },
                 {
-                    name: '2020'
+                    name: '2013'
+                }
+            ],
+            price: [
+                {
+                    name: '2010',
+                    value: 15,
+                    growth: 15,
+                    children: null
+                },
+                {
+                    name: 'Inflation',
+                    value: 3.15,
+                    growth: 2,
+                    children: null
+                },
+                {
+                    name: 'Pricing',
+                    value: 4.15,
+                    growth: 2,
+                    children: null
+                },
+                {
+                    name: '2013'
                 }
             ]
         }
@@ -419,103 +543,104 @@ export class DataManagerService {
         this.recreateScales();
     }
 
-    public getData_Waterfall(start: number|string, end: number|string) {
+    public getData_Waterfall(timelabelIds: Array<number>, variables: Array<string>) {
+        let start = this.timelabels[timelabelIds[0]]['name'];
+        let end = this.timelabels[timelabelIds[timelabelIds.length - 1]]['name'];
         let found = false;
         let i = 0;
         while (i < this.decomposition.length && !found) {
             if (
-                this.decomposition[i]['start'] == start
-                && this.decomposition[i]['end'] == end
+                this.decomposition[i]['start'].toString() == start
+                && this.decomposition[i]['end'].toString() == end
             ) {
                 found = true;
             } else {
                 i++;
             }
         }
+        console.log(123);
         if (found) {
-            return {
-                // 'modes': [
-                //     {
-                //         'key': 'growth',
-                //         'name': 'Growth rate'
-                //     },
-                //     {
-                //         'key': 'value',
-                //         'name': 'Absolute'
-                //     }
-                // ],
-                'variables': [
-                    {
-                        'name': 'Value',
-                        'key': 'values',
-                        'metric': 'piece'
-                    },
-                    {
-                        'name': 'Volume',
-                        'key': 'volume',
-                        'metric': 'USD'
-                    }
-                ],
+            let waterfall = {
                 'base_name': 'Decomposition',
+                'variables': variables.map(function(variable){
+                    let v = this.variables[variable];
+                    return {
+                        'name': v['name'],
+                        'key': variable,
+                        'metric': v['metric'],
+                        'multiplier': v['multiplier']
+                    };
+                }, this),
                 'start': this.decomposition[i]['start'],
-                'end': this.decomposition[i]['end'],
-                'values': this.decomposition[i]['values'],
-                'volume': this.decomposition[i]['volume']
+                'end': this.decomposition[i]['end']
+            };
+            for (let j=0;j<variables.length;j++) {
+                let v = variables[j];
+                waterfall[v] = this.decomposition[i][v];
             }
+            return waterfall;
         } else {
             // TODO Procedure for requesting more decomposition
         }
     }
 
-    public getData_Bar(timescale: string, variables: Array<string>) {
-        let bars: Array<Object> = [];
+    public getData_Bar(timelabelIds: Array<number>, variables: Array<string>) {
         let variable: string = null;
+        let timescale: string = this.timelabels[timelabelIds[0]]['timescale'];
+        let bars: Array<Object> = [];
+
+        let timelabelsForCagrs = this.getTwoCagrPeriods(timelabelIds);
+
         for (let i = 0; i < variables.length; i++) {
             variable = variables[i];
             // TODO Check existing
             if (this.data[timescale] && this.data[timescale][variable]) {
+                let data = this.data[timescale][variable]
+                    .filter(function (el) {
+                        return (timelabelIds.indexOf(el['timelabels_index']) != -1)
+                            ? true : false;
+                    })
+                    .map(function (el) {
+                        return {
+                            'name': this.timelabels[el['timelabels_index']]['name'],
+                            'value': el['value']
+                        }
+                    }, this);
+                let cagrs = timelabelsForCagrs.map(function(el){
+                    return this.getCagrsForPeriod(variable,
+                        el['start'], el['end']);
+                }, this);
+
                 bars.push({
                     'name': variable,
-                    'data': this.data[timescale][variable].map(function (el) {
-                        return {
-                            'name': this.timelabels[el['timelabels_index']]['name'].toString(),
-                            'value': el['value']
-                        };
-                    }, this),
-                    'cagrs': this.cagrs[variable]
+                    'variable': this.variables[variable],
+                    'cagrs': cagrs,
+                    'data': data
                 });
             }
         }
         return bars;
     }
 
-    public getData_Donut(start: number|string, end: number|string) {
-        let vars = ['CPI', 'GDP'];
+    public getData_Donut(timelabelIds: Array<number>, variables: Array<string>) {
+        let variable: string = null;
         let donuts = [];
-        for (let i = 0; i < vars.length; i++) {
-            if (this.cagrs[vars[i]]) {
-                let j = 0;
-                let found = false;
-                while (j < this.cagrs[vars[i]].length && found === false) {
-                    if (
-                        this.cagrs[vars[i]][j]['start'] == start
-                        &&
-                        this.cagrs[vars[i]][j]['end'] == end
-                    ) {
-                        donuts.push({
-                            'name': vars[i],
-                            'value': this.cagrs[vars[i]][j]['value'] * 100 // !!!
-                        });
-                        found = true;
-                    }
-                    j++;
-                }
-                if (!found) {
-                    // TODO Procedure for requesting more cagrs
-                }
-            } else {
-                // TODO Procedure for requesting more cagrs
-            }
+
+        let timelabelsForCagrs = this.getTwoCagrPeriods([
+            timelabelIds[0],
+            timelabelIds[timelabelIds.length - 1]
+        ]); // TODO Review. Only one element!
+
+        for (let i = 0; i < variables.length; i++) {
+            variable = variables[i];
+            let cagr = this.getCagrsForPeriod(variable,
+                timelabelsForCagrs[0]['start'],
+                timelabelsForCagrs[0]['end']);
+
+            donuts.push({
+                'name': this.variables[variable]['name'],
+                'value': cagr['value'] * 100 // !!!
+            });
         }
         return donuts;
     }
@@ -547,7 +672,80 @@ export class DataManagerService {
     public getData_HTable() {
     }
 
+    ////////////////////////////////
+    public getTwoCagrPeriods(timelabelIds: Array<string|number>) {
+        let timelabels = [];
+        if (timelabelIds.length < 3) {
+            timelabels = [
+                {
+                    start: this.timelabels[timelabelIds[0]]['name'],
+                    end: this.timelabels[timelabelIds[timelabelIds.length - 1]]['name']
+                }
+            ];
+        } else {
+            let _middleId = timelabelIds[Math.floor(timelabelIds.length / 2)];
+            timelabels = [
+                {
+                    start: this.timelabels[timelabelIds[0]]['name'],
+                    end: this.timelabels[_middleId]['name']
+                },
+                {
+                    start: this.timelabels[_middleId]['name'],
+                    end: this.timelabels[timelabelIds[timelabelIds.length - 1]]['name']
+                }
+            ];
+        }
+        return timelabels;
+    }
 
+    public getCagrsForPeriod(variable: string, start: string|number,
+                             end: string|number) {
+        start = start.toString();
+        end = end.toString();
+        for (let i = 0; i < this.cagrs[variable].length; i++) {
+            if (this.cagrs[variable][i]['start'].toString() == start
+                && this.cagrs[variable][i]['end'].toString() == end) {
+                return this.cagrs[variable][i];
+            }
+        }
+    }
+
+    public getVarsByType(type: string): Array<string> {
+        let vars = [];
+        for (let v in this.variables) {
+            if (this.variables[v]['type'] == type) {
+                vars.push(v);
+            }
+        }
+        return vars;
+    }
+
+    public getShortTimeLablesForOutput(timescale: string): Array<number> {
+        let longLables = this.getLongTimeLablesForOutput(timescale);
+        if (longLables.length < 3) {
+            return longLables;
+        } else {
+            return [
+                longLables[0],
+                longLables[Math.floor(longLables.length / 2)],
+                longLables[longLables.length - 1],
+            ];
+        }
+    }
+
+    public getLongTimeLablesForOutput(timescale: string): Array<number> {
+        // TODO Review sorting...
+        let vars = this.getVarsByType('output');
+        let timelables = [];
+        if (vars) {
+            timelables = this.data[timescale][vars[0]].map(function (el) {
+                return el['timelabels_index'];
+            });
+        }
+        return timelables;
+    }
+
+    ////////////////////////////////
 
 
     private digInitialData() {

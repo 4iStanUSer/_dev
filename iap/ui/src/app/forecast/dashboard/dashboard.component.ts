@@ -13,6 +13,7 @@ export class DashboardComponent implements OnInit {
 
     private pageName: string = 'dashboard';
     private currMode: string = 'summary';
+    private currTimeScale: string = 'annual';
 
     private localConfig: Object = {
         'modes': [
@@ -33,38 +34,30 @@ export class DashboardComponent implements OnInit {
 
     @ViewChild('decomposition') decompositionObj: WaterfallChartComponent;
 
-    public changeMode(mode: string) {
-        if (mode
-            && this.localConfig['modes'].filter(function(el){
-                return (el['key'] == mode) ? true : false;
-            }, this) != -1)
-        {
-            this.currMode = mode;
-        }
-    }
-
     private state: PageState;
     private lang: Object;
     private config: Object;
 
-    // private blockView: Array<boolean> = [
-    //     false,
-    //     false
-    // ];
+    private outputVars: Array<string> = [];
+    private driverVars: Array<string> = [];
 
-    // public donutsPeriod = {'start': 2016, 'end': 2020};
-    // public decompositionPeriod = {'start': 2010, 'end': 2015};
-
+    private periods: Object = {
+        'output_vars': {
+            'short': [],
+            'long': []
+        }
+    };
 
     public vTableData: Object = {};
 
 
-    public period = {'start': 2016, 'end': 2020};
+    public period = {'start': 2016, 'end': 2020}; // TODO Review
     public summaryCagrsData: Array<Object> = null;
-    public summaryBarsData: Array<Object> = null;
+    // public summaryBarsData: Array<Object> = null;
+    public summaryOutputsShortData: Array<Object> = null;
+
     public summaryDecompData: Object = null;
 
-    // private setModeForDecomp: string = null;
     /*---valueOrGrowthSwitch---*/
     public absOrRate: string = 'rate';
     public absOrRateSwitchData: Array<Object> = [
@@ -89,13 +82,16 @@ export class DashboardComponent implements OnInit {
 
         this.decompositionObj.changeMode(this.absOrRate);
 
+        let outputVars = this.dm.getVarsByType('output');
+        let timelabelsIds = this.dm.getShortTimeLablesForOutput(
+            this.currTimeScale);
+
         if ('rate' == this.absOrRate && this.summaryCagrsData === null) {
-            this.summaryCagrsData = this.dm.getData_Donut(
-                this.period['start'],
-                this.period['end']
-            );
-        } else if (this.summaryBarsData === null) {
-            this.summaryBarsData = this.dm.getData_Bar('annual', ['CPI', 'GDP']);
+            this.summaryCagrsData = this.dm.getData_Donut(timelabelsIds,
+                outputVars);
+        } else if (this.summaryOutputsShortData === null) {
+            this.summaryOutputsShortData = this.dm.getData_Bar(timelabelsIds,
+                outputVars);
         }
     }
     /*---.valueOrGrowthSwitch---*/
@@ -130,22 +126,20 @@ export class DashboardComponent implements OnInit {
             }
         }, this);
 
-        if ('rate' == this.absOrRate) {
-            this.summaryCagrsData = this.dm.getData_Donut(
-                this.period['start'],
-                this.period['end']
-            );
+        let outputVars = this.dm.getVarsByType('output');
+        let timelabelsIds = this.dm.getShortTimeLablesForOutput(
+            this.currTimeScale);
 
+        if ('rate' == this.absOrRate) {
+            this.summaryCagrsData = this.dm.getData_Donut(timelabelsIds,
+                outputVars);
         } else {
-            this.summaryBarsData = this.dm.getData_Bar(
-                'annual',
-                ['CPI', 'GDP']
-            );
+            this.summaryOutputsShortData = this.dm.getData_Bar(timelabelsIds,
+                outputVars);
         }
-        this.summaryDecompData = this.dm.getData_Waterfall(
-            this.period['start'],
-            this.period['end']
-        );
+
+        this.summaryDecompData = this.dm.getData_Waterfall(timelabelsIds,
+            outputVars);
 
         //////////////////////////////////////////////////////////////////////
 
@@ -155,6 +149,15 @@ export class DashboardComponent implements OnInit {
 
     }
 
+    public changeMode(mode: string) {
+        if (mode
+            && this.localConfig['modes'].filter(function(el){
+                return (el['key'] == mode) ? true : false;
+            }, this) != -1)
+        {
+            this.currMode = mode;
+        }
+    }
 
 
     // NEW structures
