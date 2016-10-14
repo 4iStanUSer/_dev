@@ -55,6 +55,12 @@ import {SwitchSelectorComponent} from "./common/cmp/switch-selector/switch-selec
 import {FilterListPipe} from "./common/pipes/filter-list.pipe";
 
 /*.Pipes section*/
+/*Login section*/
+import {AlertService} from "./common/module/login/services/alert.service";
+import {LoginComponent} from "./common/module/login/login.component";
+import {LoginFormComponent} from "./common/module/login/login-form/login-form.component";
+import {AlertComponent} from "./common/module/login/alert/alert.component";
+/*Login section*/
 
 @NgModule({
     imports: [
@@ -88,6 +94,10 @@ import {FilterListPipe} from "./common/pipes/filter-list.pipe";
         MenuWidgetComponent,
         ForecastEditPageCmp,
         ScenariosListComponent,
+
+        AlertComponent,
+        LoginFormComponent,
+        LoginComponent
     ],
     providers: [
         {provide: LocationStrategy, useClass: HashLocationStrategy},
@@ -100,7 +110,8 @@ import {FilterListPipe} from "./common/pipes/filter-list.pipe";
         LoadingService,
         ComponentFactoryService,
         StaticDataService,
-        StateService
+        StateService,
+        AlertService
     ],
     entryComponents: [
         AppComponent,
