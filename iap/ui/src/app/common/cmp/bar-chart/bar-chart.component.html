@@ -1,4 +1,8 @@
 <div>
+    <div>
+        <button (click)="onExpandButtonClick(null)">Expand All</button>
+    </div>
+
     <div class="block-container">
         Absolute
         <br/>
@@ -14,7 +18,7 @@
         </div>
 
         <div class="expand-button">
-            <a (click)="onExpandButtonClick(i)">Expand</a>
+            <button (click)="onExpandButtonClick(i)">Expand</button>
         </div>
 
         <div [chart]="block['chart']"></div>

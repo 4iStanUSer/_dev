@@ -3,3 +3,15 @@
 </select>
 
 <div [chart]="waterfall"></div>
+
+<div class="">
+    Driver change(CAGR)<br>
+    <button (click)="onExpandButtonClick($event)">Expand</button>
+    <table class="drivers-changes-table">
+        <tr>
+            <td *ngFor="let driverChange of driversChanges">
+                {{ driverChange['value'] + ' ' + driverChange['metric'] }}
+            </td>
+        </tr>
+    </table>
+</div>

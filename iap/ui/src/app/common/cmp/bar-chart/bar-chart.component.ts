@@ -1,4 +1,4 @@
-import {Component, OnInit, Input} from '@angular/core';
+import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {Chart} from './../../module/chart/';
 import * as _ from 'lodash';
 
@@ -55,6 +55,8 @@ export class BarChartComponent implements OnInit {
         }]
     };
 
+    @Output('click-expand') clickExpand = new EventEmitter();
+
     // @Input() set config(c: BarChartConfig) { // TODO Realize this
     //     _.extend(this._c, c);
     // }
@@ -83,8 +85,12 @@ export class BarChartComponent implements OnInit {
         }
     };
 
-    onExpandButtonClick(blockId: number) {
-        console.log('onExpandButtonClick ' + this.blocks[blockId]['name']);
+    private onExpandButtonClick(blockId: number) {
+        console.info('BarChartComponent "click-expand" event');
+        this.clickExpand.emit({
+            'name': (blockId !== null && this.blocks[blockId])
+                ? this.blocks[blockId]['name'] : null
+        });
     }
 
     constructor() {

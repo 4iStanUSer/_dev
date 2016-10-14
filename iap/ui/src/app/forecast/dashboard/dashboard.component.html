@@ -19,7 +19,16 @@
                 </div>
                 <div *ngSwitchCase="'absolute'">
                     <bar-chart
-                        [data]="summaryOutputsShortData"></bar-chart>
+                        [data]="summaryOutputsShortData"
+                        (click-expand)="showBarChartFull($event)"
+                    ></bar-chart>
+                    <!--TEMP-->
+                    <div *ngIf="showFullCharts">
+                        <bar-chart
+                            [data]="summaryOutputsFullData"
+                        ></bar-chart>
+                    </div>
+                    <!--.TEMP-->
                 </div>
             </div>
         </div>
@@ -27,7 +36,19 @@
         <div #block2 class="container-fluid">
             <waterfall-chart
                 #decomposition
-                [data]="summaryDecompData"></waterfall-chart>
+                [data]="summaryDecompData"
+                (click-expand)="showDecompositionFull($event)"
+            ></waterfall-chart>
+
+            <!--TEMP-->
+            <div *ngIf="showTable === true">
+                <accordion-table
+                    [data]="decompositionTableData"
+
+                    ></accordion-table>
+            </div>
+            <!--.TEMP-->
+
         </div>
     </div>
 

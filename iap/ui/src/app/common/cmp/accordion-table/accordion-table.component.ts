@@ -81,7 +81,6 @@ export class AccordionTableComponent implements OnInit {
         for (let i = 0; i < d['timelabels'].length; i++) {
             this.addBodyRow(d['timelabels'], i);
         }
-
     }
 
     private visibleDataRows(){

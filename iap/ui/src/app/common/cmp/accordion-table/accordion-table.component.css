@@ -1,5 +1,7 @@
-td, th {
+table.accordion-table {
     border-collapse: collapse;
+}
+td, th {
     border:1px solid #5e5e5e;
     padding:0 2px;
 }

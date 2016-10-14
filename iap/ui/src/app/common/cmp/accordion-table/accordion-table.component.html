@@ -1,6 +1,6 @@
 <a *ngFor="let depth of depthLevels" > {{ depth }} </a>
 
-<table>
+<table class="accordion-table">
     <tr *ngFor="let row of headRows">
         <th *ngFor="let meta of row.meta; let _first = first">
             {{ meta['label'] }}
@@ -16,13 +16,16 @@
             <span *ngFor="let j of range(bodyRows[i].depth)">&emsp;</span>
 
             <span
-                *ngIf="_first && !bodyRows[i].isHeader"
+                *ngIf="_first"
             >
-                <span *ngIf="bodyRows[i].children && bodyRows[i].children.length" (click)="bodyRows[i].changeExpandStatus()" class="expand-button">
-                    <i class="fa" [ngClass]="{'fa-minus': bodyRows[i].isExpanded, 'fa-plus': !bodyRows[i].isExpanded}" aria-hidden="true"></i>
+                <span *ngIf="bodyRows[i].children.length" (click)="bodyRows[i].changeExpandStatus()" class="expand-button">
+                    <span *ngIf="bodyRows[i].isExpanded">-</span>
+                    <span *ngIf="!bodyRows[i].isExpanded">+</span>
+                    <!--<i class="fa" [ngClass]="{'fa-minus': bodyRows[i].isExpanded, 'fa-plus': !bodyRows[i].isExpanded}" aria-hidden="true"></i>-->
                 </span>
-                <span *ngIf="!bodyRows[i].children || !bodyRows[i].children.length">
-                    <i class="fa fa-minus invisible"  aria-hidden="true"></i>
+                <span *ngIf="!bodyRows[i].children.length">
+                    <span>&nbsp;</span>
+                    <!--<i class="fa fa-minus invisible"  aria-hidden="true"></i>-->
                 </span>
             </span>
 

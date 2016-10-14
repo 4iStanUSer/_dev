@@ -18,8 +18,6 @@ export class DataManagerService {
 
     private scales: Array<string> = [];
 
-    // private scalesTree: Array<Object> = [];
-
     private hierarchy = [];
 
     private timelabels = [
@@ -461,80 +459,95 @@ export class DataManagerService {
         {
             start: '2010',
             end: '2013',
-            sales: [
+            vars: [
                 {
-                    name: '2010',
-                    value: 100,
-                    growth: 100,
-                    children: null
+                    key: 'sales',
+                    name: 'Sales',
+                    metric: '$',
+                    multiplier: 'MM',
+                    values: [
+                        {
+                            name: '2010',
+                            impact_abs: 100,
+                            impact_rate: 100,
+                            change_abs: null,
+                            change_rate: null,
+                            children: null
+                        },
+                        {
+                            name: 'Economic',
+                            impact_abs: 5,
+                            impact_rate: 2.15,
+                            change_abs: 10,
+                            change_rate: 15,
+                            children: null
+                        },
+                        {
+                            name: 'Inflation',
+                            impact_abs: 4,
+                            impact_rate: 3.15,
+                            change_abs: 12,
+                            change_rate: 10,
+                            children: null
+                        },
+                        {
+                            name: 'Pricing',
+                            impact_abs: 4.15,
+                            impact_rate: 2,
+                            change_abs: 22,
+                            change_rate: 8,
+                            children: null
+                        },
+                        {
+                            name: '2013',
+                            impact_abs: 4.15,
+                            impact_rate: 2,
+                            change_abs: null,
+                            change_rate: null,
+                            children: null
+                        }
+                    ]
                 },
                 {
-                    name: 'Economic',
-                    value: 2.15,
-                    growth: 5,
-                    children: null
+                    key: 'volume',
+                    name: 'Volume',
+                    metric: 'EQ',
+                    multiplier: 'Thousands',
+                    values: [
+                        {
+                            name: '2010',
+                            impact_abs: 100,
+                            impact_rate: 100,
+                            change_abs: null,
+                            change_rate: null,
+                            children: null
+                        },
+                        {
+                            name: 'Inflation',
+                            impact_abs: 4,
+                            impact_rate: 3.15,
+                            change_abs: 15,
+                            change_rate: 10,
+                            children: null
+                        },
+                        {
+                            name: 'Pricing',
+                            impact_abs: 4.15,
+                            impact_rate: 2,
+                            change_abs: 18,
+                            change_rate: 8,
+                            children: null
+                        },
+                        {
+                            name: '2013',
+                            impact_abs: 4.15,
+                            impact_rate: 2,
+                            change_abs: null,
+                            change_rate: null,
+                            children: null
+                        }
+                    ]
                 },
-                {
-                    name: 'Inflation',
-                    value: 3.15,
-                    growth: 4,
-                    children: null
-                },
-                {
-                    name: 'Pricing',
-                    value: 4.15,
-                    growth: 2,
-                    children: null
-                },
-                {
-                    name: '2013'
-                },
-            ],
-            volume: [
-                {
-                    name: '2010',
-                    value: 15,
-                    growth: 15,
-                    children: null
-                },
-                {
-                    name: 'Inflation',
-                    value: 3.15,
-                    growth: 2,
-                    children: null
-                },
-                {
-                    name: 'Pricing',
-                    value: 4.15,
-                    growth: 2,
-                    children: null
-                },
-                {
-                    name: '2013'
-                }
-            ],
-            price: [
-                {
-                    name: '2010',
-                    value: 15,
-                    growth: 15,
-                    children: null
-                },
-                {
-                    name: 'Inflation',
-                    value: 3.15,
-                    growth: 2,
-                    children: null
-                },
-                {
-                    name: 'Pricing',
-                    value: 4.15,
-                    growth: 2,
-                    children: null
-                },
-                {
-                    name: '2013'
-                }
             ]
         }
     ];
@@ -543,7 +556,7 @@ export class DataManagerService {
         this.recreateScales();
     }
 
-    public getData_Waterfall(timelabelIds: Array<number>, variables: Array<string>) {
+    public getData_Decomposition(timelabelIds: Array<number>) {
         let start = this.timelabels[timelabelIds[0]]['name'];
         let end = this.timelabels[timelabelIds[timelabelIds.length - 1]]['name'];
         let found = false;
@@ -558,26 +571,23 @@ export class DataManagerService {
                 i++;
             }
         }
-        console.log(123);
+
         if (found) {
             let waterfall = {
                 'base_name': 'Decomposition',
-                'variables': variables.map(function(variable){
-                    let v = this.variables[variable];
+                'start': this.decomposition[i]['start'],
+                'end': this.decomposition[i]['end'],
+                'vars': this.decomposition[i]['vars'].map(function(v){
                     return {
                         'name': v['name'],
-                        'key': variable,
+                        'key': v['key'],
                         'metric': v['metric'],
-                        'multiplier': v['multiplier']
+                        'multiplier': v['multiplier'],
+                        'values': v['values']
                     };
-                }, this),
-                'start': this.decomposition[i]['start'],
-                'end': this.decomposition[i]['end']
+                }, this) // === this.decomposition[i]['vars']
+
             };
-            for (let j=0;j<variables.length;j++) {
-                let v = variables[j];
-                waterfall[v] = this.decomposition[i][v];
-            }
             return waterfall;
         } else {
             // TODO Procedure for requesting more decomposition
@@ -622,7 +632,8 @@ export class DataManagerService {
         return bars;
     }
 
-    public getData_Donut(timelabelIds: Array<number>, variables: Array<string>) {
+    public getData_Donut(timelabelIds: Array<number>,
+                         variables: Array<string>): Array<Object> {
         let variable: string = null;
         let donuts = [];
 
@@ -646,6 +657,9 @@ export class DataManagerService {
     }
 
     public getData_VTable() {
+        // console.log(this.timelabels);
+        // console.log(this.data);
+        // console.log(this.variables);
         return {
             'variables': this.variables,
             'data': this.data,
@@ -653,7 +667,7 @@ export class DataManagerService {
             'scales_order': this.scales, // ['annual', 'quarterly', 'monthly']
             'config': {
                 'head': {
-                    'horizontal_order': ['CPI', 'GDP'],
+                    'horizontal_order': ['sales', 'volume', 'price'],
                     'vertical_order': [
                         {
                             'key': 'name',
@@ -673,7 +687,7 @@ export class DataManagerService {
     }
 
     ////////////////////////////////
-    public getTwoCagrPeriods(timelabelIds: Array<string|number>) {
+    public getTwoCagrPeriods(timelabelIds: Array<string|number>): Array<Object> {
         let timelabels = [];
         if (timelabelIds.length < 3) {
             timelabels = [
