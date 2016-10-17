@@ -1,4 +1,4 @@
-from .. import helpers
+from ....common import helper_lib
 
 
 def init_container(dev_template, wh, container, wh_inputs, wh_outputs):
@@ -19,8 +19,8 @@ def _init_entity(dev_template, wh_ent, container, input_rules, output_rules):
     # Find level parameters in developers template.
     level_params = None
     for item in dev_template['structure']:
-        meta = helpers.Meta(item['meta'][0], item['meta'][1])
-        if helpers.is_equal_meta(meta, cont_ent.meta):
+        meta = helper_lib.Meta(item['meta'][0], item['meta'][1])
+        if helper_lib.is_equal_meta(meta, cont_ent.meta):
             level_params = item
             break
     if level_params is None:
@@ -37,8 +37,8 @@ def _init_entity(dev_template, wh_ent, container, input_rules, output_rules):
     # Find exchange mapping rules in developer template.
     exchange_params = None
     for item in dev_template['exchange_rules']:
-        meta = helpers.Meta(item['meta'][0], item['meta'][1])
-        if helpers.is_equal_meta(meta, cont_ent.meta):
+        meta = helper_lib.Meta(item['meta'][0], item['meta'][1])
+        if helper_lib.is_equal_meta(meta, cont_ent.meta):
             exchange_params = item
             break
     if exchange_params is not None:
@@ -47,9 +47,9 @@ def _init_entity(dev_template, wh_ent, container, input_rules, output_rules):
                 exchange_params['output_variables']
         for counter, rule in enumerate(rules):
             row = dict(wh_path=wh_ent.path,
-                       wh_var=helpers.Variable(rule['wh_var'], rule['wh_ts']),
+                       wh_var=helper_lib.Variable(rule['wh_var'], rule['wh_ts']),
                        cont_entity_id=cont_ent.id,
-                       cont_var=helpers.Variable(rule['cont_var'],
+                       cont_var=helper_lib.Variable(rule['cont_var'],
                                                  rule['cont_ts']),
                        time_period=rule['time_period'])
             if counter < inputs_len:

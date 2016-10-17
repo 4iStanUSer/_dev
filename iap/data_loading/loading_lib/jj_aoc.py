@@ -1,5 +1,5 @@
 from iap.repository import exceptions as ex
-from iap.data_processing.data_loading.common import date_func, get_last_col
+from iap.data_loading.loading_lib.common import date_func, get_last_col
 
 
 def jj_aoc(wb, meta_cols, data_cols, dates_cols):

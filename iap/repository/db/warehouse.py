@@ -62,6 +62,10 @@ class Warehouse:
     def get_entity_by_id(self, entity_id):
         return self._ssn.query(Entity).get(entity_id)  # .one_or_none()
 
+    def get_time_scale(self, ts_name):
+        return self._ssn.query(TimeScale)\
+            .filter(TimeScale.name == ts_name).one_or_none()
+
     def add_time_scale(self, name, time_line):
         time_scale = self._ssn.query(TimeScale) \
             .filter(TimeScale.name == name).one_or_none()
@@ -128,10 +132,29 @@ class TimeScale(Base):
     name = Column(String(length=255))
     timeline = relationship('TimePoint', back_populates='time_scale')
 
+    def get_label_by_stamp(self, stamp):
+        try:
+            for x in self.timeline:
+                if x.timestamp == stamp:
+                    return x.name
+            return None
+            #label = next(x.name for x in self.timeline
+            #                 if x.timestamp == stamp)
+            #return label
+        except StopIteration:
+            raise ex.NotFoundError('TimeStamp', 'stamp', stamp,
+                                   'No label was found by timestamp',
+                                   'get_label_by_stamp')
+
     def get_stamp_by_label(self, label):
         try:
-            timestamp = next(x.timestamp for x in self.timeline
-                             if x.name == label)
+            for x in self.timeline:
+                if x.name == label:
+                    return x.timestamp
+            return None
+
+            #timestamp = next(x.timestamp for x in self.timeline
+            #                 if x.name == label)
             return timestamp
         except StopIteration:
             raise ex.NotFoundError('TimeStamp', 'label', label,
@@ -228,6 +251,9 @@ class Entity(Base):
             return None
         return self.parents[0]
 
+    @property
+    def variables(self):
+        return self._variables
     #@hybrid_property
     #def dimension(self):
     #    return self._dimension_name
@@ -270,6 +296,12 @@ class Entity(Base):
         new_child = Entity(_name=name, _dimension_name=meta[0], _layer=meta[1])
         self.children.append(new_child)
         return new_child
+
+    def get_child(self, name):
+        for child in self.children:
+            if child.name == name:
+                return child
+        return None
 
     def _add_node_by_path(self, path, meta, depth):
         node = None
@@ -475,7 +507,8 @@ class TimeSeries(Base):
         # Get existing points from range defined in inputs.
         existing_points = \
             sorted([x for x in self._values
-                    if new_stamps[0] <= x.timestamp <= new_stamps[-1]])
+                    if new_stamps[0] <= x.timestamp <= new_stamps[-1]],
+                   key=lambda x: x.timestamp)
         # For range defined in inputs find old points or create new.
         # Set new values.
         for ind, stamp in enumerate(new_stamps):
@@ -501,7 +534,8 @@ class TimeSeries(Base):
             # Get timestamp from start label.
             start = self._time_scale.get_stamp_by_label(start_label)
             # Get all points from start.
-            points = sorted([x for x in self._values if x.timestamp >= start])
+            points = sorted([x for x in self._values if x.timestamp >= start],
+                            key=lambda x: x.timestamp)
             # Limit length, if length is less than expected throw exception.
             if length is not None:
                 if len(points) < length:

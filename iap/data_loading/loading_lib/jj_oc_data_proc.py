@@ -1,5 +1,5 @@
 from iap.repository import exceptions as ex
-from iap.data_processing.data_loading.common import get_last_col
+from iap.data_loading.loading_lib.common import get_last_col
 import collections
 
 

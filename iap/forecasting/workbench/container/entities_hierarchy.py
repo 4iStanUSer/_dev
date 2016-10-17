@@ -1,4 +1,4 @@
-from ..helpers import Meta
+from ....common.helper_lib import Meta
 
 class Node:
 

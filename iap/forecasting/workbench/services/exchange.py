@@ -1,4 +1,4 @@
-from .. import helpers
+from ....common import helper_lib
 
 
 def download_data_from_wh(warehouse, container, mapping):
@@ -10,7 +10,7 @@ def download_data_from_wh(warehouse, container, mapping):
     for row in mapping:
         # Get warehouse entity is necessary.
         if prev_wh_entity is None or \
-                not helpers.is_equal_path(prev_wh_entity.path, row['wh_path']):
+                not helper_lib.is_equal_path(prev_wh_entity.path, row['wh_path']):
             wh_entity = warehouse.get_entity(row['wh_path'])
             prev_wh_entity = wh_entity
         # Get container entity if necessary.

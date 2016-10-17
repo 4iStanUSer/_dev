@@ -8,3 +8,15 @@ from .jj_oc_data_proc import jj_oc_data_proc
 from .common import week_to_month
 from .common import date_monthly_excel_number
 from .common import date_jj_1week
+
+from .jj_lean import (
+    jj_lean_init,
+    jj_lean_media_spend,
+    jj_lean_nielsen,
+    jj_lean_aggr_weeks
+)
+from .jj_oral_care import (
+    jj_oral_care_init,
+    jj_oral_care_sales,
+    jj_oral_care_trends
+)

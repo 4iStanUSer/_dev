@@ -5,7 +5,7 @@ import transaction
 from pyramid.paster import (get_appsettings, setup_logging)
 from pyramid.scripts.common import parse_vars
 
-from iap.data_processing.data_proc_manager import Loader
+from iap.data_loading.data_loader import Loader
 from iap.repository.tmp_template import tool_template
 from .db import (get_engine, get_session_factory, get_tm_session)
 from .db.meta import Base
@@ -41,14 +41,15 @@ def main(argv=sys.argv):
         # Create all tables
         Base.metadata.create_all(engine)
         # Add root to entities tree.
-        root = Entity(name='root', layer='root', dimension='root')
+        root = Entity(_name='root', _layer='root', _dimension_name='root')
         ssn.add(root)
 
         transaction.manager.commit()
 
         wh = Warehouse(session_factory)
-        loader = Loader(wh, data_load_command='jj')
-        loader.load()
+        loader = Loader(wh)
+        loader.run_processing('JJLean')
+        loader.run_processing('JJOralCare')
 
         transaction.manager.commit()
 

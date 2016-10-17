@@ -6,6 +6,12 @@ from iap.repository.db.warehouse import DataType, get_default_value
 import math
 
 
+
+def empty_to_zero(text):
+    if text == '':
+        return '0'
+    return text
+
 # TODO delete this old method
 def __mapping(in_meta_dict, rules_dict):
     # Check rules match
