@@ -1,0 +1,98 @@
+<div class="container-fluid">
+
+    <div class="mode-list-container">
+        <span *ngFor="let mode of localConfig['modes']" (click)="changeMode(mode['key'])">{{ mode['name'] }}</span>
+    </div>
+
+
+    <div *ngIf="'summary' == currMode">
+        <div #block1 class="container-fluid">
+            <switch-selector
+                [(data)]="absOrRateSwitchData"
+                [config]="absOrRateSwitchConfig"
+                (changed)="absOrRateSwitchChanged($event)"></switch-selector>
+
+            <div [ngSwitch]="absOrRate">
+                <div *ngSwitchCase="'rate'">
+                    <donut-chart
+                        [data]="summaryCagrsData"></donut-chart>
+                </div>
+                <div *ngSwitchCase="'absolute'">
+                    <bar-chart
+                        [data]="summaryOutputsShortData"
+                        (click-expand)="showBarChartFull($event)"
+                    ></bar-chart>
+                    <!--TEMP-->
+                    <div *ngIf="showFullCharts">
+                        <bar-chart
+                            [data]="summaryOutputsFullData"
+                        ></bar-chart>
+                    </div>
+                    <!--.TEMP-->
+                </div>
+            </div>
+        </div>
+
+        <div #block2 class="container-fluid">
+            <waterfall-chart
+                #decomposition
+                [data]="summaryDecompData"
+                (click-expand)="showDecompositionFull($event)"
+            ></waterfall-chart>
+
+            <!--TEMP-->
+            <div *ngIf="showTable === true">
+                <accordion-table
+                    [data]="decompositionTableData"
+
+                    ></accordion-table>
+            </div>
+            <!--.TEMP-->
+
+        </div>
+    </div>
+
+    <div *ngIf="'detailed' == currMode">
+
+    </div>
+
+    <div *ngIf="'drivers' == currMode">
+
+    </div>
+</div>
+
+
+<!--<div class="container-fluid">-->
+    <!--<switch-selector [data]="switchSelectorData" [config]="switchSelectorConfig" (changed)="switchSelectorChanged($event)"></switch-selector>-->
+
+    <!--<div #firstBlock>-->
+        <!--<div class="container-fluid">-->
+            <!--<input-->
+                <!--type="checkbox"-->
+                <!--[ngModel]="blockView[0]"-->
+                <!--(ngModelChange)="changedBlockView(0, $event)"-->
+                <!--&gt;-->
+        <!--</div>-->
+
+        <!--<div *ngIf="!blockView[0]" class="container-fluid">-->
+            <!--<donut-chart [data]="donutChartData"></donut-chart>-->
+        <!--</div>-->
+        <!--<div *ngIf="blockView[0]" class="container-fluid">-->
+            <!--<div class="col-md-4" *ngFor="let bar of barChartData">-->
+                <!--<bar-chart [data]="bar"></bar-chart>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+
+    <!--<div #secondBlock>-->
+        <!--<input type="checkbox" [(ngModel)]="blockView[1]">-->
+
+        <!--<div class="container-fluid">-->
+            <!--<waterfall-chart [data]="waterfallChartData"></waterfall-chart>-->
+        <!--</div>-->
+    <!--</div>-->
+
+    <!--<div>-->
+        <!--<accordion-table [data]="vTableData"></accordion-table>-->
+    <!--</div>-->
+<!--</div>-->

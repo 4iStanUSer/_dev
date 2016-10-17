@@ -1,10 +1,10 @@
-import { AngularCliWebpack8Page } from './app.po';
+import { IapPage } from './app.po';
 
-describe('angular-cli-webpack-8 App', function() {
-  let page: AngularCliWebpack8Page;
+describe('migration-proj App', function() {
+  let page: IapPage;
 
   beforeEach(() => {
-    page = new AngularCliWebpack8Page();
+    page = new IapPage();
   });
 
   it('should display message saying app works', () => {

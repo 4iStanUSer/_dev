@@ -1,0 +1,10 @@
+.mode-list-container > * {
+    cursor: pointer;
+    font-size: 20px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+.mode-list-container > *:before,
+.mode-list-container > *:after {
+    content: ' ';
+}

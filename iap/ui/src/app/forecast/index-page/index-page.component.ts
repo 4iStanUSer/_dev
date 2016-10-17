@@ -419,5 +419,4 @@ export class IndexPageComponent {
     //     }
     // ];
     /***********.HIERARCHY_WIDGET*************/
-
 }

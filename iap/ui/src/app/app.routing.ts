@@ -28,6 +28,10 @@ import {
 import {
     ScenariosListComponent as ForecastScenariosCmp
 } from './forecast/scenarios-list/scenarios-list.component';
+import {
+    DashboardComponent as ForecastDashboardCmp
+} from './forecast/dashboard/dashboard.component';
+import {LoginComponent} from "./common/module/login/login.component";
 
 const appRoutes: Routes = [
     // { path: 'crisis-center', component: CrisisCenterComponent },
@@ -40,8 +44,10 @@ const appRoutes: Routes = [
     // },
     // { path: 'hero/:id', component: HeroDetailComponent },
     // { path: '**', component: PageNotFoundComponent }
-    { path: '', pathMatch: 'full', redirectTo: 'forecast' },
+    { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
+    { path: 'dashboard', component: ForecastDashboardCmp }, //outlet: 'forecast',
     { path: 'forecast', component: ForecastIndexPageComponent }, //outlet: 'forecast',
+    { path: 'login', component: LoginComponent }, //outlet: 'forecast',
     // { path: 'crisis', loadChildren: 'app/crisis/crisis.module#CrisisModule' }
     { path: 'forecast/edit', component: ForecastEditPageComponent }, //outlet: 'tree',
     { path: 'forecast/scenarios', component: ForecastScenariosCmp }

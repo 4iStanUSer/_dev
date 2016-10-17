@@ -1,0 +1,40 @@
+<div>
+    <div>
+        <button (click)="onExpandButtonClick(null)">Expand All</button>
+    </div>
+
+    <div class="block-container">
+        Absolute
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        Cagrs
+    </div>
+    <div *ngFor="let block of blocks; let i = index" class="block-container">
+        <div class="block-name">
+            <span>{{ block['variable']['name'] }}</span>, {{ block['variable']['metric'] }}
+        </div>
+
+        <div class="expand-button">
+            <button (click)="onExpandButtonClick(i)">Expand</button>
+        </div>
+
+        <div [chart]="block['chart']"></div>
+
+        <table class="cagrs-table">
+            <tr>
+                <td
+                    *ngFor="let cagr of block['cagrs']"
+                >
+                    <div class="period-label">{{ cagr['start'] + '/' + cagr['end'] }}</div>
+                    {{ cagr['value'] }}
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+

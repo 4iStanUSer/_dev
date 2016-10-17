@@ -3,6 +3,7 @@ import {CommonModule} from '@angular/common';
 import {
     ComponentFactoryService
 } from './../../common/service/component-factory.service';
+import { DonutChartComponent } from './../../common/cmp/donut-chart/donut-chart.component';
 // import { TimeseriesWidgetModule } from './../../common/cmp/timeseries-widget/';
 // import { HierarchyWidgetComponent } from './../../common/cmp/hierarchy-widget/';
 // import { DropdownComponent } from './../../common/cmp/dropdown/';
@@ -14,11 +15,17 @@ import {
 } from './index-page.component';
 import {IndexPageService} from './../service/index-page.service';
 
+
+// import { ChartModule } from './../../common/module/chart/';
+
+
 @NgModule({
     imports: [
-        CommonModule
+        CommonModule,
         // ComponentFactoryModule
         // TimeseriesWidgetModule
+
+        // ChartModule
     ],
     declarations: [
         // TimeseriesWidgetComponent,
@@ -26,7 +33,8 @@ import {IndexPageService} from './../service/index-page.service';
         // DropdownComponent,
         // DatepickerComponent,
         NavagationPanelComponent,
-        IndexPageComponent
+        IndexPageComponent,
+        // DonutChartComponent
     ],
     exports: [
         IndexPageComponent

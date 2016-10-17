@@ -1,0 +1,6 @@
+table.drivers-changes-table {
+    border-collapse: collapse;
+}
+table.drivers-changes-table td {
+    border: 1px solid #000;
+}
