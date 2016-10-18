@@ -17,12 +17,14 @@ from . import security
 from . import service
 
 # TODO (1.0) REMOVE THIS
+#############################################################
 from ..forecasting.services.getter import run_time_collection, runTimeEx
 from ..forecasting.workbench.workbench_engine import WorkbenchEngine
 from ..repository import (get_manage_access_interface, get_wh_interface,
                           get_access_interface)
 from ..repository.storage import Storage
 from ..forecasting import TOOL_NAME as forecast_tool_name
+#############################################################
 
 
 def notfound_view(req):
@@ -45,6 +47,7 @@ def index_view(req):
     # service.recreate_db(req)
     # service.fillin_db(req)
 
+    #############################################################
     user_id = 1
     tool_name = forecast_tool_name
     # TODO(1.0) - REMOVE
@@ -68,6 +71,7 @@ def index_view(req):
         new_backup = wb.get_data_for_backup()
         s = Storage()
         s.save_backup(user_id, tool_name, new_backup, 'default')
+    #############################################################
 
     return render_to_response('templates/index.jinja2',
                               {'title': 'Home page'},
