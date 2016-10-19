@@ -1,3 +1,5 @@
+import copy
+
 from .. import exceptions as ex
 
 
@@ -117,10 +119,38 @@ class EntityData:
             raise Exception
 
 
-def get_data_for_save(self):
-    pass
+def get_backup(self):
+    var_props = {key: {'def_value': value['default_value']}
+                 for key, value in self._variables.items()}
+    var_values = []
+    for var_name, var in self._variables:
+        for ts_name, ts in var['time_series'].items():
+            var_values.append(dict(var_name=var_name,
+                                   ts_name=ts_name,
+                                   values=copy.copy(ts['values'])))
+    coeff_values = []
+    for coeff_name, var in self._coefficients:
+        for ts_name, value in var['time_series'].items():
+            coeff_values.append(dict(coeff_name=coeff_name,
+                                     ts_name=ts_name, value=value))
+    backup = dict(var_properties=var_props, var_values=var_values,
+                  coeff_values=coeff_values)
+    return backup
 
 
-def load(self):
-    pass
+def load_backup(self, backup):
 
+    var_props = backup['var_properties']
+    for name, properties in var_props:
+        self._variables[name] = dict(default_value=properties['default_value'],
+                                     timeseries=dict())
+    var_values = backup['var_values']
+    for var in var_values:
+        ts = self._get_ts(var['var_name'], var['ts_name'])
+        ts['values'] = copy.copy(var['values'])
+
+    coeff_values = backup['coeff_values']
+    for coeff in coeff_values:
+        self.add_coeff(coeff['coeff_name'], coeff['ts_name'])
+        self.set_coeff_value(coeff['coeff_name'], coeff['ts_name'],
+                             coeff['value'])

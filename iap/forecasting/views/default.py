@@ -215,7 +215,7 @@ def get_scenarios_list(req):
 def get_dashboard_data(req):
     # Get parameters from request.
     try:
-        user_id = req.json_body['user_id']
+        user_id = req.get_user()
         entity_id = req.json_body['entity_id']
     except KeyError:
         msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
@@ -231,7 +231,7 @@ def get_dashboard_data(req):
 
 def get_dashboard_data_for_period(req):
     try:
-        user_id = req.json_body['user_id']
+        user_id = req.get_user()
         entity_id = req.json_body['entity_id']
         period = (req.json_body['period'][0], req.json_body['period'][1])
     except KeyError:

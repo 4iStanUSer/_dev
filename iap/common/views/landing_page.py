@@ -19,7 +19,7 @@ def get_tools_list(req):
 def set_tool_selection(req):
     state = State()
     try:
-        state.user_id = req.json_body['user_id']
+        state.user_id = req.get_user()
         state.tool_id = req.json_body['tool_id']
         state.project_id = req.json_body['project_id']
     except KeyError:

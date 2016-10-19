@@ -11,6 +11,11 @@ class Container:
         self._nodes_dict = {}
         self._max_node_id = 0
 
+    def _clean(self):
+        self._hierarchy = Node('root', (None, None))
+        self._nodes_dict = {}
+        self._max_node_id = 0
+
     def add_entity(self, path, metas):
         new_nodes = []
         # Add nodes.
@@ -64,10 +69,30 @@ class Container:
         return data
 
     def load(self, backup):
-        pass
+        self._clean()
+        for node_info in backup:
+            new_nodes = []
+            latest_node = self._hierarchy.add_node_by_path(node_info['path'],
+                                                           node_info['metas'],
+                                                           0, new_nodes)
+            for node in new_nodes:
+                self._max_node_id += 1
+                node.id = self._max_node_id
+                self._nodes_dict[node.id] = \
+                    dict(node=node, data=EntityData(self.timeline))
+            self._nodes_dict[latest_node.id]['data']\
+                .load_backup(node_info['data'])
+        return
 
     def save(self):
-        pass
+        backup = []
+        for node_info in self._nodes_dict:
+            path = []
+            metas = []
+            node_info['node'].get_path(path, metas)
+            data = node_info['data'].get_backup()
+            backup.append(dict(path=path, metas=metas, data=data))
+        return backup
 
 class CEntity:
 
@@ -167,12 +192,6 @@ class CEntity:
 
     def set_coeff_value(self, coeff_name, ts_name, value):
         self._data.set_coeff_value(coeff_name, ts_name, value)
-
-    def load(self, entity_dict):  #, path=[]
-        pass
-
-    def save(self):
-        pass
 
     def get_decomposition(self, timescale, period):
         pass

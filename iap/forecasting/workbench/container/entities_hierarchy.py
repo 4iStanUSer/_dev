@@ -50,10 +50,11 @@ class Node:
     def rename(self, new_name):
         pass
 
-    def get_path(self, path):
+    def get_path(self, path, metas):
         if self.name == 'root':
             return
         path.insert(0, self.name)
+        metas.insert(0, self.meta)
         if len(self.parents) != 1:
             raise Exception
-        self.parents[0].get_path(path)
+        self.parents[0].get_path(path, metas)

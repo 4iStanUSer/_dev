@@ -2,8 +2,9 @@ import pyramid
 from pyramid.config import Configurator
 from pyramid.response import Response
 
+from .common import security
 from .common.views import default as common
-from .common.views import landing_page
+from .common.views import landing_page as landing
 from .forecasting.views import default as forecast
 
 
@@ -25,9 +26,14 @@ def common_routing(config):
     config.add_route('common.index', '/')
     config.add_view(common.index_view, route_name='common.index')
 
-    config.add_route('landing_page.get_tools_list', '/landing')
-    config.add_view(landing_page.get_tools_list,
-                    route_name='landing_page.get_tools_list')
+    config.add_route('landing.get_tools_list', '/landing')
+    config.add_view(landing.get_tools_list,
+                    route_name='landing.get_tools_list',
+                    request_method='POST', renderer='json')
+
+    config.add_route('landing.set_tool_selection', '/set_tool_selection')
+    config.add_view(landing.set_tool_selection,
+                    route_name='landing.set_tool_selection')
 
     config.add_route('common.login', '/login')
     config.add_view(common.login_view, route_name='common.login')
@@ -35,7 +41,7 @@ def common_routing(config):
     config.add_route('common.logout', '/logout')
     config.add_view(common.logout_view, route_name='common.logout')
 
-    #config.include('.common.security')
+    config.include(security)
 
 
 def forecast_routing(config):
@@ -67,6 +73,18 @@ def forecast_routing(config):
                      '/get_scenarios_list')
     config.add_view(forecast.get_scenarios_list,
                     route_name='forecast.get_scenarios_list',
+                    request_method='POST', renderer='json')
+
+    config.add_route('forecast.get_dashboard_data',
+                     '/get_dashboard_data')
+    config.add_view(forecast.get_dashboard_data,
+                    route_name='forecast.get_dashboard_data',
+                    request_method='POST', renderer='json')
+
+    config.add_route('forecast.get_dashboard_data_for_period',
+                     '/get_dashboard_data_for_period')
+    config.add_view(forecast.get_dashboard_data_for_period,
+                    route_name='forecast.get_dashboard_data_for_period',
                     request_method='POST', renderer='json')
 
 
