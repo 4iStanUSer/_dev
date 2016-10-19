@@ -6,8 +6,8 @@ recursive-include iap/common *
 recursive-include iap/data_processing *
 recursive-include iap/forecasting *
 recursive-include iap/repository *
-recursive-include iap\ui\dist *
-recursive-include iap\ui __init__.py
+recursive-include iap/ui/dist *
+recursive-include iap/ui __init__.py
 
 recursive-exclude .idea *
 recursive-exclude iap/ui/.idea *
