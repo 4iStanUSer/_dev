@@ -13,12 +13,15 @@ import {HttpModule, JsonpModule} from '@angular/http';
 import {AppComponent} from './app.component';
 import {routing, appRoutingProviders} from './app.routing';
 
+import {LandingPageComponent} from "./common/pages/landing-page/landing-page.component";
+
 /*Dashboard*/
 import {DashboardComponent} from './forecast/dashboard/dashboard.component';
 import {
     DataManagerService as DashboardDM
 } from './forecast/dashboard/data-manager.service';
 /*.Dashboard*/
+
 
 /*Decide about below*/
 import {MenuWidgetComponent} from './common/cmp/menu-widget/';
@@ -52,7 +55,8 @@ import {SwitchSelectorComponent} from "./common/cmp/switch-selector/switch-selec
 /*.Charts section*/
 
 /*Pipes section*/
-import {FilterListPipe} from "./common/pipes/filter-list.pipe";
+import {FilterListPipe} from "./common/pipe/filter-list.pipe";
+import {KeysPipe} from "./common/pipe/keys.pipe";
 
 /*.Pipes section*/
 /*Login section*/
@@ -85,11 +89,14 @@ import {AlertComponent} from "./common/module/login/alert/alert.component";
         DashboardComponent,
         /*Decide about below*/
         FilterListPipe,
+        KeysPipe,
         DonutChartComponent,
         BarChartComponent,
         WaterfallChartComponent,
         AccordionTableComponent,
         SwitchSelectorComponent,
+
+        LandingPageComponent,
 
         MenuWidgetComponent,
         ForecastEditPageCmp,
