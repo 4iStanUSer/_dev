@@ -1,24 +1,7 @@
-﻿// import { provideRouter, RouterConfig } from '@angular/router';
-//
-// import {
-//     IndexPageComponent as ForecastIndexPageComponent
-// } from './forecast/index-page/';
-// import {
-//     EditPageComponent as ForecastEditPageComponent
-// } from './forecast/edit-page/';
-//
-//
-// export const routes: RouterConfig = [
-//     { path: '', pathMatch: 'full', redirectTo: 'forecast' },
-//     { path: 'forecast', component: ForecastIndexPageComponent }, //outlet: 'forecast',
-//     { path: 'forecast/edit', component: ForecastEditPageComponent } //outlet: 'tree',
-// ];
-//
-// export const APP_ROUTER_PROVIDERS = [
-//     provideRouter(routes)
-// ];
+﻿import { Routes, RouterModule } from '@angular/router';
 
-import { Routes, RouterModule } from '@angular/router';
+import {LandingPageComponent} from "./common/pages/landing-page/landing-page.component";
+
 import {
     IndexPageComponent as ForecastIndexPageComponent
 } from './forecast/index-page/index-page.component';
@@ -33,6 +16,7 @@ import {
 } from './forecast/dashboard/dashboard.component';
 import {LoginComponent} from "./common/module/login/login.component";
 
+
 const appRoutes: Routes = [
     // { path: 'crisis-center', component: CrisisCenterComponent },
     // {
@@ -43,12 +27,16 @@ const appRoutes: Routes = [
     // }
     // },
     // { path: 'hero/:id', component: HeroDetailComponent },
-    // { path: '**', component: PageNotFoundComponent }
-    { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
-    { path: 'dashboard', component: ForecastDashboardCmp }, //outlet: 'forecast',
-    { path: 'forecast', component: ForecastIndexPageComponent }, //outlet: 'forecast',
-    { path: 'login', component: LoginComponent }, //outlet: 'forecast',
+    // { path: '**', component: PageNotFoundComponent },
     // { path: 'crisis', loadChildren: 'app/crisis/crisis.module#CrisisModule' }
+    { path: '', pathMatch: 'full', redirectTo: 'landing' },
+    { path: 'landing', component: LandingPageComponent }, //outlet: 'forecast',
+
+    // TODO TO BE MOVED  into forecast module (VL)
+    { path: 'dashboard', component: ForecastDashboardCmp }, //outlet: 'forecast',
+    { path: 'forecast', component: ForecastDashboardCmp }, //outlet: 'forecast',
+    // { path: 'forecast', component: ForecastIndexPageComponent }, //outlet: 'forecast',
+    { path: 'login', component: LoginComponent }, //outlet: 'forecast',
     { path: 'forecast/edit', component: ForecastEditPageComponent }, //outlet: 'tree',
     { path: 'forecast/scenarios', component: ForecastScenariosCmp }
 ];

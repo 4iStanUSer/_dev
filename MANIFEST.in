@@ -1,2 +1,18 @@
 include *.txt *.ini *.cfg *.rst
-recursive-include iap *.ico *.png *.css *.gif *.jpg *.jinja2 *.pt *.txt *.mak *.mako *.js *.html *.xml
+include *
+exclude *.pyc, .gitignore
+
+recursive-include iap/common *
+recursive-include iap/data_processing *
+recursive-include iap/forecasting *
+recursive-include iap/repository *
+recursive-include iap/ui/dist *
+recursive-include iap/ui __init__.py
+
+recursive-exclude .idea *
+recursive-exclude iap/ui/.idea *
+
+
+recursive-exclude tests *
+recursive-exclude iap/ui/node_modules *
+recursive-exclude iap/ui/e2e *
