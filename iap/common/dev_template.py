@@ -1,10 +1,10 @@
-dev_template = {
+dev_template_JJLean = {
     'tool_id': 1,
     'configuration': [
         {
             'name': 'available_dimensions',
             'value': [
-                'geography', 'category', 'time'
+                'geography', 'category', 'channel'
             ]
         },
         {
@@ -14,16 +14,38 @@ dev_template = {
         {
             'name': 'dimension_category_widget',
             'value': 'hierarchy'
-        },
-        {
-            'name': 'dimension_time_widget',
-            'value': 'dropdown'
-        },
-        {
-            'name': 'cell_bg',
-            'value': '#ccc'
-        }],
-    'top_entity': {'path': ['US']},
+        }
+    ],
+    'top_entity': {},
+    'entities': [
+        ['US'],
+        ['US', 'JJLean', 'BENADRYL'],
+        ['US', 'JJLean', 'BENADRYL', 'BENADRYL SI'],
+        ['US', 'JJLean', 'BENADRYL', 'BENADRYL SI', 'Total'],
+        ['US', 'JJLean', 'BENADRYL', 'BENADRYL SI', 'Walmart'],
+        ['US', 'JJLean', 'BENADRYL', 'BENADRYL SI', 'Walgreens'],
+        ['US', 'JJLean', 'BENADRYL', 'BENADRYL SI', 'Target'],
+        ['US', 'JJLean', 'BENADRYL', 'BENADRYL SI', 'CVS'],
+        ['US', 'JJLean', 'BAND-AID'],
+        ['US', 'JJLean', 'BAND-AID', 'DECORATED'],
+        ['US', 'JJLean', 'BAND-AID', 'VALUE'],
+        ['US', 'JJLean', 'BAND-AID', 'PREMIUM'],
+        ['US', 'JJLean', 'BAND-AID', 'DECORATED', 'Total'],
+        ['US', 'JJLean', 'BAND-AID', 'DECORATED', 'Walmart'],
+        ['US', 'JJLean', 'BAND-AID', 'DECORATED', 'Walgreens'],
+        ['US', 'JJLean', 'BAND-AID', 'DECORATED', 'Target'],
+        ['US', 'JJLean', 'BAND-AID', 'DECORATED', 'CVS'],
+        ['US', 'JJLean', 'BAND-AID', 'VALUE', 'Total'],
+        ['US', 'JJLean', 'BAND-AID', 'VALUE', 'Walmart'],
+        ['US', 'JJLean', 'BAND-AID', 'VALUE', 'Walgreens'],
+        ['US', 'JJLean', 'BAND-AID', 'VALUE', 'Target'],
+        ['US', 'JJLean', 'BAND-AID', 'VALUE', 'CVS'],
+        ['US', 'JJLean', 'BAND-AID', 'PREMIUM', 'Total'],
+        ['US', 'JJLean', 'BAND-AID', 'PREMIUM', 'Walmart'],
+        ['US', 'JJLean', 'BAND-AID', 'PREMIUM', 'Walgreens'],
+        ['US', 'JJLean', 'BAND-AID', 'PREMIUM', 'Target'],
+        ['US', 'JJLean', 'BAND-AID', 'PREMIUM', 'CVS']
+    ],
     'timelines': {
         'names': ['annual', '4-4-5'],
         'alias': {'history': {'annual': ('2011', '2015'), '4-4-5': ('Jan-11', 'Dec-15')},
@@ -533,88 +555,404 @@ dev_template = {
     ],
     'dev_storage': [
         {
-            'path': ['US', 'BAND-AID', 'DECORATED BNDG'],
-            'coefficients': {
-                'TDP Incrementality':  0.40 ,
-                'Everyday Price Elasticity':  -0.45,
-                'Advertising - TV sensitivity': 0.02,
-                'Advertising - Digital sensitivity': 0.32,
-                'Advertising - Partnership sensitivity': 0.09,
-                'Advertising - Print sensitivity': 0.15,
-                'Accumulation - TV': 2,
-                'Accumulation - Digital': 1,
-                'Accumulation - Partnership': 1,
-                'Accumulation - Print': 6,
-                'Lag - TV': 0,
-                'Lag - Digital': 0,
-                'Lag - Partnership': 0,
-                'Lag - Print': 1
-            }
+            'path': ['US', 'BAND-AID', 'DECORATED'],
+            'coefficients': [
+                {'name': 'TDP Incrementality', 'ts': '4-4-5', 'value':  0.40},
+                {'name': 'Everyday Price Elasticity', 'ts': '4-4-5', 'value':  -0.45},
+                {'name': 'Advertising - TV sensitivity', 'ts': '4-4-5', 'value': 0.02},
+                {'name': 'Advertising - Digital sensitivity', 'ts': '4-4-5', 'value': 0.32},
+                {'name': 'Advertising - Partnership sensitivity', 'ts': '4-4-5', 'value': 0.09},
+                {'name': 'Advertising - Print sensitivity', 'ts': '4-4-5', 'value': 0.15},
+                {'name': 'Accumulation - TV', 'ts': '4-4-5', 'value': 2},
+                {'name': 'Accumulation - Digital', 'ts': '4-4-5', 'value': 1},
+                {'name': 'Accumulation - Partnership', 'ts': '4-4-5', 'value': 1},
+                {'name': 'Accumulation - Print', 'ts': '4-4-5', 'value': 6},
+                {'name': 'Lag - TV', 'ts': '4-4-5', 'value': 0},
+                {'name': 'Lag - Digital', 'ts': '4-4-5', 'value': 0},
+                {'name': 'Lag - Partnership', 'ts': '4-4-5', 'value': 0},
+                {'name': 'Lag - Print', 'ts': '4-4-5', 'value': 1}
+            ]
         },
         {
-            'path': ['US', 'BAND-AID', 'PREMIUM BNDG'],
-            'coefficients':{
-                'TDP Incrementality': 0.4,
-                'Everyday Price Elasticity': -0.25,
-                'Advertising - TV sensitivity': 0.03,
-                'Advertising - Digital sensitivity': 0,
-                'Advertising - Partnership sensitivity': 0.01,
-                'Advertising - Print sensitivity': 0.1,
-                'Accumulation - TV': 5,
-                'Accumulation - Digital': 0,
-                'Accumulation - Partnership': 4,
-                'Accumulation - Print': 6,
-                'Lag - TV': 0,
-                'Lag - Digital': 0,
-                'Lag - Partnership': 0,
-                'Lag - Print': 1
-            }
+            'path': ['US', 'BAND-AID', 'PREMIUM'],
+            'coefficients':[
+                {'name': 'TDP Incrementality', 'ts': '4-4-5', 'value': 0.4},
+                {'name': 'Everyday Price Elasticity', 'ts': '4-4-5', 'value': -0.25},
+                {'name': 'Advertising - TV sensitivity', 'ts': '4-4-5', 'value': 0.03},
+                {'name': 'Advertising - Digital sensitivity', 'ts': '4-4-5', 'value': 0},
+                {'name': 'Advertising - Partnership sensitivity', 'ts': '4-4-5', 'value': 0.01},
+                {'name': 'Advertising - Print sensitivity', 'ts': '4-4-5', 'value': 0.1},
+                {'name': 'Accumulation - TV', 'ts': '4-4-5', 'value': 5},
+                {'name': 'Accumulation - Digital', 'ts': '4-4-5', 'value': 0},
+                {'name': 'Accumulation - Partnership', 'ts': '4-4-5', 'value': 4},
+                {'name': 'Accumulation - Print', 'ts': '4-4-5', 'value': 6},
+                {'name': 'Lag - TV', 'ts': '4-4-5', 'value': 0},
+                {'name': 'Lag - Digital', 'ts': '4-4-5', 'value': 0},
+                {'name': 'Lag - Partnership', 'ts': '4-4-5', 'value': 0},
+                {'name': 'Lag - Print', 'ts': '4-4-5', 'value': 1}
+            ]
         },
         {
-            'path': ['US', 'BAND-AID', 'VALUE BNDG'],
-            'coefficients': {
-                'TDP Incrementality': 0.4,
-                'Everyday Price Elasticity': -0.3,
-                'Advertising - TV sensitivity': 0.03,
-                'Advertising - Digital sensitivity': 0.07,
-                'Advertising - Partnership sensitivity': 0,
-                'Advertising - Print sensitivity': 0.08,
-                'Accumulation - TV': 5,
-                'Accumulation - Digital': 1,
-                'Accumulation - Partnership': 0,
-                'Accumulation - Print': 4,
-                'Lag - TV': 0,
-                'Lag - Digital': 0,
-                'Lag - Partnership': 0,
-                'Lag - Print': 1
-            }
+            'path': ['US', 'BAND-AID', 'VALUE'],
+            'coefficients': [
+                {'name': 'TDP Incrementality', 'ts': '4-4-5', 'value': 0.4},
+                {'name': 'Everyday Price Elasticity', 'ts': '4-4-5', 'value': -0.3},
+                {'name': 'Advertising - TV sensitivity', 'ts': '4-4-5', 'value': 0.03},
+                {'name': 'Advertising - Digital sensitivity', 'ts': '4-4-5', 'value': 0.07},
+                {'name': 'Advertising - Partnership sensitivity', 'ts': '4-4-5', 'value': 0},
+                {'name': 'Advertising - Print sensitivity', 'ts': '4-4-5', 'value': 0.08},
+                {'name': 'Accumulation - TV', 'ts': '4-4-5', 'value': 5},
+                {'name': 'Accumulation - Digital', 'ts': '4-4-5', 'value': 1},
+                {'name': 'Accumulation - Partnership', 'ts': '4-4-5', 'value': 0},
+                {'name': 'Accumulation - Print', 'ts': '4-4-5', 'value': 4},
+                {'name': 'Lag - TV', 'ts': '4-4-5', 'value': 0},
+                {'name': 'Lag - Digital', 'ts': '4-4-5', 'value': 0},
+                {'name': 'Lag - Partnership', 'ts': '4-4-5', 'value': 0},
+                {'name': 'Lag - Print', 'ts': '4-4-5', 'value': 1}
+            ]
+        },
+    ]
+}
+
+dev_template_JJOralCare = {
+    'tool_id': 1,
+    'configuration': [
+        {
+            'name': 'available_dimensions',
+            'value': [
+                'geography', 'category',
+            ]
         },
         {
-            'path': ['US', 'BAND-AID', 'DECORATED BNDG', 'Walmart Total US TA'],
-            'coefficients': {
-                'PPE': {'New @ $XX': -1.10, 'Buy @ $XX': -1.10, 'ADS': -1.10},
-                'QM Lift': {'New @ $XX': 1.15, 'Buy @ $XX': 1.06, 'ADS': 1.20},
-                'Promotion Discount': {'New @ $XX': 0, 'Buy @ $XX': 0, 'ADS': 0},
-                'Promotion Support': {'New @ $XX': 0.42, 'Buy @ $XX': 0.41,'ADS': 0.41}
-            }
+            'name': 'dimension_geography_widget',
+            'value': 'hierarchy'
         },
         {
-            'path': ['US', 'BAND-AID', 'PREMIUM BNDG', 'Walmart Total US TA'],
-            'coefficients': {
-                'PPE': {'Buy @ $XX': -1.3, 'ADS': -1.3},
-                'QM Lift': {'Buy @ $XX': 1.19, 'ADS': 1.4},
-                'Promotion Discount': {'Buy @ $XX': 0.01, 'ADS': 0.01},
-                'Promotion Support': {'Buy @ $XX': 0.1,'ADS': 0.1}
+            'name': 'dimension_category_widget',
+            'value': 'hierarchy'
+        }
+    ],
+    'top_entity': {},
+    'entities': [
+        ['US'], ['US', 'JJOralCare', 'Mouthwash'],
+        ['Germany'], ['Germany', 'JJOralCare', 'Mouthwash'],
+        ['UK'], ['UK', 'JJOralCare', 'Mouthwash'],
+        ['Brazil'], ['Brazil', 'JJOralCare', 'Mouthwash'],
+        ['Spain'], ['Spain', 'JJOralCare', 'Mouthwash'],
+        ['Italy'], ['Italy', 'JJOralCare', 'Mouthwash'],
+        ['Japan'], ['Japan', 'JJOralCare', 'Mouthwash'],
+        ['Mexico'], ['Mexico', 'JJOralCare', 'Mouthwash'],
+        ['Australia'], ['Australia', 'JJOralCare', 'Mouthwash'],
+        ['Canada'], ['Canada', 'JJOralCare', 'Mouthwash']
+    ],
+    'timelines': {
+        'names': ['annual'],
+        'alias': {'history': {'annual': ('2012', '2015')},
+                  'forecast': {'annual': ('2016', '2018')}},
+        'top_ts_points': [
+            {
+                'name_full': '2012',
+                'name_short': '2012',
+                'children': []
+            },
+            {
+                'name_full': '2012',
+                'name_short': '2012',
+                'children': []
+            },
+            {
+                'name_full': '2013',
+                'name_short': '2013',
+                'children': []
+            },
+            {
+                'name_full': '2014',
+                'name_short': '2014',
+                'children': []
+            },
+            {
+                'name_full': '2015',
+                'name_short': '2015',
+                'children': []
+            },
+            {
+                'name_full': '2016',
+                'name_short': '2016',
+                'children': []
+            },
+            {
+                'name_full': '2017',
+                'name_short': '2017',
+                'children': []
+            },
+            {
+                'name_full': '2018',
+                'name_short': '2018',
+                'children': []
             }
+        ]
+    },
+    'structure': [
+        {
+            'meta': ('Geography', 'Country'),
+            'variables': {
+                'Population total': ['annual'],
+                'CPI': ['annual'],
+                'GDP PC': ['annual']
+            },
+            'coefficients': {}
         },
         {
-            'path': ['US', 'BAND-AID', 'VALUE BNDG', 'Walmart Total US TA'],
+            'meta': ('Products', 'Category'),
+            'variables': {
+                'Value': ['annual'],
+                'EQ Volume': ['annual'],
+                'Unit Volume': ['annual'],
+                'Price per EQ': ['annual'],
+                'Price per Unit': ['annual'],
+                'Unit Size': ['annual'],
+                'Distribution': ['annual'],
+                'Innovation TDP share': ['annual'],
+                'Premiumization': ['annual'],
+                'Media Spend': ['annual'],
+                'Avg % Discount': ['annual'],
+                'Avg % Promo Support': ['annual'],
+                'Avg % Volume sold as Promo': ['annual'],
+                'LTT': ['annual']
+            },
             'coefficients': {
-                'PPE': {'ADS': -1.3},
-                'QM Lift': {'ADS': 1.4},
-                'Promotion Discount': {'ADS': 0.01},
-                'Promotion Support': {'ADS': 0.1}
+                'Economy Sensitivity': ['annual'],
+                'Innovations Sensitivity': ['annual'],
+                'Regular Distribution Sensitivity': ['annual'],
+                'Unit Price Elasticity': ['annual'],
+                'Unit Size Elasticity': ['annual'],
+                'Advertising Sensitivity': ['annual'],
+                'Trade & Promo Sensitivity': ['annual']
             }
         }
+    ],
+
+    'exchange_rules': [
+        {
+            'meta': ('Geography', 'Country'),
+            'input_variables': [
+                {
+                    'cont_var': 'Population total',
+                    'cont_ts': 'annual',
+                    'wh_var': 'Population, total',
+                    'wh_ts': 'annual',
+                    'time_period': 'history'
+                },
+                {
+                    'cont_var': 'CPI',
+                    'cont_ts': 'annual',
+                    'wh_var': 'Consumer price index',
+                    'wh_ts': 'annual',
+                    'time_period': 'history'
+                },
+                {
+                    'cont_var': 'GDP PC',
+                    'cont_ts': 'annual',
+                    'wh_var': 'GDP per capita, PPP exchange rate, real, US$',
+                    'wh_ts': 'annual',
+                    'time_period': 'history'
+                }
+            ],
+            'output_variables': []
+        },
+        {
+            'meta': ('Products', 'Category'),
+            'input_variables': [
+                {
+                    'cont_var': 'Value',
+                    'cont_ts': 'annual',
+                    'wh_var': 'Value Sales',
+                    'wh_ts': 'annual',
+                    'time_period': 'history'
+                },
+                {
+                    'cont_var': 'EQ Volume',
+                    'cont_ts': 'annual',
+                    'wh_var': 'Volume Sales',
+                    'wh_ts': 'annual',
+                    'time_period': 'history'
+                },
+                {
+                    'cont_var': 'Unit Volume',
+                    'cont_ts': 'annual',
+                    'wh_var': 'Unit Sales',
+                    'wh_ts': 'annual',
+                    'time_period': 'history'
+                },
+                {
+                    'cont_var': 'Distribution',
+                    'cont_ts': 'annual',
+                    'wh_var': 'TDP',
+                    'wh_ts': 'annual',
+                    'time_period': 'history'
+                },
+                {
+                    'cont_var': 'Innovation TDP share',
+                    'cont_ts': 'annual',
+                    'wh_var': 'Innovation TDP share',
+                    'wh_ts': 'annual',
+                    'time_period': 'history'
+                },
+                {
+                    'cont_var': 'Premiumization',
+                    'cont_ts': 'annual',
+                    'wh_var': 'Premiumization',
+                    'wh_ts': 'annual',
+                    'time_period': 'history'
+                },
+                {
+                    'cont_var': 'Media Spend',
+                    'cont_ts': 'annual',
+                    'wh_var': 'Media Spend',
+                    'wh_ts': 'annual',
+                    'time_period': 'history'
+                },
+                {
+                    'cont_var': 'Avg % Discount',
+                    'cont_ts': 'annual',
+                    'wh_var': 'Avg % Discount',
+                    'wh_ts': 'annual',
+                    'time_period': 'history'
+                },
+                {
+                    'cont_var': 'Avg % Promo Support',
+                    'cont_ts': 'annual',
+                    'wh_var': 'Avg % Promo Support',
+                    'wh_ts': 'annual',
+                    'time_period': 'history'
+                },
+                {
+                    'cont_var': 'Avg % Volume sold as Promo',
+                    'cont_ts': 'annual',
+                    'wh_var': 'Avg % Volume sold as Promo',
+                    'wh_ts': 'annual',
+                    'time_period': 'history'
+                }
+            ],
+            'output_variables': []
+        }
+    ],
+    'dev_storage': [
+        {
+            'path': ['Germany', 'Mouthwash'],
+            'coefficients': [
+                {'name': 'Economy Sensitivity', 'ts': 'annual', 'value': 0.23},
+                {'name': 'Innovations Sensitivity', 'ts': 'annual', 'value': 0.22},
+                {'name': 'Regular Distribution Sensitivity', 'ts': 'annual', 'value': 0.70},
+                {'name': 'Unit Price Elasticity', 'ts': 'annual', 'value': -0.80},
+                {'name': 'Unit Size Elasticity', 'ts': 'annual', 'value': 0.22},
+                {'name': 'Advertising Sensitivity', 'ts': 'annual', 'value': 0.02},
+                {'name': 'Trade & Promo Sensitivity', 'ts': 'annual', 'value': 0.05}
+            ]
+        },
+        {
+            'path': ['Mexico', 'Mouthwash'],
+            'coefficients': [
+                {'name': 'Economy Sensitivity', 'ts': 'annual', 'value': 0.62},
+                {'name': 'Innovations Sensitivity', 'ts': 'annual', 'value': 0.71},
+                {'name': 'Regular Distribution Sensitivity', 'ts': 'annual', 'value': 0.23},
+                {'name': 'Unit Price Elasticity', 'ts': 'annual', 'value': -0.21},
+                {'name': 'Unit Size Elasticity', 'ts': 'annual', 'value': 0.67},
+                {'name': 'Advertising Sensitivity', 'ts': 'annual', 'value': 0.01}
+            ]
+        },
+        {
+            'path': ['US', 'Mouthwash'],
+            'coefficients': [
+                {'name': 'Economy Sensitivity', 'ts': 'annual', 'value': 0.16},
+                {'name': 'Innovations Sensitivity', 'ts': 'annual', 'value': 0.08},
+                {'name': 'Regular Distribution Sensitivity', 'ts': 'annual', 'value': 0.03},
+                {'name': 'Unit Price Elasticity', 'ts': 'annual', 'value': -0.27},
+                {'name': 'Unit Size Elasticity', 'ts': 'annual', 'value': 0.70},
+                {'name': 'Advertising Sensitivity', 'ts': 'annual', 'value': 0.01},
+                {'name': 'Trade & Promo Sensitivity', 'ts': 'annual', 'value': 0.35}
+            ]
+        },
+        {
+            'path': ['Brazil', 'Mouthwash'],
+            'coefficients': [
+                {'name': 'Economy Sensitivity', 'ts': 'annual', 'value': 0.25},
+                {'name': 'Innovations Sensitivity', 'ts': 'annual', 'value': 0.43},
+                {'name': 'Regular Distribution Sensitivity', 'ts': 'annual', 'value': 0.14},
+                {'name': 'Unit Price Elasticity', 'ts': 'annual', 'value': -0.35},
+                {'name': 'Unit Size Elasticity', 'ts': 'annual', 'value': 0.05},
+                {'name': 'Advertising Sensitivity', 'ts': 'annual', 'value': 0.01}
+            ]
+        },
+        {
+            'path': ['Italy', 'Mouthwash'],
+            'coefficients': [
+                {'name': 'Economy Sensitivity', 'ts': 'annual', 'value': 0.65},
+                {'name': 'Innovations Sensitivity', 'ts': 'annual', 'value': 0.85},
+                {'name': 'Regular Distribution Sensitivity', 'ts': 'annual', 'value': 0.77},
+                {'name': 'Unit Price Elasticity', 'ts': 'annual', 'value': -0.24},
+                {'name': 'Unit Size Elasticity', 'ts': 'annual', 'value': 0.47},
+                {'name': 'Trade & Promo Sensitivity', 'ts': 'annual', 'value': 0.62}
+            ]
+        },
+        {
+            'path': ['Spain', 'Mouthwash'],
+            'coefficients': [
+                {'name': 'Economy Sensitivity', 'ts': 'annual', 'value': 0.25},
+                {'name': 'Innovations Sensitivity', 'ts': 'annual', 'value': 0.96},
+                {'name': 'Regular Distribution Sensitivity', 'ts': 'annual', 'value': 0.13},
+                {'name': 'Unit Price Elasticity', 'ts': 'annual', 'value': -0.20},
+                {'name': 'Unit Size Elasticity', 'ts': 'annual', 'value': 0.12},
+                {'name': 'Trade & Promo Sensitivity', 'ts': 'annual', 'value': 0.67}
+            ]
+        },
+        {
+            'path': ['Australia', 'Mouthwash'],
+            'coefficients': [
+                {'name': 'Economy Sensitivity', 'ts': 'annual', 'value': 0.20},
+                {'name': 'Innovations Sensitivity', 'ts': 'annual', 'value': 0.31},
+                {'name': 'Regular Distribution Sensitivity', 'ts': 'annual', 'value': 0.08},
+                {'name': 'Unit Price Elasticity', 'ts': 'annual', 'value': -0.22},
+                {'name': 'Unit Size Elasticity', 'ts': 'annual', 'value': 0.08},
+                {'name': 'Advertising Sensitivity', 'ts': 'annual', 'value': 0.03},
+                {'name': 'Trade & Promo Sensitivity', 'ts': 'annual', 'value': 0.08}
+            ]
+        },
+        {
+            'path': ['Canada', 'Mouthwash'],
+            'coefficients': [
+                {'name': 'Economy Sensitivity', 'ts': 'annual', 'value': 0.21},
+                {'name': 'Innovations Sensitivity', 'ts': 'annual', 'value': 0.10},
+                {'name': 'Regular Distribution Sensitivity', 'ts': 'annual', 'value': 0.05},
+                {'name': 'Unit Price Elasticity', 'ts': 'annual', 'value': -0.44},
+                {'name': 'Unit Size Elasticity', 'ts': 'annual', 'value': 0.42},
+                {'name': 'Advertising Sensitivity', 'ts': 'annual', 'value': 0.06},
+                {'name': 'Trade & Promo Sensitivity', 'ts': 'annual', 'value': 0.67}
+            ]
+        },
+        {
+            'path': ['Japan', 'Mouthwash'],
+            'coefficients': [
+                {'name': 'Economy Sensitivity', 'ts': 'annual', 'value': 0.47},
+                {'name': 'Innovations Sensitivity', 'ts': 'annual', 'value': 0.82},
+                {'name': 'Regular Distribution Sensitivity', 'ts': 'annual', 'value': 0.75},
+                {'name': 'Unit Price Elasticity', 'ts': 'annual', 'value': -0.19},
+                {'name': 'Unit Size Elasticity', 'ts': 'annual', 'value': 0.45},
+                {'name': 'Advertising Sensitivity', 'ts': 'annual', 'value': 0.01}
+            ]
+        },
+        {
+            'path': ['UK', 'Mouthwash'],
+            'coefficients': [
+                {'name': 'Economy Sensitivity', 'ts': 'annual', 'value': 0.18},
+                {'name': 'Innovations Sensitivity', 'ts': 'annual', 'value': 0.95},
+                {'name': 'Regular Distribution Sensitivity', 'ts': 'annual', 'value': 0.09},
+                {'name': 'Unit Price Elasticity', 'ts': 'annual', 'value': -0.50},
+                {'name': 'Unit Size Elasticity', 'ts': 'annual', 'value': 0.13},
+                {'name': 'Advertising Sensitivity', 'ts': 'annual', 'value': 0.08},
+                {'name': 'Trade & Promo Sensitivity', 'ts': 'annual', 'value': 0.10}
+            ]
+        }
+
     ]
 }

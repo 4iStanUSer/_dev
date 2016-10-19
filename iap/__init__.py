@@ -2,7 +2,8 @@ import pyramid
 from pyramid.config import Configurator
 from pyramid.response import Response
 
-from . import common
+from .common.views import default as common
+from .common.views import landing_page
 from .forecasting.views import default as forecast
 
 
@@ -24,13 +25,17 @@ def common_routing(config):
     config.add_route('common.index', '/')
     config.add_view(common.index_view, route_name='common.index')
 
+    config.add_route('landing_page.get_tools_list', '/landing')
+    config.add_view(landing_page.get_tools_list,
+                    route_name='landing_page.get_tools_list')
+
     config.add_route('common.login', '/login')
     config.add_view(common.login_view, route_name='common.login')
 
     config.add_route('common.logout', '/logout')
     config.add_view(common.logout_view, route_name='common.logout')
 
-    config.include('.common.security')
+    #config.include('.common.security')
 
 
 def forecast_routing(config):

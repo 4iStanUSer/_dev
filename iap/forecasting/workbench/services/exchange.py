@@ -8,7 +8,7 @@ def download_data_from_wh(warehouse, container, mapping):
     prev_wh_entity = None
     prev_cont_entity = None
     for row in mapping:
-        # Get warehouse entity is necessary.
+        # Get warehouse entity if necessary.
         if prev_wh_entity is None or \
                 not helper_lib.is_equal_path(prev_wh_entity.path, row['wh_path']):
             wh_entity = warehouse.get_entity(row['wh_path'])
@@ -23,8 +23,12 @@ def download_data_from_wh(warehouse, container, mapping):
         # Get data from warehouse.
         try:
             wh_var = wh_entity.get_variable(row['wh_var'].variable)
+            if wh_var is None:
+                continue
             wh_ts = wh_var.get_time_series(row['wh_var'].timescale)
-            values = wh_ts.get_values()
+            if wh_ts is None:
+                continue
+            values = wh_ts.get_values(period)
             # Set data to container.
             cont_var = cont_entity.get_variable(row['cont_var'].variable)
             cont_ts = cont_var.get_time_series(row['cont_var'].timescale)

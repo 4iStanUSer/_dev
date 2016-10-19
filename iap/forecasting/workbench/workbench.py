@@ -21,14 +21,14 @@ class Workbench:
         self._wh_inputs = []
         self._wh_outputs = []
 
-    def init_load(self, warehouse, access, dev_template):
+    def init_load(self, warehouse, dev_template):
         # Access.
-        u_perms = access.get_permissions(dev_template['tool_id'], self._user_id)
-        permissions = u_perms.get('permissions')
+        #u_perms = access.get_permissions(dev_template['tool_id'], self._user_id)
+        #permissions = u_perms.get('permissions')
         # Fill in access module
-        features = [{'name': f.name} for f in u_perms['features']] \
-            if u_perms.get('features') is not None else []
-        self.access.load(features)
+        #features = [{'name': f.name} for f in u_perms['features']] \
+        #    if u_perms.get('features') is not None else []
+        #self.access.load(features)
         # Configuration.
         self.config.load(dev_template.get('configuration', []))
         # Container
@@ -37,7 +37,7 @@ class Workbench:
         download_data_from_wh(warehouse, self.container, self._wh_inputs)
         self.dimensions.build(self.container)
 
-    def load(self, backup_binary):
+    def load_backup(self, backup_binary):
         backup = pickle.loads(backup_binary)
         # Get data for workbench parts
         container = backup.get('container', dict())
@@ -50,7 +50,7 @@ class Workbench:
         # Initialize dimensions tree
         self.dimensions.build(self.container)
 
-    def get_data_for_backup(self):
+    def get_backup(self):
         container = self.container.save()
         config = self.config.save()
         access = self.access.save()

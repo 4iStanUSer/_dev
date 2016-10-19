@@ -12,6 +12,9 @@ from .db.meta import Base
 from .db.warehouse import Entity, Warehouse
 from ..repository.interface.imanage_access import IManageAccess
 
+from ..repository import persistent_storage
+from ..forecasting.workbench.workbench import Workbench
+from ..common.dev_template import dev_template_JJLean, dev_template_JJOralCare
 
 def usage(argv):
     cmd = os.path.basename(argv[0])
@@ -50,8 +53,22 @@ def main(argv=sys.argv):
         loader = Loader(wh)
         loader.run_processing('JJLean')
         loader.run_processing('JJOralCare')
-
         transaction.manager.commit()
+
+
+        user_id = '111'
+        tool_id = 'forecast'
+        wb = Workbench(user_id)
+        wb.init_load(wh, dev_template_JJLean)
+        backup = wb.get_backup()
+        persistent_storage.save_backup(user_id, tool_id, 'JJLean', backup)
+
+        wb = Workbench(user_id)
+        wb.init_load(wh, dev_template_JJOralCare)
+        backup = wb.get_backup()
+        persistent_storage.save_backup(user_id, tool_id, 'JJOralCare', backup)
+
+
 
         imanage_access = IManageAccess(ssn=ssn)
         # Add tools

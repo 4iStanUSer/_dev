@@ -1,16 +1,5 @@
 
-def send_success_response(data):
-    return {
-        'error': False,
-        'data': data
-    }
 
-
-def send_error_response(data):
-    return {
-        'error': True,
-        'data': data
-    }
 
 
 

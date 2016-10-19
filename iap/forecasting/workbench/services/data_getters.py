@@ -1,4 +1,4 @@
-def get_data(container, entity_id):
+def get_entity_data(container, entity_id):
 
     # TODO Load from configuration (DR).
     top_ts = 'Annual'

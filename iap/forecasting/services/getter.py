@@ -1,5 +1,5 @@
-from iap.common.RunTimeCollection import (RunTimeCollection,
-                                          exceptions as runTimeEx)
+#from iap.common.RunTimeCollection import (RunTimeCollection,
+#                                          exceptions as runTimeEx)
 from iap.repository import (get_wh_interface, get_access_interface)
 
 from .. import TOOL_NAME
@@ -11,7 +11,7 @@ from .. import TOOL_NAME
 
 tool_id = 1  # TODO via - imanage_access.get_tool(ssn, name='Forecast')
 tool_name = TOOL_NAME
-run_time_collection = RunTimeCollection(tool_name)
+run_time_collection = None
 
 
 def get_permissions(req, tool_id, user_id):

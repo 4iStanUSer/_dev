@@ -89,12 +89,16 @@ def jj_lean_nielsen(book, config, warehouse):
     ]
     # Get worksheet
     sheet = book.sheet_by_name(sheet_name)
-    # Get first time point
-    full_text_data = str(sheet.cell_value(rowx=row_date, colx=col_data_start))
-    text_date = full_text_data[len(full_text_data) - 8:]
-    start_date = datetime.datetime.strptime(text_date, '%m/%d/%y')
+    # Get time period
+    full_text_start = str(sheet.cell_value(rowx=row_date, colx=col_data_start))
+    full_text_end = str(sheet.cell_value(rowx=row_date, colx=sheet.ncols - 1))
+    text_start = full_text_start[len(full_text_start) - 8:]
+    text_end = full_text_end[len(full_text_end) - 8:]
+    start_date = datetime.datetime.strptime(text_start, '%m/%d/%y')
+    end_date = datetime.datetime.strptime(text_end, '%m/%d/%y')
     timescale = warehouse.get_time_scale(timescale_name)
     start_point = timescale.get_label_by_stamp(start_date)
+    end_point = timescale.get_label_by_stamp(end_date)
     # Parse file
     prev_meta = []
     curr_meta = []
@@ -119,7 +123,8 @@ def jj_lean_nielsen(book, config, warehouse):
                         prev_meta[:len(prev_meta) - len(curr_meta)] + curr_meta
                 prev_meta = curr_meta
                 # Meta mapping
-                final_meta = [curr_meta[2], curr_meta[3], curr_meta[0]]
+                l = len(curr_meta)
+                final_meta = [curr_meta[-2], curr_meta[-1], curr_meta[0]]
                 if len(final_meta) == len(meta_mapping):
                     for i in range(len(final_meta)):
                         final_meta[i] = meta_mapping[i].get(final_meta[i],
@@ -149,7 +154,7 @@ def jj_lean_nielsen(book, config, warehouse):
                 time_series = var.force_time_series(timescale)
                 time_series.set_values(start_point, new_values)
             else:
-                old_values = time_series.get_values(start_point)
+                old_values = time_series.get_values((start_point, end_point))
                 upd_values = list(map(add, old_values, new_values))
                 time_series.set_values(start_point, upd_values)
     return

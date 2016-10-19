@@ -4,17 +4,17 @@ Describe package here.
 
 import pyramid
 
-from ..repository.storage import Storage
-from ..repository.interface.istorage import IStorage, IBackup, ITemplate
+#from ..repository.persistent_storage import PersistentStorage
+#from ..repository.interface.istorage import IStorage, IBackup, ITemplate
 
 from ..repository.db.warehouse import Warehouse as __Warehouse
 from ..repository.interface.iaccess import IAccess as __IAccess
 from ..repository.interface.imanage_access import IManageAccess as __IManAcc
 
-storage = Storage()
-backup = IBackup(storage)
-template = ITemplate(storage)
-istorage = IStorage(backup, template)
+#storage = PersistentStorage()
+#backup = IBackup(storage)
+#template = ITemplate(storage)
+#istorage = IStorage(backup, template)
 
 
 def get_wh_interface():

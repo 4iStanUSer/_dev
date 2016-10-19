@@ -12,6 +12,7 @@ from sqlalchemy.orm import relationship, object_session
 from sqlalchemy.ext.hybrid import hybrid_property
 from datetime import datetime
 import enum
+from ...common.helper_lib import Meta
 
 
 from .meta import Base
@@ -243,7 +244,7 @@ class Entity(Base):
 
     @property
     def meta(self):
-        return (self._dimension_name, self._layer)
+        return Meta(self._dimension_name, self._layer)
 
     @property
     def parent(self):
@@ -387,6 +388,9 @@ class Entity(Base):
         self._variables.append(new_var)
         return new_var
 
+    def get_var_values(self):
+        pass
+
 
 class Variable(Base):
     __tablename__ = 'variables'
@@ -525,24 +529,19 @@ class TimeSeries(Base):
                 self._values.append(point_to_set)
                 point_to_set.set(values[ind])
 
-    def get_values(self, start_label=None, length=None):
-        if start_label is None:
+    def get_values(self, period=None):
+        if period is None:
             # Get all points
             return [x.get() for x in
                     sorted(self._values, key=lambda y: y.timestamp)]
         else:
             # Get timestamp from start label.
-            start = self._time_scale.get_stamp_by_label(start_label)
-            # Get all points from start.
-            points = sorted([x for x in self._values if x.timestamp >= start],
+            start = self._time_scale.get_stamp_by_label(period[0])
+            end = self._time_scale.get_stamp_by_label(period[1])
+            # Get all points in range start end.
+            points = sorted([x for x in self._values
+                             if start <= x.timestamp <= end],
                             key=lambda x: x.timestamp)
-            # Limit length, if length is less than expected throw exception.
-            if length is not None:
-                if len(points) < length:
-                    raise ex.WrongValueError(
-                        len(points), 'length >= ' + str(length),
-                        'length is less than expected', 'get_values')
-                points = points[:length]
             return [x.get() for x in points]
 
     def get_value(self, time_label):

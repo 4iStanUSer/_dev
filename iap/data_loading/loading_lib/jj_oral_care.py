@@ -42,9 +42,9 @@ def jj_oral_care_sales(table, config, warehouse):
         if sum(values) == 0:
             continue
         # Add data to DB
-        entity = warehouse.get_entity([country, 'JJOralCare', 'Oral Care'])
+        entity = warehouse.get_entity([country, 'JJOralCare', 'Mouthwash'])
         if entity is None:
-            entity = warehouse.add_entity([country, 'JJOralCare', 'Oral Care'],
+            entity = warehouse.add_entity([country, 'JJOralCare', 'Mouthwash'],
                                           [Meta('Geography', 'Country'),
                                            Meta('Project', 'Project'),
                                            Meta('Products', 'Category')])

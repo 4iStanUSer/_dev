@@ -1,8 +1,15 @@
 from pyramid.renderers import render_to_response
+
+from ...common.helper_lib import send_success_response, send_error_response
 from ..services import getter as getter_service
-from ...common.service import send_success_response, send_error_response
+from ...common import exceptions as ex
+from ...common.error_manager import ErrorManager
+from ...common import rt_storage
 
 
+
+
+TOOL = 'forecasting'
 
 def index_view(req):
     # service.recreate_db(req)
@@ -206,36 +213,36 @@ def get_scenarios_list(req):
 
 
 def get_dashboard_data(req):
-
-    # entity id
-    # top timescale
-    # period
-
-    # get data for donuts
-    # get data for barcharts
-
-    # get data for decomposition
-    # get drivers info
-
-    #values for drivers
-    #values for outputs
-
-    # cagrs or growth rates for all variables
-
-    # timescale for cagrs
-    # data for all timescales
+    # Get parameters from request.
+    try:
+        user_id = req.json_body['user_id']
+        entity_id = req.json_body['entity_id']
+    except KeyError:
+        msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
+        return send_error_response(msg)
+    try:
+        wb = rt_storage.get_wb(user_id, TOOL)
+        data = getter_service.get_entity_data(wb.container, entity_id)
+        return send_success_response(data)
+    except Exception as e:
+        msg = ErrorManager.get_error_message(e)
+        return send_error_response(msg)
 
 
-
-
-    #'geography': req.json_body['geography']['id']
-    #if req.json_body.get('geography') else def_sel['geography'],
-    #'time': req.json_body['time']['id']
-    #if req.json_body.get('time') else def_sel['time'],
-    #'products': req.json_body['products']['id']
-    #if req.json_body.get('products') else def_sel['products'],
-
-
-
-    pass
+def get_dashboard_data_for_period(req):
+    try:
+        user_id = req.json_body['user_id']
+        entity_id = req.json_body['entity_id']
+        period = (req.json_body['period'][0], req.json_body['period'][1])
+    except KeyError:
+        msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
+        return send_error_response(msg)
+    try:
+        wb = rt_storage.get_wb(user_id, TOOL)
+        dec = getter_service.get_decomposition(wb.container, entity_id, period)
+        cagrs = getter_service.get_cagrs(wb.container, entity_id, period)
+        return send_success_response(dict(dec=dec, cagrs=cagrs))
+    except Exception as e:
+        msg = ErrorManager.get_error_message(e)
+        return send_error_response(msg)
 
