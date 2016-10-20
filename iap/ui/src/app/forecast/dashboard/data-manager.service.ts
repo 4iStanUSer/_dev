@@ -20,440 +20,445 @@ export class DataManagerService {
 
     private hierarchy = [];
 
-    private timelabels = [
-        {
-            name: 2010,
-            timescale: 'annual',
-            parent_index: null
-        },
-        {
-            name: 2011,
-            timescale: 'annual',
-            parent_index: null
-        },
-        {
-            name: 2012,
-            timescale: 'annual',
-            parent_index: null
-        },
-        {
-            name: 2013,
-            timescale: 'annual',
-            parent_index: null
-        },
+    private timelabels = [];
+    private variables = {};
+    private data = {};
+    private cagrs = {};
 
-        //
-
-        {
-            name: 'Q1',
-            timescale: 'quarterly',
-            parent_index: 0
-        },
-        {
-            name: 'Q2',
-            timescale: 'quarterly',
-            parent_index: 0
-        },
-        {
-            name: 'Q3',
-            timescale: 'quarterly',
-            parent_index: 0
-        },
-        {
-            name: 'Q4',
-            timescale: 'quarterly',
-            parent_index: 0
-        },
-
-        {
-            name: 'Q1',
-            timescale: 'quarterly',
-            parent_index: 1
-        },
-        {
-            name: 'Q2',
-            timescale: 'quarterly',
-            parent_index: 1
-        },
-        {
-            name: 'Q3',
-            timescale: 'quarterly',
-            parent_index: 1
-        },
-        {
-            name: 'Q4',
-            timescale: 'quarterly',
-            parent_index: 1
-        },
-
-        {
-            name: 'Q1',
-            timescale: 'quarterly',
-            parent_index: 2
-        },
-        {
-            name: 'Q2',
-            timescale: 'quarterly',
-            parent_index: 2
-        },
-        {
-            name: 'Q3',
-            timescale: 'quarterly',
-            parent_index: 2
-        },
-        {
-            name: 'Q4',
-            timescale: 'quarterly',
-            parent_index: 2
-        },
-        {
-            name: 'Q1',
-            timescale: 'quarterly',
-            parent_index: 3
-        },
-        {
-            name: 'Q2',
-            timescale: 'quarterly',
-            parent_index: 3
-        },
-        {
-            name: 'Q3',
-            timescale: 'quarterly',
-            parent_index: 3
-        },
-        {
-            name: 'Q4',
-            timescale: 'quarterly',
-            parent_index: 3
-        },
-
-        //
-
-        {
-            name: 'Jan',
-            timescale: 'monthly',
-            parent_index: 4
-        },
-        {
-            name: 'Feb',
-            timescale: 'monthly',
-            parent_index: 4
-        },
-        {
-            name: 'Mar',
-            timescale: 'monthly',
-            parent_index: 4
-        },
-
-        {
-            name: 'Jan',
-            timescale: 'monthly',
-            parent_index: 8
-        },
-        {
-            name: 'Feb',
-            timescale: 'monthly',
-            parent_index: 8
-        },
-        {
-            name: 'Mar',
-            timescale: 'monthly',
-            parent_index: 8
-        },
-    ];
-
-    private variables = {
-        CPI: {
-            name: 'CPI',
-            metric: 'index',
-            multiplier: null,
-            type: 'driver', // | 'output',
-            driver_type: 'economic' // | null
-        },
-        GDP: {
-            name: 'GDP',
-            metric: 'index',
-            multiplier: null,
-            type: 'driver',
-            driver_type: 'economic'
-        },
-        sales: {
-            name: 'Sales',
-            metric: '$',
-            multiplier: 'MM',
-            type: 'output',
-        },
-        volume: {
-            name: 'Volume',
-            metric: 'EQ',
-            multiplier: 'Thousands',
-            type: 'output'
-        },
-        price: {
-            name: 'Price',
-            metric: 'per EQ',
-            multiplier: '$',
-            type: 'output'
-        }
-    };
-
-    private data = {
-        annual: {
-            sales: [
-                {
-                    'timelabels_index': 0,
-                    'value': 0,
-                    'gr': 15,
-                    // 'color',
-                    // 'isEditable',
-                    // 'format'
-                },
-                {
-                    'timelabels_index': 1,
-                    'value': 1,
-                    'gr': 15
-                },
-                {
-                    'timelabels_index': 2,
-                    'value': 2,
-                    'gr': 15
-                },
-                {
-                    'timelabels_index': 3,
-                    'value': 3,
-                    'gr': 15
-                }
-            ],
-            volume: [
-                {
-                    'timelabels_index': 0,
-                    'value': 4,
-                    'gr': 15
-                },
-                {
-                    'timelabels_index': 1,
-                    'value': 5,
-                    'gr': 15
-                },
-                {
-                    'timelabels_index': 2,
-                    'value': 6,
-                    'gr': 15
-                },
-                {
-                    'timelabels_index': 3,
-                    'value': 7,
-                    'gr': 15
-                }
-            ],
-            price: [
-                {
-                    'timelabels_index': 0,
-                    'value': 4,
-                    'gr': 15
-                },
-                {
-                    'timelabels_index': 1,
-                    'value': 5,
-                    'gr': 15
-                },
-                {
-                    'timelabels_index': 2,
-                    'value': 6,
-                    'gr': 15
-                },
-                {
-                    'timelabels_index': 3,
-                    'value': 7,
-                    'gr': 15
-                }
-            ]
-        },
-        quarterly: {
-            sales: [
-                {
-                    'timelabels_index': 4,
-                    'value': 8,
-                    'gr': 15
-                },
-                {
-                    'timelabels_index': 5,
-                    'value': 9,
-                    'gr': 15
-                },
-                {
-                    'timelabels_index': 6,
-                    'value': 10,
-                    'gr': 15
-                },
-                {
-                    'timelabels_index': 7,
-                    'value': 11,
-                    'gr': 15
-                },
-            ],
-            volume: [
-                {
-                    'timelabels_index': 4,
-                    'value': 12,
-                    'gr': 15
-                },
-                {
-                    'timelabels_index': 5,
-                    'value': 13,
-                    'gr': 15
-                },
-                {
-                    'timelabels_index': 6,
-                    'value': 14,
-                    'gr': 15
-                },
-                {
-                    'timelabels_index': 7,
-                    'value': 15,
-                    'gr': 15
-                },
-            ],
-            price: [
-                {
-                    'timelabels_index': 4,
-                    'value': 12,
-                    'gr': 15
-                },
-                {
-                    'timelabels_index': 5,
-                    'value': 13,
-                    'gr': 15
-                },
-                {
-                    'timelabels_index': 6,
-                    'value': 14,
-                    'gr': 15
-                },
-                {
-                    'timelabels_index': 7,
-                    'value': 15,
-                    'gr': 15
-                },
-            ]
-        },
-        monthly: {
-            sales: [
-                {
-                    'timelabels_index': 20,
-                    'value': 16,
-                    'gr': 15
-                },
-                {
-                    'timelabels_index': 21,
-                    'value': 17,
-                    'gr': 15
-                },
-                {
-                    'timelabels_index': 22,
-                    'value': 18,
-                    'gr': 15
-                },
-                {
-                    'timelabels_index': 23,
-                    'value': 19,
-                    'gr': 15
-                },
-                {
-                    'timelabels_index': 24,
-                    'value': 20,
-                    'gr': 15
-                },
-                {
-                    'timelabels_index': 25,
-                    'value': 21,
-                    'gr': 15
-                }
-            ],
-            volume: [
-                {
-                    'timelabels_index': 20,
-                    'value': 22,
-                    'gr': 15
-                },
-                {
-                    'timelabels_index': 21,
-                    'value': 23,
-                    'gr': 15
-                },
-                {
-                    'timelabels_index': 22,
-                    'value': 24,
-                    'gr': 15
-                },
-                {
-                    'timelabels_index': 23,
-                    'value': 25,
-                    'gr': 15
-                },
-                {
-                    'timelabels_index': 24,
-                    'value': 26,
-                    'gr': 15
-                },
-                {
-                    'timelabels_index': 25,
-                    'value': 27,
-                    'gr': 15
-                }
-            ],
-            price: [
-                {
-                    'timelabels_index': 20,
-                    'value': 22,
-                    'gr': 15
-                },
-                {
-                    'timelabels_index': 21,
-                    'value': 23,
-                    'gr': 15
-                },
-                {
-                    'timelabels_index': 22,
-                    'value': 24,
-                    'gr': 15
-                },
-                {
-                    'timelabels_index': 23,
-                    'value': 25,
-                    'gr': 15
-                },
-                {
-                    'timelabels_index': 24,
-                    'value': 26,
-                    'gr': 15
-                },
-                {
-                    'timelabels_index': 25,
-                    'value': 27,
-                    'gr': 15
-                }
-            ]
-        }
-    };
-
-    private cagrs = {
-        sales: [
-            {'start': 2010, 'end': 2013, 'value': 0.25},
-            {'start': 2010, 'end': 2012, 'value': 0.12},
-            {'start': 2012, 'end': 2013, 'value': 0.13}
-        ],
-        volume: [
-            {'start': 2010, 'end': 2013, 'value': 0.25},
-            {'start': 2010, 'end': 2012, 'value': 0.10},
-            {'start': 2012, 'end': 2013, 'value': 0.15}
-        ],
-        price: [
-            {'start': 2010, 'end': 2013, 'value': 0.25},
-            {'start': 2010, 'end': 2012, 'value': 0.22},
-            {'start': 2012, 'end': 2013, 'value': 0.25}
-        ]
-    };
+    // private timelabels = [
+    //     {
+    //         name: 2010,
+    //         timescale: 'annual',
+    //         parent_index: null
+    //     },
+    //     {
+    //         name: 2011,
+    //         timescale: 'annual',
+    //         parent_index: null
+    //     },
+    //     {
+    //         name: 2012,
+    //         timescale: 'annual',
+    //         parent_index: null
+    //     },
+    //     {
+    //         name: 2013,
+    //         timescale: 'annual',
+    //         parent_index: null
+    //     },
+    //
+    //     //
+    //
+    //     {
+    //         name: 'Q1',
+    //         timescale: 'quarterly',
+    //         parent_index: 0
+    //     },
+    //     {
+    //         name: 'Q2',
+    //         timescale: 'quarterly',
+    //         parent_index: 0
+    //     },
+    //     {
+    //         name: 'Q3',
+    //         timescale: 'quarterly',
+    //         parent_index: 0
+    //     },
+    //     {
+    //         name: 'Q4',
+    //         timescale: 'quarterly',
+    //         parent_index: 0
+    //     },
+    //
+    //     {
+    //         name: 'Q1',
+    //         timescale: 'quarterly',
+    //         parent_index: 1
+    //     },
+    //     {
+    //         name: 'Q2',
+    //         timescale: 'quarterly',
+    //         parent_index: 1
+    //     },
+    //     {
+    //         name: 'Q3',
+    //         timescale: 'quarterly',
+    //         parent_index: 1
+    //     },
+    //     {
+    //         name: 'Q4',
+    //         timescale: 'quarterly',
+    //         parent_index: 1
+    //     },
+    //
+    //     {
+    //         name: 'Q1',
+    //         timescale: 'quarterly',
+    //         parent_index: 2
+    //     },
+    //     {
+    //         name: 'Q2',
+    //         timescale: 'quarterly',
+    //         parent_index: 2
+    //     },
+    //     {
+    //         name: 'Q3',
+    //         timescale: 'quarterly',
+    //         parent_index: 2
+    //     },
+    //     {
+    //         name: 'Q4',
+    //         timescale: 'quarterly',
+    //         parent_index: 2
+    //     },
+    //     {
+    //         name: 'Q1',
+    //         timescale: 'quarterly',
+    //         parent_index: 3
+    //     },
+    //     {
+    //         name: 'Q2',
+    //         timescale: 'quarterly',
+    //         parent_index: 3
+    //     },
+    //     {
+    //         name: 'Q3',
+    //         timescale: 'quarterly',
+    //         parent_index: 3
+    //     },
+    //     {
+    //         name: 'Q4',
+    //         timescale: 'quarterly',
+    //         parent_index: 3
+    //     },
+    //
+    //     //
+    //
+    //     {
+    //         name: 'Jan',
+    //         timescale: 'monthly',
+    //         parent_index: 4
+    //     },
+    //     {
+    //         name: 'Feb',
+    //         timescale: 'monthly',
+    //         parent_index: 4
+    //     },
+    //     {
+    //         name: 'Mar',
+    //         timescale: 'monthly',
+    //         parent_index: 4
+    //     },
+    //
+    //     {
+    //         name: 'Jan',
+    //         timescale: 'monthly',
+    //         parent_index: 8
+    //     },
+    //     {
+    //         name: 'Feb',
+    //         timescale: 'monthly',
+    //         parent_index: 8
+    //     },
+    //     {
+    //         name: 'Mar',
+    //         timescale: 'monthly',
+    //         parent_index: 8
+    //     },
+    // ];
+    //
+    // private variables = {
+    //     CPI: {
+    //         name: 'CPI',
+    //         metric: 'index',
+    //         multiplier: null,
+    //         type: 'driver', // | 'output',
+    //         driver_type: 'economic' // | null
+    //     },
+    //     GDP: {
+    //         name: 'GDP',
+    //         metric: 'index',
+    //         multiplier: null,
+    //         type: 'driver',
+    //         driver_type: 'economic'
+    //     },
+    //     sales: {
+    //         name: 'Sales',
+    //         metric: '$',
+    //         multiplier: 'MM',
+    //         type: 'output',
+    //     },
+    //     volume: {
+    //         name: 'Volume',
+    //         metric: 'EQ',
+    //         multiplier: 'Thousands',
+    //         type: 'output'
+    //     },
+    //     price: {
+    //         name: 'Price',
+    //         metric: 'per EQ',
+    //         multiplier: '$',
+    //         type: 'output'
+    //     }
+    // };
+    //
+    // private data = {
+    //     annual: {
+    //         sales: [
+    //             {
+    //                 'timelabels_index': 0,
+    //                 'value': 0,
+    //                 'gr': 15,
+    //                 // 'color',
+    //                 // 'isEditable',
+    //                 // 'format'
+    //             },
+    //             {
+    //                 'timelabels_index': 1,
+    //                 'value': 1,
+    //                 'gr': 15
+    //             },
+    //             {
+    //                 'timelabels_index': 2,
+    //                 'value': 2,
+    //                 'gr': 15
+    //             },
+    //             {
+    //                 'timelabels_index': 3,
+    //                 'value': 3,
+    //                 'gr': 15
+    //             }
+    //         ],
+    //         volume: [
+    //             {
+    //                 'timelabels_index': 0,
+    //                 'value': 4,
+    //                 'gr': 15
+    //             },
+    //             {
+    //                 'timelabels_index': 1,
+    //                 'value': 5,
+    //                 'gr': 15
+    //             },
+    //             {
+    //                 'timelabels_index': 2,
+    //                 'value': 6,
+    //                 'gr': 15
+    //             },
+    //             {
+    //                 'timelabels_index': 3,
+    //                 'value': 7,
+    //                 'gr': 15
+    //             }
+    //         ],
+    //         price: [
+    //             {
+    //                 'timelabels_index': 0,
+    //                 'value': 4,
+    //                 'gr': 15
+    //             },
+    //             {
+    //                 'timelabels_index': 1,
+    //                 'value': 5,
+    //                 'gr': 15
+    //             },
+    //             {
+    //                 'timelabels_index': 2,
+    //                 'value': 6,
+    //                 'gr': 15
+    //             },
+    //             {
+    //                 'timelabels_index': 3,
+    //                 'value': 7,
+    //                 'gr': 15
+    //             }
+    //         ]
+    //     },
+    //     quarterly: {
+    //         sales: [
+    //             {
+    //                 'timelabels_index': 4,
+    //                 'value': 8,
+    //                 'gr': 15
+    //             },
+    //             {
+    //                 'timelabels_index': 5,
+    //                 'value': 9,
+    //                 'gr': 15
+    //             },
+    //             {
+    //                 'timelabels_index': 6,
+    //                 'value': 10,
+    //                 'gr': 15
+    //             },
+    //             {
+    //                 'timelabels_index': 7,
+    //                 'value': 11,
+    //                 'gr': 15
+    //             },
+    //         ],
+    //         volume: [
+    //             {
+    //                 'timelabels_index': 4,
+    //                 'value': 12,
+    //                 'gr': 15
+    //             },
+    //             {
+    //                 'timelabels_index': 5,
+    //                 'value': 13,
+    //                 'gr': 15
+    //             },
+    //             {
+    //                 'timelabels_index': 6,
+    //                 'value': 14,
+    //                 'gr': 15
+    //             },
+    //             {
+    //                 'timelabels_index': 7,
+    //                 'value': 15,
+    //                 'gr': 15
+    //             },
+    //         ],
+    //         price: [
+    //             {
+    //                 'timelabels_index': 4,
+    //                 'value': 12,
+    //                 'gr': 15
+    //             },
+    //             {
+    //                 'timelabels_index': 5,
+    //                 'value': 13,
+    //                 'gr': 15
+    //             },
+    //             {
+    //                 'timelabels_index': 6,
+    //                 'value': 14,
+    //                 'gr': 15
+    //             },
+    //             {
+    //                 'timelabels_index': 7,
+    //                 'value': 15,
+    //                 'gr': 15
+    //             },
+    //         ]
+    //     },
+    //     monthly: {
+    //         sales: [
+    //             {
+    //                 'timelabels_index': 20,
+    //                 'value': 16,
+    //                 'gr': 15
+    //             },
+    //             {
+    //                 'timelabels_index': 21,
+    //                 'value': 17,
+    //                 'gr': 15
+    //             },
+    //             {
+    //                 'timelabels_index': 22,
+    //                 'value': 18,
+    //                 'gr': 15
+    //             },
+    //             {
+    //                 'timelabels_index': 23,
+    //                 'value': 19,
+    //                 'gr': 15
+    //             },
+    //             {
+    //                 'timelabels_index': 24,
+    //                 'value': 20,
+    //                 'gr': 15
+    //             },
+    //             {
+    //                 'timelabels_index': 25,
+    //                 'value': 21,
+    //                 'gr': 15
+    //             }
+    //         ],
+    //         volume: [
+    //             {
+    //                 'timelabels_index': 20,
+    //                 'value': 22,
+    //                 'gr': 15
+    //             },
+    //             {
+    //                 'timelabels_index': 21,
+    //                 'value': 23,
+    //                 'gr': 15
+    //             },
+    //             {
+    //                 'timelabels_index': 22,
+    //                 'value': 24,
+    //                 'gr': 15
+    //             },
+    //             {
+    //                 'timelabels_index': 23,
+    //                 'value': 25,
+    //                 'gr': 15
+    //             },
+    //             {
+    //                 'timelabels_index': 24,
+    //                 'value': 26,
+    //                 'gr': 15
+    //             },
+    //             {
+    //                 'timelabels_index': 25,
+    //                 'value': 27,
+    //                 'gr': 15
+    //             }
+    //         ],
+    //         price: [
+    //             {
+    //                 'timelabels_index': 20,
+    //                 'value': 22,
+    //                 'gr': 15
+    //             },
+    //             {
+    //                 'timelabels_index': 21,
+    //                 'value': 23,
+    //                 'gr': 15
+    //             },
+    //             {
+    //                 'timelabels_index': 22,
+    //                 'value': 24,
+    //                 'gr': 15
+    //             },
+    //             {
+    //                 'timelabels_index': 23,
+    //                 'value': 25,
+    //                 'gr': 15
+    //             },
+    //             {
+    //                 'timelabels_index': 24,
+    //                 'value': 26,
+    //                 'gr': 15
+    //             },
+    //             {
+    //                 'timelabels_index': 25,
+    //                 'value': 27,
+    //                 'gr': 15
+    //             }
+    //         ]
+    //     }
+    // };
+    //
+    // private cagrs = {
+    //     sales: [
+    //         {'start': 2010, 'end': 2013, 'value': 0.25},
+    //         {'start': 2010, 'end': 2012, 'value': 0.12},
+    //         {'start': 2012, 'end': 2013, 'value': 0.13}
+    //     ],
+    //     volume: [
+    //         {'start': 2010, 'end': 2013, 'value': 0.25},
+    //         {'start': 2010, 'end': 2012, 'value': 0.10},
+    //         {'start': 2012, 'end': 2013, 'value': 0.15}
+    //     ],
+    //     price: [
+    //         {'start': 2010, 'end': 2013, 'value': 0.25},
+    //         {'start': 2010, 'end': 2012, 'value': 0.22},
+    //         {'start': 2012, 'end': 2013, 'value': 0.25}
+    //     ]
+    // };
 
     private decomposition = [
         {
@@ -553,7 +558,20 @@ export class DataManagerService {
     ];
 
     constructor(private req: AjaxService) {
-        this.recreateScales();
+        this.req.get({
+            'url': '/forecast/get_dashboard_data',
+            'data': {
+                'entity_id': 1
+            }
+        }).subscribe((d)=>{
+
+            this.timelabels = d['timelabels'];
+            this.variables = d['variables'];
+            this.data = d['data'];
+            this.cagrs = d['cagrs'];
+
+            this.recreateScales();
+        });
     }
 
     public getData_Decomposition(timelabelIds: Array<number>) {

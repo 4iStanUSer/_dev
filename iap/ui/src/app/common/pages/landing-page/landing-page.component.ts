@@ -60,8 +60,11 @@ export class LandingPageComponent implements OnInit {
                 'project_id': projectId
             }
         }).subscribe((tools) => {
-            this.router.navigate([toolKey]);
+            //this.router.navigate([toolKey]);
         });
+
+        // TODO - REmove this
+        this.router.navigate([toolKey]);
     }
 
 }
