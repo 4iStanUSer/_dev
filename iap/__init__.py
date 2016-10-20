@@ -33,7 +33,8 @@ def common_routing(config):
 
     config.add_route('landing.set_tool_selection', '/set_tool_selection')
     config.add_view(landing.set_tool_selection,
-                    route_name='landing.set_tool_selection')
+                    route_name='landing.set_tool_selection',
+                    request_method='POST', renderer='json')
 
     config.add_route('common.login', '/login')
     config.add_view(common.login_view, route_name='common.login')

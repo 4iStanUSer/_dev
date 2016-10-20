@@ -62,3 +62,7 @@ class Configuration:
 
     def get(self, conf_name):
         return self._data.get(conf_name)
+
+    def set(self, conf_name, value):
+        self._data['conf_name'] = value
+        return

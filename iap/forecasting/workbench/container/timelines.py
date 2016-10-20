@@ -113,3 +113,10 @@ class TimeLineManager:
 
     def get_period_by_alias(self, ts_name, period_alias):
         return self._period_alias[period_alias][ts_name]
+
+    def get_backup(self):
+        return dict(timescales=self._timescales, alias=self._period_alias)
+
+    def load_backup(self, backup):
+        self._timescales = backup['timescales']
+        self._period_alias = backup['alias']

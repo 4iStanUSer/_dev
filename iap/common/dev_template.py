@@ -1,21 +1,12 @@
 dev_template_JJLean = {
     'tool_id': 1,
-    'configuration': [
-        {
-            'name': 'available_dimensions',
-            'value': [
-                'geography', 'category', 'channel'
-            ]
-        },
-        {
-            'name': 'dimension_geography_widget',
-            'value': 'hierarchy'
-        },
-        {
-            'name': 'dimension_category_widget',
-            'value': 'hierarchy'
-        }
-    ],
+    'configuration': {
+        'selector_widgets': {'Geography': 'hierarchy', 'Products': 'hierarchy', 'Distribution Chanel': 'flat'},
+        'dashboard_top_ts': 'annual',
+        'dashboard_bottom_ts': '4-4-5',
+        'dashboard_period': ['2013', '2020'],
+        'dashboard_cagr_periods': [['2013', '2015'], ['2015', '2020']]
+    },
     'top_entity': {},
     'entities': [
         ['US'],
@@ -616,22 +607,13 @@ dev_template_JJLean = {
 
 dev_template_JJOralCare = {
     'tool_id': 1,
-    'configuration': [
-        {
-            'name': 'available_dimensions',
-            'value': [
-                'geography', 'category',
-            ]
-        },
-        {
-            'name': 'dimension_geography_widget',
-            'value': 'hierarchy'
-        },
-        {
-            'name': 'dimension_category_widget',
-            'value': 'hierarchy'
-        }
-    ],
+    'configuration': {
+        'selector_widgets': {'Geography': 'hierarchy', 'Products': 'flat'},
+        'dashboard_top_ts': 'annual',
+        'dashboard_bottom_ts': 'annual',
+        'dashboard_period': ['2013', '2018'],
+        'dashboard_cagr_periods': [['2013', '2015'], ['2015', '2018']]
+    },
     'top_entity': {},
     'entities': [
         ['US'], ['US', 'JJOralCare', 'Mouthwash'],

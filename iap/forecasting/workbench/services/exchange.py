@@ -30,9 +30,10 @@ def download_data_from_wh(warehouse, container, mapping):
                 continue
             values = wh_ts.get_values(period)
             # Set data to container.
-            cont_var = cont_entity.get_variable(row['cont_var'].variable)
-            cont_ts = cont_var.get_time_series(row['cont_var'].timescale)
-            cont_ts.set_values(period[0], values)
+            entity_data = cont_entity.data
+            entity_data.set_values(row['cont_var'].variable,
+                                   row['cont_var'].timescale,
+                                   values, period[0])
         except AttributeError:
             continue
 

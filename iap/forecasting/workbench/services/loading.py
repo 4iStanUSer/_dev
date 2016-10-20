@@ -1,6 +1,12 @@
 from ....common import helper_lib
 
 
+def init_configuration(dev_template, config):
+    in_config = dev_template.get('configuration', {})
+    for key, value in in_config.items():
+        config.set(key, value)
+
+
 def init_container(dev_template, wh, container, wh_inputs, wh_outputs):
     # Initialize time scales.
     timelines_info = dev_template['timelines']
@@ -48,15 +54,15 @@ def _init_entity(dev_template, wh_ent, container, input_rules, output_rules):
             break
     if level_params is None:
         raise Exception
+    entity_data = cont_ent.data
     # Add variables.
     for var_name, timescales in level_params['variables'].items():
-        var = cont_ent.force_variable(var_name)
+        entity_data.add_variable(var_name, None)
         for ts_name in timescales:
-            var.force_time_series(ts_name)
+            entity_data.add_time_series(var_name, ts_name)
     # Add coefficients.
     for coeff_name, timescales in level_params['coefficients'].items():
-        for ts_name in timescales:
-            cont_ent.force_coefficient(coeff_name, ts_name)
+        entity_data.add_coefficient(coeff_name)
     # Find exchange mapping rules in developer template.
     exchange_params = None
     for item in dev_template['exchange_rules']:
@@ -86,7 +92,7 @@ def _init_entity(dev_template, wh_ent, container, input_rules, output_rules):
 
 def _load_dev_data(dev_template, container):
     for item in dev_template['dev_storage']:
-        entity = container.get_entity_by_path(item['path'])
+        entity_data = container.get_entity_by_path(item['path']).data
         for info in item['coefficients']:
             # TODO add timescale name (DR)
-            entity.set_coeff_value(info['name'], info['ts'], info['value'])
+            entity_data.set_coeff_value(info['name'], info['ts'], info['value'])
