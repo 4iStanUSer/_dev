@@ -15,16 +15,19 @@
             <div [ngSwitch]="absOrRate">
                 <div *ngSwitchCase="'rate'">
                     <donut-chart
+                        *ngIf="summaryCagrsData"
                         [data]="summaryCagrsData"></donut-chart>
                 </div>
                 <div *ngSwitchCase="'absolute'">
                     <bar-chart
+                        *ngIf="summaryOutputsShortData"
                         [data]="summaryOutputsShortData"
                         (click-expand)="showBarChartFull($event)"
                     ></bar-chart>
                     <!--TEMP-->
                     <div *ngIf="showFullCharts">
                         <bar-chart
+                            *ngIf="summaryOutputsFullData"
                             [data]="summaryOutputsFullData"
                         ></bar-chart>
                     </div>
@@ -36,6 +39,7 @@
         <div #block2 class="container-fluid">
             <waterfall-chart
                 #decomposition
+                *ngIf="summaryDecompData"
                 [data]="summaryDecompData"
                 (click-expand)="showDecompositionFull($event)"
             ></waterfall-chart>
@@ -43,8 +47,8 @@
             <!--TEMP-->
             <div *ngIf="showTable === true">
                 <accordion-table
+                    *ngIf="decompositionTableData"
                     [data]="decompositionTableData"
-
                     ></accordion-table>
             </div>
             <!--.TEMP-->

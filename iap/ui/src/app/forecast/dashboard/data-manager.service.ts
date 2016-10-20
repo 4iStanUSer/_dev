@@ -564,12 +564,10 @@ export class DataManagerService {
                 'entity_id': 1
             }
         }).subscribe((d)=>{
-
             this.timelabels = d['timelabels'];
             this.variables = d['variables'];
             this.data = d['data'];
             this.cagrs = d['cagrs'];
-
             this.recreateScales();
         });
     }
@@ -613,9 +611,12 @@ export class DataManagerService {
     }
 
     public getData_Bar(timelabelIds: Array<number>, variables: Array<string>) {
+        let bars: Array<Object> = [];
+        if (!timelabelIds || timelabelIds.length == 0) {
+            return bars;
+        }
         let variable: string = null;
         let timescale: string = this.timelabels[timelabelIds[0]]['timescale'];
-        let bars: Array<Object> = [];
 
         let timelabelsForCagrs = this.getTwoCagrPeriods(timelabelIds);
 
@@ -652,8 +653,12 @@ export class DataManagerService {
 
     public getData_Donut(timelabelIds: Array<number>,
                          variables: Array<string>): Array<Object> {
-        let variable: string = null;
         let donuts = [];
+        if (!timelabelIds || timelabelIds.length == 0) {
+            return donuts;
+        }
+
+        let variable: string = null;
 
         let timelabelsForCagrs = this.getTwoCagrPeriods([
             timelabelIds[0],
@@ -675,9 +680,6 @@ export class DataManagerService {
     }
 
     public getData_VTable() {
-        // console.log(this.timelabels);
-        // console.log(this.data);
-        // console.log(this.variables);
         return {
             'variables': this.variables,
             'data': this.data,
@@ -707,14 +709,8 @@ export class DataManagerService {
     ////////////////////////////////
     public getTwoCagrPeriods(timelabelIds: Array<string|number>): Array<Object> {
         let timelabels = [];
-        if (timelabelIds.length < 3) {
-            timelabels = [
-                {
-                    start: this.timelabels[timelabelIds[0]]['name'],
-                    end: this.timelabels[timelabelIds[timelabelIds.length - 1]]['name']
-                }
-            ];
-        } else {
+
+        if (timelabelIds.length >= 3) {
             let _middleId = timelabelIds[Math.floor(timelabelIds.length / 2)];
             timelabels = [
                 {
@@ -723,6 +719,13 @@ export class DataManagerService {
                 },
                 {
                     start: this.timelabels[_middleId]['name'],
+                    end: this.timelabels[timelabelIds[timelabelIds.length - 1]]['name']
+                }
+            ];
+        } else if (timelabelIds.length > 0) {
+            timelabels = [
+                {
+                    start: this.timelabels[timelabelIds[0]]['name'],
                     end: this.timelabels[timelabelIds[timelabelIds.length - 1]]['name']
                 }
             ];
@@ -769,7 +772,7 @@ export class DataManagerService {
         // TODO Review sorting...
         let vars = this.getVarsByType('output');
         let timelables = [];
-        if (vars) {
+        if (vars && vars.length > 0) {
             timelables = this.data[timescale][vars[0]].map(function (el) {
                 return el['timelabels_index'];
             });

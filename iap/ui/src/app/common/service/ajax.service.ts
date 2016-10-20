@@ -134,8 +134,8 @@ export class AjaxService {
 
     private _handleSiteError(res: ServerResponse, blackBox: Subject<any>) {
         // TODO Show error at view
-        console.error('Error message on view');
-        blackBox.error(res.getError());
+        console.error('App Error message: ' + res.getError());
+        //blackBox.error(res.getError()); // TODO Refactor (VL)
     }
 
     private _handleServerError(error: Response, blackBox: Subject<any>) {
@@ -144,8 +144,8 @@ export class AjaxService {
         } else if (error.status === 404) {
         }
         // TODO Show error at view
-        console.error('Error message on view');
-        blackBox.error(error.status); // TODO Refactor returning data
+        console.error('Server Error message: ' + error.status);
+        //blackBox.error(error.status); // TODO Refactor (VL)
     }
 
     private _makeRequestInst(options: IRequestOptions): Request {

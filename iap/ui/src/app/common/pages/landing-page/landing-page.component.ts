@@ -26,26 +26,15 @@ export class LandingPageComponent implements OnInit {
         //             {id: 'JJLean', name: 'FT JJ Lean Forecasting'}
         //         ]
         //     },
-        //     'ppt': {
-        //         name: 'PPT',
-        //         projects: [
-        //             {id: 'pptJJOralCare', name: 'PPT JJ Oral Care'},
-        //             {id: 'pptJJLean', name: 'PPT JJ Lean'}
-        //         ]
-        //     },
-        //     'mmm': {
-        //         name: 'MMT',
-        //         projects: [
-        //             {id: 'mmtJJOralCare', name: 'MMT JJ Oral Care'},
-        //             {id: 'mmtJJLean', name: 'MMT JJ Lean'}
-        //         ]
-        //     }
         // };
-        this.req.get({
-            'url': 'landing'
-        }).subscribe((tools) => {
-            this.tools = tools;
-        });
+        this.req
+            .get({
+                'url': 'landing',
+                'data': {}
+            })
+            .subscribe((tools) => {
+                this.tools = tools;
+            });
     }
 
     onToolChange(toolKey: string) {
@@ -63,7 +52,7 @@ export class LandingPageComponent implements OnInit {
             //this.router.navigate([toolKey]);
         });
 
-        // TODO - REmove this
+        // TODO - Remove this when request will be successful(VL)
         this.router.navigate([toolKey]);
     }
 

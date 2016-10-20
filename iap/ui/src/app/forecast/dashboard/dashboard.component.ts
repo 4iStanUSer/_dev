@@ -5,7 +5,6 @@ import {StateService, PageState} from "../../common/service/state.service";
 import {WaterfallChartComponent} from "../../common/cmp/waterfall-chart/waterfall-chart.component";
 
 @Component({
-    selector: 'dashboard',
     templateUrl: './dashboard.component.html',
     styleUrls: ['./dashboard.component.css']
 })
@@ -80,19 +79,23 @@ export class DashboardComponent implements OnInit {
         this.absOrRate = e['key'];
         this.state.set('abs_or_rate', this.absOrRate);
 
-        this.decompositionObj.changeMode(this.absOrRate);
+        if (this.decompositionObj) {
+            this.decompositionObj.changeMode(this.absOrRate);
+        }
 
         let outputVars = this.dm.getVarsByType('output');
         let timelabelsIds = this.dm.getShortTimeLablesForOutput(
             this.currTimeScale);
-
-        if ('rate' == this.absOrRate && this.summaryCagrsData === null) {
-            this.summaryCagrsData = this.dm.getData_Donut(timelabelsIds,
-                outputVars);
-        } else if (this.summaryOutputsShortData === null) {
-            this.summaryOutputsShortData = this.dm.getData_Bar(timelabelsIds,
-                outputVars);
+        if (timelabelsIds && timelabelsIds.length > 0) {
+            if ('rate' == this.absOrRate && this.summaryCagrsData === null) {
+                this.summaryCagrsData =
+                    this.dm.getData_Donut(timelabelsIds, outputVars);
+            } else if (this.summaryOutputsShortData === null) {
+                this.summaryOutputsShortData =
+                    this.dm.getData_Bar(timelabelsIds, outputVars);
+            }
         }
+
     }
     /*---.valueOrGrowthSwitch---*/
     /*---Decomposition---*/
@@ -101,7 +104,7 @@ export class DashboardComponent implements OnInit {
 
     constructor(
         private dm: DataManagerService,
-        private stateService: StateService, // TODO Review
+        private stateService: StateService, // TODO Review (VL)
         private sds: StaticDataService
     ) {
         this.state = this.stateService.getPageState(this.pageName);
@@ -129,23 +132,22 @@ export class DashboardComponent implements OnInit {
         let outputVars = this.dm.getVarsByType('output');
         let timelabelsIds = this.dm.getShortTimeLablesForOutput(
             this.currTimeScale);
+        if (timelabelsIds && timelabelsIds.length) {
+            if ('rate' == this.absOrRate) {
+                this.summaryCagrsData =
+                    this.dm.getData_Donut(timelabelsIds, outputVars);
+            } else {
+                this.summaryOutputsShortData =
+                    this.dm.getData_Bar(timelabelsIds, outputVars);
+            }
 
-        if ('rate' == this.absOrRate) {
-            this.summaryCagrsData = this.dm.getData_Donut(timelabelsIds,
-                outputVars);
-        } else {
-            this.summaryOutputsShortData = this.dm.getData_Bar(timelabelsIds,
-                outputVars);
+            this.summaryDecompData =
+                this.dm.getData_Decomposition(timelabelsIds);
         }
 
-        this.summaryDecompData = this.dm.getData_Decomposition(timelabelsIds);
 
         //////////////////////////////////////////////////////////////////////
-
-
         // this.vTableData = this.dm.getData_VTable();
-
-
     }
 
     public changeMode(mode: string) {
