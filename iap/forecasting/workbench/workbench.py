@@ -5,7 +5,7 @@ from .access import Access
 from .dimensions import Dimensions
 from .configuration import Configuration
 
-from .services.loading import init_container
+from .services.loading import init_container, init_configuration
 from .services.exchange import download_data_from_wh
 
 class Workbench:
@@ -30,7 +30,7 @@ class Workbench:
         #    if u_perms.get('features') is not None else []
         #self.access.load(features)
         # Configuration.
-        self.config.load(dev_template.get('configuration', []))
+        init_configuration(dev_template, self.config)
         # Container
         init_container(dev_template, warehouse, self.container,
                        self._wh_inputs, self._wh_outputs)

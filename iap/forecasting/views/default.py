@@ -1,7 +1,7 @@
 from pyramid.renderers import render_to_response
 
 from ...common.helper_lib import send_success_response, send_error_response
-from ..services import getter as getter_service
+from ..workbench.services import data_getters as getter_service
 from ...common import exceptions as ex
 from ...common.error_manager import ErrorManager
 from ...common import rt_storage
@@ -9,7 +9,7 @@ from ...common import rt_storage
 
 
 
-TOOL = 'forecasting'
+TOOL = 'forecast'
 
 def index_view(req):
     # service.recreate_db(req)
@@ -67,9 +67,9 @@ def get_index_page_data(req):
     #         ]
     #     }
     # }
-    data = getter_service.tmp_workbench(req)
+    #data = getter_service.tmp_workbench(req)
 
-    return send_success_response(data)
+    return send_success_response(None)
 
 
 def get_ui_config(req):
@@ -222,7 +222,7 @@ def get_dashboard_data(req):
         return send_error_response(msg)
     try:
         wb = rt_storage.get_wb(user_id, TOOL)
-        data = getter_service.get_entity_data(wb.container, entity_id)
+        data = getter_service.get_entity_data(wb.container, wb.config, entity_id)
         return send_success_response(data)
     except Exception as e:
         msg = ErrorManager.get_error_message(e)
@@ -231,7 +231,7 @@ def get_dashboard_data(req):
 
 def get_dashboard_data_for_period(req):
     try:
-        user_id = req.get_user()
+        user_id = req['user']
         entity_id = req.json_body['entity_id']
         period = (req.json_body['period'][0], req.json_body['period'][1])
     except KeyError:
@@ -239,8 +239,8 @@ def get_dashboard_data_for_period(req):
         return send_error_response(msg)
     try:
         wb = rt_storage.get_wb(user_id, TOOL)
-        dec = getter_service.get_decomposition(wb.container, entity_id, period)
-        cagrs = getter_service.get_cagrs(wb.container, entity_id, period)
+        dec = getter_service.get_decomposition(wb.container, wb.config, entity_id, period)
+        cagrs = getter_service.get_cagrs(wb.container, wb.config, entity_id, period)
         return send_success_response(dict(dec=dec, cagrs=cagrs))
     except Exception as e:
         msg = ErrorManager.get_error_message(e)

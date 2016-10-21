@@ -35,9 +35,9 @@ class TimeLineManager:
         # tree - contains hierarchical structure for UI
         # borders - contains borders for every requested timescale
         tree = []
-        borders = dict(ts_name=top_ts_name, borders=period)
+        borders = {top_ts_name: period}
         # Get top timescale
-        top_ts = self._get_ts(top_ts_name)
+        top_ts = self._get_ts(top_ts_name)[0]
         # Get range of indexes for top timescale.
         start = self.get_index(top_ts_name, period[0])
         end = self.get_index(top_ts_name, period[1])
@@ -47,7 +47,8 @@ class TimeLineManager:
         for i in range(start, end + 1):
             top_point = top_ts['timeline'][i]
             # Add top point to tree.
-            tree.append(dict(name=top_point['value'], timescale=top_ts['name'],
+            tree.append(dict(name=top_point['name_full'],
+                             timescale=top_ts['name'],
                              parent_index=None))
             # Collect points from lower timescales recursively.
             # Define borders for every lower timescale.
@@ -81,7 +82,7 @@ class TimeLineManager:
             self._add_point_to_tree(child, point_ind, max_depth, tree, borders)
 
     def get_names(self, ts_name, ts_period):
-        ts = self._get_ts(ts_name)
+        ts = self._get_ts(ts_name)[0]
         start = None
         end = None
         for index, point in enumerate(ts['timeline']):
@@ -113,3 +114,10 @@ class TimeLineManager:
 
     def get_period_by_alias(self, ts_name, period_alias):
         return self._period_alias[period_alias][ts_name]
+
+    def get_backup(self):
+        return dict(timescales=self._timescales, alias=self._period_alias)
+
+    def load_backup(self, backup):
+        self._timescales = backup['timescales']
+        self._period_alias = backup['alias']

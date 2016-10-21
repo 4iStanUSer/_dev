@@ -3,6 +3,7 @@ from .timelines import TimeLineManager
 from .entity_data import EntityData
 from .entities_hierarchy import Node
 
+
 class Container:
 
     def __init__(self):
@@ -29,23 +30,10 @@ class Container:
         # Transform node to entity
         return self.get_entity_by_id(latest_node.id)
 
-    def _add_node_child(self, node_id, child_name, child_meta):
-        node = self._nodes_dict[node_id]['node']
-        # Add new node.
-        new_child = node.add_child(child_name, child_meta)
-        # Register node.
-        self._max_node_id += 1
-        new_child.id = self._max_node_id
-        self._nodes_dict[new_child.id] = \
-            dict(node=new_child, data=EntityData(self.timeline))
-        # Transform node to entity
-        return self.get_entity_by_id(new_child.id)
-
-    def get_entity_by_id(self, node_id):
-        try:
-            node_info = self._nodes_dict[node_id]
-        except KeyError:
-            raise Exception
+    def get_entity_by_id(self, ent_id):
+        node_info = self._nodes_dict.get(ent_id, None)
+        if node_info is None:
+            return None
         return CEntity(self, node_info['node'], node_info['data'])
 
     def load_timelines(self, ts_names, alias, top_ts_points):
@@ -57,20 +45,10 @@ class Container:
         node = self._hierarchy.get_node_by_path(path)
         return self.get_entity_by_id(node.id)
 
-    def get_entity_data(self, entity, timescale):
-        #TODO Rewrite (DR)
-        variables = entity.get_variables_names()
-        data = {}
-        if variables:
-            for variable in variables:
-                c_variable = entity.get_variable(variable)
-                c_time_series = c_variable.get_time_series(timescale)
-                data[variable] = c_time_series.get_values()
-        return data
-
     def load(self, backup):
         self._clean()
-        for node_info in backup:
+        self.timeline.load_backup(backup['timeline'])
+        for node_info in backup['container']:
             new_nodes = []
             latest_node = self._hierarchy.add_node_by_path(node_info['path'],
                                                            node_info['metas'],
@@ -86,13 +64,25 @@ class Container:
 
     def save(self):
         backup = []
-        for node_info in self._nodes_dict:
+        for node_id, node_info in self._nodes_dict.items():
             path = []
             metas = []
             node_info['node'].get_path(path, metas)
             data = node_info['data'].get_backup()
             backup.append(dict(path=path, metas=metas, data=data))
-        return backup
+        return dict(timeline=self.timeline.get_backup(), container=backup)
+
+    def _add_node_child(self, node_id, child_name, child_meta):
+        node = self._nodes_dict[node_id]['node']
+        # Add new node.
+        new_child = node.add_child(child_name, child_meta)
+        # Register node.
+        self._max_node_id += 1
+        new_child.id = self._max_node_id
+        self._nodes_dict[new_child.id] = \
+            dict(node=new_child, data=EntityData(self.timeline))
+        # Transform node to entity
+        return self.get_entity_by_id(new_child.id)
 
 class CEntity:
 
@@ -115,12 +105,12 @@ class CEntity:
 
     @property
     def parents(self):
-        return [self.container.get_entity_by_id(x.id) for x in
+        return [self._container.get_entity_by_id(x.id) for x in
                 self._node.parents]
 
     @property
     def children(self):
-        return [self.container.get_entity_by_id(x.id) for x in
+        return [self._container.get_entity_by_id(x.id) for x in
                 self._node.children]
 
     @property
@@ -132,6 +122,10 @@ class CEntity:
     @property
     def meta(self):
         return self._node.meta
+
+    @property
+    def data(self):
+        return self._data
 
     def _get_root(self):
         #if self.name == 'root':
@@ -177,24 +171,16 @@ class CEntity:
         return self._data.get_var_names()
 
     def get_variable(self, name):
-        if self._data.does_contain_var(name):
+        if name in self._data.variables_names:
             return CVariable(self._data, name)
         else:
             return None
 
     def force_variable(self, name, default_value=None):
-        if not self._data.does_contain_var(name):
-            self._data.add_var(name, default_value)
+        if name not in self._data.variables_names:
+            self._data.add_variable(name, default_value)
         return CVariable(self._data, name)
 
-    def force_coefficient(self, coeff_name, ts_name):
-        self._data.add_coeff(coeff_name, ts_name)
-
-    def set_coeff_value(self, coeff_name, ts_name, value):
-        self._data.set_coeff_value(coeff_name, ts_name, value)
-
-    def get_decomposition(self, timescale, period):
-        pass
 
 class CVariable:
 
@@ -211,9 +197,9 @@ class CVariable:
         self._entity_data.rename_variable(self._var_name, name)
         self._var_name = name
 
-    @property
-    def default_value(self):
-        self._entity_data.get_default_value(self._var_name)
+    #@property
+    #def default_value(self):
+    #    self._entity_data.get_default_value(self._var_name)
 
     def get_time_series(self, ts_name):
         if self._entity_data.does_contain_ts(self._var_name, ts_name):
@@ -221,9 +207,9 @@ class CVariable:
         else:
             return None
 
-    def force_time_series(self, ts_name, start_date=None, end_date=None):
+    def force_time_series(self, ts_name):
         if not self._entity_data.does_contain_ts(self._var_name, ts_name):
-            self._entity_data.add_time_series(self._var_name, ts_name, start_date, end_date)
+            self._entity_data.add_time_series(self._var_name, ts_name)
         return CTimeSeries(self._entity_data, self._var_name, ts_name)
 
 
@@ -236,16 +222,7 @@ class CTimeSeries:
 
     @property
     def name(self):
-
         return self._ts_name
-
-    @property
-    def start_point(self):
-        return self._entity_data.get_ts_start(self._var_name, self._ts_name)
-
-    @property
-    def end_point(self):
-        return self._entity_data.get_ts_end(self._var_name, self._ts_name)
 
     def set_values(self, start_label, values):
         return self._entity_data.set_values(self._var_name,
@@ -253,20 +230,6 @@ class CTimeSeries:
                                             start_label,
                                             values)
 
-    def get_values(self, start_label=None, length=None):
-        return self._entity_data.get_values(self._var_name,
-                                            self._ts_name,
-                                            start_label,
-                                            length)
-
-    def get_value(self, time_label):
-        return self._entity_data.get_values(self._var_name,
-                                            self._ts_name,
-                                            time_label,
-                                            1)
-
-    def get_growth_rates(self, period):
-        pass
-
-    def get_cagr(self, period):
-        pass
+    def get_values(self, period):
+        return self._entity_data.get_values(self._var_name, self._ts_name,
+                                            period)

@@ -5,7 +5,7 @@ from pyramid.renderers import render_to_response
 
 def notfound_view(req):
     req.response.status = 404
-    return render_to_response('templates/404.jinja2',
+    return render_to_response('iap.common:templates/404.jinja2',
                               {'title': '404 Not Found'},
                               request=req)
 
@@ -27,7 +27,7 @@ def login_view(request):
         next_url=next_url,
         email=email,
     )
-    return render_to_response('templates/login.jinja2',
+    return render_to_response('iap.common:templates/login.jinja2',
                               data,
                               request=request)
 
