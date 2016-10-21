@@ -561,7 +561,7 @@ export class DataManagerService {
         this.req.get({
             'url': '/forecast/get_dashboard_data',
             'data': {
-                'entity_id': 1
+                'entity_id': 2
             }
         }).subscribe((d)=>{
             this.timelabels = d['timelabels'];

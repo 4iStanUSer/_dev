@@ -21,7 +21,7 @@ def get_entity_data(container, config, entity_id):
     # Get time labels for every timescale.
     time_labels = dict()
     for ts_name, ts_period in ts_borders.items():
-        time_labels [ts_name] = container.timeline.get_names(ts_name, ts_period)
+        time_labels[ts_name] = container.timeline.get_names(ts_name, ts_period)
 
     # Fill output variables properties.
     var_properties = entity_data.variables_properties
@@ -54,8 +54,8 @@ def get_entity_data(container, config, entity_id):
             if ts_name == top_ts:
                 cagrs[var_name] = \
                     [dict(start=x[0], end=x[1],
-                          value=entity_data.get_growth_over_period(var_name,
-                                                                   ts_name, x))
+                          value=entity_data.get_growth(var_name, ts_name,
+                                                       (x[0], x[1])))
                      for x in cagr_periods]
     # Return entire entity data.
     result['timelabels'] = ts_tree

@@ -1,7 +1,7 @@
 from pyramid.renderers import render_to_response
 
 from ...common.helper_lib import send_success_response, send_error_response
-from ..services import getter as getter_service
+from ..workbench.services import data_getters as getter_service
 from ...common import exceptions as ex
 from ...common.error_manager import ErrorManager
 from ...common import rt_storage
@@ -9,7 +9,7 @@ from ...common import rt_storage
 
 
 
-TOOL = 'forecasting'
+TOOL = 'forecast'
 
 def index_view(req):
     # service.recreate_db(req)
@@ -215,7 +215,7 @@ def get_scenarios_list(req):
 def get_dashboard_data(req):
     # Get parameters from request.
     try:
-        user_id = req['user']
+        user_id = req.user
         entity_id = req.json_body['entity_id']
     except KeyError:
         msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)

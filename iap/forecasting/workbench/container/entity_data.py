@@ -18,7 +18,8 @@ class EntityData:
 
     @property
     def variables_properties(self):
-        return copy.copy(self._var_properties)
+        return [{**self._var_properties[name], **dict(name=name)}
+                for name in self._var_properties.keys()]
 
     @property
     def coefficients_names(self):
@@ -71,13 +72,13 @@ class EntityData:
 
     def get_values(self, var_name, ts_name, period):
         ts = self._variables.get((var_name, ts_name), None)
-        if ts is not None:
+        if ts is None:
             raise Exception
         return self._get_ts_segment(ts['values'], period, ts_name)
 
     def get_growth_rates(self, var_name, ts_name, period):
         ts = self._variables.get((var_name, ts_name), None)
-        if ts is not None:
+        if ts is None:
             raise Exception
         return self._get_ts_segment(ts['growth_rates'], period, ts_name)
 
@@ -93,14 +94,14 @@ class EntityData:
             raise Exception
         self._set_ts_segment(ts['growth_rates'], values, start_label, ts_name)
 
-    def get_growth_over_period(self, var_name, ts_name, period):
+    def get_growth(self, var_name, ts_name, period):
         ts = self._variables.get((var_name, ts_name), None)
-        if ts is not None:
+        if ts is None:
             raise Exception
         growth = ts['changes'].get(period)
         return growth
 
-    def set_growth_over_period(self, var_name, ts_name, period, value):
+    def set_growth(self, var_name, ts_name, period, value):
         ts = self._variables.get((var_name, ts_name), None)
         if ts is None:
             raise Exception
@@ -157,11 +158,11 @@ class EntityData:
         start_index = 0
         if period[0] is not None:
             start_index = \
-                self.time_manager.get_index_by_label(timescale_name, period[0])
+                self.time_manager.get_index(timescale_name, period[0])
         end_index = len(time_series)
         if period[1] is None:
             end_index = \
-                self.time_manager.get_index_by_label(timescale_name, period[1])
+                self.time_manager.get_index(timescale_name, period[1])
         # Check indexes correctness
         if start_index > end_index:
             raise Exception

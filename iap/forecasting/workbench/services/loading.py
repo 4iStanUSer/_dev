@@ -4,7 +4,7 @@ from ....common import helper_lib
 def init_configuration(dev_template, config):
     in_config = dev_template.get('configuration', {})
     for key, value in in_config.items():
-        config.set(key, value)
+        config[key] = value
 
 
 def init_container(dev_template, wh, container, wh_inputs, wh_outputs):
