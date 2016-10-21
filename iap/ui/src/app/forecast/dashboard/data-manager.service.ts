@@ -558,18 +558,25 @@ export class DataManagerService {
     ];
 
     constructor(private req: AjaxService) {
-        this.req.get({
+
+    }
+
+    public init(){
+        let resp = this.req.get({
             'url': '/forecast/get_dashboard_data',
             'data': {
                 'entity_id': 2
             }
-        }).subscribe((d)=>{
+        });
+        resp.subscribe((d)=>{
+            console.log(1);
             this.timelabels = d['timelabels'];
             this.variables = d['variables'];
             this.data = d['data'];
             this.cagrs = d['cagrs'];
             this.recreateScales();
         });
+        return resp;
     }
 
     public getData_Decomposition(timelabelIds: Array<number>) {

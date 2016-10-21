@@ -113,7 +113,6 @@ export class DashboardComponent implements OnInit {
     }
 
     ngOnInit() {
-
         let absOrRate = this.state.get('abs_or_rate');
         if (!absOrRate) {
             absOrRate = this.absOrRate;
@@ -129,21 +128,24 @@ export class DashboardComponent implements OnInit {
             }
         }, this);
 
-        let outputVars = this.dm.getVarsByType('output');
-        let timelabelsIds = this.dm.getShortTimeLablesForOutput(
-            this.currTimeScale);
-        if (timelabelsIds && timelabelsIds.length) {
-            if ('rate' == this.absOrRate) {
-                this.summaryCagrsData =
-                    this.dm.getData_Donut(timelabelsIds, outputVars);
-            } else {
-                this.summaryOutputsShortData =
-                    this.dm.getData_Bar(timelabelsIds, outputVars);
-            }
+        this.dm.init().subscribe((d) => {
+            console.log(2);
+            let outputVars = this.dm.getVarsByType('output');
+            let timelabelsIds = this.dm.getShortTimeLablesForOutput(
+                this.currTimeScale);
+            if (timelabelsIds && timelabelsIds.length) {
+                if ('rate' == this.absOrRate) {
+                    this.summaryCagrsData =
+                        this.dm.getData_Donut(timelabelsIds, outputVars);
+                } else {
+                    this.summaryOutputsShortData =
+                        this.dm.getData_Bar(timelabelsIds, outputVars);
+                }
 
-            this.summaryDecompData =
-                this.dm.getData_Decomposition(timelabelsIds);
-        }
+                this.summaryDecompData =
+                    this.dm.getData_Decomposition(timelabelsIds);
+            }
+        });
 
 
         //////////////////////////////////////////////////////////////////////
