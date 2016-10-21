@@ -54,7 +54,7 @@ export class DashboardComponent implements OnInit {
     // public vTableData: Object = {};
 
 
-    public period = {'start': 2016, 'end': 2020}; // TODO Review
+    public period = {'start': 2016, 'end': 2020}; // TODO Review (VL)
     public summaryCagrsData: Array<Object> = null;
     // public summaryBarsData: Array<Object> = null;
     public summaryOutputsShortData: Array<Object> = null;
@@ -133,7 +133,6 @@ export class DashboardComponent implements OnInit {
         }, this);
 
         this.dm.init().subscribe((d) => {
-            console.log(2);
             let outputVars = this.dm.getVarsByType('output');
             let timelabelsIds = this.dm.getShortTimeLablesForOutput(
                 this.currTimeScale);
