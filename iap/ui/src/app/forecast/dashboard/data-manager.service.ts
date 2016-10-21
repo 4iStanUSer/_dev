@@ -2,37 +2,28 @@ import {Injectable} from '@angular/core';
 // import * as _ from 'lodash';
 import {AjaxService} from "./../../common/service/ajax.service";
 
-interface Cagr {
-    start: string;
-    end: string;
-    value: number;
-}
-export interface Period {
-    start: string;
-    end: string;
-}
-
 @Injectable()
 export class DataManagerService {
 
-    // public hTableData: Object = {};
-    // private widgetsConfig = {
-    //     'vertical_table': {},
-    //     'horizontal_table': {},
-    //     'waterfall_chart': {},
-    //     'donut_chart': {},
-    //     'bar_chart': {}
-    // };
+    public hTableData: Object = {};
+
+
+    private widgetsConfig = {
+        'vertical_table': {},
+        'horizontal_table': {},
+        'waterfall_chart': {},
+        'donut_chart': {},
+        'bar_chart': {}
+    };
 
     private scales: Array<string> = [];
+
+    private hierarchy = [];
 
     private timelabels = [];
     private variables = {};
     private data = {};
     private cagrs = {};
-
-    private cagrPeriods: Array<{start: string, end: string}> = [];
-    private timelabelsMap: {[timeLabel: string]: number} = {};
 
     // private timelabels = [
     //     {
@@ -471,8 +462,8 @@ export class DataManagerService {
 
     private decomposition = [
         {
-            start: '2015',
-            end: '2018',
+            start: '2010',
+            end: '2013',
             vars: [
                 {
                     key: 'sales',
@@ -481,7 +472,7 @@ export class DataManagerService {
                     multiplier: 'MM',
                     values: [
                         {
-                            name: '2015',
+                            name: '2010',
                             impact_abs: 100,
                             impact_rate: 100,
                             change_abs: null,
@@ -513,7 +504,7 @@ export class DataManagerService {
                             children: null
                         },
                         {
-                            name: '2018',
+                            name: '2013',
                             impact_abs: 4.15,
                             impact_rate: 2,
                             change_abs: null,
@@ -529,7 +520,7 @@ export class DataManagerService {
                     multiplier: 'Thousands',
                     values: [
                         {
-                            name: '2015',
+                            name: '2010',
                             impact_abs: 100,
                             impact_rate: 100,
                             change_abs: null,
@@ -553,7 +544,7 @@ export class DataManagerService {
                             children: null
                         },
                         {
-                            name: '2018',
+                            name: '2013',
                             impact_abs: 4.15,
                             impact_rate: 2,
                             change_abs: null,
@@ -567,65 +558,30 @@ export class DataManagerService {
     ];
 
     constructor(private req: AjaxService) {
+
     }
 
-    public init() {
+    public init(){
         let resp = this.req.get({
             'url': '/forecast/get_dashboard_data',
             'data': {
                 'entity_id': 2
             }
         });
-        resp.subscribe((d)=> {
+        resp.subscribe((d)=>{
+            console.log(1);
             this.timelabels = d['timelabels'];
+            this.variables = d['variables'];
             this.data = d['data'];
             this.cagrs = d['cagrs'];
-            //this.variables = d['variables'];
-
-            for (let i = 0; i < d['variables'].length; i++) { // TODO Remove
-                this.variables[d['variables'][i]['name']] = d['variables'][i];
-            }
-
-            // for filling cagr periods
-            let cKeys: Array<string> = Object.keys(this.cagrs);
-            if (cKeys.length) {
-                for (let i = 0; i < this.cagrs[cKeys[0]].length; i++) {
-                    let cagr = this.cagrs[cKeys[0]][i];
-                    let exist = false;
-                    for (let j = 0; j < this.cagrPeriods.length; j++) {
-                        if (this.cagrPeriods[j]['start']
-                            == cagr['start'].toString()
-                            && this.cagrPeriods[j]['end']
-                            == cagr['end'].toString()) {
-                            exist = true;
-                            break;
-                        }
-                    }
-                    if (!exist) {
-                        this.cagrPeriods.push({
-                            'start': cagr['start'].toString(),
-                            'end': cagr['end'].toString()
-                        });
-                    }
-                }
-            }
-
-            // Fill timelabelsMap -> {timeLabel: timelabelIndex}
-            for (let i = 0; i < this.timelabels.length; i++) {
-                this.timelabelsMap[this.timelabels[i]['name']] = i;
-            }
-
             this.recreateScales();
         });
         return resp;
     }
 
-    public getData_Decomposition(p: Period) {
-        if (!p || !p['start'] || !p['end']) {
-            return null;
-        }
-        let start = p['start'].toString();
-        let end = p['end'].toString();
+    public getData_Decomposition(timelabelIds: Array<number>) {
+        let start = this.timelabels[timelabelIds[0]]['name'];
+        let end = this.timelabels[timelabelIds[timelabelIds.length - 1]]['name'];
         let found = false;
         let i = 0;
         while (i < this.decomposition.length && !found) {
@@ -644,7 +600,7 @@ export class DataManagerService {
                 'base_name': 'Decomposition',
                 'start': this.decomposition[i]['start'],
                 'end': this.decomposition[i]['end'],
-                'vars': this.decomposition[i]['vars'].map(function (v) {
+                'vars': this.decomposition[i]['vars'].map(function(v){
                     return {
                         'name': v['name'],
                         'key': v['key'],
@@ -661,72 +617,15 @@ export class DataManagerService {
         }
     }
 
-    /**
-     *
-     * @param period: {start: string, end: string}
-     * @param variables Array<string>
-     * @param mode: 'preview'|'full'
-     * @returns {Array<Object>}
-     */
-    public getData_Bar(period: Period, variables: Array<string>,
-                       mode: string): Array<Object> {
-        if (!period
-            || !period['start']
-            || !period['end']
-            || this.getTimelabelIndex(period['start']) === null
-            || this.getTimelabelIndex(period['end']) === null
-        ) {
-            return null;
-        }
-
-        let startIndex = this.getTimelabelIndex(period['start']);
-        let endIndex = this.getTimelabelIndex(period['end']);
-
+    public getData_Bar(timelabelIds: Array<number>, variables: Array<string>) {
         let bars: Array<Object> = [];
+        if (!timelabelIds || timelabelIds.length == 0) {
+            return bars;
+        }
         let variable: string = null;
-        let timescale: string = this.timelabels[startIndex]['timescale'];
+        let timescale: string = this.timelabels[timelabelIds[0]]['timescale'];
 
-        // Get all timelabels Ids for this timescale
-        let timelabelIds = [];
-        for (let i = startIndex; i <= endIndex; i++) {
-            if (this.timelabels[i]['timescale'] == timescale) {
-                timelabelIds.push(i);
-            }
-        }
-        // Limit count of timelabels for preview mode
-        if (mode == 'preview' && timelabelIds.length > 3) {
-            timelabelIds = [
-                timelabelIds[0],
-                timelabelIds[Math.floor((timelabelIds.length - 1) / 2)],
-                timelabelIds[timelabelIds.length - 1]
-            ];
-        }
-
-        // Fill the timelabelsForCagrs
-        let timelabelsForCagrs = [];
-        if (timelabelIds.length >= 3) {
-            let _middleId = timelabelIds[Math.floor(
-                (timelabelIds.length - 1) / 2)];
-            timelabelsForCagrs = [
-                {
-                    start: this.timelabels[timelabelIds[0]]['name'],
-                    end: this.timelabels[_middleId]['name']
-                },
-                {
-                    start: this.timelabels[_middleId]['name'],
-                    end: this.timelabels[timelabelIds[
-                        timelabelIds.length - 1]]['name']
-                }
-            ];
-        } else if (timelabelIds.length > 0) {
-            timelabelsForCagrs = [
-                {
-                    start: this.timelabels[timelabelIds[0]]['name'],
-                    end: this.timelabels[timelabelIds[
-                        timelabelIds.length - 1]]['name']
-                }
-            ];
-        }
+        let timelabelsForCagrs = this.getTwoCagrPeriods(timelabelIds);
 
         for (let i = 0; i < variables.length; i++) {
             variable = variables[i];
@@ -734,19 +633,16 @@ export class DataManagerService {
             if (this.data[timescale] && this.data[timescale][variable]) {
                 let data = this.data[timescale][variable]
                     .filter(function (el) {
-                        let index = this.getTimelabelIndex(el['timestamp']);
-                        return (index !== null
-                                && timelabelIds.indexOf(index) != -1)
-                                ? true : false;
-                    }, this)
+                        return (timelabelIds.indexOf(el['timelabels_index']) != -1)
+                            ? true : false;
+                    })
                     .map(function (el) {
-                        let index = this.getTimelabelIndex(el['timestamp']);
                         return {
-                            'name': this.timelabels[index]['name'],
+                            'name': this.timelabels[el['timelabels_index']]['name'],
                             'value': el['value']
                         }
                     }, this);
-                let cagrs = timelabelsForCagrs.map(function (el) {
+                let cagrs = timelabelsForCagrs.map(function(el){
                     return this.getCagrsForPeriod(variable,
                         el['start'], el['end']);
                 }, this);
@@ -762,24 +658,30 @@ export class DataManagerService {
         return bars;
     }
 
-    public getData_Donut(period: Period,
+    public getData_Donut(timelabelIds: Array<number>,
                          variables: Array<string>): Array<Object> {
-        if (!period['start'] || !period['end']) {
-            return null;
-        }
         let donuts = [];
+        if (!timelabelIds || timelabelIds.length == 0) {
+            return donuts;
+        }
+
         let variable: string = null;
+
+        let timelabelsForCagrs = this.getTwoCagrPeriods([
+            timelabelIds[0],
+            timelabelIds[timelabelIds.length - 1]
+        ]); // TODO Review. Only one element!
 
         for (let i = 0; i < variables.length; i++) {
             variable = variables[i];
             let cagr = this.getCagrsForPeriod(variable,
-                period['start'], period['end']);
-            if (cagr) {
-                donuts.push({
-                    'name': this.variables[variable]['name'],
-                    'value': cagr['value'] * 100 // !!!
-                });
-            }
+                timelabelsForCagrs[0]['start'],
+                timelabelsForCagrs[0]['end']);
+
+            donuts.push({
+                'name': this.variables[variable]['name'],
+                'value': cagr['value'] * 100 // !!!
+            });
         }
         return donuts;
     }
@@ -792,7 +694,7 @@ export class DataManagerService {
             'scales_order': this.scales, // ['annual', 'quarterly', 'monthly']
             'config': {
                 'head': {
-                    'horizontal_order': Object.keys(this.variables), //['sales', 'volume', 'price'],
+                    'horizontal_order': ['sales', 'volume', 'price'],
                     'vertical_order': [
                         {
                             'key': 'name',
@@ -812,15 +714,34 @@ export class DataManagerService {
     }
 
     ////////////////////////////////
+    public getTwoCagrPeriods(timelabelIds: Array<string|number>): Array<Object> {
+        let timelabels = [];
 
-    /**
-     *
-     * @param variable: string
-     * @param start: string
-     * @param end: string
-     * @returns {start: string, end: string, value: number}
-     */
-    public getCagrsForPeriod(variable: string, start: string, end: string): Cagr {
+        if (timelabelIds.length >= 3) {
+            let _middleId = timelabelIds[Math.floor(timelabelIds.length / 2)];
+            timelabels = [
+                {
+                    start: this.timelabels[timelabelIds[0]]['name'],
+                    end: this.timelabels[_middleId]['name']
+                },
+                {
+                    start: this.timelabels[_middleId]['name'],
+                    end: this.timelabels[timelabelIds[timelabelIds.length - 1]]['name']
+                }
+            ];
+        } else if (timelabelIds.length > 0) {
+            timelabels = [
+                {
+                    start: this.timelabels[timelabelIds[0]]['name'],
+                    end: this.timelabels[timelabelIds[timelabelIds.length - 1]]['name']
+                }
+            ];
+        }
+        return timelabels;
+    }
+
+    public getCagrsForPeriod(variable: string, start: string|number,
+                             end: string|number) {
         start = start.toString();
         end = end.toString();
         for (let i = 0; i < this.cagrs[variable].length; i++) {
@@ -831,54 +752,52 @@ export class DataManagerService {
         }
     }
 
-    /**
-     *
-     * @param type: string
-     * @returns {Array<string>}
-     */
     public getVarsByType(type: string): Array<string> {
-        return ['Unit Size', 'Unit Volume', 'Value']; // TODO Remove
-        // let vars = [];
-        // for (let v in this.variables) {
-        //     if (this.variables[v]['type'] == type) {
-        //         vars.push(v);
-        //     }
-        // }
-        // return vars;
-    }
-
-    public getTimelabelIndex(name: string) {
-        return (name && this.timelabelsMap
-        && this.timelabelsMap[name] !== undefined)
-            ? this.timelabelsMap[name] : null;
-
-        // for (let i = 0; i < this.timelabels.length; i++) {
-        //     if (this.timelabels[i]['name'] == name) { // TODO Remake 'name'->'full_name' (VL)
-        //         return i;
-        //     }
-        // }
-        // return null;
-    }
-
-    public getInitialPeriod(scale: string): Period {
-        // TODO Improve this method (VL)
-        if (this.cagrPeriods && this.cagrPeriods.length > 0) {
-            return this.cagrPeriods[this.cagrPeriods.length - 1];
+        let vars = [];
+        for (let v in this.variables) {
+            if (this.variables[v]['type'] == type) {
+                vars.push(v);
+            }
         }
-        return null;
+        return vars;
+    }
+
+    public getShortTimeLablesForOutput(timescale: string): Array<number> {
+        let longLables = this.getLongTimeLablesForOutput(timescale);
+        if (longLables.length < 3) {
+            return longLables;
+        } else {
+            return [
+                longLables[0],
+                longLables[Math.floor(longLables.length / 2)],
+                longLables[longLables.length - 1],
+            ];
+        }
+    }
+
+    public getLongTimeLablesForOutput(timescale: string): Array<number> {
+        // TODO Review sorting...
+        let vars = this.getVarsByType('output');
+        let timelables = [];
+        if (vars && vars.length > 0) {
+            timelables = this.data[timescale][vars[0]].map(function (el) {
+                return el['timelabels_index'];
+            });
+        }
+        return timelables;
     }
 
     ////////////////////////////////
 
+
     private digInitialData() {
-        // TODO Implement method getInitialData() (VL)
+        // TODO Implement method getInitialData()
     }
 
     private digMoreDecomposition() {
-        // TODO Implement method digMoreDecomposition() (VL)
+        // TODO Implement method digMoreDecomposition()
     }
 
-    // TODO Move recreateScales() & _findKey() to common part or into Table model (VL)
     private recreateScales(): void {
         this.scales = [];
 
@@ -939,65 +858,4 @@ export class DataManagerService {
             }
         }
     }
-
-    // public getDonutPeriodsLabel(): {start: string, end: string} {
-    //     if (this.cagrPeriods.length > 0) {
-    //         return {
-    //             start: this.cagrPeriods[this.cagrPeriods.length - 1]['start'],
-    //             end: this.cagrPeriods[this.cagrPeriods.length - 1]['end']
-    //         };
-    //     }
-    //     return null;
-    // }
-
-    // public getTwoCagrPeriods(timelabelIds: Array<string|number>): Array<Object> {
-    //     let timelabels = [];
-    //
-    //     if (timelabelIds.length >= 3) {
-    //         let _middleId = timelabelIds[Math.floor((timelabelIds.length - 1) / 2)];
-    //         timelabels = [
-    //             {
-    //                 start: this.timelabels[timelabelIds[0]]['name'],
-    //                 end: this.timelabels[_middleId]['name']
-    //             },
-    //             {
-    //                 start: this.timelabels[_middleId]['name'],
-    //                 end: this.timelabels[timelabelIds[timelabelIds.length - 1]]['name']
-    //             }
-    //         ];
-    //     } else if (timelabelIds.length > 0) {
-    //         timelabels = [
-    //             {
-    //                 start: this.timelabels[timelabelIds[0]]['name'],
-    //                 end: this.timelabels[timelabelIds[timelabelIds.length - 1]]['name']
-    //             }
-    //         ];
-    //     }
-    //     return timelabels;
-    // }
-
-    // public getShortTimeLablesForOutput(timescale: string): Array<number> {
-    //     let longLables = this.getLongTimeLablesForOutput(timescale);
-    //     if (longLables.length < 3) {
-    //         return longLables;
-    //     } else {
-    //         return [
-    //             longLables[0],
-    //             longLables[Math.floor((longLables.length - 1) / 2)],
-    //             longLables[longLables.length - 1],
-    //         ];
-    //     }
-    // }
-
-    // public getLongTimeLablesForOutput(timescale: string): Array<number> {
-    //     let vars = this.getVarsByType('output');
-    //     let timelables = [];
-    //     if (vars && vars.length > 0) {
-    //         timelables = this.data[timescale][vars[0]].map(function (el) {
-    //             return this.getTimelabelIndex(el['timestamp']);
-    //             //return el['timelabels_index'];
-    //         }, this);
-    //     }
-    //     return timelables;
-    // }
 }
