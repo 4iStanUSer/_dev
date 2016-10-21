@@ -1,3 +1,7 @@
 <div class="container-fluid">
-    it works
+    {{ tableData | json }}
+    <accordion-table
+        *ngIf="tableData"
+        [data]="tableData"
+        ></accordion-table>
 </div>

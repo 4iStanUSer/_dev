@@ -1,4 +1,6 @@
 import {Component, OnInit} from '@angular/core';
+import {Router, ActivatedRoute, Params} from '@angular/router';
+import {SimulatorPageDataManagerService} from "./simulator-page-data-manager.service";
 
 @Component({
     templateUrl: './simulator-page.component.html',
@@ -6,10 +8,26 @@ import {Component, OnInit} from '@angular/core';
 })
 export class SimulatorPageComponent implements OnInit {
 
-    constructor() {
+    private entityId: number = null;
+
+    private tableData: Object = null;
+
+    constructor(private route: ActivatedRoute,
+                private router: Router,
+                private service: SimulatorPageDataManagerService) {
     }
 
     ngOnInit() {
+        this.route.params.forEach((params: Params) => {
+            console.log(params);
+            this.entityId = (+params['id']) ? +params['id'] : null;
+            this.service.init(this.entityId)
+                .subscribe((d)=> {
+                    console.log(d);
+
+                    this.tableData = this.service.getData_VTable();
+                });
+        });
 
     }
 
