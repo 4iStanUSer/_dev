@@ -135,7 +135,7 @@ export class AjaxService {
     private _handleSiteError(res: ServerResponse, blackBox: Subject<any>) {
         // TODO Show error at view
         console.error('App Error message: ' + res.getError());
-        //blackBox.error(res.getError()); // TODO Refactor (VL)
+        blackBox.error(res.getError()); // TODO Refactor (VL)
     }
 
     private _handleServerError(error: Response, blackBox: Subject<any>) {
@@ -145,7 +145,7 @@ export class AjaxService {
         }
         // TODO Show error at view
         console.error('Server Error message: ' + error.status);
-        //blackBox.error(error.status); // TODO Refactor (VL)
+        blackBox.error(error.status); // TODO Refactor (VL)
     }
 
     private _makeRequestInst(options: IRequestOptions): Request {
