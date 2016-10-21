@@ -18,8 +18,6 @@ export class DataManagerService {
 
     private scales: Array<string> = [];
 
-    private hierarchy = [];
-
     private timelabels = [];
     private variables = {};
     private data = {};
@@ -557,9 +555,7 @@ export class DataManagerService {
         }
     ];
 
-    constructor(private req: AjaxService) {
-
-    }
+    constructor(private req: AjaxService) { }
 
     public init(){
         let resp = this.req.get({
@@ -569,7 +565,6 @@ export class DataManagerService {
             }
         });
         resp.subscribe((d)=>{
-            console.log(1);
             this.timelabels = d['timelabels'];
             this.variables = d['variables'];
             this.data = d['data'];
@@ -580,6 +575,9 @@ export class DataManagerService {
     }
 
     public getData_Decomposition(timelabelIds: Array<number>) {
+        if (!timelabelIds || timelabelIds.length == 0) {
+            return null;
+        }
         let start = this.timelabels[timelabelIds[0]]['name'];
         let end = this.timelabels[timelabelIds[timelabelIds.length - 1]]['name'];
         let found = false;
@@ -618,10 +616,10 @@ export class DataManagerService {
     }
 
     public getData_Bar(timelabelIds: Array<number>, variables: Array<string>) {
-        let bars: Array<Object> = [];
         if (!timelabelIds || timelabelIds.length == 0) {
-            return bars;
+            return null;
         }
+        let bars: Array<Object> = [];
         let variable: string = null;
         let timescale: string = this.timelabels[timelabelIds[0]]['timescale'];
 
@@ -660,11 +658,10 @@ export class DataManagerService {
 
     public getData_Donut(timelabelIds: Array<number>,
                          variables: Array<string>): Array<Object> {
-        let donuts = [];
         if (!timelabelIds || timelabelIds.length == 0) {
-            return donuts;
+            return null;
         }
-
+        let donuts = [];
         let variable: string = null;
 
         let timelabelsForCagrs = this.getTwoCagrPeriods([
@@ -776,7 +773,7 @@ export class DataManagerService {
     }
 
     public getLongTimeLablesForOutput(timescale: string): Array<number> {
-        // TODO Review sorting...
+        // TODO Review sorting... (VL)
         let vars = this.getVarsByType('output');
         let timelables = [];
         if (vars && vars.length > 0) {
@@ -791,13 +788,15 @@ export class DataManagerService {
 
 
     private digInitialData() {
-        // TODO Implement method getInitialData()
+        // TODO Implement method getInitialData() (VL)
     }
 
     private digMoreDecomposition() {
-        // TODO Implement method digMoreDecomposition()
+        // TODO Implement method digMoreDecomposition() (VL)
     }
 
+
+    // TODO Move recreateScales() & _findKey() to common part or into Table model (VL)
     private recreateScales(): void {
         this.scales = [];
 
