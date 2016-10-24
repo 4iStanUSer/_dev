@@ -1,5 +1,5 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {DataManagerService} from './data-manager.service';
+import {DataManagerService, Period} from './data-manager.service';
 import {StaticDataService} from "../../common/service/static-data.service";
 import {StateService, PageState} from "../../common/service/state.service";
 import {WaterfallChartComponent} from "../../common/cmp/waterfall-chart/waterfall-chart.component";
@@ -13,7 +13,6 @@ export class DashboardComponent implements OnInit {
     private pageName: string = 'dashboard';
     private currMode: string = 'summary';
     private currTimeScale: string = 'annual';
-
     private localConfig: Object = {
         'modes': [
             {
@@ -30,6 +29,7 @@ export class DashboardComponent implements OnInit {
             }
         ],
     };
+    private period: Period = null;
 
     @ViewChild('decomposition') decompositionObj: WaterfallChartComponent;
 
@@ -40,21 +40,8 @@ export class DashboardComponent implements OnInit {
     private outputVars: Array<string> = [];
     private driverVars: Array<string> = [];
 
-    private periods: Object = {
-        'output_vars': {
-            'short': [],
-            'long': []
-        }
-    };
-
-    // public vTableData: Object = {};
-
-
-    public period = {'start': 2016, 'end': 2020}; // TODO Review (VL)
     public summaryCagrsData: Array<Object> = null;
-    // public summaryBarsData: Array<Object> = null;
     public summaryOutputsShortData: Array<Object> = null;
-
     public summaryDecompData: Object = null;
 
     /*---valueOrGrowthSwitch---*/
@@ -84,18 +71,15 @@ export class DashboardComponent implements OnInit {
         }
 
         let outputVars = this.dm.getVarsByType('output');
-        let timelabelsIds = this.dm.getShortTimeLablesForOutput(
-            this.currTimeScale);
-        if (timelabelsIds && timelabelsIds.length > 0) {
+        if (this.period) {
             if ('rate' == this.absOrRate && this.summaryCagrsData === null) {
                 this.summaryCagrsData =
-                    this.dm.getData_Donut(timelabelsIds, outputVars);
+                    this.dm.getData_Donut(this.period, outputVars);
             } else if (this.summaryOutputsShortData === null) {
                 this.summaryOutputsShortData =
-                    this.dm.getData_Bar(timelabelsIds, outputVars);
+                    this.dm.getData_Bar(this.period, outputVars, 'preview');
             }
         }
-
     }
     /*---.valueOrGrowthSwitch---*/
     /*---Decomposition---*/
@@ -114,6 +98,7 @@ export class DashboardComponent implements OnInit {
 
     ngOnInit() {
         let absOrRate = this.state.get('abs_or_rate');
+
         if (!absOrRate) {
             absOrRate = this.absOrRate;
             this.state.set('abs_or_rate', absOrRate);
@@ -129,20 +114,20 @@ export class DashboardComponent implements OnInit {
         }, this);
 
         this.dm.init().subscribe((d) => {
+            this.period = this.dm.getInitialPeriod(this.currTimeScale);
+
             let outputVars = this.dm.getVarsByType('output');
-            let timelabelsIds = this.dm.getShortTimeLablesForOutput(
-                this.currTimeScale);
-            if (timelabelsIds && timelabelsIds.length) {
+            if (this.period) {
                 if ('rate' == this.absOrRate) {
                     this.summaryCagrsData =
-                        this.dm.getData_Donut(timelabelsIds, outputVars);
+                        this.dm.getData_Donut(this.period, outputVars);
                 } else {
                     this.summaryOutputsShortData =
-                        this.dm.getData_Bar(timelabelsIds, outputVars);
+                        this.dm.getData_Bar(this.period, outputVars, 'preview');
                 }
 
                 this.summaryDecompData =
-                    this.dm.getData_Decomposition(timelabelsIds);
+                    this.dm.getData_Decomposition(this.period);
             }
         });
 
@@ -176,13 +161,11 @@ export class DashboardComponent implements OnInit {
     public summaryOutputsFullData: Object = {};
     public showBarChartFull(data: Object) {
         let outputVars = this.dm.getVarsByType('output');
-        let timelabelsIds = this.dm.getLongTimeLablesForOutput(
-            this.currTimeScale);
 
         if (data['name'] && outputVars.indexOf(data['name']) != -1) {
-            this.summaryOutputsFullData = this.dm.getData_Bar(timelabelsIds, [data['name']]);
+            this.summaryOutputsFullData = this.dm.getData_Bar(this.period, [data['name']], 'full');
         } else {
-            this.summaryOutputsFullData = this.dm.getData_Bar(timelabelsIds, outputVars)
+            this.summaryOutputsFullData = this.dm.getData_Bar(this.period, outputVars, 'full');
         }
         this.showFullCharts = !this.showFullCharts;
     }
