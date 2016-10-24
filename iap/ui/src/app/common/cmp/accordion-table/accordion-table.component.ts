@@ -71,16 +71,35 @@ export class AccordionTableComponent implements OnInit {
                 for (let i = 0; i < d['data'][scale][variable].length; i++) {
                     valueObj = d['data'][scale][variable][i];
 
-                    if (!('values' in d['timelabels'][valueObj['timelabels_index']])) {
-                        d['timelabels'][valueObj['timelabels_index']]['values'] = {};
+                    let index = this.getTimeLabelIndex(d['timelabels'],
+                        valueObj['timestamp']);
+                    if (index !== null) {
+                        if (!('values' in d['timelabels'][index])) {
+                            d['timelabels'][index]['values'] = {};
+                        }
+                        d['timelabels'][index]['values'][variable] = valueObj;
                     }
-                    d['timelabels'][valueObj['timelabels_index']]['values'][variable] = valueObj;
+
+                    // if (!('values' in d['timelabels'][valueObj['timelabels_index']])) {
+                    //     d['timelabels'][valueObj['timelabels_index']]['values'] = {};
+                    // }
+                    // d['timelabels'][valueObj['timelabels_index']]['values'][variable] = valueObj;
+
                 }
             }
         }
         for (let i = 0; i < d['timelabels'].length; i++) {
             this.addBodyRow(d['timelabels'], i);
         }
+    }
+
+    private getTimeLabelIndex(timelabels: Array<Object>, name: string) {
+        for (let i = 0; i < timelabels.length; i++) {
+            if (timelabels[i]['name'] == name) { // TODO Remake 'name'->'full_name' (VL)
+                return i;
+            }
+        }
+        return null;
     }
 
     private visibleDataRows(){

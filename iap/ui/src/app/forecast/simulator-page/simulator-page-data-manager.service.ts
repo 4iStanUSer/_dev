@@ -1,19 +1,23 @@
 import {Injectable} from '@angular/core';
 
 import {AjaxService} from "./../../common/service/ajax.service";
+import {TableModel} from "../../common/model/table.model";
 
 @Injectable()
 export class SimulatorPageDataManagerService {
 
     private scales: Array<string> = [];
     private timelabels = [];
-
     private variables = {};
     private data = {};
     private cagrs = {};
 
+    private cagrPeriods: Array<{start: string, end: string}> = [];
+    private timelabelsMap: {[timeLabel: string]: number} = {};
+
     constructor(private req: AjaxService) {
     }
+
 
     init(id?: number|string) {
         let data = {};
@@ -26,10 +30,49 @@ export class SimulatorPageDataManagerService {
         });
 
         resp.subscribe((d)=>{
+
             this.timelabels = d['timelabels'];
-            this.variables = d['variables'];
             this.data = d['data'];
             this.cagrs = d['cagrs'];
+            //this.variables = d['variables'];
+
+            for (let i = 0; i < d['variables'].length; i++) { // TODO Remove
+                this.variables[d['variables'][i]['name']] = d['variables'][i];
+            }
+
+            let tableModel = new TableModel(this.variables, this.timelabels, this.data);
+            console.log(tableModel);
+
+            // for filling cagr periods
+            let cKeys: Array<string> = Object.keys(this.cagrs);
+            if (cKeys.length) {
+                for (let i = 0; i < this.cagrs[cKeys[0]].length; i++) {
+                    let cagr = this.cagrs[cKeys[0]][i];
+                    let exist = false;
+                    for (let j = 0; j < this.cagrPeriods.length; j++) {
+                        if (this.cagrPeriods[j]['start']
+                            == cagr['start'].toString()
+                            && this.cagrPeriods[j]['end']
+                            == cagr['end'].toString()) {
+                            exist = true;
+                            break;
+                        }
+                    }
+                    if (!exist) {
+                        this.cagrPeriods.push({
+                            'start': cagr['start'].toString(),
+                            'end': cagr['end'].toString()
+                        });
+                    }
+                }
+            }
+
+            // Fill timelabelsMap -> {timeLabel: timelabelIndex}
+            for (let i = 0; i < this.timelabels.length; i++) {
+                this.timelabelsMap[this.timelabels[i]['name']] = i;
+            }
+
+            this.recreateScales();
         });
         return resp;
     }
@@ -42,7 +85,7 @@ export class SimulatorPageDataManagerService {
             'scales_order': this.scales, // ['annual', 'quarterly', 'monthly']
             'config': {
                 'head': {
-                    'horizontal_order': ['sales', 'volume', 'price'],
+                    'horizontal_order': Object.keys(this.variables), //['sales', 'volume', 'price'],
                     'vertical_order': [
                         {
                             'key': 'name',
