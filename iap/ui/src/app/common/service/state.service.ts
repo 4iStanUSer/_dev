@@ -38,10 +38,25 @@ export class StateService {
     }
 
     private saveOutside(page: string, key: string, value: any) {
-        // TODO Implement saveOutside() method
+        let pageValue;
+        try {
+            pageValue = JSON.parse(localStorage.getItem(page));
+        } catch (e) {
+            pageValue = {};
+        }
+        if (!pageValue) pageValue = {};
+        pageValue[key] = value;
+        localStorage.setItem(page, JSON.stringify(pageValue));
     }
 
     public getPageState(page: string): PageState {
+        if (!this.stateStorage[page]) {
+            try {
+                this.stateStorage[page] = JSON.parse(localStorage.getItem(page));
+            } catch (e) {
+                this.stateStorage[page] = {};
+            }
+        }
         return new PageState(this.stateStorage[page], page, this);
     }
 

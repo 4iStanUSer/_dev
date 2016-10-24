@@ -23,14 +23,15 @@
 
         <div [chart]="block['chart']"></div>
 
-        <table class="cagrs-table">
+        <table class="cagrs-table" *ngIf="block['cagrs']">
             <tr>
                 <td
                     *ngFor="let cagr of block['cagrs']"
                 >
-                    <div class="period-label">{{ cagr['start'] + '/' + cagr['end'] }}</div>
-                    {{ cagr['value'] }}
-
+                    <div *ngIf="cagr">
+                        <div class="period-label">{{ cagr['start'] + '/' + cagr['end'] }}</div>
+                        {{ cagr['value'] }}
+                    </div>
                 </td>
             </tr>
         </table>
