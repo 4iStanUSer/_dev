@@ -19,16 +19,12 @@ export class SimulatorPageComponent implements OnInit {
 
     ngOnInit() {
         this.route.params.forEach((params: Params) => {
-            console.log(params);
             this.entityId = (+params['id']) ? +params['id'] : null;
             this.service.init(this.entityId)
                 .subscribe((d)=> {
-                    console.log(d);
-
                     this.tableData = this.service.getData_VTable();
                 });
         });
-
     }
 
 }
