@@ -58,10 +58,10 @@ def main(argv=sys.argv):
 
         user_id = '111'
         tool_id = 'forecast'
-        wb = Workbench(user_id)
-        wb.init_load(wh, dev_template_JJLean)
-        backup = wb.get_backup()
-        persistent_storage.save_backup(user_id, tool_id, 'JJLean', backup)
+        #wb = Workbench(user_id)
+        #wb.init_load(wh, dev_template_JJLean)
+        #backup = wb.get_backup()
+        #persistent_storage.save_backup(user_id, tool_id, 'JJLean', backup)
 
         wb = Workbench(user_id)
         wb.init_load(wh, dev_template_JJOralCare)

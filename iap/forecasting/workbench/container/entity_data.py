@@ -1,6 +1,19 @@
 import copy
-
+from enum import IntEnum, unique
 from .. import exceptions as ex
+
+
+@unique
+class VariableType(IntEnum):
+    is_output = 1
+    is_driver = 2
+
+
+VAR_PROPERTIES = [
+    'metric',
+    'mult',
+    'type'
+]
 
 
 class EntityData:
@@ -25,13 +38,17 @@ class EntityData:
     def coefficients_names(self):
         return list(self._coeff_properties.keys())
 
-    def add_variable(self, name, default_value):
+    def add_variable(self, name, properties):
         if name in self._var_properties:
             raise Exception
-        if default_value is None:
-            default_value = 0
-        self._var_properties[name] = dict(def_value=default_value,
-                                          metric='', mult='', type='')
+        self._var_properties[name] = {x: None for x in VAR_PROPERTIES}
+
+        for key, value in properties.items():
+            if key in VAR_PROPERTIES:
+                if key == 'type':
+                    self._var_properties[name][key] = VariableType(value)
+                else:
+                    self._var_properties[name][key] = value
 
     def add_coefficient(self, name):
         if name in self._coeff_properties:
@@ -66,7 +83,7 @@ class EntityData:
         length = self.time_manager.get_time_length(ts_name)
 
         ts_data = dict(var_name=var_name, ts_name=ts_name,
-                       values=[var_props['def_value']]*length,
+                       values=[0]*length,
                        growth_rates=[0]*length, changes=dict())
         self._variables[(var_name, ts_name)] = ts_data
 
@@ -142,7 +159,7 @@ class EntityData:
 
     def load_backup(self, backup):
         for name, props in backup['var_properties'].items():
-            self.add_variable(name, props['def_value'])
+            self.add_variable(name, props)
         for name, props in backup['coeff_properties'].items():
             self.add_coefficient(name)
         for item in backup['var_values']:

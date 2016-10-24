@@ -1,4 +1,16 @@
+from ..container.entity_data import VariableType
+
+
 def get_entity_data(container, config, entity_id):
+
+    def transform_var_type(var_type):
+        if var_type & VariableType.is_output:
+            return 'output'
+        if var_type & VariableType.is_driver:
+            return 'driver'
+        return None
+
+
     # Load configuration parameters.
     try:
         top_ts = config['dashboard_top_ts']
@@ -25,12 +37,11 @@ def get_entity_data(container, config, entity_id):
 
     # Fill output variables properties.
     var_properties = entity_data.variables_properties
-    out_vars_props = []
-    for item in var_properties:
-        out_vars_props.append(dict(name=item['name'],
-                                   metric=item['metric'],
-                                   multiplier=item['mult'],
-                                   type=item['type']))
+    out_vars_props = {x['name']: dict(name=x['name'],
+                                      metric=x['metric'],
+                                      multiplier=x['mult'],
+                                      type=transform_var_type(x['type']))
+                      for x in var_properties}
     # Structure for output data.
     # Structure for cagrs.
     data = dict([(x, dict()) for x in ts_borders.keys()])

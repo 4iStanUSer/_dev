@@ -47,7 +47,8 @@ class TimeLineManager:
         for i in range(start, end + 1):
             top_point = top_ts['timeline'][i]
             # Add top point to tree.
-            tree.append(dict(name=top_point['name_full'],
+            tree.append(dict(short_name=top_point['name_short'],
+                             full_name=top_point['name_full'],
                              timescale=top_ts['name'],
                              parent_index=None))
             # Collect points from lower timescales recursively.

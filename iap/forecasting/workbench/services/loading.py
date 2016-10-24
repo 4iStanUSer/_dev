@@ -56,8 +56,10 @@ def _init_entity(dev_template, wh_ent, container, input_rules, output_rules):
         raise Exception
     entity_data = cont_ent.data
     # Add variables.
-    for var_name, timescales in level_params['variables'].items():
-        entity_data.add_variable(var_name, None)
+    for var_name, var_info in level_params['variables'].items():
+        var_properties = var_info['props']
+        timescales = var_info['timescales']
+        entity_data.add_variable(var_name, var_properties)
         for ts_name in timescales:
             entity_data.add_time_series(var_name, ts_name)
     # Add coefficients.

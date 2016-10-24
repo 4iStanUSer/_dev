@@ -678,29 +678,29 @@ dev_template_JJOralCare = {
         {
             'meta': ('Geography', 'Country'),
             'variables': {
-                'Population total': ['annual'],
-                'CPI': ['annual'],
-                'GDP PC': ['annual']
+                'Population total': { 'props': {'metric': 'Person', 'mult': 1000000, 'type': 2}, 'timescales': ['annual']},
+                'CPI': { 'props': {'metric': 'index', 'mult': 1, 'type': 2}, 'timescales': ['annual']},
+                'GDP PC': { 'props': {'metric': 'Dollar', 'mult': 1, 'type': 2}, 'timescales': ['annual']}
             },
             'coefficients': {}
         },
         {
             'meta': ('Products', 'Category'),
             'variables': {
-                'Value': ['annual'],
-                'EQ Volume': ['annual'],
-                'Unit Volume': ['annual'],
-                'Price per EQ': ['annual'],
-                'Price per Unit': ['annual'],
-                'Unit Size': ['annual'],
-                'Distribution': ['annual'],
-                'Innovation TDP share': ['annual'],
-                'Premiumization': ['annual'],
-                'Media Spend': ['annual'],
-                'Avg % Discount': ['annual'],
-                'Avg % Promo Support': ['annual'],
-                'Avg % Volume sold as Promo': ['annual'],
-                'LTT': ['annual']
+                'Value': { 'props': {'metric': 'Dollar', 'mult': 1000, 'type': 1}, 'timescales': ['annual'] },
+                'EQ Volume': { 'props': {'metric': 'Liter', 'mult': 1000, 'type': 1}, 'timescales': ['annual'] },
+                'Unit Volume': { 'props': {'metric': 'Unit', 'mult': 1000, 'type': 2}, 'timescales': ['annual'] },
+                'Price per EQ': { 'props': {'metric': 'Dollar Per Liter', 'mult': 1, 'type': 1}, 'timescales': ['annual'] },
+                'Price per Unit': { 'props': {'metric': 'Dollar Per Unit', 'mult': 1, 'type': 2}, 'timescales': ['annual'] },
+                'Unit Size': { 'props': {'metric': 'Litter per Unit', 'mult': 1, 'type': 2}, 'timescales': ['annual'] },
+                'Distribution': { 'props': {'metric': 'TDP', 'mult': 1, 'type': 2}, 'timescales': ['annual'] },
+                'Innovation TDP share': { 'props': {'metric': '% of TDP', 'mult': 1, 'type': 2}, 'timescales': ['annual'] },
+                'Premiumization': { 'props': {'metric': 'index', 'mult': 1, 'type': 2}, 'timescales': ['annual'] },
+                'Media Spend': { 'props': {'metric': 'Dollar', 'mult': 1000, 'type': 2}, 'timescales': ['annual'] },
+                'Avg % Discount': { 'props': {'metric': '%', 'mult': 1, 'type': 2}, 'timescales': ['annual'] },
+                'Avg % Promo Support': { 'props': {'metric': '%', 'mult': 1, 'type': 2}, 'timescales': ['annual'] },
+                'Avg % Volume sold as Promo': { 'props': {'metric': '%', 'mult': 1, 'type': 2}, 'timescales': ['annual'] },
+                'LTT': { 'props': {'metric': '%', 'mult': 1, 'type': 2}, 'timescales': ['annual'] }
             },
             'coefficients': {
                 'Economy Sensitivity': ['annual'],
