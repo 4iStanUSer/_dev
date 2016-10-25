@@ -1,420 +1,3 @@
-let Timelabels = [
-    {
-        name: 2010,
-        timescale: 'annual',
-        parent_index: null
-    },
-    {
-        name: 2011,
-        timescale: 'annual',
-        parent_index: null
-    },
-    {
-        name: 2012,
-        timescale: 'annual',
-        parent_index: null
-    },
-    {
-        name: 2013,
-        timescale: 'annual',
-        parent_index: null
-    },
-
-    //
-
-    {
-        name: 'Q1',
-        timescale: 'quarterly',
-        parent_index: 0
-    },
-    {
-        name: 'Q2',
-        timescale: 'quarterly',
-        parent_index: 0
-    },
-    {
-        name: 'Q3',
-        timescale: 'quarterly',
-        parent_index: 0
-    },
-    {
-        name: 'Q4',
-        timescale: 'quarterly',
-        parent_index: 0
-    },
-
-    {
-        name: 'Q1',
-        timescale: 'quarterly',
-        parent_index: 1
-    },
-    {
-        name: 'Q2',
-        timescale: 'quarterly',
-        parent_index: 1
-    },
-    {
-        name: 'Q3',
-        timescale: 'quarterly',
-        parent_index: 1
-    },
-    {
-        name: 'Q4',
-        timescale: 'quarterly',
-        parent_index: 1
-    },
-
-    {
-        name: 'Q1',
-        timescale: 'quarterly',
-        parent_index: 2
-    },
-    {
-        name: 'Q2',
-        timescale: 'quarterly',
-        parent_index: 2
-    },
-    {
-        name: 'Q3',
-        timescale: 'quarterly',
-        parent_index: 2
-    },
-    {
-        name: 'Q4',
-        timescale: 'quarterly',
-        parent_index: 2
-    },
-    {
-        name: 'Q1',
-        timescale: 'quarterly',
-        parent_index: 3
-    },
-    {
-        name: 'Q2',
-        timescale: 'quarterly',
-        parent_index: 3
-    },
-    {
-        name: 'Q3',
-        timescale: 'quarterly',
-        parent_index: 3
-    },
-    {
-        name: 'Q4',
-        timescale: 'quarterly',
-        parent_index: 3
-    },
-
-    //
-
-    {
-        name: 'Jan',
-        timescale: 'monthly',
-        parent_index: 4
-    },
-    {
-        name: 'Feb',
-        timescale: 'monthly',
-        parent_index: 4
-    },
-    {
-        name: 'Mar',
-        timescale: 'monthly',
-        parent_index: 4
-    },
-
-    {
-        name: 'Jan',
-        timescale: 'monthly',
-        parent_index: 8
-    },
-    {
-        name: 'Feb',
-        timescale: 'monthly',
-        parent_index: 8
-    },
-    {
-        name: 'Mar',
-        timescale: 'monthly',
-        parent_index: 8
-    },
-];
-
-let Variables = {
-    CPI: {
-        name: 'CPI',
-        metric: 'index',
-        multiplier: null,
-        type: 'driver', // | 'output',
-        driver_type: 'economic' // | null
-    },
-    GDP: {
-        name: 'GDP',
-        metric: 'index',
-        multiplier: null,
-        type: 'driver',
-        driver_type: 'economic'
-    },
-    sales: {
-        name: 'Sales',
-        metric: '$',
-        multiplier: 'MM',
-        type: 'output',
-    },
-    volume: {
-        name: 'Volume',
-        metric: 'EQ',
-        multiplier: 'Thousands',
-        type: 'output'
-    },
-    price: {
-        name: 'Price',
-        metric: 'per EQ',
-        multiplier: '$',
-        type: 'output'
-    }
-};
-
-let Data = {
-    annual: {
-        sales: [
-            {
-                'timelabels_index': 0,
-                'value': 0,
-                'gr': 15,
-                // 'color',
-                // 'isEditable',
-                // 'format'
-            },
-            {
-                'timelabels_index': 1,
-                'value': 1,
-                'gr': 15
-            },
-            {
-                'timelabels_index': 2,
-                'value': 2,
-                'gr': 15
-            },
-            {
-                'timelabels_index': 3,
-                'value': 3,
-                'gr': 15
-            }
-        ],
-        volume: [
-            {
-                'timelabels_index': 0,
-                'value': 4,
-                'gr': 15
-            },
-            {
-                'timelabels_index': 1,
-                'value': 5,
-                'gr': 15
-            },
-            {
-                'timelabels_index': 2,
-                'value': 6,
-                'gr': 15
-            },
-            {
-                'timelabels_index': 3,
-                'value': 7,
-                'gr': 15
-            }
-        ],
-        price: [
-            {
-                'timelabels_index': 0,
-                'value': 4,
-                'gr': 15
-            },
-            {
-                'timelabels_index': 1,
-                'value': 5,
-                'gr': 15
-            },
-            {
-                'timelabels_index': 2,
-                'value': 6,
-                'gr': 15
-            },
-            {
-                'timelabels_index': 3,
-                'value': 7,
-                'gr': 15
-            }
-        ]
-    },
-    quarterly: {
-        sales: [
-            {
-                'timelabels_index': 4,
-                'value': 8,
-                'gr': 15
-            },
-            {
-                'timelabels_index': 5,
-                'value': 9,
-                'gr': 15
-            },
-            {
-                'timelabels_index': 6,
-                'value': 10,
-                'gr': 15
-            },
-            {
-                'timelabels_index': 7,
-                'value': 11,
-                'gr': 15
-            },
-        ],
-        volume: [
-            {
-                'timelabels_index': 4,
-                'value': 12,
-                'gr': 15
-            },
-            {
-                'timelabels_index': 5,
-                'value': 13,
-                'gr': 15
-            },
-            {
-                'timelabels_index': 6,
-                'value': 14,
-                'gr': 15
-            },
-            {
-                'timelabels_index': 7,
-                'value': 15,
-                'gr': 15
-            },
-        ],
-        price: [
-            {
-                'timelabels_index': 4,
-                'value': 12,
-                'gr': 15
-            },
-            {
-                'timelabels_index': 5,
-                'value': 13,
-                'gr': 15
-            },
-            {
-                'timelabels_index': 6,
-                'value': 14,
-                'gr': 15
-            },
-            {
-                'timelabels_index': 7,
-                'value': 15,
-                'gr': 15
-            },
-        ]
-    },
-    monthly: {
-        sales: [
-            {
-                'timelabels_index': 20,
-                'value': 16,
-                'gr': 15
-            },
-            {
-                'timelabels_index': 21,
-                'value': 17,
-                'gr': 15
-            },
-            {
-                'timelabels_index': 22,
-                'value': 18,
-                'gr': 15
-            },
-            {
-                'timelabels_index': 23,
-                'value': 19,
-                'gr': 15
-            },
-            {
-                'timelabels_index': 24,
-                'value': 20,
-                'gr': 15
-            },
-            {
-                'timelabels_index': 25,
-                'value': 21,
-                'gr': 15
-            }
-        ],
-        volume: [
-            {
-                'timelabels_index': 20,
-                'value': 22,
-                'gr': 15
-            },
-            {
-                'timelabels_index': 21,
-                'value': 23,
-                'gr': 15
-            },
-            {
-                'timelabels_index': 22,
-                'value': 24,
-                'gr': 15
-            },
-            {
-                'timelabels_index': 23,
-                'value': 25,
-                'gr': 15
-            },
-            {
-                'timelabels_index': 24,
-                'value': 26,
-                'gr': 15
-            },
-            {
-                'timelabels_index': 25,
-                'value': 27,
-                'gr': 15
-            }
-        ],
-        price: [
-            {
-                'timelabels_index': 20,
-                'value': 22,
-                'gr': 15
-            },
-            {
-                'timelabels_index': 21,
-                'value': 23,
-                'gr': 15
-            },
-            {
-                'timelabels_index': 22,
-                'value': 24,
-                'gr': 15
-            },
-            {
-                'timelabels_index': 23,
-                'value': 25,
-                'gr': 15
-            },
-            {
-                'timelabels_index': 24,
-                'value': 26,
-                'gr': 15
-            },
-            {
-                'timelabels_index': 25,
-                'value': 27,
-                'gr': 15
-            }
-        ]
-    }
-};
-
 
 interface VariableInput {
     name: string;
@@ -437,113 +20,305 @@ interface TimePointValueInput {
     isEditable?: boolean;
     format?: string;
 }
-
-
-/***********************CLASSES**********************/
-class CellModel {
-    // options: CellOptions = {};
-
-    constructor(public variable: string,
-                public timelabel: string,
-                public value: number|string) {
+interface ValuesInput {
+    [timescale: string]: {
+        [variableName: string]: Array<TimePointValueInput>
     }
 }
 
-class TimePointModel {
-    id: number = null;
-    children: Array<TimePointModel> = [];
-    parent: TimePointModel = null;
+/***********************CLASSES**********************/
+
+export class DataCell {
+    value: any = null;
+    editMode: boolean = false;
+    isEditable: boolean = true; // TODO Revert false (VL)
+
+    variable: string = null;
+    timescale: string = null;
+    timelabel: string = null;
+
+    constructor(public id: number,
+                public data: Object) {
+        if (data['isEditable']) {
+            this.isEditable = true;
+        }
+    }
+
+    getValue() {
+        return this.data['value'];
+    }
+
+    setEditMode() {
+        if (this.isEditable) {
+            this.value = this.data['value'];
+            this.editMode = true;
+            return true;
+        }
+        return false;
+    }
+    save() {
+        if (this.isEditable) {
+            this.data['value'] = this.value;
+            this.editMode = false;
+            this.value = null;
+            return true;
+        }
+        return false;
+    }
+    cancel() {
+        this.editMode = false;
+        this.value = null;
+    }
+
+    getChange() {
+        return {
+            'variable': this.variable,
+            'timescale': this.timescale,
+            'timelabel': this.timelabel,
+            'value': this.data['value']
+        };
+    }
+}
+
+export class RowModel {
+    id: number|string = null;
+    meta: Array<Object> = [];
+    cells: Array<DataCell> = [];
+    children: Array<RowModel> = [];
+    parent: RowModel = null;
     depth: number = 0;
-
-    ////////////////////////
-
-    timelabels: {[timelabel: string]: string}
-    variables: {[variable: string]: CellModel} = {};
-
-    data: Object = {};
-
-
-
-    // options: RowOptions = {};
-
-
     isShown: boolean = true;
     isExpanded: boolean = false;
 
-    isHeader: boolean = false;
+    // isHeader: boolean = false;
+    // options: RowOptions = {};
 
-    // constructor(id: number, tblRow: TblRow, parent: RowModel, is_header: boolean = false) {
-    //     this.id = id;
-    //     this.isHeader = is_header;
-    //     this.meta = [tblRow['meta']];
-    //     this.data = tblRow['data'];
-    //     if (parent !== null) {
-    //         this.depth = parent.depth + 1;
-    //         this.isShown = false;
-    //         this.parent = parent;
-    //         parent.children.push(this);
-    //     }
-    // }
-}
-
-export class TableModel {
-    private config: Object = {
-        'isEditable': true,
-        'rowsMode': 'time', // 'variables'
-    };
-
-    private flatCellsStorage: Array<CellModel> = [];
-    private flatTimePointsStorage: Array<TimePointModel> = [];
-
-    private scalesOrder: Array<string> = [];
-
-    private vars: Object = {}; // Array<Object> = [];
-    // private timelabels: Array<Object> = [];
-    // private timelabelsChildren: Array<number> = [];
-    private values;
-
-    constructor(vars: {[variableName: string]: VariableInput},
-                timelabels: Array<TimeLabelInput>,
-                data: {
-                    [timescale: string]: {
-                        [variableName: string]: Array<TimePointValueInput>
-                    }
-                }) {
-        let varsNamesList = Object.keys(vars);
-        // this.timelabels = timelabels;
-
-        this.processInput(timelabels, data);
-
+    constructor(id: number,
+                tblRow: {meta: Array<Object>, cells: Array<DataCell>},
+                parent: RowModel = null
+                ) { // is_header: boolean = false
+        this.id = id;
+        // this.isHeader = is_header;
+        this.meta = tblRow['meta'];
+        this.cells = tblRow['cells'];
+        if (parent !== null) {
+            this.depth = parent.depth + 1;
+            this.isShown = false;
+            this.parent = parent;
+            parent.children.push(this);
+        }
     }
 
 
-    private processInput(timelabels: Array<TimeLabelInput>,
-                         data: Object): void {
-        this.scalesOrder = [];
+    public changeExpandStatus() {
+        if (this.children && this.children.length) {
+            let expandStatus = !this.isExpanded;
+            this.isExpanded = expandStatus;
 
-        timelabels = Timelabels; // TODO Remove this: testing code <-
+            this.children.forEach((child: RowModel) => {
+                if (false === expandStatus) {
+                    child.hideBranch();
+                } else {
+                    child.showBranch();
+                }
+            });
+        }
+    }
+
+    public showBranch() {
+        this.isShown = true;
+        if (this.children && this.children.length) {
+            this.children.forEach((child: RowModel) => {
+                if (this.isExpanded) {
+                    child.showBranch();
+                }
+            });
+        }
+    }
+
+    public hideBranch() {
+        this.isShown = false;
+        if (this.children && this.children.length) {
+            this.children.forEach((child: RowModel) => {
+                child.hideBranch();
+            });
+        }
+    }
+
+}
+
+export class TableModel {
+    private config: Object = { // TODO Implement configuration (VL)
+        'isEditable': true,
+        'asRows': null, // 'time_points' || 'variables'
+        'valueField': 'value', // || 'growth'
+    };
+    public dataCellStorage = [];
+    private dataRowStorage = [];
+
+    vars: {[variableName: string]: VariableInput} = {};
+    timelabels: Array<TimeLabelInput> = [];
+    data: ValuesInput = {};
+
+    mode: string = null;
+    timeHierarchy = [];
+    timelabelsOrder = [];
+    scalesOrder: Array<string> = [];
+    dataMap: {
+        [timescale: string]: {
+            [variableName: string]: {
+                [timestamp: string]: number
+            }
+        }
+    } = {};
+
+    columnsOrder: Array<string> = [];
+
+    constructor(mode: string,
+                vars: {[variableName: string]: VariableInput},
+                timelabels: Array<TimeLabelInput>,
+                data: ValuesInput) {
+        if (mode && ['time_points', 'variables'].indexOf(mode) != -1) {
+            this.mode = mode;
+            this.vars = vars;
+            this.timelabels = timelabels; //timelabels;
+            this.data = data;
+
+            this.makeTimeHierarchy(this.timelabels);
+            this.makeTimelabelsOrder(this.timelabels,
+                Helper.range(this.timelabels.length - 1), {});
+            this.makeDataMapping(this.data, this.timelabels);
+            if ('time_points' == this.mode) {
+                this.columnsOrder = Object.keys(this.vars);
+            } else if ('variables' == this.mode) {
+                // TODO Implement
+            }
+        } else {
+            console.error('Wrong mode for TableModel');
+        }
+    }
+
+    getHeader() {
+        if ('time_points' == this.mode) {
+            let rows = [
+                {
+                    meta: [{
+                        text: 'Driver'
+                    }],
+                    cells: this.columnsOrder.map((variable) => {
+                        return {
+                            text: this.vars[variable]['name']
+                        }
+                    })
+                },
+                {
+                    meta: [{
+                        text: 'Metric'
+                    }],
+                    cells: this.columnsOrder.map((variable) => {
+                        return {
+                            'text': this.vars[variable]['metric']
+                        }
+                    })
+                }
+            ];
+            return rows;
+        } else if ('variables' == this.mode) {
+            // TODO Implement
+        }
+    }
+
+    getBody() {
+        if ('time_points' == this.mode) {
+            this.getRowsModels(this.timelabels, this.timelabelsOrder, {});
+            return this.dataRowStorage;
+        } else if ('variables' == this.mode) {
+            // TODO Implement
+        }
+    }
+
+
+
+    private getRowsModels(source: Array<Object>,
+                          listToAdd: Array<number>,
+                          addedIndexes: Object,
+                          parent: RowModel = null) { // TODO Remake (VL)
+        let models = [];
+        for (let i = 0; i < listToAdd.length; i++) {
+            if (source[listToAdd[i]] && !addedIndexes[listToAdd[i]]) {
+                addedIndexes[listToAdd[i]] = true;
+                let timelabel = source[listToAdd[i]];
+                let timescale = timelabel['timescale'];
+                let timestamp = timelabel['full_name'];
+
+                let model = new RowModel(this.dataRowStorage.length, {
+                    meta: [{
+                        text: timelabel['full_name']
+                    }],
+                    cells: this.columnsOrder.map((variable) => {
+                        let idx = this.dataMap[timescale][variable][timestamp];
+                        let cell = new DataCell(this.dataCellStorage.length,
+                            this.data[timescale][variable][idx]);
+
+                        cell.variable = variable;
+                        cell.timescale = timescale;
+                        cell.timelabel = timestamp;
+
+                        this.dataCellStorage.push(cell);
+                        return cell;
+                    }, this)
+                }, parent);
+                this.dataRowStorage.push(model);
+                if (this.timeHierarchy[listToAdd[i]].length) {
+                    this.getRowsModels(source, this.timeHierarchy[listToAdd[i]], addedIndexes, model);
+                }
+            }
+        }
+        return models;
+    }
+
+
+    private makeDataMapping(data: Object,
+                            timelabels: Array<TimeLabelInput>): void {
+        this.dataMap = {};
+        for (let scale in data) {
+            this.dataMap[scale] = {};
+            for (let variable in data[scale]) {
+                this.dataMap[scale][variable] = {};
+                for (let i = 0; i < data[scale][variable].length; i++) {
+                    let timestamp = data[scale][variable][i]['timestamp'];
+                    let found = timelabels.findIndex((el) => {
+                        return (el['timescale'] == scale
+                        && el['full_name'] == timestamp) ? true : false;
+                    });
+                    this.dataMap[scale][variable][timestamp] = (found != -1)
+                        ? found : null;
+                }
+            }
+        }
+    }
+
+    private makeTimeHierarchy(timelabels: Array<TimeLabelInput>): void {
+        this.scalesOrder = [];
+        this.timeHierarchy = [];
 
         let pIndex: number = null;
         let ts: string = null;
         let relations: { [s: string]: string; } = {}; // {child: parent}
 
+        this.timeHierarchy = timelabels.map(() => {
+            return []
+        });
+
         for (let i = 0; i < timelabels.length; i++) {
             pIndex = timelabels[i]['parent_index'];
             ts = timelabels[i]['timescale'];
-
-            if (!('children' in timelabels[i])) {
-                timelabels[i]['children'] = [];
-            }
-
             if (pIndex !== null) {
-                if (!timelabels[pIndex]) {
+                try {
+                    this.timeHierarchy[pIndex].push(i);
+                } catch (e) {
                     console.error('Not found such index ' + pIndex);
-                    break;
                 }
-                if (!('children' in timelabels[pIndex])) {
-                    timelabels[pIndex]['children'] = [];
-                }
-                timelabels[pIndex]['children'].push(i);
             }
             if (!(ts in relations)) {
                 if (pIndex !== null) {
@@ -570,48 +345,34 @@ export class TableModel {
                 }
             }
         }
-
-        let addedTimelabels = {};
-        this.addTimePoints(timelabels, Helper.range(timelabels.length-1),
-            addedTimelabels);
-
     }
 
-    private addTimePoints(entireList: Array<Object>,
-                    indexesToProcess: Array<number>,
-                    addedIndexes: Object,
-                    parent: TimePointModel = null): void {
+    private makeTimelabelsOrder(fullList: Array<TimeLabelInput>,
+                                listToAdd: Array<number>,
+                                alreadyAdded: Object): void {
+        for (let i = 0; i < listToAdd.length; i++) {
+            if (!alreadyAdded[listToAdd[i]] && fullList[listToAdd[i]]) {
 
-        for (let i = 0; i < indexesToProcess.length; i++) {
-            if (!addedIndexes[indexesToProcess[i]]) {
-                addedIndexes[indexesToProcess[i]] = true;
+                alreadyAdded[listToAdd[i]] = true;
 
-                // Add row into this.flatRowsStorage
-                let timePoint = new TimePointModel();
-                timePoint.id = indexesToProcess[i];
-                if (parent !== null) {
-                    timePoint.parent = parent;
-                    timePoint.depth = parent.depth + 1;
-                    parent.children.push(timePoint);
-                }
-                this.flatTimePointsStorage.push(timePoint);
+                this.timelabelsOrder.push(listToAdd[i]);
 
-                // Add row's children into this.flatRowsStorage
-                if (entireList[indexesToProcess[i]]['children'].length > 0) {
-                    this.addTimePoints(entireList,
-                        entireList[indexesToProcess[i]]['children'],
-                        addedIndexes,
-                        timePoint);
+                // Add children into this.flatRowsStorage
+                if (this.timeHierarchy[listToAdd[i]].length > 0) {
+                    this.makeTimelabelsOrder(fullList,
+                        this.timeHierarchy[listToAdd[i]],
+                        alreadyAdded);
                 }
             }
         }
     }
-
-
 }
 
-class Helper {
 
+
+
+
+class Helper {
     static findKey(obj: Object, value: any): string {
         for (var prop in obj) {
             if (obj.hasOwnProperty(prop)) {
@@ -620,7 +381,6 @@ class Helper {
             }
         }
     }
-
     static range(start: number, stop?: number, step?: number) {
         if (typeof stop == 'undefined') {
             stop = start;
