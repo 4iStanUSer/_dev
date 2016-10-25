@@ -12,9 +12,11 @@ export class SimulatorPageComponent implements OnInit {
 
     private tableData: Object = null;
 
+    private queueToSave = [];
+
     constructor(private route: ActivatedRoute,
                 private router: Router,
-                private service: SimulatorPageDataManagerService) {
+                public service: SimulatorPageDataManagerService) {
     }
 
     ngOnInit() {
@@ -25,6 +27,31 @@ export class SimulatorPageComponent implements OnInit {
                     this.tableData = this.service.getData_VTable();
                 });
         });
+    }
+
+    recalculate() {
+        console.log('Send to server next: ');
+        console.log(this.queueToSave);
+        this.queueToSave = [];
+    }
+
+    onTableDataChanged(change: Object) {
+        let keysToCompare = Object.keys(change).filter((key)=> {
+            return (key != 'value') ? true : false;
+        });
+        let foundIndexInQueue = this.queueToSave.findIndex((el) => {
+            for (let i=0;i<keysToCompare.length; i++) {
+                if (el[keysToCompare[i]] != change[keysToCompare[i]]) {
+                    return false;
+                }
+            }
+            return true;
+        });
+        if (foundIndexInQueue != -1) {
+            this.queueToSave[foundIndexInQueue] = change;
+        } else {
+            this.queueToSave.push(change);
+        }
     }
 
 }

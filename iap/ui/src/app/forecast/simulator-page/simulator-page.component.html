@@ -1,6 +1,12 @@
 <div class="container-fluid">
+    Queue: {{ queueToSave | json }}
+
     <accordion-table
         *ngIf="tableData"
         [data]="tableData"
+        [config]="{'isEditable': true}"
+        (changed)="onTableDataChanged($event)"
         ></accordion-table>
+
+    <button *ngIf="queueToSave.length > 0" (click)="recalculate()">Calculate</button>
 </div>

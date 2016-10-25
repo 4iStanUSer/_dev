@@ -580,11 +580,11 @@ export class DataManagerService {
             this.timelabels = d['timelabels'];
             this.data = d['data'];
             this.cagrs = d['cagrs'];
-            //this.variables = d['variables'];
+            this.variables = d['variables'];
 
-            for (let i = 0; i < d['variables'].length; i++) { // TODO Remove
-                this.variables[d['variables'][i]['name']] = d['variables'][i];
-            }
+            // for (let i = 0; i < d['variables'].length; i++) { // TODO Remove
+            //     this.variables[d['variables'][i]['name']] = d['variables'][i];
+            // }
 
             // for filling cagr periods
             let cKeys: Array<string> = Object.keys(this.cagrs);
@@ -612,7 +612,7 @@ export class DataManagerService {
 
             // Fill timelabelsMap -> {timeLabel: timelabelIndex}
             for (let i = 0; i < this.timelabels.length; i++) {
-                this.timelabelsMap[this.timelabels[i]['name']] = i;
+                this.timelabelsMap[this.timelabels[i]['full_name']] = i;
             }
 
             this.recreateScales();
@@ -709,21 +709,21 @@ export class DataManagerService {
                 (timelabelIds.length - 1) / 2)];
             timelabelsForCagrs = [
                 {
-                    start: this.timelabels[timelabelIds[0]]['name'],
-                    end: this.timelabels[_middleId]['name']
+                    start: this.timelabels[timelabelIds[0]]['full_name'],
+                    end: this.timelabels[_middleId]['full_name']
                 },
                 {
-                    start: this.timelabels[_middleId]['name'],
+                    start: this.timelabels[_middleId]['full_name'],
                     end: this.timelabels[timelabelIds[
-                        timelabelIds.length - 1]]['name']
+                        timelabelIds.length - 1]]['full_name']
                 }
             ];
         } else if (timelabelIds.length > 0) {
             timelabelsForCagrs = [
                 {
-                    start: this.timelabels[timelabelIds[0]]['name'],
+                    start: this.timelabels[timelabelIds[0]]['full_name'],
                     end: this.timelabels[timelabelIds[
-                        timelabelIds.length - 1]]['name']
+                        timelabelIds.length - 1]]['full_name']
                 }
             ];
         }
@@ -742,8 +742,8 @@ export class DataManagerService {
                     .map(function (el) {
                         let index = this.getTimelabelIndex(el['timestamp']);
                         return {
-                            'name': this.timelabels[index]['name'],
-                            'value': el['value']
+                            'name': this.timelabels[index]['full_name'],
+                            'value': el['value'] // TODO Review for gr (VL)
                         }
                     }, this);
                 let cagrs = timelabelsForCagrs.map(function (el) {
@@ -789,22 +789,22 @@ export class DataManagerService {
             'variables': this.variables,
             'data': this.data,
             'timelabels': this.timelabels,
-            'scales_order': this.scales, // ['annual', 'quarterly', 'monthly']
-            'config': {
-                'head': {
-                    'horizontal_order': Object.keys(this.variables), //['sales', 'volume', 'price'],
-                    'vertical_order': [
-                        {
-                            'key': 'name',
-                            'label': 'Name'
-                        },
-                        {
-                            'key': 'metric',
-                            'label': 'Metric'
-                        }
-                    ]
-                }
-            }
+            // 'scales_order': this.scales, // ['annual', 'quarterly', 'monthly']
+            // 'config': {
+            //     'head': {
+            //         'horizontal_order': Object.keys(this.variables), //['sales', 'volume', 'price'],
+            //         'vertical_order': [
+            //             {
+            //                 'key': 'name',
+            //                 'label': 'Name'
+            //             },
+            //             {
+            //                 'key': 'metric',
+            //                 'label': 'Metric'
+            //             }
+            //         ]
+            //     }
+            // }
         };
     }
 
@@ -837,27 +837,20 @@ export class DataManagerService {
      * @returns {Array<string>}
      */
     public getVarsByType(type: string): Array<string> {
-        return ['Unit Size', 'Unit Volume', 'Value']; // TODO Remove
-        // let vars = [];
-        // for (let v in this.variables) {
-        //     if (this.variables[v]['type'] == type) {
-        //         vars.push(v);
-        //     }
-        // }
-        // return vars;
+        // return ['Unit Size', 'Unit Volume', 'Value']; // TODO Remove
+        let vars = [];
+        for (let v in this.variables) {
+            if (this.variables[v]['type'] == type) {
+                vars.push(v);
+            }
+        }
+        return vars;
     }
 
-    public getTimelabelIndex(name: string) {
-        return (name && this.timelabelsMap
-        && this.timelabelsMap[name] !== undefined)
-            ? this.timelabelsMap[name] : null;
-
-        // for (let i = 0; i < this.timelabels.length; i++) {
-        //     if (this.timelabels[i]['name'] == name) { // TODO Remake 'name'->'full_name' (VL)
-        //         return i;
-        //     }
-        // }
-        // return null;
+    public getTimelabelIndex(full_name: string) {
+        return (full_name && this.timelabelsMap
+        && this.timelabelsMap[full_name] !== undefined)
+            ? this.timelabelsMap[full_name] : null;
     }
 
     public getInitialPeriod(scale: string): Period {
