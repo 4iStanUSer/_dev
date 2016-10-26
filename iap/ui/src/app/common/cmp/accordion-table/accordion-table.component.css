@@ -18,3 +18,10 @@ td, th {
 .is-meta {
     font-weight: bold;
 }
+table.is-editable td.is-editable {
+    background-color: #c7fbc7;
+    cursor: pointer;
+}
+table.is-editable td.is-changed {
+    background-color: #d58512;
+}
