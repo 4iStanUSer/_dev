@@ -32,6 +32,7 @@ export class DataCell {
     value: any = null;
     editMode: boolean = false;
     isEditable: boolean = true; // TODO Revert false (VL)
+    isChanged: boolean = false;
 
     variable: string = null;
     timescale: string = null;
@@ -48,6 +49,7 @@ export class DataCell {
         return this.data['value'];
     }
 
+
     setEditMode() {
         if (this.isEditable) {
             this.value = this.data['value'];
@@ -56,11 +58,18 @@ export class DataCell {
         }
         return false;
     }
+
+    isValid(value) {
+        return true;
+        //return Number.isInteger(value);
+    }
+
     save() {
-        if (this.isEditable) {
+        if (this.isEditable && this.isValid(this.value)) {
             this.data['value'] = this.value;
             this.editMode = false;
             this.value = null;
+            this.isChanged = true;
             return true;
         }
         return false;

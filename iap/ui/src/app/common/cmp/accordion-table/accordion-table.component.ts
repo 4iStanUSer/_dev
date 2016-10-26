@@ -1,4 +1,4 @@
-import {Component, OnInit, Input, Output, ViewChildren, EventEmitter} from '@angular/core';
+import {Component, OnInit, AfterViewChecked, Input, Output, ViewChildren, EventEmitter} from '@angular/core';
 import {TableModel} from "../../model/table.model";
 
 
@@ -7,7 +7,7 @@ import {TableModel} from "../../model/table.model";
     templateUrl: './accordion-table.component.html',
     styleUrls: ['./accordion-table.component.css']
 })
-export class AccordionTableComponent implements OnInit {
+export class AccordionTableComponent implements OnInit, AfterViewChecked {
 
     private tableM: TableModel = null;
 
@@ -40,6 +40,14 @@ export class AccordionTableComponent implements OnInit {
 
     @ViewChildren('field_for_edit') editingFields;
 
+
+
+    constructor() {
+    }
+
+    ngOnInit() {
+    }
+
     ngAfterViewChecked() {
         let editingFields = this.editingFields.toArray();
         if (editingFields.length == 1) {
@@ -47,7 +55,26 @@ export class AccordionTableComponent implements OnInit {
         }
     }
 
-    onDblClick(e) {
+    asInitial() {
+        this.tableM.dataCellStorage.forEach((el, i) => {
+            el.isChanged = false;
+        });
+    }
+
+    private onInputKeyup(cell_id: number, e: Event) {
+        let keyCode = e['keyCode'];
+        if (keyCode == 13) { // Enter
+            if (this.tableM.dataCellStorage[cell_id].save()) {
+                this.changed.emit(
+                    this.tableM.dataCellStorage[cell_id].getChange()
+                );
+            }
+        } else if (keyCode == 27) { // Esc
+            this.tableM.dataCellStorage[cell_id].cancel();
+        }
+    }
+
+    private onDblClick(e) {
         e.preventDefault();
         if (this.conf['isEditable']) {
             // Get TD HTML Element
@@ -85,27 +112,6 @@ export class AccordionTableComponent implements OnInit {
                 }
             }
         }
-
-
     }
-
-    public onInputKeyup(cell_id: number, e: Event) {
-        let keyCode = e['keyCode'];
-        if (keyCode == 13) { // Enter
-            this.tableM.dataCellStorage[cell_id].save();
-            this.changed.emit(
-                this.tableM.dataCellStorage[cell_id].getChange()
-            );
-        } else if (keyCode == 27) { // Esc
-            this.tableM.dataCellStorage[cell_id].cancel();
-        }
-    }
-
-    constructor() {
-    }
-
-    ngOnInit() {
-    }
-
 
 }

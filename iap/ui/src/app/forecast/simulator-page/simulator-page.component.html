@@ -2,6 +2,7 @@
     Queue: {{ queueToSave | json }}
 
     <accordion-table
+        #acc_table
         *ngIf="tableData"
         [data]="tableData"
         [config]="{'isEditable': true}"

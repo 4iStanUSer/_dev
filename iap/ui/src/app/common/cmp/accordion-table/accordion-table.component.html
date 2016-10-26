@@ -1,4 +1,4 @@
-<table (dblclick)="onDblClick($event)">
+<table (dblclick)="onDblClick($event)" [ngClass]="{'is-editable': conf.isEditable}">
     <thead>
         <tr *ngFor="let row of header">
             <th *ngFor="let meta of row['meta']">
@@ -14,7 +14,7 @@
             <th *ngFor="let meta of row['meta']">
                 {{ meta['text'] }}
             </th>
-            <td *ngFor="let cell of row['cells']" [attr.data-cell-id]="cell.id">
+            <td *ngFor="let cell of row['cells']" [attr.data-cell-id]="cell.id" [ngClass]="{'is-editable': cell.isEditable, 'is-changed': cell.isChanged}">
                 <div *ngIf="cell.editMode">
                     <input
                         #field_for_edit
