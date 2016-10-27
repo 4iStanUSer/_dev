@@ -1,0 +1,43 @@
+<div class="component-container">
+    <div class="full-current-selection">
+        <div class="text">
+            <span *ngIf="selectedPoints && currScale && selectedPoints[currScale]">
+                <span *ngIf="selectedPoints[currScale]['start']">
+                    {{ selectedPoints[currScale]['start'].getName() }}
+                </span>
+                -
+                <span *ngIf="selectedPoints[currScale]['end']">
+                    {{ selectedPoints[currScale]['end'].getName() }}
+                </span>
+            </span>
+        </div>
+        <div class="toggle-arrow">
+            <div *ngIf="expandedMode == false" (click)="setExpandedMode(true)" class="arrow-to-bottom"></div>
+            <div *ngIf="expandedMode == true" (click)="setExpandedMode(false)" class="arrow-to-top"></div>
+        </div>
+    </div>
+
+    <div class="expanded-selector" *ngIf="expandedMode">
+        <div class="scales">
+            <span *ngFor="let scale of scales" [ngClass]="{'selected': (scale == currScale)}" (click)="changeScale(scale)"> {{ scale }}</span>
+        </div>
+        <div class="pre-selection">
+            <span *ngIf="preSelectedPoints['start']">{{ preSelectedPoints['start'].getName() }}</span>
+            -
+            <span *ngIf="preSelectedPoints['end']">{{ preSelectedPoints['end'].getName() }}</span>
+        </div>
+        <div class="slider-wraper">
+            <range-slider
+                [data]="currPoints"
+                [selected]="preSelectedPoints"
+                (changed)="onSliderChange($event)"
+            ></range-slider>
+
+            <!--<div *ngFor="let timelabel of currPoints" [ngClass]="{'selected': (timelabel == preSelectedPoints['start'] || timelabel == preSelectedPoints['end'])}">{{ timelabel.getName() }}</div>-->
+        </div>
+        <div class="buttons">
+            <button (click)="save()">{{ lang['apply'] }}</button>
+            <button (click)="setExpandedMode(false)">{{ lang['cancel'] }}</button>
+        </div>
+    </div>
+</div>

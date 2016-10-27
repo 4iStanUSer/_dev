@@ -11,6 +11,9 @@ import {BarChartComponent} from "../common/cmp/bar-chart/bar-chart.component";
 import {WaterfallChartComponent} from "../common/cmp/waterfall-chart/waterfall-chart.component";
 import {AccordionTableComponent} from "../common/cmp/accordion-table/accordion-table.component";
 import {SwitchSelectorComponent} from "../common/cmp/switch-selector/switch-selector.component";
+import {InsightComponent} from '../common/cmp/insight/insight.component';
+import {TimeSelectorComponent} from '../common/cmp/time-selector/time-selector.component';
+import {RangeSliderComponent} from "../common/cmp/time-selector/range-slider/range-slider.component";
 
 import {DashboardComponent} from "./dashboard/dashboard.component";
 import {DataManagerService} from "./dashboard/data-manager.service";
@@ -45,6 +48,10 @@ import {ScenariosListComponent} from "./scenarios-list/scenarios-list.component"
         WaterfallChartComponent,
         AccordionTableComponent,
         SwitchSelectorComponent,
+        InsightComponent,
+
+        RangeSliderComponent,
+        TimeSelectorComponent
     ],
     providers: [
         CommonServicesModule,
