@@ -34,147 +34,175 @@ export class DataManagerService {
     private cagrPeriods: Array<{start: string, end: string}> = [];
     private timelabelsMap: {[timeLabel: string]: number} = {};
 
-    // private timelabels = [
-    //     {
-    //         name: 2010,
-    //         timescale: 'annual',
-    //         parent_index: null
-    //     },
-    //     {
-    //         name: 2011,
-    //         timescale: 'annual',
-    //         parent_index: null
-    //     },
-    //     {
-    //         name: 2012,
-    //         timescale: 'annual',
-    //         parent_index: null
-    //     },
-    //     {
-    //         name: 2013,
-    //         timescale: 'annual',
-    //         parent_index: null
-    //     },
-    //
-    //     //
-    //
-    //     {
-    //         name: 'Q1',
-    //         timescale: 'quarterly',
-    //         parent_index: 0
-    //     },
-    //     {
-    //         name: 'Q2',
-    //         timescale: 'quarterly',
-    //         parent_index: 0
-    //     },
-    //     {
-    //         name: 'Q3',
-    //         timescale: 'quarterly',
-    //         parent_index: 0
-    //     },
-    //     {
-    //         name: 'Q4',
-    //         timescale: 'quarterly',
-    //         parent_index: 0
-    //     },
-    //
-    //     {
-    //         name: 'Q1',
-    //         timescale: 'quarterly',
-    //         parent_index: 1
-    //     },
-    //     {
-    //         name: 'Q2',
-    //         timescale: 'quarterly',
-    //         parent_index: 1
-    //     },
-    //     {
-    //         name: 'Q3',
-    //         timescale: 'quarterly',
-    //         parent_index: 1
-    //     },
-    //     {
-    //         name: 'Q4',
-    //         timescale: 'quarterly',
-    //         parent_index: 1
-    //     },
-    //
-    //     {
-    //         name: 'Q1',
-    //         timescale: 'quarterly',
-    //         parent_index: 2
-    //     },
-    //     {
-    //         name: 'Q2',
-    //         timescale: 'quarterly',
-    //         parent_index: 2
-    //     },
-    //     {
-    //         name: 'Q3',
-    //         timescale: 'quarterly',
-    //         parent_index: 2
-    //     },
-    //     {
-    //         name: 'Q4',
-    //         timescale: 'quarterly',
-    //         parent_index: 2
-    //     },
-    //     {
-    //         name: 'Q1',
-    //         timescale: 'quarterly',
-    //         parent_index: 3
-    //     },
-    //     {
-    //         name: 'Q2',
-    //         timescale: 'quarterly',
-    //         parent_index: 3
-    //     },
-    //     {
-    //         name: 'Q3',
-    //         timescale: 'quarterly',
-    //         parent_index: 3
-    //     },
-    //     {
-    //         name: 'Q4',
-    //         timescale: 'quarterly',
-    //         parent_index: 3
-    //     },
-    //
-    //     //
-    //
-    //     {
-    //         name: 'Jan',
-    //         timescale: 'monthly',
-    //         parent_index: 4
-    //     },
-    //     {
-    //         name: 'Feb',
-    //         timescale: 'monthly',
-    //         parent_index: 4
-    //     },
-    //     {
-    //         name: 'Mar',
-    //         timescale: 'monthly',
-    //         parent_index: 4
-    //     },
-    //
-    //     {
-    //         name: 'Jan',
-    //         timescale: 'monthly',
-    //         parent_index: 8
-    //     },
-    //     {
-    //         name: 'Feb',
-    //         timescale: 'monthly',
-    //         parent_index: 8
-    //     },
-    //     {
-    //         name: 'Mar',
-    //         timescale: 'monthly',
-    //         parent_index: 8
-    //     },
-    // ];
+
+    ///////////////////////////////////
+    public timelabelsTEST = [
+        {
+            full_name: '2010',
+            short_name: '2010',
+            timescale: 'annual',
+            parent_index: null
+        },
+        {
+            full_name: '2011',
+            short_name: '2011',
+            timescale: 'annual',
+            parent_index: null
+        },
+        {
+            full_name: '2012',
+            short_name: '2012',
+            timescale: 'annual',
+            parent_index: null
+        },
+        {
+            full_name: '2013',
+            short_name: '2013',
+            timescale: 'annual',
+            parent_index: null
+        },
+
+        //
+
+        {
+            full_name: 'Q1 2010',
+            short_name: 'Q1',
+            timescale: 'quarterly',
+            parent_index: 0
+        },
+        {
+            full_name: 'Q2 2010',
+            short_name: 'Q2',
+            timescale: 'quarterly',
+            parent_index: 0
+        },
+        {
+            full_name: 'Q3 2010',
+            short_name: 'Q3',
+            timescale: 'quarterly',
+            parent_index: 0
+        },
+        {
+            full_name: 'Q4 2010',
+            short_name: 'Q4',
+            timescale: 'quarterly',
+            parent_index: 0
+        },
+
+        {
+            full_name: 'Q1 2011',
+            short_name: 'Q1',
+            timescale: 'quarterly',
+            parent_index: 1
+        },
+        {
+            full_name: 'Q2 2011',
+            short_name: 'Q2',
+            timescale: 'quarterly',
+            parent_index: 1
+        },
+        {
+            full_name: 'Q3 2011',
+            short_name: 'Q3',
+            timescale: 'quarterly',
+            parent_index: 1
+        },
+        {
+            full_name: 'Q4 2011',
+            short_name: 'Q4',
+            timescale: 'quarterly',
+            parent_index: 1
+        },
+
+        {
+            full_name: 'Q1 2012',
+            short_name: 'Q1',
+            timescale: 'quarterly',
+            parent_index: 2
+        },
+        {
+            full_name: 'Q2 2012',
+            short_name: 'Q2',
+            timescale: 'quarterly',
+            parent_index: 2
+        },
+        {
+            full_name: 'Q3 2012',
+            short_name: 'Q3',
+            timescale: 'quarterly',
+            parent_index: 2
+        },
+        {
+            full_name: 'Q4 2012',
+            short_name: 'Q4',
+            timescale: 'quarterly',
+            parent_index: 2
+        },
+        {
+            full_name: 'Q1 2013',
+            short_name: 'Q1',
+            timescale: 'quarterly',
+            parent_index: 3
+        },
+        {
+            full_name: 'Q2 2013',
+            short_name: 'Q2',
+            timescale: 'quarterly',
+            parent_index: 3
+        },
+        {
+            full_name: 'Q3 2013',
+            short_name: 'Q3',
+            timescale: 'quarterly',
+            parent_index: 3
+        },
+        {
+            full_name: 'Q4 2013',
+            short_name: 'Q4',
+            timescale: 'quarterly',
+            parent_index: 3
+        },
+
+        //
+
+        {
+            full_name: 'Jan Q1 10',
+            short_name: 'Jan',
+            timescale: 'monthly',
+            parent_index: 4
+        },
+        {
+            full_name: 'Feb Q1 10',
+            short_name: 'Feb',
+            timescale: 'monthly',
+            parent_index: 4
+        },
+        {
+            full_name: 'Mar Q1 10',
+            short_name: 'Mar',
+            timescale: 'monthly',
+            parent_index: 4
+        },
+
+        {
+            full_name: 'Jan Q1 11',
+            short_name: 'Jan',
+            timescale: 'monthly',
+            parent_index: 8
+        },
+        {
+            full_name: 'Feb Q1 11',
+            short_name: 'Feb',
+            timescale: 'monthly',
+            parent_index: 8
+        },
+        {
+            full_name: 'Mar Q1 11',
+            short_name: 'Mar',
+            timescale: 'monthly',
+            parent_index: 8
+        },
+    ];
     //
     // private variables = {
     //     CPI: {
