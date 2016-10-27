@@ -1,0 +1,75 @@
+.component-container {
+    position:relative;
+}
+.full-current-selection {
+    padding: 0 5px;
+    border: 1px solid #5e5e5e;
+    border-radius: 8px;
+}
+.full-current-selection > div {
+    display: inline-block;
+}
+.toggle-arrow > * {
+    width: 0;
+    height: 0;
+    border: 10px solid transparent;
+    cursor: pointer;
+}
+
+.toggle-arrow > *.arrow-to-bottom {
+    border-top-color: black;
+    border-bottom: 0;
+}
+.toggle-arrow > *.arrow-to-top {
+    border-bottom-color: black;
+    border-top: 0;
+}
+
+.expanded-selector {
+    position:absolute;
+    left:0;
+    top:18px;
+    z-index: 999;
+    display: inline-block;
+    background: dimgray;
+    padding:10px;
+    border-radius: 10px;
+    border:3px solid lightgray;
+}
+.expanded-selector > div + div {
+    margin-top: 10px;
+}
+.expanded-selector .scales {
+    background: white;
+    padding:5px;
+}
+.expanded-selector .scales > span {
+    margin: 0 3px;
+    padding:3px;
+    background: dimgray;
+    color:#000;
+    border:2px solid dimgray;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.expanded-selector .scales > span.selected {
+    background: #fff;
+    color:#2b542c;
+}
+
+.expanded-selector .pre-selection {
+    text-align: center;
+}
+.expanded-selector .pre-selection > span {
+    background: #fff;
+    padding:0 3px;
+}
+.expanded-selector .slider-wraper {
+    background: #f5f5f5;
+    border:1px solid #5e5e5e;
+    padding:3px;
+}
+
+.expanded-selector .slider .selected {
+    background: #5e5e5e;
+}

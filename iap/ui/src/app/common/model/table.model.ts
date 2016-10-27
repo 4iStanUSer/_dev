@@ -1,3 +1,4 @@
+import {Helper} from './helper';
 
 interface VariableInput {
     name: string;
@@ -74,6 +75,7 @@ export class DataCell {
         }
         return false;
     }
+
     cancel() {
         this.editMode = false;
         this.value = null;
@@ -104,8 +106,7 @@ export class RowModel {
 
     constructor(id: number,
                 tblRow: {meta: Array<Object>, cells: Array<DataCell>},
-                parent: RowModel = null
-                ) { // is_header: boolean = false
+                parent: RowModel = null) { // is_header: boolean = false
         this.id = id;
         // this.isHeader = is_header;
         this.meta = tblRow['meta'];
@@ -247,7 +248,6 @@ export class TableModel {
     }
 
 
-
     private getRowsModels(source: Array<Object>,
                           listToAdd: Array<number>,
                           addedIndexes: Object,
@@ -375,36 +375,4 @@ export class TableModel {
             }
         }
     }
-}
-
-
-
-
-
-class Helper {
-    static findKey(obj: Object, value: any): string {
-        for (var prop in obj) {
-            if (obj.hasOwnProperty(prop)) {
-                if (obj[prop] === value)
-                    return prop;
-            }
-        }
-    }
-    static range(start: number, stop?: number, step?: number) {
-        if (typeof stop == 'undefined') {
-            stop = start;
-            start = 0;
-        }
-        if (typeof step == 'undefined') {
-            step = 1;
-        }
-        if ((step > 0 && start >= stop) || (step < 0 && start <= stop)) {
-            return [];
-        }
-        var result = [];
-        for (var i = start; step > 0 ? i < stop : i > stop; i += step) {
-            result.push(i);
-        }
-        return result;
-    };
 }

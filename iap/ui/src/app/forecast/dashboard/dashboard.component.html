@@ -1,102 +1,71 @@
 <div class="container-fluid">
 
-    <div class="mode-list-container">
-        <span *ngFor="let mode of localConfig['modes']" (click)="changeMode(mode['key'])">{{ mode['name'] }}</span>
-    </div>
+    <time-selector
+        [data]="dm.timelabelsTEST"></time-selector>
 
 
-    <div *ngIf="'summary' == currMode">
-        <div #block1 class="container-fluid">
-            <switch-selector
-                [(data)]="absOrRateSwitchData"
-                [config]="absOrRateSwitchConfig"
-                (changed)="absOrRateSwitchChanged($event)"></switch-selector>
-
-            <div [ngSwitch]="absOrRate">
-                <div *ngSwitchCase="'rate'">
-                    <donut-chart
-                        *ngIf="summaryCagrsData"
-                        [data]="summaryCagrsData"></donut-chart>
-                </div>
-                <div *ngSwitchCase="'absolute'">
-                    <bar-chart
-                        *ngIf="summaryOutputsShortData"
-                        [data]="summaryOutputsShortData"
-                        (click-expand)="showBarChartFull($event)"
-                    ></bar-chart>
-                    <!--TEMP-->
-                    <div *ngIf="showFullCharts">
-                        <bar-chart
-                            *ngIf="summaryOutputsFullData"
-                            [data]="summaryOutputsFullData"
-                        ></bar-chart>
-                    </div>
-                    <!--.TEMP-->
-                </div>
-            </div>
-        </div>
-
-        <div #block2 class="container-fluid">
-            <waterfall-chart
-                #decomposition
-                *ngIf="summaryDecompData"
-                [data]="summaryDecompData"
-                (click-expand)="showDecompositionFull($event)"
-            ></waterfall-chart>
-
-            <!--TEMP-->
-            <div *ngIf="showTable === true">
-                <accordion-table
-                    *ngIf="decompositionTableData"
-                    [data]="decompositionTableData"
-                    ></accordion-table>
-            </div>
-            <!--.TEMP-->
-
-        </div>
-    </div>
-
-    <div *ngIf="'detailed' == currMode">
-
-    </div>
-
-    <div *ngIf="'drivers' == currMode">
-
-    </div>
-</div>
 
 
-<!--<div class="container-fluid">-->
-    <!--<switch-selector [data]="switchSelectorData" [config]="switchSelectorConfig" (changed)="switchSelectorChanged($event)"></switch-selector>-->
+    <!--<div class="mode-list-container">-->
+        <!--<span *ngFor="let mode of localConfig['modes']" (click)="changeMode(mode['key'])">{{ mode['name'] }}</span>-->
+    <!--</div>-->
 
-    <!--<div #firstBlock>-->
-        <!--<div class="container-fluid">-->
-            <!--<input-->
-                <!--type="checkbox"-->
-                <!--[ngModel]="blockView[0]"-->
-                <!--(ngModelChange)="changedBlockView(0, $event)"-->
-                <!--&gt;-->
-        <!--</div>-->
+    <!--<div *ngIf="'summary' == currMode">-->
+        <!--<div #block1 class="container-fluid">-->
+            <!--<switch-selector-->
+                <!--[(data)]="absOrRateSwitchData"-->
+                <!--[config]="absOrRateSwitchConfig"-->
+                <!--(changed)="absOrRateSwitchChanged($event)"></switch-selector>-->
 
-        <!--<div *ngIf="!blockView[0]" class="container-fluid">-->
-            <!--<donut-chart [data]="donutChartData"></donut-chart>-->
-        <!--</div>-->
-        <!--<div *ngIf="blockView[0]" class="container-fluid">-->
-            <!--<div class="col-md-4" *ngFor="let bar of barChartData">-->
-                <!--<bar-chart [data]="bar"></bar-chart>-->
+            <!--<div [ngSwitch]="absOrRate">-->
+                <!--<div *ngSwitchCase="'rate'">-->
+                    <!--<donut-chart-->
+                        <!--*ngIf="summaryCagrsData"-->
+                        <!--[data]="summaryCagrsData"></donut-chart>-->
+                <!--</div>-->
+                <!--<div *ngSwitchCase="'absolute'">-->
+                    <!--<bar-chart-->
+                        <!--*ngIf="summaryOutputsShortData"-->
+                        <!--[data]="summaryOutputsShortData"-->
+                        <!--(click-expand)="showBarChartFull($event)"-->
+                    <!--&gt;</bar-chart>-->
+                    <!--&lt;!&ndash;TEMP&ndash;&gt;-->
+                    <!--<div *ngIf="showFullCharts">-->
+                        <!--<bar-chart-->
+                            <!--*ngIf="summaryOutputsFullData"-->
+                            <!--[data]="summaryOutputsFullData"-->
+                        <!--&gt;</bar-chart>-->
+                    <!--</div>-->
+                    <!--&lt;!&ndash;.TEMP&ndash;&gt;-->
+                <!--</div>-->
             <!--</div>-->
         <!--</div>-->
-    <!--</div>-->
 
-    <!--<div #secondBlock>-->
-        <!--<input type="checkbox" [(ngModel)]="blockView[1]">-->
+        <!--<div #block2 class="container-fluid">-->
+            <!--<waterfall-chart-->
+                <!--#decomposition-->
+                <!--*ngIf="summaryDecompData"-->
+                <!--[data]="summaryDecompData"-->
+                <!--(click-expand)="showDecompositionFull($event)"-->
+            <!--&gt;</waterfall-chart>-->
 
-        <!--<div class="container-fluid">-->
-            <!--<waterfall-chart [data]="waterfallChartData"></waterfall-chart>-->
+            <!--&lt;!&ndash;TEMP&ndash;&gt;-->
+            <!--<div *ngIf="showTable === true">-->
+                <!--<accordion-table-->
+                    <!--*ngIf="decompositionTableData"-->
+                    <!--[data]="decompositionTableData"-->
+                    <!--&gt;</accordion-table>-->
+            <!--</div>-->
+            <!--&lt;!&ndash;.TEMP&ndash;&gt;-->
+
         <!--</div>-->
     <!--</div>-->
 
-    <!--<div>-->
-        <!--<accordion-table [data]="vTableData"></accordion-table>-->
+    <!--<div *ngIf="'detailed' == currMode">-->
+
     <!--</div>-->
-<!--</div>-->
+
+    <!--<div *ngIf="'drivers' == currMode">-->
+
+    <!--</div>-->
+</div>
