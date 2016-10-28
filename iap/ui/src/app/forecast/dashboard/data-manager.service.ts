@@ -36,6 +36,20 @@ export class DataManagerService {
 
 
     ///////////////////////////////////
+    public timelabelsTESTSelected = {
+        'start': {
+            'full_name': 'Q2 2010',
+            'scale': 'quarterly'
+        },
+        'end': {
+            'full_name': 'Q4 2010',
+            'scale': 'quarterly'
+        },
+        'mid': {
+            'full_name': 'Q3 2010',
+            'scale': 'quarterly'
+        },
+    };
     public timelabelsTEST = [
         {
             full_name: '2010',
