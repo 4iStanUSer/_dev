@@ -57,7 +57,6 @@ export class RangeSliderComponent implements OnInit, OnChanges {
     }
 
     ngOnInit() {
-        console.log(this);
     }
 
     ngOnChanges(ch: SimpleChanges) {
@@ -88,8 +87,6 @@ export class RangeSliderComponent implements OnInit, OnChanges {
 
     private selectPoint(slider: string, pointIndex: number) {
         if (!this.points[pointIndex]) return;
-
-        console.log('Selected: slider:' +slider+'; index:'+pointIndex);
 
         this.selectedIndexes[slider] = pointIndex;
         this.svgData['sliders'][slider] =

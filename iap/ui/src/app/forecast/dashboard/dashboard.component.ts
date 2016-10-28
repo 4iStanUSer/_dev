@@ -170,4 +170,9 @@ export class DashboardComponent implements OnInit {
         this.showFullCharts = !this.showFullCharts;
     }
     /**********.TEMP***********/
+
+
+    private onTimePeriodChanged(newPeriod) {
+        console.log(newPeriod);
+    }
 }

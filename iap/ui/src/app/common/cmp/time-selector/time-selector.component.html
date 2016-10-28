@@ -1,13 +1,13 @@
 <div class="component-container">
     <div class="full-current-selection">
         <div class="text">
-            <span *ngIf="selectedPoints && currScale && selectedPoints[currScale]">
-                <span *ngIf="selectedPoints[currScale]['start']">
-                    {{ selectedPoints[currScale]['start'].getName() }}
+            <span *ngIf="selectedPoints">
+                <span *ngIf="selectedPoints['start']">
+                    {{ selectedPoints['start'].getName() }}
                 </span>
                 -
-                <span *ngIf="selectedPoints[currScale]['end']">
-                    {{ selectedPoints[currScale]['end'].getName() }}
+                <span *ngIf="selectedPoints['end']">
+                    {{ selectedPoints['end'].getName() }}
                 </span>
             </span>
         </div>
@@ -22,18 +22,16 @@
             <span *ngFor="let scale of scales" [ngClass]="{'selected': (scale == currScale)}" (click)="changeScale(scale)"> {{ scale }}</span>
         </div>
         <div class="pre-selection">
-            <span *ngIf="preSelectedPoints['start']">{{ preSelectedPoints['start'].getName() }}</span>
+            <span *ngIf="preSelectedPoints[currScale] && preSelectedPoints[currScale]['start']">{{ preSelectedPoints[currScale]['start'].getName() }}</span>
             -
-            <span *ngIf="preSelectedPoints['end']">{{ preSelectedPoints['end'].getName() }}</span>
+            <span *ngIf="preSelectedPoints[currScale] && preSelectedPoints[currScale]['end']">{{ preSelectedPoints[currScale]['end'].getName() }}</span>
         </div>
         <div class="slider-wraper">
             <range-slider
                 [data]="currPoints"
-                [selected]="preSelectedPoints"
+                [selected]="preSelectedPoints[currScale]"
                 (changed)="onSliderChange($event)"
             ></range-slider>
-
-            <!--<div *ngFor="let timelabel of currPoints" [ngClass]="{'selected': (timelabel == preSelectedPoints['start'] || timelabel == preSelectedPoints['end'])}">{{ timelabel.getName() }}</div>-->
         </div>
         <div class="buttons">
             <button (click)="save()">{{ lang['apply'] }}</button>
