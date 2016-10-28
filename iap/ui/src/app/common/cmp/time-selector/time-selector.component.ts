@@ -3,7 +3,9 @@ import {
     OnInit,
     OnChanges,
     SimpleChanges,
-    Input
+    Input,
+    Output,
+    EventEmitter
 } from '@angular/core';
 import {Helper} from './../../model/helper';
 import {RangeSliderComponent} from "./range-slider/range-slider.component";
@@ -139,7 +141,7 @@ class TimeLabels {
     getTimeLabel(scale: string, full_name: string): TimeLabel {
         for (let i=0;i<this.storage.length;i++) {
             if (this.storage[i]['full_name'] == full_name
-                && this.storage[i]['scale'] == scale) {
+                && this.storage[i]['timescale'] == scale) {
                 return this.storage[i];
             }
         }
@@ -150,7 +152,7 @@ class TimeLabels {
 
 @Component({
     selector: 'time-selector',
-    providers: [RangeSliderComponent],
+    // providers: [RangeSliderComponent],
     templateUrl: './time-selector.component.html',
     styleUrls: ['./time-selector.component.css']
 })
@@ -169,20 +171,11 @@ export class TimeSelectorComponent implements OnInit, OnChanges {
     private currScale: string = null;
     private currPoints: Array<TimeLabel> = [];
     private expandedMode: boolean = false;
-    private selectedPoints: {
-        [timescale: string]: Sliders // TODO Save state of preSelected!!!
+
+    private selectedPoints: Sliders = new Sliders();
+    private preSelectedPoints: {
+        [timescale: string]: Sliders
     } = null;
-    private preSelectedPoints: Sliders = new Sliders(); //{start: null, end: null};
-
-
-    // @Input() set data(d: Array<TimelabelInput>) {
-    //     console.info('TimeSelectorComponent: set data');
-    //     this.timelabels = new TimeLabels(d);
-    //     this.scales = this.timelabels.getScales();
-    //     if (this.scales.length) {
-    //         this.changeScale(this.scales[0]);
-    //     }
-    // }
 
 
     constructor() {
@@ -198,21 +191,22 @@ export class TimeSelectorComponent implements OnInit, OnChanges {
         mid?: {scale: string, full_name: string},
     };
 
+    @Output() changed: EventEmitter<{
+        start: {scale: string, full_name: string},
+        end: {scale: string, full_name: string},
+        mid?: {scale: string, full_name: string},
+    }> = new EventEmitter();
+
     ngOnChanges(ch: SimpleChanges) {
         console.info('TimeSelectorComponent: ngOnChanges()');
         if (ch['data']) {
             this.timelabels = new TimeLabels(ch['data']['currentValue']);
             this.scales = this.timelabels.getScales();
             if (this.scales.length) {
-                this.selectedPoints = {};
+                this.preSelectedPoints = {};
                 for (let i = 0;i<this.scales.length;i++) {
-                    this.selectedPoints[this.scales[i]] = new Sliders();
-                    // {
-                    //     start: null, end: null, mid: null
-                    // };
+                    this.preSelectedPoints[this.scales[i]] = new Sliders();
                 }
-                // this.selectedPoints = sel;
-                //this.changeScale(this.scales[0]);
             }
         }
         if (ch['selected']) {
@@ -224,12 +218,14 @@ export class TimeSelectorComponent implements OnInit, OnChanges {
                     let scale = timelabel['scale'];
                     let full_name = timelabel['full_name'];
                     let t = this.timelabels.getTimeLabel(scale, full_name);
+
                     if (t) {
                         if (selScale === null) {
                             selScale = t.timescale;
                         }
                         if (t.timescale == selScale) {
-                            this.selectedPoints[selScale][prop] = t;
+                            this.selectedPoints[prop] = t;
+                            this.preSelectedPoints[selScale][prop] = t;
                         } else {
                             if (prop == 'start') {
 
@@ -259,16 +255,14 @@ export class TimeSelectorComponent implements OnInit, OnChanges {
         if (this.scales.indexOf(scale) !== -1) {
             this.currScale = scale;
             this.currPoints = this.timelabels.getScaleTimelabels(scale);
-            // TODO get preSelectedPoints from selected
-            this.preSelectedPoints = {
-                'start': (this.currPoints[0]) ? this.currPoints[0] : null,
-                'end': (this.currPoints[this.currPoints.length - 1])
-                    ? this.currPoints[this.currPoints.length - 1] : null,
-                //'mid': null,
-            };
 
-
-            // And others actions - UPDATE SLIDER ...
+            if (!this.preSelectedPoints[scale]['start']) {
+                this.preSelectedPoints[scale]['start'] = this.currPoints[0];
+            }
+            if (!this.preSelectedPoints[scale]['end']) {
+                this.preSelectedPoints[scale]['end'] =
+                    this.currPoints[this.currPoints.length - 1];
+            }
         }
     }
 
@@ -278,19 +272,28 @@ export class TimeSelectorComponent implements OnInit, OnChanges {
 
     private onSliderChange(ch) {
         try {
-            this.preSelectedPoints[ch['slider']] = ch['value'];
+            this.preSelectedPoints[this.currScale][ch['slider']] = ch['value'];
         } catch (e) {
             console.error(e);
         }
     }
 
     private save() {
-        console.log('save');
-        this.selectedPoints[this.currScale]['start'] = this.preSelectedPoints['start'];
-        this.selectedPoints[this.currScale]['end'] = this.preSelectedPoints['end'];
-        this.selectedPoints[this.currScale]['mid'] = this.preSelectedPoints['mid'];
+        this.selectedPoints['start'] = this.preSelectedPoints[this.currScale]['start'];
+        this.selectedPoints['end'] = this.preSelectedPoints[this.currScale]['end'];
+        // this.selectedPoints[this.currScale]['mid'] = this.preSelectedPoints['mid'];
+
         this.setExpandedMode(false);
-        // TODO Change visible selection
         // TODO Emit event
+        this.changed.emit({
+            'start': {
+                'scale': this.selectedPoints['start']['timescale'],
+                'full_name': this.selectedPoints['start']['full_name'],
+            },
+            'end': {
+                'scale': this.selectedPoints['end']['timescale'],
+                'full_name': this.selectedPoints['end']['full_name'],
+            },
+        });
     }
 }

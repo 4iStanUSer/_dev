@@ -1,7 +1,10 @@
 <div class="container-fluid">
 
     <time-selector
-        [data]="dm.timelabelsTEST"></time-selector>
+        [data]="dm.timelabelsTEST"
+        [selected]="dm.timelabelsTESTSelected"
+        (changed)="onTimePeriodChanged($event)"
+    ></time-selector>
 
 
 
