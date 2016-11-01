@@ -1,5 +1,6 @@
 import {Component, OnInit, Input, Output, ElementRef, Renderer, SimpleChanges, OnChanges, EventEmitter} from '@angular/core';
-import {TimeLabel, Sliders} from "../time-selector.component";
+import {Sliders} from "./../time-selector.component";
+import {TimeLabelModel} from "./../../../model/time-labels.model";
 
 
 interface Coordinate {
@@ -19,7 +20,7 @@ export class RangeSliderComponent implements OnInit, OnChanges {
 
     private element: HTMLElement = null;
 
-    private points: Array<TimeLabel> = null;
+    private points: Array<TimeLabelModel> = null;
 
     private sliders: Sliders = null;
 
@@ -44,12 +45,12 @@ export class RangeSliderComponent implements OnInit, OnChanges {
 
     private selectedIndexes: Object = null;
 
-    @Input() data: Array<TimeLabel>;
+    @Input() data: Array<TimeLabelModel>;
     @Input() selected: Sliders;
 
     @Output() changed: EventEmitter<{
         slider: string,
-        value: TimeLabel
+        value: TimeLabelModel
     }> = new EventEmitter();
 
     constructor(private elRef: ElementRef, private renderer: Renderer) {

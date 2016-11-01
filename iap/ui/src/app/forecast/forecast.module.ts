@@ -11,7 +11,6 @@ import {BarChartComponent} from "../common/cmp/bar-chart/bar-chart.component";
 import {WaterfallChartComponent} from "../common/cmp/waterfall-chart/waterfall-chart.component";
 import {AccordionTableComponent} from "../common/cmp/accordion-table/accordion-table.component";
 import {SwitchSelectorComponent} from "../common/cmp/switch-selector/switch-selector.component";
-import {InsightComponent} from '../common/cmp/insight/insight.component';
 import {TimeSelectorComponent} from '../common/cmp/time-selector/time-selector.component';
 import {RangeSliderComponent} from "../common/cmp/time-selector/range-slider/range-slider.component";
 
@@ -23,6 +22,12 @@ import {SimulatorPageDataManagerService} from "./simulator-page/simulator-page-d
 
 import {ForecastComponent} from "./forecast.component";
 import {ScenariosListComponent} from "./scenarios-list/scenarios-list.component";
+
+import { ForecastSectionComponent } from './dashboard/forecast-section/forecast-section.component';
+import { GeneralComponent } from './dashboard/general/general.component';
+import { DriverDetailComponent } from './dashboard/driver-detail/driver-detail.component';
+import { DriverSummaryComponent } from './dashboard/driver-summary/driver-summary.component';
+import { InsightsComponent } from './dashboard/insights/insights.component';
 
 @NgModule({
     imports: [
@@ -39,7 +44,14 @@ import {ScenariosListComponent} from "./scenarios-list/scenarios-list.component"
     ],
     declarations: [
         ForecastComponent,
+
         DashboardComponent,
+        GeneralComponent,
+        DriverDetailComponent,
+        DriverSummaryComponent,
+        InsightsComponent,
+        ForecastSectionComponent,
+
         ScenariosListComponent,
         SimulatorPageComponent,
 
@@ -48,7 +60,6 @@ import {ScenariosListComponent} from "./scenarios-list/scenarios-list.component"
         WaterfallChartComponent,
         AccordionTableComponent,
         SwitchSelectorComponent,
-        InsightComponent,
 
         RangeSliderComponent,
         TimeSelectorComponent

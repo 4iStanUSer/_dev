@@ -1,6 +1,11 @@
 import {Injectable} from '@angular/core';
 // import * as _ from 'lodash';
 import {AjaxService} from "./../../common/service/ajax.service";
+import {DataModel} from "./../../common/model/data.model";
+import {
+    TimePeriodInput,
+    TimePeriodModel
+} from "../../common/model/time-period.model";
 
 interface Cagr {
     start: string;
@@ -14,6 +19,8 @@ export interface Period {
 
 @Injectable()
 export class DataManagerService {
+
+    private dataModel : DataModel = null;
 
     // public hTableData: Object = {};
     // private widgetsConfig = {
@@ -217,6 +224,7 @@ export class DataManagerService {
             parent_index: 8
         },
     ];
+    public forecastSectionDataConfig: Object = null;
     //
     // private variables = {
     //     CPI: {
@@ -624,6 +632,41 @@ export class DataManagerService {
             this.cagrs = d['cagrs'];
             this.variables = d['variables'];
 
+            let tp: TimePeriodInput = {
+                'start': '2013',
+                'mid': '2015',
+                'end': '2018'
+            };
+
+            this.dataModel = new DataModel(
+                d['timelabels'],
+                d['variables'],
+                d['cagrs'],
+                d['data']
+            );
+
+            let timePeriod = new TimePeriodModel(
+                tp['start'],
+                tp['end'],
+                tp['mid']
+            );
+
+            let shortPeriod = [tp['start'], tp['mid'], tp['end']];
+            let fullPeriodObj = this.dataModel.getTimeLine('annual', tp['start'], tp['end']);
+            let fullPeriod = fullPeriodObj.map((el)=>{
+                return el.getName();
+            });
+
+            this.forecastSectionDataConfig = {
+                timescale: 'annual',
+                varsToShow: ['Value', 'Unit Volume', 'Unit Size'],
+                periods: {
+                    short: shortPeriod,
+                    full: fullPeriod
+                }
+            };
+
+
             // for (let i = 0; i < d['variables'].length; i++) { // TODO Remove
             //     this.variables[d['variables'][i]['name']] = d['variables'][i];
             // }
@@ -661,6 +704,10 @@ export class DataManagerService {
         });
         return resp;
     }
+
+
+
+    /////////////////////////////////////////////////////////////////////
 
     public getData_Decomposition(p: Period) {
         if (!p || !p['start'] || !p['end']) {
