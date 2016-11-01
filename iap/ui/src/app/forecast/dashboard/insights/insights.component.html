@@ -1,3 +1,13 @@
-<p>
-  insights works!
-</p>
+<div>
+    <div *ngFor="let insight of storage; let i = index">
+        <div>{{ insight['nomber'] }}</div>
+        <div *ngIf="!insight.expanded">
+            {{ insight.shortText }}
+        </div>
+        <div *ngIf="insight.expanded">
+            {{ insight.fullText }}
+        </div>
+        <a (click)="onExpandButtonClick(insight, $event)">{{ ((insight.expanded) ? ('< ' + lang['less_link']) : ('> ' + lang['more_link']) ) }}</a>
+    </div>
+
+</div>
