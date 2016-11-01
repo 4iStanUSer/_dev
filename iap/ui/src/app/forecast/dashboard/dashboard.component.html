@@ -1,13 +1,25 @@
 <div class="container-fluid">
 
-    <time-selector
-        [data]="dm.timelabelsTEST"
-        [selected]="dm.timelabelsTESTSelected"
-        (changed)="onTimePeriodChanged($event)"
-    ></time-selector>
+    <ul class="navigation">
+        <li><a routerLink="./general" routerLinkActive="active">Dashboard</a></li>
+        <li><a routerLink="./driver-details" routerLinkActive="active">Driver Details</a></li>
+        <li><a routerLink="./driver-summary" routerLinkActive="active">Driver Summary</a></li>
+    </ul>
+    <router-outlet></router-outlet>
 
+    <insights></insights>
 
+    <!--<forecast-section-->
+        <!--*ngIf="dm.dataModel"-->
+        <!--[data-model]="dm.dataModel"-->
+        <!--[data-config]="dm.forecastSectionDataConfig"-->
+    <!--&gt;</forecast-section>-->
 
+    <!--<time-selector-->
+        <!--[data]="dm.timelabelsTEST"-->
+        <!--[selected]="dm.timelabelsTESTSelected"-->
+        <!--(changed)="onTimePeriodChanged($event)"-->
+    <!--&gt;</time-selector>-->
 
     <!--<div class="mode-list-container">-->
         <!--<span *ngFor="let mode of localConfig['modes']" (click)="changeMode(mode['key'])">{{ mode['name'] }}</span>-->

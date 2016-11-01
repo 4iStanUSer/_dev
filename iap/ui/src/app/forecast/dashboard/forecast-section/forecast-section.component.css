@@ -1,0 +1,13 @@
+ul.nav {
+    list-style: none;
+}
+ul.nav li {
+    display:inline-block;
+    margin: 0 5px;
+    padding: 0 5px;
+    background: grey;
+    cursor: pointer;
+}
+ul.nav li.active {
+    background: whitesmoke;
+}

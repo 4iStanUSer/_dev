@@ -11,6 +11,10 @@ import {WaterfallChartComponent} from "../../common/cmp/waterfall-chart/waterfal
 export class DashboardComponent implements OnInit {
 
     private pageName: string = 'dashboard';
+
+
+
+
     private currMode: string = 'summary';
     private currTimeScale: string = 'annual';
     private localConfig: Object = {
