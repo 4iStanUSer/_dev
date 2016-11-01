@@ -2,6 +2,14 @@ import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {Chart} from './../../module/chart/';
 import * as _ from 'lodash';
 
+
+interface BarChartDataInput { // TODO Remake (VL)
+    name: string;
+    variable: {name: string, metric: string};
+    cagrs: Array<{start: string, end: string, value: number}>;
+    data: Array<{name: string, value: number}>;
+}
+
 interface BarChartConfig {
     showGrowth?: boolean;
     showCagrs?: boolean;
@@ -12,7 +20,7 @@ interface BarChartConfig {
     templateUrl: './bar-chart.component.html',
     styleUrls: ['./bar-chart.component.css']
 })
-export class BarChartComponent implements OnInit {
+export class BarChartComponent implements OnInit { // TODO Implement 2 modes: short & full (cagrs for middle point too)
 
     private _c: BarChartConfig = {
         showGrowth: false,
@@ -55,15 +63,15 @@ export class BarChartComponent implements OnInit {
         }]
     };
 
-    @Output('click-expand') clickExpand = new EventEmitter();
+    // @Output('click-expand') clickExpand = new EventEmitter();
 
     // @Input() set config(c: BarChartConfig) { // TODO Realize this
     //     _.extend(this._c, c);
     // }
 
-    @Input() set data(data: Array<any>) {
+    @Input() set data(data: Array<BarChartDataInput>) {
         console.info('BarChartComponent: set data');
-
+        this.blocks = [];
         for (let i = 0; i < data.length; i++) {
             let config: Object = _.cloneDeep(this.baseChartConfig);
             // config['title']['text'] = data[i]['name'];
@@ -85,13 +93,13 @@ export class BarChartComponent implements OnInit {
         }
     };
 
-    private onExpandButtonClick(blockId: number) {
-        console.info('BarChartComponent "click-expand" event');
-        this.clickExpand.emit({
-            'name': (blockId !== null && this.blocks[blockId])
-                ? this.blocks[blockId]['name'] : null
-        });
-    }
+    // private onExpandButtonClick(blockId: number) {
+    //     console.info('BarChartComponent "click-expand" event');
+    //     this.clickExpand.emit({
+    //         'name': (blockId !== null && this.blocks[blockId])
+    //             ? this.blocks[blockId]['name'] : null
+    //     });
+    // }
 
     constructor() {
     }

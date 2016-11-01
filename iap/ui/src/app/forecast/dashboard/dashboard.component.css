@@ -1,10 +1,25 @@
-.mode-list-container > * {
-    cursor: pointer;
-    font-size: 20px;
-    font-weight: bold;
-    text-transform: uppercase;
+.navigation {
+    list-style: none;
 }
-.mode-list-container > *:before,
-.mode-list-container > *:after {
-    content: ' ';
+.navigation li {
+    display: inline-block;
+    margin:0 2px;
 }
+.navigation li a {
+    background: grey;
+    padding: 0 3px;
+}
+.navigation li a.active {
+    background: whitesmoke;
+}
+
+/*.mode-list-container > * {*/
+    /*cursor: pointer;*/
+    /*font-size: 20px;*/
+    /*font-weight: bold;*/
+    /*text-transform: uppercase;*/
+/*}*/
+/*.mode-list-container > *:before,*/
+/*.mode-list-container > *:after {*/
+    /*content: ' ';*/
+/*}*/

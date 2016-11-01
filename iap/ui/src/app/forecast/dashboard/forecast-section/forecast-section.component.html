@@ -1,0 +1,34 @@
+<div class="wrapper">
+
+    <ul class="nav">
+        <li (click)="onTabClick(-1)" [class.active]="(state.currTabIndex == -1)">{{ ((state.currTabIndex == -1) ? lang['active_all_tab'] : lang['passive_all_tab']) }}</li>
+        <li *ngFor="let tab of tabs; let i = index" (click)="onTabClick(i)" [class.active]="(state.currTabIndex == i)">{{ tab.variable.name + ' - ' + tab.variable.metric }}</li>
+    </ul>
+    <button *ngIf="(state.currTabIndex == -1)" (click)="onExpandCollapseButtonClick()">{{ ((state['currViewMode'] == 'short') ? lang['expand'] : lang['collapse']) }}</button>
+
+    <div class="content">
+
+        <div *ngIf="(state.currTabIndex == -1)">
+            <div class="short-mode" *ngIf="state['currViewMode'] == 'short'">
+                <bar-chart
+                    *ngIf="totalTab['short_data'] && totalTab['short_data'].length"
+                    [data]="totalTab['short_data']"
+                ></bar-chart>
+            </div>
+            <div class="full-mode" *ngIf="state['currViewMode'] == 'full'">
+                <bar-chart
+                    *ngIf="totalTab['full_data'] && totalTab['full_data'].length"
+                    [data]="totalTab['full_data']"
+                ></bar-chart>
+            </div>
+        </div>
+        <div *ngIf="(state.currTabIndex > -1)">
+            <bar-chart
+                *ngIf="tabs[state.currTabIndex] && tabs[state.currTabIndex]['full_data']"
+                [data]="tabs[state.currTabIndex]['full_data']"
+            ></bar-chart>
+        </div>
+
+    </div>
+
+</div>
