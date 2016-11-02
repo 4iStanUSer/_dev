@@ -14,6 +14,7 @@ class InsightModel {
 
     expanded: boolean = false;
     disabled: boolean = false;
+    expandable: boolean = false;
 }
 class InsightsConfig { // TODO Implement configuration (VL)
     types: {
@@ -38,7 +39,7 @@ export class InsightsComponent implements OnInit, OnChanges {
         'more_link': 'read more'
     };
     private conf: Object = {
-        'preview_length': 100
+        'preview_length': 130
     };
 
     private storage: Array<InsightModel> = [];
@@ -57,12 +58,18 @@ export class InsightsComponent implements OnInit, OnChanges {
     ngOnChanges(ch: SimpleChanges) {
         if (ch['data']) {
             this.storage = [];
-            for (let i=0; i<ch['data']['currentValue'].length;i++) {
+            let insights = ch['data']['currentValue'];
+            for (let i=0; i<insights.length;i++) {
                 let insight = new InsightModel();
                 insight.nomber = i + 1;
-                insight.shortText = this.getShortText(
-                    ch['data']['currentValue'][i]['text']);
-                insight.fullText = ch['data']['currentValue'][i]['text'];
+                if (insights[i]['text'].length > this.conf['preview_length']) {
+                    insight.shortText = this.getShortText(insights[i]['text']);
+                    insight.expandable = true;
+                } else {
+                    insight.shortText = insights[i]['text'];
+                    insight.expandable = false;
+                }
+                insight.fullText = insights[i]['text'];
                 this.storage.push(insight);
             }
         }
@@ -88,9 +95,9 @@ export class InsightsComponent implements OnInit, OnChanges {
                 }
             } while (!found && i>=0);
             if (i>=0) {
-                return text.slice(0, i);
+                return text.slice(0, i) + '...';
             } else {
-                return text.slice(0, l);
+                return text.slice(0, l) + '...';
             }
         }
         return text;

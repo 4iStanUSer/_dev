@@ -23,11 +23,17 @@ import {SimulatorPageDataManagerService} from "./simulator-page/simulator-page-d
 import {ForecastComponent} from "./forecast.component";
 import {ScenariosListComponent} from "./scenarios-list/scenarios-list.component";
 
-import { ForecastSectionComponent } from './dashboard/forecast-section/forecast-section.component';
-import { GeneralComponent } from './dashboard/general/general.component';
-import { DriverDetailComponent } from './dashboard/driver-detail/driver-detail.component';
-import { DriverSummaryComponent } from './dashboard/driver-summary/driver-summary.component';
-import { InsightsComponent } from './dashboard/insights/insights.component';
+import {ForecastSectionComponent} from './dashboard/forecast-section/forecast-section.component';
+import {SelectorsComponent} from './dashboard/selectors/selectors.component';
+import {FlatSelectorComponent} from './dashboard/selectors/flat-selector/flat-selector.component';
+import {HierarchicalSelectorComponent} from './dashboard/selectors/hierarchical-selector/hierarchical-selector.component';
+
+import {GeneralComponent} from './dashboard/general/general.component';
+import {DriverDetailComponent} from './dashboard/driver-detail/driver-detail.component';
+import {DriverSummaryComponent} from './dashboard/driver-summary/driver-summary.component';
+import {InsightsComponent} from './dashboard/insights/insights.component';
+import { RegionSelectorComponent } from './dashboard/selectors/region-selector/region-selector.component';
+
 
 @NgModule({
     imports: [
@@ -51,6 +57,9 @@ import { InsightsComponent } from './dashboard/insights/insights.component';
         DriverSummaryComponent,
         InsightsComponent,
         ForecastSectionComponent,
+        SelectorsComponent,
+        FlatSelectorComponent,
+        HierarchicalSelectorComponent,
 
         ScenariosListComponent,
         SimulatorPageComponent,
@@ -62,7 +71,8 @@ import { InsightsComponent } from './dashboard/insights/insights.component';
         SwitchSelectorComponent,
 
         RangeSliderComponent,
-        TimeSelectorComponent
+        TimeSelectorComponent,
+        RegionSelectorComponent,
     ],
     providers: [
         CommonServicesModule,

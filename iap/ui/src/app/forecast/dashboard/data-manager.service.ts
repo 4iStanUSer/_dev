@@ -728,6 +728,112 @@ export class DataManagerService {
 
 
 
+
+    private selectorsConfig = {
+        selectors: {
+            brand: {
+                name: 'Brand',
+                placeholder: 'brand',
+                multiple: true,
+                type: 'flat', // flat | hierarchical | region
+                icon: '',
+                disabled: false,
+            },
+            category: {
+                name: 'Category',
+                placeholder: 'category',
+                multiple: true,
+                type: 'hierarchical', // flat | hierarchical | region
+                icon: '',
+                disabled: false,
+            },
+            // channel: {
+            //     name: 'Channel',
+            //     placeholder: 'channel',
+            //     multiple: true,
+            //     type: 'flat', // flat | hierarchical | region
+            //     icon: ''
+            // },
+        },
+        order: ['brand', 'category'] //, 'channel'
+    };
+    private selectorsData = {
+        brand: {
+            data: [
+                {
+                    label: 'Puma',
+                    id: 'puma',
+                    parent_id: null
+                },
+                {
+                    label: 'Nike',
+                    id: 'nike',
+                    parent_id: null
+                },
+                {
+                    label: 'Adidas',
+                    id: 'adidas',
+                    parent_id: null
+                },
+                {
+                    label: 'Puma Black',
+                    id: 'puma_black',
+                    parent_id: 'puma'
+                },
+                {
+                    label: 'Nike Black',
+                    id: 'nike_black',
+                    parent_id: 'nike'
+                },
+                {
+                    label: 'Adidas Black',
+                    id: 'adidas_black',
+                    parent_id: 'adidas'
+                },
+            ],
+            selected: ['adidas_black', 'puma_black']
+        },
+        category: {
+            data: [
+                {
+                    label: 'Puma',
+                    id: 'puma',
+                    parent_id: null
+                },
+                {
+                    label: 'Nike',
+                    id: 'nike',
+                    parent_id: null
+                },
+                {
+                    label: 'Adidas',
+                    id: 'adidas',
+                    parent_id: null
+                },
+                {
+                    label: 'Puma Black',
+                    id: 'puma_black',
+                    parent_id: 'puma'
+                },
+                {
+                    label: 'Nike Black',
+                    id: 'nike_black',
+                    parent_id: 'nike'
+                },
+                {
+                    label: 'Adidas Black',
+                    id: 'adidas_black',
+                    parent_id: 'adidas'
+                },
+            ],
+            selected: ['puma', 'adidas']
+        }
+    };
+
+
+
+
+
     /////////////////////////////////////////////////////////////////////
 
     public getData_Decomposition(p: Period) {
