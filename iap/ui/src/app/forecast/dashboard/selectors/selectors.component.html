@@ -1,0 +1,43 @@
+<div class="wrapper">
+
+    <ul class="selectors">
+        <li *ngFor="let sel of selectors; let i = index">
+
+            <div class="selector-preview" (click)="onPreviewClick(i, $event)">
+                {{ sel['model']['placeholder'] }}
+            </div>
+
+        </li>
+    </ul>
+
+    <div *ngIf="state['isExpanded']" class="expanded-block">
+
+        <ul class="selectors-tabs">
+            <li *ngFor="let sel of selectors; let i = index" [class.active]="i == state['activeTab']" (click)="setActiveTab(i)">
+
+                <div class="selector-preview" (click)="onPreviewClick(i, $event)">
+                    {{ sel['model']['placeholder'] }}
+                </div>
+
+            </li>
+        </ul>
+
+        <div *ngIf="selectors[state['activeTab']]" >
+
+            <div [ngSwitch]="selectors[state['activeTab']]['model']['type']">
+
+                <flat-selector *ngSwitchCase="'flat'" [data]="selectors[state['activeTab']]['model']"></flat-selector>
+
+                <hierarchical-selector *ngSwitchCase="'hierarchical'" [data]="selectors[state['activeTab']]['model']"></hierarchical-selector>
+
+                <region-selector *ngSwitchCase="'region'" [data]="selectors[state['activeTab']]['model']"></region-selector>
+
+            </div>
+
+        </div>
+
+        <button (click)="state['isExpanded'] = !state['isExpanded']">Apply</button>
+        <button (click)="state['isExpanded'] = !state['isExpanded']">Cancel</button>
+    </div>
+
+</div>
