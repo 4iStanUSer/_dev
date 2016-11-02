@@ -7,7 +7,7 @@
         <div *ngIf="insight.expanded">
             {{ insight.fullText }}
         </div>
-        <a (click)="onExpandButtonClick(insight, $event)">{{ ((insight.expanded) ? ('< ' + lang['less_link']) : ('> ' + lang['more_link']) ) }}</a>
+        <a *ngIf="insight.expandable" (click)="onExpandButtonClick(insight, $event)">{{ ((insight.expanded) ? ('< ' + lang['less_link']) : ('> ' + lang['more_link']) ) }}</a>
     </div>
 
 </div>

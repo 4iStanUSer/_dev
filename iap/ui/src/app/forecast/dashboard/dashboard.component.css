@@ -1,3 +1,10 @@
+.dashboard-container > * {
+    border: 1px solid #5e5e5e;
+    margin: 5px 0;
+    padding: 5px;
+    display: block;
+}
+
 .navigation {
     list-style: none;
 }
@@ -12,14 +19,3 @@
 .navigation li a.active {
     background: whitesmoke;
 }
-
-/*.mode-list-container > * {*/
-    /*cursor: pointer;*/
-    /*font-size: 20px;*/
-    /*font-weight: bold;*/
-    /*text-transform: uppercase;*/
-/*}*/
-/*.mode-list-container > *:before,*/
-/*.mode-list-container > *:after {*/
-    /*content: ' ';*/
-/*}*/
