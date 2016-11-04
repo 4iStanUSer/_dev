@@ -1,10 +1,15 @@
 import {
     Component,
     Input,
+    Output,
     OnInit,
     OnChanges,
-    SimpleChanges
+    SimpleChanges,
+    EventEmitter
 } from '@angular/core';
+import {
+    SelectorItemInput, SelectorModel, SelectorConfigInput, SelectorItemModel
+} from "./../../../common/model/selector.model";
 
 /*
  * Notice-Requirements:*
@@ -16,53 +21,19 @@ import {
 
 interface SelectorsDataInput {
     [selectorKey: string]: {
-        data: Array<{
-            label: string,
-            id: number|string,
-            parent_id: number|string
-        }>,
+        data: Array<SelectorItemInput>,
         selected: Array<number|string>
     };
 }
 interface SelectorsConfigInput {
-    selectors: {[selectorKey: string]: {
-        name: string;
-        placeholder: string;
-        multiple: boolean;
-        type: string; // flat | hierarchical | region
-        icon: string;
-        disabled?: boolean;
-    }};
+    selectors: {[selectorKey: string]: SelectorConfigInput};
     order: Array<string>;
 }
 
-////////////////////////////////////////////////////////////
-
-class SelectorItemModel {
-    id: number|string = null;
-    label: string = null;
-    isSelected: boolean = false;
-    icon?: string = null;
-    disabled?: boolean = false;
-
-    parent: SelectorItemModel = null;
-    children: Array<SelectorItemModel> = [];
+interface SelectorsChangedOutput {
+    [selectorKey: string]: Array<string>
 }
-export class SelectorModel {
-    key: string;
-    name: string;
-    order: number;
-    icon: string;
-    placeholder: string;
-    multiple: boolean;
-    type: string; // flat | hierarchical | region
-    disabled: boolean;
 
-    items: Array<SelectorItemModel>;
-
-    constructor() {
-    }
-}
 
 @Component({
     selector: 'selectors',
@@ -74,16 +45,11 @@ export class SelectorsComponent implements OnInit, OnChanges {
     @Input() data: SelectorsDataInput;
     @Input() config: SelectorsConfigInput;
 
-    // private selectors: {
-    //     [selector: string]: {
-    //         model: SelectorModel,
-    //         // TODO Add more (VL)
-    //     }
-    // } = null;
+    @Output() changed: EventEmitter<SelectorsChangedOutput> = new EventEmitter();
 
     private selectors: Array<{
         model: SelectorModel,
-        // TODO Add more (VL)
+        selected: Array<SelectorItemModel>
     }> = [];
 
     private state: Object = {
@@ -129,20 +95,20 @@ export class SelectorsComponent implements OnInit, OnChanges {
                     model.disabled = !!config['disabled'];
                     // .Configuring model from config object
 
-                    // this.selectors[selKey] = {
-                    //     model: model
-                    // };
+                    model.setData(data);
+                    model.forceSelect(selected);
+
+                    let sel = model.getSelectedItems();
                     this.selectors.push({
-                        model: model
-                    })
+                        model: model,
+                        selected: sel,
+                    });
+
                 } catch (e) {
                     console.error('Error - ' + e.toString());
                 }
             }
-
-            console.log(this.selectors);
         }
-
     }
 
     private onPreviewClick(index: number, e: MouseEvent) {
@@ -151,9 +117,54 @@ export class SelectorsComponent implements OnInit, OnChanges {
         this.state['isExpanded'] = true;
 
     }
+
     private setActiveTab(index: number) {
         this.state['activeTab'] = index;
     }
 
+    private onApplyClick() {
+        this.state['isExpanded'] = false;
+        let changed = false;
+        let output = {};
+        for (let i=0;i<this.selectors.length;i++) {
+            let changedThis = false;
+            let currSelected = this.selectors[i]['model'].getSelectedItems();
+            if (currSelected.length != this.selectors[i]['selected'].length) {
+                changed = true;
+                changedThis = true;
+            } else {
+                let diff = currSelected.filter((item) => {
+                    return (this.selectors[i]['selected'].indexOf(item) == -1);
+                }, this);
+                if (diff.length > 0) {
+                    changed = true;
+                    changedThis = true;
+                }
+            }
+            if (changedThis) {
+                this.selectors[i]['selected'] = currSelected;
+            }
+
+            output[this.selectors[i].model.key] =
+                this.selectors[i]['selected'].map((item) => {
+                    return item['id'];
+                });
+        }
+        if (changed) {
+            console.log('-->SELECTORS changed', output);
+            this.changed.emit(output);
+        }
+    }
+
+    private onCancelClick() {
+        this.state['isExpanded'] = false;
+
+        this.selectors.forEach((selector) => {
+            let sel = selector['selected'].map((item) => {
+                return item.id;
+            });
+            selector['model'].forceSelect(sel);
+        });
+    }
 
 }
