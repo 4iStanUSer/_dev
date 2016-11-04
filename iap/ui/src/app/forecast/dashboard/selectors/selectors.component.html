@@ -4,7 +4,16 @@
         <li *ngFor="let sel of selectors; let i = index">
 
             <div class="selector-preview" (click)="onPreviewClick(i, $event)">
-                {{ sel['model']['placeholder'] }}
+
+                <span *ngIf="sel['selected'] && sel['selected'].length > 0">
+                    <span *ngFor="let s of sel['selected']">
+                        {{ s.name }}
+                    </span>
+                </span>
+                <span *ngIf="!sel['selected'] || sel['selected'].length == 0">
+                    {{ sel['model']['placeholder'] }}
+                </span>
+
             </div>
 
         </li>
@@ -16,7 +25,7 @@
             <li *ngFor="let sel of selectors; let i = index" [class.active]="i == state['activeTab']" (click)="setActiveTab(i)">
 
                 <div class="selector-preview" (click)="onPreviewClick(i, $event)">
-                    {{ sel['model']['placeholder'] }}
+                    {{ sel['model']['name'] }}
                 </div>
 
             </li>
@@ -24,20 +33,20 @@
 
         <div *ngIf="selectors[state['activeTab']]" >
 
-            <div [ngSwitch]="selectors[state['activeTab']]['model']['type']">
+            <div [ngSwitch]="selectors[state['activeTab']]['model']['type']" class="selector-container">
 
-                <flat-selector *ngSwitchCase="'flat'" [data]="selectors[state['activeTab']]['model']"></flat-selector>
+                <flat-selector *ngSwitchCase="'flat'" [model]="selectors[state['activeTab']]['model']"></flat-selector>
 
-                <hierarchical-selector *ngSwitchCase="'hierarchical'" [data]="selectors[state['activeTab']]['model']"></hierarchical-selector>
+                <hierarchical-selector *ngSwitchCase="'hierarchical'" [model]="selectors[state['activeTab']]['model']"></hierarchical-selector>
 
-                <region-selector *ngSwitchCase="'region'" [data]="selectors[state['activeTab']]['model']"></region-selector>
+                <region-selector *ngSwitchCase="'region'" [model]="selectors[state['activeTab']]['model']"></region-selector>
 
             </div>
 
         </div>
 
-        <button (click)="state['isExpanded'] = !state['isExpanded']">Apply</button>
-        <button (click)="state['isExpanded'] = !state['isExpanded']">Cancel</button>
+        <button (click)="onApplyClick()">Apply</button>
+        <button (click)="onCancelClick()">Cancel</button>
     </div>
 
 </div>
