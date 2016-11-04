@@ -1,5 +1,5 @@
 import {Component, OnInit, Input} from '@angular/core';
-import {SelectorModel} from "../selectors.component";
+import {SelectorModel} from "../../../../common/model/selector.model";
 
 @Component({
     selector: 'hierarchical-selector',
@@ -8,7 +8,7 @@ import {SelectorModel} from "../selectors.component";
 })
 export class HierarchicalSelectorComponent implements OnInit {
 
-    @Input() data: SelectorModel;
+    @Input() model: SelectorModel;
 
     constructor() {
     }

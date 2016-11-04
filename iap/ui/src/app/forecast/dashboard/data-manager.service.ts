@@ -761,72 +761,57 @@ export class DataManagerService {
         brand: {
             data: [
                 {
-                    label: 'Puma',
+                    name: 'Puma',
                     id: 'puma',
                     parent_id: null
                 },
                 {
-                    label: 'Nike',
+                    name: 'Nike',
                     id: 'nike',
                     parent_id: null
                 },
                 {
-                    label: 'Adidas',
+                    name: 'Adidas',
                     id: 'adidas',
                     parent_id: null
-                },
-                {
-                    label: 'Puma Black',
-                    id: 'puma_black',
-                    parent_id: 'puma'
-                },
-                {
-                    label: 'Nike Black',
-                    id: 'nike_black',
-                    parent_id: 'nike'
-                },
-                {
-                    label: 'Adidas Black',
-                    id: 'adidas_black',
-                    parent_id: 'adidas'
-                },
+                }
             ],
-            selected: ['adidas_black', 'puma_black']
+            selected: ['puma', 'adidas']
         },
         category: {
             data: [
                 {
-                    label: 'Puma',
+                    name: 'Puma',
                     id: 'puma',
                     parent_id: null
                 },
                 {
-                    label: 'Nike',
+                    name: 'Nike',
                     id: 'nike',
                     parent_id: null
                 },
                 {
-                    label: 'Adidas',
+                    name: 'Adidas',
                     id: 'adidas',
                     parent_id: null
                 },
                 {
-                    label: 'Puma Black',
+                    name: 'Puma Black',
                     id: 'puma_black',
                     parent_id: 'puma'
                 },
                 {
-                    label: 'Nike Black',
+                    name: 'Nike Black',
                     id: 'nike_black',
                     parent_id: 'nike'
                 },
                 {
-                    label: 'Adidas Black',
+                    name: 'Adidas Black',
                     id: 'adidas_black',
                     parent_id: 'adidas'
                 },
             ],
-            selected: ['puma', 'adidas']
+            selected: ['adidas']
         }
     };
 
