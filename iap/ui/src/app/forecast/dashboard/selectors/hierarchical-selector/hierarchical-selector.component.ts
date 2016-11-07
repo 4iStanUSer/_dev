@@ -1,5 +1,8 @@
 import {Component, OnInit, Input} from '@angular/core';
-import {SelectorModel} from "../../../../common/model/selector.model";
+import {
+    SelectorModel,
+    SelectorItemModel
+} from "./../../../../common/model/selector.model";
 
 @Component({
     selector: 'hierarchical-selector',
@@ -9,6 +12,18 @@ import {SelectorModel} from "../../../../common/model/selector.model";
 export class HierarchicalSelectorComponent implements OnInit {
 
     @Input() model: SelectorModel;
+
+    private items: Array<SelectorItemModel> = [];
+    // private itemsToShow: Array<SelectorItemModel> = [];
+
+    private lang: Object = {
+        'items_title': 'Brands',
+        'search_title': 'Search',
+        'search_placeholder': 'Type here',
+        'search_clear': 'Clear search',
+        'selected_title': 'Selected',
+        'not_found_items': 'Not found items'
+    };
 
     constructor() {
     }

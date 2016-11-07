@@ -96,9 +96,16 @@ export class SelectorModel {
         this.selected = this.selected.filter((id) => {
             return !!(this.items[id]);
         }, this);
+        if (!this.multiple && this.selected.length > 1) {
+            let toDeselect = this.selected.slice(1, this.selected.length);
+            this.deselect(toDeselect);
+        }
     }
 
     select(ids: Array<string>): void {
+        if (!this.multiple) {
+            this.deselect(this.selected);
+        }
         for (let i=0;i<ids.length;i++) {
             try {
                 if (this.selected.indexOf(ids[i]) == -1) {
