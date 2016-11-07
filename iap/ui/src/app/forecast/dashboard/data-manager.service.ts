@@ -734,7 +734,7 @@ export class DataManagerService {
             brand: {
                 name: 'Brand',
                 placeholder: 'brand',
-                multiple: true,
+                multiple: true, // false|true,
                 type: 'flat', // flat | hierarchical | region
                 icon: '',
                 disabled: false,
