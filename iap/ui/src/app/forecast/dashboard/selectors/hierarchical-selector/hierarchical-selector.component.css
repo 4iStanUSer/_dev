@@ -1,0 +1,33 @@
+.items ul {
+    list-style: none;
+    width: 200px;
+}
+.items ul li {
+    display:block;
+    text-align: left;
+    border-bottom: 1px solid #5e5e5e;
+    color: #000;
+    cursor: pointer;
+}
+.items ul li.active {
+    background: #2e6da4;
+    color: #fff;
+}
+
+.selected ul {
+    list-style: none;
+}
+.selected ul li {
+    display:inline-block;
+    margin:5px;
+    padding: 0 5px;
+    text-align: center;
+    border: 1px solid #5e5e5e;
+    color: #000;
+}
+.selected ul li span {
+    cursor: pointer;
+}
+.clear-button {
+    cursor: pointer;
+}
