@@ -7,6 +7,9 @@ class CalculationBase:
         obj._delay = 0
         return obj
 
+    def __init__(self, immutable_parameters=None):
+        pass
+
     def set_input_buffer(self, buffer, indxs):
         # TODO add description
         self._input = RelativeBuffer(buffer, indxs)
@@ -42,6 +45,9 @@ class CalculationBase:
         # TODO add description
         raise NotImplementedError
 
+    def clean(self):
+        pass
+
 
 class RelativeBuffer:
     # TODO add description
@@ -58,3 +64,5 @@ class RelativeBuffer:
     def __len__(self):
         return len(self._indxs)
 
+    def get_all(self):
+        return [self._buffer[x] for x in self._indxs]

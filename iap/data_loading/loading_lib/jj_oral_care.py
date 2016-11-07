@@ -48,13 +48,13 @@ def jj_oral_care_sales(table, config, warehouse):
                                           [Meta('Geography', 'Country'),
                                            Meta('Project', 'Project'),
                                            Meta('Products', 'Category')])
-            var = entity.get_variable(var_name)
-            if var is None:
-                var = entity.force_variable(var_name, 'float')
-            time_series = var.get_time_series(timescale_name)
-            if time_series is None:
-                time_series = var.force_time_series(timescale)
-            time_series.set_values(start_point, values)
+        var = entity.get_variable(var_name)
+        if var is None:
+            var = entity.force_variable(var_name, 'float')
+        time_series = var.get_time_series(timescale_name)
+        if time_series is None:
+            time_series = var.force_time_series(timescale)
+        time_series.set_values(start_point, values)
     return
 
 

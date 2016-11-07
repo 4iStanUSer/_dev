@@ -4,8 +4,9 @@ from .container import Container
 from .access import Access
 from .dimensions import Dimensions
 from .configuration import Configuration
+from .simulator.kernel import CalculationKernel
 
-from .services.loading import init_container, init_configuration
+from .services.loading import init_container, init_configuration, init_calc_engine
 from .services.exchange import download_data_from_wh
 
 class Workbench:
@@ -13,7 +14,7 @@ class Workbench:
     def __init__(self, user_id):
         self._user_id = user_id
         self.container = Container()
-        self.kernel = None
+        self.kernel = CalculationKernel()
         self.config = Configuration()
         self.access = Access()
         self.dimensions = Dimensions()
@@ -32,10 +33,18 @@ class Workbench:
         # Configuration.
         init_configuration(dev_template, self.config)
         # Container
-        init_container(dev_template, warehouse, self.container,
+        init_container(dev_template, warehouse, self.container, self.config,
                        self._wh_inputs, self._wh_outputs)
         download_data_from_wh(warehouse, self.container, self._wh_inputs)
+
+
+
+
         self.dimensions.build(self.container)
+
+    def load_formulas(self, instructions):
+        # Calculation engine
+        init_calc_engine(self.kernel, instructions)
 
     def load_backup(self, backup_binary):
         backup = pickle.loads(backup_binary)

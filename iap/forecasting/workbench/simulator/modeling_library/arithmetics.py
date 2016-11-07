@@ -9,14 +9,14 @@ class CM_Sum(CalculationBase):
     # TODO add description
     def run(self):
         # TODO add description
-        self.output[0] = fsum(self.input)
+        self.output[0] = fsum(self.input.get_all())
 
 
 class CM_Multiply(CalculationBase):
     # TODO add description
     def run(self):
         # TODO add description
-        self.output[0] = reduce(mul, self.input, 1)
+        self.output[0] = reduce(mul, self.input.get_all(), 1)
 
 
 class CM_Divide(CalculationBase):

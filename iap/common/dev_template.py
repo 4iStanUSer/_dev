@@ -611,8 +611,8 @@ dev_template_JJOralCare = {
         'selector_widgets': {'Geography': 'hierarchy', 'Products': 'flat'},
         'dashboard_top_ts': 'annual',
         'dashboard_bottom_ts': 'annual',
-        'dashboard_period': ['2013', '2018'],
-        'dashboard_cagr_periods': [['2013', '2015'], ['2015', '2018']]
+        'dashboard_period': {'annual': ['2013', '2018']},
+        'dashboard_cagr_periods': {'annual': [('2013', '2015'), ('2015', '2018')]}
     },
     'top_entity': {},
     'entities': [
@@ -632,11 +632,6 @@ dev_template_JJOralCare = {
         'alias': {'history': {'annual': ('2012', '2015')},
                   'forecast': {'annual': ('2016', '2018')}},
         'top_ts_points': [
-            {
-                'name_full': '2012',
-                'name_short': '2012',
-                'children': []
-            },
             {
                 'name_full': '2012',
                 'name_short': '2012',
@@ -678,38 +673,110 @@ dev_template_JJOralCare = {
         {
             'meta': ('Geography', 'Country'),
             'variables': {
-                'Population total': { 'props': {'metric': 'Person', 'mult': 1000000, 'type': 2}, 'timescales': ['annual']},
-                'CPI': { 'props': {'metric': 'index', 'mult': 1, 'type': 2}, 'timescales': ['annual']},
-                'GDP PC': { 'props': {'metric': 'Dollar', 'mult': 1, 'type': 2}, 'timescales': ['annual']}
+                'Population total': { 'props': {'metric': 'Person', 'mult': 1000000, 'type': 2}, 'timescales': [('annual', 5)]},
+                'CPI': { 'props': {'metric': 'index', 'mult': 1, 'type': 2}, 'timescales': [('annual', 5)]},
+                'GDP PC': { 'props': {'metric': 'Dollar', 'mult': 1, 'type': 2}, 'timescales': [('annual', 5)]}
             },
-            'coefficients': {}
+            'coefficients': {},
+            'decomposition': {}
         },
         {
             'meta': ('Products', 'Category'),
             'variables': {
-                'Value': { 'props': {'metric': 'Dollar', 'mult': 1000, 'type': 1}, 'timescales': ['annual'] },
-                'EQ Volume': { 'props': {'metric': 'Liter', 'mult': 1000, 'type': 1}, 'timescales': ['annual'] },
-                'Unit Volume': { 'props': {'metric': 'Unit', 'mult': 1000, 'type': 2}, 'timescales': ['annual'] },
-                'Price per EQ': { 'props': {'metric': 'Dollar Per Liter', 'mult': 1, 'type': 1}, 'timescales': ['annual'] },
-                'Price per Unit': { 'props': {'metric': 'Dollar Per Unit', 'mult': 1, 'type': 2}, 'timescales': ['annual'] },
-                'Unit Size': { 'props': {'metric': 'Litter per Unit', 'mult': 1, 'type': 2}, 'timescales': ['annual'] },
-                'Distribution': { 'props': {'metric': 'TDP', 'mult': 1, 'type': 2}, 'timescales': ['annual'] },
-                'Innovation TDP share': { 'props': {'metric': '% of TDP', 'mult': 1, 'type': 2}, 'timescales': ['annual'] },
-                'Premiumization': { 'props': {'metric': 'index', 'mult': 1, 'type': 2}, 'timescales': ['annual'] },
-                'Media Spend': { 'props': {'metric': 'Dollar', 'mult': 1000, 'type': 2}, 'timescales': ['annual'] },
-                'Avg % Discount': { 'props': {'metric': '%', 'mult': 1, 'type': 2}, 'timescales': ['annual'] },
-                'Avg % Promo Support': { 'props': {'metric': '%', 'mult': 1, 'type': 2}, 'timescales': ['annual'] },
-                'Avg % Volume sold as Promo': { 'props': {'metric': '%', 'mult': 1, 'type': 2}, 'timescales': ['annual'] },
-                'LTT': { 'props': {'metric': '%', 'mult': 1, 'type': 2}, 'timescales': ['annual'] }
+                'Value': { 'props': {'metric': 'Dollar', 'mult': 1000, 'type': 1}, 'timescales': [('annual', 5)]},
+                'EQ Volume': { 'props': {'metric': 'Liter', 'mult': 1000, 'type': 1}, 'timescales': [('annual', 5)]},
+                'Unit Volume': { 'props': {'metric': 'Unit', 'mult': 1000, 'type': 2}, 'timescales': [('annual', 5)]},
+                'Price per EQ': { 'props': {'metric': 'Dollar Per Liter', 'mult': 1, 'type': 1}, 'timescales': [('annual', 5)]},
+                'Price per Unit': { 'props': {'metric': 'Dollar Per Unit', 'mult': 1, 'type': 2}, 'timescales': [('annual', 5)]},
+                'Unit Size': { 'props': {'metric': 'Litter per Unit', 'mult': 1, 'type': 2}, 'timescales': [('annual', 5)]},
+                'Distribution': { 'props': {'metric': 'TDP', 'mult': 1, 'type': 2}, 'timescales': [('annual', 5)] },
+                'Innovation TDP share': { 'props': {'metric': '% of TDP', 'mult': 1, 'type': 2}, 'timescales': [('annual', 5)]},
+                'Premiumization': { 'props': {'metric': 'index', 'mult': 1, 'type': 2}, 'timescales': [('annual', 5)]},
+                'Media Spend': { 'props': {'metric': 'Dollar', 'mult': 1000, 'type': 2}, 'timescales': [('annual', 5)]},
+                'Avg % Discount': { 'props': {'metric': '%', 'mult': 1, 'type': 2}, 'timescales': [('annual', 5)] },
+                'Avg % Promo Support': { 'props': {'metric': '%', 'mult': 1, 'type': 2}, 'timescales': [('annual', 5)] },
+                'Avg % Volume sold as Promo': { 'props': {'metric': '%', 'mult': 1, 'type': 2}, 'timescales': [('annual', 5)]},
+                'LTT': { 'props': {'metric': '%', 'mult': 1, 'type': 2}, 'timescales': [('annual', 5)] },
+                'Above Unit Price': { 'props': {'metric': '%', 'mult': 1, 'type': 2}, 'timescales': [('annual', 5)]},
+
+                'dt_vol_Demographics': {'props': {'type': 4}, 'timescales': [('annual', 1)]},
+                'dt_vol_Economy': {'props': {'type': 4}, 'timescales': [('annual', 1)]},
+                'dt_vol_Innovative Distribution': {'props': {'type': 4}, 'timescales': [('annual', 1)]},
+                'dt_vol_Regular Distribution': {'props': {'type': 4}, 'timescales': [('annual', 1)]},
+                'dt_vol_Price-on-Volume changes': {'props': {'type': 4}, 'timescales': [('annual', 1)]},
+                'dt_vol_Unit Size changes': {'props': {'type': 4}, 'timescales': [('annual', 1)]},
+                'dt_vol_Advertizing': {'props': {'type': 4}, 'timescales': [('annual', 1)]},
+                'dt_vol_Discount changes': {'props': {'type': 4}, 'timescales': [('annual', 1)]},
+                'dt_vol_Promo Support changes': {'props': {'type': 4}, 'timescales': [('annual', 1)]},
+
+                'dt_pr_Inflation': {'props': {'type': 4}, 'timescales': [('annual', 1)]},
+                'dt_pr_Premiumization': {'props': {'type': 4}, 'timescales': [('annual', 1)]},
+                'dt_pr_Unit Size changes': {'props': {'type': 4}, 'timescales': [('annual', 1)]},
+                'dt_pr_Discount changes': {'props': {'type': 4}, 'timescales': [('annual', 1)]},
+                'dt_pr_Promo Support changes': {'props': {'type': 4}, 'timescales': [('annual', 1)]},
+
+                'dec_val_Demographic': {'props': {'type': 4}, 'timescales': [('annual', 4)]},
+                'dec_val_Economy': {'props': {'type': 4}, 'timescales': [('annual', 4)]},
+                'dec_val_Distribution': {'props': {'type': 4}, 'timescales': [('annual', 4)]},
+                'dec_val_Innovation': {'props': {'type': 4}, 'timescales': [('annual', 4)]},
+                'dec_val_Advertising': {'props': {'type': 4}, 'timescales': [('annual', 4)]},
+                'dec_val_Trade & Promo-on-Volume': {'props': {'type': 4}, 'timescales': [('annual', 4)]},
+                'dec_val_Price-on-Volume Impact': {'props': {'type': 4}, 'timescales': [('annual', 4)]},
+                'dec_val_UnitSize-on-Volume Impact': {'props': {'type': 4}, 'timescales': [('annual', 4)]},
+                'dec_val_Inflation': {'props': {'type': 4}, 'timescales': [('annual', 4)]},
+                'dec_val_Manufacturer Pricing': {'props': {'type': 4}, 'timescales': [('annual', 4)]},
+                'dec_val_Premiumization': {'props': {'type': 4}, 'timescales': [('annual', 4)]},
+                'dec_val_Trade & Promo': {'props': {'type': 4}, 'timescales': [('annual', 4)]},
+                'dec_val_Unit Size': {'props': {'type': 4}, 'timescales': [('annual', 4)]},
+                'dec_val_Other': {'props': {'type': 4}, 'timescales': [('annual', 4)]},
+
+                'dec_vol_Demographic': {'props': {'type': 4}, 'timescales': [('annual', 4)]},
+                'dec_vol_Economy': {'props': {'type': 4}, 'timescales': [('annual', 4)]},
+                'dec_vol_Distribution': {'props': {'type': 4}, 'timescales': [('annual', 4)]},
+                'dec_vol_Innovation': {'props': {'type': 4}, 'timescales': [('annual', 4)]},
+                'dec_vol_Advertising': {'props': {'type': 4}, 'timescales': [('annual', 4)]},
+                'dec_vol_Trade & Promo': {'props': {'type': 4}, 'timescales': [('annual', 4)]},
+                'dec_vol_Price-on-Volume Impact': {'props': {'type': 4}, 'timescales': [('annual', 4)]},
+                'dec_vol_UnitSize-on-Volume Impact': {'props': {'type': 4}, 'timescales': [('annual', 4)]},
+                'dec_vol_Long Term Trend': {'props': {'type': 4}, 'timescales': [('annual', 4)]}
             },
             'coefficients': {
-                'Economy Sensitivity': ['annual'],
-                'Innovations Sensitivity': ['annual'],
-                'Regular Distribution Sensitivity': ['annual'],
-                'Unit Price Elasticity': ['annual'],
-                'Unit Size Elasticity': ['annual'],
-                'Advertising Sensitivity': ['annual'],
-                'Trade & Promo Sensitivity': ['annual']
+                'Economy Sensitivity': [('annual', 2)],
+                'Innovations Sensitivity': [('annual', 2)],
+                'Regular Distribution Sensitivity': [('annual', 2)],
+                'Unit Price Elasticity': [('annual', 2)],
+                'Unit Size Elasticity': [('annual', 2)],
+                'Advertising Sensitivity': [('annual', 2)],
+                'Trade & Promo Sensitivity': [('annual', 2)]
+            },
+            'decomposition': {
+                'Value': [
+                    'dec_val_Demographic',
+                    'dec_val_Economy',
+                    'dec_val_Distribution',
+                    'dec_val_Innovation',
+                    'dec_val_Advertising',
+                    'dec_val_Trade & Promo-on-Volume',
+                    'dec_val_Price-on-Volume Impact',
+                    'dec_val_UnitSize-on-Volume Impact',
+                    'dec_val_Inflation',
+                    'dec_val_Manufacturer Pricing',
+                    'dec_val_Premiumization',
+                    'dec_val_Trade & Promo',
+                    'dec_val_Unit Size',
+                    'dec_val_Other'
+                ],
+                'Volume': [
+                    'dec_vol_Demographic',
+                    'dec_vol_Economy',
+                    'dec_vol_Distribution',
+                    'dec_vol_Innovation',
+                    'dec_vol_Advertising',
+                    'dec_vol_Trade & Promo',
+                    'dec_vol_Price-on-Volume Impact',
+                    'dec_vol_UnitSize-on-Volume Impact',
+                    'dec_vol_Long Term Trend'
+                ]
             }
         }
     ],
@@ -821,6 +888,14 @@ dev_template_JJOralCare = {
     ],
     'dev_storage': [
         {
+            'path': ['Germany'],
+            'data': [
+                    {'name': 'Population total', 'ts': 'annual', 'start': '2016','values': [82.23959, 82.6217825, 82.8304]},
+                    {'name': 'CPI', 'ts': 'annual', 'start': '2016','values': [108.478375, 110.614375, 112.4365]},
+                    {'name': 'GDP PC', 'ts': 'annual', 'start': '2016','values': [44043.24, 44724.1, 45222.91]}
+            ]
+        },
+        {
             'path': ['Germany', 'Mouthwash'],
             'coefficients': [
                 {'name': 'Economy Sensitivity', 'ts': 'annual', 'value': 0.23},
@@ -830,6 +905,28 @@ dev_template_JJOralCare = {
                 {'name': 'Unit Size Elasticity', 'ts': 'annual', 'value': 0.22},
                 {'name': 'Advertising Sensitivity', 'ts': 'annual', 'value': 0.02},
                 {'name': 'Trade & Promo Sensitivity', 'ts': 'annual', 'value': 0.05}
+            ],
+            'data': [
+                {'name': 'Price per EQ', 'ts': 'annual', 'start': '2013', 'end': '2016', 'values': [8.386636215, 8.141729635, 7.680938359]},
+                {'name': 'Price per Unit', 'ts': 'annual', 'start': '2013', 'end': '2018', 'values': [3.134247748, 3.070108835, 2.976280282, 2.863626067, 2.818788424, 2.768048625]},
+                {'name': 'Unit Size', 'ts': 'annual', 'start': '2013', 'end': '2018', 'values': [0.373719292, 0.377083123, 0.387489151, 0.390852982, 0.394216812, 0.397580643]},
+                {'name': 'Distribution', 'ts': 'annual', 'start': '2016',  'end': '2018', 'values': [3030.30102, 3101.174971, 3172.048922]},
+                {'name': 'Innovation TDP share', 'ts': 'annual', 'start': '2016', 'end': '2018',  'values': [0.056287547, 0.061205369, 0.066123191]},
+                {'name': 'Premiumization', 'ts': 'annual', 'start': '2016',  'end': '2018', 'values': [0.975903841, 0.967871788, 0.959839735]},
+                {'name': 'Media Spend', 'ts': 'annual', 'start': '2016',  'end': '2018', 'values': [44897.51799, 44390.22082, 43888.6556]},
+                {'name': 'Avg % Discount', 'ts': 'annual', 'start': '2016',  'end': '2018', 'values': [0.073070602, 0.073070602, 0.073070602]},
+                {'name': 'Avg % Promo Support', 'ts': 'annual', 'start': '2016',  'end': '2018', 'values': [0.100664966, 0.100664966, 0.100664966]},
+                {'name': 'LTT', 'ts': 'annual', 'start': '2016',  'end': '2018', 'values': [0.0104958, 0.0104958, 0.0104958]},
+                {'name': 'Above Unit Price', 'ts': 'annual', 'start': '2016',  'end': '2018', 'values': [-0.023345156, -0.023345156, -0.023345156]}
+            ],
+            'insights': ['insight1', 'insight2']
+        },
+        {
+            'path': ['Mexico'],
+            'data': [
+                    {'name': 'Population total', 'ts': 'annual', 'start': '2016','values': [82.23959, 82.6217825, 82.8304]},
+                    {'name': 'CPI', 'ts': 'annual', 'start': '2016','values': [108.478375, 110.614375, 112.4365]},
+                    {'name': 'GDP PC', 'ts': 'annual', 'start': '2016','values': [44043.24, 44724.1, 45222.91]}
             ]
         },
         {
@@ -841,6 +938,27 @@ dev_template_JJOralCare = {
                 {'name': 'Unit Price Elasticity', 'ts': 'annual', 'value': -0.21},
                 {'name': 'Unit Size Elasticity', 'ts': 'annual', 'value': 0.67},
                 {'name': 'Advertising Sensitivity', 'ts': 'annual', 'value': 0.01}
+            ],
+            'data': [
+                {'name': 'Price per EQ', 'ts': 'annual', 'start': '2013', 'end': '2016', 'values': [8.39, 8.14, 7.68]},
+                {'name': 'Price per Unit', 'ts': 'annual', 'start': '2013', 'end': '2018', 'values': [3.13, 3.07, 2.98, 2.86, 2.82, 2.77]},
+                {'name': 'Unit Size', 'ts': 'annual', 'start': '2013', 'end': '2018', 'values': [0.374, 0.377, 0.387, 0.391, 0.394, 0.398]},
+                {'name': 'Distribution', 'ts': 'annual', 'start': '2016',  'end': '2018', 'values': [3030.30102, 3101.174971, 3172.048922]},
+                {'name': 'Innovation TDP share', 'ts': 'annual', 'start': '2016', 'end': '2018',  'values': [0.056287547, 0.061205369, 0.066123191]},
+                {'name': 'Premiumization', 'ts': 'annual', 'start': '2016',  'end': '2018', 'values': [0.975903841, 0.967871788, 0.959839735]},
+                {'name': 'Media Spend', 'ts': 'annual', 'start': '2016',  'end': '2018', 'values': [44897.51799, 44390.22082, 43888.6556]},
+                {'name': 'Avg % Discount', 'ts': 'annual', 'start': '2016',  'end': '2018', 'values': [0.073070602, 0.073070602, 0.073070602]},
+                {'name': 'Avg % Promo Support', 'ts': 'annual', 'start': '2016',  'end': '2018', 'values': [0.100664966, 0.100664966, 0.100664966]},
+                {'name': 'LTT', 'ts': 'annual', 'start': '2016',  'end': '2018', 'values': [0.0104958, 0.0104958, 0.0104958]}
+            ],
+            'insights': ['insight1', 'insight2']
+        },
+        {
+            'path': ['US'],
+            'data': [
+                    {'name': 'Population total', 'ts': 'annual', 'start': '2016','values': [82.23959, 82.6217825, 82.8304]},
+                    {'name': 'CPI', 'ts': 'annual', 'start': '2016','values': [108.478375, 110.614375, 112.4365]},
+                    {'name': 'GDP PC', 'ts': 'annual', 'start': '2016','values': [44043.24, 44724.1, 45222.91]}
             ]
         },
         {
@@ -853,6 +971,27 @@ dev_template_JJOralCare = {
                 {'name': 'Unit Size Elasticity', 'ts': 'annual', 'value': 0.70},
                 {'name': 'Advertising Sensitivity', 'ts': 'annual', 'value': 0.01},
                 {'name': 'Trade & Promo Sensitivity', 'ts': 'annual', 'value': 0.35}
+            ],
+            'data': [
+                {'name': 'Price per EQ', 'ts': 'annual', 'start': '2013', 'end': '2016', 'values': [8.39, 8.14, 7.68]},
+                {'name': 'Price per Unit', 'ts': 'annual', 'start': '2013', 'end': '2018', 'values': [3.13, 3.07, 2.98, 2.86, 2.82, 2.77]},
+                {'name': 'Unit Size', 'ts': 'annual', 'start': '2013', 'end': '2018', 'values': [0.374, 0.377, 0.387, 0.391, 0.394, 0.398]},
+                {'name': 'Distribution', 'ts': 'annual', 'start': '2016',  'end': '2018', 'values': [3030.30102, 3101.174971, 3172.048922]},
+                {'name': 'Innovation TDP share', 'ts': 'annual', 'start': '2016', 'end': '2018',  'values': [0.056287547, 0.061205369, 0.066123191]},
+                {'name': 'Premiumization', 'ts': 'annual', 'start': '2016',  'end': '2018', 'values': [0.975903841, 0.967871788, 0.959839735]},
+                {'name': 'Media Spend', 'ts': 'annual', 'start': '2016',  'end': '2018', 'values': [44897.51799, 44390.22082, 43888.6556]},
+                {'name': 'Avg % Discount', 'ts': 'annual', 'start': '2016',  'end': '2018', 'values': [0.073070602, 0.073070602, 0.073070602]},
+                {'name': 'Avg % Promo Support', 'ts': 'annual', 'start': '2016',  'end': '2018', 'values': [0.100664966, 0.100664966, 0.100664966]},
+                {'name': 'LTT', 'ts': 'annual', 'start': '2016',  'end': '2018', 'values': [0.0104958, 0.0104958, 0.0104958]}
+            ],
+            'insights': ['insight1', 'insight2']
+        },
+        {
+            'path': ['Brazil'],
+            'data': [
+                    {'name': 'Population total', 'ts': 'annual', 'start': '2016','values': [82.23959, 82.6217825, 82.8304]},
+                    {'name': 'CPI', 'ts': 'annual', 'start': '2016','values': [108.478375, 110.614375, 112.4365]},
+                    {'name': 'GDP PC', 'ts': 'annual', 'start': '2016','values': [44043.24, 44724.1, 45222.91]}
             ]
         },
         {
@@ -864,6 +1003,27 @@ dev_template_JJOralCare = {
                 {'name': 'Unit Price Elasticity', 'ts': 'annual', 'value': -0.35},
                 {'name': 'Unit Size Elasticity', 'ts': 'annual', 'value': 0.05},
                 {'name': 'Advertising Sensitivity', 'ts': 'annual', 'value': 0.01}
+            ],
+            'data': [
+                {'name': 'Price per EQ', 'ts': 'annual', 'start': '2013', 'end': '2016', 'values': [8.39, 8.14, 7.68]},
+                {'name': 'Price per Unit', 'ts': 'annual', 'start': '2013', 'end': '2018', 'values': [3.13, 3.07, 2.98, 2.86, 2.82, 2.77]},
+                {'name': 'Unit Size', 'ts': 'annual', 'start': '2013', 'end': '2018', 'values': [0.374, 0.377, 0.387, 0.391, 0.394, 0.398]},
+                {'name': 'Distribution', 'ts': 'annual', 'start': '2016',  'end': '2018', 'values': [3030.30102, 3101.174971, 3172.048922]},
+                {'name': 'Innovation TDP share', 'ts': 'annual', 'start': '2016', 'end': '2018',  'values': [0.056287547, 0.061205369, 0.066123191]},
+                {'name': 'Premiumization', 'ts': 'annual', 'start': '2016',  'end': '2018', 'values': [0.975903841, 0.967871788, 0.959839735]},
+                {'name': 'Media Spend', 'ts': 'annual', 'start': '2016',  'end': '2018', 'values': [44897.51799, 44390.22082, 43888.6556]},
+                {'name': 'Avg % Discount', 'ts': 'annual', 'start': '2016',  'end': '2018', 'values': [0.073070602, 0.073070602, 0.073070602]},
+                {'name': 'Avg % Promo Support', 'ts': 'annual', 'start': '2016',  'end': '2018', 'values': [0.100664966, 0.100664966, 0.100664966]},
+                {'name': 'LTT', 'ts': 'annual', 'start': '2016',  'end': '2018', 'values': [0.0104958, 0.0104958, 0.0104958]}
+            ],
+            'insights': ['insight1', 'insight2']
+        },
+        {
+            'path': ['Italy'],
+            'data': [
+                    {'name': 'Population total', 'ts': 'annual', 'start': '2016','values': [82.23959, 82.6217825, 82.8304]},
+                    {'name': 'CPI', 'ts': 'annual', 'start': '2016','values': [108.478375, 110.614375, 112.4365]},
+                    {'name': 'GDP PC', 'ts': 'annual', 'start': '2016','values': [44043.24, 44724.1, 45222.91]}
             ]
         },
         {
@@ -875,6 +1035,27 @@ dev_template_JJOralCare = {
                 {'name': 'Unit Price Elasticity', 'ts': 'annual', 'value': -0.24},
                 {'name': 'Unit Size Elasticity', 'ts': 'annual', 'value': 0.47},
                 {'name': 'Trade & Promo Sensitivity', 'ts': 'annual', 'value': 0.62}
+            ],
+            'data': [
+                {'name': 'Price per EQ', 'ts': 'annual', 'start': '2013', 'end': '2016', 'values': [8.39, 8.14, 7.68]},
+                {'name': 'Price per Unit', 'ts': 'annual', 'start': '2013', 'end': '2018', 'values': [3.13, 3.07, 2.98, 2.86, 2.82, 2.77]},
+                {'name': 'Unit Size', 'ts': 'annual', 'start': '2013', 'end': '2018', 'values': [0.374, 0.377, 0.387, 0.391, 0.394, 0.398]},
+                {'name': 'Distribution', 'ts': 'annual', 'start': '2016',  'end': '2018', 'values': [3030.30102, 3101.174971, 3172.048922]},
+                {'name': 'Innovation TDP share', 'ts': 'annual', 'start': '2016', 'end': '2018',  'values': [0.056287547, 0.061205369, 0.066123191]},
+                {'name': 'Premiumization', 'ts': 'annual', 'start': '2016',  'end': '2018', 'values': [0.975903841, 0.967871788, 0.959839735]},
+                {'name': 'Media Spend', 'ts': 'annual', 'start': '2016',  'end': '2018', 'values': [44897.51799, 44390.22082, 43888.6556]},
+                {'name': 'Avg % Discount', 'ts': 'annual', 'start': '2016',  'end': '2018', 'values': [0.073070602, 0.073070602, 0.073070602]},
+                {'name': 'Avg % Promo Support', 'ts': 'annual', 'start': '2016',  'end': '2018', 'values': [0.100664966, 0.100664966, 0.100664966]},
+                {'name': 'LTT', 'ts': 'annual', 'start': '2016',  'end': '2018', 'values': [0.0104958, 0.0104958, 0.0104958]}
+            ],
+            'insights': ['insight1', 'insight2']
+        },
+{
+            'path': ['Spain'],
+            'data': [
+                    {'name': 'Population total', 'ts': 'annual', 'start': '2016','values': [82.23959, 82.6217825, 82.8304]},
+                    {'name': 'CPI', 'ts': 'annual', 'start': '2016','values': [108.478375, 110.614375, 112.4365]},
+                    {'name': 'GDP PC', 'ts': 'annual', 'start': '2016','values': [44043.24, 44724.1, 45222.91]}
             ]
         },
         {
@@ -886,6 +1067,27 @@ dev_template_JJOralCare = {
                 {'name': 'Unit Price Elasticity', 'ts': 'annual', 'value': -0.20},
                 {'name': 'Unit Size Elasticity', 'ts': 'annual', 'value': 0.12},
                 {'name': 'Trade & Promo Sensitivity', 'ts': 'annual', 'value': 0.67}
+            ],
+            'data': [
+                {'name': 'Price per EQ', 'ts': 'annual', 'start': '2013', 'end': '2016', 'values': [8.39, 8.14, 7.68]},
+                {'name': 'Price per Unit', 'ts': 'annual', 'start': '2013', 'end': '2018', 'values': [3.13, 3.07, 2.98, 2.86, 2.82, 2.77]},
+                {'name': 'Unit Size', 'ts': 'annual', 'start': '2013', 'end': '2018', 'values': [0.374, 0.377, 0.387, 0.391, 0.394, 0.398]},
+                {'name': 'Distribution', 'ts': 'annual', 'start': '2016',  'end': '2018', 'values': [3030.30102, 3101.174971, 3172.048922]},
+                {'name': 'Innovation TDP share', 'ts': 'annual', 'start': '2016', 'end': '2018',  'values': [0.056287547, 0.061205369, 0.066123191]},
+                {'name': 'Premiumization', 'ts': 'annual', 'start': '2016',  'end': '2018', 'values': [0.975903841, 0.967871788, 0.959839735]},
+                {'name': 'Media Spend', 'ts': 'annual', 'start': '2016',  'end': '2018', 'values': [44897.51799, 44390.22082, 43888.6556]},
+                {'name': 'Avg % Discount', 'ts': 'annual', 'start': '2016',  'end': '2018', 'values': [0.073070602, 0.073070602, 0.073070602]},
+                {'name': 'Avg % Promo Support', 'ts': 'annual', 'start': '2016',  'end': '2018', 'values': [0.100664966, 0.100664966, 0.100664966]},
+                {'name': 'LTT', 'ts': 'annual', 'start': '2016',  'end': '2018', 'values': [0.0104958, 0.0104958, 0.0104958]}
+            ],
+            'insights': ['insight1', 'insight2']
+        },
+        {
+            'path': ['Australia'],
+            'data': [
+                    {'name': 'Population total', 'ts': 'annual', 'start': '2016','values': [82.23959, 82.6217825, 82.8304]},
+                    {'name': 'CPI', 'ts': 'annual', 'start': '2016','values': [108.478375, 110.614375, 112.4365]},
+                    {'name': 'GDP PC', 'ts': 'annual', 'start': '2016','values': [44043.24, 44724.1, 45222.91]}
             ]
         },
         {
@@ -898,6 +1100,27 @@ dev_template_JJOralCare = {
                 {'name': 'Unit Size Elasticity', 'ts': 'annual', 'value': 0.08},
                 {'name': 'Advertising Sensitivity', 'ts': 'annual', 'value': 0.03},
                 {'name': 'Trade & Promo Sensitivity', 'ts': 'annual', 'value': 0.08}
+            ],
+            'data': [
+                {'name': 'Price per EQ', 'ts': 'annual', 'start': '2013', 'end': '2016', 'values': [8.39, 8.14, 7.68]},
+                {'name': 'Price per Unit', 'ts': 'annual', 'start': '2013', 'end': '2018', 'values': [3.13, 3.07, 2.98, 2.86, 2.82, 2.77]},
+                {'name': 'Unit Size', 'ts': 'annual', 'start': '2013', 'end': '2018', 'values': [0.374, 0.377, 0.387, 0.391, 0.394, 0.398]},
+                {'name': 'Distribution', 'ts': 'annual', 'start': '2016',  'end': '2018', 'values': [3030.30102, 3101.174971, 3172.048922]},
+                {'name': 'Innovation TDP share', 'ts': 'annual', 'start': '2016', 'end': '2018',  'values': [0.056287547, 0.061205369, 0.066123191]},
+                {'name': 'Premiumization', 'ts': 'annual', 'start': '2016',  'end': '2018', 'values': [0.975903841, 0.967871788, 0.959839735]},
+                {'name': 'Media Spend', 'ts': 'annual', 'start': '2016',  'end': '2018', 'values': [44897.51799, 44390.22082, 43888.6556]},
+                {'name': 'Avg % Discount', 'ts': 'annual', 'start': '2016',  'end': '2018', 'values': [0.073070602, 0.073070602, 0.073070602]},
+                {'name': 'Avg % Promo Support', 'ts': 'annual', 'start': '2016',  'end': '2018', 'values': [0.100664966, 0.100664966, 0.100664966]},
+                {'name': 'LTT', 'ts': 'annual', 'start': '2016',  'end': '2018', 'values': [0.0104958, 0.0104958, 0.0104958]}
+            ],
+            'insights': ['insight1', 'insight2']
+        },
+        {
+            'path': ['Canada'],
+            'data': [
+                    {'name': 'Population total', 'ts': 'annual', 'start': '2016','values': [82.23959, 82.6217825, 82.8304]},
+                    {'name': 'CPI', 'ts': 'annual', 'start': '2016','values': [108.478375, 110.614375, 112.4365]},
+                    {'name': 'GDP PC', 'ts': 'annual', 'start': '2016','values': [44043.24, 44724.1, 45222.91]}
             ]
         },
         {
@@ -910,6 +1133,27 @@ dev_template_JJOralCare = {
                 {'name': 'Unit Size Elasticity', 'ts': 'annual', 'value': 0.42},
                 {'name': 'Advertising Sensitivity', 'ts': 'annual', 'value': 0.06},
                 {'name': 'Trade & Promo Sensitivity', 'ts': 'annual', 'value': 0.67}
+            ],
+            'data': [
+                {'name': 'Price per EQ', 'ts': 'annual', 'start': '2013', 'end': '2016', 'values': [8.39, 8.14, 7.68]},
+                {'name': 'Price per Unit', 'ts': 'annual', 'start': '2013', 'end': '2018', 'values': [3.13, 3.07, 2.98, 2.86, 2.82, 2.77]},
+                {'name': 'Unit Size', 'ts': 'annual', 'start': '2013', 'end': '2018', 'values': [0.374, 0.377, 0.387, 0.391, 0.394, 0.398]},
+                {'name': 'Distribution', 'ts': 'annual', 'start': '2016',  'end': '2018', 'values': [3030.30102, 3101.174971, 3172.048922]},
+                {'name': 'Innovation TDP share', 'ts': 'annual', 'start': '2016', 'end': '2018',  'values': [0.056287547, 0.061205369, 0.066123191]},
+                {'name': 'Premiumization', 'ts': 'annual', 'start': '2016',  'end': '2018', 'values': [0.975903841, 0.967871788, 0.959839735]},
+                {'name': 'Media Spend', 'ts': 'annual', 'start': '2016',  'end': '2018', 'values': [44897.51799, 44390.22082, 43888.6556]},
+                {'name': 'Avg % Discount', 'ts': 'annual', 'start': '2016',  'end': '2018', 'values': [0.073070602, 0.073070602, 0.073070602]},
+                {'name': 'Avg % Promo Support', 'ts': 'annual', 'start': '2016',  'end': '2018', 'values': [0.100664966, 0.100664966, 0.100664966]},
+                {'name': 'LTT', 'ts': 'annual', 'start': '2016',  'end': '2018', 'values': [0.0104958, 0.0104958, 0.0104958]}
+            ],
+            'insights': ['insight1', 'insight2']
+        },
+        {
+            'path': ['Japan'],
+            'data': [
+                    {'name': 'Population total', 'ts': 'annual', 'start': '2016','values': [82.23959, 82.6217825, 82.8304]},
+                    {'name': 'CPI', 'ts': 'annual', 'start': '2016','values': [108.478375, 110.614375, 112.4365]},
+                    {'name': 'GDP PC', 'ts': 'annual', 'start': '2016','values': [44043.24, 44724.1, 45222.91]}
             ]
         },
         {
@@ -921,6 +1165,27 @@ dev_template_JJOralCare = {
                 {'name': 'Unit Price Elasticity', 'ts': 'annual', 'value': -0.19},
                 {'name': 'Unit Size Elasticity', 'ts': 'annual', 'value': 0.45},
                 {'name': 'Advertising Sensitivity', 'ts': 'annual', 'value': 0.01}
+            ],
+            'data': [
+                {'name': 'Price per EQ', 'ts': 'annual', 'start': '2013', 'end': '2016', 'values': [8.39, 8.14, 7.68]},
+                {'name': 'Price per Unit', 'ts': 'annual', 'start': '2013', 'end': '2018', 'values': [3.13, 3.07, 2.98, 2.86, 2.82, 2.77]},
+                {'name': 'Unit Size', 'ts': 'annual', 'start': '2013', 'end': '2018', 'values': [0.374, 0.377, 0.387, 0.391, 0.394, 0.398]},
+                {'name': 'Distribution', 'ts': 'annual', 'start': '2016',  'end': '2018', 'values': [3030.30102, 3101.174971, 3172.048922]},
+                {'name': 'Innovation TDP share', 'ts': 'annual', 'start': '2016', 'end': '2018',  'values': [0.056287547, 0.061205369, 0.066123191]},
+                {'name': 'Premiumization', 'ts': 'annual', 'start': '2016',  'end': '2018', 'values': [0.975903841, 0.967871788, 0.959839735]},
+                {'name': 'Media Spend', 'ts': 'annual', 'start': '2016',  'end': '2018', 'values': [44897.51799, 44390.22082, 43888.6556]},
+                {'name': 'Avg % Discount', 'ts': 'annual', 'start': '2016',  'end': '2018', 'values': [0.073070602, 0.073070602, 0.073070602]},
+                {'name': 'Avg % Promo Support', 'ts': 'annual', 'start': '2016',  'end': '2018', 'values': [0.100664966, 0.100664966, 0.100664966]},
+                {'name': 'LTT', 'ts': 'annual', 'start': '2016',  'end': '2018', 'values': [0.0104958, 0.0104958, 0.0104958]}
+            ],
+            'insights': ['insight1', 'insight2']
+        },
+{
+            'path': ['UK'],
+            'data': [
+                    {'name': 'Population total', 'ts': 'annual', 'start': '2016','values': [82.23959, 82.6217825, 82.8304]},
+                    {'name': 'CPI', 'ts': 'annual', 'start': '2016','values': [108.478375, 110.614375, 112.4365]},
+                    {'name': 'GDP PC', 'ts': 'annual', 'start': '2016','values': [44043.24, 44724.1, 45222.91]}
             ]
         },
         {
@@ -933,7 +1198,20 @@ dev_template_JJOralCare = {
                 {'name': 'Unit Size Elasticity', 'ts': 'annual', 'value': 0.13},
                 {'name': 'Advertising Sensitivity', 'ts': 'annual', 'value': 0.08},
                 {'name': 'Trade & Promo Sensitivity', 'ts': 'annual', 'value': 0.10}
-            ]
+            ],
+            'data': [
+                {'name': 'Price per EQ', 'ts': 'annual', 'start': '2013', 'end': '2016', 'values': [8.39, 8.14, 7.68]},
+                {'name': 'Price per Unit', 'ts': 'annual', 'start': '2013', 'end': '2018', 'values': [3.13, 3.07, 2.98, 2.86, 2.82, 2.77]},
+                {'name': 'Unit Size', 'ts': 'annual', 'start': '2013', 'end': '2018', 'values': [0.374, 0.377, 0.387, 0.391, 0.394, 0.398]},
+                {'name': 'Distribution', 'ts': 'annual', 'start': '2016',  'end': '2018', 'values': [3030.30102, 3101.174971, 3172.048922]},
+                {'name': 'Innovation TDP share', 'ts': 'annual', 'start': '2016', 'end': '2018',  'values': [0.056287547, 0.061205369, 0.066123191]},
+                {'name': 'Premiumization', 'ts': 'annual', 'start': '2016',  'end': '2018', 'values': [0.975903841, 0.967871788, 0.959839735]},
+                {'name': 'Media Spend', 'ts': 'annual', 'start': '2016',  'end': '2018', 'values': [44897.51799, 44390.22082, 43888.6556]},
+                {'name': 'Avg % Discount', 'ts': 'annual', 'start': '2016',  'end': '2018', 'values': [0.073070602, 0.073070602, 0.073070602]},
+                {'name': 'Avg % Promo Support', 'ts': 'annual', 'start': '2016',  'end': '2018', 'values': [0.100664966, 0.100664966, 0.100664966]},
+                {'name': 'LTT', 'ts': 'annual', 'start': '2016',  'end': '2018', 'values': [0.0104958, 0.0104958, 0.0104958]}
+            ],
+            'insights': ['insight1', 'insight2']
         }
 
     ]

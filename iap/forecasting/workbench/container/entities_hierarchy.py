@@ -1,4 +1,4 @@
-from ....common.helper_lib import Meta
+from ....common.helper_lib import Meta, is_equal_meta
 
 class Node:
 
@@ -36,7 +36,6 @@ class Node:
         return new_child
 
     def get_node_by_path(self, path):
-        # TODO Rewrite (DR)
         if len(path) == 0:
             return self
         elif self.children:
@@ -58,3 +57,19 @@ class Node:
         if len(self.parents) != 1:
             raise Exception
         self.parents[0].get_path(path, metas)
+
+    def get_children_by_meta(self, meta_filter, nodes_ids):
+        for child in self.children:
+            if is_equal_meta(child.meta, meta_filter):
+                nodes_ids.append(child.id)
+            child.get_children_by_meta(meta_filter, nodes_ids)
+        return
+
+    def get_parent_by_meta(self, meta_filter):
+        for parent in self.parents:
+            if is_equal_meta(parent.meta, meta_filter):
+                return parent
+            res = parent.get_parent_by_meta(meta_filter)
+            if res is not None:
+                return res
+        return None

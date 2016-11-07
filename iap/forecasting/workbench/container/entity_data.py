@@ -1,6 +1,13 @@
 import copy
 from enum import IntEnum, unique
-from .. import exceptions as ex
+
+
+@unique
+class DataType(IntEnum):
+    empty = 0
+    time_series = 1
+    scalar = 2
+    period_series = 4
 
 
 @unique
@@ -9,193 +16,188 @@ class VariableType(IntEnum):
     is_driver = 2
 
 
-VAR_PROPERTIES = [
-    'metric',
-    'mult',
-    'type'
-]
-
-
 class EntityData:
     def __init__(self, time_manager):
         self.time_manager = time_manager
-        self._var_properties = {}
-        self._coeff_properties = {}
         self._variables = {}
-        self._coefficients = {}
-        self._decomposition = {}
-
-    @property
-    def variables_names(self):
-        return list(self._var_properties.keys())
-
-    @property
-    def variables_properties(self):
-        return [{**self._var_properties[name], **dict(name=name)}
-                for name in self._var_properties.keys()]
-
-    @property
-    def coefficients_names(self):
-        return list(self._coeff_properties.keys())
-
-    def add_variable(self, name, properties):
-        if name in self._var_properties:
-            raise Exception
-        self._var_properties[name] = {x: None for x in VAR_PROPERTIES}
-
-        for key, value in properties.items():
-            if key in VAR_PROPERTIES:
-                if key == 'type':
-                    self._var_properties[name][key] = VariableType(value)
-                else:
-                    self._var_properties[name][key] = value
-
-    def add_coefficient(self, name):
-        if name in self._coeff_properties:
-            raise Exception
-        self._coeff_properties[name] = dict()
-
-    def rename_variable(self, old_name, new_name):
-        raise NotImplementedError
-        #if new_name in self._variables:
-        #    # return Exception
-        #    return ex.EdAlreadyExistentVarName(new_name)
-        #self._variables[new_name] = self._get_var(old_name)
-        #self._variables.pop(old_name)
-
-    ##def get_default_value(self, var_name):
-    #    raise NotImplementedError
-    #    #return self._get_var(var_name)['default_value']
-
-    def does_contain_ts(self, var_name, ts_name):
-        ts = self._variables.get((var_name, ts_name), None)
-        if ts is not None:
-            return True
-        return False
-
-    def add_time_series(self, var_name, ts_name):
-        var_props = self._var_properties.get(var_name, None)
-        if var_props is None:
-            raise Exception
-        ts = self._variables.get((var_name, ts_name), None)
-        if ts is not None:
-            raise Exception
-        length = self.time_manager.get_time_length(ts_name)
-
-        ts_data = dict(var_name=var_name, ts_name=ts_name,
-                       values=[0]*length,
-                       growth_rates=[0]*length, changes=dict())
-        self._variables[(var_name, ts_name)] = ts_data
-
-    def get_values(self, var_name, ts_name, period):
-        ts = self._variables.get((var_name, ts_name), None)
-        if ts is None:
-            raise Exception
-        return self._get_ts_segment(ts['values'], period, ts_name)
-
-    def get_growth_rates(self, var_name, ts_name, period):
-        ts = self._variables.get((var_name, ts_name), None)
-        if ts is None:
-            raise Exception
-        return self._get_ts_segment(ts['growth_rates'], period, ts_name)
-
-    def set_values(self, var_name, ts_name, values, start_label=None):
-        ts = self._variables.get((var_name, ts_name), None)
-        if ts is None:
-            raise Exception
-        self._set_ts_segment(ts['values'], values, ts_name, start_label)
-
-    def set_growth_rates(self, var_name, ts_name, start_label, values):
-        ts = self._variables.get((var_name, ts_name), None)
-        if ts is None:
-            raise Exception
-        self._set_ts_segment(ts['growth_rates'], values, start_label, ts_name)
-
-    def get_growth(self, var_name, ts_name, period):
-        ts = self._variables.get((var_name, ts_name), None)
-        if ts is None:
-            raise Exception
-        growth = ts['changes'].get(period)
-        return growth
-
-    def set_growth(self, var_name, ts_name, period, value):
-        ts = self._variables.get((var_name, ts_name), None)
-        if ts is None:
-            raise Exception
-        ts['changes'][period] = value
-        return
-
-    def get_coeff_value(self, coeff_name, ts_name):
-        try:
-            return self._coefficients[(coeff_name, ts_name)]['value']
-        except KeyError:
-            raise Exception
-
-    def set_coeff_value(self, coeff_name, ts_name, value):
-        if (coeff_name, ts_name) in self._coefficients:
-            self._coefficients[(coeff_name, ts_name)]['value'] = value
-        else:
-            coeff_props = self._coeff_properties.get(coeff_name, None)
-            if coeff_props is None:
-                raise Exception
-            self._coefficients[(coeff_name, ts_name)] = \
-                dict(coeff_name=coeff_name, ts_name=ts_name, value=value)
-
-    def get_decomposition(self, period):
-        return None
+        self._time_series = {}
+        self._scalars = {}
+        self._periods_series = {}
 
     def get_backup(self):
-        var_values = [dict(var_name=val['var_name'], ts_name=val['ts_name'],
-                           values=copy.copy(val['values']))
-                      for key, val in self._variables.items()]
-        coeff_values = [dict(coeff_name=val['coeff_name'],
-                             ts_name=val['ts_name'], value=val['value'])
-                        for key, val in self._coefficients.items()]
-        backup = dict(var_properties=self._var_properties,
-                      coeff_properties=self._coeff_properties,
-                      var_values=var_values,
-                      coeff_values=coeff_values)
+        # Variables.
+        var_properties = []
+        for var_name, props in self._variables.items():
+            for prop_name, prop_value in props.items():
+                var_properties.append((dict(var=var_name, prop=prop_name,
+                                            value=prop_value)))
+        # Time series.
+        time_series = [dict(var=var_ts[0], ts=var_ts[1], line=copy.copy(line))
+                       for var_ts, line in self._time_series.items()]
+        # Scalars.
+        scalars = [dict(var=var_ts[0], ts=var_ts[1], value=val)
+                   for var_ts, val in self._scalars.items()]
+        # Period series.
+        period_series = []
+        for var_ts, periods in self._periods_series.items():
+            for period, value in periods.items():
+                period_series.append(dict(var=var_ts[0], ts=var_ts[1],
+                                          period=period, value=value))
+        # Collect backup.
+        backup = dict(var_properties=var_properties,
+                      time_series=time_series,
+                      scalars=scalars,
+                      periods_series=period_series)
         return backup
 
     def load_backup(self, backup):
-        for name, props in backup['var_properties'].items():
-            self.add_variable(name, props)
-        for name, props in backup['coeff_properties'].items():
-            self.add_coefficient(name)
-        for item in backup['var_values']:
-            self.add_time_series(item['var_name'], item['ts_name'])
-            self.set_values(item['var_name'], item['ts_name'], item['values'])
-        for item in backup['coeff_values']:
-            self.set_coeff_value(item['coeff_name'], item['ts_name'],
-                                 item['value'])
+        try:
+            # Variables.
+            for item in backup['var_properties']:
+                self.add_variable(item['var'])
+                self.set_var_property(item['var'], item['prop'], item['value'])
+            # Time series.
+            for item in backup['time_series']:
+                self.init_slot(item['var'], item['ts'], DataType.time_series)
+                self.set_ts_vals(item['var'], item['ts'], item['line'])
+            # Scalars.
+            for item in backup['scalars']:
+                self.init_slot(item['var'], item['ts'], DataType.scalar)
+                self.set_scalar_val(item['var'], item['ts'], item['value'])
+            # Period series.
+            for item in backup['periods_series']:
+                if not self.is_exist(item['var'], item['ts'],
+                                     DataType.period_series):
+                    self.init_slot(item['var'], item['ts'],
+                                   DataType.period_series)
+                self.set_period_val(item['var'], item['ts'], item['period'],
+                                    item['value'])
+        except KeyError:
+            raise Exception
         return
 
-    def _get_ts_segment(self, time_series, period, timescale_name):
+    @property
+    def var_names(self):
+        return self._variables.keys()
+
+    def add_variable(self, var_name):
+        if var_name not in self._variables:
+            self._variables[var_name] = dict()
+
+    def get_var_properties(self, var_name):
+        return copy.copy(self._variables[var_name])
+
+    def get_var_property(self, var_name, prop_name):
+        var_props = self._variables.get(var_name)
+        if var_props is not None:
+            return var_props.get(prop_name)
+        else:
+            return None
+
+    def set_var_property(self, var_name, prop_name, value):
+        if var_name not in self._variables:
+            raise Exception
+        self._variables[var_name][prop_name] = value
+        return
+
+    def rename_variable(self, old_name, new_name):
+        pass
+
+    def is_exist(self, var_name, ts_name, data_type):
+        if data_type == DataType.time_series:
+            return (var_name, ts_name) in self._time_series
+        elif data_type == DataType.scalar:
+            return (var_name, ts_name) in self._scalars
+        elif data_type == DataType.period_series:
+            return (var_name, ts_name) in self._periods_series
+        else:
+            raise Exception
+
+    def init_slot(self, var_name, ts_name, data_type):
+        if data_type == DataType.time_series:
+            def_value = self.get_var_property(var_name, 'default_value')
+            if def_value is None:
+                def_value = 0
+            length = self.time_manager.get_time_length(ts_name)
+            self._time_series[(var_name, ts_name)] = [def_value] * length
+        elif data_type == DataType.scalar:
+            def_value = self.get_var_property(var_name, 'default_value')
+            if def_value is None:
+                def_value = 0
+            self._scalars[(var_name, ts_name)] = def_value
+        elif data_type == DataType.period_series:
+            self._periods_series[(var_name, ts_name)] = dict()
+        else:
+            raise Exception
+
+    def get_ts_vals(self, var_name, ts_name, period, length):
+        # Get time series.
+        ts = self._time_series.get((var_name, ts_name))
+        if ts is None:
+            raise Exception
         # Define borders.
         start_index = 0
         if period[0] is not None:
             start_index = \
-                self.time_manager.get_index(timescale_name, period[0])
-        end_index = len(time_series)
-        if period[1] is None:
+                self.time_manager.get_index(ts_name, period[0])
+        end_index = len(ts)
+        if period[1] is not None:
             end_index = \
-                self.time_manager.get_index(timescale_name, period[1])
+                self.time_manager.get_index(ts_name, period[1])
+        elif length is not None:
+            end_index = start_index + length
         # Check indexes correctness
-        if start_index > end_index:
+        if start_index > end_index or end_index > len(ts):
             raise Exception
         # Return requested segment.
-        return time_series[start_index:end_index]
+        return ts[start_index:end_index]
 
-    def _set_ts_segment(self, time_series, values, timescale_name,
-                        start_label):
+    def set_ts_vals(self, var_name, ts_name, values, stamp=None):
+        # Get time series.
+        ts = self._time_series.get((var_name, ts_name))
+        if ts is None:
+            raise Exception
         # Define borders.
         start_index = 0
-        if start_label is not None:
+        if stamp is not None:
             start_index = \
-                self.time_manager.get_index(timescale_name, start_label)
+                self.time_manager.get_index(ts_name, stamp)
         end_index = len(values) + start_index
         # Check index.
-        if end_index > len(time_series):
+        if end_index > len(ts):
             raise Exception
         # Set values.
-        time_series[start_index:end_index] = values
+        ts[start_index:end_index] = values
+
+    def get_scalar_val(self, var_name, ts_name):
+        scalar = self._scalars.get((var_name, ts_name))
+        if scalar is None:
+            raise Exception
+        return scalar
+
+    def set_scalar_val(self, var_name, ts_name, value):
+        if (var_name, ts_name) in self._scalars:
+            self._scalars[(var_name, ts_name)] = value
+        else:
+            raise Exception
+        return
+
+    def get_all_periods(self, var_name, ts_name):
+        ps = self._periods_series.get((var_name, ts_name))
+        if ps is not None:
+            return ps.keys()
+        else:
+            return []
+
+    def get_period_val(self, var_name, ts_name, period):
+        ps = self._periods_series.get((var_name, ts_name))
+        if ps is None:
+            raise Exception
+        return ps.get(period)
+
+    def set_period_val(self, var_name, ts_name, period, value):
+        ps = self._periods_series.get((var_name, ts_name))
+        if ps is None:
+            raise Exception
+        ps[period] = value
+        return

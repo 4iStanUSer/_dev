@@ -2,9 +2,12 @@ from pyramid.renderers import render_to_response
 
 from ...common.helper_lib import send_success_response, send_error_response
 from ..workbench.services import data_getters as getter_service
+from ..workbench.services import calculate as calc_service
 from ...common import exceptions as ex
 from ...common.error_manager import ErrorManager
 from ...common import rt_storage
+
+from ...common.calc_instructions import JJOralCare_queue_instructions as instructions
 
 
 
@@ -222,26 +225,47 @@ def get_dashboard_data(req):
         return send_error_response(msg)
     try:
         wb = rt_storage.get_wb(user_id, TOOL)
-        data = getter_service.get_entity_data(wb.container, wb.config, entity_id)
+        data = getter_service.get_entity_data(wb.container, wb.config,
+                                              entity_id)
         return send_success_response(data)
     except Exception as e:
         msg = ErrorManager.get_error_message(e)
         return send_error_response(msg)
 
 
-def get_dashboard_data_for_period(req):
+def get_cagrs_for_period(req):
+    # Get parameters from request.
     try:
-        user_id = req['user']
-        entity_id = req.json_body['entity_id']
+        user_id = req.user
+        entities_ids = req.json_body['entities_ids']
         period = (req.json_body['period'][0], req.json_body['period'][1])
     except KeyError:
         msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
         return send_error_response(msg)
     try:
         wb = rt_storage.get_wb(user_id, TOOL)
-        dec = getter_service.get_decomposition(wb.container, wb.config, entity_id, period)
-        cagrs = getter_service.get_cagrs(wb.container, wb.config, entity_id, period)
-        return send_success_response(dict(dec=dec, cagrs=cagrs))
+        cagrs = getter_service.get_cagrs(wb.container, wb.config, entities_ids,
+                                         period)
+        return send_success_response(cagrs)
+    except Exception as e:
+        msg = ErrorManager.get_error_message(e)
+        return send_error_response(msg)
+
+
+def get_decomposition_for_period(req):
+    # Get parameters from request.
+    try:
+        user_id = req.user
+        entities_ids = req.json_body['entities_ids']
+        period = (req.json_body['period'][0], req.json_body['period'][1])
+    except KeyError:
+        msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
+        return send_error_response(msg)
+    try:
+        wb = rt_storage.get_wb(user_id, TOOL)
+        dec_data = getter_service.get_decomposition(wb.container, wb.config,
+                                                    entities_ids, period)
+        return send_success_response(dec_data)
     except Exception as e:
         msg = ErrorManager.get_error_message(e)
         return send_error_response(msg)

@@ -15,6 +15,7 @@ from ..repository.interface.imanage_access import IManageAccess
 from ..repository import persistent_storage
 from ..forecasting.workbench.workbench import Workbench
 from ..common.dev_template import dev_template_JJLean, dev_template_JJOralCare
+from ..common.calc_instructions import JJOralCare_queue_instructions
 
 def usage(argv):
     cmd = os.path.basename(argv[0])
@@ -51,7 +52,7 @@ def main(argv=sys.argv):
 
         wh = Warehouse(session_factory)
         loader = Loader(wh)
-        loader.run_processing('JJLean')
+        #loader.run_processing('JJLean')
         loader.run_processing('JJOralCare')
         transaction.manager.commit()
 

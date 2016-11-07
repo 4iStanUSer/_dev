@@ -1,6 +1,5 @@
 import copy
 
-
 class Configuration(dict):
 
     def load(self, data):
@@ -10,7 +9,6 @@ class Configuration(dict):
 
     def save(self):
         return copy.copy(self)
-
 
 
 

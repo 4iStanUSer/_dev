@@ -82,10 +82,16 @@ def forecast_routing(config):
                     route_name='forecast.get_dashboard_data',
                     request_method='POST', renderer='json')
 
-    config.add_route('forecast.get_dashboard_data_for_period',
-                     '/get_dashboard_data_for_period')
-    config.add_view(forecast.get_dashboard_data_for_period,
-                    route_name='forecast.get_dashboard_data_for_period',
+    config.add_route('forecast.get_cagrs_for_period',
+                     '/get_cagrs_for_period')
+    config.add_view(forecast.get_cagrs_for_period,
+                    route_name='forecast.get_cagrs_for_period',
+                    request_method='POST', renderer='json')
+
+    config.add_route('forecast.get_decomposition_for_period',
+                     '/get_decomposition_for_period')
+    config.add_view(forecast.get_decomposition_for_period,
+                    route_name='forecast.get_decomposition_for_period',
                     request_method='POST', renderer='json')
 
 

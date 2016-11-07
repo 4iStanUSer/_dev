@@ -6,6 +6,13 @@ class TimeLineManager:
         self._timescales = []
         self._period_alias = dict()
 
+    def get_backup(self):
+        return dict(timescales=self._timescales, alias=self._period_alias)
+
+    def load_backup(self, backup):
+        self._timescales = backup['timescales']
+        self._period_alias = backup['alias']
+
     def load_timelines(self, ts_names, alias, top_ts_points):
         self._timescales = [dict(name=x, timeline=[]) for x in ts_names]
         for period_name, ts_borders in alias.items():
@@ -116,9 +123,21 @@ class TimeLineManager:
     def get_period_by_alias(self, ts_name, period_alias):
         return self._period_alias[period_alias][ts_name]
 
-    def get_backup(self):
-        return dict(timescales=self._timescales, alias=self._period_alias)
+    def get_growth_periods(self, ts_name, period=None):
+        # TODO rework (DR).
+        if period is None:
+            ts = self._get_ts(ts_name)[0]
+            start = ts['timeline'][0]['name_full']
+            end = ts['timeline'][-1]['name_short']
+        else:
+            start = period[0]
+            end = period[1]
 
-    def load_backup(self, backup):
-        self._timescales = backup['timescales']
-        self._period_alias = backup['alias']
+        periods = []
+        if ts_name == 'annual':
+            start_ind = self.get_index(ts_name, start)
+            end_ind = self.get_index(ts_name, end)
+            for i in range(start_ind + 1, end_ind + 1):
+                periods.append((self.get_label(ts_name, i - 1),
+                                self.get_label(ts_name, i)))
+        return periods

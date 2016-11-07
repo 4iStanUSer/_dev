@@ -2,21 +2,13 @@ from .base import CalculationBase
 
 class CM_Delay(CalculationBase):
     # TODO add description
-    def __init__(self):
-        self.runs_counter = 0
-        self.prev_values = None
-
-    def load_parameters(self, parameters):
-        # TODO add description
+    def __init__(self, immutable_parameters):
         try:
-            self._delay = int(parameters['delay'])
-            self.prev_values = [0] * self.delay
+            self._delay = immutable_parameters['delay']
+            self.runs_counter = 0
+            self.prev_values = [0] * self._delay
         except KeyError:
             raise Exception
-            # TODO define custom exception
-        except ValueError:
-            raise Exception
-            # TODO define custom exception
 
     def run(self):
         # TODO add description
@@ -29,6 +21,10 @@ class CM_Delay(CalculationBase):
         except ZeroDivisionError as e:
             raise e
 
+    def clean(self):
+        self.runs_counter = 0
+        for i in range(len(self.prev_values)):
+            self.prev_values[i] = 0
 
 class CM_AutoSum(CalculationBase):
 
@@ -163,5 +159,26 @@ class CM_PromoCalculator(CalculationBase):
     #Promo parameters - string
 
 
+class CM_Delay_Switch(CalculationBase):
+    # TODO add description
+    def __init__(self, immutable_parameters):
+        try:
+            self._delay = immutable_parameters['delay']
+            self.runs_counter = 0
+            self.prev_value = 0
+        except KeyError:
+            raise Exception
 
+    def run(self):
 
+        if self.runs_counter == 0:
+            self.prev_value = self.input[0]
+        elif self.runs_counter == 1:
+            self.output[0] = self.prev_value
+        else:
+            self.output[0] = self.input[1]
+        self.runs_counter += 1
+
+    def clean(self):
+        self.runs_counter = 0
+        self.prev_value = 0
