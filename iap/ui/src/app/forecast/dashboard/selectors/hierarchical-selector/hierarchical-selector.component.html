@@ -1,3 +1,42 @@
-<p>
-  hierarchical-selector works!
-</p>
+<div>
+
+    <div class="items">
+        <div>
+            <h3>{{ lang['search_title'] }}</h3>
+            <input [ngModel]="searchText" (ngModelChange)="onSearchTextChange($event)" [attr.placeholder]="lang['search_placeholder']">
+            <span *ngIf="searchText && searchText.length" (click)="onSearchTextChange(null)" [attr.title]="lang['search_clear']" class="clear-button">X</span>
+        </div>
+
+        <div>
+            <h3>{{ lang['items_title'] }}</h3>
+
+            <ul *ngIf="itemsToShow.length > 0">
+                <li *ngFor="let item of itemsToShow" [class.active]="item.isSelected" >
+                    <input type="checkbox" [ngModel]="item.isSelected" (click)="onItemClick(item)" >
+                    <span *ngFor="let i of range(item.depth)">&nbsp;&nbsp;</span>
+
+                    {{ item.name }}
+
+                    <span *ngIf="!(searchText && searchText.length) && item.children.length > 0" (click)="changeExpandStatus(item)">
+                        <span *ngIf="item.isExpanded">-</span>
+                        <span *ngIf="!item.isExpanded">+</span>
+                    </span>
+                </li>
+            </ul>
+            <span *ngIf="itemsToShow.length == 0">{{ lang['not_found_items'] }}</span>
+        </div>
+
+    </div>
+
+
+    <div class="selected">
+        <h3>{{ lang['selected_title'] }}</h3>
+        <ul>
+            <li *ngFor="let item_id of model.selected">
+                {{ model['items'][item_id]['name'] }}
+                <span (click)="onDeselectItemClick(item_id)">X</span>
+            </li>
+        </ul>
+    </div>
+
+</div>
