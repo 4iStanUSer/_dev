@@ -16,6 +16,9 @@ export class SelectorItemModel {
     id: string = null; //number|
     name: string = null;
     isSelected: boolean = false;
+    isHidden: boolean = false;
+    isExpanded: boolean = true;
+    depth: number = 0;
     icon?: string = null;
     disabled?: boolean = false;
 
@@ -33,7 +36,54 @@ export class SelectorItemModel {
     addParent(parent: SelectorItemModel) {
         this.parent = parent;
         this.parent.children.push(this);
+        this.depth = this.parent.depth + 1;
     }
+
+    changeExpandStatus() {
+        if (this.children && this.children.length) {
+            let expandStatus = !this.isExpanded;
+            this.isExpanded = expandStatus;
+
+            this.children.forEach((child: SelectorItemModel) => {
+                if (false === expandStatus) {
+                    child.hideToBottom();
+                } else {
+                    child.showToBottom();
+                }
+            });
+        }
+    }
+
+    showToBottom() {
+        this.isHidden = false;
+        if (this.children && this.children.length) {
+            this.children.forEach((child: SelectorItemModel) => {
+                if (this.isExpanded) {
+                    child.showToBottom();
+                } else {
+                    child.hideToBottom();
+                }
+            });
+        }
+    }
+
+    hideToBottom() {
+        this.isHidden = true;
+        if (this.children && this.children.length) {
+            this.children.forEach((child: SelectorItemModel) => {
+                child.hideToBottom();
+            });
+        }
+    }
+
+    showToUp() {
+        this.isHidden = false;
+        if (this.parent) {
+            this.parent.showToUp();
+        }
+    }
+
+
 }
 export class SelectorModel {
     key: string;
@@ -47,6 +97,8 @@ export class SelectorModel {
 
     items: {[item_id: string]: SelectorItemModel};
 
+    flatListItems: Array<string> = null;
+
     selected: Array<string> = []; // SelectorItemModel
 
     rootItems: Array<string> = [];
@@ -57,6 +109,8 @@ export class SelectorModel {
     setData(items: Array<SelectorItemInput>): void {
         let rels = {};
         this.items = {};
+        this.rootItems = [];
+
         // fill items storage
         for (let i = 0; i < items.length; i++) {
             let id = items[i]['id'].toString();
@@ -77,6 +131,8 @@ export class SelectorModel {
             let parent_id = rels[id];
             this.items[id].addParent(this.items[parent_id]);
         }
+
+        this.flatListItems = this.getFlat(this.getFirstLevelItems());
     }
 
     forceSelect(ids: Array<string>): void {
@@ -90,16 +146,6 @@ export class SelectorModel {
         this.select(toSelect);
         this.deselect(toDeselect);
         this.fixSelection();
-    }
-
-    private fixSelection() {
-        this.selected = this.selected.filter((id) => {
-            return !!(this.items[id]);
-        }, this);
-        if (!this.multiple && this.selected.length > 1) {
-            let toDeselect = this.selected.slice(1, this.selected.length);
-            this.deselect(toDeselect);
-        }
     }
 
     select(ids: Array<string>): void {
@@ -139,4 +185,39 @@ export class SelectorModel {
             return this.items[id];
         }, this);
     }
+
+    getFlatListItems() {
+        return this.flatListItems.map((id) => {
+            return this.items[id];
+        }, this);
+    }
+
+    private fixSelection() {
+        this.selected = this.selected.filter((id) => {
+            return !!(this.items[id]);
+        }, this);
+        if (!this.multiple && this.selected.length > 1) {
+            let toDeselect = this.selected.slice(1, this.selected.length);
+            this.deselect(toDeselect);
+        }
+    }
+
+    private getFlat(inputList: Array<SelectorItemModel>) : Array<string> {
+        let outputList: Array<string> = [];
+        for (let i = 0; i < inputList.length; i++) {
+            if (inputList[i]) {
+                outputList.push(inputList[i].id);
+                if (inputList[i].children && inputList[i].children.length > 0){
+                    let children = this.getFlat(inputList[i].children);
+                    // console.log(children);
+                    if (children && children.length) {
+                        outputList = outputList.concat(children);
+                    }
+                }
+            }
+        }
+        return outputList;
+    }
+
+
 }
