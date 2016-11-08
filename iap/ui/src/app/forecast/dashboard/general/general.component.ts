@@ -13,4 +13,8 @@ export class GeneralComponent implements OnInit {
     ngOnInit() {
     }
 
+
+    buttonsGroupChanged(changes: Object) {
+        console.log(changes);
+    }
 }

@@ -3,3 +3,10 @@
     [data-model]="dm.dataModel"
     [data-config]="dm.forecastSectionDataConfig"
 ></forecast-section>
+
+
+<buttons-group
+    *ngIf="dm.buttonsGroupData"
+    [data]="dm.buttonsGroupData"
+    (change)="buttonsGroupChanged($event)"
+></buttons-group>

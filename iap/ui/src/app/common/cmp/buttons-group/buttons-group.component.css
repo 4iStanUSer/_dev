@@ -1,0 +1,15 @@
+.wrapper,
+.wrapper > div {
+    display: inline-block;
+}
+.wrapper > div {
+    background-color: #5e5e5e;
+    cursor: pointer;
+    padding: 5px 10px;
+}
+.wrapper > div + div {
+    border-left: 1px solid #000;
+}
+.wrapper > div.active {
+    background-color: #888888;
+}

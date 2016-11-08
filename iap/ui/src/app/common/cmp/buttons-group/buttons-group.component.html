@@ -1,0 +1,7 @@
+<div class="wrapper">
+
+    <div *ngFor="let button of data; let i = index" (click)="onButtonClick(i)" [class.active]="i == selected">
+        {{ button['name'] }}
+    </div>
+
+</div>
