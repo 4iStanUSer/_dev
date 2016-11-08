@@ -815,7 +815,23 @@ export class DataManagerService {
         }
     };
 
-
+    buttonsGroupData = [
+        {
+            id: 1,
+            name: 'Value',
+            selected: true
+        },
+        {
+            id: 2,
+            name: 'Volume',
+            selected: false
+        },
+        {
+            id: 3,
+            name: 'Price',
+            selected: false
+        }
+    ];
 
 
 

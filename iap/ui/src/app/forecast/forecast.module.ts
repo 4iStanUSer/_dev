@@ -32,8 +32,8 @@ import {GeneralComponent} from './dashboard/general/general.component';
 import {DriverDetailComponent} from './dashboard/driver-detail/driver-detail.component';
 import {DriverSummaryComponent} from './dashboard/driver-summary/driver-summary.component';
 import {InsightsComponent} from './dashboard/insights/insights.component';
-import { RegionSelectorComponent } from './dashboard/selectors/region-selector/region-selector.component';
-
+import {RegionSelectorComponent} from './dashboard/selectors/region-selector/region-selector.component';
+import {ButtonsGroupComponent} from './../common/cmp/buttons-group/buttons-group.component';
 
 @NgModule({
     imports: [
@@ -73,6 +73,7 @@ import { RegionSelectorComponent } from './dashboard/selectors/region-selector/r
         RangeSliderComponent,
         TimeSelectorComponent,
         RegionSelectorComponent,
+        ButtonsGroupComponent
     ],
     providers: [
         CommonServicesModule,
