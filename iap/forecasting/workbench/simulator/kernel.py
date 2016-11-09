@@ -153,6 +153,8 @@ class CalculationKernel:
             # Calculate number of tacts.
             start = cont.timeline.get_index(queue.inp_timescale, queue.period[0])
             end = cont.timeline.get_index(queue.inp_timescale, queue.period[1])
+
+
             queue.total_runs_count = end - start + 1
 
             #ts_adjust = cont.timeline.get_line_divider(queue.inp_timescale,
