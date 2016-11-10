@@ -1,9 +1,28 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {DataManagerService, Period} from './data-manager.service';
-import {StaticDataService} from "../../common/service/static-data.service";
-import {StateService, PageState} from "../../common/service/state.service";
-import {WaterfallChartComponent} from "../../common/cmp/waterfall-chart/waterfall-chart.component";
+import {DataManagerService} from './data-manager.service';
 
+@Component({
+    templateUrl: './dashboard.component.html',
+    styleUrls: ['./dashboard.component.css']
+})
+export class DashboardComponent implements OnInit {
+
+    constructor(private dm: DataManagerService) {
+        // console.log('DashboardComponent');
+        // this.dm.isFilled.subscribe((a) => {
+        //     console.log(a);
+        // });
+    }
+
+    ngOnInit() {
+
+
+    }
+
+}
+
+
+/*
 @Component({
     templateUrl: './dashboard.component.html',
     styleUrls: ['./dashboard.component.css']
@@ -48,7 +67,7 @@ export class DashboardComponent implements OnInit {
     public summaryOutputsShortData: Array<Object> = null;
     public summaryDecompData: Object = null;
 
-    /*---valueOrGrowthSwitch---*/
+
     public absOrRate: string = 'rate';
     public absOrRateSwitchData: Array<Object> = [
         {
@@ -85,10 +104,7 @@ export class DashboardComponent implements OnInit {
             }
         }
     }
-    /*---.valueOrGrowthSwitch---*/
-    /*---Decomposition---*/
 
-    /*---.Decomposition---*/
 
     constructor(
         private dm: DataManagerService,
@@ -153,7 +169,7 @@ export class DashboardComponent implements OnInit {
 
 
 
-    /**********TEMP***********/
+    ///TEMP
     public showTable: boolean = false;
     public decompositionTableData: Object = {};
     public showDecompositionFull(data: Object) {
@@ -173,10 +189,11 @@ export class DashboardComponent implements OnInit {
         }
         this.showFullCharts = !this.showFullCharts;
     }
-    /**********.TEMP***********/
+    ///.TEMP
 
 
     private onTimePeriodChanged(newPeriod) {
         console.log(newPeriod);
     }
 }
+*/

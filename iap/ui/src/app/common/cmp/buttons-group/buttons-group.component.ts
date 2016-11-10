@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 
 
-interface ButtonDataInput {
+export interface ButtonDataInput {
     id: string|number;
     name: string;
     selected?: boolean;
@@ -26,7 +26,7 @@ export class ButtonsGroupComponent implements OnInit, OnChanges {
 
     @Input() data: Array<ButtonDataInput> = [];
 
-    @Output() change: EventEmitter<ButtonDataChangeOutput> = new EventEmitter();
+    @Output() changed = new EventEmitter(); //ButtonDataChangeOutput
 
     private selected: string|number = null;
 
@@ -52,9 +52,9 @@ export class ButtonsGroupComponent implements OnInit, OnChanges {
 
     onButtonClick(index: number) {
         if (index != this.selected) {
-            console.info('-->ButtonsGroupComponent -> change()');
+            console.info('-->ButtonsGroupComponent -> changed()');
             this.selected = index;
-            this.change.emit({
+            this.changed.emit({
                 'id': this.data[this.selected]['id'],
                 'name': this.data[this.selected]['name']
             });

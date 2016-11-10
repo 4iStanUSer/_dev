@@ -4,8 +4,8 @@ import {
     ComponentFactoryResolver
 } from '@angular/core';
 import * as _ from 'lodash';
-import {HierarchyWidgetComponent} from './../cmp/hierarchy-widget/';
-import {DropdownComponent} from './../cmp/dropdown/';
+// import {HierarchyWidgetComponent} from './../cmp/hierarchy-widget/';
+// import {DropdownComponent} from './../cmp/dropdown/';
 import {TimeseriesWidgetComponent} from './../cmp/timeseries-widget/';
 
 
@@ -26,8 +26,8 @@ export class ComponentFactoryService {
     private _config: Object = null;
 
     private _types: { [s: string]: any; } = {
-        'hierarchy': HierarchyWidgetComponent,
-        'dropdown': DropdownComponent,
+        // 'hierarchy': HierarchyWidgetComponent,
+        // 'dropdown': DropdownComponent,
         'timeseries': TimeseriesWidgetComponent
     };
 

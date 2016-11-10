@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Http, Response, Request, RequestMethod, BaseRequestOptions,
     Headers } from '@angular/http';
-import { Observable }     from 'rxjs/Observable';
+import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import * as _ from 'lodash';
-import './../rxjs-operators';
 import { LoadingService } from './loading.service';
 
 class ServiceConf {

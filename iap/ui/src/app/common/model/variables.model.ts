@@ -7,6 +7,7 @@ export interface VariableInput {
 
 export class VariableModel {
     constructor(
+        public key: string,
         public name: string,
         public metric: string,
         public multiplier: number,
@@ -22,6 +23,7 @@ export class VariablesModel { // TODO Refactor storage structure (VL)
         this.storage = {};
         for (let variable in input) {
             let v = new VariableModel(
+                variable,
                 input[variable]['name'],
                 input[variable]['metric'],
                 input[variable]['multiplier'],

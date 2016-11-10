@@ -7,7 +7,13 @@ import {
     Output,
     EventEmitter
 } from '@angular/core';
-import {TimelabelInput, TimeLabelModel, TimeLabelsModel} from "../../model/time-labels.model";
+
+import {
+    TimelabelInput,
+    TimeLabelModel,
+    TimeLabelsModel
+} from "../../model/time-labels.model";
+import {TimePeriodInput} from "../../model/time-period.model";
 
 
 export class Sliders {
@@ -52,17 +58,19 @@ export class TimeSelectorComponent implements OnInit, OnChanges {
     }
 
     @Input() data: Array<TimelabelInput> = [];
-    @Input() selected: {
-        start: {scale: string, full_name: string},
-        end: {scale: string, full_name: string},
-        mid?: {scale: string, full_name: string},
-    };
+    @Input() selected: TimePeriodInput = null;
+    // {
+    //     start: {scale: string, full_name: string},
+    //     end: {scale: string, full_name: string},
+    //     mid?: {scale: string, full_name: string},
+    // };
 
-    @Output() changed: EventEmitter<{
-        start: {scale: string, full_name: string},
-        end: {scale: string, full_name: string},
-        mid?: {scale: string, full_name: string},
-    }> = new EventEmitter();
+    @Output() changed = new EventEmitter(); //: EventEmitter<TimePeriodInput>
+    // {
+    //     start: {scale: string, full_name: string},
+    //     end: {scale: string, full_name: string},
+    //     mid?: {scale: string, full_name: string},
+    // }
 
     ngOnChanges(ch: SimpleChanges) {
         console.info('TimeSelectorComponent: ngOnChanges()');
@@ -77,14 +85,16 @@ export class TimeSelectorComponent implements OnInit, OnChanges {
             }
         }
         if (ch['selected']) {
-            // {scale: string, full_name: string}
             let selScale = null;
+            let scale = ch['selected']['currentValue']['scale'];
             for (let prop in ch['selected']['currentValue']) {
+                if (prop == 'scale') continue;
+
                 try {
                     let timelabel = ch['selected']['currentValue'][prop];
-                    let scale = timelabel['scale'];
-                    let full_name = timelabel['full_name'];
-                    let t = this.timelabels.getTimeLabel(scale, full_name);
+                    // let scale = timelabel['scale'];
+                    // let full_name = timelabel; //['full_name'];
+                    let t = this.timelabels.getTimeLabel(scale, timelabel);
 
                     if (t) {
                         if (selScale === null) {
@@ -153,14 +163,9 @@ export class TimeSelectorComponent implements OnInit, OnChanges {
         this.setExpandedMode(false);
         // TODO Emit event
         this.changed.emit({
-            'start': {
-                'scale': this.selectedPoints['start']['timescale'],
-                'full_name': this.selectedPoints['start']['full_name'],
-            },
-            'end': {
-                'scale': this.selectedPoints['end']['timescale'],
-                'full_name': this.selectedPoints['end']['full_name'],
-            },
+            'scale': this.currScale,
+            'start': this.selectedPoints['start']['full_name'],
+            'end': this.selectedPoints['end']['full_name'],
         });
     }
 }

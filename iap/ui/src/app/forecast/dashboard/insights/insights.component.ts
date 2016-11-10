@@ -1,8 +1,8 @@
 import {Component, OnInit, OnChanges, Input, SimpleChanges} from '@angular/core';
 
-interface InsightInput {
-    type: string;
+export interface InsightInput {
     text: string;
+    type?: string;
     disabled?: boolean;
 }
 
