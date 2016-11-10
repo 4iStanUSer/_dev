@@ -1,0 +1,9 @@
+table {
+    border-collapse: collapse;
+}
+table td, table th {
+    border: 1px solid #5e5e5e;
+}
+tr.selected {
+    background: #888888;
+}

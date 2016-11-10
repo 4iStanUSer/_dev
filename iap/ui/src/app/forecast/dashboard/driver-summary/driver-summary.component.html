@@ -1,3 +1,9 @@
-<p>
-  driver-summary works!
-</p>
+<div>
+
+    <table-widget
+        *ngIf="tableData"
+        [data]="tableData"
+        (row-select)="onRowSelect($event)"
+    ></table-widget>
+
+</div>
