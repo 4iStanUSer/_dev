@@ -1,10 +1,20 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 
-import {AjaxService} from "../../service/ajax.service";
+import {AjaxService} from "./../../service/ajax.service";
+
+
+interface ToolsAndProjectsInput {
+    [tool_name: string]: {
+        name: string,
+        projects: Array<{
+            id: string,
+            name: string
+        }>
+    };
+}
 
 @Component({
-    selector: 'landing-page',
     templateUrl: './landing-page.component.html',
     styleUrls: ['./landing-page.component.css']
 })
@@ -18,21 +28,12 @@ export class LandingPageComponent implements OnInit {
     }
 
     ngOnInit() {
-        // let a = {
-        //     'forecast': {
-        //         name: 'Forecasting Tool',
-        //         projects: [
-        //             {id: 'JJOralCare', name: 'FT JJ Oral Care'},
-        //             {id: 'JJLean', name: 'FT JJ Lean Forecasting'}
-        //         ]
-        //     },
-        // };
         this.req
             .get({
                 'url': 'landing',
                 'data': {}
             })
-            .subscribe((tools) => {
+            .subscribe((tools: Object) => {
                 this.tools = tools;
             });
     }
@@ -49,11 +50,8 @@ export class LandingPageComponent implements OnInit {
                 'project_id': projectId
             }
         }).subscribe((tools) => {
-            //this.router.navigate([toolKey]);
+            this.router.navigate([toolKey]);
         });
-
-        // TODO - Remove this when request will be successful(VL)
-        this.router.navigate([toolKey]);
     }
 
 }

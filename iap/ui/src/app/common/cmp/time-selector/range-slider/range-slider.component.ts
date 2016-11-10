@@ -51,7 +51,7 @@ export class RangeSliderComponent implements OnInit, OnChanges {
     @Output() changed: EventEmitter<{
         slider: string,
         value: TimeLabelModel
-    }> = new EventEmitter();
+    }>= new EventEmitter();
 
     constructor(private elRef: ElementRef, private renderer: Renderer) {
         this.element = elRef.nativeElement;

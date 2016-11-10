@@ -1,5 +1,9 @@
 import {Injectable} from '@angular/core';
 
+
+import { Observable } from 'rxjs/Observable';
+// import 'rxjs/Rx';
+
 export class PageState {
 
     constructor(
@@ -29,12 +33,36 @@ export class PageState {
 export class StateService {
 
     private stateStorage: {[s: string]: Object} = {};
+    private storage: {[s: string]: PageState} = {};
 
     constructor() {
     }
 
     private init(): void {
         // TODO Implement init() method
+    }
+
+    public getPageState(page: string) { //: Observable<PageState>
+        if (!this.storage[page]) {
+            if (!this.stateStorage[page]) {
+                try {
+                    this.stateStorage[page] =
+                        JSON.parse(localStorage.getItem(page));
+                } catch (e) {
+                    this.stateStorage[page] = {};
+                }
+            }
+            this.storage[page] = new PageState(this.stateStorage[page],
+                page, this)
+        }
+        return this.storage[page];
+        // TODO Make request to server (VL)
+        // let resp = new Observable(observer => {
+        //     setTimeout(() => {
+        //         observer.next(this.storage[page]);
+        //     },5000);
+        // });
+        // return resp;
     }
 
     private saveOutside(page: string, key: string, value: any) {
@@ -49,16 +77,7 @@ export class StateService {
         localStorage.setItem(page, JSON.stringify(pageValue));
     }
 
-    public getPageState(page: string): PageState {
-        if (!this.stateStorage[page]) {
-            try {
-                this.stateStorage[page] = JSON.parse(localStorage.getItem(page));
-            } catch (e) {
-                this.stateStorage[page] = {};
-            }
-        }
-        return new PageState(this.stateStorage[page], page, this);
-    }
+
 
     public setPageStateKey(page: string, key: string, value: any) {
         try {

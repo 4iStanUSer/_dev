@@ -10,7 +10,6 @@ import {DonutChartComponent} from "../common/cmp/donut-chart/donut-chart.compone
 import {BarChartComponent} from "../common/cmp/bar-chart/bar-chart.component";
 import {WaterfallChartComponent} from "../common/cmp/waterfall-chart/waterfall-chart.component";
 import {AccordionTableComponent} from "../common/cmp/accordion-table/accordion-table.component";
-import {SwitchSelectorComponent} from "../common/cmp/switch-selector/switch-selector.component";
 import {TimeSelectorComponent} from '../common/cmp/time-selector/time-selector.component';
 import {RangeSliderComponent} from "../common/cmp/time-selector/range-slider/range-slider.component";
 
@@ -43,10 +42,6 @@ import {ButtonsGroupComponent} from './../common/cmp/buttons-group/buttons-group
 
         CommonServicesModule,
         ChartModule,
-        // HierarchyWidgetModule,
-        // DropdownModule,
-        // TimeseriesWidgetModule,
-        // ForecastIndexPageModule,
     ],
     declarations: [
         ForecastComponent,
@@ -68,7 +63,6 @@ import {ButtonsGroupComponent} from './../common/cmp/buttons-group/buttons-group
         BarChartComponent,
         WaterfallChartComponent,
         AccordionTableComponent,
-        SwitchSelectorComponent,
 
         RangeSliderComponent,
         TimeSelectorComponent,

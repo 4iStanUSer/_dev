@@ -1,5 +1,6 @@
 // Statics
 import 'rxjs/add/observable/throw';
+// import 'rxjs/add/observable/timer';
 
 // Operators
 import 'rxjs/add/operator/catch';

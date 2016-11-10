@@ -1,12 +1,218 @@
-<forecast-section
-    *ngIf="dm.dataModel"
-    [data-model]="dm.dataModel"
-    [data-config]="dm.forecastSectionDataConfig"
-></forecast-section>
+
+<div class="wrapper">
+
+    <div class="forecasting-section">
+
+        <div class="header">
+
+            {{ dm.lang['forecast_block'] }}
+
+            <time-selector
+                *ngIf="fPeriodSelectorData"
+                [data]="fPeriodSelectorData['data']"
+                [selected]="fPeriodSelectorData['selected']"
+                (changed)="onChangedForecastPeriod($event)"
+            ></time-selector>
+
+            <buttons-group
+                *ngIf="absRateSwitcherData"
+                [data]="absRateSwitcherData"
+                (changed)="onChangedAbsRateState($event)"
+            ></buttons-group>
+
+            <button *ngIf="dm.state.get('forecast_active_tab') == 'all'" (click)="onClickForecastToggleButton()">
+                {{ ((dm.state.get('forecast_collapse_expand') == 'collapse') ? dm.lang['expand'] : dm.lang['collapse']) }}
+            </button>
+
+        </div>
+
+        <div class="content">
+
+            <ul class="forecast-tabs">
+                <li (click)="onClickForecastTab('all')" [class.active]="dm.state.get('forecast_active_tab') == 'all'">
+                    {{ dm.lang['tab_all'] }}
+                </li>
+                <li *ngFor="let tab of fTabsAbsData; let i = index" (click)="onClickForecastTab(tab.variable.key)" [class.active]="dm.state.get('forecast_active_tab') == tab.variable.key">
+                    {{ tab.variable.name + ' - ' + tab.variable.metric }}
+                </li>
+            </ul>
+
+            <div class="forecast-tabs-content" *ngIf="dm.state.get('forecast_absolute_rate') == 'absolute'">
+
+                <div *ngIf="dm.state.get('forecast_active_tab') == 'all'">
+
+                    <div class="short-mode" *ngIf="dm.state.get('forecast_collapse_expand') == 'collapse'">
+                        <div>
+                            <div style="display:inline-block;width:24%">
+                                {{ dm.lang['absolute'] }}
+                            </div>
+
+                            <div *ngFor="let tab of fTabsAbsData" style="display:inline-block;width:24%">
+                                <bar-chart
+                                    *ngIf="tab['preview'] && tab['preview']['absolute']"
+                                    [data]="tab['preview']['absolute']"
+                                ></bar-chart>
+                            </div>
+                        </div>
+                        <div>
+                            <div style="display:inline-block;width:24%">
+                                {{ dm.lang['growth_cagr'] }}
+                            </div>
+                            <div *ngFor="let tab of fTabsAbsData" style="display:inline-block;width:24%">
+
+                                <table *ngIf="tab['preview'] && tab['preview']['rate']">
+                                    <tr>
+                                        <td *ngFor="let rate of tab['preview']['rate']">
+                                            {{ rate }}
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="full-mode" *ngIf="dm.state.get('forecast_collapse_expand') == 'expand'">
+
+                        <div *ngFor="let tab of fTabsAbsData">
+
+                            <div style="display:inline-block;width:74%;position: relative" class="chart-rates">
+
+                                <div>
+                                    <div style="display:inline-block;width:24%">
+                                        {{ dm.lang['absolute'] }}
+                                    </div>
+
+                                    <bar-chart
+                                        *ngIf="tab['full'] && tab['full']['absolute']"
+                                        [data]="tab['full']['absolute']"
+                                    ></bar-chart>
+                                </div>
+                                <div>
+                                    <div style="display:inline-block;width:24%">
+                                        {{ dm.lang['growth_cagr'] }}
+                                    </div>
+                                    <table *ngIf="tab['full'] && tab['full']['rate']">
+                                        <tr>
+                                            <td *ngFor="let rate of tab['full']['rate']">
+                                                {{ rate }}
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div style="display:inline-block;width:24%" class="cagrs">
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div *ngIf="dm.state.get('forecast_active_tab') != 'all' && fActiveTabIndex !== null">
+                    <div style="display:inline-block;width:74%;position: relative" class="chart-rates">
+                        <div>
+                            <div style="display:inline-block;width:24%">
+                                {{ dm.lang['absolute'] }}
+                            </div>
+
+                            <bar-chart
+                                *ngIf="fTabsAbsData[fActiveTabIndex]['full'] && fTabsAbsData[fActiveTabIndex]['full']['absolute']"
+                                [data]="fTabsAbsData[fActiveTabIndex]['full']['absolute']"
+                            ></bar-chart>
+                        </div>
+                        <div>
+                            <div style="display:inline-block;width:24%">
+                                {{ dm.lang['growth_cagr'] }}
+                            </div>
+                            <table *ngIf="fTabsAbsData[fActiveTabIndex]['full'] && fTabsAbsData[fActiveTabIndex]['full']['rate']">
+                                <tr>
+                                    <td *ngFor="let rate of fTabsAbsData[fActiveTabIndex]['full']['rate']">
+                                        {{ rate }}
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div style="display:inline-block;width:24%" class="cagrs">
+
+                    </div>
+                </div>
 
 
-<buttons-group
-    *ngIf="dm.buttonsGroupData"
-    [data]="dm.buttonsGroupData"
-    (change)="buttonsGroupChanged($event)"
-></buttons-group>
+
+            </div>
+
+            <div class="forecast-tabs-content" *ngIf="dm.state.get('forecast_absolute_rate') == 'rate'">
+                <div *ngFor="let tab of fTabsRateData">
+                    Donut for {{ tab.variable.name }}
+                </div>
+            </div>
+
+        </div>
+
+
+
+
+    </div>
+
+    <!----------------------------------------------------------------------->
+
+    <div class="decomposition-section">
+
+        <div class="header">
+            {{ dm.lang['decomposition_block'] }}
+
+            <time-selector
+                *ngIf="dPeriodSelectorData"
+                [data]="dPeriodSelectorData['data']"
+                [selected]="dPeriodSelectorData['selected']"
+                (changed)="onChangedDecompPeriod($event)"
+            ></time-selector>
+
+            <buttons-group
+                *ngIf="dTypesSwitcherData"
+                [data]="dTypesSwitcherData"
+                (changed)="onChangedDecompType($event)"
+            ></buttons-group>
+
+            <button>{{ dm.lang['explore'] }}</button>
+        </div>
+
+        <div class="content" *ngIf="dTypeData">
+            <!--<waterfall-chart-->
+                    <!--[data]="( (dm.state.get('forecast_absolute_rate') == 'absolute') ? dTypeData['abs'] : dTypeData['rate'])"-->
+            <!--&gt;</waterfall-chart>-->
+
+            <div>
+                {{ dm.lang['driver_contribution'] }}
+            </div>
+
+            <div *ngIf="dm.state.get('forecast_absolute_rate') == 'absolute'">
+                <waterfall-chart
+                    *ngIf="dTypeData['abs']"
+                    [data]="dTypeData['abs']"
+                ></waterfall-chart>
+            </div>
+            <div *ngIf="dm.state.get('forecast_absolute_rate') == 'rate'">
+                <waterfall-chart
+                    *ngIf="dTypeData['rate']"
+                    [data]="dTypeData['rate']"
+                ></waterfall-chart>
+            </div>
+
+            <div>
+                {{ dm.lang['driver_change_cagr'] }}
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
+
+

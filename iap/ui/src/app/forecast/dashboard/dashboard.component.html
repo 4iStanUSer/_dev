@@ -1,15 +1,23 @@
 <div class="container-fluid dashboard-container">
 
-    <selectors [data]="dm.selectorsData" [config]="dm.selectorsConfig"></selectors>
+    <selectors
+        *ngIf="dm.selectors"
+        [data]="dm.selectors['data']"
+        [config]="dm.selectors['config']"
+    ></selectors>
 
     <ul class="navigation">
         <li><a routerLink="./general" routerLinkActive="active">Dashboard</a></li>
         <li><a routerLink="./driver-details" routerLinkActive="active">Driver Details</a></li>
         <li><a routerLink="./driver-summary" routerLinkActive="active">Driver Summary</a></li>
     </ul>
+
     <router-outlet></router-outlet>
 
     <insights [data]="dm.insights"></insights>
+
+</div>
+
 
     <!--<forecast-section-->
         <!--*ngIf="dm.dataModel"-->
@@ -85,4 +93,3 @@
     <!--<div *ngIf="'drivers' == currMode">-->
 
     <!--</div>-->
-</div>

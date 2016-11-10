@@ -1,0 +1,13 @@
+ul.forecast-tabs {
+    list-style: none;
+}
+ul.forecast-tabs li {
+    display:inline-block;
+    margin: 0 5px;
+    padding: 0 5px;
+    background: grey;
+    cursor: pointer;
+}
+ul.forecast-tabs li.active {
+    background: whitesmoke;
+}
