@@ -16,7 +16,7 @@ import {PointValueModel} from "../../common/model/points-values.model";
 import {InsightInput} from "./insights/insights.component";
 
 /*======TEMP=====*/
-import {selectorsDataTEMP, selectorsConfigTEMP} from './general/data';
+import {selectorsDataTEMP, selectorsConfigTEMP, vertTableTEMP} from './general/data';
 import {DecompositionModel} from "../../common/model/decomposition.model";
 import {TimelabelInput} from "../../common/model/time-labels.model";
 /*======.TEMP=====*/
@@ -127,6 +127,7 @@ export class DataManagerService {
                 data: selectorsDataTEMP,
                 config: selectorsConfigTEMP
             };
+
             // console.log(this.dataModel);
             // this.checkFilling();
         });
@@ -238,6 +239,10 @@ export class DataManagerService {
         return output;
     }
 
+
+    getData_DriverSummaryTable() {
+        return vertTableTEMP;
+    }
 
 }
 

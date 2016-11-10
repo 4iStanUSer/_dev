@@ -1,0 +1,45 @@
+<div>
+
+    <table>
+
+        <thead>
+            <tr *ngFor="let colMetaIndex of range(colsMetaCount)">
+                <th *ngFor="let rowMetaIndex of range(rowsMetaCount)">
+                    {{ appendix[rowsMetaCount*colMetaIndex + rowMetaIndex] }}
+                </th>
+                <th *ngFor="let col of cols">
+                    {{ col.meta[colMetaIndex]['name'] }}
+                </th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr *ngFor="let row of rows | filterList:{key: 'isHidden', value: false}" [class.selected]="selectedRowId === row.id" (click)="onClickRow(row.id)">
+                <th *ngFor="let meta of row.meta">
+
+                    <span *ngFor="let i of range(row.depth)">&nbsp;&nbsp;&nbsp;</span>
+
+                    <span
+                        *ngIf="row.children.length > 0"
+                        (click)="row.changeExpandStatus($event)" style="cursor: pointer;">
+
+                        <span *ngIf="row.isExpanded">-</span>
+                        <span *ngIf="!row.isExpanded">+</span>
+
+                    </span>
+
+                    <span *ngIf="row.children.length == 0">
+                        &nbsp;
+                    </span>
+
+                    {{ meta['name'] }}
+                </th>
+                <td *ngFor="let col of cols">
+                    {{ getValue(row.id, col.id) }}
+                </td>
+            </tr>
+        </tbody>
+
+    </table>
+
+</div>
