@@ -177,7 +177,7 @@ export class TableWidgetComponent {
                 colsChildParent[i] = col['parent_id'];
             }
         }
-        // Linking RowModels
+        // Linking ColModels
         for (let childIndex in colsChildParent) {
             let parentId = colsChildParent[childIndex];
             let parentIndex = colsIdIndex[parentId];
