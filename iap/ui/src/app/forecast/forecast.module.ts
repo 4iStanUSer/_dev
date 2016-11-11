@@ -9,7 +9,6 @@ import {ChartModule} from '../common/module/chart/';
 import {DonutChartComponent} from "../common/cmp/donut-chart/donut-chart.component";
 import {BarChartComponent} from "../common/cmp/bar-chart/bar-chart.component";
 import {WaterfallChartComponent} from "../common/cmp/waterfall-chart/waterfall-chart.component";
-import {AccordionTableComponent} from "../common/cmp/accordion-table/accordion-table.component";
 import {TimeSelectorComponent} from '../common/cmp/time-selector/time-selector.component';
 import {RangeSliderComponent} from "../common/cmp/time-selector/range-slider/range-slider.component";
 
@@ -63,7 +62,6 @@ import {TableWidgetComponent} from "../common/cmp/table-widget/table-widget.comp
         DonutChartComponent,
         BarChartComponent,
         WaterfallChartComponent,
-        AccordionTableComponent,
 
         RangeSliderComponent,
         TimeSelectorComponent,

@@ -6,7 +6,7 @@ import {
 import * as _ from 'lodash';
 // import {HierarchyWidgetComponent} from './../cmp/hierarchy-widget/';
 // import {DropdownComponent} from './../cmp/dropdown/';
-import {TimeseriesWidgetComponent} from './../cmp/timeseries-widget/';
+// import {TimeseriesWidgetComponent} from './../cmp/timeseries-widget/';
 
 
 // TODO Move this
@@ -28,7 +28,7 @@ export class ComponentFactoryService {
     private _types: { [s: string]: any; } = {
         // 'hierarchy': HierarchyWidgetComponent,
         // 'dropdown': DropdownComponent,
-        'timeseries': TimeseriesWidgetComponent
+        // 'timeseries': TimeseriesWidgetComponent
     };
 
     constructor(private resolver: ComponentFactoryResolver) {
