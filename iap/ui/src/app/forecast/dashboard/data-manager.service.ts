@@ -3,7 +3,14 @@ import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import {Observer} from 'rxjs/Observer';
 
-// import * as _ from 'lodash';
+/*======TEMP=====*/
+import {
+    selectorsDataTEMP, selectorsConfigTEMP, vertTableTEMP,
+    forecastValueRateData
+} from './general/data';
+/*======.TEMP=====*/
+
+
 import {AjaxService} from "./../../common/service/ajax.service";
 import {DataModel} from "./../../common/model/data.model";
 import {
@@ -14,12 +21,13 @@ import {StateService, PageState} from "../../common/service/state.service";
 import {StaticDataService} from "../../common/service/static-data.service";
 import {PointValueModel} from "../../common/model/points-values.model";
 import {InsightInput} from "./insights/insights.component";
-
-/*======TEMP=====*/
-import {selectorsDataTEMP, selectorsConfigTEMP, vertTableTEMP} from './general/data';
+import {
+    TableWidgetData,
+    TableWidgetRowColItem,
+    TableWidgetValues
+} from "../../common/cmp/table-widget/table-widget.component";
 import {DecompositionModel} from "../../common/model/decomposition.model";
 import {TimelabelInput} from "../../common/model/time-labels.model";
-/*======.TEMP=====*/
 
 
 export interface Period {
@@ -230,7 +238,7 @@ export class DataManagerService {
 
         // TODO Remake PeriodSelector Input data
 
-        for (let i=0;i<this.inputData['timelabels'].length;i++) {
+        for (let i = 0; i < this.inputData['timelabels'].length; i++) {
             let timelabel = this.inputData['timelabels'][i];
             if (timescales.indexOf(timelabel['timescale']) != -1) {
                 output.push(timelabel);
@@ -240,8 +248,107 @@ export class DataManagerService {
     }
 
 
-    getData_DriverSummaryTable() {
-        return vertTableTEMP;
+    getData_DriverSummaryTableData(start: string,
+                                   end: string,
+                                   mid: string,
+                                   timescale: string,
+                                   selRowId: string = null): TableWidgetData {
+        // TODO Implement period limitations
+
+        let variables = this.dataModel.getVariablesByType('driver');
+        let timelabels = this.dataModel.getPlainTimeLabels();
+
+        let vars: Array<TableWidgetRowColItem> = [],
+            tls: Array<TableWidgetRowColItem> = [],
+            vals: TableWidgetValues = {},
+            timelines: Object = {},
+            l: number;
+
+        // For ROWS
+        l = (timelabels && timelabels.length) ? timelabels.length : 0;
+        for (let i = 0; i < l; i++) {
+            let timelabel = timelabels[i];
+            tls.push({
+                id: timelabel.full_name,
+                parent_id: (timelabel.parent)
+                    ? timelabel.parent.full_name : null,
+                meta:[
+                    {name: timelabel.full_name}
+                ]
+            });
+            vals[timelabel.full_name] = {};
+            if (!(timelabel.timescale in timelines)) {
+                timelines[timelabel.timescale] = [];
+            }
+            timelines[timelabel.timescale].push(timelabel.full_name);
+        }
+
+        // For COLS
+        l = (variables && variables.length) ? variables.length : 0;
+        for (let i = 0; i < l; i++) {
+            let variable = variables[i];
+            vars.push({
+                id: variable.key,
+                parent_id: null,
+                meta:[
+                    {name: variable.name},
+                    {name: variable.metric}
+                ]
+            });
+
+            for (let timescaleKey in timelines) {
+                let timeline = timelines[timescaleKey];
+                let values = this.dataModel.getPointsValue(timescaleKey,
+                    variable.key, timeline);
+                if (values && values.length) {
+                    for (let j=0;j<values.length;j++) {
+                        vals[values[j].timestamp][variable.key] = values[j].value;
+                    }
+                }
+            }
+        }
+
+        // Add CAGRs
+        let ids = ['cagr/'+start+'/'+mid, 'cagr/'+mid+'/'+end];
+        tls.push({
+            id: ids[0],
+            parent_id: null,
+            meta:[
+                {name: this.lang['cagr'] + ' ' + start + '/' + mid}
+            ]
+        });
+        tls.push({
+            id: ids[1],
+            parent_id: null,
+            meta:[
+                {name: this.lang['cagr'] + ' ' +  mid + '/' + end}
+            ]
+        });
+        vals[ids[0]] = {};
+        vals[ids[1]] = {};
+
+        l = (variables && variables.length) ? variables.length : 0;
+        for (let i = 0; i < l; i++) {
+            let variable = variables[i];
+
+            vals[ids[0]][variable.key] = this.dataModel.getCagrValue(
+                variable.key, start, mid, timescale);
+            vals[ids[1]][variable.key] = this.dataModel.getCagrValue(
+                variable.key, mid, end, timescale);
+        }
+
+
+
+        return {
+            selected_row_id: selRowId,
+            appendix: [
+                <string>this.lang['driver'],
+                <string>this.lang['metric'],
+            ],
+            cols: vars,
+            rows: tls,
+            values: vals
+        };
     }
 
 }
