@@ -1,7 +1,7 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {Router, ActivatedRoute, Params} from '@angular/router';
 import {SimulatorPageDataManagerService} from "./simulator-page-data-manager.service";
-import {AccordionTableComponent} from "../../common/cmp/accordion-table/accordion-table.component";
+// import {AccordionTableComponent} from "../../common/cmp/accordion-table/accordion-table.component";
 
 @Component({
     templateUrl: './simulator-page.component.html',
@@ -15,7 +15,7 @@ export class SimulatorPageComponent implements OnInit {
 
     private queueToSave = [];
 
-    @ViewChild('acc_table') accTableObj: AccordionTableComponent;
+    @ViewChild('acc_table') accTableObj: any; //AccordionTableComponent;
 
     constructor(private route: ActivatedRoute,
                 private router: Router,

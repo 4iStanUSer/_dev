@@ -64,23 +64,29 @@ export class DataModel {
         return filteredTL;
     }
 
+    getPlainTimeLabels(): Array<TimeLabelModel> {
+        return this.timeLables.storage; // TODO Make right
+    }
+
     getVariable(name: string): VariableModel {
         return this.variables.storage[name];
     }
 
-    getPointsValue(timescale: string, variable: string,
+    getPointsValue(timescaleKey: string, variableKey: string,
                    timeline: Array<string>): Array<PointValueModel> {
 
         let pointsValue = [];
-        for (let i = 0; i < this.pointsValues.storage[timescale][variable].length; i++) {
-            let timestamp = this.pointsValues.storage[timescale][variable][i]['timestamp'];
+        for (let i = 0; i < this.pointsValues.storage[timescaleKey][variableKey].length; i++) {
+            let timestamp = this.pointsValues.storage[timescaleKey][variableKey][i]['timestamp'];
             if (timeline.indexOf(timestamp) != -1) {
-                pointsValue.push(this.pointsValues.storage[timescale][variable][i]);
+                pointsValue.push(this.pointsValues.storage[timescaleKey][variableKey][i]);
             }
         }
         return pointsValue;
     }
 
+
+    // ??????????????? TODO Review
     getCargsForPointsValues(variable: VariableModel,
                             periods: Array<{
                                 'start': string,
@@ -109,6 +115,25 @@ export class DataModel {
             }
         }
         return output;
+    }
+
+    getCagrValue(varKey: string, start: string,
+                 end: string, timescale: string) {
+        // TODO Implement timescale for CAGR
+        try {
+            for (let i = 0; i<this.cargs[varKey].length;i++) {
+                if (
+                    this.cargs[varKey][i].start == start
+                    && this.cargs[varKey][i].end == end
+                    && true // this.cargs[varKey][i].timescale == timescale
+                ) {
+                    return this.cargs[varKey][i].value;
+                }
+            }
+        } catch (e) {
+            // TODO Implement query for server
+            return null;
+        }
     }
 
 }

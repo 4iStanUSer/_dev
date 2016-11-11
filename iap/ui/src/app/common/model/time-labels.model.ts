@@ -43,7 +43,7 @@ export class TimeLabelModel {
 
 export class TimeLabelsModel {
     private scalesOrder: Array<string> = [];
-    private storage: Array<TimeLabelModel> = [];
+    storage: Array<TimeLabelModel> = [];
     private pointsByScale: {
         [scale: string]: Array<number>
     } = {};

@@ -1,9 +1,46 @@
-<div>
+<div class="wrapper">
 
-    <table-widget
-        *ngIf="tableData"
-        [data]="tableData"
-        (row-select)="onRowSelect($event)"
-    ></table-widget>
+    <div class="table-section">
+
+        <div class="header">
+            {{ dm.lang['drivers_summary_block'] }}
+
+            <button (click)="onClickTableToggleButton()">
+                {{ ((dm.state.get('d_summary_table_collapsed_expanded') == 'collapsed') ? dm.lang['expand'] : dm.lang['collapse']) }}
+            </button>
+        </div>
+        <div class="content" *ngIf="dm.state.get('d_summary_table_collapsed_expanded') == 'expanded'">
+
+            <table-widget
+                *ngIf="tableData"
+                [data]="tableData"
+                (row-select)="onRowSelect($event)"
+            ></table-widget>
+
+        </div>
+    </div>
+
+    <div class="decomp-section">
+        <div class="header">
+            {{ dm.lang['decomposition_block'] }}
+
+            <buttons-group
+                *ngIf="dTypesSwitcherData"
+                [data]="dTypesSwitcherData"
+                (changed)="onChangedDecompType($event)"
+            ></buttons-group>
+
+        </div>
+
+        <div class="content" *ngIf="dTypeData">
+
+            <waterfall-chart
+                *ngIf="dTypeData['abs']"
+                [data]="dTypeData['abs']"
+            ></waterfall-chart>
+
+        </div>
+
+    </div>
 
 </div>

@@ -23,6 +23,8 @@ export class StaticDataService {
                 'forecast_active_tab': 'all', // all|(name of variable)
                 'forecast_tab': 'all', // all|(or name of variable)
                 'decomp_value_volume_price': 'Value', // value|volume|price (name of type)
+
+                'd_summary_table_collapsed_expanded': 'expanded', // collapsed|expanded
             }
         };
 
@@ -32,6 +34,7 @@ export class StaticDataService {
                 'forecast_block': 'Forecast',
                 'decomposition_block': 'Decomposition',
                 'insights_block': 'Insights',
+                'drivers_summary_block': 'Drivers Summary',
 
                 'dashboard_tab': 'Dashboard',
                 'drivers_summary_tab': 'Drivers Summary',
@@ -47,7 +50,11 @@ export class StaticDataService {
                 'growth_cagr': 'Growth (CAGR)',
 
                 'driver_contribution': 'Driver Contribution to Sales Growth,',
-                'driver_change_cagr': 'Driver Change (CAGR)'
+                'driver_change_cagr': 'Driver Change (CAGR)',
+
+                'driver': 'Driver',
+                'metric': 'Metric',
+                'cagr': 'CAGR',
             }
         };
 

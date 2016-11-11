@@ -1,25 +1,23 @@
 import {Component, Input, Output, EventEmitter} from '@angular/core';
 import {Helper} from "../../model/helper";
 
+export interface TableWidgetRowColItem {
+    id: string;
+    parent_id: string;
+    meta: Array<{name: string;}>;
+}
+export interface TableWidgetValues {
+    [row_id: string]: {
+        [col_id: string]: string|number|Object;
+    }
+}
 
 export interface TableWidgetData {
     selected_row_id?: string;
     appendix: Array<string>;
-    rows: [{
-        id: string;
-        parent_id: string;
-        meta: Array<{name: string;}>;
-    }];
-    cols: [{
-        id: string;
-        parent_id: string;
-        meta: Array<{name: string;}>;
-    }];
-    values: {
-        [row_id: string]: {
-            [col_id: string]: string|number|Object;
-        }
-    };
+    rows: Array<TableWidgetRowColItem>;
+    cols: Array<TableWidgetRowColItem>;
+    values: TableWidgetValues;
 }
 // interface TableWidgetConfig {
 //     mode: string; // vertical|horizontal // TODO Implement
@@ -123,6 +121,7 @@ export class TableWidgetComponent {
     @Output('row-select') rowSelect = new EventEmitter();
 
     @Input() set data(d: TableWidgetData) {
+        console.info('TableWidgetComponent -> set data');
 
         let rows: Array<RowModel> = [],
             cols: Array<ColModel> = [];
@@ -139,7 +138,7 @@ export class TableWidgetComponent {
         let rowsIdIndex: Object = {};
 
         // Create RowModels
-        l = d['rows'].length;
+        l = (d['rows'] && d['rows'].length) ? d['rows'].length : 0;
         for (let i = 0; i < l; i++) {
             let row = d['rows'][i];
             if (this.rowsMetaCount < row['meta'].length) {
@@ -165,7 +164,7 @@ export class TableWidgetComponent {
         let colsIdIndex: Object = {};
 
         // Create ColModels
-        l = d['cols'].length;
+        l = (d['cols'] && d['cols'].length) ? d['cols'].length : 0;
         for (let i = 0; i < l; i++) {
             let col = d['cols'][i];
             if (this.colsMetaCount < col['meta'].length) {
