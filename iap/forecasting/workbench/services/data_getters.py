@@ -21,8 +21,8 @@ def get_entity_data(container, config, entity_id):
 
     # Define default selection for time periods
     mid = container.timeline.get_period_by_alias(top_ts, 'history')[1]
-    main_period = dict(start=period[0], mid=mid, end=period[1])
-    decomp_period = dict(start=mid, end=period[1])
+    main_period = dict(timsecale=top_ts, start=period[0], mid=mid, end=period[1])
+    decomp_period = dict(timescale=top_ts, start=mid, end=period[1])
     # Get requested entity.
     #entity_id = entities_ids[0]
     ent = container.get_entity_by_id(entity_id)
@@ -42,6 +42,8 @@ def get_entity_data(container, config, entity_id):
     out_vars_props = dict()
     for var in ent.variables:
         var_type = var.get_property('type')
+        if var_type is None:
+            continue
         if not (var_type & VariableType.is_output or
                 var_type & VariableType.is_driver):
             continue
@@ -57,10 +59,11 @@ def get_entity_data(container, config, entity_id):
     out_cagrs = dict()
     for item in cagrs:
         if item['var_name'] not in out_cagrs:
-            out_cagrs['var_name'] = []
-        out_cagrs['var_name'].append(dict(start=item['start'],
-                                          end=item['end'],
-                                          value=item['value']))
+            out_cagrs[item['var_name']] = []
+        out_cagrs[item['var_name']].append(dict(timescale = top_ts,
+                                                start=item['start'],
+                                                end=item['end'],
+                                                value=item['value']))
     # Get decomposition.
     dec_periods = container.timeline.get_growth_periods(top_ts, ts_borders[top_ts])
     dec_periods.extend(cagr_periods)
@@ -72,6 +75,8 @@ def get_entity_data(container, config, entity_id):
     # Get drivers and outputs from container.
     for var in ent.variables:
         var_type = var.get_property('type')
+        if var_type is None:
+            continue
         if not (var_type & VariableType.is_output or
                 var_type & VariableType.is_driver):
             continue
@@ -87,15 +92,21 @@ def get_entity_data(container, config, entity_id):
                      gr=growth_rates[i])
                 for i in range(len(values))]
 
+    # Insights.
+    insights = [dict(text=x) for x in ent.insights]
+
+
     # Return entire entity data.
-    result = dict(main_period=main_period,
-                  decomp_period=decomp_period,
-                  timelabels=ts_tree,
+    result = dict(
+        data=dict(timelabels=ts_tree,
                   variables=out_vars_props,
                   data=data,
                   cagrs=out_cagrs,
                   decomposition=decomposition,
-                  insights=ent.insights)
+                  insights=insights),
+        config=dict(main_period=main_period,
+                    decomp_period=decomp_period)
+    )
     return result
 
 
@@ -137,6 +148,8 @@ def _get_entity_dec(entity, dec_config, timescale, period):
                 raise Exception
             decomp_tree[dec_type].append(dict(name=var_name, value=value,
                                               growth=0, children=None))
+        decomp_tree[dec_type].append(dict(name='end_val', value=0,
+                                          growth=0, children=None))
     return decomp_tree
 
 
@@ -171,6 +184,8 @@ def _get_entity_cagrs(entity, timescale, period):
     # Get drivers and outputs from container.
     for var in entity.variables:
         var_type = var.get_property('type')
+        if var_type is None:
+            continue
         if not (var_type & VariableType.is_output or
                     var_type & VariableType.is_driver):
             continue

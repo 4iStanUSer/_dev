@@ -26,11 +26,13 @@ class EntityData:
 
     def get_backup(self):
         # Variables.
+        var_names = list(self._variables.keys())
         var_properties = []
         for var_name, props in self._variables.items():
             for prop_name, prop_value in props.items():
                 var_properties.append((dict(var=var_name, prop=prop_name,
                                             value=prop_value)))
+
         # Time series.
         time_series = [dict(var=var_ts[0], ts=var_ts[1], line=copy.copy(line))
                        for var_ts, line in self._time_series.items()]
@@ -44,7 +46,8 @@ class EntityData:
                 period_series.append(dict(var=var_ts[0], ts=var_ts[1],
                                           period=period, value=value))
         # Collect backup.
-        backup = dict(var_properties=var_properties,
+        backup = dict(var_names=var_names,
+                      var_properties=var_properties,
                       time_series=time_series,
                       scalars=scalars,
                       periods_series=period_series)
@@ -53,8 +56,9 @@ class EntityData:
     def load_backup(self, backup):
         try:
             # Variables.
+            for name in backup['var_names']:
+                self.add_variable(name)
             for item in backup['var_properties']:
-                self.add_variable(item['var'])
                 self.set_var_property(item['var'], item['prop'], item['value'])
             # Time series.
             for item in backup['time_series']:
@@ -150,7 +154,7 @@ class EntityData:
         if start_index > end_index or end_index > len(ts):
             raise Exception
         # Return requested segment.
-        return ts[start_index:end_index]
+        return ts[start_index:end_index + 1]
 
     def set_ts_vals(self, var_name, ts_name, values, stamp=None):
         # Get time series.

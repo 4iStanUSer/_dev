@@ -225,6 +225,8 @@ def get_dashboard_data(req):
         return send_error_response(msg)
     try:
         wb = rt_storage.get_wb(user_id, TOOL)
+        wb.kernel.load_instructions(instructions)
+        calc_service.calculate(wb.kernel, wb.container)
         data = getter_service.get_entity_data(wb.container, wb.config,
                                               entity_id)
         return send_success_response(data)

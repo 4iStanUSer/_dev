@@ -616,21 +616,15 @@ dev_template_JJOralCare = {
     },
     'top_entity': {},
     'entities': [
-        ['US'], ['US', 'JJOralCare', 'Mouthwash'],
-        ['Germany'], ['Germany', 'JJOralCare', 'Mouthwash'],
-        ['UK'], ['UK', 'JJOralCare', 'Mouthwash'],
-        ['Brazil'], ['Brazil', 'JJOralCare', 'Mouthwash'],
-        ['Spain'], ['Spain', 'JJOralCare', 'Mouthwash'],
-        ['Italy'], ['Italy', 'JJOralCare', 'Mouthwash'],
-        ['Japan'], ['Japan', 'JJOralCare', 'Mouthwash'],
-        ['Mexico'], ['Mexico', 'JJOralCare', 'Mouthwash'],
-        ['Australia'], ['Australia', 'JJOralCare', 'Mouthwash'],
-        ['Canada'], ['Canada', 'JJOralCare', 'Mouthwash']
+        ['Germany'], ['Germany', 'JJOralCare', 'Mouthwash']
     ],
     'timelines': {
         'names': ['annual'],
-        'alias': {'history': {'annual': ('2012', '2015')},
-                  'forecast': {'annual': ('2016', '2018')}},
+        'alias': {
+            'all': {'annual': ('2013', '2018')},
+            'history': {'annual': ('2013', '2015')},
+            'forecast': {'annual': ('2016', '2018')}
+        },
         'top_ts_points': [
             {
                 'name_full': '2012',
@@ -708,12 +702,14 @@ dev_template_JJOralCare = {
                 'dt_vol_Advertizing': {'props': {'type': 4}, 'timescales': [('annual', 1)]},
                 'dt_vol_Discount changes': {'props': {'type': 4}, 'timescales': [('annual', 1)]},
                 'dt_vol_Promo Support changes': {'props': {'type': 4}, 'timescales': [('annual', 1)]},
+                'dt_vol_LTT': {'props': {'type': 4}, 'timescales': [('annual', 1)]},
 
                 'dt_pr_Inflation': {'props': {'type': 4}, 'timescales': [('annual', 1)]},
                 'dt_pr_Premiumization': {'props': {'type': 4}, 'timescales': [('annual', 1)]},
                 'dt_pr_Unit Size changes': {'props': {'type': 4}, 'timescales': [('annual', 1)]},
                 'dt_pr_Discount changes': {'props': {'type': 4}, 'timescales': [('annual', 1)]},
                 'dt_pr_Promo Support changes': {'props': {'type': 4}, 'timescales': [('annual', 1)]},
+                'dt_pr_Other': {'props': {'type': 4}, 'timescales': [('annual', 1)]},
 
                 'dec_val_Demographic': {'props': {'type': 4}, 'timescales': [('annual', 4)]},
                 'dec_val_Economy': {'props': {'type': 4}, 'timescales': [('annual', 4)]},

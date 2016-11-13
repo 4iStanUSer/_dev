@@ -19,7 +19,7 @@ def download_data_from_wh(warehouse, container, mapping):
             cont_entity = container.get_entity_by_id(row['cont_entity_id'])
             prev_cont_entity = cont_entity
 
-        period = container.timeline.get_period_by_alias(row['cont_var'].timescale, row['time_period'])
+        period = container.timeline.get_period_by_alias(row['cont_var'].timescale, row['time_period'])[0]
         # Get data from warehouse.
         try:
             wh_var = wh_entity.get_variable(row['wh_var'].variable)

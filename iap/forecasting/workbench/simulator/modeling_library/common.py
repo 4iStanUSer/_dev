@@ -1,31 +1,5 @@
 from .base import CalculationBase
 
-class CM_Delay(CalculationBase):
-    # TODO add description
-    def __init__(self, immutable_parameters):
-        try:
-            self._delay = immutable_parameters['delay']
-            self.runs_counter = 0
-            self.prev_values = [0] * self._delay
-        except KeyError:
-            raise Exception
-
-    def run(self):
-        # TODO add description
-        try:
-            index = self.runs_counter % self.delay
-            if self.runs_counter >= self.delay:
-                self.output[0] = self.prev_values[index]
-            self.prev_values[index] = self.input[0]
-            self.runs_counter += 1
-        except ZeroDivisionError as e:
-            raise e
-
-    def clean(self):
-        self.runs_counter = 0
-        for i in range(len(self.prev_values)):
-            self.prev_values[i] = 0
-
 class CM_AutoSum(CalculationBase):
 
     # TODO add description
@@ -54,30 +28,6 @@ class CM_AutoSum(CalculationBase):
         self.output[0] = self.prev_values[index] * (1+self.input[1])
         self.prev_values[index] = self.output[0]
         self.runs_counter += 1
-
-
-class CM_Switch(CalculationBase):
-
-    def __init__(self):
-        self.switch_number = None
-        self.runs_counter = 0
-
-    def load_parameters(self, parameters):
-        try:
-            self.switch_number = int(parameters['runs_number'])
-        except KeyError:
-            raise Exception
-            # TODO define custom exception
-        except ValueError:
-            raise Exception
-            # TODO define custom exception
-
-    def run(self):
-        self.runs_counter += 1
-        if self.runs_counter <= self.switch_number:
-            self.output[0] = self.input[0]
-        else:
-            self.output[0] = self.input[1]
 
 
 class CM_AdStockSimple(CalculationBase):
@@ -158,19 +108,24 @@ class CM_PromoCalculator(CalculationBase):
     #Display parameters - string
     #Promo parameters - string
 
-
 class CM_Delay_Switch(CalculationBase):
     # TODO add description
-    def __init__(self, immutable_parameters):
-        try:
-            self._delay = immutable_parameters['delay']
-            self.runs_counter = 0
-            self.prev_value = 0
-        except KeyError:
-            raise Exception
+    def __init__(self):
+        self._runs_counter = 0
+        self.prev_value = 0
+
+    def clean(self):
+        pass
+
+    @property
+    def out_size(self):
+        return 1
+
+    def set_parameters(self, parameters):
+        self._delay = parameters.get('delay', 0)
+        self.__init__()
 
     def run(self):
-
         if self.runs_counter == 0:
             self.prev_value = self.input[0]
         elif self.runs_counter == 1:
@@ -180,5 +135,6 @@ class CM_Delay_Switch(CalculationBase):
         self.runs_counter += 1
 
     def clean(self):
-        self.runs_counter = 0
-        self.prev_value = 0
+        self.__init__()
+
+

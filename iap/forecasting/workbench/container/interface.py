@@ -57,7 +57,10 @@ class Container:
         if self._root is None:
             return None
         node = self._root.get_node_by_path(path)
-        return self.get_entity_by_id(node.id)
+        if node is not None:
+            return self.get_entity_by_id(node.id)
+        else:
+            return None
 
     def get_entities_by_meta(self, meta_filter, top_entity):
         nodes_ids = []
