@@ -83,7 +83,7 @@ def jj_oral_care_trends(table, config, warehouse):
         # Add data to DB
         entity = warehouse.get_entity([country])
         if entity is None:
-            warehouse.add_entity([country], [Meta('Geography', 'Country')])
+            entity = warehouse.add_entity([country], [Meta('Geography', 'Country')])
         var = entity.get_variable(trend_name)
         if var is None:
             var = entity.force_variable(trend_name, 'float')

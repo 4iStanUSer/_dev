@@ -219,14 +219,16 @@ def get_dashboard_data(req):
     # Get parameters from request.
     try:
         user_id = req.user
-        entity_id = req.json_body['entity_id']
+        entities_ids = req.json_body['entities_ids']
     except KeyError:
         msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
         return send_error_response(msg)
     try:
         wb = rt_storage.get_wb(user_id, TOOL)
+        wb.kernel.load_instructions(instructions)
+        calc_service.calculate(wb.kernel, wb.container)
         data = getter_service.get_entity_data(wb.container, wb.config,
-                                              entity_id)
+                                              entities_ids)
         return send_success_response(data)
     except Exception as e:
         msg = ErrorManager.get_error_message(e)

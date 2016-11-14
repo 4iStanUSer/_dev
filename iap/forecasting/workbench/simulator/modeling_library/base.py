@@ -5,9 +5,10 @@ class CalculationBase:
         obj._input = None
         obj._output = None
         obj._delay = 0
+        obj._runs_counter = 0
         return obj
 
-    def __init__(self, immutable_parameters=None):
+    def __init__(self):
         pass
 
     def set_input_buffer(self, buffer, indxs):
@@ -33,20 +34,26 @@ class CalculationBase:
         # TODO add description
         return self._delay
 
+    @property
+    def runs_counter(self):
+        return self._runs_counter
+
+    @property
+    def out_size(self):
+        # TODO add description
+        raise NotImplementedError
+
     def run(self):
         # TODO add description
-        raise NotImplementedError
+        self._runs_counter += 1
+        return self._runs_counter > self._delay
 
-    def load_parameters(self, parameters):
+    def set_parameters(self, parameters):
         # TODO add description
-        raise NotImplementedError
-
-    def get_parameters_for_save(self):
-        # TODO add description
-        raise NotImplementedError
+        self._delay = parameters.get('delay', 0)
 
     def clean(self):
-        pass
+        self._runs_counter = 0
 
 
 class RelativeBuffer:

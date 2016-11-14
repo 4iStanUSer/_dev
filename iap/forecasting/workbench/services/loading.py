@@ -111,6 +111,8 @@ def _init_entity(dev_template, wh_ent, container, gr_periods, input_rules, outpu
 def _load_dev_data(dev_template, container):
     for item in dev_template['dev_storage']:
         cont_ent = container.get_entity_by_path(item['path'])
+        if cont_ent is None:
+            continue
         if 'coefficients' in item:
             for info in item['coefficients']:
                 var = cont_ent.get_variable(info['name'])

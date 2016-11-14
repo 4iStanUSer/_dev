@@ -1,3 +1,4 @@
+import copy
 from .. import exceptions as ex
 
 class TimeLineManager:
@@ -121,7 +122,21 @@ class TimeLineManager:
             raise ex.TlmNonExistentLabelIndex(ts_name, index)
 
     def get_period_by_alias(self, ts_name, period_alias):
-        return self._period_alias[period_alias][ts_name]
+        start_label, end_label = self._period_alias[period_alias][ts_name]
+        start_index = self.get_index(ts_name, start_label)
+        end_index = self.get_index(ts_name, end_label)
+        return (start_label, end_label), (start_index, end_index)
+
+    def get_timeline_by_period(self, ts_name, period):
+        start_index = self.get_index(ts_name, period[0])
+        end_index = self.get_index(ts_name, period[1])
+        return [x['name_full'] for x in
+                self._get_ts(ts_name)[0]['timeline'][start_index:end_index+1]]
+
+    def get_last_actual(self, ts_name):
+
+        period, period_index = self.get_period_by_alias(ts_name, 'history')
+        return period[1], period_index[1]
 
     def get_growth_periods(self, ts_name, period=None):
         # TODO rework (DR).
