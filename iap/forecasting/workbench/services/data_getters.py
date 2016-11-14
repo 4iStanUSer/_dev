@@ -1,7 +1,7 @@
 from ..container.entity_data import VariableType
 
 
-def get_entity_data(container, config, entity_id):
+def get_entity_data(container, config, entities_ids):
 
     def transform_var_type(variable_type):
         if variable_type & VariableType.is_output:
@@ -24,7 +24,7 @@ def get_entity_data(container, config, entity_id):
     main_period = dict(timsecale=top_ts, start=period[0], mid=mid, end=period[1])
     decomp_period = dict(timescale=top_ts, start=mid, end=period[1])
     # Get requested entity.
-    #entity_id = entities_ids[0]
+    entity_id = entities_ids[0]
     ent = container.get_entity_by_id(entity_id)
     # Get list of timescales.
     ts_tree, ts_borders = container.timeline.get_timeline_tree(top_ts,

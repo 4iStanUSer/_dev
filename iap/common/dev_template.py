@@ -616,7 +616,16 @@ dev_template_JJOralCare = {
     },
     'top_entity': {},
     'entities': [
-        ['Germany'], ['Germany', 'JJOralCare', 'Mouthwash']
+        ['Germany'], ['Germany', 'JJOralCare', 'Mouthwash'],
+        ['US'], ['US', 'JJOralCare', 'Mouthwash'],
+        ['Canada'], ['Canada', 'JJOralCare', 'Mouthwash'],
+        ['Brazil'], ['Brazil', 'JJOralCare', 'Mouthwash'],
+        ['Japan'], ['Japan', 'JJOralCare', 'Mouthwash'],
+        ['Mexico'], ['Mexico', 'JJOralCare', 'Mouthwash'],
+        ['Spain'], ['Spain', 'JJOralCare', 'Mouthwash'],
+        ['Italy'], ['Italy', 'JJOralCare', 'Mouthwash'],
+        ['Australia'], ['Australia', 'JJOralCare', 'Mouthwash'],
+        ['UK'], ['UK', 'JJOralCare', 'Mouthwash']
     ],
     'timelines': {
         'names': ['annual'],

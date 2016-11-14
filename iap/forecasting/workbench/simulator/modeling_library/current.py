@@ -89,8 +89,11 @@ class CM_Growth(CalculationBase):
         elif self.runs_counter >= self._period_length:
             end_val = self.input[0]
             if self._var_type == 'abs':
-                self.output[0] = \
-                    pow(end_val/self._start_val, self._period_length) - 1
+                if self._start_val == 0:
+                    self.output[0] = 0
+                else:
+                    self.output[0] = \
+                        pow(end_val / self._start_val, self._period_length) - 1
             elif self._var_type == 'rate':
                 self.output[0] = \
                     pow(end_val - self._start_val + 1, self._period_length) - 1
@@ -215,7 +218,7 @@ class CM_ImpactAbove(CalculationBase):
             total_change = self.input[0] / self.input[1] - 1
         except ZeroDivisionError:
             self.output[0] = 0
-            return
+            return super().run()
         for i in range(self._above_count):
             try:
                 change = self.input[2 * i + 2] / self.input[2 * i + 3] - 1
