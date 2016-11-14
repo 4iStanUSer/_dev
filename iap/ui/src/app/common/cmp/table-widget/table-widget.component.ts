@@ -30,6 +30,7 @@ class RowModel {
     children: Array<RowModel> = [];
     isExpanded: boolean = false;
     isHidden: boolean = false;
+    notSelectable: boolean = false;
 
     constructor(public id: string,
                 public meta: Array<Object>) {
@@ -144,7 +145,11 @@ export class TableWidgetComponent {
             if (this.rowsMetaCount < row['meta'].length) {
                 this.rowsMetaCount = row['meta'].length;
             }
-            rows.push(new RowModel(row['id'], row['meta']));
+            let rowM = new RowModel(row['id'], row['meta']);
+            if (row['notSelectable']) {
+                rowM.notSelectable = true;
+            }
+            rows.push(rowM);
             rowsIdIndex[row['id']] = i;
             if (row['parent_id'] !== null) {
                 rowsChildParent[i] = row['parent_id'];
@@ -190,12 +195,14 @@ export class TableWidgetComponent {
     constructor() {
     }
 
-    private onClickRow(rowId: string) {
-        if (this.selectedRowId != rowId) {
-            this.selectedRowId = rowId;
-            this.rowSelect.emit({
-                row_id: rowId
-            });
+    private onClickRow(row: RowModel) {
+        if (!row.notSelectable) {
+            if (this.selectedRowId != row.id) {
+                this.selectedRowId = row.id;
+                this.rowSelect.emit({
+                    row_id: row.id
+                });
+            }
         }
     }
 

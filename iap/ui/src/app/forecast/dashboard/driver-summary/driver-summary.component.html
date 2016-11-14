@@ -23,6 +23,7 @@
     <div class="decomp-section">
         <div class="header">
             {{ dm.lang['decomposition_block'] }}
+            {{ ((decompData) ? decompData['start'] : null) }}
 
             <buttons-group
                 *ngIf="dTypesSwitcherData"

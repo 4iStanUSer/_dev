@@ -74,10 +74,15 @@ export class DriverSummaryComponent implements OnInit {
         this.dm.state.set('d_summary_table_collapsed_expanded', newStatus);
     }
     private onRowSelect(o) {
-        console.log(o);
-        this.decompData['start'] = (parseInt(o['row_id'])).toString();
-        this.decompData['end'] = (parseInt(o['row_id'])+1).toString();
-        this.rebuildDecompositionChart();
+        let period = this.dm.convertDrvSumTableIdsIntoPeriod(o['row_id']);
+        console.log(period);
+        if (period) {
+            this.decompData['start'] = period['start'];
+            this.decompData['end'] = period['end'];
+            this.rebuildDecompositionChart();
+        } else {
+            console.error('There is no id for selected row');
+        }
     }
     /*-----------.TABLE-SECTION--------------*/
 

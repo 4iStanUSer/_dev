@@ -247,13 +247,22 @@ export class DataManagerService {
         return output;
     }
 
-
+    private drvSumTableIds: {
+        [id: string]: {
+            start: string,
+            end: string
+        }
+    } = {};
+    convertDrvSumTableIdsIntoPeriod(id: string) {
+        return this.drvSumTableIds[id];
+    }
     getData_DriverSummaryTableData(start: string,
                                    end: string,
                                    mid: string,
                                    timescale: string,
                                    selRowId: string = null): TableWidgetData {
         // TODO Implement period limitations
+        this.drvSumTableIds = {};
 
         let variables = this.dataModel.getVariablesByType('driver');
         let timelabels = this.dataModel.getPlainTimeLabels();
@@ -268,6 +277,11 @@ export class DataManagerService {
         l = (timelabels && timelabels.length) ? timelabels.length : 0;
         for (let i = 0; i < l; i++) {
             let timelabel = timelabels[i];
+            this.drvSumTableIds[timelabel.full_name] = {
+                // TODO Get from CAGR data
+                start: timelabel.full_name,
+                end: (parseInt(timelabel.full_name)+1).toString(),
+            };
             tls.push({
                 id: timelabel.full_name,
                 parent_id: (timelabel.parent)
@@ -282,6 +296,7 @@ export class DataManagerService {
             }
             timelines[timelabel.timescale].push(timelabel.full_name);
         }
+        tls[tls.length-1]['notSelectable'] = true;
 
         // For COLS
         l = (variables && variables.length) ? variables.length : 0;
@@ -310,6 +325,16 @@ export class DataManagerService {
 
         // Add CAGRs
         let ids = ['cagr/'+start+'/'+mid, 'cagr/'+mid+'/'+end];
+        this.drvSumTableIds[ids[0]] = {
+            // TODO Get from CAGR data
+            start: start,
+            end: mid,
+        };
+        this.drvSumTableIds[ids[1]] = {
+            // TODO Get from CAGR data
+            start: mid,
+            end: end,
+        };
         tls.push({
             id: ids[0],
             parent_id: null,
@@ -336,8 +361,6 @@ export class DataManagerService {
             vals[ids[1]][variable.key] = this.dataModel.getCagrValue(
                 variable.key, mid, end, timescale);
         }
-
-
 
         return {
             selected_row_id: selRowId,
