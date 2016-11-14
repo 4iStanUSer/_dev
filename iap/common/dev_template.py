@@ -628,7 +628,7 @@ dev_template_JJOralCare = {
         ['UK'], ['UK', 'JJOralCare', 'Mouthwash']
     ],
     'timelines': {
-        'names': ['annual'],
+        'properties': {'annual': {'name': 'Annual', 'growth_lag': 1}},
         'alias': {
             'all': {'annual': ('2013', '2018')},
             'history': {'annual': ('2013', '2015')},
@@ -756,31 +756,31 @@ dev_template_JJOralCare = {
             },
             'decomposition': {
                 'Value': [
-                    'dec_val_Demographic',
-                    'dec_val_Economy',
-                    'dec_val_Distribution',
-                    'dec_val_Innovation',
-                    'dec_val_Advertising',
-                    'dec_val_Trade & Promo-on-Volume',
-                    'dec_val_Price-on-Volume Impact',
-                    'dec_val_UnitSize-on-Volume Impact',
-                    'dec_val_Inflation',
-                    'dec_val_Manufacturer Pricing',
-                    'dec_val_Premiumization',
-                    'dec_val_Trade & Promo',
-                    'dec_val_Unit Size',
-                    'dec_val_Other'
+                    {'factor': 'dec_val_Demographic', 'drivers': ['Population total']},
+                    {'factor': 'dec_val_Economy', 'drivers': ['GDP PC']},
+                    {'factor': 'dec_val_Distribution', 'drivers': ['Distribution', 'Innovation TDP share']},
+                    {'factor': 'dec_val_Innovation', 'drivers': ['Distribution', 'Innovation TDP share']},
+                    {'factor': 'dec_val_Advertising', 'drivers': ['Media Spend']},
+                    {'factor': 'dec_val_Trade & Promo-on-Volume', 'drivers': ['Avg % Discount', 'Avg % Promo Support']},
+                    {'factor': 'dec_val_Price-on-Volume Impact', 'drivers': ['Price per Unit']},
+                    {'factor': 'dec_val_UnitSize-on-Volume Impact', 'drivers': ['Unit Size']},
+                    {'factor': 'dec_val_Inflation', 'drivers': ['CPI']},
+                    {'factor': 'dec_val_Manufacturer Pricing', 'drivers': []},
+                    {'factor': 'dec_val_Premiumization', 'drivers': ['Premiumization']},
+                    {'factor': 'dec_val_Trade & Promo', 'drivers': ['Avg % Discount', 'Avg % Promo Support', 'Avg % Volume sold as Promo']},
+                    {'factor': 'dec_val_Unit Size', 'drivers': ['Unit Size']},
+                    {'factor': 'dec_val_Other', 'drivers': []}
                 ],
                 'Volume': [
-                    'dec_vol_Demographic',
-                    'dec_vol_Economy',
-                    'dec_vol_Distribution',
-                    'dec_vol_Innovation',
-                    'dec_vol_Advertising',
-                    'dec_vol_Trade & Promo',
-                    'dec_vol_Price-on-Volume Impact',
-                    'dec_vol_UnitSize-on-Volume Impact',
-                    'dec_vol_Long Term Trend'
+                    {'factor': 'dec_vol_Demographic', 'drivers': ['Population total']},
+                    {'factor': 'dec_vol_Economy', 'drivers': ['GDP PC']},
+                    {'factor': 'dec_vol_Distribution', 'drivers': ['Distribution', 'Innovation TDP share']},
+                    {'factor': 'dec_vol_Innovation', 'drivers': ['Distribution', 'Innovation TDP share']},
+                    {'factor': 'dec_vol_Advertising', 'drivers': ['Media Spend']},
+                    {'factor': 'dec_vol_Trade & Promo', 'drivers': ['Avg % Discount', 'Avg % Promo Support']},
+                    {'factor': 'dec_vol_Price-on-Volume Impact', 'drivers': ['Price per Unit']},
+                    {'factor': 'dec_vol_UnitSize-on-Volume Impact', 'drivers': ['Unit Size']},
+                    {'factor': 'dec_vol_Long Term Trend', 'drivers': ['LTT']}
                 ]
             }
         }

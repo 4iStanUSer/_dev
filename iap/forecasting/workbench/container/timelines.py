@@ -14,8 +14,10 @@ class TimeLineManager:
         self._timescales = backup['timescales']
         self._period_alias = backup['alias']
 
-    def load_timelines(self, ts_names, alias, top_ts_points):
-        self._timescales = [dict(name=x, timeline=[]) for x in ts_names]
+    def load_timelines(self, ts_properties, alias, top_ts_points):
+        self._timescales = \
+            [dict(name=name, growth_lag=props['growth_lag'], timeline=[])
+             for name, props in ts_properties.items()]
         for period_name, ts_borders in alias.items():
             self._period_alias[period_name] = dict(ts_borders)
         for point in top_ts_points:
@@ -37,6 +39,10 @@ class TimeLineManager:
             if ts['name'] == ts_name:
                 return ts, index
         raise ex.TlmNonExistentName(ts_name)
+
+    def get_growth_lag(self, ts_name):
+        ts = self._get_ts(ts_name)[0]
+        return ts['growth_lag']
 
     def get_timeline_tree(self, top_ts_name, bottom_ts_name, period):
         # Declare outputs

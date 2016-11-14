@@ -23,13 +23,24 @@ def get_entity_data(container, config, entities_ids):
     mid = container.timeline.get_period_by_alias(top_ts, 'history')[1]
     main_period = dict(timsecale=top_ts, start=period[0], mid=mid, end=period[1])
     decomp_period = dict(timescale=top_ts, start=mid, end=period[1])
+
     # Get requested entity.
     entity_id = entities_ids[0]
     ent = container.get_entity_by_id(entity_id)
+
+    # Define connections between decomposition factors and drivers.
+    factors_drivers = {x: {} for x in config[ent.meta].keys()}
+    for dec_type, dec_factors in config[ent.meta].items():
+        for factor_dict in dec_factors:
+            factors_drivers[dec_type][factor_dict['factor']] = factor_dict['drivers']
+
     # Get list of timescales.
     ts_tree, ts_borders = container.timeline.get_timeline_tree(top_ts,
                                                                bottom_ts,
                                                                period)
+    timescales = [dict(key=x, name=x,
+                       growth_lag=container.timeline.get_growth_lag(x))
+                  for x in ts_borders.keys()]
     # Get time labels for every timescale.
     # Get growth rates periods for every timescale.
     time_labels = dict()
@@ -52,24 +63,30 @@ def get_entity_data(container, config, entities_ids):
                  metric=var.get_property('metric'),
                  multiplier=var.get_property('mult'),
                  type=transform_var_type(var.get_property('type')))
-    # Get CAGRS.
-    cagrs = []
+
+    # Collect growth rates and CAGRS.
+    grs = []
+    for ts_name, periods in gr_periods.items():
+        for p in periods:
+            grs.extend(_get_entity_growth(ent, ts_name, p))
     for period in cagr_periods:
-        cagrs.extend(_get_entity_cagrs(ent, top_ts, period))
-    out_cagrs = dict()
-    for item in cagrs:
-        if item['var_name'] not in out_cagrs:
-            out_cagrs[item['var_name']] = []
-        out_cagrs[item['var_name']].append(dict(timescale = top_ts,
-                                                start=item['start'],
-                                                end=item['end'],
-                                                value=item['value']))
+        grs.extend(_get_entity_growth(ent, top_ts, period))
+    # Transform structure for output.
+    growth = dict()
+    for item in grs:
+        if item['var_name'] not in growth:
+            growth[item['var_name']] = []
+        growth[item['var_name']].append(dict(timescale=top_ts,
+                                             start=item['start'],
+                                             end=item['end'],
+                                             value=item['value']))
     # Get decomposition.
     dec_periods = container.timeline.get_growth_periods(top_ts, ts_borders[top_ts])
     dec_periods.extend(cagr_periods)
     dec_config = config[ent.meta]
     decomposition = [_get_entity_dec(ent, dec_config, top_ts, p)
                      for p in dec_periods]
+
     # Init structure for output data.
     data = dict([(x, dict()) for x in ts_borders.keys()])
     # Get drivers and outputs from container.
@@ -82,15 +99,11 @@ def get_entity_data(container, config, entities_ids):
             continue
         for ts_name, ts_period in ts_borders.items():
             ts = var.get_time_series(ts_name)
-            ps = var.get_periods_series(ts_name)
             # Fill output data structure.
             values = ts.get_values_for_period(ts_period)
-            growth_rates = [ps.get_value(period) for period in gr_periods[ts_name]]
-            growth_rates = [0]*(len(values) - len(growth_rates)) + growth_rates
-            data[ts_name][var.name] = [
-                dict(timestamp=time_labels[ts_name][i], value=values[i],
-                     gr=growth_rates[i])
-                for i in range(len(values))]
+            data[ts_name][var.name] = \
+                [dict(timestamp=time_labels[ts_name][i], value=values[i])
+                 for i in range(len(values))]
 
     # Insights.
     insights = [dict(text=x) for x in ent.insights]
@@ -98,14 +111,18 @@ def get_entity_data(container, config, entities_ids):
 
     # Return entire entity data.
     result = dict(
-        data=dict(timelabels=ts_tree,
-                  variables=out_vars_props,
-                  data=data,
-                  cagrs=out_cagrs,
-                  decomposition=decomposition,
-                  insights=insights),
+        data=dict(
+            timescales=timescales,
+            timelabels=ts_tree,
+            variables=out_vars_props,
+            data=data,
+            growth=growth,
+            decomposition=decomposition,
+            insights=insights),
         config=dict(main_period=main_period,
-                    decomp_period=decomp_period)
+                    decomp_period=decomp_period,
+                    factors_drivers=factors_drivers,
+                    dec_timescales=[top_ts])
     )
     return result
 
@@ -138,7 +155,8 @@ def _get_entity_dec(entity, dec_config, timescale, period):
         decomp_tree[dec_type] = []
         decomp_tree[dec_type].append(dict(name='ini_val', value=1,
                                           growth=0, children=None))
-        for var_name in dec_vars:
+        for item in dec_vars:
+            var_name = item['factor']
             var = entity.get_variable(var_name)
             if var is None:
                 continue
@@ -165,7 +183,7 @@ def get_cagrs(container, config, entities_ids, periods):
     all_cagrs = []
     for period in periods:
         try:
-            period_cagrs = _get_entity_cagrs(ent, timescale, period)
+            period_cagrs = _get_entity_growth(ent, timescale, period)
         except Exception:
             period_cagrs = None
         all_cagrs.extend(period_cagrs)
@@ -179,8 +197,8 @@ def get_cagrs(container, config, entities_ids, periods):
     return out_cagrs
 
 
-def _get_entity_cagrs(entity, timescale, period):
-    cagrs = []
+def _get_entity_growth(entity, timescale, period):
+    growth = []
     # Get drivers and outputs from container.
     for var in entity.variables:
         var_type = var.get_property('type')
@@ -193,8 +211,8 @@ def _get_entity_cagrs(entity, timescale, period):
         value = ps.get_value(period)
         if value is None:
             raise Exception
-        cagrs.append(dict(var_name=var.name,
+        growth.append(dict(var_name=var.name,
                           start=period[0],
                           end=period[1],
                           value=value))
-    return cagrs
+    return growth

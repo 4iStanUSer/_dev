@@ -18,11 +18,11 @@ def init_configuration(dev_template, config):
 def init_container(dev_template, wh, container, config, wh_inputs, wh_outputs):
     # Initialize time scales.
     timelines_info = dev_template['timelines']
-    container.timeline.load_timelines(timelines_info['names'],
+    container.timeline.load_timelines(timelines_info['properties'],
                              timelines_info['alias'],
                              timelines_info['top_ts_points'])
     gr_periods = []
-    for ts_name in dev_template['timelines']['names']:
+    for ts_name in dev_template['timelines']['properties'].keys():
         gr_periods.extend(config['dashboard_cagr_periods'][ts_name])
         gr_periods.extend(container.timeline.get_growth_periods(ts_name))
     # Create container structure
