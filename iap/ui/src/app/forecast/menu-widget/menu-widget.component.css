@@ -1,0 +1,7 @@
+ul li {
+    display: inline-block;
+    margin: 0 15px;
+}
+ul li a.active {
+    font-weight: bold;
+}
