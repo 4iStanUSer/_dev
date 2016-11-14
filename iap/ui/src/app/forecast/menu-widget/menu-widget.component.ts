@@ -86,8 +86,8 @@ export class MenuWidgetComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges(ch: SimpleChanges) {
+        console.log('MenuWidgetComponent -> ngOnChanges()');
         if (ch['data'] && ch['data']['currentValue']) {
-            console.log(ch['data']['currentValue']);
             let l = ch['data']['currentValue'].length;
             for (let i = 0; i < l; i++) {
                 let item = ch['data']['currentValue'][i];

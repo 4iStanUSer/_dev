@@ -21,7 +21,6 @@ import {SimulatorPageDataManagerService} from "./simulator-page/simulator-page-d
 import {ForecastComponent} from "./forecast.component";
 import {ScenariosListComponent} from "./scenarios-list/scenarios-list.component";
 
-import {ForecastSectionComponent} from './dashboard/forecast-section/forecast-section.component';
 import {SelectorsComponent} from './dashboard/selectors/selectors.component';
 import {FlatSelectorComponent} from './dashboard/selectors/flat-selector/flat-selector.component';
 import {HierarchicalSelectorComponent} from './dashboard/selectors/hierarchical-selector/hierarchical-selector.component';
@@ -52,7 +51,6 @@ import { MenuWidgetComponent } from './menu-widget/menu-widget.component';
         DriverDetailComponent,
         DriverSummaryComponent,
         InsightsComponent,
-        ForecastSectionComponent,
         SelectorsComponent,
         FlatSelectorComponent,
         HierarchicalSelectorComponent,

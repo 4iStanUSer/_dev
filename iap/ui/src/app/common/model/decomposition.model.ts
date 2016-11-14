@@ -71,12 +71,12 @@ export class DecompositionModel {
         }
     }
 
-    getDecomposition(variable: string, start: string, end: string) {
+    getDecomposition(type: string, start: string, end: string) {
         let l = this.storage.length;
         for (let i = 0; i < l; i++) {
             if (this.storage[i].start == start
                 && this.storage[i].end == end) {
-                return this.storage[i].getTypeData(variable);
+                return this.storage[i].getTypeData(type);
             }
         }
     }

@@ -27,9 +27,9 @@ class CalculationKernel:
         # Load queues
         for q_template in instructions['queues']:
             # Check for duplicated queues.
-            if q_template['name'] in self.queues:
-                # TODO Define custom exception.
-                raise Exception
+            # if q_template['name'] in self.queues:
+            #     # TODO Define custom exception.
+            #     raise Exception
             # Create new queue and load template.
             queue = Queue()
             queue.load_template(q_template)

@@ -36,34 +36,42 @@ export class DriverSummaryComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.dm.getDataModel().subscribe(() => {
-            this.periods = this.dm.periods;
+        if (this.dm.dataIsResolved) {
+            this.collectData();
+        } else {
+            let initSubject = this.dm.init();
+            initSubject.subscribe(() => {
+                this.collectData();
+                initSubject.complete();
+            });
+        }
+    }
 
-            // TODO Question about default selection
-            let start = this.periods['main']['start'];
-            let mid = this.periods['main']['mid'];
+    private collectData() {
+        this.periods = this.dm.periods;
+        // TODO Question about default selection
+        let start = this.periods['main']['start'];
+        let mid = this.periods['main']['mid'];
 
-            this.selTableRowId = 'cagr/'+start+'/'+mid;
+        this.selTableRowId = 'cagr/'+start+'/'+mid;
 
-            this.decompData = {
-                timescale: 'annual',
-                start: start,
-                end: mid,
-                type: this.dm.state.get('decomp_value_volume_price')
-            };
-            this.rebuildDecompositionChart();
+        this.decompData = {
+            timescale: 'annual',
+            start: start,
+            end: mid,
+            type: this.dm.state.get('decomp_value_volume_price')
+        };
+        this.rebuildDecompositionChart();
 
-            this.tableData = this.dm.getData_DriverSummaryTableData(
-                this.periods['main']['start'],
-                this.periods['main']['end'],
-                this.periods['main']['mid'],
-                'annual',
-                this.selTableRowId // TODO Pass some Logic !!!
-            );
+        this.tableData = this.dm.getData_DriverSummaryTableData(
+            this.periods['main']['start'],
+            this.periods['main']['end'],
+            this.periods['main']['mid'],
+            'annual',
+            this.selTableRowId // TODO Pass some Logic !!!
+        );
 
-            this.dTypesSwitcherData = this.getDecompositionTypes();
-
-        });
+        this.dTypesSwitcherData = this.getDecompositionTypes();
     }
 
 

@@ -4,10 +4,10 @@ import {
     TimeLabelModel
 } from "./time-labels.model";
 import {
-    CagrInput,
-    CagrsModel,
-    CagrModel
-} from "./cagrs.model";
+    GrowthRateInput,
+    GrowthRateModel,
+    GrowthRatesModel
+} from "./growth.model";
 import {
     PointValueInput,
     PointsValuesModel,
@@ -18,31 +18,35 @@ import {
     VariablesModel,
     VariableModel
 } from "./variables.model";
+import {TimeScalesModel, TimeScaleInput} from "./time-scales.model";
+
 
 
 export class DataModel {
+    timeScales: TimeScalesModel = null;
     timeLables: TimeLabelsModel = null;
-    cargs: CagrsModel = null;
+    grRates: GrowthRatesModel = null;
     variables: VariablesModel = null;
     pointsValues: PointsValuesModel = null;
 
-    constructor(timeLabels: Array<TimelabelInput>,
+    constructor(timeScales: Array<TimeScaleInput>,
+                timeLabels: Array<TimelabelInput>,
                 variables: {[variable: string]: VariableInput},
-                cagrs: {[variable: string]: Array<CagrInput>},
+                rates: {[variable: string]: Array<GrowthRateInput>},
                 pointsValues: {
                     [timescale: string]: {
                         [variable: string]: Array<PointValueInput>
                     }
                 }) {
 
+        this.timeScales = new TimeScalesModel(timeScales);
         this.timeLables = new TimeLabelsModel(timeLabels);
         this.variables = new VariablesModel(variables);
-        this.cargs = new CagrsModel(cagrs);
+        this.grRates = new GrowthRatesModel(rates);
         this.pointsValues = new PointsValuesModel(pointsValues,
             this.variables, this.timeLables);
     }
 
-    // TODO Fill DataModel with methods (VL)
 
     getTimeLine(timescale: string, start: string,
                 end: string): Array<TimeLabelModel> {
@@ -85,17 +89,29 @@ export class DataModel {
         return pointsValue;
     }
 
+    getVariablesByType(type: string): Array<VariableModel> {
+        let variables = Object.keys(this.variables.storage);
+        let output = [];
+        let l = variables.length;
+        for (let i = 0; i < l; i++) {
+            if (type == this.variables.storage[variables[i]].type) {
+                output.push(this.variables.storage[variables[i]]);
+            }
+        }
+        return output;
+    }
+
 
     // ??????????????? TODO Review
     getCargsForPointsValues(variable: VariableModel,
                             periods: Array<{
                                 'start': string,
                                 'end': string
-                            }>): Array<CagrModel> {
+                            }>): Array<GrowthRateModel> {
 
         return periods.map((p) => {
-            for (let i = 0; i < this.cargs.storage[variable.name].length; i++) {
-                let carg = this.cargs.storage[variable.name][i];
+            for (let i = 0; i < this.grRates.storage[variable.name].length; i++) {
+                let carg = this.grRates.storage[variable.name][i];
                 if (carg['start'] == p['start'] && carg['end'] == p['end']) {
                     return carg;
                 }
@@ -106,28 +122,19 @@ export class DataModel {
         });
     }
 
-    getVariablesByType(type: string): Array<VariableModel> {
-        let variables = Object.keys(this.variables.storage);
-        let output = [];
-        for (let i = 0; i < variables.length; i++) {
-            if (type == this.variables.storage[variables[i]].type) {
-                output.push(this.variables.storage[variables[i]]);
-            }
-        }
-        return output;
-    }
+
 
     getCagrValue(varKey: string, start: string,
                  end: string, timescale: string) {
         // TODO Implement timescale for CAGR
         try {
-            for (let i = 0; i<this.cargs[varKey].length;i++) {
+            for (let i = 0; i<this.grRates[varKey].length;i++) {
                 if (
-                    this.cargs[varKey][i].start == start
-                    && this.cargs[varKey][i].end == end
+                    this.grRates[varKey][i].start == start
+                    && this.grRates[varKey][i].end == end
                     && true // this.cargs[varKey][i].timescale == timescale
                 ) {
-                    return this.cargs[varKey][i].value;
+                    return this.grRates[varKey][i].value;
                 }
             }
         } catch (e) {
@@ -135,5 +142,7 @@ export class DataModel {
             return null;
         }
     }
+
+    getFullPeriodTime
 
 }

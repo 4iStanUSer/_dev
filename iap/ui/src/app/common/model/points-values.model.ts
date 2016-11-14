@@ -2,17 +2,15 @@ import {VariablesModel, VariableModel} from "./variables.model";
 import {TimeLabelsModel, TimeLabelModel} from "./time-labels.model";
 
 export interface PointValueInput {
-    value: number;
     timestamp: string;
-    gr: number;
+    value: number;
 }
 
 export class PointValueModel {
     variable: VariableModel;
     timelabel: TimeLabelModel;
 
-    constructor(public timestamp: string, public value: number,
-                public gr: number) { }
+    constructor(public timestamp: string, public value: number) { }
 }
 
 export class PointsValuesModel { // TODO Refactor storage structure (VL)
@@ -46,8 +44,7 @@ export class PointsValuesModel { // TODO Refactor storage structure (VL)
                 for (let i = 0; i<input[timescale][variable].length; i++) {
                     let pointV = new PointValueModel(
                         input[timescale][variable][i]['timestamp'],
-                        input[timescale][variable][i]['value'],
-                        input[timescale][variable][i]['gr']
+                        input[timescale][variable][i]['value']
                     );
 
                     if (v) {
