@@ -181,8 +181,14 @@ export class GeneralComponent implements OnInit {
         let newState = (now == 'collapse') ? 'expand' : 'collapse';
         this.dm.state.set('forecast_collapse_expand', newState);
     }
-    private onChangedForecastPeriod(period) { //TimePeriodInput
+    private onChangedForecastPeriod(period) {
         console.log(period);
+        this.dm.setPeriod('main', period['scale'], period['start'],
+            period['end'], period['mid']);
+
+        this.fTabsAbsData = this.getForecastTabsAbsData();
+        this.fTabsRateData = this.getForecastTabsRateData();
+
     }
 
     /*-----------.FORECAST--------------*/
@@ -249,6 +255,9 @@ export class GeneralComponent implements OnInit {
     }
     private onChangedDecompPeriod(period) {
         console.log(period);
+        this.dm.setPeriod('decomp', period['scale'], period['start'],
+            period['end']);
+        this.dTypeData = this.getDecompositionData();
     }
 
     /*-----------.DECOMPOSITION--------------*/

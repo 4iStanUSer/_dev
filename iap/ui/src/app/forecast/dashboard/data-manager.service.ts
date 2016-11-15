@@ -107,7 +107,6 @@ export class DataManagerService {
                 this.resolveInitObervable();
             }, 10);
         }
-        console.log(this.initResolver);
         return this.initResolver;
     }
 
@@ -152,7 +151,7 @@ export class DataManagerService {
             );
             this.periods['decomp'] = new Period(
                 c['decomp_period']['timescale'],
-                '2013', //c['decomp_period']['start'], // TODO Replace
+                '2015', //c['decomp_period']['start'], // TODO Replace
                 c['decomp_period']['end']
             );
 
@@ -190,34 +189,34 @@ export class DataManagerService {
         this.isData['static']['sent'] = true;
         this.isData['static']['received'] = false;
 
-        // this.req.get({
-        //     'url': '/forecast/get_page_configuration',
-        //     'data': {
-        //         'page_name': this.pageName
-        //     }
-        // }).subscribe((d)=> {
-        //     this.isData['static']['received'] = true;
-        //
-        //     this.lang = this.sds.getLangPack(this.pageName);
-        //     this.config = this.sds.getConfig(this.pageName);
-        //
-        //     this.state = this.stateService.getPageState(this.pageName);
-        //     this.defaults = this.sds.getDefaults(this.pageName);
-        //
-        //     // Merge defaults into state
-        //     let defKeys = Object.keys(this.defaults),
-        //         defKeysLen = defKeys.length,
-        //         defKey = null;
-        //     for (let i = 0; i < defKeysLen; i++) {
-        //         defKey = defKeys[i];
-        //         let v = this.state.get(defKey);
-        //         if (v === null || v === undefined) {
-        //             this.state.set(defKey, this.defaults[defKey]);
-        //         }
-        //     }
-        //
-        //     this.resolveInitObervable();
-        // });
+        this.req.get({
+            'url': '/forecast/get_page_configuration',
+            'data': {
+                'page_name': this.pageName
+            }
+        }).subscribe((d)=> {
+            // this.isData['static']['received'] = true;
+            //
+            // this.lang = this.sds.getLangPack(this.pageName);
+            // this.config = this.sds.getConfig(this.pageName);
+            //
+            // this.state = this.stateService.getPageState(this.pageName);
+            // this.defaults = this.sds.getDefaults(this.pageName);
+            //
+            // // Merge defaults into state
+            // let defKeys = Object.keys(this.defaults),
+            //     defKeysLen = defKeys.length,
+            //     defKey = null;
+            // for (let i = 0; i < defKeysLen; i++) {
+            //     defKey = defKeys[i];
+            //     let v = this.state.get(defKey);
+            //     if (v === null || v === undefined) {
+            //         this.state.set(defKey, this.defaults[defKey]);
+            //     }
+            // }
+            //
+            // this.resolveInitObervable();
+        });
         /////////////////////////////////////////
         this.isData['static']['received'] = true;
 
@@ -272,6 +271,15 @@ export class DataManagerService {
     getPeriod(name: string): Period {
         return (this.periods[name]) ? this.periods[name] : null;
     }
+    setPeriod(name: string, timescale: string, start: string,
+              end: string, mid: string = null) {
+        if (this.periods[name]) {
+            this.periods[name].timescale = timescale;
+            this.periods[name].start = start;
+            this.periods[name].end = end;
+            this.periods[name].mid = mid;
+        }
+    }
 
     getData_ForecastAbsValues(timescale: string, timepoints: Array<string>, variable: string) {
         let pointsValue: Array<PointValueModel>;
@@ -283,18 +291,20 @@ export class DataManagerService {
             rate: []
         };
 
-        pointsValue = this.dataModel.getPointsValue(timescale, variable, timepoints);
-
+        pointsValue = this.dataModel.getPointsValue(timescale, variable,
+            timepoints);
         for (let j = 0; j < pointsValue.length; j++) {
             output['absolute'].push({
                 name: pointsValue[j].timestamp, // OR timelabel.full_name
                 value: pointsValue[j].value
             });
-            // !!!!!!
-            if (j != 0) { // Change this use or growth or cagrs
-                // output['rate'].push(pointsValue[j].gr); // TODO
-            }
-            // !!!!!!
+        }
+        for (let i = 0;i<timepoints.length-1;i++) {
+            let start = timepoints[i];
+            let end = timepoints[i+1];
+            let growth = this.dataModel.getGrowthRate(variable, start,
+                end, timescale);
+            output['rate'].push(growth);
         }
         return output;
     }
@@ -456,9 +466,9 @@ export class DataManagerService {
         for (let i = 0; i < l; i++) {
             let variable = variables[i];
 
-            vals[ids[0]][variable.key] = this.dataModel.getCagrValue(
+            vals[ids[0]][variable.key] = this.dataModel.getGrowthRate(
                 variable.key, start, mid, timescale);
-            vals[ids[1]][variable.key] = this.dataModel.getCagrValue(
+            vals[ids[1]][variable.key] = this.dataModel.getGrowthRate(
                 variable.key, mid, end, timescale);
         }
 
@@ -476,7 +486,9 @@ export class DataManagerService {
 
     getFullPeriod(timescale: string, start: string,
                   end: string): Array<string> {
-        return ['2013', '2014', '2015', '2016', '2017', '2018'];
+        let timelabels = this.dataModel.getTimeLine(timescale, start, end);
+        return (timelabels && timelabels.length)
+            ? timelabels.map((el) => {return el.full_name}) : [];
     }
 
 }

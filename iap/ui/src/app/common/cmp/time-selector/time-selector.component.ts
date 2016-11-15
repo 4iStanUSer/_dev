@@ -19,7 +19,7 @@ import {TimePeriodInput} from "../../model/time-period.model";
 export class Sliders {
     start: TimeLabelModel;
     end: TimeLabelModel;
-    // mid: TimeLabel;
+    mid?: TimeLabelModel;
 }
 
 
@@ -59,18 +59,8 @@ export class TimeSelectorComponent implements OnInit, OnChanges {
 
     @Input() data: Array<TimelabelInput> = [];
     @Input() selected: TimePeriodInput = null;
-    // {
-    //     start: {scale: string, full_name: string},
-    //     end: {scale: string, full_name: string},
-    //     mid?: {scale: string, full_name: string},
-    // };
 
     @Output() changed = new EventEmitter(); //: EventEmitter<TimePeriodInput>
-    // {
-    //     start: {scale: string, full_name: string},
-    //     end: {scale: string, full_name: string},
-    //     mid?: {scale: string, full_name: string},
-    // }
 
     ngOnChanges(ch: SimpleChanges) {
         console.info('TimeSelectorComponent: ngOnChanges()');
@@ -158,14 +148,17 @@ export class TimeSelectorComponent implements OnInit, OnChanges {
     private save() {
         this.selectedPoints['start'] = this.preSelectedPoints[this.currScale]['start'];
         this.selectedPoints['end'] = this.preSelectedPoints[this.currScale]['end'];
-        // this.selectedPoints[this.currScale]['mid'] = this.preSelectedPoints['mid'];
+        this.selectedPoints['mid'] = this.preSelectedPoints[this.currScale]['mid'];
 
         this.setExpandedMode(false);
-        // TODO Emit event
+
         this.changed.emit({
             'scale': this.currScale,
             'start': this.selectedPoints['start']['full_name'],
             'end': this.selectedPoints['end']['full_name'],
+            'mid': ((this.selectedPoints['mid']
+                && this.selectedPoints['mid']['full_name'])
+                ? this.selectedPoints['mid']['full_name'] : null)
         });
     }
 }

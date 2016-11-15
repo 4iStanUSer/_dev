@@ -102,39 +102,16 @@ export class DataModel {
     }
 
 
-    // ??????????????? TODO Review
-    getCargsForPointsValues(variable: VariableModel,
-                            periods: Array<{
-                                'start': string,
-                                'end': string
-                            }>): Array<GrowthRateModel> {
-
-        return periods.map((p) => {
-            for (let i = 0; i < this.grRates.storage[variable.name].length; i++) {
-                let carg = this.grRates.storage[variable.name][i];
-                if (carg['start'] == p['start'] && carg['end'] == p['end']) {
-                    return carg;
-                }
-            }
-            return null;
-        }, this).filter((c) => {
-            return !!(c);
-        });
-    }
-
-
-
-    getCagrValue(varKey: string, start: string,
+    getGrowthRate(varKey: string, start: string,
                  end: string, timescale: string) {
-        // TODO Implement timescale for CAGR
         try {
-            for (let i = 0; i<this.grRates[varKey].length;i++) {
+            for (let i = 0; i<this.grRates.storage[varKey].length;i++) {
                 if (
-                    this.grRates[varKey][i].start == start
-                    && this.grRates[varKey][i].end == end
-                    && true // this.cargs[varKey][i].timescale == timescale
+                    this.grRates.storage[varKey][i].start == start
+                    && this.grRates.storage[varKey][i].end == end
+                    && this.grRates.storage[varKey][i].timescale == timescale
                 ) {
-                    return this.grRates[varKey][i].value;
+                    return this.grRates.storage[varKey][i].value;
                 }
             }
         } catch (e) {
@@ -142,7 +119,5 @@ export class DataModel {
             return null;
         }
     }
-
-    getFullPeriodTime
 
 }
