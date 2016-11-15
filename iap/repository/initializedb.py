@@ -13,9 +13,8 @@ from .db.warehouse import Entity, Warehouse
 from ..repository.interface.imanage_access import IManageAccess
 
 from ..repository import persistent_storage
-from ..forecasting.workbench.workbench import Workbench
+from ..forecasting.workbench import Workbench
 from ..common.dev_template import dev_template_JJLean, dev_template_JJOralCare
-from ..common.calc_instructions import JJOralCare_queue_instructions
 
 def usage(argv):
     cmd = os.path.basename(argv[0])
