@@ -30,14 +30,14 @@ class RunTimeStorage:
 
     def set_state(self, state):
         user_box = self._collection.get(state.user_id, None)
-        if user_box is None:
-            wb = self._get_wb_from_storage(state)
-            user_box = dict(state=copy.copy(state), wb=wb)
-            with self._lock:
-                self._collection[state.user_id] = user_box
-        else:
-            # TODO Add realization (DR)
-            raise NotImplementedError
+        #if user_box is None:
+        wb = self._get_wb_from_storage(state)
+        user_box = dict(state=copy.copy(state), wb=wb)
+        with self._lock:
+            self._collection[state.user_id] = user_box
+        #else:
+        #    # TODO Add realization (DR)
+        #    raise NotImplementedError
         return
 
     def _get_wb_from_storage(self, state):

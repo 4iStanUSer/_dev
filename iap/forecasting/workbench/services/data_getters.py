@@ -20,8 +20,8 @@ def get_entity_data(container, config, entities_ids):
         raise Exception
 
     # Define default selection for time periods
-    mid = container.timeline.get_period_by_alias(top_ts, 'history')[1]
-    main_period = dict(timsecale=top_ts, start=period[0], mid=mid, end=period[1])
+    mid = container.timeline.get_period_by_alias(top_ts, 'history')[0][1]
+    main_period = dict(timesecale=top_ts, start=period[0], mid=mid, end=period[1])
     decomp_period = dict(timescale=top_ts, start=mid, end=period[1])
 
     # Get requested entity.

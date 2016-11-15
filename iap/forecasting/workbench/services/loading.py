@@ -1,10 +1,5 @@
 from ....common import helper_lib
 
-
-def init_calc_engine(calc_engine, instructions):
-    calc_engine.load_instructions(instructions, None)
-
-
 def init_configuration(dev_template, config):
     in_config = dev_template.get('configuration', {})
     for key, value in in_config.items():

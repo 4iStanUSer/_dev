@@ -608,6 +608,7 @@ dev_template_JJLean = {
 dev_template_JJOralCare = {
     'tool_id': 1,
     'configuration': {
+        'dimensions': ['Geography', 'Products'],
         'selector_widgets': {'Geography': 'hierarchy', 'Products': 'flat'},
         'dashboard_top_ts': 'annual',
         'dashboard_bottom_ts': 'annual',

@@ -12,6 +12,11 @@ class Container:
         self._nodes_dict = {}
         self._max_node_id = 0
 
+    def _clean(self):
+        self._root = Node('root', (None, None))
+        self._nodes_dict = {}
+        self._max_node_id = 0
+
     def load(self, backup):
         self._clean()
         self.timeline.load_backup(backup['timeline'])
@@ -31,6 +36,10 @@ class Container:
             ins = node_info['insights']
             backup.append(dict(path=path, metas=metas, data=data, insights=ins))
         return dict(timeline=self.timeline.get_backup(), container=backup)
+
+    @property
+    def top_entities(self):
+        return [self.get_entity_by_id(x.id) for x in self._root.children]
 
     def add_entity(self, path, metas):
         new_nodes = []
@@ -71,10 +80,7 @@ class Container:
             self._root.get_children_by_meta(meta_filter, nodes_ids)
         return [self.get_entity_by_id(x) for x in nodes_ids]
 
-    def _clean(self):
-        self._root = Node('root', (None, None))
-        self._nodes_dict = {}
-        self._max_node_id = 0
+
 
 
 class Entity:

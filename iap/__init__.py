@@ -94,6 +94,13 @@ def forecast_routing(config):
                     route_name='forecast.get_decomposition_for_period',
                     request_method='POST', renderer='json')
 
+    config.add_route('forecast.get_options_for_entity_selector',
+                     '/get_options_for_entity_selector')
+    config.add_view(forecast.get_options_for_entity_selector,
+                    route_name='forecast.get_options_for_entity_selector',
+                    request_method='POST', renderer='json')
+
+
 
 # def wsgi_app(global_config, **settings):
 def main(global_config, **settings):

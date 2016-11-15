@@ -1,4 +1,10 @@
 
+
+def load_formulas(self, instructions):
+    # Calculation engine
+    init_calc_engine(self.kernel, instructions)
+
+
 def calculate(calc_engine, container):
     calc_engine.calculate(container, container.timeline, 'main', period_ali='all')
     calc_engine.calculate(container, container.timeline, 'country_growth', in_period=('2013', '2014'))
