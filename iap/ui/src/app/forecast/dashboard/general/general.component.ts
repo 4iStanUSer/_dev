@@ -46,6 +46,7 @@ export class GeneralComponent implements OnInit {
     private dTypeData: {
         abs: WaterfallChartDataInput,
         rate: WaterfallChartDataInput,
+        table: Array<{name: string, value: number, metric: string}>
     } = null;
 
     constructor(private dm: DataManagerService) {

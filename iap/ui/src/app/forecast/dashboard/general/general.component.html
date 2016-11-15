@@ -59,7 +59,7 @@
                             </div>
                             <div *ngFor="let tab of fTabsAbsData" style="display:inline-block;width:24%">
 
-                                <table *ngIf="tab['preview'] && tab['preview']['rate']">
+                                <table *ngIf="tab['preview'] && tab['preview']['rate']" border="1">
                                     <tr>
                                         <td *ngFor="let rate of tab['preview']['rate']">
                                             {{ rate }}
@@ -89,7 +89,7 @@
                                     <div style="display:inline-block;width:24%">
                                         {{ dm.lang['growth_cagr'] }}
                                     </div>
-                                    <table *ngIf="tab['full'] && tab['full']['rate']">
+                                    <table *ngIf="tab['full'] && tab['full']['rate']" border="1">
                                         <tr>
                                             <td *ngFor="let rate of tab['full']['rate']">
                                                 {{ rate }}
@@ -124,7 +124,7 @@
                             <div style="display:inline-block;width:24%">
                                 {{ dm.lang['growth_cagr'] }}
                             </div>
-                            <table *ngIf="fTabsAbsData[fActiveTabIndex]['full'] && fTabsAbsData[fActiveTabIndex]['full']['rate']">
+                            <table *ngIf="fTabsAbsData[fActiveTabIndex]['full'] && fTabsAbsData[fActiveTabIndex]['full']['rate']" border="1">
                                 <tr>
                                     <td *ngFor="let rate of fTabsAbsData[fActiveTabIndex]['full']['rate']">
                                         {{ rate }}
@@ -202,6 +202,16 @@
 
             <div>
                 {{ dm.lang['driver_change_cagr'] }}
+            </div>
+            <div>
+                <table border="1">
+                    <tr>
+                        <td *ngFor="let rate of dTypeData['table']">
+                            {{ rate['value'] }}
+                            {{ rate['metric'] }}
+                        </td>
+                    </tr>
+                </table>
             </div>
 
         </div>

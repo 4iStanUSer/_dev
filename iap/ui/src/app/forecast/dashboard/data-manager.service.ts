@@ -324,6 +324,7 @@ export class DataManagerService {
         let output = {
             'abs': [],
             'rate': [],
+            'table': []
         };
         let items = this.decompModel.getDecomposition(type, start, end);
         let l = (items && items.length) ? items.length : 0;
@@ -338,6 +339,13 @@ export class DataManagerService {
                 value: items[i]['growth'],
                 metric: '%',
             });
+            if (i != 0 && i != l-1) {
+                output['table'].push({
+                    name: items[i]['name'],
+                    value: items[i]['growth'],
+                    metric: '%',
+                });
+            }
         }
         return output;
     }
@@ -375,7 +383,8 @@ export class DataManagerService {
         this.drvSumTableIds = {};
 
         let variables = this.dataModel.getVariablesByType('driver');
-        let timelabels = this.dataModel.getPlainTimeLabels();
+        // let timelabels = this.dataModel.getPlainTimeLabels();
+        let timelabels = this.dataModel.getTimeLine(timescale, start, end);
 
         let vars: Array<TableWidgetRowColItem> = [],
             tls: Array<TableWidgetRowColItem> = [],
@@ -383,14 +392,25 @@ export class DataManagerService {
             timelines: Object = {},
             l: number;
 
+        let growthLag = this.dataModel.getTimeScaleLag(timescale);
+
         // For ROWS
         l = (timelabels && timelabels.length) ? timelabels.length : 0;
         for (let i = 0; i < l; i++) {
             let timelabel = timelabels[i];
+
+            let startTL = this.dataModel.getPreviousTimeLabel(timescale,
+                timelabel.full_name, growthLag);
+
+            let start: string = null,
+                notSelectable: boolean = true;
+            if (startTL) {
+                start = startTL.full_name;
+                notSelectable = false;
+            }
             this.drvSumTableIds[timelabel.full_name] = {
-                // TODO Get from CAGR data
-                start: timelabel.full_name,
-                end: (parseInt(timelabel.full_name)+1).toString(),
+                start: start,
+                end: timelabel.full_name
             };
             tls.push({
                 id: timelabel.full_name,
@@ -398,7 +418,8 @@ export class DataManagerService {
                     ? timelabel.parent.full_name : null,
                 meta:[
                     {name: timelabel.full_name}
-                ]
+                ],
+                notSelectable: notSelectable
             });
             vals[timelabel.full_name] = {};
             if (!(timelabel.timescale in timelines)) {
@@ -406,7 +427,6 @@ export class DataManagerService {
             }
             timelines[timelabel.timescale].push(timelabel.full_name);
         }
-        tls[tls.length-1]['notSelectable'] = true;
 
         // For COLS
         l = (variables && variables.length) ? variables.length : 0;
@@ -436,12 +456,10 @@ export class DataManagerService {
         // Add CAGRs
         let ids = ['cagr/'+start+'/'+mid, 'cagr/'+mid+'/'+end];
         this.drvSumTableIds[ids[0]] = {
-            // TODO Get from CAGR data
             start: start,
             end: mid,
         };
         this.drvSumTableIds[ids[1]] = {
-            // TODO Get from CAGR data
             start: mid,
             end: end,
         };

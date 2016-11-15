@@ -23,7 +23,7 @@
     <div class="decomp-section">
         <div class="header">
             {{ dm.lang['decomposition_block'] }}
-            {{ ((decompData) ? decompData['start'] : null) }}
+            {{ ((decompData) ? (decompData['start'] +'-'+ decompData['end']) : null) }}
 
             <buttons-group
                 *ngIf="dTypesSwitcherData"
@@ -35,10 +35,29 @@
 
         <div class="content" *ngIf="dTypeData">
 
+            <div>
+                {{ dm.lang['driver_contribution'] }}
+            </div>
+
             <waterfall-chart
                 *ngIf="dTypeData['abs']"
                 [data]="dTypeData['abs']"
             ></waterfall-chart>
+
+
+            <div>
+                {{ dm.lang['driver_change_cagr'] }}
+            </div>
+            <div>
+                <table border="1">
+                    <tr>
+                        <td *ngFor="let rate of dTypeData['table']">
+                            {{ rate['value'] }}
+                            {{ rate['metric'] }}
+                        </td>
+                    </tr>
+                </table>
+            </div>
 
         </div>
 

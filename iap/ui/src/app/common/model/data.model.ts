@@ -21,7 +21,6 @@ import {
 import {TimeScalesModel, TimeScaleInput} from "./time-scales.model";
 
 
-
 export class DataModel {
     timeScales: TimeScalesModel = null;
     timeLables: TimeLabelsModel = null;
@@ -47,7 +46,13 @@ export class DataModel {
             this.variables, this.timeLables);
     }
 
-
+    /**
+     *
+     * @param timescale
+     * @param start
+     * @param end
+     * @returns {Array}
+     */
     getTimeLine(timescale: string, start: string,
                 end: string): Array<TimeLabelModel> {
         let allTL: Array<TimeLabelModel> =
@@ -68,14 +73,13 @@ export class DataModel {
         return filteredTL;
     }
 
-    getPlainTimeLabels(): Array<TimeLabelModel> {
-        return this.timeLables.storage; // TODO Make right
-    }
-
-    getVariable(name: string): VariableModel {
-        return this.variables.storage[name];
-    }
-
+    /**
+     *
+     * @param timescaleKey
+     * @param variableKey
+     * @param timeline
+     * @returns {Array}
+     */
     getPointsValue(timescaleKey: string, variableKey: string,
                    timeline: Array<string>): Array<PointValueModel> {
 
@@ -89,6 +93,11 @@ export class DataModel {
         return pointsValue;
     }
 
+    /**
+     *
+     * @param type
+     * @returns {Array}
+     */
     getVariablesByType(type: string): Array<VariableModel> {
         let variables = Object.keys(this.variables.storage);
         let output = [];
@@ -101,11 +110,18 @@ export class DataModel {
         return output;
     }
 
-
+    /**
+     *
+     * @param varKey
+     * @param start
+     * @param end
+     * @param timescale
+     * @returns {any}
+     */
     getGrowthRate(varKey: string, start: string,
-                 end: string, timescale: string) {
+                  end: string, timescale: string): number {
         try {
-            for (let i = 0; i<this.grRates.storage[varKey].length;i++) {
+            for (let i = 0; i < this.grRates.storage[varKey].length; i++) {
                 if (
                     this.grRates.storage[varKey][i].start == start
                     && this.grRates.storage[varKey][i].end == end
@@ -116,8 +132,51 @@ export class DataModel {
             }
         } catch (e) {
             // TODO Implement query for server
+            console.error('Have no growth rate for:', varKey, start, end);
             return null;
         }
     }
 
+    /**
+     *
+     * @param timescale
+     * @returns {number}
+     */
+    getTimeScaleLag(timescale: string): number {
+        let ts = this.timeScales.getTimeScale(timescale);
+        return (ts) ? ts.growth_lag : null;
+    }
+
+    /**
+     *
+     * @param timescale
+     * @param full_name
+     * @param lag
+     * @returns {any}
+     */
+    getPreviousTimeLabel(timescale: string, full_name: string,
+                         lag: number): TimeLabelModel {
+        // TODO Improove method
+        let allTL: Array<TimeLabelModel> =
+            this.timeLables.getScaleTimelabels(timescale);
+        for (let i = allTL.length - 1; i >= 0; i--) {
+            if (allTL[i].full_name == full_name) {
+                if (allTL[i-lag]) {
+                    return allTL[i-lag]
+                } else {
+                    break;
+                }
+            }
+        }
+        console.error('Have no prev period for:', timescale, full_name, lag);
+        return null;
+    }
+
+    getPlainTimeLabels(): Array<TimeLabelModel> {
+        return this.timeLables.storage; // TODO Make right
+    }
+
+    getVariable(name: string): VariableModel {
+        return this.variables.storage[name];
+    }
 }

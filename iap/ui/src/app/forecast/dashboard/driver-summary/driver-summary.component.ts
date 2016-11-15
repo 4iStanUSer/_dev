@@ -14,10 +14,6 @@ export class DriverSummaryComponent implements OnInit {
 
     private selTableRowId: string = null;
 
-
-
-    private periods: Object = null;
-
     private decompData: {
         timescale: string;
         start: string;
@@ -27,9 +23,10 @@ export class DriverSummaryComponent implements OnInit {
 
     private dTypesSwitcherData: Array<ButtonDataInput> = null;
 
-    private dTypeData: {
+    private dTypeData: { // TODO Make interface (same structure exists in general)
         abs: WaterfallChartDataInput,
         rate: WaterfallChartDataInput,
+        table: Array<{name: string, value: number, metric: string}>
     } = null;
 
     constructor(private dm: DataManagerService) {
@@ -48,15 +45,18 @@ export class DriverSummaryComponent implements OnInit {
     }
 
     private collectData() {
-        this.periods = this.dm.periods;
         // TODO Question about default selection
-        let start = this.periods['main']['start'];
-        let mid = this.periods['main']['mid'];
+        let period = this.dm.getPeriod('main');
+        console.log(period);
+        let start = period.start;
+        let end = period.end;
+        let mid = period.mid;
+        let timescale = period.timescale
 
         this.selTableRowId = 'cagr/'+start+'/'+mid;
 
         this.decompData = {
-            timescale: 'annual',
+            timescale: timescale,
             start: start,
             end: mid,
             type: this.dm.state.get('decomp_value_volume_price')
@@ -64,11 +64,7 @@ export class DriverSummaryComponent implements OnInit {
         this.rebuildDecompositionChart();
 
         this.tableData = this.dm.getData_DriverSummaryTableData(
-            this.periods['main']['start'],
-            this.periods['main']['end'],
-            this.periods['main']['mid'],
-            'annual',
-            this.selTableRowId // TODO Pass some Logic !!!
+            start, end, mid, timescale, this.selTableRowId
         );
 
         this.dTypesSwitcherData = this.getDecompositionTypes();
