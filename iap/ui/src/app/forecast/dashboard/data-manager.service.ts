@@ -379,11 +379,9 @@ export class DataManagerService {
                                    mid: string,
                                    timescale: string,
                                    selRowId: string = null): TableWidgetData {
-        // TODO Implement period limitations
         this.drvSumTableIds = {};
 
         let variables = this.dataModel.getVariablesByType('driver');
-        // let timelabels = this.dataModel.getPlainTimeLabels();
         let timelabels = this.dataModel.getTimeLine(timescale, start, end);
 
         let vars: Array<TableWidgetRowColItem> = [],
