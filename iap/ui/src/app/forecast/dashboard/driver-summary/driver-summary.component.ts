@@ -9,7 +9,6 @@ import {DecompositionTypeData, ClickableTable} from "../interfaces";
 })
 export class DriverSummaryComponent implements OnInit {
 
-    // private tableData: TableWidgetData = null;
     private tableData: ClickableTable = null;
 
     private selTableRowId: string = null;
@@ -131,7 +130,7 @@ export class DriverSummaryComponent implements OnInit {
             end = this.decompData['end'],
             type = this.decompData['type'];
 
-        this.dTypeData = this.dm.getData_Decomposition(type, timescale,
+        this.dTypeData = this.dm.getDecompositionData(type, timescale,
             start, end);
     }
     /*-----------.DECOMPOSITION--------------*/

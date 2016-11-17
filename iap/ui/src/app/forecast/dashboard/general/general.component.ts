@@ -254,7 +254,7 @@ export class GeneralComponent implements OnInit {
         let period = this.dm.getPeriod('decomp');
         if (period) {
             let type = this.dm.state.get('decomp_value_volume_price');
-            return this.dm.getData_Decomposition(type, period.timescale,
+            return this.dm.getDecompositionData(type, period.timescale,
                 period.start, period.end);
         }
     }
@@ -267,7 +267,6 @@ export class GeneralComponent implements OnInit {
         this.dTypeData = this.getDecompositionData();
     }
     private onChangedDecompPeriod(period) {
-        console.log(period);
         this.dm.setPeriod('decomp', period['scale'], period['start'],
             period['end']);
         this.dTypeData = this.getDecompositionData();

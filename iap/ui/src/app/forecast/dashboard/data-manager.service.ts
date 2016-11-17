@@ -29,7 +29,10 @@ import {
 import {DecompositionModel} from "../../common/model/decomposition.model";
 import {TimelabelInput} from "../../common/model/time-labels.model";
 import {ButtonsGroupDataInput} from "../../common/cmp/buttons-group/buttons-group.component";
-import {VariableData, ClickableTable} from "./interfaces";
+import {
+    VariableData, ClickableTable,
+    DecompositionTypeData
+} from "./interfaces";
 
 
 class Period {
@@ -288,8 +291,7 @@ export class DataManagerService {
     }
 
     /**
-     * Returns Variable's Data for drawing
-     * BarChart(absolute values), table below(rates) and  CAGRS block
+     * Returns Variable's Data: absolute values, growth rates and CAGRS
      * If cagrsPeriod is not defined - it returns data without 'cagr' key
      * @param timescale
      * @param timepoints
@@ -352,18 +354,17 @@ export class DataManagerService {
         return output;
     }
 
-    getData_ForecastRateValues(timescale: string, timepoints: Array<string>,
-                               variable: string) {
-        return null; // TODO Implement
-    }
-
-    getData_ForecastTimelabels() {
-        return this.inputData['timelabels'];
-    }
-
-
-    getData_Decomposition(type: string, timescale: string,
-                          start: string, end: string) {
+    /**
+     * Returns Decomposition's Data:
+     * absolute values, rates and and item changes
+     * @param type
+     * @param timescale
+     * @param start
+     * @param end
+     * @returns {DecompositionTypeData}
+     */
+    getDecompositionData(type: string, timescale: string,
+                         start: string, end: string): DecompositionTypeData {
         let output = {
             'abs': [],
             'rate': [],
@@ -391,6 +392,15 @@ export class DataManagerService {
             }
         }
         return output;
+    }
+
+    getData_ForecastRateValues(timescale: string, timepoints: Array<string>,
+                               variable: string) {
+        return null; // TODO Implement
+    }
+
+    getData_ForecastTimelabels() {
+        return this.inputData['timelabels'];
     }
 
     getDecompPeriodLabels() {
