@@ -51,7 +51,7 @@ export class DataModel {
      * @param timescale
      * @param start
      * @param end
-     * @returns {Array}
+     * @returns {Array<TimeLabelModel>}
      */
     getTimeLine(timescale: string, start: string,
                 end: string): Array<TimeLabelModel> {
@@ -78,16 +78,19 @@ export class DataModel {
      * @param timescaleKey
      * @param variableKey
      * @param timeline
-     * @returns {Array}
+     * @returns {Array<PointValueModel>}
      */
     getPointsValue(timescaleKey: string, variableKey: string,
                    timeline: Array<string>): Array<PointValueModel> {
 
         let pointsValue = [];
-        for (let i = 0; i < this.pointsValues.storage[timescaleKey][variableKey].length; i++) {
-            let timestamp = this.pointsValues.storage[timescaleKey][variableKey][i]['timestamp'];
-            if (timeline.indexOf(timestamp) != -1) {
-                pointsValue.push(this.pointsValues.storage[timescaleKey][variableKey][i]);
+        if (this.pointsValues.storage[timescaleKey]
+            && this.pointsValues.storage[timescaleKey][variableKey]) {
+            for (let i = 0; i < this.pointsValues.storage[timescaleKey][variableKey].length; i++) {
+                let timestamp = this.pointsValues.storage[timescaleKey][variableKey][i]['timestamp'];
+                if (timeline.indexOf(timestamp) != -1) { // TODO REFACTOR - WARNING ORDER IS IMPORTANT
+                    pointsValue.push(this.pointsValues.storage[timescaleKey][variableKey][i]);
+                }
             }
         }
         return pointsValue;
@@ -96,7 +99,7 @@ export class DataModel {
     /**
      *
      * @param type
-     * @returns {Array}
+     * @returns {Array<VariableModel>}
      */
     getVariablesByType(type: string): Array<VariableModel> {
         let variables = Object.keys(this.variables.storage);
@@ -178,5 +181,9 @@ export class DataModel {
 
     getVariable(name: string): VariableModel {
         return this.variables.storage[name];
+    }
+
+    variableExists(varName: string): boolean {
+        return (varName in this.variables.storage);
     }
 }

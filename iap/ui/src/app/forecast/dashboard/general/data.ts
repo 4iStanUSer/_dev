@@ -1,11 +1,11 @@
-import {ButtonDataInput} from "../../../common/cmp/buttons-group/buttons-group.component";
+import {ButtonsGroupDataInput} from "../../../common/cmp/buttons-group/buttons-group.component";
 import {TableWidgetData} from "../../../common/cmp/table-widget/table-widget.component";
 
 /**
  * Buttons for Value/GrowthRate ButtonsGroup inside forecast section
  * @type {{id: string; name: string; selected: boolean}[]}
  */
-export const forecastValueRateData: Array<ButtonDataInput> = [
+export const forecastValueRateData: ButtonsGroupDataInput = [
     {
         id: 'absolute',
         name: 'Value',

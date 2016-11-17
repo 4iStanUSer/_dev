@@ -9,11 +9,14 @@ import {
 } from '@angular/core';
 
 
-export interface ButtonDataInput {
+// export
+interface ButtonDataInput {
     id: string|number;
     name: string;
     selected?: boolean;
 }
+export type ButtonsGroupDataInput = Array<ButtonDataInput>;
+
 interface ButtonDataChangeOutput extends ButtonDataInput {
 }
 
@@ -24,7 +27,7 @@ interface ButtonDataChangeOutput extends ButtonDataInput {
 })
 export class ButtonsGroupComponent implements OnInit, OnChanges {
 
-    @Input() data: Array<ButtonDataInput> = [];
+    @Input() data: ButtonsGroupDataInput = [];
 
     @Output() changed = new EventEmitter(); //ButtonDataChangeOutput
 

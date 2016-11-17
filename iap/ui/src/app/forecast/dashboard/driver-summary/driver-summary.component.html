@@ -12,8 +12,8 @@
         <div class="content" *ngIf="dm.state.get('d_summary_table_collapsed_expanded') == 'expanded'">
 
             <table-widget
-                *ngIf="tableData"
-                [data]="tableData"
+                *ngIf="tableData && tableData.data"
+                [data]="tableData.data"
                 (row-select)="onRowSelect($event)"
             ></table-widget>
 

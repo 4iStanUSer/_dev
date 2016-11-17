@@ -1,8 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {DataManagerService} from "../data-manager.service";
-import {TableWidgetData} from "../../../common/cmp/table-widget/table-widget.component";
-import {ButtonDataInput} from "../../../common/cmp/buttons-group/buttons-group.component";
-import {WaterfallChartDataInput} from "../../../common/cmp/waterfall-chart/waterfall-chart.component";
+import {ButtonsGroupDataInput} from "../../../common/cmp/buttons-group/buttons-group.component";
+import {DecompositionTypeData, ClickableTable} from "../interfaces";
 
 @Component({
     templateUrl: './driver-summary.component.html',
@@ -10,7 +9,8 @@ import {WaterfallChartDataInput} from "../../../common/cmp/waterfall-chart/water
 })
 export class DriverSummaryComponent implements OnInit {
 
-    private tableData: TableWidgetData = null;
+    // private tableData: TableWidgetData = null;
+    private tableData: ClickableTable = null;
 
     private selTableRowId: string = null;
 
@@ -21,13 +21,9 @@ export class DriverSummaryComponent implements OnInit {
         type: string;
     } = null;
 
-    private dTypesSwitcherData: Array<ButtonDataInput> = null;
+    private dTypesSwitcherData: ButtonsGroupDataInput = null;
 
-    private dTypeData: { // TODO Make interface (same structure exists in general)
-        abs: WaterfallChartDataInput,
-        rate: WaterfallChartDataInput,
-        table: Array<{name: string, value: number, metric: string}>
-    } = null;
+    private dTypeData: DecompositionTypeData = null;
 
     constructor(private dm: DataManagerService) {
     }
@@ -44,6 +40,9 @@ export class DriverSummaryComponent implements OnInit {
         }
     }
 
+    /**
+     * Collects all variables to draw Drivers Summary tab
+     */
     private collectData() {
         // TODO Question about default selection
         let period = this.dm.getPeriod('main');
@@ -51,7 +50,7 @@ export class DriverSummaryComponent implements OnInit {
         let start = period.start;
         let end = period.end;
         let mid = period.mid;
-        let timescale = period.timescale
+        let timescale = period.timescale;
 
         this.selTableRowId = 'cagr/'+start+'/'+mid;
 
@@ -78,8 +77,7 @@ export class DriverSummaryComponent implements OnInit {
         this.dm.state.set('d_summary_table_collapsed_expanded', newStatus);
     }
     private onRowSelect(o) {
-        let period = this.dm.convertDrvSumTableIdsIntoPeriod(o['row_id']);
-        console.log(period);
+        let period = this.tableData.rows_data[o['row_id']];
         if (period) {
             this.decompData['start'] = period['start'];
             this.decompData['end'] = period['end'];
@@ -93,7 +91,7 @@ export class DriverSummaryComponent implements OnInit {
 
 
     /*-----------DECOMPOSITION--------------*/
-    private getDecompositionTypes(): Array<ButtonDataInput> {
+    private getDecompositionTypes(): ButtonsGroupDataInput {
         // TODO Question - What type of decomposition for drivers summary
         // TODO Question - What period
 

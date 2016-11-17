@@ -25,6 +25,10 @@ export class StaticDataService {
                 'decomp_value_volume_price': 'Value', // value|volume|price (name of type)
 
                 'd_summary_table_collapsed_expanded': 'expanded', // collapsed|expanded
+
+                'd_details_table_collapsed_expanded': 'expanded', // collapsed|expanded
+
+                'd_details_selected_megadriver': null, // null(get first)|mega driver key
             }
         };
 
@@ -55,6 +59,10 @@ export class StaticDataService {
                 'driver': 'Driver',
                 'metric': 'Metric',
                 'cagr': 'CAGR',
+
+                'sub_drivers_dynamic': 'Sub-driver\'s dynamic',
+                'sub_drivers_impact': 'Sub-driver\'s impact',
+                'fact': 'Fact',
             }
         };
 

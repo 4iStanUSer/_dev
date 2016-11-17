@@ -2,13 +2,18 @@ import {Component, OnInit} from '@angular/core';
 import {DataManagerService} from "./../data-manager.service";
 import {forecastValueRateData} from './data';
 
-import {ButtonDataInput} from "./../../../common/cmp/buttons-group/buttons-group.component";
+import {ButtonsGroupDataInput} from "./../../../common/cmp/buttons-group/buttons-group.component";
 import {VariableModel} from "../../../common/model/variables.model";
 import {TimelabelInput} from "../../../common/model/time-labels.model";
 import {TimePeriodInput} from "../../../common/model/time-period.model";
-import {WaterfallChartDataInput} from "../../../common/cmp/waterfall-chart/waterfall-chart.component";
+import {DecompositionTypeData, VariableData} from "../interfaces";
 
 
+type ForecastTabsAbsData = Array<{
+    variable: VariableModel,
+    preview: Array<VariableData>,
+    full: Array<VariableData>,
+}>;
 
 @Component({
     templateUrl: './general.component.html',
@@ -16,38 +21,65 @@ import {WaterfallChartDataInput} from "../../../common/cmp/waterfall-chart/water
 })
 export class GeneralComponent implements OnInit {
 
-    private absRateSwitcherData: Array<ButtonDataInput> = null;
+    /**
+     * Data for Absolute|GrowthRate switcher
+     * @type {ButtonsGroupDataInput}
+     */
+    private absRateSwitcherData: ButtonsGroupDataInput = null;
 
+    /**
+     * Index of selected tab in Forecasting section
+     * Array of tabs: tabs this.fTabsAbsData | this.fTabsRateData
+     * @type {number}
+     */
     private fActiveTabIndex: number = null;
 
-    private fTabsAbsData: Array<{
-        variable: VariableModel,
-        preview: Array<Object>, // TODO Replace by input interface of BarChart
-        full: Array<Object>, // TODO Replace by input interface of BarChart
-    }> = [];
+    /**
+     * Contains Absolute data for Bar Charts in Forecasting section
+     * @type {ForecastTabsAbsData}
+     */
+    private fTabsAbsData: ForecastTabsAbsData = [];
 
+    /**
+     * Contains Growth Rates for Donuts in Forecasting section
+     * @type {Array}
+     */
     private fTabsRateData: Array<{
         variable: VariableModel,
         // TODO Create structure
     }> = [];
 
-    private fPeriodSelectorData: {
+    /**
+     * Contains available time points & current selection
+     * in Forecasting section
+     * @type {{data: Array<TimelabelInput>, selected: TimePeriodInput}}
+     */
+    private fPeriodSelectorData: { // TODO Make Interface|Type for period selector
         data: Array<TimelabelInput>,
         selected: TimePeriodInput
     } = null;
 
+    /**
+     * Contains available time points & current selection
+     * in Decomposition section
+     * @type {{data: Array<TimelabelInput>, selected: TimePeriodInput}}
+     */
     private dPeriodSelectorData: {
         data: Array<TimelabelInput>,
         selected: TimePeriodInput
     } = null;
 
-    private dTypesSwitcherData: Array<ButtonDataInput> = null;
+    /**
+     * Data for decomposition type switcher
+     * @type {ButtonsGroupDataInput}
+     */
+    private dTypesSwitcherData: ButtonsGroupDataInput = null;
 
-    private dTypeData: {
-        abs: WaterfallChartDataInput,
-        rate: WaterfallChartDataInput,
-        table: Array<{name: string, value: number, metric: string}>
-    } = null;
+    /**
+     * Data for drawing WaterFall by selected type
+     * @type {DecompositionTypeData}
+     */
+    private dTypeData: DecompositionTypeData = null;
 
     constructor(private dm: DataManagerService) {
     }
@@ -64,6 +96,9 @@ export class GeneralComponent implements OnInit {
         }
     }
 
+    /**
+     * Collects all variables to draw Dashboard tab
+     */
     private collectData() {
         this.absRateSwitcherData = this.getAbsRateSwitcherData();
         this.fActiveTabIndex = this.getForecastActiveTabIndex();
@@ -78,7 +113,7 @@ export class GeneralComponent implements OnInit {
     }
 
 
-    private getAbsRateSwitcherData(): Array<ButtonDataInput> {
+    private getAbsRateSwitcherData(): ButtonsGroupDataInput {
         let output = [];
         let name, sel;
         for (let i = 0; i < forecastValueRateData.length; i++) {
@@ -132,10 +167,10 @@ export class GeneralComponent implements OnInit {
             for (let i = 0; i < outputVars.length; i++) {
                 output.push({
                     'variable': outputVars[i],
-                    'preview': this.dm.getData_ForecastAbsValues(timescale,
+                    'preview': this.dm.getVariableData(timescale,
                         shortList, outputVars[i].key),
-                    'full': this.dm.getData_ForecastAbsValues(timescale,
-                        longList, outputVars[i].key),
+                    'full': this.dm.getVariableData(timescale,
+                        longList, outputVars[i].key, period),
                 });
             }
         }
@@ -223,32 +258,9 @@ export class GeneralComponent implements OnInit {
                 period.start, period.end);
         }
     }
-    private getDecompositionTypes(): Array<ButtonDataInput> {
-
-        let output = [];
-        let autoSel = true,
-            sel;
-        let types = this.dm.decompModel.getDecompositionTypes();
-
-        for (let i = 0; i < types.length; i++) {
-            if (this.dm.state.get('decomp_value_volume_price') == types[i]) {
-                sel = true;
-                autoSel = false;
-            } else {
-                sel = false;
-            }
-            let opt = {
-                'id': types[i],
-                'name': types[i],
-                'selected': sel
-            };
-            output.push(opt);
-        }
-        if (autoSel && output.length > 0) {
-            output[0]['selected'] = true;
-        }
-
-        return output;
+    private getDecompositionTypes(): ButtonsGroupDataInput {
+        let defVal = this.dm.state.get('decomp_value_volume_price');
+        return this.dm.getDecompTypesSwitcherData(defVal);
     }
     private onChangedDecompType(changes: Object): void {
         this.dm.state.set('decomp_value_volume_price', changes['id']);

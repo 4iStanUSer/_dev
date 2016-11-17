@@ -48,8 +48,8 @@
 
                             <div *ngFor="let tab of fTabsAbsData" style="display:inline-block;width:24%">
                                 <bar-chart
-                                    *ngIf="tab['preview'] && tab['preview']['absolute']"
-                                    [data]="tab['preview']['absolute']"
+                                    *ngIf="tab['preview'] && tab['preview']['abs']"
+                                    [data]="tab['preview']['abs']"
                                 ></bar-chart>
                             </div>
                         </div>
@@ -81,8 +81,8 @@
                                     </div>
 
                                     <bar-chart
-                                        *ngIf="tab['full'] && tab['full']['absolute']"
-                                        [data]="tab['full']['absolute']"
+                                        *ngIf="tab['full'] && tab['full']['abs']"
+                                        [data]="tab['full']['abs']"
                                     ></bar-chart>
                                 </div>
                                 <div>
@@ -99,7 +99,11 @@
                                 </div>
                             </div>
                             <div style="display:inline-block;width:24%" class="cagrs">
-
+                                <div *ngFor="let cagr of tab['full']['cagr']">
+                                    {{ dm.lang['cagr'] }}<br>
+                                    {{ cagr.start }}/{{ cagr.end }}<br>
+                                    {{ cagr.value }}%
+                                </div>
                             </div>
 
                         </div>
@@ -116,8 +120,8 @@
                             </div>
 
                             <bar-chart
-                                *ngIf="fTabsAbsData[fActiveTabIndex]['full'] && fTabsAbsData[fActiveTabIndex]['full']['absolute']"
-                                [data]="fTabsAbsData[fActiveTabIndex]['full']['absolute']"
+                                *ngIf="fTabsAbsData[fActiveTabIndex]['full'] && fTabsAbsData[fActiveTabIndex]['full']['abs']"
+                                [data]="fTabsAbsData[fActiveTabIndex]['full']['abs']"
                             ></bar-chart>
                         </div>
                         <div>
@@ -134,7 +138,11 @@
                         </div>
                     </div>
                     <div style="display:inline-block;width:24%" class="cagrs">
-
+                        <div *ngFor="let cagr of fTabsAbsData[fActiveTabIndex]['full']['cagr']">
+                            {{ dm.lang['cagr'] }}<br>
+                            {{ cagr.start }}/{{ cagr.end }}<br>
+                            {{ cagr.value }}%
+                        </div>
                     </div>
                 </div>
 
@@ -179,10 +187,6 @@
         </div>
 
         <div class="content" *ngIf="dTypeData">
-            <!--<waterfall-chart-->
-                    <!--[data]="( (dm.state.get('forecast_absolute_rate') == 'absolute') ? dTypeData['abs'] : dTypeData['rate'])"-->
-            <!--&gt;</waterfall-chart>-->
-
             <div>
                 {{ dm.lang['driver_contribution'] }}
             </div>

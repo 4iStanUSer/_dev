@@ -54,20 +54,23 @@ export class DecompositionModel {
 
     types: Array<string> = [];
 
-    constructor(data: Array<DecompositionItemInput>) {
+    constructor(types: Array<string>, data: Array<DecompositionItemInput>) {
         this.storage = [];
 
-        for (let i = 0; i < data.length; i++) {
-            let item = new DecompositionItemModel(data[i].start, data[i].end);
-            for (let type in data[i]) {
-                if (type != 'start' && type != 'end') {
-                    if (this.types.indexOf(type) == -1) {
-                        this.types.push(type);
+        this.types = types;
+        let typesCount = this.types.length;
+        if (typesCount > 0) {
+            for (let i = 0; i < data.length; i++) {
+                let item = new DecompositionItemModel(data[i].start,
+                    data[i].end);
+                for (let j = 0; j < typesCount; j++) {
+                    let type = this.types[j];
+                    if (data[i][type]) {
+                        item.addType(type, data[i][type]);
                     }
-                    item.addType(type, data[i][type]);
                 }
+                this.storage.push(item);
             }
-            this.storage.push(item);
         }
     }
 
