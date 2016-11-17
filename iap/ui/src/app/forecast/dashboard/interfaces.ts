@@ -15,7 +15,10 @@ export interface DecompositionTypeData {
 
 export interface VariableData {
     abs: BarChartDataInput,
-    rate: Array<number>,
+    rate: Array<{
+        name: string;
+        value: number;
+    }>,
     cagr?: Array<{
         start: string;
         end: string;

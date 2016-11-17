@@ -322,7 +322,10 @@ export class DataManagerService {
             let end = timepoints[i + 1];
             let growth = this.dataModel.getGrowthRate(variable, start,
                 end, timescale);
-            output.rate.push(growth);
+            output.rate.push({
+                name: start + '/' + end,
+                value: growth
+            });
         }
         if (cagrsPeriod) {
             output.cagr =  [
