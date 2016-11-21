@@ -25,6 +25,23 @@ const langsDataTEMP = [
         selected: false
     },
 ];
+const topMenuDataTEMP = [
+    {
+        key: 'comparison',
+        name: 'Comparison',
+        disabled: true
+    },
+    {
+        key: 'scenarios',
+        name: 'Scenarios',
+        disabled: false
+    },
+    {
+        key: 'simulator',
+        name: 'Simulator',
+        disabled: false
+    },
+];
 
 @Component({
     templateUrl: './forecast.component.html',
@@ -40,7 +57,14 @@ export class ForecastComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.langsData = langsDataTEMP;
+        this.req.get({
+            url: 'get-languages', // TODO Implement on server
+            data: {}
+        }).subscribe(
+            (d) => {
+                // this.langsData = d['langs'];
+            }
+        );
 
         this.req.get({
             url: 'get-menu', // TODO Implement on server
@@ -50,23 +74,10 @@ export class ForecastComponent implements OnInit {
                 // this.topMenuData = d['menu'];
             }
         );
-        this.topMenuData = [
-            {
-                key: 'comparison',
-                name: 'Comparison',
-                disabled: true
-            },
-            {
-                key: 'scenarios',
-                name: 'Scenarios',
-                disabled: false
-            },
-            {
-                key: 'simulator',
-                name: 'Simulator',
-                disabled: false
-            },
-        ];
+
+        // TEMP below
+        this.langsData = langsDataTEMP;
+        this.topMenuData = topMenuDataTEMP;
     }
 
     languageChanged(changes: LanguageSelectorOutput) {

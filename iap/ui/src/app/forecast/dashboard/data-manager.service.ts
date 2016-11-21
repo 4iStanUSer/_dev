@@ -33,6 +33,7 @@ import {
     VariableData, ClickableTable,
     DecompositionTypeData
 } from "./interfaces";
+import {TimeSelectorDataInput} from "../../common/cmp/time-selector/time-selector.component";
 
 
 class Period {
@@ -330,7 +331,7 @@ export class DataManagerService {
             });
         }
         if (cagrsPeriod) {
-            output.cagr =  [
+            output.cagr = [
                 {
                     start: cagrsPeriod.start,
                     end: cagrsPeriod.mid,
@@ -394,26 +395,43 @@ export class DataManagerService {
         return output;
     }
 
-    getData_ForecastRateValues(timescale: string, timepoints: Array<string>,
-                               variable: string) {
-        return null; // TODO Implement
+    // getData_ForecastRateValues(timescale: string, timepoints: Array<string>,
+    //                            variable: string) {
+    //     return null; // TODO Implement
+    // }
+
+    getData_ForecastTimelabels(): TimeSelectorDataInput {
+        let output = {
+            order: this.dataModel.getTimeScalesOrder(),
+            timescales: {}
+        };
+        let l = (output['order'] && output['order'].length)
+            ? output['order'].length : 0;
+        for (let i = 0; i < l; i++) {
+            let ts = output['order'][i];
+            output['timescales'][ts] = this.dataModel.getTimeLine(ts);
+        }
+        return output;
     }
 
-    getData_ForecastTimelabels() {
-        return this.inputData['timelabels'];
-    }
-
-    getDecompPeriodLabels() {
-        let timescales = this.config['dec_timescales']; //decomp_timescales
-        let output: Array<TimelabelInput> = [];
-
-        // TODO Remake PeriodSelector Input data
-
-        for (let i = 0; i < this.inputData['timelabels'].length; i++) {
-            let timelabel = this.inputData['timelabels'][i];
-            if (timescales.indexOf(timelabel['timescale']) != -1) {
-                output.push(timelabel);
+    getDecompPeriodLabels(): TimeSelectorDataInput {
+        let allowedTs = this.config['dec_timescales'];
+        let allTs = this.dataModel.getTimeScalesOrder();
+        let order = [];
+        for (let i = 0; i < allTs.length; i++) {
+            if (allowedTs.indexOf(allTs[i]) != -1) {
+                order.push(allTs[i]);
             }
+        }
+        let output = {
+            order: order,
+            timescales: {}
+        };
+        let l = (output['order'] && output['order'].length)
+            ? output['order'].length : 0;
+        for (let i = 0; i < l; i++) {
+            let ts = output['order'][i];
+            output['timescales'][ts] = this.dataModel.getTimeLine(ts);
         }
         return output;
     }

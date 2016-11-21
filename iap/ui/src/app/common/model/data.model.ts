@@ -53,24 +53,28 @@ export class DataModel {
      * @param end
      * @returns {Array<TimeLabelModel>}
      */
-    getTimeLine(timescale: string, start: string,
-                end: string): Array<TimeLabelModel> {
+    getTimeLine(timescale: string, start: string = null,
+                end: string = null): Array<TimeLabelModel> {
         let allTL: Array<TimeLabelModel> =
             this.timeLables.getScaleTimelabels(timescale);
-        let filteredTL = [];
-        let toAdd = false;
-        for (let i = 0; i < allTL.length; i++) {
-            if (!toAdd && allTL[i].getName() == start) {
-                toAdd = true;
-            }
-            if (toAdd) {
-                filteredTL.push(allTL[i]);
-                if (allTL[i].getName() == end) {
-                    break;
+        if (start === null && end === null) {
+            return allTL;
+        } else {
+            let filteredTL = [];
+            let toAdd = false;
+            for (let i = 0; i < allTL.length; i++) {
+                if (!toAdd && allTL[i].getName() == start) {
+                    toAdd = true;
+                }
+                if (toAdd) {
+                    filteredTL.push(allTL[i]);
+                    if (end !== null && allTL[i].getName() == end) {
+                        break;
+                    }
                 }
             }
+            return filteredTL;
         }
-        return filteredTL;
     }
 
     /**
@@ -155,7 +159,7 @@ export class DataModel {
      * @param timescale
      * @param full_name
      * @param lag
-     * @returns {any}
+     * @returns {TimeLabelModel}
      */
     getPreviousTimeLabel(timescale: string, full_name: string,
                          lag: number): TimeLabelModel {
@@ -173,6 +177,10 @@ export class DataModel {
         }
         console.error('Have no prev period for:', timescale, full_name, lag);
         return null;
+    }
+
+    getTimeScalesOrder() {
+        return this.timeScales.order;
     }
 
     getPlainTimeLabels(): Array<TimeLabelModel> {

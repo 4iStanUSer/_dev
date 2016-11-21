@@ -7,6 +7,10 @@ import {VariableModel} from "../../../common/model/variables.model";
 import {TimelabelInput} from "../../../common/model/time-labels.model";
 import {TimePeriodInput} from "../../../common/model/time-period.model";
 import {DecompositionTypeData, VariableData} from "../interfaces";
+import {
+    TimeSelectorDataInput,
+    TimeSelectorSelectedData
+} from "../../../common/cmp/time-selector/time-selector.component";
 
 
 type ForecastTabsAbsData = Array<{
@@ -55,8 +59,8 @@ export class GeneralComponent implements OnInit {
      * @type {{data: Array<TimelabelInput>, selected: TimePeriodInput}}
      */
     private fPeriodSelectorData: { // TODO Make Interface|Type for period selector
-        data: Array<TimelabelInput>,
-        selected: TimePeriodInput
+        data: TimeSelectorDataInput,
+        selected: TimeSelectorSelectedData
     } = null;
 
     /**
@@ -65,8 +69,8 @@ export class GeneralComponent implements OnInit {
      * @type {{data: Array<TimelabelInput>, selected: TimePeriodInput}}
      */
     private dPeriodSelectorData: {
-        data: Array<TimelabelInput>,
-        selected: TimePeriodInput
+        data: TimeSelectorDataInput,
+        selected: TimeSelectorSelectedData
     } = null;
 
     /**
