@@ -6,6 +6,11 @@
                     {{ selectedPoints['start'].getName() }}
                 </span>
                 -
+                <span *ngIf="selectedPoints['mid']">
+                    {{ selectedPoints['mid'].getName() }}
+                </span>
+                <span *ngIf="selectedPoints['mid']">-</span>
+
                 <span *ngIf="selectedPoints['end']">
                     {{ selectedPoints['end'].getName() }}
                 </span>
@@ -18,12 +23,14 @@
     </div>
 
     <div class="expanded-selector" *ngIf="expandedMode">
-        <div class="scales">
+        <div class="scales" *ngIf="scales && scales.length > 1">
             <span *ngFor="let scale of scales" [ngClass]="{'selected': (scale == currScale)}" (click)="changeScale(scale)"> {{ scale }}</span>
         </div>
         <div class="pre-selection">
             <span *ngIf="preSelectedPoints[currScale] && preSelectedPoints[currScale]['start']">{{ preSelectedPoints[currScale]['start'].getName() }}</span>
             -
+            <span *ngIf="preSelectedPoints[currScale] && preSelectedPoints[currScale]['mid']">{{ preSelectedPoints[currScale]['mid'].getName() }}</span>
+
             <span *ngIf="preSelectedPoints[currScale] && preSelectedPoints[currScale]['end']">{{ preSelectedPoints[currScale]['end'].getName() }}</span>
         </div>
         <div class="slider-wraper">

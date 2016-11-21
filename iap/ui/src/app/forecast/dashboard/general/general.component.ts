@@ -44,10 +44,10 @@ export class GeneralComponent implements OnInit {
      * Contains Growth Rates for Donuts in Forecasting section
      * @type {Array}
      */
-    private fTabsRateData: Array<{
-        variable: VariableModel,
-        // TODO Create structure
-    }> = [];
+    // private fTabsRateData: Array<{
+    //     variable: VariableModel,
+    //     // TODO Create structure
+    // }> = [];
 
     /**
      * Contains available time points & current selection
@@ -104,7 +104,7 @@ export class GeneralComponent implements OnInit {
         this.fActiveTabIndex = this.getForecastActiveTabIndex();
 
         this.fTabsAbsData = this.getForecastTabsAbsData();
-        this.fTabsRateData = this.getForecastTabsRateData();
+        // this.fTabsRateData = this.getForecastTabsRateData();
         this.fPeriodSelectorData = this.getMainPeriodSelectorData();
 
         this.dPeriodSelectorData = this.getDecompPeriodSelectorData();
@@ -176,28 +176,6 @@ export class GeneralComponent implements OnInit {
         }
         return output;
     }
-    private getForecastTabsRateData() {
-        let output = [];
-        let outputVars = this.dm.dataModel.getVariablesByType('output');
-
-        let period = this.dm.getPeriod('main');
-        if (period) {
-            let timescale = period.timescale;
-            let shortList = [period.start, period.mid, period.end];
-            let longList = this.dm.getFullPeriod(timescale,
-                period.start, period.end);
-
-            for (let i = 0; i < outputVars.length; i++) {
-                output.push({
-                    'variable': outputVars[i],
-                    // 'preview': this.dm.getData_ForecastRateValues(timescale, shortPeriod, outputVars[i].key),
-                    // 'full': this.dm.getData_ForecastRateValues(timescale, longPeriod, outputVars[i].key),
-                });
-            }
-        }
-
-        return output;
-    }
     private getForecastActiveTabIndex() {
         let outputVars = this.dm.dataModel.getVariablesByType('output');
 
@@ -223,7 +201,7 @@ export class GeneralComponent implements OnInit {
             period['end'], period['mid']);
 
         this.fTabsAbsData = this.getForecastTabsAbsData();
-        this.fTabsRateData = this.getForecastTabsRateData();
+        // this.fTabsRateData = this.getForecastTabsRateData();
 
     }
 
@@ -275,4 +253,27 @@ export class GeneralComponent implements OnInit {
     /*-----------.DECOMPOSITION--------------*/
 
 
+
+    // private getForecastTabsRateData() {
+    //     let output = [];
+    //     let outputVars = this.dm.dataModel.getVariablesByType('output');
+    //
+    //     let period = this.dm.getPeriod('main');
+    //     if (period) {
+    //         let timescale = period.timescale;
+    //         let shortList = [period.start, period.mid, period.end];
+    //         let longList = this.dm.getFullPeriod(timescale,
+    //             period.start, period.end);
+    //
+    //         for (let i = 0; i < outputVars.length; i++) {
+    //             output.push({
+    //                 'variable': outputVars[i],
+    //                 // 'preview': this.dm.getData_ForecastRateValues(timescale, shortPeriod, outputVars[i].key),
+    //                 // 'full': this.dm.getData_ForecastRateValues(timescale, longPeriod, outputVars[i].key),
+    //             });
+    //         }
+    //     }
+    //
+    //     return output;
+    // }
 }

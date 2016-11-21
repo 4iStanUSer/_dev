@@ -18,6 +18,8 @@ interface Coordinate {
 })
 export class RangeSliderComponent implements OnInit, OnChanges {
 
+    private hasMid: boolean = false;
+
     private element: HTMLElement = null;
 
     private points: Array<TimeLabelModel> = null;
@@ -77,6 +79,8 @@ export class RangeSliderComponent implements OnInit, OnChanges {
                 correspond[slider] = idx;
             }
         }
+
+        this.hasMid = (this.sliders['mid']) ? true : false;
         if (!this.easelDetails) {
             this.easelDetails = this.getEaselDetails();
         }
@@ -116,9 +120,17 @@ export class RangeSliderComponent implements OnInit, OnChanges {
                 let startIdx = 0;
                 let endIdx = this.trackCoords['page'].length;
                 if (slider == 'start') {
-                    endIdx = this.selectedIndexes['end'];
+                    if (this.hasMid) {
+                        endIdx = this.selectedIndexes['mid'];
+                    } else {
+                        endIdx = this.selectedIndexes['end'];
+                    }
                 } else if (slider == 'end') {
-                    startIdx = this.selectedIndexes['start'] + 1;
+                    if (this.hasMid) {
+                        startIdx = this.selectedIndexes['mid'] + 1;
+                    } else {
+                        startIdx = this.selectedIndexes['start'] + 1;
+                    }
                 } else if (slider == 'mid') {
                     startIdx = this.selectedIndexes['start'] + 1;
                     endIdx = this.selectedIndexes['end'];
