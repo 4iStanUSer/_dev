@@ -87,4 +87,15 @@ export class DecompositionModel {
     getDecompositionTypes() {
         return this.types;
     }
+
+    hasDecomposition(start: string, end: string): boolean {
+        let l = this.storage.length;
+        for (let i = 0; i < l; i++) {
+            if (this.storage[i].start == start
+                && this.storage[i].end == end) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

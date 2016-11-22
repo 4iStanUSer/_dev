@@ -177,7 +177,7 @@ export class DriverDetailComponent implements OnInit {
             parent_id: null,
             meta: [
                 {
-                    name: this.dm.lang['cagr'] + ' ' + period.start +
+                    name: this.dm.config['cagr'] + ' ' + period.start +
                         '/' + period.mid
                 }
             ]
@@ -187,7 +187,7 @@ export class DriverDetailComponent implements OnInit {
             parent_id: null,
             meta: [
                 {
-                    name: this.dm.lang['cagr'] + ' ' + period.mid +
+                    name: this.dm.config['cagr'] + ' ' + period.mid +
                         '/' + period.end
                 }
             ]
@@ -217,7 +217,7 @@ export class DriverDetailComponent implements OnInit {
             data: {
                 selected_row_id: this.selectedDriver,
                 appendix: [
-                    <string>this.dm.lang['fact']
+                    <string>this.dm.config['fact']
                 ],
                 cols: cols,
                 rows: rows,

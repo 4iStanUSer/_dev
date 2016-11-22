@@ -4,7 +4,7 @@
     <div class="table-section">
 
         <div class="header">
-            <h3>{{ dm.lang['drivers_summary_block'] }}</h3>
+            <h3>{{ dm.config['drivers_summary_block'] }}</h3>
 
             <buttons-group
                 *ngIf="dTypesSwitcherData"
@@ -25,7 +25,7 @@
 
 
             <button (click)="onClickTableToggleButton($event)">
-                {{ ((dm.state.get('d_details_table_collapsed_expanded') == 'collapsed') ? dm.lang['expand'] : dm.lang['collapse']) }}
+                {{ ((dm.state.get('d_details_table_collapsed_expanded') == 'collapsed') ? dm.config['expand'] : dm.config['collapse']) }}
             </button>
         </div>
 
@@ -44,7 +44,7 @@
     <div class="sub-driver-dymanic-section">
 
         <div class="header">
-            <h3>{{ dm.lang['sub_drivers_dynamic'] }}</h3>
+            <h3>{{ dm.config['sub_drivers_dynamic'] }}</h3>
 
         </div>
         <div class="content">
@@ -54,7 +54,7 @@
                      class="chart-rates">
                     <div>
                         <div style="display:inline-block;width:24%">
-                            {{ dm.lang['driver_contribution'] }}
+                            {{ dm.config['driver_contribution'] }}
                         </div>
 
                         <bar-chart
@@ -64,7 +64,7 @@
                     </div>
                     <div>
                         <div style="display:inline-block;width:24%">
-                            {{ dm.lang['driver_change_cagr'] }}
+                            {{ dm.config['driver_change_cagr'] }}
                         </div>
                         <table *ngIf="dynamicData.rate" border="1">
                             <tr>
@@ -77,7 +77,7 @@
                 </div>
                 <div style="display:inline-block;width:24%" class="cagrs">
                     <div *ngFor="let cagr of dynamicData.cagr">
-                        {{ dm.lang['cagr'] }}<br>
+                        {{ dm.config['cagr'] }}<br>
                         {{ cagr.start }}/{{ cagr.end }}<br>
                         {{ cagr.value }}%
                     </div>
@@ -90,7 +90,7 @@
     <div class="table-section">
 
         <div class="header">
-            <h3>{{ dm.lang['sub_drivers_impact'] }}</h3>
+            <h3>{{ dm.config['sub_drivers_impact'] }}</h3>
 
         </div>
         <div class="content">

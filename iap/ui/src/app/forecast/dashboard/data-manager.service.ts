@@ -7,18 +7,13 @@ import {
     selectorsDataTEMP, selectorsConfigTEMP,
     // vertTableTEMP,
     // forecastValueRateData
-} from './general/data';
+} from './data';
 /*======.TEMP=====*/
 
 
 import {AjaxService} from "./../../common/service/ajax.service";
 import {DataModel} from "./../../common/model/data.model";
-// import {
-//     TimePeriodInput,
-//     TimePeriodModel
-// } from "../../common/model/time-period.model";
-import {StateService, PageState} from "../../common/service/state.service";
-import {StaticDataService} from "../../common/service/static-data.service";
+import {StaticDataService, PageState} from "../../common/service/static-data.service";
 import {PointValueModel} from "../../common/model/points-values.model";
 import {InsightInput} from "./insights/insights.component";
 import {
@@ -27,7 +22,6 @@ import {
     TableWidgetValues
 } from "../../common/cmp/table-widget/table-widget.component";
 import {DecompositionModel} from "../../common/model/decomposition.model";
-import {TimelabelInput} from "../../common/model/time-labels.model";
 import {ButtonsGroupDataInput} from "../../common/cmp/buttons-group/buttons-group.component";
 import {
     VariableData, ClickableTable,
@@ -69,11 +63,11 @@ export class DataManagerService {
 
     insights: Array<InsightInput> = [];
 
-    lang: Object = null;
-
     state: PageState = null;
 
     config: Object = null; // TODO Interface for config
+
+    ddConfig: Object = null; // Dynamic Data Config
 
     initResolver: Subject<number> = null;
 
@@ -87,14 +81,11 @@ export class DataManagerService {
     // ----------------------------- //
 
     selectors: {data: Object, config: Object} = null;
-    inputData: Object = null;// TODO Solve about this variable
-
 
     private defaults: Object = null; // TODO Review this variable (VL)
 
     constructor(private req: AjaxService,
-                private stateService: StateService,
-                private sds: StaticDataService) {
+                private sds: StaticDataService) { //private stateService: StateService,
 
         this.init();
     }
@@ -123,6 +114,8 @@ export class DataManagerService {
     }
 
     private dataInitialized() {
+        console.log('dataInitialized', this.isData);
+
         return (this.isData['dynamic']['received']
         && this.isData['static']['received']);
     }
@@ -144,7 +137,7 @@ export class DataManagerService {
             let d = data['data'];
             let c = data['config'];
 
-            this.config = c;
+            this.ddConfig = c;
 
             this.insights = d['insights'];
 
@@ -165,8 +158,6 @@ export class DataManagerService {
                 data: selectorsDataTEMP,
                 config: selectorsConfigTEMP
             };
-
-            this.inputData = d; // TODO Remove this variable
 
             this.dataModel = new DataModel(
                 d['timescales'],
@@ -192,88 +183,47 @@ export class DataManagerService {
         });
     }
 
+    private proceedStaticData() {
+        this.isData['static']['received'] = true;
+
+        this.config = this.sds.getConfig(this.pageName);
+        this.state = this.sds.getState(this.pageName);
+
+        // TODO This in sds
+        // // Merge defaults into state
+        // let defKeys = Object.keys(this.defaults),
+        //     defKeysLen = defKeys.length,
+        //     defKey = null;
+        // for (let i = 0; i < defKeysLen; i++) {
+        //     defKey = defKeys[i];
+        //     let v = this.state.get(defKey);
+        //     if (v === null || v === undefined) {
+        //         this.state.set(defKey, this.defaults[defKey]);
+        //     }
+        // }
+        this.resolveInitObervable();
+    }
     private initStaticData() {
         if (this.isData['static']['sent']) return;
 
         this.isData['static']['sent'] = true;
         this.isData['static']['received'] = false;
 
-        this.req.get({
-            'url': '/forecast/get_page_configuration',
-            'data': {
-                'page_name': this.pageName
-            }
-        }).subscribe((d)=> {
-            // this.isData['static']['received'] = true;
-            //
-            // this.lang = this.sds.getLangPack(this.pageName);
-            // this.config = this.sds.getConfig(this.pageName);
-            //
-            // this.state = this.stateService.getPageState(this.pageName);
-            // this.defaults = this.sds.getDefaults(this.pageName);
-            //
-            // // Merge defaults into state
-            // let defKeys = Object.keys(this.defaults),
-            //     defKeysLen = defKeys.length,
-            //     defKey = null;
-            // for (let i = 0; i < defKeysLen; i++) {
-            //     defKey = defKeys[i];
-            //     let v = this.state.get(defKey);
-            //     if (v === null || v === undefined) {
-            //         this.state.set(defKey, this.defaults[defKey]);
-            //     }
-            // }
-            //
-            // this.resolveInitObervable();
-        });
-        /////////////////////////////////////////
-        this.isData['static']['received'] = true;
-
-        this.lang = this.sds.getLangPack(this.pageName);
-        this.config = this.sds.getConfig(this.pageName);
-
-        this.state = this.stateService.getPageState(this.pageName);
-        this.defaults = this.sds.getDefaults(this.pageName);
-
-        // Merge defaults into state
-        let defKeys = Object.keys(this.defaults),
-            defKeysLen = defKeys.length,
-            defKey = null;
-        for (let i = 0; i < defKeysLen; i++) {
-            defKey = defKeys[i];
-            let v = this.state.get(defKey);
-            if (v === null || v === undefined) {
-                this.state.set(defKey, this.defaults[defKey]);
-            }
-        }
-        this.resolveInitObervable();
-        /////////////////////////////////////////
-    }
-
-
-    getState() {
-        // this.stateService.getPageState(this.pageName)
-        //     .subscribe((pageState) => {
-        //
-        //         console.log('getState subs');
-        //
-        //         this.state = pageState;
-        //         this.checkFilling();
-        //     });
-
-        this.state = this.stateService.getPageState(this.pageName);
-        this.defaults = this.sds.getDefaults(this.pageName);
-
-        // Merge defaults into state
-        let defKeys = Object.keys(this.defaults),
-            defKeysLen = defKeys.length,
-            defKey = null;
-        for (let i = 0; i < defKeysLen; i++) {
-            defKey = defKeys[i];
-            let v = this.state.get(defKey);
-            if (v === null || v === undefined) {
-                this.state.set(defKey, this.defaults[defKey]);
-            }
+        if (!this.sds.hasPage(this.pageName)) {
+            this.req.get({
+                'url': '/temp/get_page_static_data',
+                'data': {
+                    'page_name': this.pageName
+                }
+            }).subscribe((d)=> {
+                this.sds.addPage(this.pageName, d);
+                this.proceedStaticData();
+            },
+            (e)=> {
+                console.log(e);
+            });
+        } else {
+            this.proceedStaticData();
         }
     }
 
@@ -395,11 +345,6 @@ export class DataManagerService {
         return output;
     }
 
-    // getData_ForecastRateValues(timescale: string, timepoints: Array<string>,
-    //                            variable: string) {
-    //     return null; // TODO Implement
-    // }
-
     getData_ForecastTimelabels(): TimeSelectorDataInput {
         let output = {
             order: this.dataModel.getTimeScalesOrder(),
@@ -415,7 +360,7 @@ export class DataManagerService {
     }
 
     getDecompPeriodLabels(): TimeSelectorDataInput {
-        let allowedTs = this.config['dec_timescales'];
+        let allowedTs = this.ddConfig['dec_timescales'];
         let allTs = this.dataModel.getTimeScalesOrder();
         let order = [];
         for (let i = 0; i < allTs.length; i++) {
@@ -527,14 +472,14 @@ export class DataManagerService {
             id: ids[0],
             parent_id: null,
             meta: [
-                {name: this.lang['cagr'] + ' ' + start + '/' + mid}
+                {name: this.config['cagr'] + ' ' + start + '/' + mid}
             ]
         });
         tls.push({
             id: ids[1],
             parent_id: null,
             meta: [
-                {name: this.lang['cagr'] + ' ' + mid + '/' + end}
+                {name: this.config['cagr'] + ' ' + mid + '/' + end}
             ]
         });
         vals[ids[0]] = {};
@@ -554,8 +499,8 @@ export class DataManagerService {
             data: {
                 selected_row_id: selRowId,
                 appendix: [
-                    <string>this.lang['driver'],
-                    <string>this.lang['metric'],
+                    <string>this.config['driver'],
+                    <string>this.config['metric'],
                 ],
                 cols: vars,
                 rows: tls,
@@ -578,7 +523,7 @@ export class DataManagerService {
         let megaDrvsKeys: Array<string>;
         try {
             megaDrvsKeys = Object.keys(
-                this.config['factors_drivers'][decompType]);
+                this.ddConfig['factors_drivers'][decompType]);
         } catch (e) {
             console.error('Have no such decomposition type', decompType);
             return null;
@@ -638,7 +583,7 @@ export class DataManagerService {
         // Get all drivers for megadriver and decomposition type
         let allDrv: Array<string>;
         try {
-            allDrv = this.config['factors_drivers'][decompType][megaDrv];
+            allDrv = this.ddConfig['factors_drivers'][decompType][megaDrv];
         } catch (e) {
             console.error('Have no data', decompType, megaDrv, e);
         }
@@ -650,5 +595,12 @@ export class DataManagerService {
         // }, this);
         output = allDrv;
         return output;
+    }
+
+    getLanguagePackForTimeSelector() {
+        return {
+            'apply': this.config['apply'],
+            'cancel': this.config['cancel']
+        }
     }
 }

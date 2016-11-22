@@ -3,10 +3,10 @@
     <div class="table-section">
 
         <div class="header">
-            {{ dm.lang['drivers_summary_block'] }}
+            {{ dm.config['drivers_summary_block'] }}
 
             <button (click)="onClickTableToggleButton()">
-                {{ ((dm.state.get('d_summary_table_collapsed_expanded') == 'collapsed') ? dm.lang['expand'] : dm.lang['collapse']) }}
+                {{ ((dm.state.get('d_summary_table_collapsed_expanded') == 'collapsed') ? dm.config['expand'] : dm.config['collapse']) }}
             </button>
         </div>
         <div class="content" *ngIf="dm.state.get('d_summary_table_collapsed_expanded') == 'expanded'">
@@ -22,7 +22,7 @@
 
     <div class="decomp-section">
         <div class="header">
-            {{ dm.lang['decomposition_block'] }}
+            {{ dm.config['decomposition_block'] }}
             {{ ((decompData) ? (decompData['start'] +'-'+ decompData['end']) : null) }}
 
             <buttons-group
@@ -36,7 +36,7 @@
         <div class="content" *ngIf="dTypeData">
 
             <div>
-                {{ dm.lang['driver_contribution'] }}
+                {{ dm.config['driver_contribution'] }}
             </div>
 
             <waterfall-chart
@@ -46,7 +46,7 @@
 
 
             <div>
-                {{ dm.lang['driver_change_cagr'] }}
+                {{ dm.config['driver_change_cagr'] }}
             </div>
             <div>
                 <table border="1">

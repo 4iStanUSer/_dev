@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {DataManagerService} from "./../data-manager.service";
-import {forecastValueRateData} from './data';
+import {forecastValueRateData} from './../data';
 
 import {ButtonsGroupDataInput} from "./../../../common/cmp/buttons-group/buttons-group.component";
 import {VariableModel} from "../../../common/model/variables.model";
@@ -45,22 +45,14 @@ export class GeneralComponent implements OnInit {
     private fTabsAbsData: ForecastTabsAbsData = [];
 
     /**
-     * Contains Growth Rates for Donuts in Forecasting section
-     * @type {Array}
-     */
-    // private fTabsRateData: Array<{
-    //     variable: VariableModel,
-    //     // TODO Create structure
-    // }> = [];
-
-    /**
      * Contains available time points & current selection
      * in Forecasting section
      * @type {{data: Array<TimelabelInput>, selected: TimePeriodInput}}
      */
     private fPeriodSelectorData: { // TODO Make Interface|Type for period selector
         data: TimeSelectorDataInput,
-        selected: TimeSelectorSelectedData
+        selected: TimeSelectorSelectedData,
+        static: Object
     } = null;
 
     /**
@@ -70,7 +62,8 @@ export class GeneralComponent implements OnInit {
      */
     private dPeriodSelectorData: {
         data: TimeSelectorDataInput,
-        selected: TimeSelectorSelectedData
+        selected: TimeSelectorSelectedData,
+        static: Object
     } = null;
 
     /**
@@ -89,6 +82,7 @@ export class GeneralComponent implements OnInit {
     }
 
     ngOnInit() {
+        console.log(this.dm.dataIsResolved);
         if (this.dm.dataIsResolved) {
             this.collectData();
         } else {
@@ -108,7 +102,6 @@ export class GeneralComponent implements OnInit {
         this.fActiveTabIndex = this.getForecastActiveTabIndex();
 
         this.fTabsAbsData = this.getForecastTabsAbsData();
-        // this.fTabsRateData = this.getForecastTabsRateData();
         this.fPeriodSelectorData = this.getMainPeriodSelectorData();
 
         this.dPeriodSelectorData = this.getDecompPeriodSelectorData();
@@ -122,7 +115,7 @@ export class GeneralComponent implements OnInit {
         let name, sel;
         for (let i = 0; i < forecastValueRateData.length; i++) {
             name = (forecastValueRateData[i]['id'] == 'absolute')
-                ? this.dm.lang['value'] : this.dm.lang['growth_rate'];
+                ? this.dm.config['value'] : this.dm.config['growth_rate'];
             sel = (this.dm.state.get('forecast_absolute_rate')
                     == forecastValueRateData[i]['id']) ? true : false;
             let opt = {
@@ -153,7 +146,8 @@ export class GeneralComponent implements OnInit {
             };
             return {
                 data: timelabels,
-                selected: selected
+                selected: selected,
+                static: this.dm.getLanguagePackForTimeSelector()
             };
         }
     }
@@ -228,7 +222,8 @@ export class GeneralComponent implements OnInit {
             };
             return {
                 data: timelabels,
-                selected: selected
+                selected: selected,
+                static: this.dm.getLanguagePackForTimeSelector()
             };
         }
     }
@@ -256,28 +251,4 @@ export class GeneralComponent implements OnInit {
 
     /*-----------.DECOMPOSITION--------------*/
 
-
-
-    // private getForecastTabsRateData() {
-    //     let output = [];
-    //     let outputVars = this.dm.dataModel.getVariablesByType('output');
-    //
-    //     let period = this.dm.getPeriod('main');
-    //     if (period) {
-    //         let timescale = period.timescale;
-    //         let shortList = [period.start, period.mid, period.end];
-    //         let longList = this.dm.getFullPeriod(timescale,
-    //             period.start, period.end);
-    //
-    //         for (let i = 0; i < outputVars.length; i++) {
-    //             output.push({
-    //                 'variable': outputVars[i],
-    //                 // 'preview': this.dm.getData_ForecastRateValues(timescale, shortPeriod, outputVars[i].key),
-    //                 // 'full': this.dm.getData_ForecastRateValues(timescale, longPeriod, outputVars[i].key),
-    //             });
-    //         }
-    //     }
-    //
-    //     return output;
-    // }
 }

@@ -112,6 +112,7 @@ export class TimeSelectorComponent implements OnInit, OnChanges {
         'apply': 'Apply',
         'cancel': 'Cancel'
     };
+    private conf = {};
 
     private scalesM: ScalesModel = null;
 
@@ -135,6 +136,7 @@ export class TimeSelectorComponent implements OnInit, OnChanges {
 
     @Input() data: TimeSelectorDataInput = null;
     @Input() selected: TimeSelectorSelectedData = null;
+    @Input() static: Object = null;
 
 
     @Output() changed = new EventEmitter(); //: EventEmitter<TimePeriodInput>
@@ -187,6 +189,17 @@ export class TimeSelectorComponent implements OnInit, OnChanges {
                 }
             }
             this.currScale = (selScale) ? selScale : null;
+        }
+        if (ch['static']) {
+            // Replacing for language
+            let keys = Object.keys(this.lang);
+            let l = keys.length;
+            for (let i=0;i<l;i++) {
+                if (ch['static']['currentValue'][keys[i]]) {
+                    this.lang[keys[i]] = ch['static']['currentValue'][keys[i]];
+                }
+            }
+            // TODO replacing for configuration
         }
         if (this.scales.length) {
             if (!this.currScale) {
