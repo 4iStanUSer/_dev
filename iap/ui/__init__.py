@@ -7,6 +7,18 @@ def temp_routing(config):
                     route_name='temp.get_page_static_data',
                     request_method='POST', renderer='json')
 
+    config.add_route('temp.get_languages',
+                     '/get_languages')
+    config.add_view(get_page_static_data,
+                    route_name='temp.get_languages',
+                    request_method='POST', renderer='json')
+
+    config.add_route('temp.get_top_menu',
+                     '/get_top_menu')
+    config.add_view(get_page_static_data,
+                    route_name='temp.get_top_menu',
+                    request_method='POST', renderer='json')
+
 
 def get_page_static_data(req):
     data = {
@@ -55,4 +67,56 @@ def get_page_static_data(req):
             'cancel': 'Cancel!',
         }
     }
+    return send_success_response(data)
+
+
+def get_languages(req):
+    data = [
+        {
+            'id': 'en',
+            'name': 'English',
+            'selected': True
+        },
+        {
+            'id': 'ru',
+            'name': 'Russian',
+            'selected': False
+        },
+        {
+            'id': 'sp',
+            'name': 'Spain',
+            'selected': False
+        }
+    ]
+    return send_success_response(data)
+
+
+def get_top_menu(req):
+    data = [
+        {
+            'key': 'home',
+            'name': 'Home',
+            'disabled': False
+        },
+        {
+            'key': 'dashboard',
+            'name': 'Dashboard',
+            'disabled': False
+        },
+        {
+            'key': 'comparison',
+            'name': 'Comparison',
+            'disabled': False
+        },
+        {
+            'key': 'scenarios',
+            'name': 'Scenarios',
+            'disabled': False
+        },
+        {
+            'key': 'simulator',
+            'name': 'Simulator',
+            'disabled': False
+        }
+    ]
     return send_success_response(data)

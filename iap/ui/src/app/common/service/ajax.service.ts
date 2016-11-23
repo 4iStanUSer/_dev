@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import * as _ from 'lodash';
 import { LoadingService } from './loading.service';
+import {AuthService} from "./auth.service";
 
 class ServiceConf {
     //request: RequestConf = new RequestConf('ajax');
@@ -63,7 +64,10 @@ export class AjaxService {
     private serviceConf: ServiceConf = new ServiceConf();
     private counter: number = 0;
 
-    constructor(private http: Http, private loading: LoadingService) { }
+    constructor(
+        private http: Http,
+        private loading: LoadingService,
+        private auth: AuthService) { }
 
     public configure(serv_config: Object = {}) {
         _.extend(this.serviceConf, serv_config);
@@ -90,37 +94,22 @@ export class AjaxService {
         let pid = 'request_' + this.counter;
         this.loading.show(pid);
 
-        let r = this.http.request(req)
+        let r = this.http.request(req) // Observable
             .map((res: Response) => {
                 let body = res.json();
                 let resp = new ServerResponse();
                 _.extend(resp, body);
                 return resp;
             });
-
-        // r.subscribe( // TODO check unsubscribe for blackbox subscription
-        //     (res: ServerResponse) => {
-        //         if (res.hasError()) {
-        //             this._handleSiteError(res, blackBox);
-        //         } else {
-        //             blackBox.next(res.data);
-        //         }
-        //         this.loading.hide(pid);
-        //     },
-        //     (err: Response) => {
-        //         this.loading.hide(pid);
-        //         this._handleServerError(err, blackBox);
-        //     }
-        // );
-        // return r;
+        console.log(r);
         r.subscribe( // TODO check unsubscribe for blackbox subscription
             (res: ServerResponse) => {
+                this.loading.hide(pid);
                 if (res.hasError()) {
                     this._handleSiteError(res, blackBox);
                 } else {
                     blackBox.next(res.data);
                 }
-                this.loading.hide(pid);
             },
             (err: Response) => {
                 this.loading.hide(pid);
@@ -134,7 +123,7 @@ export class AjaxService {
     private _handleSiteError(res: ServerResponse, blackBox: Subject<any>) {
         // TODO Show error at view
         console.error('App Error message: ' + res.getError());
-        // blackBox.error(res.getError()); // TODO Refactor (VL)
+        blackBox.error(res.getError()); // TODO Refactor (VL)
     }
 
     private _handleServerError(error: Response, blackBox: Subject<any>) {
@@ -144,7 +133,7 @@ export class AjaxService {
         }
         // TODO Show error at view
         console.error('Server Error message: ' + error.status);
-        // blackBox.error(error.status); // TODO Refactor (VL)
+        blackBox.error(error.status); // TODO Refactor (VL)
     }
 
     private _makeRequestInst(options: IRequestOptions): Request {

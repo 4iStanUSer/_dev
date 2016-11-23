@@ -166,9 +166,9 @@ export class GeneralComponent implements OnInit {
                 output.push({
                     'variable': outputVars[i],
                     'preview': this.dm.getVariableData(timescale,
-                        shortList, outputVars[i].key),
+                        shortList, outputVars[i].id),
                     'full': this.dm.getVariableData(timescale,
-                        longList, outputVars[i].key, period),
+                        longList, outputVars[i].id, period),
                 });
             }
         }
@@ -178,7 +178,7 @@ export class GeneralComponent implements OnInit {
         let outputVars = this.dm.dataModel.getVariablesByType('output');
 
         for (let i =0;i<outputVars.length;i++) {
-            if (outputVars[i].key == this.dm.state.get('forecast_active_tab')) {
+            if (outputVars[i].id == this.dm.state.get('forecast_active_tab')) {
                 return i;
             }
         }

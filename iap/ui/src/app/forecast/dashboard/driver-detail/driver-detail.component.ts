@@ -200,11 +200,14 @@ export class DriverDetailComponent implements OnInit {
         for (let i = 0; i < drivers.length; i++) {
             let values = this.dm.dataModel.getPointsValue(
                 timescale, drivers[i], timeline);
-            if (values && values.length) {
-                for (let j = 0; j < values.length; j++) {
-                    vals[drivers[i]][values[j].timestamp] = values[j].value;
-                }
+            for (let j = 0; j < timeline.length; j++) {
+                vals[drivers[i]][timeline[j]] = values[j];
             }
+            // if (values && values.length) {
+            //     for (let j = 0; j < values.length; j++) {
+            //         vals[drivers[i]][values[j].timestamp] = values[j].value;
+            //     }
+            // }
             vals[drivers[i]][cagrsIds[0]] = this.dm.dataModel.getGrowthRate(
                 drivers[i], period.start, period.mid, timescale);
             vals[drivers[i]][cagrsIds[1]] = this.dm.dataModel.getGrowthRate(

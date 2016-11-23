@@ -58,20 +58,22 @@ export class ForecastComponent implements OnInit {
 
     ngOnInit() {
         this.req.get({
-            url: 'get-languages', // TODO Implement on server
+            url: '/temp/get_languages', // TODO Implement on server
             data: {}
         }).subscribe(
             (d) => {
-                // this.langsData = d['langs'];
+                console.log(d);
+                // this.langsData = d;
             }
         );
 
         this.req.get({
-            url: 'get-menu', // TODO Implement on server
+            url: '/temp/get_top_menu', // TODO Implement on server
             data: {}
         }).subscribe(
             (d) => {
-                // this.topMenuData = d['menu'];
+                console.log(d);
+                // this.topMenuData = d;
             }
         );
 

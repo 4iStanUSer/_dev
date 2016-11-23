@@ -97,7 +97,7 @@ export class DriverSummaryComponent implements OnInit {
         let output = [];
         let autoSel = true,
             sel;
-        let types = this.dm.decompModel.getDecompositionTypes();
+        let types = this.dm.dataModel.getDecompositionTypes();
 
         for (let i = 0; i < types.length; i++) {
             if (this.dm.state.get('decomp_value_volume_price') == types[i]) {

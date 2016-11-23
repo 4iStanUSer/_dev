@@ -115,18 +115,18 @@ export class StaticDataService {
             }
             this.defState[page] = data['state'];
 
-
-            // Merge defaults into state
-            let defKeys = Object.keys(this.defState[page]),
-                defKeysLen = defKeys.length,
-                defKey = null;
-            for (let i = 0; i < defKeysLen; i++) {
-                defKey = defKeys[i];
-                let v = this.state.get(defKey);
-                if (v === null || v === undefined) {
-                    this.state.set(defKey, this.defaults[defKey]);
-                }
-            }
+            // TODO Implement this !!!!
+            // // Merge defaults into state
+            // let defKeys = Object.keys(this.defState[page]),
+            //     defKeysLen = defKeys.length,
+            //     defKey = null;
+            // for (let i = 0; i < defKeysLen; i++) {
+            //     defKey = defKeys[i];
+            //     let v = this.state.get(defKey);
+            //     if (v === null || v === undefined) {
+            //         this.state.set(defKey, this.defaults[defKey]);
+            //     }
+            // }
 
 
 
