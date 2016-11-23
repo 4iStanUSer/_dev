@@ -326,15 +326,17 @@ export class DashboardDataModel {
     }
 
     getTimeScalesOrder(): Array<string> {
-        return this.timescales.map((ts: Timescale) => {
-            return ts.id;
-        });
+        return (this.timescales && this.timescales.length)
+            ? this.timescales.map((ts: Timescale) => {
+                return ts.id;
+            }) : [];
     }
 
     getDecompositionTypes(): Array<string> {
-        return this.decompTypes.map((dt: DecompType) => {
-            return dt.id;
-        });
+        return (this.decompTypes && this.decompTypes.length)
+            ? this.decompTypes.map((dt: DecompType) => {
+                return dt.id;
+            }) : [];
     }
 
     hasDecomposition(start_timelabel_id: string,
