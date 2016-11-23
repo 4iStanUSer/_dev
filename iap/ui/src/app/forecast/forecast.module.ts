@@ -33,6 +33,7 @@ import {RegionSelectorComponent} from './dashboard/selectors/region-selector/reg
 import {ButtonsGroupComponent} from './../common/cmp/buttons-group/buttons-group.component';
 import {TableWidgetComponent} from "../common/cmp/table-widget/table-widget.component";
 import { MenuWidgetComponent } from './menu-widget/menu-widget.component';
+import { LanguageSelectorComponent } from './language-selector/language-selector.component';
 
 @NgModule({
     imports: [
@@ -68,6 +69,7 @@ import { MenuWidgetComponent } from './menu-widget/menu-widget.component';
         ButtonsGroupComponent,
         TableWidgetComponent,
         MenuWidgetComponent,
+        LanguageSelectorComponent,
     ],
     providers: [
         CommonServicesModule,

@@ -6,10 +6,10 @@
         [config]="dm.selectors['config']"
     ></selectors>
 
-    <ul class="navigation">
-        <li><a routerLink="./general" routerLinkActive="active">Dashboard</a></li>
-        <li><a routerLink="./driver-details" routerLinkActive="active">Driver Details</a></li>
-        <li><a routerLink="./driver-summary" routerLinkActive="active">Driver Summary</a></li>
+    <ul class="navigation" *ngIf="dm.dataIsResolved">
+        <li><a routerLink="./general" routerLinkActive="active">{{ dm.config['dashboard_tab'] }}</a></li>
+        <li><a routerLink="./driver-details" routerLinkActive="active">{{ dm.config['drivers_details_tab'] }}</a></li>
+        <li><a routerLink="./driver-summary" routerLinkActive="active">{{ dm.config['drivers_summary_tab'] }}</a></li>
     </ul>
 
     <router-outlet></router-outlet>

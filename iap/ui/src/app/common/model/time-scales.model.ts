@@ -24,4 +24,8 @@ export class TimeScalesModel {
             }
         }
     }
+
+    getTimeScale(timescale: string) {
+        return (this.storage[timescale]) ? this.storage[timescale] : null;
+    }
 }

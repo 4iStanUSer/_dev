@@ -5,6 +5,7 @@ export interface TableWidgetRowColItem {
     id: string;
     parent_id: string;
     meta: Array<{name: string;}>;
+    notSelectable?: boolean;
 }
 export interface TableWidgetValues {
     [row_id: string]: {

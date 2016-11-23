@@ -1,3 +1,103 @@
-<p *ngIf="dm.dataIsResolved">
-  driver-detail works!
-</p>
+<div class="wrapper" *ngIf="dm.dataIsResolved">
+
+
+    <div class="table-section">
+
+        <div class="header">
+            <h3>{{ dm.config['drivers_summary_block'] }}</h3>
+
+            <buttons-group
+                *ngIf="dTypesSwitcherData"
+                [data]="dTypesSwitcherData"
+                (changed)="onChangedDecompType($event)"
+            ></buttons-group>
+
+            <select
+                *ngIf="megaDriversSelectorData"
+                [ngModel]="megaDriversSelectorData.selected"
+                (ngModelChange)="onChangeMegaDriver($event)">
+                <option
+                    *ngFor="let opt of megaDriversSelectorData.options"
+                    [value]="opt.id">
+                    {{ opt.name }}
+                </option>
+            </select>
+
+
+            <button (click)="onClickTableToggleButton($event)">
+                {{ ((dm.state.get('d_details_table_collapsed_expanded') == 'collapsed') ? dm.config['expand'] : dm.config['collapse']) }}
+            </button>
+        </div>
+
+
+        <div class="content" *ngIf="dm.state.get('d_details_table_collapsed_expanded') == 'expanded'">
+
+            <table-widget
+                *ngIf="tableData && tableData['data']"
+                [data]="tableData['data']"
+                (row-select)="onRowSelect($event)"
+            ></table-widget>
+
+        </div>
+    </div>
+
+    <div class="sub-driver-dymanic-section">
+
+        <div class="header">
+            <h3>{{ dm.config['sub_drivers_dynamic'] }}</h3>
+
+        </div>
+        <div class="content">
+
+            <div *ngIf="dynamicData">
+                <div style="position: relative"
+                     class="chart-rates">
+                    <div>
+                        <div style="display:inline-block;width:24%">
+                            {{ dm.config['driver_contribution'] }}
+                        </div>
+
+                        <bar-chart
+                            *ngIf="dynamicData.abs"
+                            [data]="dynamicData.abs"
+                        ></bar-chart>
+                    </div>
+                    <div>
+                        <div style="display:inline-block;width:24%">
+                            {{ dm.config['driver_change_cagr'] }}
+                        </div>
+                        <table *ngIf="dynamicData.rate" border="1">
+                            <tr>
+                                <td *ngFor="let rate of dynamicData.rate">
+                                    {{ rate.value }}
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div style="display:inline-block;width:24%" class="cagrs">
+                    <div *ngFor="let cagr of dynamicData.cagr">
+                        {{ dm.config['cagr'] }}<br>
+                        {{ cagr.start }}/{{ cagr.end }}<br>
+                        {{ cagr.value }}%
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="table-section">
+
+        <div class="header">
+            <h3>{{ dm.config['sub_drivers_impact'] }}</h3>
+
+        </div>
+        <div class="content">
+
+
+        </div>
+    </div>
+
+
+</div>

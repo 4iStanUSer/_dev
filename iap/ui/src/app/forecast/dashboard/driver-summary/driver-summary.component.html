@@ -3,17 +3,17 @@
     <div class="table-section">
 
         <div class="header">
-            {{ dm.lang['drivers_summary_block'] }}
+            {{ dm.config['drivers_summary_block'] }}
 
             <button (click)="onClickTableToggleButton()">
-                {{ ((dm.state.get('d_summary_table_collapsed_expanded') == 'collapsed') ? dm.lang['expand'] : dm.lang['collapse']) }}
+                {{ ((dm.state.get('d_summary_table_collapsed_expanded') == 'collapsed') ? dm.config['expand'] : dm.config['collapse']) }}
             </button>
         </div>
         <div class="content" *ngIf="dm.state.get('d_summary_table_collapsed_expanded') == 'expanded'">
 
             <table-widget
-                *ngIf="tableData"
-                [data]="tableData"
+                *ngIf="tableData && tableData.data"
+                [data]="tableData.data"
                 (row-select)="onRowSelect($event)"
             ></table-widget>
 
@@ -22,8 +22,8 @@
 
     <div class="decomp-section">
         <div class="header">
-            {{ dm.lang['decomposition_block'] }}
-            {{ ((decompData) ? decompData['start'] : null) }}
+            {{ dm.config['decomposition_block'] }}
+            {{ ((decompData) ? (decompData['start'] +'-'+ decompData['end']) : null) }}
 
             <buttons-group
                 *ngIf="dTypesSwitcherData"
@@ -35,10 +35,29 @@
 
         <div class="content" *ngIf="dTypeData">
 
+            <div>
+                {{ dm.config['driver_contribution'] }}
+            </div>
+
             <waterfall-chart
                 *ngIf="dTypeData['abs']"
                 [data]="dTypeData['abs']"
             ></waterfall-chart>
+
+
+            <div>
+                {{ dm.config['driver_change_cagr'] }}
+            </div>
+            <div>
+                <table border="1">
+                    <tr>
+                        <td *ngFor="let rate of dTypeData['table']">
+                            {{ rate['value'] }}
+                            {{ rate['metric'] }}
+                        </td>
+                    </tr>
+                </table>
+            </div>
 
         </div>
 

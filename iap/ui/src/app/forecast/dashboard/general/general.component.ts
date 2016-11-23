@@ -1,14 +1,23 @@
 import {Component, OnInit} from '@angular/core';
 import {DataManagerService} from "./../data-manager.service";
-import {forecastValueRateData} from './data';
+import {forecastValueRateData} from './../data';
 
-import {ButtonDataInput} from "./../../../common/cmp/buttons-group/buttons-group.component";
+import {ButtonsGroupDataInput} from "./../../../common/cmp/buttons-group/buttons-group.component";
 import {VariableModel} from "../../../common/model/variables.model";
 import {TimelabelInput} from "../../../common/model/time-labels.model";
 import {TimePeriodInput} from "../../../common/model/time-period.model";
-import {WaterfallChartDataInput} from "../../../common/cmp/waterfall-chart/waterfall-chart.component";
+import {DecompositionTypeData, VariableData} from "../interfaces";
+import {
+    TimeSelectorDataInput,
+    TimeSelectorSelectedData
+} from "../../../common/cmp/time-selector/time-selector.component";
 
 
+type ForecastTabsAbsData = Array<{
+    variable: VariableModel,
+    preview: Array<VariableData>,
+    full: Array<VariableData>,
+}>;
 
 @Component({
     templateUrl: './general.component.html',
@@ -16,42 +25,64 @@ import {WaterfallChartDataInput} from "../../../common/cmp/waterfall-chart/water
 })
 export class GeneralComponent implements OnInit {
 
-    private absRateSwitcherData: Array<ButtonDataInput> = null;
+    /**
+     * Data for Absolute|GrowthRate switcher
+     * @type {ButtonsGroupDataInput}
+     */
+    private absRateSwitcherData: ButtonsGroupDataInput = null;
 
+    /**
+     * Index of selected tab in Forecasting section
+     * Array of tabs: tabs this.fTabsAbsData | this.fTabsRateData
+     * @type {number}
+     */
     private fActiveTabIndex: number = null;
 
-    private fTabsAbsData: Array<{
-        variable: VariableModel,
-        preview: Array<Object>, // TODO Replace by input interface of BarChart
-        full: Array<Object>, // TODO Replace by input interface of BarChart
-    }> = [];
+    /**
+     * Contains Absolute data for Bar Charts in Forecasting section
+     * @type {ForecastTabsAbsData}
+     */
+    private fTabsAbsData: ForecastTabsAbsData = [];
 
-    private fTabsRateData: Array<{
-        variable: VariableModel,
-        // TODO Create structure
-    }> = [];
-
-    private fPeriodSelectorData: {
-        data: Array<TimelabelInput>,
-        selected: TimePeriodInput
+    /**
+     * Contains available time points & current selection
+     * in Forecasting section
+     * @type {{data: Array<TimelabelInput>, selected: TimePeriodInput}}
+     */
+    private fPeriodSelectorData: { // TODO Make Interface|Type for period selector
+        data: TimeSelectorDataInput,
+        selected: TimeSelectorSelectedData,
+        static: Object
     } = null;
 
+    /**
+     * Contains available time points & current selection
+     * in Decomposition section
+     * @type {{data: Array<TimelabelInput>, selected: TimePeriodInput}}
+     */
     private dPeriodSelectorData: {
-        data: Array<TimelabelInput>,
-        selected: TimePeriodInput
+        data: TimeSelectorDataInput,
+        selected: TimeSelectorSelectedData,
+        static: Object
     } = null;
 
-    private dTypesSwitcherData: Array<ButtonDataInput> = null;
+    /**
+     * Data for decomposition type switcher
+     * @type {ButtonsGroupDataInput}
+     */
+    private dTypesSwitcherData: ButtonsGroupDataInput = null;
 
-    private dTypeData: {
-        abs: WaterfallChartDataInput,
-        rate: WaterfallChartDataInput,
-    } = null;
+    /**
+     * Data for drawing WaterFall by selected type
+     * @type {DecompositionTypeData}
+     */
+    private dTypeData: DecompositionTypeData = null;
 
     constructor(private dm: DataManagerService) {
     }
 
     ngOnInit() {
+        console.log(this.dm.dataIsResolved);
         if (this.dm.dataIsResolved) {
             this.collectData();
         } else {
@@ -63,12 +94,14 @@ export class GeneralComponent implements OnInit {
         }
     }
 
+    /**
+     * Collects all variables to draw Dashboard tab
+     */
     private collectData() {
         this.absRateSwitcherData = this.getAbsRateSwitcherData();
         this.fActiveTabIndex = this.getForecastActiveTabIndex();
 
         this.fTabsAbsData = this.getForecastTabsAbsData();
-        this.fTabsRateData = this.getForecastTabsRateData();
         this.fPeriodSelectorData = this.getMainPeriodSelectorData();
 
         this.dPeriodSelectorData = this.getDecompPeriodSelectorData();
@@ -77,12 +110,12 @@ export class GeneralComponent implements OnInit {
     }
 
 
-    private getAbsRateSwitcherData(): Array<ButtonDataInput> {
+    private getAbsRateSwitcherData(): ButtonsGroupDataInput {
         let output = [];
         let name, sel;
         for (let i = 0; i < forecastValueRateData.length; i++) {
             name = (forecastValueRateData[i]['id'] == 'absolute')
-                ? this.dm.lang['value'] : this.dm.lang['growth_rate'];
+                ? this.dm.config['value'] : this.dm.config['growth_rate'];
             sel = (this.dm.state.get('forecast_absolute_rate')
                     == forecastValueRateData[i]['id']) ? true : false;
             let opt = {
@@ -113,7 +146,8 @@ export class GeneralComponent implements OnInit {
             };
             return {
                 data: timelabels,
-                selected: selected
+                selected: selected,
+                static: this.dm.getLanguagePackForTimeSelector()
             };
         }
     }
@@ -131,42 +165,20 @@ export class GeneralComponent implements OnInit {
             for (let i = 0; i < outputVars.length; i++) {
                 output.push({
                     'variable': outputVars[i],
-                    'preview': this.dm.getData_ForecastAbsValues(timescale,
-                        shortList, outputVars[i].key),
-                    'full': this.dm.getData_ForecastAbsValues(timescale,
-                        longList, outputVars[i].key),
+                    'preview': this.dm.getVariableData(timescale,
+                        shortList, outputVars[i].id),
+                    'full': this.dm.getVariableData(timescale,
+                        longList, outputVars[i].id, period),
                 });
             }
         }
-        return output;
-    }
-    private getForecastTabsRateData() {
-        let output = [];
-        let outputVars = this.dm.dataModel.getVariablesByType('output');
-
-        let period = this.dm.getPeriod('main');
-        if (period) {
-            let timescale = period.timescale;
-            let shortList = [period.start, period.mid, period.end];
-            let longList = this.dm.getFullPeriod(timescale,
-                period.start, period.end);
-
-            for (let i = 0; i < outputVars.length; i++) {
-                output.push({
-                    'variable': outputVars[i],
-                    // 'preview': this.dm.getData_ForecastRateValues(timescale, shortPeriod, outputVars[i].key),
-                    // 'full': this.dm.getData_ForecastRateValues(timescale, longPeriod, outputVars[i].key),
-                });
-            }
-        }
-
         return output;
     }
     private getForecastActiveTabIndex() {
         let outputVars = this.dm.dataModel.getVariablesByType('output');
 
         for (let i =0;i<outputVars.length;i++) {
-            if (outputVars[i].key == this.dm.state.get('forecast_active_tab')) {
+            if (outputVars[i].id == this.dm.state.get('forecast_active_tab')) {
                 return i;
             }
         }
@@ -187,7 +199,7 @@ export class GeneralComponent implements OnInit {
             period['end'], period['mid']);
 
         this.fTabsAbsData = this.getForecastTabsAbsData();
-        this.fTabsRateData = this.getForecastTabsRateData();
+        // this.fTabsRateData = this.getForecastTabsRateData();
 
     }
 
@@ -210,7 +222,8 @@ export class GeneralComponent implements OnInit {
             };
             return {
                 data: timelabels,
-                selected: selected
+                selected: selected,
+                static: this.dm.getLanguagePackForTimeSelector()
             };
         }
     }
@@ -218,49 +231,24 @@ export class GeneralComponent implements OnInit {
         let period = this.dm.getPeriod('decomp');
         if (period) {
             let type = this.dm.state.get('decomp_value_volume_price');
-            return this.dm.getData_Decomposition(type, period.timescale,
+            return this.dm.getDecompositionData(type, period.timescale,
                 period.start, period.end);
         }
     }
-    private getDecompositionTypes(): Array<ButtonDataInput> {
-
-        let output = [];
-        let autoSel = true,
-            sel;
-        let types = this.dm.decompModel.getDecompositionTypes();
-
-        for (let i = 0; i < types.length; i++) {
-            if (this.dm.state.get('decomp_value_volume_price') == types[i]) {
-                sel = true;
-                autoSel = false;
-            } else {
-                sel = false;
-            }
-            let opt = {
-                'id': types[i],
-                'name': types[i],
-                'selected': sel
-            };
-            output.push(opt);
-        }
-        if (autoSel && output.length > 0) {
-            output[0]['selected'] = true;
-        }
-
-        return output;
+    private getDecompositionTypes(): ButtonsGroupDataInput {
+        let defVal = this.dm.state.get('decomp_value_volume_price');
+        return this.dm.getDecompTypesSwitcherData(defVal);
     }
     private onChangedDecompType(changes: Object): void {
         this.dm.state.set('decomp_value_volume_price', changes['id']);
         this.dTypeData = this.getDecompositionData();
     }
     private onChangedDecompPeriod(period) {
-        console.log(period);
         this.dm.setPeriod('decomp', period['scale'], period['start'],
             period['end']);
         this.dTypeData = this.getDecompositionData();
     }
 
     /*-----------.DECOMPOSITION--------------*/
-
 
 }

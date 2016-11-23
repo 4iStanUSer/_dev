@@ -5,8 +5,8 @@ import {HttpModule, JsonpModule} from '@angular/http';
 import {AjaxService} from '../service/ajax.service';
 import {LoadingService} from '../service/loading.service';
 import {StaticDataService} from "../service/static-data.service";
-import {StateService} from "../service/state.service";
 import {ComponentFactoryService} from '../service/component-factory.service';
+import {AuthService} from "../service/auth.service";
 /*-.Services-*/
 
 /*-Pipes-*/
@@ -28,7 +28,7 @@ import {KeysPipe} from "../pipe/keys.pipe";
         LoadingService,
         ComponentFactoryService,
         StaticDataService,
-        StateService
+        AuthService
     ],
     exports: [
         FilterListPipe,

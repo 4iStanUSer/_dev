@@ -1,3 +1,8 @@
-<menu-widget [data]="topMenuData"></menu-widget>
+<language-selector
+    [langs]="langsData"
+    (changed)="languageChanged($event)"></language-selector>
+
+<menu-widget
+    [data]="topMenuData"></menu-widget>
 
 <router-outlet></router-outlet>

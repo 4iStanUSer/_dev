@@ -4,37 +4,43 @@ import {Subject} from 'rxjs/Subject';
 
 /*======TEMP=====*/
 import {
-    selectorsDataTEMP, selectorsConfigTEMP, vertTableTEMP,
-    forecastValueRateData
-} from './general/data';
+    selectorsDataTEMP, selectorsConfigTEMP,
+    // vertTableTEMP,
+    // forecastValueRateData
+} from './data';
 /*======.TEMP=====*/
 
 
 import {AjaxService} from "./../../common/service/ajax.service";
-import {DataModel} from "./../../common/model/data.model";
 import {
-    TimePeriodInput,
-    TimePeriodModel
-} from "../../common/model/time-period.model";
-import {StateService, PageState} from "../../common/service/state.service";
-import {StaticDataService} from "../../common/service/static-data.service";
-import {PointValueModel} from "../../common/model/points-values.model";
+    StaticDataService,
+    PageState
+} from "../../common/service/static-data.service";
 import {InsightInput} from "./insights/insights.component";
 import {
     TableWidgetData,
     TableWidgetRowColItem,
     TableWidgetValues
 } from "../../common/cmp/table-widget/table-widget.component";
-import {DecompositionModel} from "../../common/model/decomposition.model";
-import {TimelabelInput} from "../../common/model/time-labels.model";
 
+import {ButtonsGroupDataInput} from "../../common/cmp/buttons-group/buttons-group.component";
+import {
+    VariableData,
+    ClickableTable,
+    DecompositionTypeData
+} from "./interfaces";
+import {TimeSelectorDataInput} from "../../common/cmp/time-selector/time-selector.component";
+import {DashboardDataModel} from "./data.model";
+
+// import {DataModel} from "./../../common/model/data.model";
+// import {PointValueModel} from "../../common/model/points-values.model";
+// import {DecompositionModel} from "../../common/model/decomposition.model";
 
 class Period {
-    constructor(
-        public timescale: string = null,
-        public start: string = null,
-        public end: string = null,
-        public mid: string = null) {
+    constructor(public timescale: string = null,
+                public start: string = null,
+                public end: string = null,
+                public mid: string = null) {
     }
 }
 
@@ -57,17 +63,19 @@ export class DataManagerService {
     };
     dataIsResolved: boolean = false;
 
-    dataModel: DataModel = null;
+    dataModel: DashboardDataModel = null;
 
-    decompModel: DecompositionModel = null;
+    // dataModel: DataModel = null;
+    //
+    // decompModel: DecompositionModel = null;
 
     insights: Array<InsightInput> = [];
-
-    lang: Object = null;
 
     state: PageState = null;
 
     config: Object = null; // TODO Interface for config
+
+    ddConfig: Object = null; // Dynamic Data Config
 
     initResolver: Subject<number> = null;
 
@@ -81,15 +89,11 @@ export class DataManagerService {
     // ----------------------------- //
 
     selectors: {data: Object, config: Object} = null;
-    inputData: Object = null;// TODO Solve about this variable
-
-
 
     private defaults: Object = null; // TODO Review this variable (VL)
 
     constructor(private req: AjaxService,
-                private stateService: StateService,
-                private sds: StaticDataService) {
+                private sds: StaticDataService) { //private stateService: StateService,
 
         this.init();
     }
@@ -118,8 +122,10 @@ export class DataManagerService {
     }
 
     private dataInitialized() {
+        console.log('dataInitialized', this.isData);
+
         return (this.isData['dynamic']['received']
-                && this.isData['static']['received']);
+        && this.isData['static']['received']);
     }
 
     private initDynamicData(): void {
@@ -139,7 +145,7 @@ export class DataManagerService {
             let d = data['data'];
             let c = data['config'];
 
-            this.config = c;
+            this.ddConfig = c;
 
             this.insights = d['insights'];
 
@@ -155,22 +161,37 @@ export class DataManagerService {
                 c['decomp_period']['end']
             );
 
+
+            this.dataModel = new DashboardDataModel(
+                d['timescales'],
+                d['timelables'],
+                d['variables'],
+                d['variable_values'],
+                d['change_over_period'],
+                d['decomp_types'],
+                d['decomp'],
+                d['factor_drivers'],
+            );
+
+
             ////////////////////
             this.selectors = {
                 data: selectorsDataTEMP,
                 config: selectorsConfigTEMP
             };
 
-            this.inputData = d; // TODO Remove this variable
-
-            this.dataModel = new DataModel(
-                d['timescales'],
-                d['timelabels'],
-                d['variables'],
-                d['growth'],
-                d['data']
-            );
-            this.decompModel = new DecompositionModel(d['decomposition']);
+            // this.dataModel = new DataModel(
+            //     d['timescales'],
+            //     d['timelabels'],
+            //     d['variables'],
+            //     d['growth'],
+            //     d['data']
+            // );
+            // let decompTypes = (c['factors_drivers'])
+            //     ? Object.keys(c['factors_drivers']) : [];
+            //
+            // this.decompModel = new DecompositionModel(decompTypes,
+            //     d['decomposition']);
 
             // console.log(this.dataModel);
             // console.log(this.decompModel);
@@ -183,94 +204,55 @@ export class DataManagerService {
         });
     }
 
+    private proceedStaticData() {
+        this.isData['static']['received'] = true;
+
+        this.config = this.sds.getConfig(this.pageName);
+        this.state = this.sds.getState(this.pageName);
+
+        // TODO This in sds
+        // // Merge defaults into state
+        // let defKeys = Object.keys(this.defaults),
+        //     defKeysLen = defKeys.length,
+        //     defKey = null;
+        // for (let i = 0; i < defKeysLen; i++) {
+        //     defKey = defKeys[i];
+        //     let v = this.state.get(defKey);
+        //     if (v === null || v === undefined) {
+        //         this.state.set(defKey, this.defaults[defKey]);
+        //     }
+        // }
+        this.resolveInitObervable();
+    }
+
     private initStaticData() {
         if (this.isData['static']['sent']) return;
 
         this.isData['static']['sent'] = true;
         this.isData['static']['received'] = false;
 
-        this.req.get({
-            'url': '/forecast/get_page_configuration',
-            'data': {
-                'page_name': this.pageName
-            }
-        }).subscribe((d)=> {
-            // this.isData['static']['received'] = true;
-            //
-            // this.lang = this.sds.getLangPack(this.pageName);
-            // this.config = this.sds.getConfig(this.pageName);
-            //
-            // this.state = this.stateService.getPageState(this.pageName);
-            // this.defaults = this.sds.getDefaults(this.pageName);
-            //
-            // // Merge defaults into state
-            // let defKeys = Object.keys(this.defaults),
-            //     defKeysLen = defKeys.length,
-            //     defKey = null;
-            // for (let i = 0; i < defKeysLen; i++) {
-            //     defKey = defKeys[i];
-            //     let v = this.state.get(defKey);
-            //     if (v === null || v === undefined) {
-            //         this.state.set(defKey, this.defaults[defKey]);
-            //     }
-            // }
-            //
-            // this.resolveInitObervable();
-        });
-        /////////////////////////////////////////
-        this.isData['static']['received'] = true;
-
-        this.lang = this.sds.getLangPack(this.pageName);
-        this.config = this.sds.getConfig(this.pageName);
-
-        this.state = this.stateService.getPageState(this.pageName);
-        this.defaults = this.sds.getDefaults(this.pageName);
-
-        // Merge defaults into state
-        let defKeys = Object.keys(this.defaults),
-            defKeysLen = defKeys.length,
-            defKey = null;
-        for (let i = 0; i < defKeysLen; i++) {
-            defKey = defKeys[i];
-            let v = this.state.get(defKey);
-            if (v === null || v === undefined) {
-                this.state.set(defKey, this.defaults[defKey]);
-            }
-        }
-        this.resolveInitObervable();
-        /////////////////////////////////////////
-    }
-
-
-    getState() {
-        // this.stateService.getPageState(this.pageName)
-        //     .subscribe((pageState) => {
-        //
-        //         console.log('getState subs');
-        //
-        //         this.state = pageState;
-        //         this.checkFilling();
-        //     });
-
-        this.state = this.stateService.getPageState(this.pageName);
-        this.defaults = this.sds.getDefaults(this.pageName);
-
-        // Merge defaults into state
-        let defKeys = Object.keys(this.defaults),
-            defKeysLen = defKeys.length,
-            defKey = null;
-        for (let i = 0; i < defKeysLen; i++) {
-            defKey = defKeys[i];
-            let v = this.state.get(defKey);
-            if (v === null || v === undefined) {
-                this.state.set(defKey, this.defaults[defKey]);
-            }
+        if (!this.sds.hasPage(this.pageName)) {
+            this.req.get({
+                'url': '/temp/get_page_static_data',
+                'data': {
+                    'page_name': this.pageName
+                }
+            }).subscribe((d)=> {
+                    this.sds.addPage(this.pageName, d);
+                    this.proceedStaticData();
+                },
+                (e)=> {
+                    console.log(e);
+                });
+        } else {
+            this.proceedStaticData();
         }
     }
 
     getPeriod(name: string): Period {
         return (this.periods[name]) ? this.periods[name] : null;
     }
+
     setPeriod(name: string, timescale: string, start: string,
               end: string, mid: string = null) {
         if (this.periods[name]) {
@@ -281,52 +263,100 @@ export class DataManagerService {
         }
     }
 
-    getData_ForecastAbsValues(timescale: string, timepoints: Array<string>, variable: string) {
-        let pointsValue: Array<PointValueModel>;
-        let output: {
-            absolute: Array<{name: string, value: number}>,
-            rate: Array<number>
-        } = {
-            absolute: [],
-            rate: []
+    /**
+     * Returns Variable's Data: absolute values, growth rates and CAGRS
+     * If cagrsPeriod is not defined - it returns data without 'cagr' key
+     * @param timescale_id
+     * @param timepoints_ids
+     * @param variable_id
+     * @param cagrsPeriod
+     * @returns {VariableData}
+     */
+    getVariableData(timescale_id: string,
+                    timepoints_ids: Array<string>,
+                    variable_id: string,
+                    cagrsPeriod: Period = null): VariableData {
+
+        // let pointsValue: Array<PointValueModel>;
+        let pointsValue: Array<number>;
+        let output: VariableData = {
+            abs: [],
+            rate: [],
+            cagr: null
         };
 
-        pointsValue = this.dataModel.getPointsValue(timescale, variable,
-            timepoints);
-        for (let j = 0; j < pointsValue.length; j++) {
-            output['absolute'].push({
-                name: pointsValue[j].timestamp, // OR timelabel.full_name
-                value: pointsValue[j].value
+        let l = (timepoints_ids && timepoints_ids.length)
+            ? timepoints_ids.length : 0;
+
+        pointsValue = this.dataModel.getPointsValue(timescale_id, variable_id,
+            timepoints_ids);
+        for (let i = 0; i < l; i++) {
+            // timepoints[i] - TODO get full_name
+            output.abs.push({
+                name: timepoints_ids[i],
+                value: pointsValue[i]
             });
         }
-        for (let i = 0;i<timepoints.length-1;i++) {
-            let start = timepoints[i];
-            let end = timepoints[i+1];
-            let growth = this.dataModel.getGrowthRate(variable, start,
-                end, timescale);
-            output['rate'].push(growth);
+        // for (let j = 0; j < pointsValue.length; j++) {
+        //     output.abs.push({
+        //         name: pointsValue[j].timestamp, // OR timelabel.full_name
+        //         value: pointsValue[j].value
+        //     });
+        // }
+        for (let i = 0; i < l - 1; i++) {
+            let start = timepoints_ids[i];
+            let end = timepoints_ids[i + 1];
+            let growth = this.dataModel.getGrowthRate(variable_id, start,
+                end, timescale_id);
+            output.rate.push({
+                name: start + '/' + end,
+                value: growth
+            });
+        }
+        if (cagrsPeriod) {
+            output.cagr = [
+                {
+                    start: cagrsPeriod.start,
+                    end: cagrsPeriod.mid,
+                    value: this.dataModel.getGrowthRate(
+                        variable_id,
+                        cagrsPeriod.start,
+                        cagrsPeriod.mid,
+                        cagrsPeriod.timescale)
+                },
+                {
+                    start: cagrsPeriod.mid,
+                    end: cagrsPeriod.end,
+                    value: this.dataModel.getGrowthRate(
+                        variable_id,
+                        cagrsPeriod.mid,
+                        cagrsPeriod.end,
+                        cagrsPeriod.timescale)
+                },
+            ]
         }
         return output;
     }
 
-    getData_ForecastRateValues(timescale: string, timepoints: Array<string>,
-                               variable: string) {
-        return null; // TODO Implement
-    }
-
-    getData_ForecastTimelabels() {
-        return this.inputData['timelabels'];
-    }
-
-
-    getData_Decomposition(type: string, timescale: string,
-                          start: string, end: string) {
+    /**
+     * Returns Decomposition's Data:
+     * absolute values, rates and and item changes
+     * @param decomp_type_id
+     * @param timescale_id
+     * @param start
+     * @param end
+     * @returns {DecompositionTypeData}
+     */
+    getDecompositionData(decomp_type_id: string, timescale_id: string,
+                         start: string, end: string): DecompositionTypeData {
         let output = {
             'abs': [],
             'rate': [],
+            'table': []
         };
-        let items = this.decompModel.getDecomposition(type, start, end);
-        let l = (items && items.length) ? items.length : 0;
+        let items = this.dataModel.getDecomposition(decomp_type_id,
+            timescale_id, start, end);
+        let l = 0; //(items && items.length) ? items.length : 0; TODO Refactor
         for (let i = 0; i < l; i++) {
             output['abs'].push({
                 name: items[i]['name'],
@@ -338,44 +368,62 @@ export class DataManagerService {
                 value: items[i]['growth'],
                 metric: '%',
             });
-        }
-        return output;
-    }
-
-    getDecompPeriodLabels() {
-        let timescales = this.config['dec_timescales']; //decomp_timescales
-        let output: Array<TimelabelInput> = [];
-
-        // TODO Remake PeriodSelector Input data
-
-        for (let i = 0; i < this.inputData['timelabels'].length; i++) {
-            let timelabel = this.inputData['timelabels'][i];
-            if (timescales.indexOf(timelabel['timescale']) != -1) {
-                output.push(timelabel);
+            if (i != 0 && i != l - 1) {
+                output['table'].push({
+                    name: items[i]['name'],
+                    value: items[i]['growth'],
+                    metric: '%',
+                });
             }
         }
         return output;
     }
 
-    private drvSumTableIds: {
-        [id: string]: {
-            start: string,
-            end: string
+    getData_ForecastTimelabels(): TimeSelectorDataInput {
+        let output = {
+            order: this.dataModel.getTimeScalesOrder(),
+            timescales: {}
+        };
+        let l = (output['order'] && output['order'].length)
+            ? output['order'].length : 0;
+        for (let i = 0; i < l; i++) {
+            let ts = output['order'][i];
+            output['timescales'][ts] = this.dataModel.getTimeLine(ts);
         }
-    } = {};
-    convertDrvSumTableIdsIntoPeriod(id: string) {
-        return this.drvSumTableIds[id];
+        return output;
     }
+
+    getDecompPeriodLabels(): TimeSelectorDataInput {
+        let allowedTs = this.ddConfig['dec_timescales'];
+        let allTs = this.dataModel.getTimeScalesOrder();
+        let order = [];
+        for (let i = 0; i < allTs.length; i++) {
+            if (allowedTs.indexOf(allTs[i]) != -1) {
+                order.push(allTs[i]);
+            }
+        }
+        let output = {
+            order: order,
+            timescales: {}
+        };
+        let l = (output['order'] && output['order'].length)
+            ? output['order'].length : 0;
+        for (let i = 0; i < l; i++) {
+            let ts = output['order'][i];
+            output['timescales'][ts] = this.dataModel.getTimeLine(ts);
+        }
+        return output;
+    }
+
     getData_DriverSummaryTableData(start: string,
                                    end: string,
                                    mid: string,
                                    timescale: string,
-                                   selRowId: string = null): TableWidgetData {
-        // TODO Implement period limitations
-        this.drvSumTableIds = {};
+                                   selRowId: string = null): ClickableTable {
+        let drvSumTableIds = {};
 
         let variables = this.dataModel.getVariablesByType('driver');
-        let timelabels = this.dataModel.getPlainTimeLabels();
+        let timelabels = this.dataModel.getTimeLine(timescale, start, end);
 
         let vars: Array<TableWidgetRowColItem> = [],
             tls: Array<TableWidgetRowColItem> = [],
@@ -383,22 +431,35 @@ export class DataManagerService {
             timelines: Object = {},
             l: number;
 
+        let growthLag = this.dataModel.getTimeScaleLag(timescale);
+
         // For ROWS
         l = (timelabels && timelabels.length) ? timelabels.length : 0;
         for (let i = 0; i < l; i++) {
             let timelabel = timelabels[i];
-            this.drvSumTableIds[timelabel.full_name] = {
-                // TODO Get from CAGR data
-                start: timelabel.full_name,
-                end: (parseInt(timelabel.full_name)+1).toString(),
+            let pTimelabel = this.dataModel.getParentTimelabel(timelabel.id,
+                timelabel.timescale );
+
+            let startTL = this.dataModel.getPreviousTimeLabel(timescale,
+                timelabel.full_name, growthLag);
+
+            let start: string = null,
+                notSelectable: boolean = true;
+            if (startTL) {
+                start = startTL.full_name;
+                notSelectable = false;
+            }
+            drvSumTableIds[timelabel.full_name] = {
+                start: start,
+                end: timelabel.full_name
             };
             tls.push({
-                id: timelabel.full_name,
-                parent_id: (timelabel.parent)
-                    ? timelabel.parent.full_name : null,
-                meta:[
+                id: timelabel.id,
+                parent_id: (pTimelabel) ? pTimelabel.id : null,
+                meta: [
                     {name: timelabel.full_name}
-                ]
+                ],
+                notSelectable: notSelectable
             });
             vals[timelabel.full_name] = {};
             if (!(timelabel.timescale in timelines)) {
@@ -406,57 +467,57 @@ export class DataManagerService {
             }
             timelines[timelabel.timescale].push(timelabel.full_name);
         }
-        tls[tls.length-1]['notSelectable'] = true;
 
         // For COLS
         l = (variables && variables.length) ? variables.length : 0;
         for (let i = 0; i < l; i++) {
             let variable = variables[i];
             vars.push({
-                id: variable.key,
+                id: variable.id,
                 parent_id: null,
-                meta:[
-                    {name: variable.name},
+                meta: [
+                    {name: variable.full_name},
                     {name: variable.metric}
                 ]
             });
 
-            for (let timescaleKey in timelines) {
-                let timeline = timelines[timescaleKey];
-                let values = this.dataModel.getPointsValue(timescaleKey,
-                    variable.key, timeline);
-                if (values && values.length) {
-                    for (let j=0;j<values.length;j++) {
-                        vals[values[j].timestamp][variable.key] = values[j].value;
-                    }
+            for (let timescaleId in timelines) {
+                let timeline = timelines[timescaleId];
+                let values = this.dataModel.getPointsValue(timescaleId,
+                    variable.id, timeline);
+                for (let j = 0; j < timeline.length; j++) {
+                    vals[timeline[j]][variable.id] = values[j];
                 }
+                // if (values && values.length) {
+                //     for (let j = 0; j < values.length; j++) {
+                //         vals[values[j].timestamp][variable.id] = values[j].value;
+                //     }
+                // }
             }
         }
 
         // Add CAGRs
-        let ids = ['cagr/'+start+'/'+mid, 'cagr/'+mid+'/'+end];
-        this.drvSumTableIds[ids[0]] = {
-            // TODO Get from CAGR data
+        let ids = ['cagr/' + start + '/' + mid, 'cagr/' + mid + '/' + end];
+        drvSumTableIds[ids[0]] = {
             start: start,
             end: mid,
         };
-        this.drvSumTableIds[ids[1]] = {
-            // TODO Get from CAGR data
+        drvSumTableIds[ids[1]] = {
             start: mid,
             end: end,
         };
         tls.push({
             id: ids[0],
             parent_id: null,
-            meta:[
-                {name: this.lang['cagr'] + ' ' + start + '/' + mid}
+            meta: [
+                {name: this.config['cagr'] + ' ' + start + '/' + mid}
             ]
         });
         tls.push({
             id: ids[1],
             parent_id: null,
-            meta:[
-                {name: this.lang['cagr'] + ' ' +  mid + '/' + end}
+            meta: [
+                {name: this.config['cagr'] + ' ' + mid + '/' + end}
             ]
         });
         vals[ids[0]] = {};
@@ -466,21 +527,24 @@ export class DataManagerService {
         for (let i = 0; i < l; i++) {
             let variable = variables[i];
 
-            vals[ids[0]][variable.key] = this.dataModel.getGrowthRate(
-                variable.key, start, mid, timescale);
-            vals[ids[1]][variable.key] = this.dataModel.getGrowthRate(
-                variable.key, mid, end, timescale);
+            vals[ids[0]][variable.id] = this.dataModel.getGrowthRate(
+                variable.id, start, mid, timescale);
+            vals[ids[1]][variable.id] = this.dataModel.getGrowthRate(
+                variable.id, mid, end, timescale);
         }
 
         return {
-            selected_row_id: selRowId,
-            appendix: [
-                <string>this.lang['driver'],
-                <string>this.lang['metric'],
-            ],
-            cols: vars,
-            rows: tls,
-            values: vals
+            data: {
+                selected_row_id: selRowId,
+                appendix: [
+                    <string>this.config['driver'],
+                    <string>this.config['metric'],
+                ],
+                cols: vars,
+                rows: tls,
+                values: vals
+            },
+            rows_data: drvSumTableIds
         };
     }
 
@@ -488,7 +552,94 @@ export class DataManagerService {
                   end: string): Array<string> {
         let timelabels = this.dataModel.getTimeLine(timescale, start, end);
         return (timelabels && timelabels.length)
-            ? timelabels.map((el) => {return el.full_name}) : [];
+            ? timelabels.map((el) => {
+            return el.full_name
+        }) : [];
     }
 
+    getMegaDriversList(decompType: string): Array<{id: string; name: string}> {
+        let megaDrvsKeys: Array<string>;
+        try {
+            megaDrvsKeys = Object.keys(
+                this.ddConfig['factors_drivers'][decompType]); // TODO Remake!!!
+        } catch (e) {
+            console.error('Have no such decomposition type', decompType);
+            return null;
+        }
+        let output: Array<{id: string; name: string}> = [];
+        let l = megaDrvsKeys.length;
+        if (l > 0) {
+            for (let i = 0; i < l; i++) {
+                let megaDrvsKey = megaDrvsKeys[i];
+                // TODO Add name for mega drivers
+                output.push({
+                    id: megaDrvsKey,
+                    name: megaDrvsKey
+                });
+            }
+        }
+        return output;
+    }
+
+
+    /**
+     * Returns data for Decomposition Types Switcher.
+     * This data is ready to use in template
+     * @param defaultVal
+     * @returns {ButtonsGroupDataInput}
+     */
+    getDecompTypesSwitcherData(defaultVal: string): ButtonsGroupDataInput {
+
+        let output = [];
+        let autoSel = true,
+            sel;
+        let types = this.dataModel.getDecompositionTypes();
+
+        for (let i = 0; i < types.length; i++) {
+            if (defaultVal == types[i]) {
+                sel = true;
+                autoSel = false;
+            } else {
+                sel = false;
+            }
+            let opt = {
+                'id': types[i],
+                'name': types[i],
+                'selected': sel
+            };
+            output.push(opt);
+        }
+        if (autoSel && output.length > 0) {
+            output[0]['selected'] = true;
+        }
+
+        return output;
+    }
+
+
+    getDriversOfMegaDriver(decompType: string, megaDrv: string): Array<string> {
+        // Get all drivers for megadriver and decomposition type
+        let allDrv: Array<string>;
+        try {
+            // allDrv = this.ddConfig['factors_drivers'][decompType][megaDrv];
+            allDrv = this.ddConfig['factors_drivers'][decompType][megaDrv]; // TODO Remake
+        } catch (e) {
+            console.error('Have no data', decompType, megaDrv, e);
+        }
+        let output: Array<string> = [];
+
+        // // Filter only existing drivers
+        // output = allDrv.filter((variable) => {
+        //     return this.dataModel.variableExists(variable);
+        // }, this);
+        output = allDrv;
+        return output;
+    }
+
+    getLanguagePackForTimeSelector() {
+        return {
+            'apply': this.config['apply'],
+            'cancel': this.config['cancel']
+        }
+    }
 }

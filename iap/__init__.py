@@ -6,7 +6,7 @@ from .common import security
 from .common.views import default as common
 from .common.views import landing_page as landing
 from .forecasting.views import default as forecast
-
+from .ui import temp_routing
 
 def common_routing(config):
     """
@@ -115,6 +115,7 @@ def main(global_config, **settings):
     config.include('iap.repository.db')
     config.include(common_routing)
     config.include(forecast_routing, route_prefix='/forecast')
+    config.include(temp_routing, route_prefix='/temp')  # TODO Replace: TEMP !!!
     # Add routing for another tools
 
     return config.make_wsgi_app()
