@@ -1,10 +1,10 @@
-import { IapPage } from './app.po';
+import { TestAngularCliBeta21Page } from './app.po';
 
-describe('migration-proj App', function() {
-  let page: IapPage;
+describe('test-angular-cli-beta-21 App', function() {
+  let page: TestAngularCliBeta21Page;
 
   beforeEach(() => {
-    page = new IapPage();
+    page = new TestAngularCliBeta21Page();
   });
 
   it('should display message saying app works', () => {

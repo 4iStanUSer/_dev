@@ -1,6 +1,6 @@
-import { browser, element, by } from 'protractor/globals';
+import { browser, element, by } from 'protractor';
 
-export class IapPage {
+export class TestAngularCliBeta21Page {
   navigateTo() {
     return browser.get('/');
   }
