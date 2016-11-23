@@ -1,10 +1,12 @@
-import { Injectable } from '@angular/core';
-import { Http, Response, Request, RequestMethod, BaseRequestOptions,
-    Headers } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
-import { Subject } from 'rxjs/Subject';
+import {Injectable} from '@angular/core';
+import {
+    Http, Response, Request, RequestMethod, BaseRequestOptions,
+    Headers
+} from '@angular/http';
+import {Observable} from 'rxjs/Observable';
+import {Subject} from 'rxjs/Subject';
 import * as _ from 'lodash';
-import { LoadingService } from './loading.service';
+import {LoadingService} from './loading.service';
 import {AuthService} from "./auth.service";
 
 class ServiceConf {
@@ -14,32 +16,50 @@ class ServiceConf {
 class ServerResponse {
     error: boolean = false;
     data: Object = {};
+    request: Object = {};
 
     hasError() {
         return !!this.error;
     }
+
     getError() {
         return this.data;
     }
+
     getData() {
         return this.data;
     }
 }
 
-interface IRequestOptions {
-    url: string;
+
+interface IRequestOptions { // TODO Separate outside and inside interfaces
+    url_id: string;
     method?: string; // 'get', 'post', 'put', 'delete', 'head'
     data?: any;
+    url?: string;
+    sync?: boolean;
     //headers: Object;
     //content_type: string;
     //...
 }
 
+type UrlConfig = {
+    'url': string;
+    'allowNotAuth': boolean;
+};
+type QueueItem = {
+    id: number;
+    url_id: string;
+    sync: boolean;
+    sent: boolean;
+    request: Request;
+    observable: Subject<any>
+}
 
 /**
  * Using:
  * this.request
-            .get({
+ .get({
                 url: '/forecasting/get_data',
                 data: {
                     param: '123',
@@ -47,86 +67,240 @@ interface IRequestOptions {
                     param3: [7, 8, 9]
                 }
             })
-            .subscribe(
-                (d) => {
+ .subscribe(
+ (d) => {
                     this.get_data_ = d;
                 },
-                (e) => {
+ (e) => {
                     console.log(e);
                 },
-                () => {
+ () => {
                     console.log('Complete!');
                 }
-            );
+ );
  */
 @Injectable()
 export class AjaxService {
-    private serviceConf: ServiceConf = new ServiceConf();
+    /**
+     * Shows ability to do request in this moment
+     * @type {boolean}
+     */
+    private allowToRequest: boolean = true;
+
+    /**
+     * Url for getting urls configuration
+     * @type {string}
+     */
+    private urlsSource: string = '/temp/get_urls';
+
+    /**
+     * Flag for request for urlMapper
+     * @type {boolean}
+     */
+    private reqForUrlMapperSent: boolean = false;
+
+    /**
+     * Contains urls configuration
+     * @type {{[url_id: string]: UrlConfig}}
+     */
+    private urlsMapper: {
+        [url_id: string]: UrlConfig
+    } = null;
+
+    /**
+     * Contains queue of requests
+     * @type {Array<QueueItem>}
+     */
+    private reqQueue: Array<QueueItem> = [];
+
+    /**
+     * Counter for generating unique process ID
+     * @type {number}
+     */
     private counter: number = 0;
 
-    constructor(
-        private http: Http,
-        private loading: LoadingService,
-        private auth: AuthService) { }
+    // private serviceConf: ServiceConf = new ServiceConf();
 
-    public configure(serv_config: Object = {}) {
-        _.extend(this.serviceConf, serv_config);
+    constructor(private http: Http,
+                private loading: LoadingService,
+                private auth: AuthService) {
+
+        // this.urlsMapper = urlConf; // TODO Remove & remake
     }
 
-    public get(options: IRequestOptions) : Observable<Subject<any>> {
-        options.method = 'post';
-        let req = this._makeRequestInst(options);
+    // public configure(serv_config: Object = {}) {
+    //     _.extend(this.serviceConf, serv_config);
+    // }
 
-        return this._query(req);
+    /**
+     * Add request(QueueItem object) into queue and run this.mapQueue()
+     * @param options: IRequestOptions
+     * @returns {Observable<any>}
+     */
+    get(options: IRequestOptions): Observable<any> { //Subject<any>
+        // TODO Fix bad request !!!
+        if (!this.urlsMapper && !this.reqForUrlMapperSent) {
+            this.loadUrlMapper();
+        }
+        if (
+            options.url_id
+            && typeof options.url_id == 'string'
+            && options.url_id.length > 0
+        ) {
+            let id = this.counter++;
+            let sync = (options.sync) ? options.sync : false;
+            let url_id = options.url_id;
+            let subject = new Subject<any>();
+            let req = this.makeRequestInst({
+                url: this.getUrl(url_id),
+                method: 'post',
+                data: options.data
+            });
+            this.reqQueue.push({
+                'id': id,
+                'url_id': url_id,
+                'sync': sync,
+                'sent': false,
+                'observable': subject,
+                'request': req
+            });
+            // subject.subscribe((data) => {
+            //     console.log('subject.subscribe', data);
+            // });
+            setTimeout(() => {
+                this.mapQueue(); // TODO Review
+            }, 10);
+            return subject;
+        } else {
+            console.error('Wrong request "url_id" property')
+        }
+        return null;
     }
-    public post(options: IRequestOptions) : Observable<Subject<any>> {
-        options.method = 'post';
-        let req = this._makeRequestInst(options);
 
-        return this._query(req);
+    post(options: IRequestOptions): Observable<any> {
+        console.error('Implement AjaxService.post()');
+        return null;
     }
 
-    private _query(req: Request) {
-        // TODO Loading Procedure
-        let blackBox = <Subject<any>>new Subject();
+    private mapQueue() {
+        if (!this.allowToRequest) return;
+
+        for (let i = 0; i < this.reqQueue.length; i++) {
+            if (this.reqQueue[i].sent) continue;
+
+            if (this.reqQueue[i].sync) {
+                this.startQuery(this.reqQueue[i]);
+                break;
+            } else {
+                this.startQuery(this.reqQueue[i]);
+            }
+        }
+    }
+
+    private startQuery(item: QueueItem) {
+        if (item.sync) {
+            this.allowToRequest = false;
+        }
+        item.sent = true;
+        if (!item.request.url && item.url_id) {
+            item.request.url = this.getUrl(item.url_id);
+        }
+        // console.log(item.request.url);
+        if (item.request.url) {
+            this.query(item.request).subscribe((data) => {
+                    if (item.sync) {
+                        this.allowToRequest = true;
+                    }
+                    item.observable.next(data);
+                    this.endQuery(item);
+                },
+                (e) => {
+                    if (item.sync) {
+                        this.allowToRequest = true;
+                    }
+                    item.observable.error(e);
+                    this.endQuery(item);
+                }); // TODO Check this and add complete method
+        } else {
+            console.error('Didn\'t receive url(s) for AjaxService.urlMapper');
+            item.observable.error(null);
+        }
+    }
+
+    private endQuery(item: QueueItem) {
+        for (let i = 0; i < this.reqQueue.length; i++) {
+            if (item.id == this.reqQueue[i].id) {
+                this.reqQueue.splice(i, 1);
+                this.mapQueue();
+                break;
+            }
+        }
+    }
+
+    private loadUrlMapper() {
+        this.reqForUrlMapperSent = true;
+        let subject = new Subject<any>();
+        this.reqQueue.push({
+            'id': this.counter++,
+            'url_id': null,
+            'sync': true,
+            'sent': false,
+            'observable': subject,
+            'request': this.makeRequestInst({
+                url: this.urlsSource,
+                method: 'post',
+                data: {}
+            })
+        });
+        subject.subscribe((data) => {
+            console.info('-->AjaxService->Received urlsMapper');
+            this.urlsMapper = data;
+        });
+        setTimeout(() => {
+            this.mapQueue();
+        }, 10);
+    }
+
+    private query(req: Request): Subject<any> {
+        // TODO REMAKE - delete blackBox
+        let blackBox = new Subject<any>();
 
         this.counter += 1;
         let pid = 'request_' + this.counter;
         this.loading.show(pid);
 
-        let r = this.http.request(req) // Observable
+        this.http.request(req)
             .map((res: Response) => {
                 let body = res.json();
                 let resp = new ServerResponse();
                 _.extend(resp, body);
+                // TODO Add request meta into Response
                 return resp;
-            });
-        console.log(r);
-        r.subscribe( // TODO check unsubscribe for blackbox subscription
-            (res: ServerResponse) => {
-                this.loading.hide(pid);
-                if (res.hasError()) {
-                    this._handleSiteError(res, blackBox);
-                } else {
-                    blackBox.next(res.data);
+            })
+            .subscribe( // TODO check unsubscribe for blackbox subscription
+                (res: ServerResponse) => {
+                    this.loading.hide(pid);
+                    if (res.hasError()) {
+                        this.handleSiteError(res, blackBox);
+                    } else {
+                        blackBox.next(res.data);
+                    }
+                },
+                (err: Response) => {
+                    this.loading.hide(pid);
+                    this.handleServerError(err, blackBox);
                 }
-            },
-            (err: Response) => {
-                this.loading.hide(pid);
-                this._handleServerError(err, blackBox);
-            }
-        );
-        // return blackBox.asObservable();
+            );
         return blackBox;
     }
 
-    private _handleSiteError(res: ServerResponse, blackBox: Subject<any>) {
+    private handleSiteError(res: ServerResponse, blackBox: Subject<any>) {
         // TODO Show error at view
         console.error('App Error message: ' + res.getError());
         blackBox.error(res.getError()); // TODO Refactor (VL)
     }
 
-    private _handleServerError(error: Response, blackBox: Subject<any>) {
+    private handleServerError(error: Response, blackBox: Subject<any>) {
         // TODO handlers for ERROR TYPES
         if (error.status === 500) {
         } else if (error.status === 404) {
@@ -136,20 +310,26 @@ export class AjaxService {
         blackBox.error(error.status); // TODO Refactor (VL)
     }
 
-    private _makeRequestInst(options: IRequestOptions): Request {
+    private getUrl(url_id: string) {
+        return (url_id && this.urlsMapper && this.urlsMapper[url_id])
+            ? this.urlsMapper[url_id].url : null;
+    }
+
+    private makeRequestInst(options: {
+        url: string;
+        method: string;
+        data: any;
+    }): Request { //IRequestOptions
+        // if (typeof options['url'] != 'string' || options['url'].length == 0) {
+        //     console.error('Wrong url_id property!');
+        //     return null;
+        // } // TODO Review maybe this is not needed
+
         let reqOpt = new BaseRequestOptions();
         let headers = new Headers();
-
-        let obj_for_merge = {};
-
-        if (!options['url']) {
-            console.error('Have no url property!');
-            return null;
-        } else if (!_.isString(options['url']) || !options['url'].length) {
-            console.error('Wrong url property!');
-            return null;
-        }
-        obj_for_merge['url'] = options['url'];
+        let obj_for_merge = {
+            'url': options['url']
+        };
 
         let method = RequestMethod.Post;
         if (options.method && options.method != 'post') {
@@ -183,7 +363,7 @@ export class AjaxService {
             if (_.isString(options.data)) {
                 obj_for_merge['search'] = options.data;
             } else if (_.isObject(options.data)) {
-                obj_for_merge['search'] = this._objectToQueryString(options.data);
+                obj_for_merge['search'] = this.objectToQueryString(options.data);
             } else {
                 console.error('Can\'t procced value!');
             }
@@ -193,7 +373,8 @@ export class AjaxService {
 
         return new Request(reqOpt.merge(obj_for_merge));
     }
-    private _objectToQueryString (obj: any) {
+
+    private objectToQueryString(obj: any) {
         var qs = _.reduce(obj, function (result, value, key) {
             if (!_.isNull(value) && !_.isUndefined(value)) {
                 if (_.isArray(value)) {

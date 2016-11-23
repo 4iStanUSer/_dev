@@ -44,7 +44,7 @@ export class MenuWidgetComponent implements OnInit, OnChanges {
             key: 'comparison',
             name: 'Comparison',
             disabled: false,
-            path: null
+            path: null // TODO Add Path
         },
         {
             key: 'scenarios',

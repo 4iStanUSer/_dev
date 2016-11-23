@@ -30,10 +30,11 @@ export class LandingPageComponent implements OnInit {
     ngOnInit() {
         this.req
             .get({
-                'url': 'landing',
+                'url_id': 'landing',
                 'data': {}
             })
             .subscribe((tools: Object) => {
+                console.log('LandingPageComponent->ngOnInit', tools);
                 this.tools = tools;
             });
     }
@@ -43,13 +44,14 @@ export class LandingPageComponent implements OnInit {
     }
 
     goToTool(toolKey: string, projectId: string) {
-        this.req.get({
-            'url': 'set_tool_selection',
+        this.req.get({ // TODO Make post query
+            'url_id': 'set_tool_selection',
             'data': {
                 'tool_id': toolKey,
                 'project_id': projectId
             }
         }).subscribe((tools) => {
+            console.log('LandingPageComponent->goToTool', tools);
             this.router.navigate([toolKey]);
         });
     }

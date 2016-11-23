@@ -23,7 +23,7 @@ export class SimulatorPageDataManagerService {
             data['entity_id'] = +id;
         }
         let resp = this.req.get({
-            'url': '/forecast/get_dashboard_data',
+            'url_id': 'forecast/get_dashboard_data',
             'data': data
         });
 

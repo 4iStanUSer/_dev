@@ -82,7 +82,6 @@ export class GeneralComponent implements OnInit {
     }
 
     ngOnInit() {
-        console.log(this.dm.dataIsResolved);
         if (this.dm.dataIsResolved) {
             this.collectData();
         } else {

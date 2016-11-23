@@ -1,8 +1,10 @@
 <language-selector
+    *ngIf="langsData"
     [langs]="langsData"
     (changed)="languageChanged($event)"></language-selector>
 
 <menu-widget
+    *ngIf="topMenuData"
     [data]="topMenuData"></menu-widget>
 
 <router-outlet></router-outlet>

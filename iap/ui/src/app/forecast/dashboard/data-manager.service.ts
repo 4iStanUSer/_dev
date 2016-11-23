@@ -4,9 +4,8 @@ import {Subject} from 'rxjs/Subject';
 
 /*======TEMP=====*/
 import {
+    defaultState, dashboardConfig,
     selectorsDataTEMP, selectorsConfigTEMP,
-    // vertTableTEMP,
-    // forecastValueRateData
 } from './data';
 /*======.TEMP=====*/
 
@@ -18,7 +17,6 @@ import {
 } from "../../common/service/static-data.service";
 import {InsightInput} from "./insights/insights.component";
 import {
-    TableWidgetData,
     TableWidgetRowColItem,
     TableWidgetValues
 } from "../../common/cmp/table-widget/table-widget.component";
@@ -31,10 +29,6 @@ import {
 } from "./interfaces";
 import {TimeSelectorDataInput} from "../../common/cmp/time-selector/time-selector.component";
 import {DashboardDataModel} from "./data.model";
-
-// import {DataModel} from "./../../common/model/data.model";
-// import {PointValueModel} from "../../common/model/points-values.model";
-// import {DecompositionModel} from "../../common/model/decomposition.model";
 
 class Period {
     constructor(public timescale: string = null,
@@ -65,10 +59,6 @@ export class DataManagerService {
 
     dataModel: DashboardDataModel = null;
 
-    // dataModel: DataModel = null;
-    //
-    // decompModel: DecompositionModel = null;
-
     insights: Array<InsightInput> = [];
 
     state: PageState = null;
@@ -89,8 +79,6 @@ export class DataManagerService {
     // ----------------------------- //
 
     selectors: {data: Object, config: Object} = null;
-
-    private defaults: Object = null; // TODO Review this variable (VL)
 
     constructor(private req: AjaxService,
                 private sds: StaticDataService) { //private stateService: StateService,
@@ -122,8 +110,6 @@ export class DataManagerService {
     }
 
     private dataInitialized() {
-        console.log('dataInitialized', this.isData);
-
         return (this.isData['dynamic']['received']
         && this.isData['static']['received']);
     }
@@ -135,7 +121,7 @@ export class DataManagerService {
         this.isData['dynamic']['received'] = false;
 
         this.req.get({
-            'url': '/forecast/get_dashboard_data',
+            'url_id': 'forecast/get_dashboard_data',
             'data': {
                 'entities_ids': [2]
             }
@@ -150,14 +136,14 @@ export class DataManagerService {
             this.insights = d['insights'];
 
             this.periods['main'] = new Period(
-                c['main_period']['timsecale'], // TODO Fix key
+                c['main_period']['timescale'],
                 c['main_period']['start'],
                 c['main_period']['end'],
-                '2015' //c['main_period']['mid'] // TODO Replace
+                c['main_period']['mid']
             );
             this.periods['decomp'] = new Period(
                 c['decomp_period']['timescale'],
-                '2015', //c['decomp_period']['start'], // TODO Replace
+                c['decomp_period']['start'],
                 c['decomp_period']['end']
             );
 
@@ -179,28 +165,14 @@ export class DataManagerService {
                 data: selectorsDataTEMP,
                 config: selectorsConfigTEMP
             };
-
-            // this.dataModel = new DataModel(
-            //     d['timescales'],
-            //     d['timelabels'],
-            //     d['variables'],
-            //     d['growth'],
-            //     d['data']
-            // );
-            // let decompTypes = (c['factors_drivers'])
-            //     ? Object.keys(c['factors_drivers']) : [];
-            //
-            // this.decompModel = new DecompositionModel(decompTypes,
-            //     d['decomposition']);
-
-            // console.log(this.dataModel);
-            // console.log(this.decompModel);
-
             ////////////////////
 
             this.isData['dynamic']['processed'] = true;
 
             this.resolveInitObervable();
+        },
+        (e)=> {
+            console.error('Didn\'t receive dynamic data for dashboard page!');
         });
     }
 
@@ -210,18 +182,6 @@ export class DataManagerService {
         this.config = this.sds.getConfig(this.pageName);
         this.state = this.sds.getState(this.pageName);
 
-        // TODO This in sds
-        // // Merge defaults into state
-        // let defKeys = Object.keys(this.defaults),
-        //     defKeysLen = defKeys.length,
-        //     defKey = null;
-        // for (let i = 0; i < defKeysLen; i++) {
-        //     defKey = defKeys[i];
-        //     let v = this.state.get(defKey);
-        //     if (v === null || v === undefined) {
-        //         this.state.set(defKey, this.defaults[defKey]);
-        //     }
-        // }
         this.resolveInitObervable();
     }
 
@@ -232,17 +192,22 @@ export class DataManagerService {
         this.isData['static']['received'] = false;
 
         if (!this.sds.hasPage(this.pageName)) {
+            let frontData = {
+                'state': defaultState,
+                'config': dashboardConfig
+            };
             this.req.get({
-                'url': '/temp/get_page_static_data',
+                'url_id': 'forecast/get_page_static_data',
                 'data': {
                     'page_name': this.pageName
                 }
             }).subscribe((d)=> {
-                    this.sds.addPage(this.pageName, d);
+                    this.sds.addPage(this.pageName, frontData, d);
                     this.proceedStaticData();
                 },
                 (e)=> {
-                    console.log(e);
+                    this.sds.addPage(this.pageName, frontData);
+                    this.proceedStaticData();
                 });
         } else {
             this.proceedStaticData();
@@ -277,7 +242,6 @@ export class DataManagerService {
                     variable_id: string,
                     cagrsPeriod: Period = null): VariableData {
 
-        // let pointsValue: Array<PointValueModel>;
         let pointsValue: Array<number>;
         let output: VariableData = {
             abs: [],
@@ -394,7 +358,7 @@ export class DataManagerService {
     }
 
     getDecompPeriodLabels(): TimeSelectorDataInput {
-        let allowedTs = this.ddConfig['dec_timescales'];
+        let allowedTs = this.ddConfig['decomp_timescales'];
         let allTs = this.dataModel.getTimeScalesOrder();
         let order = [];
         for (let i = 0; i < allTs.length; i++) {

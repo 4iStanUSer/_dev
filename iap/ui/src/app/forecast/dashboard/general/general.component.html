@@ -32,8 +32,8 @@
                 <li (click)="onClickForecastTab('all')" [class.active]="dm.state.get('forecast_active_tab') == 'all'">
                     {{ dm.config['tab_all'] }}
                 </li>
-                <li *ngFor="let tab of fTabsAbsData; let i = index" (click)="onClickForecastTab(tab.variable.key)" [class.active]="dm.state.get('forecast_active_tab') == tab.variable.key">
-                    {{ tab.variable.name + ' - ' + tab.variable.metric }}
+                <li *ngFor="let tab of fTabsAbsData; let i = index" (click)="onClickForecastTab(tab.variable.id)" [class.active]="dm.state.get('forecast_active_tab') == tab.variable.id">
+                    {{ tab.variable.full_name + ' - ' + tab.variable.metric }}
                 </li>
             </ul>
 
