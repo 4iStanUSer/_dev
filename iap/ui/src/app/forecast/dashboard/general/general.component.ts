@@ -193,7 +193,6 @@ export class GeneralComponent implements OnInit {
         this.dm.state.set('forecast_collapse_expand', newState);
     }
     private onChangedForecastPeriod(period) {
-        console.log(period);
         this.dm.setPeriod('main', period['scale'], period['start'],
             period['end'], period['mid']);
 

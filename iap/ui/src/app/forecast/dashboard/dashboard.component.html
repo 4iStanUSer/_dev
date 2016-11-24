@@ -1,7 +1,7 @@
 <div class="container-fluid dashboard-container">
 
     <selectors
-        *ngIf="dm.selectors"
+        *ngIf="dm.selectors && dm.selectors.config"
         [data]="dm.selectors['data']"
         [config]="dm.selectors['config']"
     ></selectors>
