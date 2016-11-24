@@ -1,14 +1,77 @@
-from ..container.entity_data import VariableType
+from ..helper import VariableType, SlotType, AccessMask
+
+
+def set_entity_values(wb, entity_id, values):
+
+    # Get requested entity.
+    entity = wb.container.get_entity_by_id(entity_id)
+
+    # Check access.
+    try:
+        coordinates = [dict(var_name=x['var_name'],
+                            timescale=x['timescale'],
+                            slot_type=x['slot_type'],
+                            time_label=x['time_label']) for x in values]
+    except KeyError:
+        raise Exception
+    access_masks = wb.access.get_data_access_bulk(coordinates)
+    errors = [x for x in access_masks if not x & AccessMask.edit]
+    if len(errors) > 0:
+        raise Exception
+    # Set values.
+    for item in values:
+        try:
+            var = entity.get_variable(item['var_name'])
+            if item['slot_type'] & SlotType.time_series:
+                ts = var.get_time_series(item['timescale'])
+                ts.set_value(item['time_label'], item['value'])
+            elif item['slot_type'] & SlotType.scalar:
+                scalar = var.get_scalar(item['timescale'])
+                scalar.set_value()
+            elif item['slot_type'] & SlotType.period_series:
+                ps = var.get_periods_series(item['timescale'])
+                ps.set_value(item['time_label'], item['value'])
+            else:
+                raise Exception
+        except KeyError:
+            raise Exception
+    return
 
 
 def get_entity_data(container, config, entities_ids):
 
-    def transform_var_type(variable_type):
-        if variable_type & VariableType.is_output:
-            return 'output'
-        if variable_type & VariableType.is_driver:
-            return 'driver'
-        return None
+    # Get requested entities.
+    entity_id = entities_ids[0]
+    ent = container.get_entity_by_id(entity_id)
+
+
+    'dash_forecast_timescales'
+    'dash_decomposition_timescales'
+    'dash_top_ts_period'
+
+
+
+    top_ts = config.get_option('dash_top_ts', ent.meta, ent.path)
+    bottom_ts = config.get_option('dash_bot_ts', ent.meta, ent.path)
+
+
+
+    period = config.get_option('dash_top_ts_period', ent.meta, ent.path)
+
+
+    config.get_option('decomp_timescales')
+
+
+
+
+    config = dict(main_period=main_period,
+                  decomp_period=decomp_period,
+                  factors_drivers=factors_drivers,
+                  dec_timescales=[top_ts])
+
+    entities_ids
+
+
 
     # Load configuration parameters.
     try:
@@ -24,9 +87,7 @@ def get_entity_data(container, config, entities_ids):
     main_period = dict(timesecale=top_ts, start=period[0], mid=mid, end=period[1])
     decomp_period = dict(timescale=top_ts, start=mid, end=period[1])
 
-    # Get requested entity.
-    entity_id = entities_ids[0]
-    ent = container.get_entity_by_id(entity_id)
+
 
     # Define connections between decomposition factors and drivers.
     factors_drivers = {x: {} for x in config[ent.meta].keys()}

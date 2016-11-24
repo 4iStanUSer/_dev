@@ -1,19 +1,5 @@
 import copy
-from enum import IntEnum, unique
-
-
-@unique
-class DataType(IntEnum):
-    empty = 0
-    time_series = 1
-    scalar = 2
-    period_series = 4
-
-
-@unique
-class VariableType(IntEnum):
-    is_output = 1
-    is_driver = 2
+from ..helper import SlotType
 
 
 class EntityData:
@@ -62,18 +48,18 @@ class EntityData:
                 self.set_var_property(item['var'], item['prop'], item['value'])
             # Time series.
             for item in backup['time_series']:
-                self.init_slot(item['var'], item['ts'], DataType.time_series)
+                self.init_slot(item['var'], item['ts'], SlotType.time_series)
                 self.set_ts_vals(item['var'], item['ts'], item['line'])
             # Scalars.
             for item in backup['scalars']:
-                self.init_slot(item['var'], item['ts'], DataType.scalar)
+                self.init_slot(item['var'], item['ts'], SlotType.scalar)
                 self.set_scalar_val(item['var'], item['ts'], item['value'])
             # Period series.
             for item in backup['periods_series']:
                 if not self.is_exist(item['var'], item['ts'],
-                                     DataType.period_series):
+                                     SlotType.period_series):
                     self.init_slot(item['var'], item['ts'],
-                                   DataType.period_series)
+                                   SlotType.period_series)
                 self.set_period_val(item['var'], item['ts'], item['period'],
                                     item['value'])
         except KeyError:
@@ -108,28 +94,28 @@ class EntityData:
         pass
 
     def is_exist(self, var_name, ts_name, data_type):
-        if data_type == DataType.time_series:
+        if data_type == SlotType.time_series:
             return (var_name, ts_name) in self._time_series
-        elif data_type == DataType.scalar:
+        elif data_type == SlotType.scalar:
             return (var_name, ts_name) in self._scalars
-        elif data_type == DataType.period_series:
+        elif data_type == SlotType.period_series:
             return (var_name, ts_name) in self._periods_series
         else:
             raise Exception
 
     def init_slot(self, var_name, ts_name, data_type):
-        if data_type == DataType.time_series:
+        if data_type == SlotType.time_series:
             def_value = self.get_var_property(var_name, 'default_value')
             if def_value is None:
                 def_value = 0
             length = self.time_manager.get_time_length(ts_name)
             self._time_series[(var_name, ts_name)] = [def_value] * length
-        elif data_type == DataType.scalar:
+        elif data_type == SlotType.scalar:
             def_value = self.get_var_property(var_name, 'default_value')
             if def_value is None:
                 def_value = 0
             self._scalars[(var_name, ts_name)] = def_value
-        elif data_type == DataType.period_series:
+        elif data_type == SlotType.period_series:
             self._periods_series[(var_name, ts_name)] = dict()
         else:
             raise Exception

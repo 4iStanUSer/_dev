@@ -1,0 +1,1447 @@
+{
+  "data": {
+    "config": {
+      "decomp_timescales": [
+        "annual"
+      ],
+      "main_period": {
+        "timescale": "annual",
+        "mid": "2015",
+        "end": "2018",
+        "start": "2013"
+      },
+      "decomp_period": {
+        "timescale": "annual",
+        "end": "2018",
+        "start": "2013"
+      }
+    },
+    "data": {
+      "insights": [
+        {
+          "text": "insight1"
+        },
+        {
+          "text": "insight2"
+        }
+      ],
+      "variables": [
+        {
+          "id": "Avg % Discount",
+          "full_name": "Avg % Discount",
+          "short_name": "Avg % Discount",
+          "type": "driver",
+          "metric": "%",
+          "format": "",
+          "hint": ""
+        },
+        {
+          "id": "Above Unit Price",
+          "full_name": "Above Unit Price",
+          "short_name": "Above Unit Price",
+          "type": "driver",
+          "metric": "%",
+          "format": "",
+          "hint": ""
+        },
+        {
+          "id": "Price per Unit",
+          "full_name": "Price per Unit",
+          "short_name": "Price per Unit",
+          "type": "driver",
+          "metric": "Dollar Per Unit",
+          "format": "",
+          "hint": ""
+        },
+        {
+          "id": "Value",
+          "full_name": "Value",
+          "short_name": "Value",
+          "type": "output",
+          "metric": "Dollar",
+          "format": "",
+          "hint": ""
+        },
+        {
+          "id": "Avg % Volume sold as Promo",
+          "full_name": "Avg % Volume sold as Promo",
+          "short_name": "Avg % Volume sold as Promo",
+          "type": "driver",
+          "metric": "%",
+          "format": "",
+          "hint": ""
+        },
+        {
+          "id": "Distribution",
+          "full_name": "Distribution",
+          "short_name": "Distribution",
+          "type": "driver",
+          "metric": "TDP",
+          "format": "",
+          "hint": ""
+        },
+        {
+          "id": "Media Spend",
+          "full_name": "Media Spend",
+          "short_name": "Media Spend",
+          "type": "driver",
+          "metric": "Dollar",
+          "format": "",
+          "hint": ""
+        },
+        {
+          "id": "Unit Volume",
+          "full_name": "Unit Volume",
+          "short_name": "Unit Volume",
+          "type": "driver",
+          "metric": "Unit",
+          "format": "",
+          "hint": ""
+        },
+        {
+          "id": "EQ Volume",
+          "full_name": "EQ Volume",
+          "short_name": "EQ Volume",
+          "type": "output",
+          "metric": "Liter",
+          "format": "",
+          "hint": ""
+        },
+        {
+          "id": "Premiumization",
+          "full_name": "Premiumization",
+          "short_name": "Premiumization",
+          "type": "driver",
+          "metric": "index",
+          "format": "",
+          "hint": ""
+        },
+        {
+          "id": "Avg % Promo Support",
+          "full_name": "Avg % Promo Support",
+          "short_name": "Avg % Promo Support",
+          "type": "driver",
+          "metric": "%",
+          "format": "",
+          "hint": ""
+        },
+        {
+          "id": "Unit Size",
+          "full_name": "Unit Size",
+          "short_name": "Unit Size",
+          "type": "driver",
+          "metric": "Litter per Unit",
+          "format": "",
+          "hint": ""
+        },
+        {
+          "id": "Innovation TDP share",
+          "full_name": "Innovation TDP share",
+          "short_name": "Innovation TDP share",
+          "type": "driver",
+          "metric": "% of TDP",
+          "format": "",
+          "hint": ""
+        },
+        {
+          "id": "Price per EQ",
+          "full_name": "Price per EQ",
+          "short_name": "Price per EQ",
+          "type": "output",
+          "metric": "Dollar Per Liter",
+          "format": "",
+          "hint": ""
+        },
+        {
+          "id": "LTT",
+          "full_name": "LTT",
+          "short_name": "LTT",
+          "type": "driver",
+          "metric": "%",
+          "format": "",
+          "hint": ""
+        },
+        {
+          "id": "ImpactVar1",
+          "full_name": "ImpactVar1",
+          "short_name": "ImpactVar1",
+          "type": "impact",
+          "metric": "%",
+          "format": "",
+          "hint": ""
+        },
+        {
+          "id": "ImpactVar2",
+          "full_name": "ImpactVar2",
+          "short_name": "ImpactVar2",
+          "type": "impact",
+          "metric": "%",
+          "format": "",
+          "hint": ""
+        },
+        {
+          "id": "ImpactVar3",
+          "full_name": "ImpactVar3",
+          "short_name": "ImpactVar3",
+          "type": "impact",
+          "metric": "%",
+          "format": "",
+          "hint": ""
+        },
+        {
+          "id": "ImpactVar4",
+          "full_name": "ImpactVar4",
+          "short_name": "ImpactVar4",
+          "type": "impact",
+          "metric": "%",
+          "format": "",
+          "hint": ""
+        },
+        {
+          "id": "ImpactVar5",
+          "full_name": "ImpactVar5",
+          "short_name": "ImpactVar5",
+          "type": "impact",
+          "metric": "%",
+          "format": "",
+          "hint": ""
+        }
+      ],
+      "variable_values": {
+        "annual": {
+          "Avg % Discount": {
+            "2013": 0.15672912,
+            "2014": 0.124825838,
+            "2015": 0.021315367,
+            "2016": 0.073070602,
+            "2017": 0.073070602,
+            "2018": 0.073070602
+          },
+          "Above Unit Price": {
+            "2013": 0,
+            "2014": 0,
+            "2015": 0,
+            "2016": -0.023345156,
+            "2017": -0.023345156,
+            "2018": -0.023345156
+          },
+          "Price per Unit": {
+            "2013": 3.134247748,
+            "2014": 3.070108835,
+            "2015": 2.976280282,
+            "2016": 2.863626067,
+            "2017": 2.818788424,
+            "2018": 2.768048625
+          },
+          "Value": {
+            "2013": 237288.8064,
+            "2014": 245366.2606,
+            "2015": 241606.5798,
+            "2016": 243489.0721562347,
+            "2017": 250075.20994703867,
+            "2018": 255400.3457041838
+          },
+          "Avg % Volume sold as Promo": {
+            "2013": 0.142749047,
+            "2014": 0.156890702,
+            "2015": 0.192484476,
+            "2016": 0,
+            "2017": 0,
+            "2018": 0
+          },
+          "Distribution": {
+            "2013": 2817.679167,
+            "2014": 2812.516667,
+            "2015": 2959.427069,
+            "2016": 3030.30102,
+            "2017": 3101.174971,
+            "2018": 3172.048922
+          },
+          "Media Spend": {
+            "2013": 48195.8222,
+            "2014": 47651.25748,
+            "2015": 45410.61262,
+            "2016": 44897.51799,
+            "2017": 44390.22082,
+            "2018": 43888.6556
+          },
+          "Unit Volume": {
+            "2013": 75.7083758,
+            "2014": 79.9210301,
+            "2015": 81.17736128,
+            "2016": 85028.2356911632,
+            "2017": 88717.26867395375,
+            "2018": 92267.2901760112
+          },
+          "EQ Volume": {
+            "2013": 28293.6806,
+            "2014": 30136.8716,
+            "2015": 31455.34679,
+            "2016": 33233.539474089965,
+            "2017": 34973.83882599352,
+            "2018": 36683.688556046116
+          },
+          "Premiumization": {
+            "2013": 1,
+            "2014": 0.994448796,
+            "2015": 0.983935894,
+            "2016": 0.975903841,
+            "2017": 0.967871788,
+            "2018": 0.959839735
+          },
+          "Avg % Promo Support": {
+            "2013": 0.067045178,
+            "2014": 0.076185237,
+            "2015": 0.125144696,
+            "2016": 0.100664966,
+            "2017": 0.100664966,
+            "2018": 0.100664966
+          },
+          "Unit Size": {
+            "2013": 0.373719292,
+            "2014": 0.377083123,
+            "2015": 0.387489151,
+            "2016": 0.390852982,
+            "2017": 0.394216812,
+            "2018": 0.397580643
+          },
+          "Innovation TDP share": {
+            "2013": 0.041534083,
+            "2014": 0.025890229,
+            "2015": 0.051369726,
+            "2016": 0.056287547,
+            "2017": 0.061205369,
+            "2018": 0.066123191
+          },
+          "Price per EQ": {
+            "2013": 8.386636215,
+            "2014": 8.141729635,
+            "2015": 7.680938359,
+            "2016": 7.32660667534577,
+            "2017": 7.150350614676474,
+            "2018": 6.962231873547224
+          },
+          "LTT": {
+            "2013": 0,
+            "2014": 0,
+            "2015": 0,
+            "2016": 0.0104958,
+            "2017": 0.0104958,
+            "2018": 0.0104958
+          },
+          "ImpactVar1": {
+            "2013": 0.351974,
+            "2014": 0.997305,
+            "2015": 0.718144,
+            "2016": 0.636752,
+            "2017": 0.769829,
+            "2018": 0.664442
+          },
+          "ImpactVar2": {
+            "2013": 0.074939,
+            "2014": 0.223951,
+            "2015": 0.400238,
+            "2016": 0.729591,
+            "2017": 0.527484,
+            "2018": 0.981372
+          },
+          "ImpactVar3": {
+            "2013": 0.503847,
+            "2014": 0.100241,
+            "2015": 0.404303,
+            "2016": 0.753095,
+            "2017": 0.471066,
+            "2018": 0.743271
+          },
+          "ImpactVar4": {
+            "2013": 0.211345,
+            "2014": 0.221179,
+            "2015": 0.164605,
+            "2016": 0.454385,
+            "2017": 0.768253,
+            "2018": 0.999185
+          },
+          "ImpactVar5": {
+            "2013": 0.742955,
+            "2014": 0.504349,
+            "2015": 0.887565,
+            "2016": 0.526211,
+            "2017": 0.696226,
+            "2018": 0.656456
+          }
+        }
+      },
+      "timescales": [
+        {
+          "id": "annual",
+          "full_name": "annual",
+          "short_name": "annual",
+          "lag": 1
+        }
+      ],
+      "timelables": [
+        {
+          "id": "2013",
+          "full_name": "2013",
+          "short_name": "2013",
+          "parent_index": null,
+          "timescale": "annual"
+        },
+        {
+          "id": "2014",
+          "full_name": "2014",
+          "short_name": "2014",
+          "parent_index": null,
+          "timescale": "annual"
+        },
+        {
+          "id": "2015",
+          "full_name": "2015",
+          "short_name": "2015",
+          "parent_index": null,
+          "timescale": "annual"
+        },
+        {
+          "id": "2016",
+          "full_name": "2016",
+          "short_name": "2016",
+          "parent_index": null,
+          "timescale": "annual"
+        },
+        {
+          "id": "2017",
+          "full_name": "2017",
+          "short_name": "2017",
+          "parent_index": null,
+          "timescale": "annual"
+        },
+        {
+          "id": "2018",
+          "full_name": "2018",
+          "short_name": "2018",
+          "parent_index": null,
+          "timescale": "annual"
+        }
+      ],
+      "decomp_types": [
+        {
+          "id": "value",
+          "full_name": "Value",
+          "short_name": "value"
+        },
+        {
+          "id": "volume",
+          "full_name": "Volume",
+          "short_name": "volume"
+        }
+      ],
+      "change_over_period": {
+        "annual": {
+          "Avg % Discount": [
+            {
+              "abs": -0.03190328200000003,
+              "rate": 0,
+              "end": "2014",
+              "start": "2013"
+            },
+            {
+              "abs": -0.10351047099999999,
+              "rate": 0,
+              "end": "2015",
+              "start": "2014"
+            },
+            {
+              "abs": 0.0517552349999999,
+              "rate": 0,
+              "end": "2016",
+              "start": "2015"
+            },
+            {
+              "abs": 0,
+              "rate": 0,
+              "end": "2017",
+              "start": "2016"
+            },
+            {
+              "abs": 0,
+              "rate": 0,
+              "end": "2018",
+              "start": "2017"
+            },
+            {
+              "abs": 0,
+              "rate": 0,
+              "end": "2015",
+              "start": "2013"
+            },
+            {
+              "abs": 0,
+              "rate": 0,
+              "end": "2018",
+              "start": "2015"
+            }
+          ],
+          "Above Unit Price": [
+            {
+              "abs": 0,
+              "rate": 0,
+              "end": "2014",
+              "start": "2013"
+            },
+            {
+              "abs": 0,
+              "rate": 0,
+              "end": "2015",
+              "start": "2014"
+            },
+            {
+              "abs": 0,
+              "rate": 0,
+              "end": "2016",
+              "start": "2015"
+            },
+            {
+              "abs": 0,
+              "rate": 0,
+              "end": "2017",
+              "start": "2016"
+            },
+            {
+              "abs": 0,
+              "rate": 0,
+              "end": "2018",
+              "start": "2017"
+            },
+            {
+              "abs": 0,
+              "rate": 0,
+              "end": "2015",
+              "start": "2013"
+            },
+            {
+              "abs": 0,
+              "rate": 0,
+              "end": "2018",
+              "start": "2015"
+            }
+          ],
+          "Price per Unit": [
+            {
+              "abs": -0.020463893781507148,
+              "rate": 0,
+              "end": "2014",
+              "start": "2013"
+            },
+            {
+              "abs": -0.03056196312336934,
+              "rate": 0,
+              "end": "2015",
+              "start": "2014"
+            },
+            {
+              "abs": -0.037850674105295745,
+              "rate": 0,
+              "end": "2016",
+              "start": "2015"
+            },
+            {
+              "abs": -0.015657645918474627,
+              "rate": 0,
+              "end": "2017",
+              "start": "2016"
+            },
+            {
+              "abs": -0.018000570233645874,
+              "rate": 0,
+              "end": "2018",
+              "start": "2017"
+            },
+            {
+              "abs": 0,
+              "rate": 0,
+              "end": "2015",
+              "start": "2013"
+            },
+            {
+              "abs": 0,
+              "rate": 0,
+              "end": "2018",
+              "start": "2015"
+            }
+          ],
+          "abs": [
+            {
+              "abs": 0,
+              "rate": 0,
+              "end": "2014",
+              "start": "2013"
+            },
+            {
+              "abs": 0,
+              "rate": 0,
+              "end": "2015",
+              "start": "2014"
+            },
+            {
+              "abs": 0,
+              "rate": 0,
+              "end": "2016",
+              "start": "2015"
+            },
+            {
+              "abs": 0,
+              "rate": 0,
+              "end": "2017",
+              "start": "2016"
+            },
+            {
+              "abs": 0,
+              "rate": 0,
+              "end": "2018",
+              "start": "2017"
+            },
+            {
+              "abs": 0,
+              "rate": 0,
+              "end": "2015",
+              "start": "2013"
+            },
+            {
+              "abs": 0,
+              "rate": 0,
+              "end": "2018",
+              "start": "2015"
+            }
+          ],
+          "Avg % Volume sold as Promo": [
+            {
+              "abs": 0,
+              "rate": 0,
+              "end": "2014",
+              "start": "2013"
+            },
+            {
+              "abs": 0,
+              "rate": 0,
+              "end": "2015",
+              "start": "2014"
+            },
+            {
+              "abs": 0,
+              "rate": 0,
+              "end": "2016",
+              "start": "2015"
+            },
+            {
+              "abs": 0,
+              "rate": 0,
+              "end": "2017",
+              "start": "2016"
+            },
+            {
+              "abs": 0,
+              "rate": 0,
+              "end": "2018",
+              "start": "2017"
+            },
+            {
+              "abs": 0,
+              "rate": 0,
+              "end": "2015",
+              "start": "2013"
+            },
+            {
+              "abs": 0,
+              "rate": 0,
+              "end": "2018",
+              "start": "2015"
+            }
+          ],
+          "Distribution": [
+            {
+              "abs": -0.0018321816268018765,
+              "rate": 0,
+              "end": "2014",
+              "start": "2013"
+            },
+            {
+              "abs": 0.05223450005603114,
+              "rate": 0,
+              "end": "2015",
+              "start": "2014"
+            },
+            {
+              "abs": 0.023948537790440927,
+              "rate": 0,
+              "end": "2016",
+              "start": "2015"
+            },
+            {
+              "abs": 0.02338841934587732,
+              "rate": 0,
+              "end": "2017",
+              "start": "2016"
+            },
+            {
+              "abs": 0.022853902686163607,
+              "rate": 0,
+              "end": "2018",
+              "start": "2017"
+            },
+            {
+              "abs": 0,
+              "rate": 0,
+              "end": "2015",
+              "start": "2013"
+            },
+            {
+              "abs": 0,
+              "rate": 0,
+              "end": "2018",
+              "start": "2015"
+            }
+          ],
+          "Media Spend": [
+            {
+              "abs": -0.011299002592801588,
+              "rate": 0,
+              "end": "2014",
+              "start": "2013"
+            },
+            {
+              "abs": -0.047021736224703736,
+              "rate": 0,
+              "end": "2015",
+              "start": "2014"
+            },
+            {
+              "abs": -0.011299002598657237,
+              "rate": 0,
+              "end": "2016",
+              "start": "2015"
+            },
+            {
+              "abs": -0.011299002544260639,
+              "rate": 0,
+              "end": "2017",
+              "start": "2016"
+            },
+            {
+              "abs": -0.011299002589643004,
+              "rate": 0,
+              "end": "2018",
+              "start": "2017"
+            },
+            {
+              "abs": 0,
+              "rate": 0,
+              "end": "2015",
+              "start": "2013"
+            },
+            {
+              "abs": 0,
+              "rate": 0,
+              "end": "2018",
+              "start": "2015"
+            }
+          ],
+          "Unit Volume": [
+            {
+              "abs": 0.055643173631523046,
+              "rate": 0,
+              "end": "2014",
+              "start": "2013"
+            },
+            {
+              "abs": 0.015719656996763476,
+              "rate": 0,
+              "end": "2015",
+              "start": "2014"
+            },
+            {
+              "abs": 1046.4377874624504,
+              "rate": 0,
+              "end": "2016",
+              "start": "2015"
+            },
+            {
+              "abs": 0.0433859758797035,
+              "rate": 0,
+              "end": "2017",
+              "start": "2016"
+            },
+            {
+              "abs": 0.04001499995569291,
+              "rate": 0,
+              "end": "2018",
+              "start": "2017"
+            },
+            {
+              "abs": 0,
+              "rate": 0,
+              "end": "2015",
+              "start": "2013"
+            },
+            {
+              "abs": 0,
+              "rate": 0,
+              "end": "2018",
+              "start": "2015"
+            }
+          ],
+          "EQ Volume": [
+            {
+              "abs": 0.06514497092329519,
+              "rate": 0,
+              "end": "2014",
+              "start": "2013"
+            },
+            {
+              "abs": 0.0437495705426838,
+              "rate": 0,
+              "end": "2015",
+              "start": "2014"
+            },
+            {
+              "abs": 0.05653069718040027,
+              "rate": 0,
+              "end": "2016",
+              "start": "2015"
+            },
+            {
+              "abs": 0.05236575397755483,
+              "rate": 0,
+              "end": "2017",
+              "start": "2016"
+            },
+            {
+              "abs": 0.04888939239869172,
+              "rate": 0,
+              "end": "2018",
+              "start": "2017"
+            },
+            {
+              "abs": 0,
+              "rate": 0,
+              "end": "2015",
+              "start": "2013"
+            },
+            {
+              "abs": 0,
+              "rate": 0,
+              "end": "2018",
+              "start": "2015"
+            }
+          ],
+          "Premiumization": [
+            {
+              "abs": -0.005551203999999976,
+              "rate": 0,
+              "end": "2014",
+              "start": "2013"
+            },
+            {
+              "abs": -0.010571587036241947,
+              "rate": 0,
+              "end": "2015",
+              "start": "2014"
+            },
+            {
+              "abs": -0.008163187306184372,
+              "rate": 0,
+              "end": "2016",
+              "start": "2015"
+            },
+            {
+              "abs": -0.00823037338573207,
+              "rate": 0,
+              "end": "2017",
+              "start": "2016"
+            },
+            {
+              "abs": -0.008298674576099896,
+              "rate": 0,
+              "end": "2018",
+              "start": "2017"
+            },
+            {
+              "abs": 0,
+              "rate": 0,
+              "end": "2015",
+              "start": "2013"
+            },
+            {
+              "abs": 0,
+              "rate": 0,
+              "end": "2018",
+              "start": "2015"
+            }
+          ],
+          "Avg % Promo Support": [
+            {
+              "abs": 0.009140058999999923,
+              "rate": 0,
+              "end": "2014",
+              "start": "2013"
+            },
+            {
+              "abs": 0.04895945899999998,
+              "rate": 0,
+              "end": "2015",
+              "start": "2014"
+            },
+            {
+              "abs": -0.024479730000000033,
+              "rate": 0,
+              "end": "2016",
+              "start": "2015"
+            },
+            {
+              "abs": 0,
+              "rate": 0,
+              "end": "2017",
+              "start": "2016"
+            },
+            {
+              "abs": 0,
+              "rate": 0,
+              "end": "2018",
+              "start": "2017"
+            },
+            {
+              "abs": 0,
+              "rate": 0,
+              "end": "2015",
+              "start": "2013"
+            },
+            {
+              "abs": 0,
+              "rate": 0,
+              "end": "2018",
+              "start": "2015"
+            }
+          ],
+          "Unit Size": [
+            {
+              "abs": 0.009000956257832149,
+              "rate": 0,
+              "end": "2014",
+              "start": "2013"
+            },
+            {
+              "abs": 0.027596111746427843,
+              "rate": 0,
+              "end": "2015",
+              "start": "2014"
+            },
+            {
+              "abs": 0.008681097241868496,
+              "rate": 0,
+              "end": "2016",
+              "start": "2015"
+            },
+            {
+              "abs": 0.008606381823639264,
+              "rate": 0,
+              "end": "2017",
+              "start": "2016"
+            },
+            {
+              "abs": 0.008532946585748213,
+              "rate": 0,
+              "end": "2018",
+              "start": "2017"
+            },
+            {
+              "abs": 0,
+              "rate": 0,
+              "end": "2015",
+              "start": "2013"
+            },
+            {
+              "abs": 0,
+              "rate": 0,
+              "end": "2018",
+              "start": "2015"
+            }
+          ],
+          "Innovation TDP share": [
+            {
+              "abs": -0.015643854000000013,
+              "rate": 0,
+              "end": "2014",
+              "start": "2013"
+            },
+            {
+              "abs": 0.025479497000000073,
+              "rate": 0,
+              "end": "2015",
+              "start": "2014"
+            },
+            {
+              "abs": 0.004917821000000044,
+              "rate": 0,
+              "end": "2016",
+              "start": "2015"
+            },
+            {
+              "abs": 0.004917821999999905,
+              "rate": 0,
+              "end": "2017",
+              "start": "2016"
+            },
+            {
+              "abs": 0.004917821999999905,
+              "rate": 0,
+              "end": "2018",
+              "start": "2017"
+            },
+            {
+              "abs": 0,
+              "rate": 0,
+              "end": "2015",
+              "start": "2013"
+            },
+            {
+              "abs": 0,
+              "rate": 0,
+              "end": "2018",
+              "start": "2015"
+            }
+          ],
+          "Price per EQ": [
+            {
+              "abs": -0.029202003487640127,
+              "rate": 0,
+              "end": "2014",
+              "start": "2013"
+            },
+            {
+              "abs": -0.0565962389636635,
+              "rate": 0,
+              "end": "2015",
+              "start": "2014"
+            },
+            {
+              "abs": -0.046131301553676396,
+              "rate": 0,
+              "end": "2016",
+              "start": "2015"
+            },
+            {
+              "abs": -0.02405698415098534,
+              "rate": 0,
+              "end": "2017",
+              "start": "2016"
+            },
+            {
+              "abs": -0.02630902332860796,
+              "rate": 0,
+              "end": "2018",
+              "start": "2017"
+            },
+            {
+              "abs": 0,
+              "rate": 0,
+              "end": "2015",
+              "start": "2013"
+            },
+            {
+              "abs": 0,
+              "rate": 0,
+              "end": "2018",
+              "start": "2015"
+            }
+          ],
+          "LTT": [
+            {
+              "abs": 0,
+              "rate": 0,
+              "end": "2014",
+              "start": "2013"
+            },
+            {
+              "abs": 0,
+              "rate": 0,
+              "end": "2015",
+              "start": "2014"
+            },
+            {
+              "abs": 0.010495799999999944,
+              "rate": 0,
+              "end": "2016",
+              "start": "2015"
+            },
+            {
+              "abs": 0,
+              "rate": 0,
+              "end": "2017",
+              "start": "2016"
+            },
+            {
+              "abs": 0,
+              "rate": 0,
+              "end": "2018",
+              "start": "2017"
+            },
+            {
+              "abs": 0,
+              "rate": 0,
+              "end": "2015",
+              "start": "2013"
+            },
+            {
+              "abs": 0,
+              "rate": 0,
+              "end": "2018",
+              "start": "2015"
+            }
+          ]
+        }
+      },
+      "decomp": {
+        "annual": {
+          "value": [
+            {
+              "start": "2013",
+              "end": "2014",
+              "factors": [
+                {
+                  "var_id": "ImpactVar1",
+                  "abs": 0.990784,
+                  "rate": 0.0359802
+                },
+                {
+                  "var_id": "ImpactVar2",
+                  "abs": 0.163726,
+                  "rate": 0.0510542
+                },
+                {
+                  "var_id": "ImpactVar3",
+                  "abs": 0.794359,
+                  "rate": 0.0206714
+                },
+                {
+                  "var_id": "ImpactVar4",
+                  "abs": 0.754937,
+                  "rate": 0.0754937
+                },
+                {
+                  "var_id": "ImpactVar5",
+                  "abs": 0.127042,
+                  "rate": 0.038778
+                }
+              ]
+            },
+            {
+              "start": "2014",
+              "end": "2015",
+              "factors": [
+                {
+                  "var_id": "ImpactVar1",
+                  "abs": 0.978912,
+                  "rate": 0.0483124
+                },
+                {
+                  "var_id": "ImpactVar2",
+                  "abs": 0.23216,
+                  "rate": 0.0682931
+                },
+                {
+                  "var_id": "ImpactVar3",
+                  "abs": 0.610557,
+                  "rate": 0.0906985
+                },
+                {
+                  "var_id": "ImpactVar4",
+                  "abs": 0.475029,
+                  "rate": 0.0197856
+                },
+                {
+                  "var_id": "ImpactVar5",
+                  "abs": 0.207832,
+                  "rate": 0.0105532
+                }
+              ]
+            },
+            {
+              "start": "2015",
+              "end": "2016",
+              "factors": [
+                {
+                  "var_id": "ImpactVar1",
+                  "abs": 0.240613,
+                  "rate": 0.0210588
+                },
+                {
+                  "var_id": "ImpactVar2",
+                  "abs": 0.598098,
+                  "rate": 0.0151758
+                },
+                {
+                  "var_id": "ImpactVar3",
+                  "abs": 0.692215,
+                  "rate": 0.0477526
+                },
+                {
+                  "var_id": "ImpactVar4",
+                  "abs": 0.234345,
+                  "rate": 0.085709
+                },
+                {
+                  "var_id": "ImpactVar5",
+                  "abs": 0.666541,
+                  "rate": 0.0668499
+                }
+              ]
+            },
+            {
+              "start": "2016",
+              "end": "2017",
+              "factors": [
+                {
+                  "var_id": "ImpactVar1",
+                  "abs": 0.392542,
+                  "rate": 0.0953839
+                },
+                {
+                  "var_id": "ImpactVar2",
+                  "abs": 0.963472,
+                  "rate": 0.0226944
+                },
+                {
+                  "var_id": "ImpactVar3",
+                  "abs": 0.751981,
+                  "rate": 0.0800128
+                },
+                {
+                  "var_id": "ImpactVar4",
+                  "abs": 0.868217,
+                  "rate": 0.0102356
+                },
+                {
+                  "var_id": "ImpactVar5",
+                  "abs": 0.460591,
+                  "rate": 0.043915
+                }
+              ]
+            },
+            {
+              "start": "2017",
+              "end": "2018",
+              "factors": [
+                {
+                  "var_id": "ImpactVar1",
+                  "abs": 0.624416,
+                  "rate": 0.0560729
+                },
+                {
+                  "var_id": "ImpactVar2",
+                  "abs": 0.871365,
+                  "rate": 0.0874228
+                },
+                {
+                  "var_id": "ImpactVar3",
+                  "abs": 0.444918,
+                  "rate": 0.0795486
+                },
+                {
+                  "var_id": "ImpactVar4",
+                  "abs": 0.392,
+                  "rate": 0.0489171
+                },
+                {
+                  "var_id": "ImpactVar5",
+                  "abs": 0.559849,
+                  "rate": 0.0232788
+                }
+              ]
+            }
+          ],
+          "volume": [
+            {
+              "start": "2013",
+              "end": "2014",
+              "factors": [
+                {
+                  "var_id": "ImpactVar1",
+                  "abs": 0.98542,
+                  "rate": 0.0738657
+                },
+                {
+                  "var_id": "ImpactVar2",
+                  "abs": 0.48134,
+                  "rate": 0.0652715
+                },
+                {
+                  "var_id": "ImpactVar3",
+                  "abs": 0.99519,
+                  "rate": 0.0976987
+                },
+                {
+                  "var_id": "ImpactVar4",
+                  "abs": 0.78942,
+                  "rate": 0.0626273
+                },
+                {
+                  "var_id": "ImpactVar5",
+                  "abs": 0.285773,
+                  "rate": 0.0355594
+                }
+              ]
+            },
+            {
+              "start": "2014",
+              "end": "2015",
+              "factors": [
+                {
+                  "var_id": "ImpactVar1",
+                  "abs": 0.528851,
+                  "rate": 0.0919143
+                },
+                {
+                  "var_id": "ImpactVar2",
+                  "abs": 0.763161,
+                  "rate": 0.0842327
+                },
+                {
+                  "var_id": "ImpactVar3",
+                  "abs": 0.537789,
+                  "rate": 0.0704983
+                },
+                {
+                  "var_id": "ImpactVar4",
+                  "abs": 0.923729,
+                  "rate": 0.0271423
+                },
+                {
+                  "var_id": "ImpactVar5",
+                  "abs": 0.68645,
+                  "rate": 0.0176666
+                }
+              ]
+            },
+            {
+              "start": "2015",
+              "end": "2016",
+              "factors": [
+                {
+                  "var_id": "ImpactVar1",
+                  "abs": 0.524467,
+                  "rate": 0.0468196
+                },
+                {
+                  "var_id": "ImpactVar2",
+                  "abs": 0.611925,
+                  "rate": 0.093163
+                },
+                {
+                  "var_id": "ImpactVar3",
+                  "abs": 0.296334,
+                  "rate": 0.0101075
+                },
+                {
+                  "var_id": "ImpactVar4",
+                  "abs": 0.372081,
+                  "rate": 0.0741157
+                },
+                {
+                  "var_id": "ImpactVar5",
+                  "abs": 0.175675,
+                  "rate": 0.0812591
+                }
+              ]
+            },
+            {
+              "start": "2016",
+              "end": "2017",
+              "factors": [
+                {
+                  "var_id": "ImpactVar1",
+                  "abs": 0.92559,
+                  "rate": 0.0343801
+                },
+                {
+                  "var_id": "ImpactVar2",
+                  "abs": 0.444639,
+                  "rate": 0.0254852
+                },
+                {
+                  "var_id": "ImpactVar3",
+                  "abs": 0.447989,
+                  "rate": 0.0689154
+                },
+                {
+                  "var_id": "ImpactVar4",
+                  "abs": 0.276602,
+                  "rate": 0.0293354
+                },
+                {
+                  "var_id": "ImpactVar5",
+                  "abs": 0.831093,
+                  "rate": 0.0587996
+                }
+              ]
+            },
+            {
+              "start": "2017",
+              "end": "2018",
+              "factors": [
+                {
+                  "var_id": "ImpactVar1",
+                  "abs": 0.235433,
+                  "rate": 0.011355
+                },
+                {
+                  "var_id": "ImpactVar2",
+                  "abs": 0.14416,
+                  "rate": 0.084965
+                },
+                {
+                  "var_id": "ImpactVar3",
+                  "abs": 0.444918,
+                  "rate": 0.0795486
+                },
+                {
+                  "var_id": "ImpactVar4",
+                  "abs": 0.85634,
+                  "rate": 0.083107
+                },
+                {
+                  "var_id": "ImpactVar5",
+                  "abs": 0.789906,
+                  "rate": 0.0925784
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "factor_drivers": {
+        "ImpactVar1": [
+          {
+            "factor": "ImpactVar1",
+            "driver": "Avg % Discount"
+          }
+        ],
+        "ImpactVar2": [
+          {
+            "factor": "ImpactVar2",
+            "driver": "Above Unit Price"
+          }
+        ],
+        "ImpactVar3": [
+          {
+            "factor": "ImpactVar4",
+            "driver": "Price per Unit"
+          },
+          {
+            "factor": "ImpactVar5",
+            "driver": "Avg % Volume sold as Promo"
+          }
+        ]
+      }
+    }
+  },
+  "error": false
+}

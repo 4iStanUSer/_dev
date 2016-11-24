@@ -5,7 +5,7 @@ from numpy import mean
 
 from .. import timeline_lib as t_lib
 from .. import data_processing_lib as dp_lib
-from ...common.helper_lib import Meta
+from ...common.helper import Meta
 from .common import empty_to_zero
 
 def jj_lean_init(config, warehouse):

@@ -2,6 +2,12 @@ from pyramid.httpexceptions import HTTPFound
 from pyramid.security import forget
 from pyramid.renderers import render_to_response
 
+from ...common.helper import send_success_response, send_error_response
+from ...common.tools_config import get_page_config
+from ...common import exceptions as ex
+from ...common.error_manager import ErrorManager
+from ...common import rt_storage
+
 
 def notfound_view(req):
     req.response.status = 404
@@ -39,39 +45,26 @@ def logout_view(request):
 
 
 def index_view(req):
-    # user = req.user
-    # if user is None:
-    #    raise HTTPForbidden
-
-    # service.recreate_db(req)
-    # service.fillin_db(req)
-
-    #user_id = 1
-    #tool_name = forecast_tool_name
-    # TODO(1.0) - REMOVE
-    #try:
-        #wb = run_time_collection.get(user_id)
-    #except runTimeEx.BackupNotFound as error:
-        # TODO(1.0) - Move this
-    #i_access = get_access_interface(ssn=req.dbsession)
-    #i_man_acc = get_manage_access_interface(ssn=req.dbsession)
-    #user_roles = i_man_acc.get_user_roles(user_id)
-    #user_roles_id = [x.id for x in user_roles]
-
-    # Load into RAM
-    #wb = Workbench(user_id)
-    #warehouse = get_wh_interface()
-
-    #wb.init_load(warehouse, i_access, dev_template)
-    #run_time_collection.add(user_id, wb)
-
-    # Save into storage
-    #new_backup = wb.get_data_for_backup()
-    #s = Storage()
-    #s.save_backup(user_id, tool_name, new_backup, 'default')
-
     return render_to_response('iap.common:templates/index.jinja2',
                               {'title': 'Home page'},
                               request=req)
 
 
+def get_page_configuration(req):
+    # Get parameters from request.
+    try:
+        user_id = req.user
+        page_name = 'dashboard'
+        state = rt_storage.get_state(user_id)
+        tool_id = state['tool_id']
+        language = state['language']
+    except KeyError:
+        msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
+        return send_error_response(msg)
+
+    try:
+        config = get_page_config(tool_id, page_name, language)
+        return send_error_response(config)
+    except Exception as e:
+        msg = ErrorManager.get_error_message(e)
+        return send_error_response(msg)

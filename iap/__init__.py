@@ -5,8 +5,12 @@ from pyramid.response import Response
 from .common import security
 from .common.views import default as common
 from .common.views import landing_page as landing
-from .forecasting.views import default as forecast
-from .ui import temp_routing
+
+from .forecasting.views import dashboard as f_dashboard
+from .forecasting.views import default as f_common
+from .forecasting.views import scenarios as f_scenarios
+from .forecasting.views import simulator as f_simulator
+
 
 def common_routing(config):
     """
@@ -26,6 +30,12 @@ def common_routing(config):
     config.add_route('common.index', '/')
     config.add_view(common.index_view, route_name='common.index')
 
+    config.add_route('common.get_page_configuration',
+                     '/get_page_configuration')
+    config.add_view(common.get_page_configuration,
+                    route_name='common.get_page_configuration',
+                    request_method='POST', renderer='json')
+
     config.add_route('landing.get_tools_list', '/landing')
     config.add_view(landing.get_tools_list,
                     route_name='landing.get_tools_list',
@@ -35,6 +45,7 @@ def common_routing(config):
     config.add_view(landing.set_tool_selection,
                     route_name='landing.set_tool_selection',
                     request_method='POST', renderer='json')
+
 
     config.add_route('common.login', '/login')
     config.add_view(common.login_view, route_name='common.login')
@@ -56,47 +67,38 @@ def forecast_routing(config):
     # TODO Add redirect
     #context='myproject.resources.Hello', renderer='json' !!!!!!
     config.add_route('forecast.index', '/')
-    config.add_view(forecast.index_view, route_name='forecast.index')
+    config.add_view(f_common.index_view, route_name='forecast.index')
 
     config.add_route('forecast.get_index_page_data',
                      '/get_index_page_data')
-    config.add_view(forecast.get_index_page_data,
-                    route_name='forecast.get_index_page_data',
-                    request_method='POST', renderer='json')
-
-    config.add_route('forecast.get_ui_config',
-                     '/get_ui_config')
-    config.add_view(forecast.get_ui_config,
-                    route_name='forecast.get_ui_config',
-                    request_method='POST', renderer='json')
 
     config.add_route('forecast.get_scenarios_list',
                      '/get_scenarios_list')
-    config.add_view(forecast.get_scenarios_list,
+    config.add_view(f_scenarios.get_scenarios_list,
                     route_name='forecast.get_scenarios_list',
                     request_method='POST', renderer='json')
 
     config.add_route('forecast.get_dashboard_data',
                      '/get_dashboard_data')
-    config.add_view(forecast.get_dashboard_data,
+    config.add_view(f_dashboard.get_dashboard_data,
                     route_name='forecast.get_dashboard_data',
                     request_method='POST', renderer='json')
 
     config.add_route('forecast.get_cagrs_for_period',
                      '/get_cagrs_for_period')
-    config.add_view(forecast.get_cagrs_for_period,
+    config.add_view(f_dashboard.get_cagrs_for_period,
                     route_name='forecast.get_cagrs_for_period',
                     request_method='POST', renderer='json')
 
     config.add_route('forecast.get_decomposition_for_period',
                      '/get_decomposition_for_period')
-    config.add_view(forecast.get_decomposition_for_period,
+    config.add_view(f_dashboard.get_decomposition_for_period,
                     route_name='forecast.get_decomposition_for_period',
                     request_method='POST', renderer='json')
 
     config.add_route('forecast.get_options_for_entity_selector',
                      '/get_options_for_entity_selector')
-    config.add_view(forecast.get_options_for_entity_selector,
+    config.add_view(f_common.get_options_for_entity_selector,
                     route_name='forecast.get_options_for_entity_selector',
                     request_method='POST', renderer='json')
 
@@ -115,7 +117,6 @@ def main(global_config, **settings):
     config.include('iap.repository.db')
     config.include(common_routing)
     config.include(forecast_routing, route_prefix='/forecast')
-    config.include(temp_routing, route_prefix='/temp')  # TODO Replace: TEMP !!!
     # Add routing for another tools
 
     return config.make_wsgi_app()

@@ -12,7 +12,7 @@ from sqlalchemy.orm import relationship, object_session
 from sqlalchemy.ext.hybrid import hybrid_property
 from datetime import datetime
 import enum
-from ...common.helper_lib import Meta
+from ...common.helper import Meta
 
 
 from .meta import Base
