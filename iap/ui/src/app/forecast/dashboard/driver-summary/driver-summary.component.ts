@@ -17,6 +17,7 @@ export class DriverSummaryComponent implements OnInit {
         timescale: string;
         start: string;
         end: string;
+        mid: string;
         type: string;
     } = null;
 
@@ -45,25 +46,26 @@ export class DriverSummaryComponent implements OnInit {
     private collectData() {
         // TODO Question about default selection
         let period = this.dm.getPeriod('main');
-        console.log(period);
         let start = period.start;
         let end = period.end;
         let mid = period.mid;
         let timescale = period.timescale;
 
-        this.selTableRowId = 'cagr/'+start+'/'+mid;
+        this.selTableRowId = 'cagr/'+start+'/'+mid; // Default choice
 
         this.decompData = {
             timescale: timescale,
             start: start,
-            end: mid,
+            end: end,
+            mid: mid,
             type: this.dm.state.get('decomp_value_volume_price')
         };
-        this.rebuildDecompositionChart();
 
         this.tableData = this.dm.getData_DriverSummaryTableData(
             start, end, mid, timescale, this.selTableRowId
         );
+
+        this.rebuildDecompositionChart();
 
         this.dTypesSwitcherData = this.getDecompositionTypes();
     }
@@ -73,13 +75,21 @@ export class DriverSummaryComponent implements OnInit {
     private onClickTableToggleButton() {
         let newStatus = (this.dm.state.get('d_summary_table_collapsed_expanded') == 'collapsed')
             ? 'expanded' : 'collapsed';
+        if (newStatus == 'expanded') {
+            this.tableData = this.dm.getData_DriverSummaryTableData(
+                this.decompData.start,
+                this.decompData.end,
+                this.decompData.mid,
+                this.decompData.timescale,
+                this.selTableRowId
+            );
+        }
         this.dm.state.set('d_summary_table_collapsed_expanded', newStatus);
     }
     private onRowSelect(o) {
         let period = this.tableData.rows_data[o['row_id']];
         if (period) {
-            this.decompData['start'] = period['start'];
-            this.decompData['end'] = period['end'];
+            this.selTableRowId = o['row_id'];
             this.rebuildDecompositionChart();
         } else {
             console.error('There is no id for selected row');
@@ -125,10 +135,11 @@ export class DriverSummaryComponent implements OnInit {
         this.rebuildDecompositionChart();
     }
     private rebuildDecompositionChart(): void {
+        let selRowPeriod = this.tableData.rows_data[this.selTableRowId];
         let timescale = this.decompData['timescale'],
-            start = this.decompData['start'],
-            end = this.decompData['end'],
-            type = this.decompData['type'];
+            type = this.decompData['type'],
+            start = selRowPeriod['start'],
+            end = selRowPeriod['end'];
 
         this.dTypeData = this.dm.getDecompositionData(type, timescale,
             start, end);

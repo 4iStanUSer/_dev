@@ -74,9 +74,9 @@ export class DriverDetailComponent implements OnInit {
     private getMegaDriversSelectorData(): SingleSelector {
         // Get All MegaDrivers list/options
         let dType = this.dm.state.get('decomp_value_volume_price');
-        let options = this.dm.getMegaDriversList(dType);
+        let options = this.dm.getFactorsList(dType);
         if (options && options.length) {
-            let selectedDrv = this.dm.state.get('d_details_selected_megadriver');
+            let selectedDrv = this.dm.state.get('d_details_selected_factor');
             if (selectedDrv && selectedDrv.length) {
                 let l = options.length;
                 let found: boolean = false;
@@ -92,7 +92,7 @@ export class DriverDetailComponent implements OnInit {
             } else {
                 selectedDrv = options[0].id;
             }
-            this.dm.state.set('d_details_selected_megadriver', selectedDrv);
+            this.dm.state.set('d_details_selected_factor', selectedDrv);
             return {
                 options: options,
                 selected: selectedDrv
@@ -104,10 +104,10 @@ export class DriverDetailComponent implements OnInit {
 
     private getTableData(): ClickableTable { //dType: string, megaDrv: string
         let dType = this.dm.state.get('decomp_value_volume_price'),
-            megaDrv = this.dm.state.get('d_details_selected_megadriver');
+            factorId = this.dm.state.get('d_details_selected_factor');
 
         // Get drivers
-        let drivers = this.dm.getDriversOfMegaDriver(dType, megaDrv);
+        let drivers = this.dm.getDriversForFactor(dType, factorId);
 
         if (!(drivers && drivers.length)) return null;
 
@@ -133,21 +133,21 @@ export class DriverDetailComponent implements OnInit {
         // For ROWS
         l = drivers.length;
         for (let i = 0; i < l; i++) {
-            let drvKey = drivers[i];
             // Get Driver
+            let driver = this.dm.dataModel.getVariable(drivers[i]);
 
             rows.push({
-                id: drvKey,
+                id: driver.id,
                 parent_id: null, // Maybe change in future
                 meta: [
-                    {name: drvKey}
+                    {name: driver.full_name}
                 ],
                 notSelectable: false
             });
 
-            vals[drvKey] = {};
-            rowsData[drvKey] = {
-                driver_key: drvKey
+            vals[driver.id] = {};
+            rowsData[driver.id] = {
+                driver_key: driver.id
             };
         }
 
@@ -239,7 +239,7 @@ export class DriverDetailComponent implements OnInit {
         this.dynamicData = this.getDynamicData();
     }
     private onChangeMegaDriver(newValue: string) {
-        this.dm.state.set('d_details_selected_megadriver', newValue);
+        this.dm.state.set('d_details_selected_factor', newValue);
 
         // QUEUE
         this.megaDriversSelectorData = this.getMegaDriversSelectorData();

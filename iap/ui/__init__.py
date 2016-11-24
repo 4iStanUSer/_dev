@@ -81,10 +81,10 @@ def get_page_static_data(req):
             'forecast_collapse_expand': 'collapse', # collapse | expand
             'forecast_active_tab': 'all', # all | (name of variable)
             'forecast_tab': 'all', # all | ( or name of variable)
-            'decomp_value_volume_price': 'Value', # value | volume | price(name of type)
+            'decomp_value_volume_price': 'value', # value | volume | price(name of type)
             'd_summary_table_collapsed_expanded': 'expanded', # collapsed | expanded
             'd_details_table_collapsed_expanded': 'expanded', # collapsed | expanded
-            'd_details_selected_megadriver': None, # null(get first) | mega driver key
+            'd_details_selected_factor': None, # null(get first) | factor (variable) id
         },
         'config': {
             'forecast_block': 'Forecast',
@@ -189,14 +189,14 @@ def get_dashboard_data(req):
             ],
             "main_period": {
                 "timescale": "annual",
-                "mid": "2015",
-                "end": "2018",
+                "mid": "2014",
+                "end": "2015",
                 "start": "2013"
             },
             "decomp_period": {
                 "timescale": "annual",
-                "end": "2018",
-                "start": "2013"
+                "end": "2015",
+                "start": "2014"
             }
         },
         "data": {
@@ -1599,6 +1599,10 @@ def get_dashboard_data(req):
                         }
                     ]
                 }
+            },
+            "decomp_type_factors": {
+                "value": ["ImpactVar1", "ImpactVar2"],
+                "volume": ["ImpactVar2", "ImpactVar3"]
             },
             "factor_drivers": {
                 "ImpactVar1": [

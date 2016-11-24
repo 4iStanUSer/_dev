@@ -92,7 +92,7 @@ export class DataManagerService {
             this.initDynamicData();
             this.initStaticData();
             this.initResolver.subscribe(() => {
-                console.log('DataManager init() subscriber');
+                //console.log('DataManager init() subscriber');
             });
         } else {
             setTimeout(() => {
@@ -157,6 +157,7 @@ export class DataManagerService {
                 d['decomp_types'],
                 d['decomp'],
                 d['factor_drivers'],
+                d['decomp_type_factors'],
             );
 
 
@@ -318,24 +319,30 @@ export class DataManagerService {
             'rate': [],
             'table': []
         };
-        let items = this.dataModel.getDecomposition(decomp_type_id,
+        let decomp = this.dataModel.getDecomposition(decomp_type_id,
             timescale_id, start, end);
-        let l = 0; //(items && items.length) ? items.length : 0; TODO Refactor
+
+        let l = (decomp && decomp.factors && decomp.factors.length)
+            ? decomp.factors.length : 0;
         for (let i = 0; i < l; i++) {
+            let factor = decomp.factors[i];
+            let variable = this.dataModel.getVariable(factor.var_id);
+            let factorName = (variable) ? variable.full_name : null;
+            let factorMetric = (variable) ? variable.metric : null;
             output['abs'].push({
-                name: items[i]['name'],
-                value: items[i]['value'],
-                metric: '',
+                name: factorName,
+                value: factor.abs,
+                metric: factorMetric,
             });
             output['rate'].push({
-                name: items[i]['name'],
-                value: items[i]['growth'],
+                name: factorName,
+                value: factor.rate,
                 metric: '%',
             });
             if (i != 0 && i != l - 1) {
                 output['table'].push({
-                    name: items[i]['name'],
-                    value: items[i]['growth'],
+                    name: factorName,
+                    value: factor.rate,
                     metric: '%',
                 });
             }
@@ -521,25 +528,19 @@ export class DataManagerService {
         }) : [];
     }
 
-    getMegaDriversList(decompType: string): Array<{id: string; name: string}> {
-        let megaDrvsKeys: Array<string>;
-        try {
-            megaDrvsKeys = Object.keys(
-                this.ddConfig['factors_drivers'][decompType]); // TODO Remake!!!
-        } catch (e) {
-            console.error('Have no such decomposition type', decompType);
-            return null;
-        }
-        let output: Array<{id: string; name: string}> = [];
-        let l = megaDrvsKeys.length;
-        if (l > 0) {
-            for (let i = 0; i < l; i++) {
-                let megaDrvsKey = megaDrvsKeys[i];
-                // TODO Add name for mega drivers
-                output.push({
-                    id: megaDrvsKey,
-                    name: megaDrvsKey
-                });
+    getFactorsList(decompType: string): Array<{id: string; name: string}> {
+        let output = [];
+        let factors = this.dataModel.getDecompTypeFactors(decompType);
+        if (factors) {
+            let l = factors.length;
+            for (let i = 0;i<l;i++) {
+                let variable = this.dataModel.getVariable(factors[i]);
+                if (variable) {
+                    output.push({
+                        id: variable.id,
+                        name: variable.full_name
+                    });
+                }
             }
         }
         return output;
@@ -581,23 +582,8 @@ export class DataManagerService {
     }
 
 
-    getDriversOfMegaDriver(decompType: string, megaDrv: string): Array<string> {
-        // Get all drivers for megadriver and decomposition type
-        let allDrv: Array<string>;
-        try {
-            // allDrv = this.ddConfig['factors_drivers'][decompType][megaDrv];
-            allDrv = this.ddConfig['factors_drivers'][decompType][megaDrv]; // TODO Remake
-        } catch (e) {
-            console.error('Have no data', decompType, megaDrv, e);
-        }
-        let output: Array<string> = [];
-
-        // // Filter only existing drivers
-        // output = allDrv.filter((variable) => {
-        //     return this.dataModel.variableExists(variable);
-        // }, this);
-        output = allDrv;
-        return output;
+    getDriversForFactor(decompType: string, factorId: string): Array<string> {
+        return this.dataModel.getFactorDrivers(factorId);
     }
 
     getLanguagePackForTimeSelector() {
