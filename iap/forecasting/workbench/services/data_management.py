@@ -44,32 +44,28 @@ def get_entity_data(container, config, entities_ids):
     entity_id = entities_ids[0]
     ent = container.get_entity_by_id(entity_id)
 
+    # Load parameters from configuration.
+    main_timescales = config.get_option('dash_timescales', ent.meta, ent.path)
+    dec_timescales = config.get_option('dash_decomposition_timescales',
+                                       ent.meta, ent.path)
+    top_ts_period = config.get_option('dash_top_ts_period', ent.meta, ent.path)
 
-    'dash_forecast_timescales'
-    'dash_decomposition_timescales'
-    'dash_top_ts_period'
+    # Define default selection for time periods
+    top_ts = str(main_timescales[0])
+    mid = container.timeline.get_period_by_alias(top_ts, 'history')[0][1]
 
-
-
-    top_ts = config.get_option('dash_top_ts', ent.meta, ent.path)
-    bottom_ts = config.get_option('dash_bot_ts', ent.meta, ent.path)
-
-
-
-    period = config.get_option('dash_top_ts_period', ent.meta, ent.path)
-
-
-    config.get_option('decomp_timescales')
+    # Collect page configurations.
+    page_config = dict(
+        decomp_timescales=[str(x) for x in dec_timescales],
+        main_period=dict(timescale=top_ts, start=top_ts_period[0], mid=mid,
+                         end=top_ts_period[1]),
+        decomp_period=dict(timescale=top_ts, start=mid, end=top_ts_period[1])
+    )
 
 
 
 
-    config = dict(main_period=main_period,
-                  decomp_period=decomp_period,
-                  factors_drivers=factors_drivers,
-                  dec_timescales=[top_ts])
 
-    entities_ids
 
 
 
