@@ -28,7 +28,8 @@ import {KeysPipe} from "../pipe/keys.pipe";
         LoadingService,
         ComponentFactoryService,
         StaticDataService,
-        AuthService
+
+        AuthService // TODO Review - maybe move into login module
     ],
     exports: [
         FilterListPipe,

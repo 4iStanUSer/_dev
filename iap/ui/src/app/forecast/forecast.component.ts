@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
 import {
     MenuWidgetDataInput
 } from "./menu-widget/menu-widget.component";
@@ -7,6 +8,7 @@ import {
     LanguageSelectorInput,
     LanguageSelectorOutput
 } from "./language-selector/language-selector.component";
+import {AuthService} from "../common/service/auth.service";
 
 @Component({
     templateUrl: './forecast.component.html',
@@ -18,12 +20,16 @@ export class ForecastComponent implements OnInit {
 
     private langsData: LanguageSelectorInput = null;
 
-    constructor(private req: AjaxService) {
+    constructor(
+        private req: AjaxService,
+        private auth: AuthService,
+        public router: Router
+    ) {
     }
 
     ngOnInit() {
         this.req.get({
-            url_id: 'get_languages', // TODO Change url
+            url_id: 'get_languages',
             data: {}
         }).subscribe(
             (d) => {
@@ -32,7 +38,7 @@ export class ForecastComponent implements OnInit {
         );
 
         this.req.get({
-            url_id: 'forecast/get_top_menu', // TODO Change url
+            url_id: 'forecast/get_top_menu',
             data: {}
         }).subscribe(
             (d) => {
@@ -43,6 +49,21 @@ export class ForecastComponent implements OnInit {
 
     languageChanged(changes: LanguageSelectorOutput) {
         console.log(changes);
+    }
+
+    onClickLogout() {
+        this.auth.logout()
+            .subscribe(
+                () => {
+                    this.router.navigate(['/']);
+                },
+                (e) => {
+                    console.log(e);
+                },
+                () => {
+                    console.log('Complete!');
+                }
+            );
     }
 
 }

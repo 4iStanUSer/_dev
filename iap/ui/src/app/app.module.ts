@@ -17,6 +17,8 @@ import {CommonServicesModule} from "./common/module/common-services.module";
 
 import {ForecastModule} from "./forecast/forecast.module";
 
+import {LoginModule} from "./common/module/login/login.module";
+
 @NgModule({
     imports: [
         BrowserModule,
@@ -24,6 +26,7 @@ import {ForecastModule} from "./forecast/forecast.module";
         FormsModule,
         AppRoutingModule,
         CommonServicesModule,
+        LoginModule,
         ForecastModule
     ],
     declarations: [

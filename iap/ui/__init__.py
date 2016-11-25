@@ -2,6 +2,12 @@ from ..common.helper_lib import send_success_response, send_error_response
 
 
 def temp_routing(config):
+    config.add_route('temp.login',
+                     '/login')
+    config.add_view(login,
+                    route_name='temp.login',
+                    request_method='POST', renderer='json')
+
     config.add_route('temp.get_urls',
                      '/get_urls')
     config.add_view(get_urls,
@@ -32,15 +38,25 @@ def temp_routing(config):
                     route_name='temp.get_dashboard_data',
                     request_method='POST', renderer='json')
 
-    config.add_route('temp.get_selectors',
-                     '/get_selectors')
-    config.add_view(get_selectors,
-                    route_name='temp.get_selectors',
+    config.add_route('temp.get_options_for_entity_selector',
+                     '/get_options_for_entity_selector')
+    config.add_view(get_options_for_entity_selector,
+                    route_name='temp.get_options_for_entity_selector',
+                    request_method='POST', renderer='json')
+
+    config.add_route('temp.get_entity_selectors_config',
+                     '/get_entity_selectors_config')
+    config.add_view(get_entity_selectors_config,
+                    route_name='temp.get_entity_selectors_config',
                     request_method='POST', renderer='json')
 
 
 def get_urls(req):
     data = {
+        'login': {
+            'url': '/login',
+            'allowNotAuth': True,
+        },
         'landing': {
             'url': '/landing',
             'allowNotAuth': True,
@@ -57,6 +73,16 @@ def get_urls(req):
             'url': '/temp/get_top_menu',
             'allowNotAuth': True,
         },
+
+        'forecast/get_entity_selectors_config': {
+            'url': '/temp/get_entity_selectors_config',
+            'allowNotAuth': True,
+        },
+        'forecast/get_options_for_entity_selector': {
+            'url': '/temp/get_options_for_entity_selector',
+            'allowNotAuth': True,
+        },
+
         'forecast/get_dashboard_data': {
             'url': '/temp/get_dashboard_data',
             'allowNotAuth': True,
@@ -70,6 +96,11 @@ def get_urls(req):
             'allowNotAuth': True,
         }
     }
+    return send_success_response(data)
+
+
+def login(req):
+    data = {}
     return send_success_response(data)
 
 
@@ -172,12 +203,6 @@ def get_top_menu(req):
             'disabled': False
         }
     ]
-    return send_success_response(data)
-
-
-def get_selectors(req):
-    # TODO Implement
-    data = {}
     return send_success_response(data)
 
 
@@ -1861,5 +1886,90 @@ def get_dashboard_data(req):
     }
     return send_success_response(data)
 
+
+def get_options_for_entity_selector(req):
+    data = {
+        'brand': {
+            'data': [
+                {
+                    'name': 'Puma',
+                    'id': 'puma',
+                    'parent_id': None
+                },
+                {
+                    'name': 'Nike',
+                    'id': 'nike',
+                    'parent_id': None
+                },
+                {
+                    'name': 'Adidas',
+                    'id': 'adidas',
+                    'parent_id': None
+                }
+            ],
+            'selected': ['puma', 'adidas']
+        },
+        'category': {
+            'data': [
+                {
+                    'name': 'Puma',
+                    'id': 'puma',
+                    'parent_id': None
+                },
+                {
+                    'name': 'Nike',
+                    'id': 'nike',
+                    'parent_id': None
+                },
+                {
+                    'name': 'Adidas',
+                    'id': 'adidas',
+                    'parent_id': None
+                },
+                {
+                    'name': 'Puma Black',
+                    'id': 'puma_black',
+                    'parent_id': 'puma'
+                },
+                {
+                    'name': 'Nike Black',
+                    'id': 'nike_black',
+                    'parent_id': 'nike'
+                },
+                {
+                    'name': 'Adidas Black',
+                    'id': 'adidas_black',
+                    'parent_id': 'adidas'
+                },
+            ],
+            'selected': ['adidas']
+        }
+    }
+    return send_success_response(data)
+
+
+def get_entity_selectors_config(req):
+    data = {
+        'selectors': {
+            'brand': {
+                'name': 'Brand',
+                'placeholder': 'brand',
+                'multiple': True,  # false|true,
+                'type': 'flat',  # flat | hierarchical | region
+                'icon': '',
+                'disabled': False,
+            },
+            'category': {
+                'name': 'Category',
+                'placeholder': 'category',
+                'multiple': True,
+                'type': 'hierarchical', # flat | hierarchical | region
+                'icon': '',
+                'disabled': False,
+            }
+        },
+        'order': ['brand', 'category']
+    }
+    return send_success_response(data)
 
 

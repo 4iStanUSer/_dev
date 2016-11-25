@@ -1,7 +1,13 @@
+<!--TEMP-->
+<div>
+    <button (click)="onClickLogout()">Logout</button>
+</div>
+
 <language-selector
     *ngIf="langsData"
     [langs]="langsData"
     (changed)="languageChanged($event)"></language-selector>
+<!--/TEMP-->
 
 <menu-widget
     *ngIf="topMenuData"

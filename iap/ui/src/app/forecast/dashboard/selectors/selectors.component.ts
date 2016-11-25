@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import {
     SelectorItemInput, SelectorModel, SelectorConfigInput, SelectorItemModel
-} from "./../../../common/model/selector.model";
+} from "./selector.model";
 
 /*
  * Notice-Requirements:*

@@ -3,7 +3,7 @@ import {Component, OnInit, OnChanges, Input, SimpleChanges} from '@angular/core'
 import {
     SelectorItemModel,
     SelectorModel
-} from "../../../../common/model/selector.model";
+} from "../selector.model";
 
 @Component({
     selector: 'flat-selector',

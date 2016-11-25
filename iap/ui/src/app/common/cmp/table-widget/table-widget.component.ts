@@ -1,5 +1,5 @@
 import {Component, Input, Output, EventEmitter} from '@angular/core';
-import {Helper} from "../../model/helper";
+import {Helper} from "../../helper";
 
 export interface TableWidgetRowColItem {
     id: string;

@@ -122,7 +122,7 @@ type Timelabel = {
     parent_index: number;
     timescale: string;
 };
-type Variable = {
+export type Variable = {
     id: string;
     full_name: string;
     short_name: string;

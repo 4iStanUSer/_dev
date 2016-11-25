@@ -3,18 +3,16 @@ import {DataManagerService} from "./../data-manager.service";
 import {forecastValueRateData} from './../data';
 
 import {ButtonsGroupDataInput} from "./../../../common/cmp/buttons-group/buttons-group.component";
-import {VariableModel} from "../../../common/model/variables.model";
-import {TimelabelInput} from "../../../common/model/time-labels.model";
-import {TimePeriodInput} from "../../../common/model/time-period.model";
 import {DecompositionTypeData, VariableData} from "../interfaces";
 import {
     TimeSelectorDataInput,
     TimeSelectorSelectedData
 } from "../../../common/cmp/time-selector/time-selector.component";
+import {Variable} from "../data.model";
 
 
 type ForecastTabsAbsData = Array<{
-    variable: VariableModel,
+    variable: Variable,
     preview: Array<VariableData>,
     full: Array<VariableData>,
 }>;
@@ -193,7 +191,6 @@ export class GeneralComponent implements OnInit {
         this.dm.state.set('forecast_collapse_expand', newState);
     }
     private onChangedForecastPeriod(period) {
-        console.log(period);
         this.dm.setPeriod('main', period['scale'], period['start'],
             period['end'], period['mid']);
 
