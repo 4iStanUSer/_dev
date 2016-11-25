@@ -28,38 +28,10 @@ def description():
 def graph():
     return data['graph']
 
-def fill_graph(graph,description):
-    discovered = []
-    root_node = Node("Ukraine", description()['Ukraine'])
-
-    def DFC(i):
-        # set parent
-        if i in graph()['Ukraine']:
-            root_node.add_child(i, Meta(description()[i][0], description()[i][1]))
-        elif i in discovered or graph()[i] == []:
-            pass
-        else:
-            parent = Node(i, description()[i])
-            discovered.append(i)
-            for j in graph()[i]:
-                parent.add_child(j, Meta(description()[j][0], description()[j][1]))
-                DFC(j)
-
-    for vertex in graph().keys()[1:]:
-        DFC(vertex)
-    return root_node
-
-
-
-
-
-
-
-
 #testing equality between added nodes and getted node by same path
 def get_add_by_path(path,description):
-    parent = Node('Ukraine', description()['Ukraine'])
-    metas = [Meta(description()[i][0],description()[i][1]) for i in path]
+    parent = Node('Ukraine', description['Ukraine'])
+    metas = [Meta(description[i][0],description[i][1]) for i in path]
     depth = 0
     new_nodes = []
     add_node = parent.get_node_by_path(path)
@@ -69,8 +41,8 @@ def get_add_by_path(path,description):
 
 #testing that get node by path has the same path in output as in input
 def get_by_path_and_path_function_testing(path,description):
-    parent = Node('Ukraine', description()['Ukraine'])
-    metas = [Meta(description()[i][0], description()[i][1]) for i in path]
+    parent = Node('Ukraine', description['Ukraine'])
+    metas = [Meta(description[i][0], description[i][1]) for i in path]
     depth = 0
     new_nodes = []
     get_node = parent.add_node_by_path(path, metas, depth, new_nodes)
@@ -82,27 +54,27 @@ def get_by_path_and_path_function_testing(path,description):
 #parametrized tests
 
 
-def testing_add_node_by_path_by_i_o_name(path):
-    parent = Node('Ukraine', description()['Ukraine'])
+def add_node_by_path_by_i_o_name(path):
+    parent = Node('Ukraine', description['Ukraine'])
     depth = 0
     new_nodes = []
-    metas = [Meta(description()[i][0], description()[i][1]) for i in path]
+    metas = [Meta(description[i][0], description[i][1]) for i in path]
     new_node = parent.add_node_by_path(path, metas, depth, new_nodes)
     return new_node.name
 
 
 
 @pytest.mark.parametrize('path', [['Kiev','Cars','Candy','Market'], ['Kiev'], ['Kiev','Candy','Candy','Market']])
-def test_get_add_by_path_on_equality_return(path,description):
+def test_get_add_by_path(path,description):
     assert get_add_by_path(path,description)[0] == get_add_by_path(path,description)[1]
 
 @pytest.mark.parametrize('path', [['Kiev','Cars','Candy','Market'], ['Kiev'], ['Kiev','Candy','Candy','Market']])
-def test_get_add_by_path_on_equality_return(path,description):
+def test_get_by_path_and_path_function_testing(path,description):
     assert get_by_path_and_path_function_testing(path,description)[0] == path
 
 @pytest.mark.parametrize('path', [['Kiev','Cars','Candy','Market'], ['Kiev'], ['Kiev','Candy','Candy','Market']])
-def test_get_add_by_path_on_equality_return(path,description):
-    assert testing_add_node_by_path_by_i_o_name(path)
+def test_add_node_by_path_by_i_o_name(path,description):
+    assert add_node_by_path_by_i_o_name(path)
 
 ##Testing get children - parent by path
 
@@ -147,7 +119,7 @@ def test_get_children_parent_by_meta_check_input_output_equality(meta,type_of_no
         children = root_node.get_children_by_meta(Meta(meta[0],meta[1]),nodes_ids)
 
         names = [child.name for child in children]
-    elif type_of_node=="parent":
+    elif type_of_node=="parent"add
         index = random.randint(0, len(root_node.children)-1)
         print(root_node.children[index].name)
         parent = root_node.children[index].get_parent_by_meta(Meta(meta[0],meta[0]))
