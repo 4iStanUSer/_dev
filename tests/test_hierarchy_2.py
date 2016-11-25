@@ -28,6 +28,23 @@ def description():
 def graph():
     return data['graph']
 
+
+
+#test add child
+def add_child(names,description):
+    parent = Node('Ukraine', description['Ukraine'])
+    for i in names:
+        parent.add_child(i,Meta(description[i][0],description[i][1]))
+    return [child.names for child in parent.child]
+
+
+@pytest.mark.parametrize('names', [['Kiev','Cars','Candy','Market'], ['Ukraine'], ['Kiev','Odessa','Lviv','Market']])
+def test_get_add_by_path(names,description):
+    assert add_child(names,description) == names
+
+
+
+
 #testing equality between added nodes and getted node by same path
 def get_add_by_path(path,description):
     parent = Node('Ukraine', description['Ukraine'])
@@ -98,7 +115,7 @@ def test_get_children_parent_by_meta_check_input_output_equality(meta,type_of_no
 
     discovered = []
     root_node = Node("Ukraine", description()['Ukraine'])
-
+    not_discovered = graph().keys()[:]
     def DFC(i):
         # set parent
         if i in graph()['Ukraine']:
@@ -108,18 +125,20 @@ def test_get_children_parent_by_meta_check_input_output_equality(meta,type_of_no
         else:
             parent = Node(i, description()[i])
             discovered.append(i)
+            not_discovered.remove(i)
             for j in graph()[i]:
                 parent.add_child(j, Meta(description()[j][0], description()[j][1]))
                 DFC(j)
 
-    for vertex in graph().keys()[1:]:
+    for vertex in not_discovered:
         DFC(vertex)
+
     if type_of_node=="children":
         nodes_ids =[]
         children = root_node.get_children_by_meta(Meta(meta[0],meta[1]),nodes_ids)
 
         names = [child.name for child in children]
-    elif type_of_node=="parent"add
+    elif type_of_node=="parent":
         index = random.randint(0, len(root_node.children)-1)
         print(root_node.children[index].name)
         parent = root_node.children[index].get_parent_by_meta(Meta(meta[0],meta[0]))
