@@ -189,13 +189,13 @@ def get_dashboard_data(req):
             ],
             "main_period": {
                 "timescale": "annual",
-                "mid": "2014",
-                "end": "2015",
+                "mid": "2015",
+                "end": "2018",
                 "start": "2013"
             },
             "decomp_period": {
                 "timescale": "annual",
-                "end": "2015",
+                "end": "2018",
                 "start": "2014"
             }
         },
@@ -621,6 +621,18 @@ def get_dashboard_data(req):
             "change_over_period": {
                 "annual": {
                     "Avg % Discount": [
+                        {
+                            "abs": -0.045903282,
+                            "rate": 0,
+                            "end": "2018",
+                            "start": "2015"
+                        },
+                        {
+                            "abs": -0.039903282,
+                            "rate": 0,
+                            "end": "2015",
+                            "start": "2013"
+                        },
                         {
                             "abs": -0.03190328200000003,
                             "rate": 0,
@@ -1279,12 +1291,193 @@ def get_dashboard_data(req):
                             "end": "2018",
                             "start": "2015"
                         }
+                    ],
+                    "ImpactVar1": [
+                        {
+                            "abs": 0.0456,
+                            "rate": 0,
+                            "end": "2014",
+                            "start": "2013"
+                        },
+                        {
+                            "abs": 0.0498,
+                            "rate": 0,
+                            "end": "2015",
+                            "start": "2014"
+                        },
+                        {
+                            "abs": 0.0347,
+                            "rate": 0,
+                            "end": "2016",
+                            "start": "2015"
+                        },
+                        {
+                            "abs": 0.0235,
+                            "rate": 0,
+                            "end": "2017",
+                            "start": "2016"
+                        },
+                        {
+                            "abs": 0.3658,
+                            "rate": 0,
+                            "end": "2018",
+                            "start": "2017"
+                        },
+                        {
+                            "abs": 0.0497,
+                            "rate": 0,
+                            "end": "2015",
+                            "start": "2013"
+                        },
+                        {
+                            "abs": 0.0936,
+                            "rate": 0,
+                            "end": "2018",
+                            "start": "2015"
+                        }
+                    ],
+                    "ImpactVar2": [
+                        {
+                            "abs": 0.0569,
+                            "rate": 0,
+                            "end": "2014",
+                            "start": "2013"
+                        },
+                        {
+                            "abs": 0.0698,
+                            "rate": 0,
+                            "end": "2015",
+                            "start": "2014"
+                        },
+                        {
+                            "abs": 0.0703,
+                            "rate": 0,
+                            "end": "2016",
+                            "start": "2015"
+                        },
+                        {
+                            "abs": 0.0654,
+                            "rate": 0,
+                            "end": "2017",
+                            "start": "2016"
+                        },
+                        {
+                            "abs": 0.0692,
+                            "rate": 0,
+                            "end": "2018",
+                            "start": "2017"
+                        },
+                        {
+                            "abs": 0.0656,
+                            "rate": 0,
+                            "end": "2015",
+                            "start": "2013"
+                        },
+                        {
+                            "abs": 0.0512,
+                            "rate": 0,
+                            "end": "2018",
+                            "start": "2015"
+                        }
                     ]
                 }
             },
             "decomp": {
                 "annual": {
                     "value": [
+                        {
+                            "start": "2014",
+                            "end": "2018",
+                            "factors": [
+                                {
+                                    "var_id": "ImpactVar1",
+                                    "abs": 0.21990784,
+                                    "rate": 0.0359802
+                                },
+                                {
+                                    "var_id": "ImpactVar2",
+                                    "abs": 0.21163726,
+                                    "rate": 0.0510542
+                                },
+                                {
+                                    "var_id": "ImpactVar3",
+                                    "abs": 0.21794359,
+                                    "rate": 0.0206714
+                                },
+                                {
+                                    "var_id": "ImpactVar4",
+                                    "abs": 0.21754937,
+                                    "rate": 0.0754937
+                                },
+                                {
+                                    "var_id": "ImpactVar5",
+                                    "abs": 0.21127042,
+                                    "rate": 0.038778
+                                }
+                            ]
+                        },
+                        {
+                            "start": "2015",
+                            "end": "2018",
+                            "factors": [
+                                {
+                                    "var_id": "ImpactVar1",
+                                    "abs": 0.21990784,
+                                    "rate": 0.0359802
+                                },
+                                {
+                                    "var_id": "ImpactVar2",
+                                    "abs": 0.21163726,
+                                    "rate": 0.0510542
+                                },
+                                {
+                                    "var_id": "ImpactVar3",
+                                    "abs": 0.21794359,
+                                    "rate": 0.0206714
+                                },
+                                {
+                                    "var_id": "ImpactVar4",
+                                    "abs": 0.21754937,
+                                    "rate": 0.0754937
+                                },
+                                {
+                                    "var_id": "ImpactVar5",
+                                    "abs": 0.21127042,
+                                    "rate": 0.038778
+                                }
+                            ]
+                        },
+                        {
+                            "start": "2013",
+                            "end": "2015",
+                            "factors": [
+                                {
+                                    "var_id": "ImpactVar1",
+                                    "abs": 0.1990784,
+                                    "rate": 0.0359802
+                                },
+                                {
+                                    "var_id": "ImpactVar2",
+                                    "abs": 0.1163726,
+                                    "rate": 0.0510542
+                                },
+                                {
+                                    "var_id": "ImpactVar3",
+                                    "abs": 0.1794359,
+                                    "rate": 0.0206714
+                                },
+                                {
+                                    "var_id": "ImpactVar4",
+                                    "abs": 0.1754937,
+                                    "rate": 0.0754937
+                                },
+                                {
+                                    "var_id": "ImpactVar5",
+                                    "abs": 0.1127042,
+                                    "rate": 0.038778
+                                }
+                            ]
+                        },
                         {
                             "start": "2013",
                             "end": "2014",
@@ -1442,6 +1635,42 @@ def get_dashboard_data(req):
                         }
                     ],
                     "volume": [
+                        {
+                            "start": "2014",
+                            "end": "2018",
+                            "factors": [
+                                {
+                                    "var_id": "Premiumization",
+                                    "abs": 2.45,
+                                    "rate": 1
+                                },
+                                {
+                                    "var_id": "ImpactVar1",
+                                    "abs": 0.98542,
+                                    "rate": 0.0738657
+                                },
+                                {
+                                    "var_id": "ImpactVar2",
+                                    "abs": 0.48134,
+                                    "rate": 0.0652715
+                                },
+                                {
+                                    "var_id": "ImpactVar3",
+                                    "abs": 0.99519,
+                                    "rate": 0.0976987
+                                },
+                                {
+                                    "var_id": "ImpactVar4",
+                                    "abs": 0.78942,
+                                    "rate": 0.0626273
+                                },
+                                {
+                                    "var_id": "ImpactVar5",
+                                    "abs": 0.285773,
+                                    "rate": 0.0355594
+                                }
+                            ]
+                        },
                         {
                             "start": "2013",
                             "end": "2014",

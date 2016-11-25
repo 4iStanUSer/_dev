@@ -324,29 +324,72 @@ export class DataManagerService {
 
         let l = (decomp && decomp.factors && decomp.factors.length)
             ? decomp.factors.length : 0;
+        let lastMetric = '';
         for (let i = 0; i < l; i++) {
             let factor = decomp.factors[i];
             let variable = this.dataModel.getVariable(factor.var_id);
             let factorName = (variable) ? variable.full_name : null;
             let factorMetric = (variable) ? variable.metric : null;
-            output['abs'].push({
-                name: factorName,
-                value: factor.abs,
-                metric: factorMetric,
-            });
-            output['rate'].push({
-                name: factorName,
-                value: factor.rate,
-                metric: '%',
-            });
-            if (i != 0 && i != l - 1) {
-                output['table'].push({
+            if (i == 0){
+                lastMetric = factorMetric;
+                output['abs'].push({
+                    name: start,
+                    value: factor.abs,
+                    metric: factorMetric,
+                });
+                output['rate'].push({
+                    name: start,
+                    value: factor.rate,
+                    metric: '%',
+                });
+                if (i != 0 && i != l - 1) {
+                    output['table'].push({
+                        name: start,
+                        value: factor.rate,
+                        metric: '%',
+                    });
+                }
+            }
+            else {
+                output['abs'].push({
+                    name: factorName,
+                    value: factor.abs,
+                    metric: factorMetric,
+                });
+                output['rate'].push({
                     name: factorName,
                     value: factor.rate,
                     metric: '%',
                 });
+                if (i != 0 && i != l - 1) {
+                    output['table'].push({
+                        name: factorName,
+                        value: factor.rate,
+                        metric: '%',
+                    });
+                }
             }
         }
+        if ( l > 0 ) {
+            output['abs'].push({
+                name: end,
+                value: 0,
+                metric: lastMetric,
+            });
+            output['rate'].push({
+                name: end,
+                value: 0,
+                metric: '%',
+            });
+            /*if (i != 0 && i != l - 1) {
+                output['table'].push({
+                    name: end,
+                    value: 0,
+                    metric: '%',
+                });
+            }*/
+        }
+
         return output;
     }
 

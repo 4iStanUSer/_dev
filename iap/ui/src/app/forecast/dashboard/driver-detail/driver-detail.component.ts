@@ -237,6 +237,7 @@ export class DriverDetailComponent implements OnInit {
         this.megaDriversSelectorData = this.getMegaDriversSelectorData();
         this.tableData = this.getTableData();
         this.dynamicData = this.getDynamicData();
+        this.imapactData = this.getImapactData();
     }
     private onChangeMegaDriver(newValue: string) {
         this.dm.state.set('d_details_selected_factor', newValue);
@@ -245,6 +246,7 @@ export class DriverDetailComponent implements OnInit {
         this.megaDriversSelectorData = this.getMegaDriversSelectorData();
         this.tableData = this.getTableData();
         this.dynamicData = this.getDynamicData();
+        this.imapactData = this.getImapactData();
     }
     private onClickTableToggleButton(e: MouseEvent) {
         e.preventDefault();
@@ -264,6 +266,7 @@ export class DriverDetailComponent implements OnInit {
         }
 
         this.dynamicData = this.getDynamicData();
+        this.imapactData = this.getImapactData()
     }
 
     /*-----------.TABLE-SECTION--------------*/
@@ -290,7 +293,29 @@ export class DriverDetailComponent implements OnInit {
     }
 
     private getImapactData(): VariableData {
-        return {
+        let period = this.dm.getPeriod('main');
+        let driverKey = this.selectedDriver;
+        let pss = this.dm.dataModel.getRelatedFactor(
+            this.megaDriversSelectorData.selected, this.selectedDriver);
+        driverKey = pss;
+
+        console.log(this.selectedDriver);
+        console.log(this.megaDriversSelectorData.selected);
+        console.log(pss);
+
+
+        if (!period || !driverKey) return null;
+
+        let timePoints = this.dm.getFullPeriod(period.timescale,
+            period.start, period.end);
+
+        if (!timePoints || timePoints.length == 0) return null;
+
+        let driverData = this.dm.getVariableData(
+            period.timescale, timePoints, driverKey, period);
+
+        return (driverData) ? driverData : null;
+        /*return {
             abs: null, //BarChartDataInput;
             rate: [], //Array<number>;
             cagr: [
@@ -300,7 +325,7 @@ export class DriverDetailComponent implements OnInit {
                     value: null
                 }
             ]
-        };
+        };*/
     }
 
     /*-----------.CHARTS-SECTION--------------*/

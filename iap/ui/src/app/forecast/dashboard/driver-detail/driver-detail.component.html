@@ -95,6 +95,40 @@
         </div>
         <div class="content">
 
+            <div *ngIf="imapactData">
+                <div style="position: relative"
+                     class="chart-rates">
+                    <div>
+                        <div style="display:inline-block;width:24%">
+                            {{ dm.config['absolute'] }}
+                        </div>
+
+                        <bar-chart
+                            *ngIf="imapactData.abs"
+                            [data]="imapactData.abs"
+                        ></bar-chart>
+                    </div>
+                    <div>
+                        <div style="display:inline-block;width:24%">
+                            {{ dm.config['driver_change_cagr'] }}
+                        </div>
+                        <table *ngIf="imapactData.rate" border="1">
+                            <tr>
+                                <td *ngFor="let rate of imapactData.rate">
+                                    {{ rate.value }}
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div style="display:inline-block;width:24%" class="cagrs">
+                    <div *ngFor="let cagr of imapactData.cagr">
+                        {{ dm.config['cagr'] }}<br>
+                        {{ cagr.start }}/{{ cagr.end }}<br>
+                        {{ cagr.value }}%
+                    </div>
+                </div>
+            </div>
 
         </div>
     </div>

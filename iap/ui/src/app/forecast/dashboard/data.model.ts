@@ -400,4 +400,24 @@ export class DashboardDataModel {
         }
         return null;
     }
+    getRelatedFactor(factorId: string, driverId: string): string {
+        if(!factorId || !driverId)
+            return null;
+        else{
+            let output = '';
+            try{
+                let factorsByDriver = this.factorDrivers[factorId].filter(function (el) {
+                    return (el['driver'] === driverId);
+                });
+                //TODO find out if it is ok to use [0] and if checking for arr length is needed factorsByDriver.len must be equal to 1
+                output = factorsByDriver[0]['factor'];
+            }
+            catch (e) {
+                console.error('Related factor not found');
+                output = null;
+            }
+
+            return output;
+        }
+    }
 }
