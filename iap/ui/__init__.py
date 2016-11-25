@@ -2,6 +2,12 @@ from ..common.helper_lib import send_success_response, send_error_response
 
 
 def temp_routing(config):
+    config.add_route('temp.login',
+                     '/login')
+    config.add_view(login,
+                    route_name='temp.login',
+                    request_method='POST', renderer='json')
+
     config.add_route('temp.get_urls',
                      '/get_urls')
     config.add_view(get_urls,
@@ -47,6 +53,10 @@ def temp_routing(config):
 
 def get_urls(req):
     data = {
+        'login': {
+            'url': '/login',
+            'allowNotAuth': True,
+        },
         'landing': {
             'url': '/landing',
             'allowNotAuth': True,
@@ -86,6 +96,11 @@ def get_urls(req):
             'allowNotAuth': True,
         }
     }
+    return send_success_response(data)
+
+
+def login(req):
+    data = {}
     return send_success_response(data)
 
 

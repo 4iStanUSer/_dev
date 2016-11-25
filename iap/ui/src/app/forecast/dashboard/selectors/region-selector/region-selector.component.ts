@@ -1,5 +1,5 @@
 import {Component, OnInit, Input} from '@angular/core';
-import {SelectorModel} from "../../../../common/model/selector.model";
+import {SelectorModel} from "./../selector.model";
 
 @Component({
     selector: 'region-selector',

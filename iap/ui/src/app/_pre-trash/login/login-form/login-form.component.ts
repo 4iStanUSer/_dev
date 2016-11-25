@@ -24,7 +24,7 @@ export class LoginFormComponent implements OnInit {
             password: this.model.password
         }
         this.req.get({
-            url: '/login/check_user_data',
+            url_id: 'login',
             data: userCredentials
         }).subscribe(
             () => {

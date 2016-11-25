@@ -2,8 +2,8 @@ import {Component, OnInit, OnChanges, Input, SimpleChanges} from '@angular/core'
 import {
     SelectorModel,
     SelectorItemModel
-} from "./../../../../common/model/selector.model";
-import {Helper} from "./../../../../common/model/helper";
+} from "./../selector.model";
+import {Helper} from "../../../../common/helper";
 
 @Component({
     selector: 'hierarchical-selector',

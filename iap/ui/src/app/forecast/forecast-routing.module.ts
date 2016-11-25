@@ -1,6 +1,8 @@
 import {NgModule}       from '@angular/core';
 import {RouterModule}   from '@angular/router';
 
+import {AuthGuard} from "../common/module/login/auth-guard";
+
 import {ForecastComponent} from "./forecast.component";
 import {DashboardComponent} from "./dashboard/dashboard.component";
 import {ScenariosListComponent} from "./scenarios-list/scenarios-list.component";
@@ -9,21 +11,25 @@ import {GeneralComponent} from "./dashboard/general/general.component";
 import {DriverSummaryComponent} from "./dashboard/driver-summary/driver-summary.component";
 import {DriverDetailComponent} from "./dashboard/driver-detail/driver-detail.component";
 
+
 @NgModule({
     imports: [
         RouterModule.forChild([
             {
                 path: 'forecast',
                 component: ForecastComponent,
+                canActivate: [AuthGuard],
+                // canActivateChild: [AuthGuard],
                 children: [
                     {
                         path: '',
                         redirectTo: 'dashboard',
-                        pathMatch: 'full'
+                        pathMatch: 'full',
                     },
                     {
                         path: 'dashboard',
                         component: DashboardComponent,
+
                         children: [
                             {
                                 path: '',
