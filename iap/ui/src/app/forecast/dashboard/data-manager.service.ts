@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 
+import {Observable} from 'rxjs/Observable';
 import {Subject} from 'rxjs/Subject';
 
 /*======TEMP=====*/
@@ -84,7 +85,7 @@ export class DataManagerService {
     constructor(private req: AjaxService,
                 private sds: StaticDataService) { //private stateService: StateService,
 
-        this.init();
+        //this.init();
     }
 
     init() {
@@ -127,7 +128,7 @@ export class DataManagerService {
         this.req.get({
             url_id: 'forecast/get_options_for_entity_selector',
             data: {
-                query: [null,null,null,null]
+                query: [null, null, null, null]
             }
         }).subscribe((data) => {
             this.selectors['data'] = data;
@@ -146,55 +147,55 @@ export class DataManagerService {
                 'entities_ids': [2]
             }
         }).subscribe((data)=> {
-            this.isData['dynamic']['received'] = true;
+                this.isData['dynamic']['received'] = true;
 
-            let d = data['data'];
-            let c = data['config'];
+                let d = data['data'];
+                let c = data['config'];
 
-            this.ddConfig = c;
+                this.ddConfig = c;
 
-            this.insights = d['insights'];
+                this.insights = d['insights'];
 
-            this.periods['main'] = new Period(
-                c['main_period']['timescale'],
-                c['main_period']['start'],
-                c['main_period']['end'],
-                c['main_period']['mid']
-            );
-            this.periods['decomp'] = new Period(
-                c['decomp_period']['timescale'],
-                c['decomp_period']['start'],
-                c['decomp_period']['end']
-            );
-
-
-            this.dataModel = new DashboardDataModel(
-                d['timescales'],
-                d['timelables'],
-                d['variables'],
-                d['variable_values'],
-                d['change_over_period'],
-                d['decomp_types'],
-                d['decomp'],
-                d['factor_drivers'],
-                d['decomp_type_factors'],
-            );
+                this.periods['main'] = new Period(
+                    c['main_period']['timescale'],
+                    c['main_period']['start'],
+                    c['main_period']['end'],
+                    c['main_period']['mid']
+                );
+                this.periods['decomp'] = new Period(
+                    c['decomp_period']['timescale'],
+                    c['decomp_period']['start'],
+                    c['decomp_period']['end']
+                );
 
 
-            ////////////////////
-            // this.selectors = {
-            //     data: selectorsDataTEMP,
-            //     config: selectorsConfigTEMP
-            // };
-            ////////////////////
+                this.dataModel = new DashboardDataModel(
+                    d['timescales'],
+                    d['timelables'],
+                    d['variables'],
+                    d['variable_values'],
+                    d['change_over_period'],
+                    d['decomp_types'],
+                    d['decomp'],
+                    d['factor_drivers'],
+                    d['decomp_type_factors'],
+                );
 
-            this.isData['dynamic']['processed'] = true;
 
-            this.resolveInitObervable();
-        },
-        (e)=> {
-            console.error('Didn\'t receive dynamic data for dashboard page!');
-        });
+                ////////////////////
+                // this.selectors = {
+                //     data: selectorsDataTEMP,
+                //     config: selectorsConfigTEMP
+                // };
+                ////////////////////
+
+                this.isData['dynamic']['processed'] = true;
+
+                this.resolveInitObervable();
+            },
+            (e)=> {
+                console.error('Didn\'t receive dynamic data for dashboard page!');
+            });
     }
 
     private proceedStaticData() {
@@ -323,6 +324,68 @@ export class DataManagerService {
         return output;
     }
 
+    loadChangesOverPeriod(timescale_id: string,
+                            periods: Array<{start: string, end: string}>) {
+        return this.req.get({
+            url_id: 'forecast/get_changes_for_period',
+            data: {
+                'timescale': timescale_id,
+                'periods': periods
+            }
+        })
+    }
+
+    getVariableDataAsync(timescale_id: string,
+                         timepoints_ids: Array<string>,
+                         variable_id: string,
+                         cagrsPeriod: Period = null): Subject<VariableData> {
+        let subject = new Subject();
+
+        let periodsToLoad = [];
+        for (let i=0;i<timepoints_ids.length - 1; i++) {
+            let start = timepoints_ids[i],
+                end = timepoints_ids[i+1];
+
+            if (!this.dataModel
+                    .hasChangesOverPeriod(timescale_id, start, end)) {
+                periodsToLoad.push({
+                    start: timepoints_ids[i],
+                    end: timepoints_ids[i+1],
+                });
+            }
+        }
+
+        if (periodsToLoad.length > 0) {
+            this.req.get({
+                url_id: 'forecast/get_changes_for_period',
+                data: periodsToLoad
+            }).subscribe(
+                (data) => {
+                    this.dataModel.addChangesOverPeriod(data);
+                    let varData = this.getVariableData(
+                        timescale_id,
+                        timepoints_ids,
+                        variable_id,
+                        cagrsPeriod
+                    );
+                    subject.next(varData);
+                }
+            );
+        } else {
+            setTimeout(() => {
+                let varData = this.getVariableData(
+                    timescale_id,
+                    timepoints_ids,
+                    variable_id,
+                    cagrsPeriod
+                );
+                subject.next(varData);
+            }, 10);
+        }
+
+        return subject;
+    }
+
     /**
      * Returns Decomposition's Data:
      * absolute values, rates and and item changes
@@ -332,8 +395,10 @@ export class DataManagerService {
      * @param end
      * @returns {DecompositionTypeData}
      */
-    getDecompositionData(decomp_type_id: string, timescale_id: string,
-                         start: string, end: string): DecompositionTypeData {
+    getDecompositionData(decomp_type_id: string,
+                         timescale_id: string,
+                         start: string,
+                         end: string): DecompositionTypeData {
         let output = {
             'abs': [],
             'rate': [],
@@ -350,7 +415,7 @@ export class DataManagerService {
             let variable = this.dataModel.getVariable(factor.var_id);
             let factorName = (variable) ? variable.full_name : null;
             let factorMetric = (variable) ? variable.metric : null;
-            if (i == 0){
+            if (i == 0) {
                 lastMetric = factorMetric;
                 output['abs'].push({
                     name: start,
@@ -390,7 +455,7 @@ export class DataManagerService {
                 }
             }
         }
-        if ( l > 0 ) {
+        if (l > 0) {
             output['abs'].push({
                 name: end,
                 value: 0,
@@ -402,15 +467,55 @@ export class DataManagerService {
                 metric: '%',
             });
             /*if (i != 0 && i != l - 1) {
-                output['table'].push({
-                    name: end,
-                    value: 0,
-                    metric: '%',
-                });
-            }*/
+             output['table'].push({
+             name: end,
+             value: 0,
+             metric: '%',
+             });
+             }*/
         }
 
         return output;
+    }
+
+    getDecompositionDataAsync(decomp_type_id: string,
+                              timescale_id: string,
+                              start: string,
+                              end: string): Subject<DecompositionTypeData> {
+        let subject = new Subject();
+
+        if (!this.dataModel.hasDecomposition(timescale_id, start, end)) {
+            this.req.get({
+                url_id: 'forecast/get_decomposition_for_period',
+                data: {
+                    timescale: timescale_id,
+                    start: start,
+                    end: end
+                }
+            }).subscribe(
+                (data) => {
+                    this.dataModel.addDecomposition(data);
+                    let decData = this.getDecompositionData(
+                        decomp_type_id,
+                        timescale_id,
+                        start,
+                        end
+                    );
+                    subject.next(decData);
+                }
+            );
+        } else {
+            setTimeout(() => {
+                let decData = this.getDecompositionData(
+                    decomp_type_id,
+                    timescale_id,
+                    start,
+                    end
+                );
+                subject.next(decData);
+            }, 10);
+        }
+        return subject;
     }
 
     getData_ForecastTimelabels(): TimeSelectorDataInput {
@@ -472,7 +577,7 @@ export class DataManagerService {
         for (let i = 0; i < l; i++) {
             let timelabel = timelabels[i];
             let pTimelabel = this.dataModel.getParentTimelabel(timelabel.id,
-                timelabel.timescale );
+                timelabel.timescale);
 
             let startTL = this.dataModel.getPreviousTimeLabel(timescale,
                 timelabel.full_name, growthLag);
@@ -596,7 +701,7 @@ export class DataManagerService {
         let factors = this.dataModel.getDecompTypeFactors(decompType);
         if (factors) {
             let l = factors.length;
-            for (let i = 0;i<l;i++) {
+            for (let i = 0; i < l; i++) {
                 let variable = this.dataModel.getVariable(factors[i]);
                 if (variable) {
                     output.push({

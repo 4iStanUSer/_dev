@@ -176,8 +176,7 @@ export class DashboardDataModel {
                 decomp_types: DecompTypesInput,
                 decomp: DecompInput,
                 factor_drivers: FactorDriversInput,
-                decomp_type_factors: DecompTypeFactorsInput
-    ) {
+                decomp_type_factors: DecompTypeFactorsInput) {
         this.timescales = timescales;
         this.timelables = timelables;
         this.vars = variables;
@@ -335,28 +334,15 @@ export class DashboardDataModel {
     getTimeScalesOrder(): Array<string> {
         return (this.timescales && this.timescales.length)
             ? this.timescales.map((ts: Timescale) => {
-                return ts.id;
-            }) : [];
+            return ts.id;
+        }) : [];
     }
 
     getDecompositionTypes(): Array<string> {
         return (this.decompTypes && this.decompTypes.length)
             ? this.decompTypes.map((dt: DecompType) => {
-                return dt.id;
-            }) : [];
-    }
-
-    hasDecomposition(start_timelabel_id: string,
-                     end_timelabel_id: string): boolean { // TODO Check type
-        return true;
-        // let l = this.storage.length;
-        // for (let i = 0; i < l; i++) {
-        //     if (this.storage[i].start == start_timelabel_id
-        //         && this.storage[i].end == end_timelabel_id) {
-        //         return true;
-        //     }
-        // }
-        // return false;
+            return dt.id;
+        }) : [];
     }
 
     getDecomposition(decomp_type_id: string,
@@ -372,13 +358,14 @@ export class DashboardDataModel {
                     return this.decomp[timescale_id][decomp_type_id][i];
                 }
             }
-        } catch(e) { }
+        } catch (e) {
+        }
         return null;
     }
 
     getVariable(variable_id: string): Variable {
         let l = (this.vars && this.vars.length) ? this.vars.length : 0;
-        for (let i = 0; i< l;i++) {
+        for (let i = 0; i < l; i++) {
             if (variable_id == this.vars[i].id) {
                 return this.vars[i];
             }
@@ -388,7 +375,7 @@ export class DashboardDataModel {
 
     getDecompTypeFactors(decomp_type_id: string): Array<string> {
         return (this.decompTypeFactors
-            && this.decompTypeFactors[decomp_type_id])
+        && this.decompTypeFactors[decomp_type_id])
             ? this.decompTypeFactors[decomp_type_id] : null;
     }
 
@@ -400,12 +387,13 @@ export class DashboardDataModel {
         }
         return null;
     }
+
     getRelatedFactor(factorId: string, driverId: string): string {
-        if(!factorId || !driverId)
+        if (!factorId || !driverId)
             return null;
-        else{
+        else {
             let output = '';
-            try{
+            try {
                 let factorsByDriver = this.factorDrivers[factorId].filter(function (el) {
                     return (el['driver'] === driverId);
                 });
@@ -418,6 +406,89 @@ export class DashboardDataModel {
             }
 
             return output;
+        }
+    }
+
+    hasDecomposition(timescale: string, start: string, end: string): boolean {
+        // TODO Optimize method
+        if (this.decomp && this.decomp[timescale]) {
+            let types = Object.keys(this.decomp[timescale]);
+            if (types.length) {
+                let l = this.decomp[timescale][types[0]].length;
+                for (let i = 0; i < l; i++) {
+                    let dec = this.decomp[timescale][types[0]][i];
+                    if (dec.start == start && dec.end == end) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    hasChangesOverPeriod(timescale: string, start: string,
+                         end: string): boolean {
+        // TODO Optimize method
+        if (this.changes && this.changes[timescale]) {
+            let vars = Object.keys(this.changes[timescale]);
+            if (vars.length) {
+                let l = this.changes[timescale][vars[0]].length;
+                for (let i = 0; i < l; i++) {
+                    let change = this.changes[timescale][vars[0]][i];
+                    if (change.start == start && change.end == end) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    addDecomposition(decomp: DecompInput) {
+        // TODO Check merge method
+        // TODO Check for duplicate
+        if (!this.decomp) {
+            this.decomp = {};
+        }
+        let timescales = Object.keys(decomp);
+        for (let i = 0; i < timescales.length; i++) {
+            let ts = timescales[i];
+            if (!this.decomp[ts]) {
+                this.decomp[ts] = {};
+            }
+            let types = Object.keys(decomp[ts]);
+            for (let j = 0; j < types.length; j++) {
+                let type = types[j];
+                if (!this.decomp[ts][type]) {
+                    this.decomp[ts][type] = [];
+                }
+                this.decomp[ts][type] = this.decomp[ts][type]
+                    .concat(decomp[ts][type]);
+            }
+        }
+    }
+
+    addChangesOverPeriod(changes: ChangesOverPeriodInput) {
+        // TODO Check merge method
+        // TODO Check for duplicate
+        if (!this.changes) {
+            this.changes = {};
+        }
+        let timescales = Object.keys(changes);
+        for (let i = 0; i < timescales.length; i++) {
+            let ts = timescales[i];
+            if (!this.changes[ts]) {
+                this.changes[ts] = {};
+            }
+            let vars = Object.keys(changes[ts]);
+            for (let j = 0; j < vars.length; j++) {
+                let variable_id = vars[j];
+                if (!this.changes[ts][variable_id]) {
+                    this.changes[ts][variable_id] = [];
+                }
+                this.changes[ts][variable_id] = this.changes[ts][variable_id]
+                    .concat(changes[ts][variable_id]);
+            }
         }
     }
 }

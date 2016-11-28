@@ -141,8 +141,10 @@ export class DriverSummaryComponent implements OnInit {
             start = selRowPeriod['start'],
             end = selRowPeriod['end'];
 
-        this.dTypeData = this.dm.getDecompositionData(type, timescale,
-            start, end);
+        this.dm.getDecompositionDataAsync(type, timescale, start, end)
+            .subscribe((data) => {
+                this.dTypeData = data;
+            });
     }
     /*-----------.DECOMPOSITION--------------*/
 }

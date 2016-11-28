@@ -38,6 +38,18 @@ def temp_routing(config):
                     route_name='temp.get_dashboard_data',
                     request_method='POST', renderer='json')
 
+    config.add_route('temp.get_changes_for_period',
+                     '/get_changes_for_period')
+    config.add_view(get_changes_for_period,
+                    route_name='temp.get_changes_for_period',
+                    request_method='POST', renderer='json')
+
+    config.add_route('temp.get_decomposition_for_period',
+                     '/get_decomposition_for_period')
+    config.add_view(get_decomposition_for_period,
+                    route_name='temp.get_decomposition_for_period',
+                    request_method='POST', renderer='json')
+
     config.add_route('temp.get_options_for_entity_selector',
                      '/get_options_for_entity_selector')
     config.add_view(get_options_for_entity_selector,
@@ -87,6 +99,15 @@ def get_urls(req):
             'url': '/temp/get_dashboard_data',
             'allowNotAuth': True,
         },
+        'forecast/get_changes_for_period': {
+            'url': '/temp/get_changes_for_period',
+            'allowNotAuth': True,
+        },
+        'forecast/get_decomposition_for_period': {
+            'url': '/temp/get_decomposition_for_period',
+            'allowNotAuth': True,
+        },
+
         'forecast/get_page_static_data': {
             'url': '/temp/get_page_static_data',
             'allowNotAuth': True,
@@ -1441,223 +1462,223 @@ def get_dashboard_data(req):
                                 }
                             ]
                         },
-                        {
-                            "start": "2015",
-                            "end": "2018",
-                            "factors": [
-                                {
-                                    "var_id": "ImpactVar1",
-                                    "abs": 0.21990784,
-                                    "rate": 0.0359802
-                                },
-                                {
-                                    "var_id": "ImpactVar2",
-                                    "abs": 0.21163726,
-                                    "rate": 0.0510542
-                                },
-                                {
-                                    "var_id": "ImpactVar3",
-                                    "abs": 0.21794359,
-                                    "rate": 0.0206714
-                                },
-                                {
-                                    "var_id": "ImpactVar4",
-                                    "abs": 0.21754937,
-                                    "rate": 0.0754937
-                                },
-                                {
-                                    "var_id": "ImpactVar5",
-                                    "abs": 0.21127042,
-                                    "rate": 0.038778
-                                }
-                            ]
-                        },
-                        {
-                            "start": "2013",
-                            "end": "2015",
-                            "factors": [
-                                {
-                                    "var_id": "ImpactVar1",
-                                    "abs": 0.1990784,
-                                    "rate": 0.0359802
-                                },
-                                {
-                                    "var_id": "ImpactVar2",
-                                    "abs": 0.1163726,
-                                    "rate": 0.0510542
-                                },
-                                {
-                                    "var_id": "ImpactVar3",
-                                    "abs": 0.1794359,
-                                    "rate": 0.0206714
-                                },
-                                {
-                                    "var_id": "ImpactVar4",
-                                    "abs": 0.1754937,
-                                    "rate": 0.0754937
-                                },
-                                {
-                                    "var_id": "ImpactVar5",
-                                    "abs": 0.1127042,
-                                    "rate": 0.038778
-                                }
-                            ]
-                        },
-                        {
-                            "start": "2013",
-                            "end": "2014",
-                            "factors": [
-                                {
-                                    "var_id": "ImpactVar1",
-                                    "abs": 0.990784,
-                                    "rate": 0.0359802
-                                },
-                                {
-                                    "var_id": "ImpactVar2",
-                                    "abs": 0.163726,
-                                    "rate": 0.0510542
-                                },
-                                {
-                                    "var_id": "ImpactVar3",
-                                    "abs": 0.794359,
-                                    "rate": 0.0206714
-                                },
-                                {
-                                    "var_id": "ImpactVar4",
-                                    "abs": 0.754937,
-                                    "rate": 0.0754937
-                                },
-                                {
-                                    "var_id": "ImpactVar5",
-                                    "abs": 0.127042,
-                                    "rate": 0.038778
-                                }
-                            ]
-                        },
-                        {
-                            "start": "2014",
-                            "end": "2015",
-                            "factors": [
-                                {
-                                    "var_id": "ImpactVar1",
-                                    "abs": 0.978912,
-                                    "rate": 0.0483124
-                                },
-                                {
-                                    "var_id": "ImpactVar2",
-                                    "abs": 0.23216,
-                                    "rate": 0.0682931
-                                },
-                                {
-                                    "var_id": "ImpactVar3",
-                                    "abs": 0.610557,
-                                    "rate": 0.0906985
-                                },
-                                {
-                                    "var_id": "ImpactVar4",
-                                    "abs": 0.475029,
-                                    "rate": 0.0197856
-                                },
-                                {
-                                    "var_id": "ImpactVar5",
-                                    "abs": 0.207832,
-                                    "rate": 0.0105532
-                                }
-                            ]
-                        },
-                        {
-                            "start": "2015",
-                            "end": "2016",
-                            "factors": [
-                                {
-                                    "var_id": "ImpactVar1",
-                                    "abs": 0.240613,
-                                    "rate": 0.0210588
-                                },
-                                {
-                                    "var_id": "ImpactVar2",
-                                    "abs": 0.598098,
-                                    "rate": 0.0151758
-                                },
-                                {
-                                    "var_id": "ImpactVar3",
-                                    "abs": 0.692215,
-                                    "rate": 0.0477526
-                                },
-                                {
-                                    "var_id": "ImpactVar4",
-                                    "abs": 0.234345,
-                                    "rate": 0.085709
-                                },
-                                {
-                                    "var_id": "ImpactVar5",
-                                    "abs": 0.666541,
-                                    "rate": 0.0668499
-                                }
-                            ]
-                        },
-                        {
-                            "start": "2016",
-                            "end": "2017",
-                            "factors": [
-                                {
-                                    "var_id": "ImpactVar1",
-                                    "abs": 0.392542,
-                                    "rate": 0.0953839
-                                },
-                                {
-                                    "var_id": "ImpactVar2",
-                                    "abs": 0.963472,
-                                    "rate": 0.0226944
-                                },
-                                {
-                                    "var_id": "ImpactVar3",
-                                    "abs": 0.751981,
-                                    "rate": 0.0800128
-                                },
-                                {
-                                    "var_id": "ImpactVar4",
-                                    "abs": 0.868217,
-                                    "rate": 0.0102356
-                                },
-                                {
-                                    "var_id": "ImpactVar5",
-                                    "abs": 0.460591,
-                                    "rate": 0.043915
-                                }
-                            ]
-                        },
-                        {
-                            "start": "2017",
-                            "end": "2018",
-                            "factors": [
-                                {
-                                    "var_id": "ImpactVar1",
-                                    "abs": 0.624416,
-                                    "rate": 0.0560729
-                                },
-                                {
-                                    "var_id": "ImpactVar2",
-                                    "abs": 0.871365,
-                                    "rate": 0.0874228
-                                },
-                                {
-                                    "var_id": "ImpactVar3",
-                                    "abs": 0.444918,
-                                    "rate": 0.0795486
-                                },
-                                {
-                                    "var_id": "ImpactVar4",
-                                    "abs": 0.392,
-                                    "rate": 0.0489171
-                                },
-                                {
-                                    "var_id": "ImpactVar5",
-                                    "abs": 0.559849,
-                                    "rate": 0.0232788
-                                }
-                            ]
-                        }
+                    #     {
+                    #         "start": "2015",
+                    #         "end": "2018",
+                    #         "factors": [
+                    #             {
+                    #                 "var_id": "ImpactVar1",
+                    #                 "abs": 0.21990784,
+                    #                 "rate": 0.0359802
+                    #             },
+                    #             {
+                    #                 "var_id": "ImpactVar2",
+                    #                 "abs": 0.21163726,
+                    #                 "rate": 0.0510542
+                    #             },
+                    #             {
+                    #                 "var_id": "ImpactVar3",
+                    #                 "abs": 0.21794359,
+                    #                 "rate": 0.0206714
+                    #             },
+                    #             {
+                    #                 "var_id": "ImpactVar4",
+                    #                 "abs": 0.21754937,
+                    #                 "rate": 0.0754937
+                    #             },
+                    #             {
+                    #                 "var_id": "ImpactVar5",
+                    #                 "abs": 0.21127042,
+                    #                 "rate": 0.038778
+                    #             }
+                    #         ]
+                    #     },
+                    #     {
+                    #         "start": "2013",
+                    #         "end": "2015",
+                    #         "factors": [
+                    #             {
+                    #                 "var_id": "ImpactVar1",
+                    #                 "abs": 0.1990784,
+                    #                 "rate": 0.0359802
+                    #             },
+                    #             {
+                    #                 "var_id": "ImpactVar2",
+                    #                 "abs": 0.1163726,
+                    #                 "rate": 0.0510542
+                    #             },
+                    #             {
+                    #                 "var_id": "ImpactVar3",
+                    #                 "abs": 0.1794359,
+                    #                 "rate": 0.0206714
+                    #             },
+                    #             {
+                    #                 "var_id": "ImpactVar4",
+                    #                 "abs": 0.1754937,
+                    #                 "rate": 0.0754937
+                    #             },
+                    #             {
+                    #                 "var_id": "ImpactVar5",
+                    #                 "abs": 0.1127042,
+                    #                 "rate": 0.038778
+                    #             }
+                    #         ]
+                    #     },
+                    #     {
+                    #         "start": "2013",
+                    #         "end": "2014",
+                    #         "factors": [
+                    #             {
+                    #                 "var_id": "ImpactVar1",
+                    #                 "abs": 0.990784,
+                    #                 "rate": 0.0359802
+                    #             },
+                    #             {
+                    #                 "var_id": "ImpactVar2",
+                    #                 "abs": 0.163726,
+                    #                 "rate": 0.0510542
+                    #             },
+                    #             {
+                    #                 "var_id": "ImpactVar3",
+                    #                 "abs": 0.794359,
+                    #                 "rate": 0.0206714
+                    #             },
+                    #             {
+                    #                 "var_id": "ImpactVar4",
+                    #                 "abs": 0.754937,
+                    #                 "rate": 0.0754937
+                    #             },
+                    #             {
+                    #                 "var_id": "ImpactVar5",
+                    #                 "abs": 0.127042,
+                    #                 "rate": 0.038778
+                    #             }
+                    #         ]
+                    #     },
+                    #     {
+                    #         "start": "2014",
+                    #         "end": "2015",
+                    #         "factors": [
+                    #             {
+                    #                 "var_id": "ImpactVar1",
+                    #                 "abs": 0.978912,
+                    #                 "rate": 0.0483124
+                    #             },
+                    #             {
+                    #                 "var_id": "ImpactVar2",
+                    #                 "abs": 0.23216,
+                    #                 "rate": 0.0682931
+                    #             },
+                    #             {
+                    #                 "var_id": "ImpactVar3",
+                    #                 "abs": 0.610557,
+                    #                 "rate": 0.0906985
+                    #             },
+                    #             {
+                    #                 "var_id": "ImpactVar4",
+                    #                 "abs": 0.475029,
+                    #                 "rate": 0.0197856
+                    #             },
+                    #             {
+                    #                 "var_id": "ImpactVar5",
+                    #                 "abs": 0.207832,
+                    #                 "rate": 0.0105532
+                    #             }
+                    #         ]
+                    #     },
+                    #     {
+                    #         "start": "2015",
+                    #         "end": "2016",
+                    #         "factors": [
+                    #             {
+                    #                 "var_id": "ImpactVar1",
+                    #                 "abs": 0.240613,
+                    #                 "rate": 0.0210588
+                    #             },
+                    #             {
+                    #                 "var_id": "ImpactVar2",
+                    #                 "abs": 0.598098,
+                    #                 "rate": 0.0151758
+                    #             },
+                    #             {
+                    #                 "var_id": "ImpactVar3",
+                    #                 "abs": 0.692215,
+                    #                 "rate": 0.0477526
+                    #             },
+                    #             {
+                    #                 "var_id": "ImpactVar4",
+                    #                 "abs": 0.234345,
+                    #                 "rate": 0.085709
+                    #             },
+                    #             {
+                    #                 "var_id": "ImpactVar5",
+                    #                 "abs": 0.666541,
+                    #                 "rate": 0.0668499
+                    #             }
+                    #         ]
+                    #     },
+                    #     {
+                    #         "start": "2016",
+                    #         "end": "2017",
+                    #         "factors": [
+                    #             {
+                    #                 "var_id": "ImpactVar1",
+                    #                 "abs": 0.392542,
+                    #                 "rate": 0.0953839
+                    #             },
+                    #             {
+                    #                 "var_id": "ImpactVar2",
+                    #                 "abs": 0.963472,
+                    #                 "rate": 0.0226944
+                    #             },
+                    #             {
+                    #                 "var_id": "ImpactVar3",
+                    #                 "abs": 0.751981,
+                    #                 "rate": 0.0800128
+                    #             },
+                    #             {
+                    #                 "var_id": "ImpactVar4",
+                    #                 "abs": 0.868217,
+                    #                 "rate": 0.0102356
+                    #             },
+                    #             {
+                    #                 "var_id": "ImpactVar5",
+                    #                 "abs": 0.460591,
+                    #                 "rate": 0.043915
+                    #             }
+                    #         ]
+                    #     },
+                    #     {
+                    #         "start": "2017",
+                    #         "end": "2018",
+                    #         "factors": [
+                    #             {
+                    #                 "var_id": "ImpactVar1",
+                    #                 "abs": 0.624416,
+                    #                 "rate": 0.0560729
+                    #             },
+                    #             {
+                    #                 "var_id": "ImpactVar2",
+                    #                 "abs": 0.871365,
+                    #                 "rate": 0.0874228
+                    #             },
+                    #             {
+                    #                 "var_id": "ImpactVar3",
+                    #                 "abs": 0.444918,
+                    #                 "rate": 0.0795486
+                    #             },
+                    #             {
+                    #                 "var_id": "ImpactVar4",
+                    #                 "abs": 0.392,
+                    #                 "rate": 0.0489171
+                    #             },
+                    #             {
+                    #                 "var_id": "ImpactVar5",
+                    #                 "abs": 0.559849,
+                    #                 "rate": 0.0232788
+                    #             }
+                    #         ]
+                    #     }
                     ],
                     "volume": [
                         {
@@ -1696,161 +1717,161 @@ def get_dashboard_data(req):
                                 }
                             ]
                         },
-                        {
-                            "start": "2013",
-                            "end": "2014",
-                            "factors": [
-                                {
-                                    "var_id": "ImpactVar1",
-                                    "abs": 0.98542,
-                                    "rate": 0.0738657
-                                },
-                                {
-                                    "var_id": "ImpactVar2",
-                                    "abs": 0.48134,
-                                    "rate": 0.0652715
-                                },
-                                {
-                                    "var_id": "ImpactVar3",
-                                    "abs": 0.99519,
-                                    "rate": 0.0976987
-                                },
-                                {
-                                    "var_id": "ImpactVar4",
-                                    "abs": 0.78942,
-                                    "rate": 0.0626273
-                                },
-                                {
-                                    "var_id": "ImpactVar5",
-                                    "abs": 0.285773,
-                                    "rate": 0.0355594
-                                }
-                            ]
-                        },
-                        {
-                            "start": "2014",
-                            "end": "2015",
-                            "factors": [
-                                {
-                                    "var_id": "ImpactVar1",
-                                    "abs": 0.528851,
-                                    "rate": 0.0919143
-                                },
-                                {
-                                    "var_id": "ImpactVar2",
-                                    "abs": 0.763161,
-                                    "rate": 0.0842327
-                                },
-                                {
-                                    "var_id": "ImpactVar3",
-                                    "abs": 0.537789,
-                                    "rate": 0.0704983
-                                },
-                                {
-                                    "var_id": "ImpactVar4",
-                                    "abs": 0.923729,
-                                    "rate": 0.0271423
-                                },
-                                {
-                                    "var_id": "ImpactVar5",
-                                    "abs": 0.68645,
-                                    "rate": 0.0176666
-                                }
-                            ]
-                        },
-                        {
-                            "start": "2015",
-                            "end": "2016",
-                            "factors": [
-                                {
-                                    "var_id": "ImpactVar1",
-                                    "abs": 0.524467,
-                                    "rate": 0.0468196
-                                },
-                                {
-                                    "var_id": "ImpactVar2",
-                                    "abs": 0.611925,
-                                    "rate": 0.093163
-                                },
-                                {
-                                    "var_id": "ImpactVar3",
-                                    "abs": 0.296334,
-                                    "rate": 0.0101075
-                                },
-                                {
-                                    "var_id": "ImpactVar4",
-                                    "abs": 0.372081,
-                                    "rate": 0.0741157
-                                },
-                                {
-                                    "var_id": "ImpactVar5",
-                                    "abs": 0.175675,
-                                    "rate": 0.0812591
-                                }
-                            ]
-                        },
-                        {
-                            "start": "2016",
-                            "end": "2017",
-                            "factors": [
-                                {
-                                    "var_id": "ImpactVar1",
-                                    "abs": 0.92559,
-                                    "rate": 0.0343801
-                                },
-                                {
-                                    "var_id": "ImpactVar2",
-                                    "abs": 0.444639,
-                                    "rate": 0.0254852
-                                },
-                                {
-                                    "var_id": "ImpactVar3",
-                                    "abs": 0.447989,
-                                    "rate": 0.0689154
-                                },
-                                {
-                                    "var_id": "ImpactVar4",
-                                    "abs": 0.276602,
-                                    "rate": 0.0293354
-                                },
-                                {
-                                    "var_id": "ImpactVar5",
-                                    "abs": 0.831093,
-                                    "rate": 0.0587996
-                                }
-                            ]
-                        },
-                        {
-                            "start": "2017",
-                            "end": "2018",
-                            "factors": [
-                                {
-                                    "var_id": "ImpactVar1",
-                                    "abs": 0.235433,
-                                    "rate": 0.011355
-                                },
-                                {
-                                    "var_id": "ImpactVar2",
-                                    "abs": 0.14416,
-                                    "rate": 0.084965
-                                },
-                                {
-                                    "var_id": "ImpactVar3",
-                                    "abs": 0.444918,
-                                    "rate": 0.0795486
-                                },
-                                {
-                                    "var_id": "ImpactVar4",
-                                    "abs": 0.85634,
-                                    "rate": 0.083107
-                                },
-                                {
-                                    "var_id": "ImpactVar5",
-                                    "abs": 0.789906,
-                                    "rate": 0.0925784
-                                }
-                            ]
-                        }
+                    #     {
+                    #         "start": "2013",
+                    #         "end": "2014",
+                    #         "factors": [
+                    #             {
+                    #                 "var_id": "ImpactVar1",
+                    #                 "abs": 0.98542,
+                    #                 "rate": 0.0738657
+                    #             },
+                    #             {
+                    #                 "var_id": "ImpactVar2",
+                    #                 "abs": 0.48134,
+                    #                 "rate": 0.0652715
+                    #             },
+                    #             {
+                    #                 "var_id": "ImpactVar3",
+                    #                 "abs": 0.99519,
+                    #                 "rate": 0.0976987
+                    #             },
+                    #             {
+                    #                 "var_id": "ImpactVar4",
+                    #                 "abs": 0.78942,
+                    #                 "rate": 0.0626273
+                    #             },
+                    #             {
+                    #                 "var_id": "ImpactVar5",
+                    #                 "abs": 0.285773,
+                    #                 "rate": 0.0355594
+                    #             }
+                    #         ]
+                    #     },
+                    #     {
+                    #         "start": "2014",
+                    #         "end": "2015",
+                    #         "factors": [
+                    #             {
+                    #                 "var_id": "ImpactVar1",
+                    #                 "abs": 0.528851,
+                    #                 "rate": 0.0919143
+                    #             },
+                    #             {
+                    #                 "var_id": "ImpactVar2",
+                    #                 "abs": 0.763161,
+                    #                 "rate": 0.0842327
+                    #             },
+                    #             {
+                    #                 "var_id": "ImpactVar3",
+                    #                 "abs": 0.537789,
+                    #                 "rate": 0.0704983
+                    #             },
+                    #             {
+                    #                 "var_id": "ImpactVar4",
+                    #                 "abs": 0.923729,
+                    #                 "rate": 0.0271423
+                    #             },
+                    #             {
+                    #                 "var_id": "ImpactVar5",
+                    #                 "abs": 0.68645,
+                    #                 "rate": 0.0176666
+                    #             }
+                    #         ]
+                    #     },
+                    #     {
+                    #         "start": "2015",
+                    #         "end": "2016",
+                    #         "factors": [
+                    #             {
+                    #                 "var_id": "ImpactVar1",
+                    #                 "abs": 0.524467,
+                    #                 "rate": 0.0468196
+                    #             },
+                    #             {
+                    #                 "var_id": "ImpactVar2",
+                    #                 "abs": 0.611925,
+                    #                 "rate": 0.093163
+                    #             },
+                    #             {
+                    #                 "var_id": "ImpactVar3",
+                    #                 "abs": 0.296334,
+                    #                 "rate": 0.0101075
+                    #             },
+                    #             {
+                    #                 "var_id": "ImpactVar4",
+                    #                 "abs": 0.372081,
+                    #                 "rate": 0.0741157
+                    #             },
+                    #             {
+                    #                 "var_id": "ImpactVar5",
+                    #                 "abs": 0.175675,
+                    #                 "rate": 0.0812591
+                    #             }
+                    #         ]
+                    #     },
+                    #     {
+                    #         "start": "2016",
+                    #         "end": "2017",
+                    #         "factors": [
+                    #             {
+                    #                 "var_id": "ImpactVar1",
+                    #                 "abs": 0.92559,
+                    #                 "rate": 0.0343801
+                    #             },
+                    #             {
+                    #                 "var_id": "ImpactVar2",
+                    #                 "abs": 0.444639,
+                    #                 "rate": 0.0254852
+                    #             },
+                    #             {
+                    #                 "var_id": "ImpactVar3",
+                    #                 "abs": 0.447989,
+                    #                 "rate": 0.0689154
+                    #             },
+                    #             {
+                    #                 "var_id": "ImpactVar4",
+                    #                 "abs": 0.276602,
+                    #                 "rate": 0.0293354
+                    #             },
+                    #             {
+                    #                 "var_id": "ImpactVar5",
+                    #                 "abs": 0.831093,
+                    #                 "rate": 0.0587996
+                    #             }
+                    #         ]
+                    #     },
+                    #     {
+                    #         "start": "2017",
+                    #         "end": "2018",
+                    #         "factors": [
+                    #             {
+                    #                 "var_id": "ImpactVar1",
+                    #                 "abs": 0.235433,
+                    #                 "rate": 0.011355
+                    #             },
+                    #             {
+                    #                 "var_id": "ImpactVar2",
+                    #                 "abs": 0.14416,
+                    #                 "rate": 0.084965
+                    #             },
+                    #             {
+                    #                 "var_id": "ImpactVar3",
+                    #                 "abs": 0.444918,
+                    #                 "rate": 0.0795486
+                    #             },
+                    #             {
+                    #                 "var_id": "ImpactVar4",
+                    #                 "abs": 0.85634,
+                    #                 "rate": 0.083107
+                    #             },
+                    #             {
+                    #                 "var_id": "ImpactVar5",
+                    #                 "abs": 0.789906,
+                    #                 "rate": 0.0925784
+                    #             }
+                    #         ]
+                    #     }
                     ]
                 }
             },
@@ -1973,3 +1994,394 @@ def get_entity_selectors_config(req):
     return send_success_response(data)
 
 
+def get_decomposition_for_period(req):
+    data = {
+        "annual": {
+            "value": [
+                {
+                    "start": "2015",
+                    "end": "2018",
+                    "factors": [
+                        {
+                            "var_id": "ImpactVar1",
+                            "abs": 0.21990784,
+                            "rate": 0.0359802
+                        },
+                        {
+                            "var_id": "ImpactVar2",
+                            "abs": 0.21163726,
+                            "rate": 0.0510542
+                        },
+                        {
+                            "var_id": "ImpactVar3",
+                            "abs": 0.21794359,
+                            "rate": 0.0206714
+                        },
+                        {
+                            "var_id": "ImpactVar4",
+                            "abs": 0.21754937,
+                            "rate": 0.0754937
+                        },
+                        {
+                            "var_id": "ImpactVar5",
+                            "abs": 0.21127042,
+                            "rate": 0.038778
+                        }
+                    ]
+                },
+                {
+                    "start": "2013",
+                    "end": "2015",
+                    "factors": [
+                        {
+                            "var_id": "ImpactVar1",
+                            "abs": 0.1990784,
+                            "rate": 0.0359802
+                        },
+                        {
+                            "var_id": "ImpactVar2",
+                            "abs": 0.1163726,
+                            "rate": 0.0510542
+                        },
+                        {
+                            "var_id": "ImpactVar3",
+                            "abs": 0.1794359,
+                            "rate": 0.0206714
+                        },
+                        {
+                            "var_id": "ImpactVar4",
+                            "abs": 0.1754937,
+                            "rate": 0.0754937
+                        },
+                        {
+                            "var_id": "ImpactVar5",
+                            "abs": 0.1127042,
+                            "rate": 0.038778
+                        }
+                    ]
+                },
+                {
+                    "start": "2013",
+                    "end": "2014",
+                    "factors": [
+                        {
+                            "var_id": "ImpactVar1",
+                            "abs": 0.990784,
+                            "rate": 0.0359802
+                        },
+                        {
+                            "var_id": "ImpactVar2",
+                            "abs": 0.163726,
+                            "rate": 0.0510542
+                        },
+                        {
+                            "var_id": "ImpactVar3",
+                            "abs": 0.794359,
+                            "rate": 0.0206714
+                        },
+                        {
+                            "var_id": "ImpactVar4",
+                            "abs": 0.754937,
+                            "rate": 0.0754937
+                        },
+                        {
+                            "var_id": "ImpactVar5",
+                            "abs": 0.127042,
+                            "rate": 0.038778
+                        }
+                    ]
+                },
+                {
+                    "start": "2014",
+                    "end": "2015",
+                    "factors": [
+                        {
+                            "var_id": "ImpactVar1",
+                            "abs": 0.978912,
+                            "rate": 0.0483124
+                        },
+                        {
+                            "var_id": "ImpactVar2",
+                            "abs": 0.23216,
+                            "rate": 0.0682931
+                        },
+                        {
+                            "var_id": "ImpactVar3",
+                            "abs": 0.610557,
+                            "rate": 0.0906985
+                        },
+                        {
+                            "var_id": "ImpactVar4",
+                            "abs": 0.475029,
+                            "rate": 0.0197856
+                        },
+                        {
+                            "var_id": "ImpactVar5",
+                            "abs": 0.207832,
+                            "rate": 0.0105532
+                        }
+                    ]
+                },
+                {
+                    "start": "2015",
+                    "end": "2016",
+                    "factors": [
+                        {
+                            "var_id": "ImpactVar1",
+                            "abs": 0.240613,
+                            "rate": 0.0210588
+                        },
+                        {
+                            "var_id": "ImpactVar2",
+                            "abs": 0.598098,
+                            "rate": 0.0151758
+                        },
+                        {
+                            "var_id": "ImpactVar3",
+                            "abs": 0.692215,
+                            "rate": 0.0477526
+                        },
+                        {
+                            "var_id": "ImpactVar4",
+                            "abs": 0.234345,
+                            "rate": 0.085709
+                        },
+                        {
+                            "var_id": "ImpactVar5",
+                            "abs": 0.666541,
+                            "rate": 0.0668499
+                        }
+                    ]
+                },
+                {
+                    "start": "2016",
+                    "end": "2017",
+                    "factors": [
+                        {
+                            "var_id": "ImpactVar1",
+                            "abs": 0.392542,
+                            "rate": 0.0953839
+                        },
+                        {
+                            "var_id": "ImpactVar2",
+                            "abs": 0.963472,
+                            "rate": 0.0226944
+                        },
+                        {
+                            "var_id": "ImpactVar3",
+                            "abs": 0.751981,
+                            "rate": 0.0800128
+                        },
+                        {
+                            "var_id": "ImpactVar4",
+                            "abs": 0.868217,
+                            "rate": 0.0102356
+                        },
+                        {
+                            "var_id": "ImpactVar5",
+                            "abs": 0.460591,
+                            "rate": 0.043915
+                        }
+                    ]
+                },
+                {
+                    "start": "2017",
+                    "end": "2018",
+                    "factors": [
+                        {
+                            "var_id": "ImpactVar1",
+                            "abs": 0.624416,
+                            "rate": 0.0560729
+                        },
+                        {
+                            "var_id": "ImpactVar2",
+                            "abs": 0.871365,
+                            "rate": 0.0874228
+                        },
+                        {
+                            "var_id": "ImpactVar3",
+                            "abs": 0.444918,
+                            "rate": 0.0795486
+                        },
+                        {
+                            "var_id": "ImpactVar4",
+                            "abs": 0.392,
+                            "rate": 0.0489171
+                        },
+                        {
+                            "var_id": "ImpactVar5",
+                            "abs": 0.559849,
+                            "rate": 0.0232788
+                        }
+                    ]
+                }
+            ],
+            "volume": [
+                {
+                    "start": "2013",
+                    "end": "2014",
+                    "factors": [
+                        {
+                            "var_id": "ImpactVar1",
+                            "abs": 0.98542,
+                            "rate": 0.0738657
+                        },
+                        {
+                            "var_id": "ImpactVar2",
+                            "abs": 0.48134,
+                            "rate": 0.0652715
+                        },
+                        {
+                            "var_id": "ImpactVar3",
+                            "abs": 0.99519,
+                            "rate": 0.0976987
+                        },
+                        {
+                            "var_id": "ImpactVar4",
+                            "abs": 0.78942,
+                            "rate": 0.0626273
+                        },
+                        {
+                            "var_id": "ImpactVar5",
+                            "abs": 0.285773,
+                            "rate": 0.0355594
+                        }
+                    ]
+                },
+                {
+                    "start": "2014",
+                    "end": "2015",
+                    "factors": [
+                        {
+                            "var_id": "ImpactVar1",
+                            "abs": 0.528851,
+                            "rate": 0.0919143
+                        },
+                        {
+                            "var_id": "ImpactVar2",
+                            "abs": 0.763161,
+                            "rate": 0.0842327
+                        },
+                        {
+                            "var_id": "ImpactVar3",
+                            "abs": 0.537789,
+                            "rate": 0.0704983
+                        },
+                        {
+                            "var_id": "ImpactVar4",
+                            "abs": 0.923729,
+                            "rate": 0.0271423
+                        },
+                        {
+                            "var_id": "ImpactVar5",
+                            "abs": 0.68645,
+                            "rate": 0.0176666
+                        }
+                    ]
+                },
+                {
+                    "start": "2015",
+                    "end": "2016",
+                    "factors": [
+                        {
+                            "var_id": "ImpactVar1",
+                            "abs": 0.524467,
+                            "rate": 0.0468196
+                        },
+                        {
+                            "var_id": "ImpactVar2",
+                            "abs": 0.611925,
+                            "rate": 0.093163
+                        },
+                        {
+                            "var_id": "ImpactVar3",
+                            "abs": 0.296334,
+                            "rate": 0.0101075
+                        },
+                        {
+                            "var_id": "ImpactVar4",
+                            "abs": 0.372081,
+                            "rate": 0.0741157
+                        },
+                        {
+                            "var_id": "ImpactVar5",
+                            "abs": 0.175675,
+                            "rate": 0.0812591
+                        }
+                    ]
+                },
+                {
+                    "start": "2016",
+                    "end": "2017",
+                    "factors": [
+                        {
+                            "var_id": "ImpactVar1",
+                            "abs": 0.92559,
+                            "rate": 0.0343801
+                        },
+                        {
+                            "var_id": "ImpactVar2",
+                            "abs": 0.444639,
+                            "rate": 0.0254852
+                        },
+                        {
+                            "var_id": "ImpactVar3",
+                            "abs": 0.447989,
+                            "rate": 0.0689154
+                        },
+                        {
+                            "var_id": "ImpactVar4",
+                            "abs": 0.276602,
+                            "rate": 0.0293354
+                        },
+                        {
+                            "var_id": "ImpactVar5",
+                            "abs": 0.831093,
+                            "rate": 0.0587996
+                        }
+                    ]
+                },
+                {
+                    "start": "2017",
+                    "end": "2018",
+                    "factors": [
+                        {
+                            "var_id": "ImpactVar1",
+                            "abs": 0.235433,
+                            "rate": 0.011355
+                        },
+                        {
+                            "var_id": "ImpactVar2",
+                            "abs": 0.14416,
+                            "rate": 0.084965
+                        },
+                        {
+                            "var_id": "ImpactVar3",
+                            "abs": 0.444918,
+                            "rate": 0.0795486
+                        },
+                        {
+                            "var_id": "ImpactVar4",
+                            "abs": 0.85634,
+                            "rate": 0.083107
+                        },
+                        {
+                            "var_id": "ImpactVar5",
+                            "abs": 0.789906,
+                            "rate": 0.0925784
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+
+    return send_success_response(data)
+
+
+def get_changes_for_period(req):
+    data = {
+        'get_changes_for_period': 1
+    }
+
+    return send_success_response(data)

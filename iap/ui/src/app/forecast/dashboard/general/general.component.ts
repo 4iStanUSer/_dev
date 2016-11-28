@@ -1,4 +1,7 @@
 import {Component, OnInit} from '@angular/core';
+
+import {Subject} from 'rxjs/Subject';
+
 import {DataManagerService} from "./../data-manager.service";
 import {forecastValueRateData} from './../data';
 
@@ -98,12 +101,18 @@ export class GeneralComponent implements OnInit {
         this.absRateSwitcherData = this.getAbsRateSwitcherData();
         this.fActiveTabIndex = this.getForecastActiveTabIndex();
 
-        this.fTabsAbsData = this.getForecastTabsAbsData();
+        let forecastObj = this.getForecastTabsAbsData();
+        if (forecastObj) {
+            forecastObj.subscribe((d) => { this.fTabsAbsData = d; });
+        }
         this.fPeriodSelectorData = this.getMainPeriodSelectorData();
 
         this.dPeriodSelectorData = this.getDecompPeriodSelectorData();
         this.dTypesSwitcherData = this.getDecompositionTypes();
-        this.dTypeData = this.getDecompositionData();
+        let decompObs = this.getDecompositionData();
+        if (decompObs) {
+            decompObs.subscribe((d) => { this.dTypeData = d});
+        }
     }
 
 
@@ -148,10 +157,10 @@ export class GeneralComponent implements OnInit {
             };
         }
     }
-    private getForecastTabsAbsData() {
-        let output = [];
-        let outputVars = this.dm.dataModel.getVariablesByType('output');
+    private getForecastTabsAbsData(): Subject<ForecastTabsAbsData> {
+        let subject = new Subject();
 
+        let outputVars = this.dm.dataModel.getVariablesByType('output');
         let period = this.dm.getPeriod('main');
         if (period) {
             let timescale = period.timescale;
@@ -159,17 +168,108 @@ export class GeneralComponent implements OnInit {
             let longList = this.dm.getFullPeriod(timescale,
                 period.start, period.end);
 
-            for (let i = 0; i < outputVars.length; i++) {
-                output.push({
-                    'variable': outputVars[i],
-                    'preview': this.dm.getVariableData(timescale,
-                        shortList, outputVars[i].id),
-                    'full': this.dm.getVariableData(timescale,
-                        longList, outputVars[i].id, period),
-                });
+            let neededPeriods = [];
+            if (shortList) {
+                for (let i = 0; i < shortList.length - 1; i++) {
+                    neededPeriods.push({
+                        start: shortList[i],
+                        end: shortList[i+1]
+                    });
+                }
             }
+            if (longList) {
+                for (let i = 0; i < longList.length - 1; i++) {
+                    neededPeriods.push({
+                        start: longList[i],
+                        end: longList[i+1]
+                    });
+                }
+            }
+
+            if (neededPeriods.length) {
+                let periodsToLoad = [];
+                for (let i = 0; i<neededPeriods.length;i++) {
+                    if (
+                        !this.dm.dataModel
+                            .hasChangesOverPeriod(timescale,
+                                neededPeriods[i].start,
+                                neededPeriods[i].end)
+                    ) {
+                        periodsToLoad.push(neededPeriods[i]);
+                    }
+                }
+                if (periodsToLoad.length > 0) {
+                    this.dm.loadChangesOverPeriod(timescale, periodsToLoad)
+                        .subscribe(
+                            (d) => {
+                                let output = [];
+                                for (let i = 0; i < outputVars.length; i++) {
+                                    output.push({
+                                        'variable': outputVars[i],
+                                        'preview': this.dm.getVariableData(
+                                            timescale,
+                                            shortList,
+                                            outputVars[i].id),
+                                        'full': this.dm.getVariableData(
+                                            timescale,
+                                            longList,
+                                            outputVars[i].id,
+                                            period),
+                                    });
+                                }
+                                subject.next(output);
+                            }
+                        ); // TODO Add handler for error
+                } else {
+                    setTimeout(() => {
+                        let output = [];
+                        for (let i = 0; i < outputVars.length; i++) {
+                            output.push({
+                                'variable': outputVars[i],
+                                'preview': this.dm.getVariableData(timescale,
+                                    shortList, outputVars[i].id),
+                                'full': this.dm.getVariableData(timescale,
+                                    longList, outputVars[i].id, period),
+                            });
+                        }
+                        subject.next(output);
+                    }, 10);
+                }
+            } else {
+                setTimeout(() => {
+                    subject.next(null);
+                }, 10);
+            }
+        } else {
+            setTimeout(() => {
+                subject.next(null);
+            }, 10);
         }
-        return output;
+        return subject;
+
+
+
+        // let output = [];
+        // let outputVars = this.dm.dataModel.getVariablesByType('output');
+        //
+        // let period = this.dm.getPeriod('main');
+        // if (period) {
+        //     let timescale = period.timescale;
+        //     let shortList = [period.start, period.mid, period.end];
+        //     let longList = this.dm.getFullPeriod(timescale,
+        //         period.start, period.end);
+        //
+        //     for (let i = 0; i < outputVars.length; i++) {
+        //         output.push({
+        //             'variable': outputVars[i],
+        //             'preview': this.dm.getVariableData(timescale,
+        //                 shortList, outputVars[i].id), // TODO Update to use dm.getVariableDataAsync()
+        //             'full': this.dm.getVariableData(timescale,
+        //                 longList, outputVars[i].id, period), // TODO Update to use dm.getVariableDataAsync()
+        //         });
+        //     }
+        // }
+        // return output;
     }
     private getForecastActiveTabIndex() {
         let outputVars = this.dm.dataModel.getVariablesByType('output');
@@ -194,8 +294,10 @@ export class GeneralComponent implements OnInit {
         this.dm.setPeriod('main', period['scale'], period['start'],
             period['end'], period['mid']);
 
-        this.fTabsAbsData = this.getForecastTabsAbsData();
-        // this.fTabsRateData = this.getForecastTabsRateData();
+        let forecastObj = this.getForecastTabsAbsData();
+        if (forecastObj) {
+            forecastObj.subscribe((d) => { this.fTabsAbsData = d; });
+        }
 
     }
 
@@ -223,13 +325,14 @@ export class GeneralComponent implements OnInit {
             };
         }
     }
-    private getDecompositionData() {
+    private getDecompositionData(): Subject<DecompositionTypeData>  {
         let period = this.dm.getPeriod('decomp');
         if (period) {
             let type = this.dm.state.get('decomp_value_volume_price');
-            return this.dm.getDecompositionData(type, period.timescale,
+            return this.dm.getDecompositionDataAsync(type, period.timescale,
                 period.start, period.end);
         }
+        return null;
     }
     private getDecompositionTypes(): ButtonsGroupDataInput {
         let defVal = this.dm.state.get('decomp_value_volume_price');
@@ -237,12 +340,18 @@ export class GeneralComponent implements OnInit {
     }
     private onChangedDecompType(changes: Object): void {
         this.dm.state.set('decomp_value_volume_price', changes['id']);
-        this.dTypeData = this.getDecompositionData();
+        let decompObs = this.getDecompositionData();
+        if (decompObs) {
+            decompObs.subscribe((d) => { this.dTypeData = d});
+        }
     }
     private onChangedDecompPeriod(period) {
         this.dm.setPeriod('decomp', period['scale'], period['start'],
             period['end']);
-        this.dTypeData = this.getDecompositionData();
+        let decompObs = this.getDecompositionData();
+        if (decompObs) {
+            decompObs.subscribe((d) => { this.dTypeData = d});
+        }
     }
 
     /*-----------.DECOMPOSITION--------------*/
