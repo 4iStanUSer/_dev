@@ -1,9 +1,9 @@
 <div class="wrapper">
 
     <ul class="selectors">
-        <li *ngFor="let sel of selectors; let i = index">
+        <li *ngFor="let sel of selectorsOrder | iterateObjectByOrder: selectors; let i = index">
 
-            <div class="selector-preview" (click)="onPreviewClick(i, $event)">
+            <div class="selector-preview" (click)="onPreviewClick(selectorsOrder[i], $event)">
 
                 <span *ngIf="sel['selected'] && sel['selected'].length > 0">
                     <span *ngFor="let s of sel['selected']">
@@ -22,7 +22,7 @@
     <div *ngIf="state['isExpanded']" class="expanded-block">
 
         <ul class="selectors-tabs">
-            <li *ngFor="let sel of selectors; let i = index" [class.active]="i == state['activeTab']" (click)="setActiveTab(i)">
+            <li *ngFor="let sel of selectorsOrder | iterateObjectByOrder: selectors; let i = index" [class.active]="selectorsOrder[i] == state['activeTab']" (click)="setActiveTab(selectorsOrder[i])">
 
                 <div class="selector-preview" (click)="onPreviewClick(i, $event)">
                     {{ sel['model']['name'] }}

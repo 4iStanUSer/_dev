@@ -12,6 +12,7 @@ import {AuthService} from "../service/auth.service";
 /*-Pipes-*/
 import {FilterListPipe} from "../pipe/filter-list.pipe";
 import {KeysPipe} from "../pipe/keys.pipe";
+import {IterateObjectByOrderPipe} from "../pipe/iterate-object-by-order.pipe";
 /*-.Pipes-*/
 
 @NgModule({
@@ -21,7 +22,8 @@ import {KeysPipe} from "../pipe/keys.pipe";
     ],
     declarations: [
         FilterListPipe,
-        KeysPipe
+        KeysPipe,
+        IterateObjectByOrderPipe
     ],
     providers: [
         AjaxService,
@@ -33,7 +35,8 @@ import {KeysPipe} from "../pipe/keys.pipe";
     ],
     exports: [
         FilterListPipe,
-        KeysPipe
+        KeysPipe,
+        IterateObjectByOrderPipe
     ]
 })
 export class CommonServicesModule {

@@ -107,6 +107,8 @@ export class SelectorModel {
     }
 
     setData(items: Array<SelectorItemInput>): void {
+        this.deselect(this.selected);
+
         let rels = {};
         this.items = {};
         this.rootItems = [];
@@ -162,7 +164,8 @@ export class SelectorModel {
         }
     }
 
-    deselect(ids: Array<string>): void {
+    deselect(src_ids: Array<string>): void {
+        let ids = src_ids.map((id) => { return id; });
         for (let i=0;i<ids.length; i++) {
             try {
                 let index = this.selected.indexOf(ids[i]);

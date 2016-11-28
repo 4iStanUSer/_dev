@@ -91,7 +91,7 @@ export class DataManagerService {
     init() {
         if (!this.initResolver) {
             this.initResolver = new Subject();
-            this.initSelectors();
+            // this.initSelectors();
             this.initDynamicData();
             this.initStaticData();
             this.initResolver.subscribe(() => {
@@ -117,23 +117,23 @@ export class DataManagerService {
         && this.isData['static']['received']);
     }
 
-    private initSelectors(): void {
-        this.req.get({
-            url_id: 'forecast/get_entity_selectors_config',
-            data: {}
-        }).subscribe((data) => {
-            this.selectors['config'] = data;
-        });
-
-        this.req.get({
-            url_id: 'forecast/get_options_for_entity_selector',
-            data: {
-                query: [null, null, null, null]
-            }
-        }).subscribe((data) => {
-            this.selectors['data'] = data;
-        });
-    }
+    // private initSelectors(): void {
+    //     this.req.get({
+    //         url_id: 'forecast/get_entity_selectors_config',
+    //         data: {}
+    //     }).subscribe((data) => {
+    //         this.selectors['config'] = data;
+    //     });
+    //
+    //     this.req.get({
+    //         url_id: 'forecast/get_options_for_entity_selector',
+    //         data: {
+    //             query: [null, null, null, null]
+    //         }
+    //     }).subscribe((data) => {
+    //         this.selectors['data'] = data;
+    //     });
+    // }
 
     private initDynamicData(): void {
         if (this.isData['dynamic']['sent']) return;
