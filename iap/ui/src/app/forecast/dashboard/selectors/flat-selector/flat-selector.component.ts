@@ -14,7 +14,7 @@ export class FlatSelectorComponent implements OnInit, OnChanges {
 
     @Input() model: SelectorModel;
 
-    private lang: Object = {
+    private lang: Object = { // TODO Get languagePack
         'items_title': 'Brands',
         'search_title': 'Search',
         'search_placeholder': 'Type here',

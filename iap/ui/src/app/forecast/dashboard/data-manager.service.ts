@@ -1,15 +1,10 @@
 import {Injectable} from '@angular/core';
 
-import {Observable} from 'rxjs/Observable';
 import {Subject} from 'rxjs/Subject';
 
-/*======TEMP=====*/
 import {
-    defaultState, dashboardConfig,
-    // selectorsDataTEMP, selectorsConfigTEMP,
+    defaultState, dashboardConfig
 } from './data';
-/*======.TEMP=====*/
-
 
 import {AjaxService} from "./../../common/service/ajax.service";
 import {
@@ -91,7 +86,6 @@ export class DataManagerService {
     init() {
         if (!this.initResolver) {
             this.initResolver = new Subject();
-            // this.initSelectors();
             this.initDynamicData();
             this.initStaticData();
             this.initResolver.subscribe(() => {
@@ -117,24 +111,6 @@ export class DataManagerService {
         && this.isData['static']['received']);
     }
 
-    // private initSelectors(): void {
-    //     this.req.get({
-    //         url_id: 'forecast/get_entity_selectors_config',
-    //         data: {}
-    //     }).subscribe((data) => {
-    //         this.selectors['config'] = data;
-    //     });
-    //
-    //     this.req.get({
-    //         url_id: 'forecast/get_options_for_entity_selector',
-    //         data: {
-    //             query: [null, null, null, null]
-    //         }
-    //     }).subscribe((data) => {
-    //         this.selectors['data'] = data;
-    //     });
-    // }
-
     private initDynamicData(): void {
         if (this.isData['dynamic']['sent']) return;
 
@@ -144,7 +120,7 @@ export class DataManagerService {
         this.req.get({
             'url_id': 'forecast/get_dashboard_data',
             'data': {
-                'entities_ids': [2]
+                'entities_ids': [2] // TODO Replace
             }
         }).subscribe((data)=> {
                 this.isData['dynamic']['received'] = true;
@@ -180,14 +156,6 @@ export class DataManagerService {
                     d['factor_drivers'],
                     d['decomp_type_factors'],
                 );
-
-
-                ////////////////////
-                // this.selectors = {
-                //     data: selectorsDataTEMP,
-                //     config: selectorsConfigTEMP
-                // };
-                ////////////////////
 
                 this.isData['dynamic']['processed'] = true;
 
