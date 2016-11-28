@@ -10,6 +10,7 @@ import {SimulatorPageComponent} from "./simulator-page/simulator-page.component"
 import {GeneralComponent} from "./dashboard/general/general.component";
 import {DriverSummaryComponent} from "./dashboard/driver-summary/driver-summary.component";
 import {DriverDetailComponent} from "./dashboard/driver-detail/driver-detail.component";
+import {LandingPageComponent} from "./landing-page/landing-page.component"
 
 
 @NgModule({
@@ -25,6 +26,10 @@ import {DriverDetailComponent} from "./dashboard/driver-detail/driver-detail.com
                         path: '',
                         redirectTo: 'dashboard',
                         pathMatch: 'full',
+                    },
+                    {
+                        path: 'landing',
+                        component: LandingPageComponent
                     },
                     {
                         path: 'dashboard',

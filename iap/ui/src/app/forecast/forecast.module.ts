@@ -34,6 +34,7 @@ import {ButtonsGroupComponent} from './../common/cmp/buttons-group/buttons-group
 import {TableWidgetComponent} from "../common/cmp/table-widget/table-widget.component";
 import { MenuWidgetComponent } from './menu-widget/menu-widget.component';
 import { LanguageSelectorComponent } from './language-selector/language-selector.component';
+import { LandingPageComponent } from './landing-page/landing-page.component';
 
 @NgModule({
     imports: [
@@ -70,6 +71,7 @@ import { LanguageSelectorComponent } from './language-selector/language-selector
         TableWidgetComponent,
         MenuWidgetComponent,
         LanguageSelectorComponent,
+        LandingPageComponent,
     ],
     providers: [
         CommonServicesModule,
