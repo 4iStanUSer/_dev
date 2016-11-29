@@ -4,6 +4,9 @@ import {Pipe, PipeTransform} from '@angular/core';
     name: 'iterateObjectByOrder',
     pure: false
 })
+/**
+ * Pipe for iterating sourceObj properties by order specified in orderList
+ */
 export class IterateObjectByOrderPipe implements PipeTransform {
 
     transform(orderList: Array<string>, sourceObj: Object): Array<Object> {
