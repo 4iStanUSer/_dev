@@ -34,7 +34,10 @@ import {ButtonsGroupComponent} from './../common/cmp/buttons-group/buttons-group
 import {TableWidgetComponent} from "../common/cmp/table-widget/table-widget.component";
 import { MenuWidgetComponent } from './menu-widget/menu-widget.component';
 import { LanguageSelectorComponent } from './language-selector/language-selector.component';
+
 import { LandingPageComponent } from './landing-page/landing-page.component';
+import { LandingPageService } from './landing-page/landing-page.service';
+
 
 @NgModule({
     imports: [
@@ -77,7 +80,8 @@ import { LandingPageComponent } from './landing-page/landing-page.component';
         CommonServicesModule,
 
         DataManagerService, // TODO Rename (VL)
-        SimulatorPageDataManagerService
+        SimulatorPageDataManagerService,
+        LandingPageService
     ]
 })
 export class ForecastModule {
