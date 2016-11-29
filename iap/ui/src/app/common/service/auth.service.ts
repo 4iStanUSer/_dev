@@ -15,6 +15,11 @@ export class AuthService {
     // store the URL so we can redirect after logging in
     redirectUrl: string;
 
+    user: UserModel = null;
+
+    constructor() {
+    }
+
     login(credentials: Object): Observable<boolean> {
         return Observable.of(true).delay(1000).do(val => this.isLoggedIn = true);
         // this.req.get({
@@ -27,16 +32,8 @@ export class AuthService {
         return Observable.of(true).delay(1000).do(val => this.isLoggedIn = false);
     }
 
-    //===========================================
-
-    isAuth: boolean = false;
-
-    user: UserModel = null;
-
-    constructor() {
-    }
-
-    checkpoint() {
-
+    logoutByBackend() {
+        this.isLoggedIn = false;
+        this.user = null;
     }
 }

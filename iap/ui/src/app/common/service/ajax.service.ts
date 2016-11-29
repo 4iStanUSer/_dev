@@ -29,6 +29,10 @@ class ServerResponse {
     getData() {
         return this.data;
     }
+
+    isAuthError() {
+        return this.data === 'auth-error'; // TODO Generate error codes
+    }
 }
 
 
@@ -56,30 +60,39 @@ type QueueItem = {
     observable: Subject<any>
 }
 
-/**
- * Using:
- * this.request
- .get({
-                url: '/forecasting/get_data',
-                data: {
-                    param: '123',
-                    param2: 456,
-                    param3: [7, 8, 9]
-                }
-            })
- .subscribe(
- (d) => {
-                    this.get_data_ = d;
-                },
- (e) => {
-                    console.log(e);
-                },
- () => {
-                    console.log('Complete!');
-                }
- );
- */
+
+
 @Injectable()
+/**
+ * AjaxService (service) - object for sending requests to server side.
+ * First of all it loads urlMapper from server (before first query).
+ * It uses queue of requests. Requests may be 2 types: sync and async.
+ * If service meets sync request - other requests wait for resolving
+ * this sync request.
+ * Main public methods are - .get(), .post()
+ * If property allowToRequest equals to true - allow requesting,
+ * otherwise - decline requesting.
+ * Simply usage inside component/services/etc.:
+ *  this.request.get({
+ *      url_id: 'forecasting/get_data',
+ *      data: {
+ *          param: '123',
+ *          param2: 456,
+ *          param3: [7, 8, 9]
+ *      }
+ *  })
+ *  .subscribe(
+ *      (d) => {
+ *          this.get_data_ = d;
+ *      },
+ *      (e) => {
+ *          console.log(e);
+ *      },
+ *      () => {
+ *          console.log('Complete!');
+ *      }
+ *  );
+ */
 export class AjaxService {
     /**
      * Shows ability to do request in this moment
@@ -124,8 +137,6 @@ export class AjaxService {
     constructor(private http: Http,
                 private loading: LoadingService,
                 private auth: AuthService) {
-
-        // this.urlsMapper = urlConf; // TODO Remove & remake
     }
 
     // public configure(serv_config: Object = {}) {
@@ -182,6 +193,12 @@ export class AjaxService {
         return null;
     }
 
+    /**
+     * Sorts out queue of requests and run this.startQuery() for each item if:
+     * - allow to request (this.allowToRequest == true)
+     * - current request was not sent
+     * If found synchronous request - sends request and breaks the loop
+     */
     private mapQueue() {
         if (!this.allowToRequest) return;
 
@@ -197,6 +214,14 @@ export class AjaxService {
         }
     }
 
+    /**
+     * Sends query to server for passed QueueItem;
+     * Subscribes for resolving query and run .next() method
+     * on QueueItem's observable - for execution subscribers of
+     * external components/services/etc.
+     * After execution all external subscribers - run this.endQuery()
+     * @param item
+     */
     private startQuery(item: QueueItem) {
         if (item.sync) {
             this.allowToRequest = false;
@@ -205,7 +230,6 @@ export class AjaxService {
         if (!item.request.url && item.url_id) {
             item.request.url = this.getUrl(item.url_id);
         }
-        // console.log(item.request.url);
         if (item.request.url) {
             this.query(item.request).subscribe((data) => {
                     if (item.sync) {
@@ -227,6 +251,11 @@ export class AjaxService {
         }
     }
 
+    /**
+     * Removes passed QueueItem from queue of requests
+     * and if found - run sort out the queue
+     * @param item
+     */
     private endQuery(item: QueueItem) {
         for (let i = 0; i < this.reqQueue.length; i++) {
             if (item.id == this.reqQueue[i].id) {
@@ -237,6 +266,12 @@ export class AjaxService {
         }
     }
 
+    /**
+     * Loads urls and info for each of them from server.
+     * Must be executed before first query.
+     * If it not executed - AjaxService doesn't know where to send queries.
+     * It adds synchronous query into queue.
+     */
     private loadUrlMapper() {
         this.reqForUrlMapperSent = true;
         let subject = new Subject<any>();
@@ -261,6 +296,17 @@ export class AjaxService {
         }, 10);
     }
 
+    /**
+     * Low-level method for execution any query to server.
+     * Should be used only by members of AjaxService.
+     * If it receives error from server (server error or application error) -
+     * runs private methods for handling this error.
+     * It uses LoadingService inside.
+     * Returns Observable 'BlackBox', which will be resolved
+     * when server answers for query.
+     * @param req Request
+     * @returns {Subject<any>}
+     */
     private query(req: Request): Subject<any> {
         // TODO REMAKE - delete blackBox
         let blackBox = new Subject<any>();
@@ -294,12 +340,27 @@ export class AjaxService {
         return blackBox;
     }
 
+    /**
+     * Handles application error and runs .error() method on query 'BlackBox'.
+     * If this error is auth error - runs this.auth.logoutByBackend()
+     * @param res
+     * @param blackBox
+     */
     private handleSiteError(res: ServerResponse, blackBox: Subject<any>) {
         // TODO Show error at view
         console.error('App Error message: ' + res.getError());
-        blackBox.error(res.getError()); // TODO Refactor (VL)
+        if (res.isAuthError()) {
+            this.auth.logoutByBackend();
+        }
+        blackBox.error(res.getError());
     }
 
+    /**
+     * Handles specific errors - server errors.
+     * Runs error callback on higher subscribers.
+     * @param error
+     * @param blackBox
+     */
     private handleServerError(error: Response, blackBox: Subject<any>) {
         // TODO handlers for ERROR TYPES
         if (error.status === 500) {
@@ -307,23 +368,32 @@ export class AjaxService {
         }
         // TODO Show error at view
         console.error('Server Error message: ' + error.status);
-        blackBox.error(error.status); // TODO Refactor (VL)
+        blackBox.error(error.status);
     }
 
+    /**
+     * Returns string url for url_id. Source of urls - this.urlsMapper.
+     * If can't get url path - returns null.
+     * @param url_id
+     * @returns {String}
+     */
     private getUrl(url_id: string) {
         return (url_id && this.urlsMapper && this.urlsMapper[url_id])
             ? this.urlsMapper[url_id].url : null;
     }
 
+    /**
+     * Low-level method for creating Request object for Angular Http Service.
+     * Creates request object with body in JSON format.
+     * Default request method = POST
+     * @param options {url: string, method: string, data: any}
+     * @returns {Request}
+     */
     private makeRequestInst(options: {
         url: string;
         method: string;
         data: any;
     }): Request { //IRequestOptions
-        // if (typeof options['url'] != 'string' || options['url'].length == 0) {
-        //     console.error('Wrong url_id property!');
-        //     return null;
-        // } // TODO Review maybe this is not needed
 
         let reqOpt = new BaseRequestOptions();
         let headers = new Headers();
@@ -374,6 +444,14 @@ export class AjaxService {
         return new Request(reqOpt.merge(obj_for_merge));
     }
 
+    /**
+     * Transforms input variable in safe query string.
+     * It uses encodeURIComponent() method.
+     * It doesn't include variable into result structure if value
+     * equals null or undefined!
+     * @param obj
+     * @returns {string}
+     */
     private objectToQueryString(obj: any) {
         var qs = _.reduce(obj, function (result, value, key) {
             if (!_.isNull(value) && !_.isUndefined(value)) {
