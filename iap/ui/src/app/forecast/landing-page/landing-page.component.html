@@ -1,0 +1,23 @@
+<div *ngIf="labels">
+    <div *ngIf="projectInfo">
+        <div>{{projectInfo.name}}</div>
+        <div>{{projectInfo.description}}</div>
+    </div>
+
+
+    <label>{{labels['recent_actions']}}</label>
+    <ul>
+        <li *ngFor="let act of recentActions">
+            <span>{{act.name}}</span>
+            <span>{{act.date}}</span>
+        </li>
+    </ul>
+    <div>
+        <a href="#" [routerLink]="['../dashboard']">Dashboard</a>
+        <a href="#" [routerLink]="['../comparison']">Comparison</a>
+        <a href="#" [routerLink]="['../report']">Report</a>
+        <a href="#" [routerLink]="['../scenarios']">Scenarios</a>
+    </div>
+</div>
+
+
