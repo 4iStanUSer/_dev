@@ -1,82 +1,3 @@
-/*
- INPUT VARIABLES:
- timescales:
- [{
- id:'',
- full_name:'',
- short_name:'',
- lag:''
- }]
-
- timelables:
- [{
- id:'',
- full_name:'',
- short_name:'',
- parent_index:'',
- timescale:''
- }]
-
- variables:
- [{
- id:'',
- full_name:'',
- short_name:'',
- type:'driver'|'output'|'decomp',
- metric:'',
- format:'',
- hint:''
- }]
-
- variable_values:
- {
- timescale_id: {
- var_id: {
- timelable_id: ''
- }
- }
- }
-
- change_over_period: {
- timescale_id: {
- var_id: [{
- start:'',
- end: '',
- abs: '',
- rate: ''
- }]
- }
- }
-
- decomp_types: [{
- id:'',
- full_name:'',
- short_name:''
- }]
-
- decomp: {
- timescale_id: {
- decomp_type_id:[{
- start: '',
- end: '',
- factors: [{
- var_id: '',
- abs: '',
- rate: ''
- }]
- }]
- }
- }
- factor_drivers: {
- var_id (factor_id): [{
- factor: var_id,
- driver: var_id
- }]
- }
-
- * */
-
-
 // Input Types
 type TimescalesInput = Array<Timescale>;
 type TimelablesInput = Array<Timelabel>;
@@ -157,6 +78,10 @@ type FactorDriver = {
 }
 
 
+/**
+ * Model of data for Dashboard Page.
+ * It uses by DataManager (DashboardComponent's service)
+ */
 export class DashboardDataModel {
     timescales: TimescalesInput = null;
     timelables: TimelablesInput = null;
@@ -189,7 +114,19 @@ export class DashboardDataModel {
     }
 
 
-    /*=====NEW REALIZATION====*/
+    /**
+     * Returns array of Timelabels for timescale between start_timelabel_id
+     * and end_timelabel_id.
+     * If end_timelabel_id is not defined - returns array from start_timelabel
+     * to end of timelabels list of timescale.
+     * If start_timelabel_id is not defined too - returns full list
+     * of timelabels for timescale!
+     *
+     * @param timescale_id
+     * @param start_timelabel_id
+     * @param end_timelabel_id
+     * @returns {Array<Timelabel>}
+     */
     getTimeLine(timescale_id: string,
                 start_timelabel_id: string = null,
                 end_timelabel_id: string = null): Array<Timelabel> {
@@ -216,8 +153,13 @@ export class DashboardDataModel {
         }
     }
 
+    /**
+     * Need to be removed
+     * @param timescale_id
+     * @returns {Array<Timelabel>}
+     */
     getScaleTimelabels(timescale_id: string): Array<Timelabel> {
-        // TODO Review
+        // TODO Review - use this.getTimeLine()
         let l = (this.timelables && this.timelables.length)
             ? this.timelables.length : 0;
         let output = [];
@@ -229,6 +171,15 @@ export class DashboardDataModel {
         return output;
     }
 
+    /**
+     * Returns array of absolute values for variable(variable_id)
+     * for timeline(timelabel_ids). Values are in same order as timelabels.
+     * If there is not value for variable for timelabel - it pushes null
+     * @param timescale_id
+     * @param variable_id
+     * @param timelabel_ids
+     * @returns {Array<number>}
+     */
     getPointsValue(timescale_id: string, variable_id: string,
                    timelabel_ids: Array<string>): Array<number> {
 
@@ -247,6 +198,12 @@ export class DashboardDataModel {
         return output;
     }
 
+    /**
+     * Returns parent Timelabel object, if there is not parent - returns null
+     * @param timelabel_id
+     * @param timescale_id
+     * @returns {Timelabel}
+     */
     getParentTimelabel(timelabel_id: string, timescale_id: string): Timelabel {
         let l = (this.timelables && this.timelables.length)
             ? this.timelables.length : 0;
@@ -265,6 +222,11 @@ export class DashboardDataModel {
         return null;
     }
 
+    /**
+     * Returns list of Variable objects, each of them has requested type
+     * @param type
+     * @returns {Array<Variable>}
+     */
     getVariablesByType(type: string): Array<Variable> {
         let output = [];
         let l = (this.vars && this.vars.length) ? this.vars.length : 0;
@@ -276,6 +238,15 @@ export class DashboardDataModel {
         return output;
     }
 
+    /**
+     * Returns Growth Rate absolute value for requested variable and period
+     * If there is not growth rate - returns null and push error into console
+     * @param variable_id
+     * @param start_timelabel_id
+     * @param end_timelabel_id
+     * @param timescale_id
+     * @returns {number}
+     */
     getGrowthRate(variable_id: string, start_timelabel_id: string,
                   end_timelabel_id: string, timescale_id: string): number {
         try {
@@ -286,22 +257,31 @@ export class DashboardDataModel {
                     change.start == start_timelabel_id
                     && change.end == end_timelabel_id
                 ) {
-                    return change.abs; // TODO Question: Absolute|Rate
+                    return change.abs; // TODO Question: Absolute|Rate OR Update
                 }
             }
         } catch (e) {
-            // TODO Implement query to server
             console.error('Don\'t have ChangeOverPeriod:',
                 variable_id, start_timelabel_id, end_timelabel_id);
             return null;
         }
     }
 
+    /**
+     * Returns count of time points to define previous period point.
+     * @param timescale_id
+     * @returns {number}
+     */
     getTimeScaleLag(timescale_id: string): number { // TODO Maybe use getTimescale()
         let ts = this.getTimescale(timescale_id);
         return (ts) ? ts.lag : null;
     }
 
+    /**
+     * Returns Timescale object by timescale_id
+     * @param timescale_id
+     * @returns {Timescale}
+     */
     getTimescale(timescale_id: string): Timescale {
         let l = (this.timescales && this.timescales.length)
             ? this.timescales.length : 0;
@@ -313,6 +293,13 @@ export class DashboardDataModel {
         return null;
     }
 
+    /**
+     * Returns previous sibling timelabel (in the same timescale)
+     * @param timescale_id
+     * @param timelabel_id
+     * @param lag
+     * @returns {Timelabel}
+     */
     getPreviousTimeLabel(timescale_id: string, timelabel_id: string,
                          lag: number): Timelabel {
 
@@ -331,6 +318,10 @@ export class DashboardDataModel {
         return null;
     }
 
+    /**
+     * Returns list of timescales with hierarchical order
+     * @returns {string[]|Array}
+     */
     getTimeScalesOrder(): Array<string> {
         return (this.timescales && this.timescales.length)
             ? this.timescales.map((ts: Timescale) => {
@@ -338,6 +329,10 @@ export class DashboardDataModel {
         }) : [];
     }
 
+    /**
+     * Returns list of decomposition types
+     * @returns {string[]|Array}
+     */
     getDecompositionTypes(): Array<string> {
         return (this.decompTypes && this.decompTypes.length)
             ? this.decompTypes.map((dt: DecompType) => {
@@ -345,6 +340,15 @@ export class DashboardDataModel {
         }) : [];
     }
 
+    /**
+     * Returns decomposition data for type, start and end timelabels.
+     * If there is not data for specified period - returns null
+     * @param decomp_type_id
+     * @param timescale_id
+     * @param start
+     * @param end
+     * @returns {Decomposition}
+     */
     getDecomposition(decomp_type_id: string,
                      timescale_id: string,
                      start: string,
@@ -359,10 +363,17 @@ export class DashboardDataModel {
                 }
             }
         } catch (e) {
+            console.error('Don\'t have decomposition data for:',
+                timescale_id, start, end);
         }
         return null;
     }
 
+    /**
+     * Returns Variable object by variable_id
+     * @param variable_id
+     * @returns {Variable}
+     */
     getVariable(variable_id: string): Variable {
         let l = (this.vars && this.vars.length) ? this.vars.length : 0;
         for (let i = 0; i < l; i++) {
@@ -373,12 +384,22 @@ export class DashboardDataModel {
         return null;
     }
 
+    /**
+     * Returns list of factors (variable_id) for decomposition type
+     * @param decomp_type_id
+     * @returns {Array<string>}
+     */
     getDecompTypeFactors(decomp_type_id: string): Array<string> {
         return (this.decompTypeFactors
         && this.decompTypeFactors[decomp_type_id])
             ? this.decompTypeFactors[decomp_type_id] : null;
     }
 
+    /**
+     * Returns list of drivers (variable_id) for factor
+     * @param factorId
+     * @returns {Array<string>}
+     */
     getFactorDrivers(factorId: string): Array<string> {
         if (this.factorDrivers && this.factorDrivers[factorId]) {
             return this.factorDrivers[factorId].map((item) => {
@@ -388,27 +409,45 @@ export class DashboardDataModel {
         return null;
     }
 
+    /**
+     * Returns related factor (variable_id) for impact section
+     * If null data is passed, or not found related factor,
+     * or found more than one - returns null
+     * @param factorId
+     * @param driverId
+     * @returns {string}
+     */
     getRelatedFactor(factorId: string, driverId: string): string {
         if (!factorId || !driverId)
             return null;
         else {
-            let output = '';
+            let output = null;
             try {
-                let factorsByDriver = this.factorDrivers[factorId].filter(function (el) {
-                    return (el['driver'] === driverId);
-                });
-                //TODO find out if it is ok to use [0] and if checking for arr length is needed factorsByDriver.len must be equal to 1
-                output = factorsByDriver[0]['factor'];
+                let factorsByDriver = this.factorDrivers[factorId]
+                    .filter(function (el) {
+                        return (el['driver'] === driverId);
+                    });
+                if (factorsByDriver.length == 1) {
+                    output = factorsByDriver[0]['factor'];
+                } else if (factorsByDriver.length > 1) {
+                    console.error('More than one related factor');
+                } else {
+                    console.error('Related factor not found');
+                }
             }
-            catch (e) {
-                console.error('Related factor not found');
-                output = null;
-            }
-
+            catch (e) { }
             return output;
         }
     }
 
+    /**
+     * Check if there is decomposition data for requested period.
+     * Check this in first decomposition type's data in specified timescale
+     * @param timescale
+     * @param start
+     * @param end
+     * @returns {boolean}
+     */
     hasDecomposition(timescale: string, start: string, end: string): boolean {
         // TODO Optimize method
         if (this.decomp && this.decomp[timescale]) {
@@ -426,6 +465,14 @@ export class DashboardDataModel {
         return false;
     }
 
+    /**
+     * Check if there is changes over period for requested period.
+     * Check this in first variable's data in specified timescale
+     * @param timescale
+     * @param start
+     * @param end
+     * @returns {boolean}
+     */
     hasChangesOverPeriod(timescale: string, start: string,
                          end: string): boolean {
         // TODO Optimize method
@@ -444,8 +491,12 @@ export class DashboardDataModel {
         return false;
     }
 
-    addDecomposition(decomp: DecompInput) {
-        // TODO Check merge method
+    /**
+     * Adds set of data into decomposition storage. Old data keeps.
+     * @param decomp
+     */
+    addDecomposition(decomp: DecompInput): void {
+        // TODO Check .merge() method
         // TODO Check for duplicate
         if (!this.decomp) {
             this.decomp = {};
@@ -468,8 +519,12 @@ export class DashboardDataModel {
         }
     }
 
+    /**
+     * Adds set of data into changes storage. Old data keeps.
+     * @param decomp
+     */
     addChangesOverPeriod(changes: ChangesOverPeriodInput) {
-        // TODO Check merge method
+        // TODO Check .merge() method
         // TODO Check for duplicate
         if (!this.changes) {
             this.changes = {};
