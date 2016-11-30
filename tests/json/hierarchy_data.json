@@ -1,16 +1,41 @@
 {
+  "path":[
+
+    {"id":0,"node":["Ukraine"]},
+    {"id":1,"node":  ["Ukraine","Kiev"]},
+    {"id":2,"node":  ["Ukraine","Odessa"]},
+    {"id":3,"node":  ["Ukraine","Lviv"]},
+    {"id":4,"node":  ["Ukraine","Kiev","Candy"]},
+    {"id":5,"node":  ["Ukraine","Kiev","Cars"]},
+    {"id":6,"node":  ["Ukraine","Odessa","Candy"]},
+    {"id":7,"node":  ["Ukraine","Odessa","Cars"]},
+    {"id":8,"node":  ["Ukraine","Odessa","Wine"]},
+    {"id":9,"node":  ["Ukraine","Odessa","Cars","Market"]},
+    {"id":10,"node":  ["Ukraine","Odessa","Cars","Shop"]},
+    {"id":11,"node":  ["Ukraine","Odessa","Wine","Bars"]},
+    {"id":12,"node":  ["Ukraine","Odessa","Wine","Market"]},
+    {"id":13,"node":  ["Ukraine","Odessa","Cars","Market","Silpo"]},
+    {"id":14,"node":  ["Ukraine","Odessa","Cars","Shop","Number"]},
+    {"id":15,"node":  ["Ukraine","Odessa","Wine","Bars","Good Bar"]},
+    {"id":16,"node":  ["Ukraine","Odessa","Wine","Market","Silpo"]}
+
+  ],
 
   "graph": {
+          "root":["Ukraine"],
           "Ukraine": ["Kiev", "Odessa", "Lviv"],
           "Odessa": ["Cars", "Wine"],
           "Kiev": ["Candy"],
           "Cars": ["Market","Shop"],
           "Wine": ["Bars","Market"],
-          "Bars": [],
+          "Bars": ["Good Bar"],
+          "Good Bar":[],
           "Candy": [],
-          "Market": [],
-          "Shop": [],
-          "Lviv": []
+          "Market": ["Silpo"],
+          "Silpo":[],
+          "Shop": ["Number"],
+          "Lviv": [],
+          "Number":[]
           },
   "description": {"Ukraine": ["Geo", "Country"],
                   "Kiev": ["Geo","Region"],
@@ -21,6 +46,10 @@
                   "Cars": ["Product", "Transport"],
                   "Market": ["Reseller", "Market"],
                   "Shop": ["Reseller", "Market"],
-                  "Bars": ["Reseler", "Market"]
+                  "Bars": ["Reseler", "Market"],
+                  "Good Bar":["Reseler", "Market"],
+                  "Silpo":["Reseler", "Market"],
+                  "Number":["Reseler", "Market"]
   }
+
 }

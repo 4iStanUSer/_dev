@@ -1,15 +1,33 @@
-{
-        "properties": {"annual": {"name": "Annual", "growth_lag": 1}},
+{"timelines": {
+        "properies": {"annual": {"name": "Annual", "growth_lag": 1}},
         "alias": {
-            "all": {"annual": ["2013", "2018"]},
-            "history": {"annual": ["2013", "2015"]},
-            "forecast": {"annual": ["2016", "2018"]}
+            "all": {"annual": ("2013", "2018")},
+            "forecast": {"annual": ("2013", "2015")},
+            "history": {"annual": ("2016", "2018")}
         },
-        "top_ts_points": [
+        "top_points": [
             {
                 "name_full": "2012",
                 "name_short": "2012",
-                "children": []
+                "children": [
+                  "top_ts_points":[
+                    {
+                    "name_full": "January",
+                    "name_short": "Jan",
+                    "children": []
+                    },
+                    {
+                    "name_full": "February",
+                    "name_short": "Feb",
+                    "children": []
+                    },
+                    {
+                    "name_full": "March",
+                    "name_short": "Mar",
+                    "children": []
+                    }
+                  ]
+                ]
             },
             {
                 "name_full": "2013",
@@ -43,3 +61,4 @@
             }
         ]
     }
+}

@@ -1,225 +1,175 @@
-import pytest
 #load modules
 from iap.forecasting.workbench.container.entities_hierarchy import Node
-from iap.common.helper_lib import Meta,is_equal_meta
-
-path = []
-
-#fixture executed before each function start
-def setup_function(function):
-    path=[]
-
-#fixture executed before each function end
-def teardown_function(function):
-    path.clear()
-
+from iap.common.helper_lib import Meta, is_equal_meta
+import pytest
 
 #Load data from json
 import json
 input_data = open('json/hierarchy_data.json').read()
 data = json.loads(input_data)
 
-
-#get_graph_data
+#get description data
 @pytest.fixture
 def description():
     description = data['description']
     # meta information about each node
     return description
+#get pathes data
+@pytest.fixture
+def list_of_pathes():
+    l = []
+    for i in data['path']:
+        l.insert(i['id'], i['node'])
+    return l
 
-#get description data
+#get graph data
 @pytest.fixture
 def graph():
     return data['graph']
 
+#encoded list of pathes
+encoded_path = []
+#list of nodes
+list_of_nodes = []
 
-def encode_json_into_node(graph, description, root_node):
-    '''
+#fixture executed before each function start
+def setup_function(function):
+    list_of_nodes = []
+    encoded_path=[]
 
-    Function encode tree structure of json file or dictionary into Node object
+#fixture executed before each function end
+def teardown_function(function):
+    list_of_nodes.clear()
+    encoded_path.clear()
 
-    :param graph:
-    :param description:
-    :param root_node:
+def encode_list_of_pathes_into_node(root_node, list_of_pathes, description):
+    '''Function serialise json list of pathes into Node object root_node
+
+    :param root_node: root node
+    :param list_of_pathes: list of pathes in graph
+    :param description: meta data of each node
     :return:
 
     '''
 
-    if root_node.name in path:
-        pass
-    else:
-        path.append(root_node.name)
-        for child in graph[root_node.name]:
-            node = Node(child,description[child])
-            root_node.children.append(node)
-            encode_json_into_node(graph, description,node)
-
-def decode_node_into_json(data_graph, data_description, root_node):
-    '''
-    Function decode tree structure of Node object into the json or dict
-
-    :param data_graph:
-    :param data_desciprion:
-    :param root_node:
-    :return:
-
-    '''
-
-    data_graph[root_node.name] = []
-    if root_node.children == []:
-        pass
-    else:
-        for child in root_node.children:
-            data_graph[root_node.name].append(child.name)
-            decode_node_into_json(data_graph, data_description, child)
-
-
-
-
-def test_preparation(graph, description):
-    '''
-    Test for encoding_ and decoding functions
-
-
-    :param graph:
-    :param description:
-    :return:
-
-    '''
-    root_node = Node('Ukraine', description['Ukraine'])
-    #encoding json object into root_node
-
-    encode_json_into_node(graph, description, root_node)
-
-    data_graph = {}
-    data_description = {}
-
-    decode_node_into_json(data_graph, data_description, root_node)
-
-
-    #print("input: {0}, output: {1}, expected {2}".format(graph, data_graph,"Dictionary equal !!!")
-    assert data_graph == graph
-
-#!!!      Tests for Node methods   !!!
-
-def test_add_child(graph, description):
-    '''
-    Test for add_child(self,name,meta)
-
-
-
-    :param graph:
-    :param description:
-    :return:
-    '''
-
-    print("input: , output: , expected: {0}".format("Kiev"))
-
-    def add_child(input_name):
-        parent = Node('Ukraine', description['Ukraine'])
-        child = parent.add_child(input_name, Meta(description[input_name][0], description[input_name][1]))
-        return child.name
-
-    assert add_child("Kiev") == "Kiev"
-    #print("input: {0}, output: {1}, expected {2}".format('Kiev', add_child("Kiev"), " Kiev")
-
-    assert add_child("Ukraine") == "Kiev"
-    #print("input: {0}, output: {1}, expected {2}".format('Ukraine', add_child("Ukraine"), "Kiev")
-
-    assert add_child("Kiev") == "Odessa"
-    #print("input: {0}, output: {1}, expected {2}".format('Kiev', add_child("Kiev"), "Odessa")
-
-
-
-def test_add_node_by_path(graph, description):
-    '''
-    Test for method add_node_by_path(self,path, metas, depth, new_nodes)
-
-
-    :param graph:
-    :param description:
-    :return:
-    '''
-    def add_by_path(path,meta_list):
-        parent = Node('Ukraine', description['Ukraine'])
-        metas = [Meta(meta[0], meta[1]) for meta in meta_list]
+    for path in list_of_pathes:
         new_nodes = []
-        depth =0
-        new_node = parent.add_node_by_path(path, metas, depth, new_nodes)
-        return new_node.name
+        depth = 0
+        metas = []
+        for node_name in path:
+            metas.append(Meta(description[node_name][0], description[node_name][1]))
+        new_node = root_node.add_node_by_path(path, metas,depth,new_nodes)
+        #create list of node's and add specific id to node
+        new_node.id = list_of_pathes.index(path)
+        list_of_nodes.insert(new_node.id, new_node)
+    return list_of_pathes
 
-    assert add_by_path(['Kiev'], [description['Kiev']])=='Kiev'
-    #print("input: {0}, output: {1}, expected {2}".format('Kiev',add_by_path(['Kiev'], [description['Kiev']]), "Kiev")
+def decode_node_into_list_of_pathes(root_node, path):
+    '''Deserialise graph structure of root_node into list of pathes
 
-    assert add_by_path(['Kiev', 'Candy'], [description['Kiev'], description['Candy']]) == 'Kiev'
-    #print("input: {0}, output: {1}, expected {2}".format(['Kiev', 'Candy'], add_by_path(['Kiev', 'Candy'], [description['Kiev'], description['Candy']]), " Kiev")
+    :param root_node: root node
+    :param path: list that contain hitory of path traversing
+    :return:
 
-def test_get_node_by_path(graph, description):
     '''
-    Test for  method get_node_by_path(self,path)
 
-    Input: path
-    Output: node's name
-    Expected: names equality
+    for node in root_node.children:
+        new_path = path[:]
+        new_path.append(node.name)
+        encoded_path.insert(node.id, new_path)
+        decode_node_into_list_of_pathes(node, new_path)
 
+def test_preparation(description, list_of_pathes):
+    '''Test for encoding_ and decoding functions
+
+     first step function serialise json in node
+     next step in deserialise node struncture in list of pathes
+     matcher check if input and output list_of_pathes and encoded_list equal
 
     :param graph:
     :param description:
     :return:
 
+    '''
+
+    root_node = Node('root', (None, None))
+    encode_list_of_pathes_into_node(root_node, list_of_pathes, description)
+    decode_node_into_list_of_pathes(root_node, path=[])
+
+    assert list_of_pathes.sort() == encoded_path.sort()
+
+def test_add_child(list_of_pathes, description):
+    '''Test for add_child(self,name,meta)
+
+    Input cutted tree - without last element
+    Output root node with added elements
+
+    :param graph:
+    :param description:
+    :return:
+
+    '''
+
+    def add_child():
+        #tree preparation
+        tree = list_of_pathes[:-1]
+        #bottom of tree
+        last_child = list_of_pathes[-1]
+        root_node = Node('root', (None, None))
+        encode_list_of_pathes_into_node(root_node, list_of_pathes[:-1], description)
+        last_node = list_of_nodes[-1]
+        print(tree)
+        print(last_child[-1])
+        print(last_node.name)
+        last_node.add_child(last_child[-1], Meta(description[last_child[-1]][0], description[last_child[-1]][1]))
+        return root_node
+
+    decode_node_into_list_of_pathes(add_child(), path=[])
+
+    actual = encoded_path
+    expected = list_of_pathes
+    assert actual.sort() == expected.sort()
+
+    actual = encoded_path
+    expected = list_of_pathes[:-2]
+    assert actual == expected
+
+def test_get_node_by_path(list_of_pathes, description):
+    '''Test for  method get_node_by_path(self,path)
+
     Input: path
     Output: node's name
     Expected: names equality
 
+    :param graph:
+    :param description:
+    :return:
 
     '''
-    def get_node_by_path(path):
-        root_node = Node('Ukraine', description['Ukraine'])
-        encode_json_into_node(graph, description, root_node)
+    def get_node_by_path(list_of_pathes, path):
+        root_node = Node('root', (None, None))
+        encode_list_of_pathes_into_node(root_node, list_of_pathes, description)
         output_node = root_node.get_node_by_path(path)
-        return output_node.name
+        return output_node
 
-    assert get_node_by_path([]) == 'Ukraine'
-    #print("input: {0}, output: {1}, expected {2}".format('Kiev',add_by_path(['Kiev'], [description['Kiev']]), "Kiev")
+    actual_id = get_node_by_path(list_of_pathes, ['Ukraine']).id
+    expected_id = 0
+    assert actual_id == expected_id
 
-    assert get_node_by_path(['Kiev']) == 'Kiev'
-    #print("input: {0}, output: {1}, expected {2}".format('Kiev',add_by_path(['Kiev'], [description['Kiev']]), "Kiev")
+    actual_id = get_node_by_path(list_of_pathes, ["Ukraine", "Odessa", "Wine", "Market", "Silpo"]).id
+    expected_id = 16
+    assert actual_id == expected_id
 
-    assert get_node_by_path(['Kiev', 'Candy']) == 'Candy'
-    #print("input: {0}, output: {1}, expected {2}".format('Kiev',add_by_path(['Kiev'], [description['Kiev']]), "Kiev")
+    actual_id = get_node_by_path(list_of_pathes, ['Ukraine', 'Kiev']).id
+    expected_id = 4
+    assert actual_id == expected_id
 
+    actual_id = get_node_by_path(list_of_pathes, ["Ukraine","Odessa","Wine","Market","Silpo"]).id
+    expected_id = 12
+    assert actual_id == expected_id
 
-def test_get_and_add_node_by_path(graph,description):
-    '''
-    Test on both methods  - get_node_by_path(self,path) and add_node_by_path
-
-
-    :param graph:
-    :param description:
-    :return:
-    '''
-    def get_add_node_by_path():
-        root_node = Node('Ukraine', description['Ukraine'])
-        encode_json_into_node(graph, description, root_node)
-
-        added_node = root_node.add_node_by_path(path, metas, depth, new_nodes)
-
-        getted_node = root_node.get_node_by_path(path)
-
-        return [added_node,getted_node]
-
-    assert get_add_node_by_path()
-    #print("input: {}, output: {1}, expected {2}".format([],add_by_path(['Kiev'], [description['Kiev']]), "Kiev")
-
-
-    assert get_add_node_by_path()
-    #print("input: {0}, output: {1}, expected {2}".format('Kiev',add_by_path(['Kiev'], [description['Kiev']]), "Kiev")
-
-
-def test_get_children_by_meta(graph,description):
-    '''
-    Test for method get_children_by_meta(self,meta_filter,node_ids)
-
+def test_get_children_by_meta(list_of_pathes, description):
+    '''Test for method get_children_by_meta(self,meta_filter,node_ids)
 
     Input: meta filter
     Output: meta data of founded node by input filter
@@ -229,93 +179,114 @@ def test_get_children_by_meta(graph,description):
 
     '''
 
-
-    def get_children_by_meta(meta_filter):
-        root_node = Node('Ukraine', description['Ukraine'])
-        encode_json_into_node(graph,description, root_node)
+    def get_children_by_meta(list_of_pathes, meta, nodes_ids):
+        root_node = Node('root', (None,None))
+        encode_list_of_pathes_into_node(root_node, list_of_pathes, description)
         node_ids = []
+        meta_filter = Meta(meta[0], meta[1])
         output_node = root_node.get_children_by_meta(meta_filter, node_ids)
-        return output_node.meta
+        print(list_of_pathes)
+        return node_ids
 
-    meta_filter = Meta(description['Kiev'][0], description['Kiev'][1])
-    assert get_children_by_meta(meta_filter) == meta_filter
+    actual = get_children_by_meta(list_of_pathes, ["Geo", "Region"], nodes_ids=[])
+    expected = [1,2,3]
+    assert actual == expected
 
+    actual = get_children_by_meta(list_of_pathes, ["Reseller", "Market"], nodes_ids=[])
+    expected = [1,3,4,5]
+    assert actual == expected
 
+    actual = get_children_by_meta(list_of_pathes, ["Reseller", "Market"], nodes_ids=[])
+    expected = [1,3,4,5]
+    assert actual == expected
 
+def test_parent_by_meta(list_of_pathes, description):
+    '''Test for method get_parent_by_meta(self,meta_filter)
 
-
-def test_parent_by_meta(graph,description):
-    '''
-    test for method get_parent_by_meta(self,meta_filter)
-
-    Input: meta data filters
+    Input: meta data filters, node id
     Output: list of meta data of getted parent node
-    Expected: equality between founded and search meta data
 
     :return:
 
     '''
 
-
-    def get_parent_by_meta(meta_filter):
+    def get_parent_by_meta(meta_filter, id):
+        meta_filter = Meta(meta_filter[0], meta_filter[1])
         root_node = Node('Ukraine', description['Ukraine'])
-        encode_json_into_node(graph,description, root_node)
-        print(len(root_node.children))
-        child = root_node.children[0]
-        output_node = child.get_parent_by_meta(meta_filter)
-        return [output_node.meta['level'],output_node.meta['dimension']]
+        encode_list_of_pathes_into_node(root_node, list_of_pathes, description)
+        default_node = list_of_nodes[id]
+        output_node = default_node.get_parent_by_meta(meta_filter)
+        return output_node
 
-    meta_filter = Meta(description['Odessa'][0], description['Odessa'][1])
-    assert get_parent_by_meta(meta_filter) == [meta_filter['level'],meta_filter['dimension']]
+    actual = get_parent_by_meta(["Geo", "Country"], 2).id
+    expected = 0
+    assert actual == expected
 
+    actual = get_parent_by_meta(["Geo", "Region"], 15).id
+    expected = 2
+    assert actual == expected
 
+    actual = get_parent_by_meta(["Product", "Drink"], 7).id
+    expected = 1
+    assert actual == expected
 
-def test_rename(graph,description):
-    '''
-    Test for rename(self,new_name) method
+def test_rename(graph, description):
+    '''Test for rename(self,new_name) method
 
     Input: new_name
     Output: node's new name
     Expected: name equality
 
     :return:
+
     '''
+
     def rename(new_name):
         root_node = Node('Ukraine', description['Ukraine'])
         root_node.rename(new_name)
         return root_node.name
 
     assert rename('USA') == 'USA'
-    #print("input: {0}, output: {1}, expected {2}".format('USA',rename('USA'), "USA")
 
-    assert rename('') == 'Ukraine'
-    #print("input: {0}, output: {1}, expected {2}".format('',rename(''), "Ukraine")
+    assert rename('Ukrane') == 'Ukrane'
 
+def test_get_path(list_of_pathes, description):
+    '''Test for get_path(self,node) method
 
-def test_get_path(graph,description):
-
-    '''
-    Test for get_path(self,node) method
-
-    Input node
-    Output path
-
-    Expected check path equality
-
+    Input node id
+    Output path of node
+    Expected path equality
 
     :return:
+
     '''
-    print(path)
-    def get_path(path,metas):
+
+    def get_path(id):
         root_node = Node('Ukraine', description['Ukraine'])
-        encode_json_into_node(graph, description, root_node)
-        root_node.children[-1].get_path(path,metas)
+        path = []
+        metas = []
+        encode_list_of_pathes_into_node(root_node, list_of_pathes, description)
+        default_node = list_of_nodes[id]
+        default_node.get_path(path, metas)
         return path
-    assert get_path([],[]) == ['Ukraine']
-    #print("input: {0}, output: {1}, expected {2}".format([],get_path([],[]), ['Ukraine'])
 
+    actual = get_path(0)
+    expected = ["Ukraine"]
+    assert actual == expected
 
-    assert get_path(['Kiev'], []) == ['Kiev']
-    #print("input: {0}, output: {1}, expected {2}".format(['Kiev'],get_path([],[]), ['Kiev'])
+    actual = get_path(2)
+    expectd = ["Ukraine"]
+    assert actual == expected
 
+    actual = get_path(12)
+    expected = ["Ukraine","Odessa","Cars","Market","Silpo"]
+    assert actual == expected
+
+    actual = get_path(2)
+    expected= ["Ukraine','Kiev"]
+    assert actual == expected
+
+    actual = get_path(14)
+    expected = ["Ukraine","Odessa","Wine","Bars","Good Bar"]
+    assert actual == expected
 
