@@ -212,7 +212,7 @@ def test_parent_by_meta(list_of_pathes, description):
 
     def get_parent_by_meta(meta_filter, id):
         meta_filter = Meta(meta_filter[0], meta_filter[1])
-        root_node = Node('Ukraine', description['Ukraine'])
+        root_node = Node('root', (None, None))
         encode_list_of_pathes_into_node(root_node, list_of_pathes, description)
         default_node = list_of_nodes[id]
         output_node = default_node.get_parent_by_meta(meta_filter)
@@ -242,7 +242,7 @@ def test_rename(graph, description):
     '''
 
     def rename(new_name):
-        root_node = Node('Ukraine', description['Ukraine'])
+        root_node = Node('root', (None,None))
         root_node.rename(new_name)
         return root_node.name
 
