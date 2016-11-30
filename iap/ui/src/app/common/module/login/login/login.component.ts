@@ -36,7 +36,10 @@ export class LoginComponent implements OnInit {
                         // If no redirect has been set, use the default
                         // let redirect = this.auth.redirectUrl
                         //     ? this.auth.redirectUrl : '/';
+
+                        /*let redirect = '/forecast';*/
                         let redirect = '/forecast';
+
                         // Redirect the user
                         this.router.navigate([redirect]);
                     }
