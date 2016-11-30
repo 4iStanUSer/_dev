@@ -14,6 +14,7 @@ def description():
     description = data['description']
     # meta information about each node
     return description
+
 #get pathes data
 @pytest.fixture
 def list_of_pathes():
@@ -28,14 +29,14 @@ def graph():
     return data['graph']
 
 #encoded list of pathes
-encoded_path = []
+encoded_path = {}
 #list of nodes
-list_of_nodes = []
+list_of_nodes = {}
 
 #fixture executed before each function start
 def setup_function(function):
-    list_of_nodes = []
-    encoded_path=[]
+    list_of_nodes = {}
+    encoded_path.clear()
 
 #fixture executed before each function end
 def teardown_function(function):
@@ -61,7 +62,8 @@ def encode_list_of_pathes_into_node(root_node, list_of_pathes, description):
         new_node = root_node.add_node_by_path(path, metas,depth,new_nodes)
         #create list of node's and add specific id to node
         new_node.id = list_of_pathes.index(path)
-        list_of_nodes.insert(new_node.id, new_node)
+        list_of_nodes[new_node.id] = new_node
+
     return list_of_pathes
 
 def decode_node_into_list_of_pathes(root_node, path):
@@ -76,7 +78,7 @@ def decode_node_into_list_of_pathes(root_node, path):
     for node in root_node.children:
         new_path = path[:]
         new_path.append(node.name)
-        encoded_path.insert(node.id, new_path)
+        encoded_path[node.id] = new_path
         decode_node_into_list_of_pathes(node, new_path)
 
 def test_preparation(description, list_of_pathes):
@@ -96,7 +98,7 @@ def test_preparation(description, list_of_pathes):
     encode_list_of_pathes_into_node(root_node, list_of_pathes, description)
     decode_node_into_list_of_pathes(root_node, path=[])
 
-    assert list_of_pathes.sort() == encoded_path.sort()
+    assert list_of_pathes == [val for val in encoded_path.values()]
 
 def test_add_child(list_of_pathes, description):
     '''Test for add_child(self,name,meta)
@@ -110,28 +112,26 @@ def test_add_child(list_of_pathes, description):
 
     '''
 
-    def add_child():
+    def add_child(name):
+        depth = len(list_of_pathes)-2
         #tree preparation
         tree = list_of_pathes[:-1]
         #bottom of tree
-        last_child = list_of_pathes[-1]
         root_node = Node('root', (None, None))
         encode_list_of_pathes_into_node(root_node, list_of_pathes[:-1], description)
-        last_node = list_of_nodes[-1]
-        print(tree)
-        print(last_child[-1])
-        print(last_node.name)
-        last_node.add_child(last_child[-1], Meta(description[last_child[-1]][0], description[last_child[-1]][1]))
+        last_node = list_of_nodes[depth]
+        last_node.add_child(name, Meta(description[name][0], description[name][1]))
+        last_node.children[-1].id = depth+1
         return root_node
 
-    decode_node_into_list_of_pathes(add_child(), path=[])
-
-    actual = encoded_path
+    decode_node_into_list_of_pathes(add_child("Number"), path=[])
+    actual = [val for val in encoded_path.values()]
     expected = list_of_pathes
-    assert actual.sort() == expected.sort()
+    assert actual == expected
 
-    actual = encoded_path
-    expected = list_of_pathes[:-2]
+    decode_node_into_list_of_pathes(add_child("Kiev"), path=[])
+    actual = [val for val in encoded_path.values()]
+    expected = list_of_pathes
     assert actual == expected
 
 def test_get_node_by_path(list_of_pathes, description):
@@ -262,7 +262,7 @@ def test_get_path(list_of_pathes, description):
     '''
 
     def get_path(id):
-        root_node = Node('Ukraine', description['Ukraine'])
+        root_node = Node('root', (None,None))
         path = []
         metas = []
         encode_list_of_pathes_into_node(root_node, list_of_pathes, description)
@@ -270,12 +270,12 @@ def test_get_path(list_of_pathes, description):
         default_node.get_path(path, metas)
         return path
 
-    actual = get_path(0)
-    expected = ["Ukraine"]
+    actual = get_path(1)
+    expected = ["Ukraine","Kiev"]
     assert actual == expected
 
-    actual = get_path(2)
-    expectd = ["Ukraine"]
+    actual = get_path(0)
+    expected = ["Ukraine"]
     assert actual == expected
 
     actual = get_path(12)
