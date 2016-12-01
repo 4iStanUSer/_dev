@@ -17,7 +17,9 @@
     {"id":13,"node":  ["Ukraine","Odessa","Cars","Market","Silpo"]},
     {"id":14,"node":  ["Ukraine","Odessa","Cars","Shop","Number"]},
     {"id":15,"node":  ["Ukraine","Odessa","Wine","Bars","Good Bar"]},
-    {"id":16,"node":  ["Ukraine","Odessa","Wine","Market","Silpo"]}
+    {"id":16,"node":  ["Ukraine","Odessa","Wine","Market","Silpo"]},
+    {"id":17,"node":  ["Ukraine","Odessa","Wine","Market","Silpo","Number"]}
+
 
   ],
 
