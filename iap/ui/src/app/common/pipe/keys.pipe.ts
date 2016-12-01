@@ -4,7 +4,7 @@ import {Pipe, PipeTransform} from '@angular/core';
     name: 'keys'
 })
 /**
- * Pipe for getting keys of input object
+ * Pipe for getting list of keys of object
  */
 export class KeysPipe implements PipeTransform {
 

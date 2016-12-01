@@ -14,6 +14,13 @@ export type WaterfallChartDataInput = Array<{
     templateUrl: './waterfall-chart.component.html',
     styleUrls: ['./waterfall-chart.component.css']
 })
+/**
+ * Simple wrapper component for Waterfall Chart.
+ * http://www.highcharts.com/demo/waterfall
+ * Main aim - configure chart options, process/transform input data
+ * for using inside Highcharts library.
+ * Should be used inside template of page/tab components
+ */
 export class WaterfallChartComponent implements OnInit {
 
     private chart: Chart = null;

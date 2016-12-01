@@ -1,18 +1,28 @@
 import {Component, Input, Output, EventEmitter} from '@angular/core';
 import {Helper} from "../../helper";
 
+/**
+ * Describes input data for table column or row
+ */
 export interface TableWidgetRowColItem {
     id: string;
     parent_id: string;
     meta: Array<{name: string;}>;
     notSelectable?: boolean;
 }
+
+/**
+ * Describes input structure for table "content block"
+ */
 export interface TableWidgetValues {
     [row_id: string]: {
         [col_id: string]: string|number|Object;
     }
 }
 
+/**
+ * Describes input structure for TableWidget component
+ */
 export interface TableWidgetData {
     selected_row_id?: string;
     appendix: Array<string>;
@@ -24,7 +34,10 @@ export interface TableWidgetData {
 //     mode: string; // vertical|horizontal // TODO Implement
 // }
 
-
+/**
+ * Stores table row's data (only data) and operations with this data,
+ * which based on data logic
+ */
 class RowModel {
     depth: number = 0;
     parent: RowModel = null;
@@ -83,6 +96,10 @@ class RowModel {
     }
 }
 
+/**
+ * Stores table column's data (only data) and operations with this data,
+ * which based on data logic
+ */
 class ColModel {
     depth: number = 0;
     parent: ColModel = null;
@@ -97,7 +114,6 @@ class ColModel {
         this.depth = this.parent.depth + 1;
         this.parent.children.push(this);
     }
-
 }
 
 
@@ -106,18 +122,57 @@ class ColModel {
     templateUrl: './table-widget.component.html',
     styleUrls: ['./table-widget.component.css']
 })
+/**
+ * "Simple" component for showing table with collapsible rows and columns.
+ * TODO collapsible columns
+ * TableWidget catches clicks on allowed to click rows
+ * and fires event 'row-select' and passes clicked row ID.
+ * Columns and rows must have same interface for convenient deal with them.
+ */
 export class TableWidgetComponent {
 
     private transpose: boolean = false;
 
+    /**
+     * Count of rows for columns' head
+     * @type {number}
+     */
     private colsMetaCount: number = 0;
-    private rowsMetaCount: number = 0;
-    private appendixIndex: number = 0;
 
+    /**
+     * Count of columns for rows' head
+     * @type {number}
+     */
+    private rowsMetaCount: number = 0;
+
+    /**
+     * Storage for rows models. It uses at template.
+     * @type {Array<RowModel>}
+     */
     private rows: Array<RowModel> = [];
+
+    /**
+     * Storage for columns models. It uses at template.
+     * @type {Array<RowModel>}
+     */
     private cols: Array<ColModel> = [];
+
+    /**
+     * Storage for cells values. It uses at template.
+     * @type {Array<RowModel>}
+     */
     private values: Object = null;
+
+    /**
+     * Data for top-left corner of table (intersection of head cells).
+     * @type {Array<string>}
+     */
     private appendix: Array<string> = [];
+
+    /**
+     * ID of selected row
+     * @type {string}
+     */
     private selectedRowId: string = null;
 
     @Output('row-select') rowSelect = new EventEmitter();
@@ -131,7 +186,6 @@ export class TableWidgetComponent {
 
         this.values = d['values'];
         this.appendix = d['appendix'];
-        this.appendixIndex = 0;
         this.selectedRowId = (d['selected_row_id'])
             ? d['selected_row_id'] : null;
 
@@ -196,6 +250,10 @@ export class TableWidgetComponent {
     constructor() {
     }
 
+    /**
+     * Catches click on row and fires upper event 'row-select' with row's ID
+     * @param row
+     */
     private onClickRow(row: RowModel) {
         if (!row.notSelectable) {
             if (this.selectedRowId != row.id) {
@@ -207,6 +265,13 @@ export class TableWidgetComponent {
         }
     }
 
+    /**
+     * Unification for getting cell's value - from single value, Object, etc.
+     * TODO Implement type format
+     * @param row_id
+     * @param col_id
+     * @returns {any}
+     */
     private getValue(row_id: string, col_id: string) {
         try {
             return this.values[row_id][col_id]; // TODO Add for objects
@@ -215,6 +280,13 @@ export class TableWidgetComponent {
         }
     }
 
+    /**
+     * Adds new item(column|row) into passed storage with right order -
+     * child exactly under parent - for drawing at template
+     * @param addInto
+     * @param addWhat
+     * @param alreadyAdded
+     */
     private addItems(addInto: Array<RowModel|ColModel>,
                      addWhat: Array<RowModel|ColModel>,
                      alreadyAdded: Object) {
