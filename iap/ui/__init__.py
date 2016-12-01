@@ -1971,7 +1971,6 @@ def get_dashboard_data(req):
 
 
 def get_options_for_entity_selector(req):
-    auth.is_logged_in = False
     if auth.is_logged_in:
         data = {
             'brand': {
