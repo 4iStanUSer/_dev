@@ -23,7 +23,6 @@ export class AuthGuard implements CanActivate, CanActivateChild {
     constructor(private req: AjaxService,
                 private auth: AuthService,
                 private router: Router) {
-        this.auth.init(this.req);
     }
 
     /**

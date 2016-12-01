@@ -128,11 +128,14 @@ export class AjaxService {
      */
     private counter: number = 0;
 
-    // private serviceConf: ServiceConf = new ServiceConf();
+    /**
+     * Link to AuthService
+     * @type {AuthService}
+     */
+    auth: AuthService = null;
 
     constructor(private http: Http,
-                private loading: LoadingService,
-                private auth: AuthService) {
+                private loading: LoadingService) {
         this.loadUrlMapper();
     }
 
@@ -342,7 +345,7 @@ export class AjaxService {
     private handleSiteError(res: ServerResponse, blackBox: Subject<any>) {
         // TODO Show error at view
         console.error('App Error message: ' + res.getError());
-        if (res.isAuthError()) {
+        if (res.isAuthError() && this.auth) {
             this.auth.logoutByBackend();
             // TODO Implement procedure of route reload when ajax request has auth error
         }

@@ -44,19 +44,14 @@ export class AuthService {
     user: UserModel = null;
 
     /**
-     * Link for AjaxService. TODO Review - move from here
-     *
-     * @type {AjaxService}
-     */
-    private req: AjaxService = null;
-
-    /**
      * Observable for .isLoggedIn()
      * @type {Observable<boolean>}
      */
     private initObs: Observable<boolean> = null;
 
-    constructor() {
+    constructor(private req: AjaxService) {
+        this.req.auth = this; // TODO Remake
+        this.init();
     }
 
     /**
@@ -78,11 +73,10 @@ export class AuthService {
      * Procedure of initial getting logged in status from server.
      * (!) Must be used before any other methods - catches link
      * to Request Service
-     * @param req AjaxService
      * @returns {Observable<boolean>}
      */
-    init(req: AjaxService): Observable<boolean> {
-        this.req = req;
+    init(): Observable<boolean> {
+        //this.req = req;
         this.initObs = this.req.get({
             url_id: 'check_logged_in',
             sync: true,
