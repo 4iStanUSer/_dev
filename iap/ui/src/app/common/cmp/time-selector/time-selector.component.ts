@@ -106,6 +106,16 @@ class PointModel {
     templateUrl: './time-selector.component.html',
     styleUrls: ['./time-selector.component.css']
 })
+/**
+ * Component for showing time period selector.
+ * There are 2 blocks:
+ * - block with already selected time points
+ * - selection block - available time scales and time points for current timescale.
+ * Selection block has 2 modes: expanded, collapsed.
+ * Selected points change only if user clicks on "Apply" button
+ * inside Selection block.
+ * If count of time scales equals 1 - time scales bar is hidden.
+ */
 export class TimeSelectorComponent implements OnInit, OnChanges {
 
     private lang = {
@@ -114,15 +124,50 @@ export class TimeSelectorComponent implements OnInit, OnChanges {
     };
     private conf = {};
 
+    /**
+     * Main storage for timescales and their timepoints
+     * @type {ScalesModel}
+     */
     private scalesM: ScalesModel = null;
 
-    /*--Vars for view--*/
+    /*--Members for view--*/
+    /**
+     * Show list of timescales at template.
+     * It is used inside template.
+     * @type {Array}
+     */
     private scales: Array<string> = [];
+
+    /**
+     * Current selected timescale.
+     * It is used inside template.
+     * @type {string}
+     */
     private currScale: string = null;
+
+    /**
+     * Current selected time points.
+     * It is used inside template.
+     * @type {Array}
+     */
     private currPoints: Array<PointModel> = [];
+
+    /**
+     * Flag for expand/collapse mode
+     * @type {boolean}
+     */
     private expandedMode: boolean = false;
 
+    /**
+     * Selected and confirmed time points.
+     * @type {Sliders}
+     */
     private selectedPoints: Sliders = new Sliders();
+
+    /**
+     * Selected but not confirmed time points for each timescale.
+     * @type {any}
+     */
     private preSelectedPoints: {
         [timescale: string]: Sliders
     } = null;
@@ -209,7 +254,10 @@ export class TimeSelectorComponent implements OnInit, OnChanges {
         }
     }
 
-
+    /**
+     * It handles changing time scale inside selection block
+     * @param scale
+     */
     private changeScale(scale: string) {
         if (this.scales.indexOf(scale) !== -1) {
             this.currScale = scale;
@@ -225,10 +273,19 @@ export class TimeSelectorComponent implements OnInit, OnChanges {
         }
     }
 
+    /**
+     * Set expand/collapse mode for selection block
+     * @param mode
+     */
     private setExpandedMode(mode: boolean) {
         this.expandedMode = !!mode;
     }
 
+    /**
+     * Proceeds moving any slider in time points range.
+     * Technically: it changes pre-selected points for current time scale.
+     * @param ch
+     */
     private onSliderChange(ch) {
         try {
             this.preSelectedPoints[this.currScale][ch['slider']] = ch['value'];
@@ -237,6 +294,10 @@ export class TimeSelectorComponent implements OnInit, OnChanges {
         }
     }
 
+    /**
+     * Saves changed period, hides selection block and
+     * fires event 'changed' to upper component.
+     */
     private save() {
         this.selectedPoints['start'] = this.preSelectedPoints[this.currScale]['start'];
         this.selectedPoints['end'] = this.preSelectedPoints[this.currScale]['end'];

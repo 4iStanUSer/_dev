@@ -2,6 +2,11 @@ export type Point = (number | [number, number] | [string, number]
     | HighchartsDataPoint);
 export type ChartSerie = HighchartsSeriesOptions;
 
+/**
+ * Stores configuration options for Highcharts
+ * and is able to do some operations with the options.
+ * It is used as input variable into Chart Directive.
+ */
 export class Chart {
     ref: HighchartsChartObject;
 

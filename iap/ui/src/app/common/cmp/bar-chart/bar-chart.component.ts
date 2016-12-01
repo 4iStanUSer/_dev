@@ -12,6 +12,13 @@ export type BarChartDataInput = Array<{
     templateUrl: './bar-chart.component.html',
     styleUrls: ['./bar-chart.component.css']
 })
+/**
+ * Simple wrapper component for Bars Chart.
+ * http://www.highcharts.com/demo/column-basic
+ * Main aim - configure chart options, process/transform input data
+ * for using inside Highcharts library.
+ * Should be used inside template of page/tab components
+ */
 export class BarChartComponent implements OnInit {
 
     private chart: Chart = null;

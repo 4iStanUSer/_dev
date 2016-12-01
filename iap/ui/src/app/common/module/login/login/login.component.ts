@@ -6,23 +6,19 @@ import {AuthService} from "../../../service/auth.service";
     templateUrl: './login.component.html',
     styleUrls: ['./login.component.css']
 })
+/**
+ * Simple component to show login form and catch some events on it
+ */
 export class LoginComponent implements OnInit {
     model: any = {};
-    message: string;
 
     constructor(public auth: AuthService, public router: Router) {
-        this.setMessage();
     }
 
     ngOnInit() {
     }
 
-    setMessage() {
-        this.message = 'Logged ' + (this.auth.isLoggedIn ? 'in' : 'out');
-    }
-
     login() {
-        this.message = 'Trying to log in ...';
         let userCredentials = {
             username: this.model.username,
             password: this.model.password
@@ -30,16 +26,12 @@ export class LoginComponent implements OnInit {
         this.auth.login(userCredentials)
             .subscribe(
                 () => {
-                    this.setMessage();
                     if (this.auth.isLoggedIn) {
                         // Get the redirect URL from our auth service
                         // If no redirect has been set, use the default
                         // let redirect = this.auth.redirectUrl
                         //     ? this.auth.redirectUrl : '/';
-
-                        /*let redirect = '/forecast';*/
-                        let redirect = '/forecast';
-
+                        let redirect = '/forecast'; // TODO Review ability to get this from outside
                         // Redirect the user
                         this.router.navigate([redirect]);
                     }
@@ -55,7 +47,6 @@ export class LoginComponent implements OnInit {
 
     logout() {
         this.auth.logout();
-        this.setMessage();
     }
 
 }

@@ -9,6 +9,11 @@ import * as _ from 'lodash';
 import {LoadingService} from './loading.service';
 import {AuthService} from "./auth.service";
 
+/**
+ * Any server response wrap by this class.
+ * It knows about data logic of server response.
+ * It also might to know about request options - TODO Implement this
+ */
 class ServerResponse {
     error: boolean = false;
     data: Object = {};
@@ -31,7 +36,9 @@ class ServerResponse {
     }
 }
 
-
+/**
+ * Describes input data for one query
+ */
 interface IRequestOptions { // TODO Separate outside and inside interfaces
     url_id: string;
     method?: string; // 'get', 'post', 'put', 'delete', 'head'
@@ -43,10 +50,18 @@ interface IRequestOptions { // TODO Separate outside and inside interfaces
     //...
 }
 
+/**
+ * Describes configuration of url into urlsMapper.
+ * It is received from backend
+ */
 type UrlConfig = {
     'url': string;
     'allowNotAuth': boolean;
 };
+
+/**
+ * Describes item in requests queue.
+ */
 type QueueItem = {
     id: number;
     url_id: string;
@@ -390,7 +405,7 @@ export class AjaxService {
         url: string;
         method: string;
         data: any;
-    }): Request { //IRequestOptions
+    }): Request {
 
         let reqOpt = new BaseRequestOptions();
         let headers = new Headers();

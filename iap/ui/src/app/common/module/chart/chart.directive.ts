@@ -1,49 +1,55 @@
-import { Highcharts } from './highcharts';
+import {Highcharts} from './highcharts';
 
 import {
-  Directive,
-  Input,
-  ElementRef,
-  OnInit,
-  OnDestroy,
-  OnChanges,
-  SimpleChange
+    Directive,
+    Input,
+    ElementRef,
+    OnInit,
+    OnDestroy,
+    OnChanges,
+    SimpleChange
 } from '@angular/core';
 
-import { Chart } from './chart';
+import {Chart} from './chart';
 
 @Directive({
-  selector: '[chart]'
+    selector: '[chart]'
 })
+/**
+ * Directive for showing any chart inside hightchart library.
+ * It is used inside template of wrapper-components
+ * such as: WaterfallChart, BarChart ...
+ */
 export class ChartDirective implements OnInit, OnDestroy, OnChanges {
-  @Input() chart: Chart;
+    @Input() chart: Chart;
 
-  constructor(private el: ElementRef) {}
-
-  ngOnInit() {
-    this.init();
-  }
-
-  ngOnDestroy() {
-    this.destroy();
-  }
-
-  ngOnChanges(changes: {[propName: string]: SimpleChange}) {
-    if (!changes['chart'].isFirstChange()) {
-      this.destroy();
-      this.init();
+    constructor(private el: ElementRef) {
     }
-  }
 
-  private init() {
-    if (this.chart instanceof Chart) {
-      this.chart.ref = Highcharts.chart(this.el.nativeElement, this.chart.options);
+    ngOnInit() {
+        this.init();
     }
-  }
 
-  private destroy() {
-    if (this.chart && this.chart.ref) {
-      this.chart.ref.destroy();
+    ngOnDestroy() {
+        this.destroy();
     }
-  }
+
+    ngOnChanges(changes: {[propName: string]: SimpleChange}) {
+        if (!changes['chart'].isFirstChange()) {
+            this.destroy();
+            this.init();
+        }
+    }
+
+    private init() {
+        if (this.chart instanceof Chart) {
+            this.chart.ref = Highcharts.chart(this.el.nativeElement, this.chart.options);
+        }
+    }
+
+    private destroy() {
+        if (this.chart && this.chart.ref) {
+            this.chart.ref.destroy();
+        }
+    }
 }

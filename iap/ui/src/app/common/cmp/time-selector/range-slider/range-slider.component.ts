@@ -21,22 +21,57 @@ interface Coordinate {
     templateUrl: './range-slider.component.html',
     styleUrls: ['./range-slider.component.css']
 })
+/**
+ * Component for DRAWING time line (range of time points).
+ * It uses SVG to draw the time line.
+ */
 export class RangeSliderComponent implements OnInit, OnChanges {
 
+    /**
+     * Flag middle time point (slider).
+     * @type {boolean}
+     */
     private hasMid: boolean = false;
 
+    /**
+     * Link to html element in DOM.
+     * @type {any}
+     */
     private element: HTMLElement = null;
 
+    /**
+     * List of points to draw. Contains only data from upper component
+     * @type {Array<Point>}
+     */
     private points: Array<Point> = null;
 
+    /**
+     * Storage for all sliders
+     * @type {any}
+     */
     private sliders: Sliders = null;
 
+    /**
+     * Info about container of drawing
+     * @type {Object}
+     */
     private easelDetails: Object = null;
 
+    /**
+     * List of coordinates for time line (track).
+     * Coordinates have 2 variants:
+     * - inside container for drawing
+     * - inside page
+     * @type {any}
+     */
     private trackCoords: {
         svg: Array<Coordinate>,
         page: Array<Coordinate>} = null;
 
+    /**
+     * Base configuration for drawing
+     * @type {{height: number; trackY: number; trackSideMargin: number; sliderHeight: number; sliderWidth: number}}
+     */
     private svgConfig: Object = {
         height: 40,
         trackY: 30,
@@ -45,11 +80,19 @@ export class RangeSliderComponent implements OnInit, OnChanges {
         sliderWidth: 15,
     };
 
+    /**
+     * Set of string commands for SVG
+     * @type {{track: any; sliders: any}}
+     */
     private svgData = {
         track: null,
         sliders: null
     };
 
+    /**
+     * Shows selected indexes in this.trackCoords
+     * @type {any}
+     */
     private selectedIndexes: Object = null;
 
     @Input() data: Array<Point>;
@@ -95,6 +138,12 @@ export class RangeSliderComponent implements OnInit, OnChanges {
         }
     }
 
+    /**
+     * Finalizes changing of slider position on time line
+     * and fires 'changed' event to upper component.
+     * @param slider
+     * @param pointIndex
+     */
     private selectPoint(slider: string, pointIndex: number) {
         if (!this.points[pointIndex]) return;
 
@@ -112,6 +161,12 @@ export class RangeSliderComponent implements OnInit, OnChanges {
         });
     }
 
+    /**
+     * Handles 'mousedown' event on slider, attaches 'mouseup' event,
+     * run re-draw of slider if it was moved.
+     * @param slider
+     * @param e
+     */
     private onSliderMousedown(slider: string, e: MouseEvent) {
         let baseX = e.pageX;
         let list = this.renderer.listenGlobal(
@@ -158,6 +213,12 @@ export class RangeSliderComponent implements OnInit, OnChanges {
                 list1();
             });
     }
+
+    /**
+     * Calculates all coordinates for drawing, based on:
+     * - container's width;
+     * - count of time points.
+     */
     private calculate() {
         // L - count of points
         // W - width of container
@@ -225,12 +286,10 @@ export class RangeSliderComponent implements OnInit, OnChanges {
 
     }
 
-
-
-    private getKeys(o: Object) {
-        return Object.keys(o);
-    }
-
+    /**
+     * Returns details of container for drawing
+     * @returns {{right: any, left: any, width: number}}
+     */
     private getEaselDetails() {
         let trackElement = this.element.querySelector('.track');
         let dims = trackElement.getBoundingClientRect();
@@ -242,6 +301,12 @@ export class RangeSliderComponent implements OnInit, OnChanges {
         };
     }
 
+    /**
+     * Returns string with commands for SVG container to draw time points line
+     * @param coords
+     * @param yLine
+     * @returns {string}
+     */
     private getSvgTrackCmds(coords: Array<Object>, yLine: number): string {
         let comm = "";
         for (let i = 0; i < coords.length; i++) {
@@ -250,6 +315,11 @@ export class RangeSliderComponent implements OnInit, OnChanges {
         return comm;
     }
 
+    /**
+     * Returns string with commands for SVG container to draw one slider
+     * @param coords
+     * @returns {string}
+     */
     private getSvgSliderCmds(coords: {x: number, y: number}) {
         let sliderW = this.svgConfig['sliderWidth'];
         let sliderH = this.svgConfig['sliderHeight'];
@@ -265,5 +335,14 @@ export class RangeSliderComponent implements OnInit, OnChanges {
 
     private toStr(exp: any): string {
         return exp.toString();
+    }
+
+    /**
+     * Sorry, not documented yet!
+     * @param o
+     * @returns {string[]}
+     */
+    private getKeys(o: Object) {
+        return Object.keys(o);
     }
 }

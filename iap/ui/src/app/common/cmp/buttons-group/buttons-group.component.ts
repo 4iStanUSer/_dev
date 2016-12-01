@@ -25,6 +25,11 @@ interface ButtonDataChangeOutput extends ButtonDataInput {
     templateUrl: './buttons-group.component.html',
     styleUrls: ['./buttons-group.component.css']
 })
+/**
+ * Simple component to show group of buttons.
+ * It works as switcher - one time, one choice.
+ * Generates event 'changed' when user changed selection inside.
+ */
 export class ButtonsGroupComponent implements OnInit, OnChanges {
 
     @Input() data: ButtonsGroupDataInput = [];
