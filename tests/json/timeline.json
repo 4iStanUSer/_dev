@@ -1,30 +1,103 @@
-{
-        "properties": {"annual": {"name": "Annual", "growth_lag": 1}},
-        "alias": {
-            "all": {"annual": ["2013", "2018"]},
-            "history": {"annual": ["2013", "2015"]},
-            "forecast": {"annual": ["2016", "2018"]}
+{"properties": {
+                "annual": {"name": "Annual", "growth_lag": 1},
+                "month": {"name": "Month", "growth_lag": 1},
+                "day": {"name": "Days", "growth_lag": 1},
+                "hour": {"name": "Hour", "growth_lag": 1}
+                },
+"alias":{
+        "all": {"annual": ["2012", "2018"],"month":["January", "June"], "day":["1", "31"], "hour":["0", "24"]},
+        "history": {"annual": ["2014", "2016"], "month":["January", "June"], "day":["1", "31"], "hour":["0", "24"]},
+        "forecast": {"annual": ["2013", "2018"], "month":["January", "June"], "day":["1","31"], "hour":["0", "24"]}
         },
-        "top_ts_points": [
+"top_ts_points": [
             {
                 "name_full": "2012",
                 "name_short": "2012",
-                "children": []
+                "children": [
+                    {
+                        "name_full": "January",
+                        "name_short": "Jan",
+                        "children": []
+
+                    },{
+                        "name_full": "February",
+                        "name_short": "Feb",
+                        "children": []
+
+                    },{
+                        "name_full": "March",
+                        "name_short": "Mar",
+                        "children": []
+
+                    }
+                ]
             },
             {
                 "name_full": "2013",
                 "name_short": "2013",
-                "children": []
+                "children": [
+                    {
+                        "name_full": "January",
+                        "name_short": "Jan",
+                        "children": []
+
+                    },{
+                        "name_full": "February",
+                        "name_short": "Feb",
+                        "children": []
+
+                    },{
+                        "name_full": "March",
+                        "name_short": "Mar",
+                        "children": []
+
+                    }
+                ]
             },
             {
                 "name_full": "2014",
                 "name_short": "2014",
-                "children": []
+                "children": [
+                    {
+                        "name_full": "January",
+                        "name_short": "Jan",
+                        "children": []
+
+                    },{
+                        "name_full": "February",
+                        "name_short": "Feb",
+                        "children": []
+
+                    },{
+                        "name_full": "March",
+                        "name_short": "Mar",
+                        "children": []
+
+                    }
+
+                ]
             },
             {
                 "name_full": "2015",
                 "name_short": "2015",
-                "children": []
+                "children": [
+                    {
+                        "name_full": "January",
+                        "name_short": "Jan",
+                        "children": []
+
+                    },{
+                        "name_full": "February",
+                        "name_short": "Feb",
+                        "children": []
+
+                    },{
+                        "name_full": "March",
+                        "name_short": "Mar",
+                        "children": []
+
+                    }
+                ]
             },
             {
                 "name_full": "2016",
@@ -41,5 +114,5 @@
                 "name_short": "2018",
                 "children": []
             }
-        ]
-    }
+            ]
+}
