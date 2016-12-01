@@ -19,7 +19,8 @@ import {DriverDetailComponent} from "./dashboard/driver-detail/driver-detail.com
                 path: 'forecast',
                 component: ForecastComponent,
                 canActivate: [AuthGuard],
-                // canActivateChild: [AuthGuard],
+                canActivateChild: [AuthGuard],
+                // canDeactivate: [CanDeactivateGuard]
                 children: [
                     {
                         path: '',
@@ -43,7 +44,6 @@ import {DriverDetailComponent} from "./dashboard/driver-detail/driver-detail.com
                             {
                                 path: 'driver-summary',
                                 component: DriverSummaryComponent,
-                                //canDeactivate: [CanDeactivateGuard]
                             },
                             {
                                 path: 'driver-details',

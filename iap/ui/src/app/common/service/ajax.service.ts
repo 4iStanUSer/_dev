@@ -9,10 +9,6 @@ import * as _ from 'lodash';
 import {LoadingService} from './loading.service';
 import {AuthService} from "./auth.service";
 
-class ServiceConf {
-    //request: RequestConf = new RequestConf('ajax');
-}
-
 class ServerResponse {
     error: boolean = false;
     data: Object = {};
@@ -137,11 +133,8 @@ export class AjaxService {
     constructor(private http: Http,
                 private loading: LoadingService,
                 private auth: AuthService) {
+        this.loadUrlMapper();
     }
-
-    // public configure(serv_config: Object = {}) {
-    //     _.extend(this.serviceConf, serv_config);
-    // }
 
     /**
      * Add request(QueueItem object) into queue and run this.mapQueue()
@@ -351,6 +344,7 @@ export class AjaxService {
         console.error('App Error message: ' + res.getError());
         if (res.isAuthError()) {
             this.auth.logoutByBackend();
+            // TODO Implement procedure of route reload when ajax request has auth error
         }
         blackBox.error(res.getError());
     }
@@ -475,4 +469,5 @@ export class AjaxService {
         }, '').slice(0, -1);
         return qs;
     };
+
 }

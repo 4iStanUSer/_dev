@@ -7,7 +7,11 @@ import {AuthGuard} from "./common/module/login/auth-guard";
 @NgModule({
     imports: [
         RouterModule.forRoot([
-            {path: '', pathMatch: 'full', redirectTo: 'landing'},
+            {
+                path: '',
+                pathMatch: 'full',
+                redirectTo: '/landing',
+            },
             {
                 path: 'landing',
                 component: LandingPageComponent,
