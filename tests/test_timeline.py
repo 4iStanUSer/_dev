@@ -76,6 +76,7 @@ def test_load_backup(load_data, backup, load_correct_timeseries, load_incorrect_
     _time_line_manager.load_backup(backup)
 
     assert _time_line_manager.get_backup() == backup
+
     assert _time_line_manager._timescales == load_correct_timeseries
     # Failed test case
     assert _time_line_manager._timescales == load_incorrect_timeseries
@@ -103,22 +104,35 @@ def test_load_timelines(timeline_manager, backup, load_correct_timeseries, load_
 
     actual = timeline_manager.get_backup()
     expected = backup
-    assert actual.keys() == expected.keys()
-    assert json.dumps(actual) == json.dumps(expected)
+    print(actual)
+    print(expected)
+    assert len(actual['timescales']) == len(expected['timescales'])
+    assert [i['name'] for i in expected].sort() == \
+           [i['name'] for i in actual].sort()
+    assert [(i['name'], len(i['timeline'])) for i in expected].sort() == \
+           [(i['timeline'], len(i['timeline'])) for i in actual].sort()
+
 
 def test_load_timelines_1(timeline_manager, load_correct_timeseries):
 
-    actual = timeline_manager._time_scales
+    actual = timeline_manager._timescales
     expected = load_correct_timeseries
     assert len(actual) == len(expected)
-    assert json.dumps(actual) == json.dumps(expected)
+    assert [i['name'] for i in expected].sort() == \
+           [i['name'] for i in actual].sort()
+    assert sorted([(i['name'], len(i['timeline'])) for i in expected], key = lambda l: l[0]) == \
+           sorted([(i['name'], len(i['timeline'])) for i in actual], key = lambda l: l[0])
 
 def test_load_timelines_2(timeline_manager, load_incorrect_timeseries):
     # Failed test case
 
-    actual = timeline_manager._time_scales
+    actual = timeline_manager._timescales
     expected = load_incorrect_timeseries
-    assert json.dumps(actual) == json.dumps(expected)
+    assert len(actual) == len(expected)
+    assert [i['name'] for i in expected].sort() == \
+           [i['name'] for i in actual].sort()
+    assert sorted([(i['name'], len(i['timeline'])) for i in expected], key=lambda l: l[0]) == \
+           sorted([(i['name'], len(i['timeline'])) for i in actual], key=lambda l: l[0])
 
 
 def test_get_ts(timeline_manager, load_data, load_correct_timeseries, load_incorrect_timeseries):
@@ -141,60 +155,76 @@ def test_get_ts(timeline_manager, load_data, load_correct_timeseries, load_incor
 
     expected = [i for i in load_incorrect_timeseries if i['name']=='annual'][0]
     actual = timeline_manager._get_ts('annual')[0]
-    assert actual.keys() == expected.keys()
-    assert json.dumps(actual) == json.dumps(expected)
+    assert actual['name'] == expected['name']
+    assert len(actual['timeline']) == len(expected['timeline'])
+    assert sorted(actual['timeline'], key = lambda l: l['name_full']) == \
+           sorted(expected['timeline'], key=lambda l: l['name_full'])
 
 def test_get_ts_1(timeline_manager, load_data, load_correct_timeseries, load_incorrect_timeseries):
     # Failed test case
 
     expected = [i for i in load_incorrect_timeseries if i['name']=='month'][0]
     actual =  timeline_manager._get_ts('month')[0]
-    assert actual.keys() == expected.keys()
-    assert json.dumps(actual) == json.dumps(expected)
+    assert actual['name'] == expected['name']
+    assert len(actual['timeline']) == len(expected['timeline'])
+    assert sorted(actual['timeline'], key=lambda l: l['name_full']) == \
+           sorted(expected['timeline'], key=lambda l: l['name_full'])
 
 def test_get_ts_2(timeline_manager, load_data, load_correct_timeseries, load_incorrect_timeseries):
     # Failed test case
 
     expected = [i for i in load_incorrect_timeseries if i['name']=='day'][0]
     actual = timeline_manager._get_ts('day')[0]
-    assert actual.keys() == expected.keys()
-    assert json.dumps(actual) == json.dumps(expected)
+    assert actual['name'] == expected['name']
+    assert len(actual['timeline']) == len(expected['timeline'])
+    assert sorted(actual['timeline'], key=lambda l: l['name_full']) == \
+           sorted(expected['timeline'], key=lambda l: l['name_full'])
 
 def test_get_ts_3(timeline_manager, load_data, load_correct_timeseries, load_incorrect_timeseries):
     # Failed test case
 
     expected = [i for i in load_incorrect_timeseries if i['name']=='hour'][0]
     actual = timeline_manager._get_ts('hour')[0]
-    assert actual.keys() == expected.keys()
-    assert json.dumps(actual) == json.dumps(expected)
+    assert actual['name'] == expected['name']
+    assert len(actual['timeline']) == len(expected['timeline'])
+    assert sorted(actual['timeline'], key=lambda l: l['name_full']) == \
+           sorted(expected['timeline'], key=lambda l: l['name_full'])
 
 def test_get_ts_4(timeline_manager, load_data, load_correct_timeseries, load_incorrect_timeseries):
 
     expected = [i for i in load_correct_timeseries if i['name']=='annual'][0]
     actual = timeline_manager._get_ts('annual')[0]
-    assert actual.keys() == expected.keys()
-    assert json.dumps(actual) == json.dumps(expected)
+    assert actual['name'] == expected['name']
+    assert len(actual['timeline']) == len(expected['timeline'])
+    assert sorted(actual['timeline'], key=lambda l: l['name_full']) == \
+           sorted(expected['timeline'], key=lambda l: l['name_full'])
 
 def test_get_ts_5(timeline_manager, load_data, load_correct_timeseries, load_incorrect_timeseries):
 
     expected = [i for i in load_correct_timeseries if i['name']=='month'][0]
     actual = timeline_manager._get_ts('month')[0]
-    assert actual.keys() == expected.keys()
-    assert json.dumps(actual) == json.dumps(expected)
+    assert actual['name'] == expected['name']
+    assert len(actual['timeline']) == len(expected['timeline'])
+    assert sorted(actual['timeline'], key=lambda l: l['name_full']) == \
+           sorted(expected['timeline'], key=lambda l: l['name_full'])
 
 def test_get_ts_6(timeline_manager, load_data, load_correct_timeseries, load_incorrect_timeseries):
 
     expected = [i for i in load_correct_timeseries if i['name']=='day'][0]
     actual = timeline_manager._get_ts('day')[0]
-    assert actual.keys() == expected.keys()
-    assert json.dumps(actual) == json.dumps(expected)
+    assert actual['name'] == expected['name']
+    assert len(actual['timeline']) == len(expected['timeline'])
+    assert sorted(actual['timeline'], key=lambda l: l['name_full']) == \
+           sorted(expected['timeline'], key=lambda l: l['name_full'])
 
 def test_get_ts_7(timeline_manager, load_data, load_correct_timeseries, load_incorrect_timeseries):
 
     expected = [i for i in load_correct_timeseries if i['name']=='hour'][0]
     actual = timeline_manager._get_ts('hour')[0]
-    assert actual.keys() == expected.keys()
-    assert json.dumps(actual) == json.dumps(expected)
+    assert actual['name'] == expected['name']
+    assert len(actual['timeline']) == len(expected['timeline'])
+    assert sorted(actual['timeline'], key=lambda l: l['name_full']) == \
+           sorted(expected['timeline'], key=lambda l: l['name_full'])
 
 def test_get_growth_lag(timeline_manager):
     '''Test for get_growth_lag

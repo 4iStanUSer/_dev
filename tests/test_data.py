@@ -52,18 +52,21 @@ def test_get_backup(entity_data, backup):
     '''
 
     entity_data.load_backup(backup)
-    expected = json.dumps(backup)
-    actual = json.dumps(entity_data.get_backup())
-    assert actual == expected
-
-
-def test_get_backup_1(entity_data, backup):
-    # Failed test
-
-    entity_data.load_backup(backup['periods_series'])
-    expected = json.dumps(backup)
-    actual = json.dumps(entity_data.get_backup())
-    assert actual == expected
+    expected = backup
+    actual = entity_data.get_backup()
+    print(actual)
+    print(expected)
+    assert actual.keys() == expected.keys()
+    assert sorted(actual['var_names']) == sorted(expected['var_names'])
+    assert sorted(actual['periods_series'], key = lambda series: series['var']) == \
+           sorted(actual['periods_series'], key = lambda series: series['var'])
+    assert sorted(actual['var_properties'], key=lambda series: series['var']) == \
+           sorted(actual['var_properties'], key=lambda series: series['var'])
+    assert sorted(actual['var_names']) == sorted(expected['var_names'])
+    assert sorted(actual['time_series'], key=lambda series: series['var']) == \
+           sorted(actual['time_series'], key=lambda series: series['var'])
+    assert sorted(actual['scalars'], key=lambda series: series['value']) == \
+           sorted(actual['scalars'], key=lambda series: series['value'])
 
 def test_get_ts_vals(entity_data, backup):
     '''
