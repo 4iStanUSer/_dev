@@ -1,15 +1,8 @@
 import copy
-from enum import IntEnum
-from ...common import helper_lib
+
+from ...common.helper import Meta
+from .helper import FilterType, SlotType
 from . import modeling_library
-
-
-class FilterType(IntEnum):
-    empty = 0
-    path = 1
-    relative_path = 2
-    meta_filter = 3
-    const = 4
 
 
 class CalculationKernel:
@@ -17,6 +10,16 @@ class CalculationKernel:
     def __init__(self):
         # TODO Describe class structure
         self.queues = {}
+
+    def get_backup(self):
+        instructions = dict(
+            top_queues=None,
+            queues=[q.get_backup() for q in self.queues.values()]
+        )
+        return instructions
+
+    def load_from_backup(self, backup):
+        self.load_instructions(backup)
 
     def load_instructions(self, instructions):
         # TODO Add description.
@@ -123,11 +126,11 @@ class CalculationKernel:
                 var_name = item[0]
                 slot_type = item[1]
                 var = entity.get_variable(var_name)
-                if slot_type & 1:
+                if slot_type & SlotType.time_series:
                     ts = var.get_time_series(queue.out_ts_name)
                     ts.set_values_from([x[ind] for x in output],
                                        first_out_date)
-                elif slot_type & 4:
+                elif slot_type & SlotType.period_series:
                     ps = var.get_periods_series(queue.out_ts_name)
                     ps.set_value(period, output[0][ind])
                 else:
@@ -143,7 +146,7 @@ class CalculationKernel:
         # Meta filter.
         elif meta_type == FilterType.meta_filter:
 
-            meta_filter = helper_lib.Meta(
+            meta_filter = Meta(
                 input_item_info['meta_filter'][0],
                 input_item_info['meta_filter'][1])
 
@@ -169,8 +172,8 @@ class CalculationKernel:
         elif meta_type == FilterType.meta_filter:
             res_entity = \
                 main_ent.get_parent_by_meta(
-                    helper_lib.Meta(ent_filter['meta_filter'][0],
-                                    ent_filter['meta_filter'][1]))
+                    Meta(ent_filter['meta_filter'][0],
+                         ent_filter['meta_filter'][1]))
         else:
             raise Exception
         if res_entity is None:
@@ -191,6 +194,9 @@ class Queue:
 
         self.dependents = None
         self.output = None
+        # Parameters to make serialization easier.
+        self._out_pins = None
+        self._in_pins = None
         #self._calc_modules = {}
         self._calc_instructions = []
         #self._buffer = None
@@ -204,8 +210,35 @@ class Queue:
         self._out_modules = None
         self._runs_counter = 0
 
-    def load_template(self, template):
+    def get_backup(self):
+        input = self.inp_requirements
+        for c_item in self.coeff_requirements:
+            found_flag = False
+            for d_item in input:
+                if c_item['meta'] == d_item['meta']:
+                    d_item['coefficients'] = c_item['data']
+                    found_flag = True
+                    break
+            if not found_flag:
+                input.append(
+                    dict(meta=c_item['meta'], coefficients=c_item['data']))
+        backup = dict(
+            name=self.name,
+            input_timescale=self.inp_ts_name,
+            output_timescale=self.out_ts_name,
+            input_item=self.input_item_info,
+            input=input,
+            timeline_parameters=[x['par_name'] for x in self._tl_pars_refs],
+            parameters=self._parameters,
+            modules={x['id']: type(x['module']).__name__
+                     for x in self._calc_instructions},
+            input_pins=self._in_pins,
+            output=self._out_pins,
+            constants=self._constants
+        )
+        return backup
 
+    def load_template(self, template):
         # Read main parameters.
         self.name = template['name']
         self.input_item_info = copy.copy(template['input_item'])
@@ -250,6 +283,10 @@ class Queue:
                         append(dict(mod_id=mod_id, mod_par_name=par_name))
                 else:
                     raise Exception
+
+        # Parameters to make serialization easier.
+        self._out_pins = template['output']
+        self._in_pins = template['input_pins']
 
         # Set up calculation scheme.
         self._load_scheme(template['modules'], template['input_pins'],

@@ -1,3 +1,6 @@
+class ProjectNotFoundError(Exception):
+    pass
+
 class UserNotFoundError(Exception):
 
     def __init__(self, user_id):

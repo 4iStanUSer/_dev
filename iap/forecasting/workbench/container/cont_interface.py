@@ -1,8 +1,9 @@
 import copy
 from .timelines import TimeLineManager
-from .entity_data import EntityData, DataType
+from .entity_data import EntityData
 from .entities_hierarchy import Node
-
+from ..helper import SlotType, FilterType
+from ....common.helper import Meta
 
 class Container:
 
@@ -17,16 +18,7 @@ class Container:
         self._nodes_dict = {}
         self._max_node_id = 0
 
-    def load(self, backup):
-        self._clean()
-        self.timeline.load_backup(backup['timeline'])
-        for node_info in backup['container']:
-            ent = self.add_entity(node_info['path'], node_info['metas'])
-            self._nodes_dict[ent.id]['data'].load_backup(node_info['data'])
-            self._nodes_dict[ent.id]['insights'] = node_info['insights']
-        return
-
-    def save(self):
+    def get_backup(self):
         backup = []
         for node_id, node_info in self._nodes_dict.items():
             path = []
@@ -36,6 +28,15 @@ class Container:
             ins = node_info['insights']
             backup.append(dict(path=path, metas=metas, data=data, insights=ins))
         return dict(timeline=self.timeline.get_backup(), container=backup)
+
+    def load_from_backup(self, backup):
+        self._clean()
+        self.timeline.load_backup(backup['timeline'])
+        for node_info in backup['container']:
+            ent = self.add_entity(node_info['path'], node_info['metas'])
+            self._nodes_dict[ent.id]['data'].load_backup(node_info['data'])
+            self._nodes_dict[ent.id]['insights'] = node_info['insights']
+        return
 
     @property
     def top_entities(self):
@@ -80,7 +81,23 @@ class Container:
             self._root.get_children_by_meta(meta_filter, nodes_ids)
         return [self.get_entity_by_id(x) for x in nodes_ids]
 
-
+    def get_entity_by_filter(self, main_ent, ent_filter):
+        meta_type = ent_filter['type']
+        if meta_type == FilterType.empty:
+            res_entity = main_ent
+        elif meta_type == FilterType.path:
+            res_entity = self.get_entity_by_path(ent_filter['path'])
+        elif meta_type == FilterType.relative_path:
+            res_entity = main_ent.get_child_by_relative_path(ent_filter['path'])
+        elif meta_type == FilterType.meta_filter:
+            res_entity = \
+                main_ent.get_parent_by_meta(Meta(ent_filter['meta_filter'][0],
+                                                 ent_filter['meta_filter'][1]))
+        else:
+            raise Exception
+        if res_entity is None:
+            raise Exception
+        return res_entity
 
 
 class Entity:
@@ -117,7 +134,8 @@ class Entity:
     @property
     def path(self):
         p = []
-        self._node.get_path(p)
+        m = []
+        self._node.get_path(p, m)
         return p
 
     @property
@@ -182,40 +200,40 @@ class Variable:
         self._data.set_var_property(self._var_name, name, value)
 
     def get_time_series(self, ts_name):
-        if self._data.is_exist(self._var_name, ts_name, DataType.time_series):
+        if self._data.is_exist(self._var_name, ts_name, SlotType.time_series):
             return TimeSeries(self._data, self._var_name, ts_name)
         else:
             return None
 
     def get_scalar(self, ts_name):
-        if self._data.is_exist(self._var_name, ts_name, DataType.scalar):
+        if self._data.is_exist(self._var_name, ts_name, SlotType.scalar):
             return Scalar(self._data, self._var_name, ts_name)
         else:
             return None
 
     def get_periods_series(self, ts_name):
         if self._data.is_exist(self._var_name, ts_name,
-                               DataType.period_series):
+                               SlotType.period_series):
             return PeriodSeries(self._data, self._var_name, ts_name)
         else:
             return None
 
     def add_time_series(self, ts_name):
         if not self._data.is_exist(self._var_name, ts_name,
-                                   DataType.time_series):
-            self._data.init_slot(self._var_name, ts_name, DataType.time_series)
+                                   SlotType.time_series):
+            self._data.init_slot(self._var_name, ts_name, SlotType.time_series)
         return TimeSeries(self._data, self._var_name, ts_name)
 
     def add_scalar(self, ts_name):
-        if not self._data.is_exist(self._var_name, ts_name, DataType.scalar):
-            self._data.init_slot(self._var_name, ts_name, DataType.scalar)
+        if not self._data.is_exist(self._var_name, ts_name, SlotType.scalar):
+            self._data.init_slot(self._var_name, ts_name, SlotType.scalar)
         return Scalar(self._data, self._var_name, ts_name)
 
     def add_periods_series(self, ts_name):
         if not self._data.is_exist(self._var_name, ts_name,
-                                   DataType.period_series):
+                                   SlotType.period_series):
             self._data.init_slot(self._var_name, ts_name,
-                                 DataType.period_series)
+                                 SlotType.period_series)
         return PeriodSeries(self._data, self._var_name, ts_name)
 
 

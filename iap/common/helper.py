@@ -1,7 +1,20 @@
 from collections import namedtuple
-
-Variable = namedtuple('Variable', ['variable', 'timescale'])
+Variable = namedtuple('Variable', ['variable', 'timescale', 'slot'])
 Meta = namedtuple('Meta', ['dimension', 'level'])
+
+
+def send_success_response(data=None):
+    return {
+        'error': False,
+        'data': data
+    }
+
+
+def send_error_response(data):
+    return {
+        'error': True,
+        'data': data
+    }
 
 
 def is_equal_path(path1, path2):
@@ -19,15 +32,7 @@ def is_equal_meta(meta1, meta2):
     return False
 
 
-def send_success_response(data=None):
-    return {
-        'error': False,
-        'data': data
-    }
-
-
-def send_error_response(data):
-    return {
-        'error': True,
-        'data': data
-    }
+def dicts_left_join(d1, d2):
+    for key in d1.keys():
+        if key in d2:
+            d1[key] = d2[key]

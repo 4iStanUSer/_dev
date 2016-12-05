@@ -1,4 +1,4 @@
-from ....common import helper_lib
+from ....common.helper import is_equal_path
 
 
 def download_data_from_wh(warehouse, container, mapping):
@@ -10,13 +10,13 @@ def download_data_from_wh(warehouse, container, mapping):
     for row in mapping:
         # Get warehouse entity if necessary.
         if prev_wh_entity is None or \
-                not helper_lib.is_equal_path(prev_wh_entity.path, row['wh_path']):
+                not is_equal_path(prev_wh_entity.path, row['wh_path']):
             wh_entity = warehouse.get_entity(row['wh_path'])
             prev_wh_entity = wh_entity
         # Get container entity if necessary.
         if prev_cont_entity is None or \
-                prev_cont_entity.id != row['cont_entity_id']:
-            cont_entity = container.get_entity_by_id(row['cont_entity_id'])
+                prev_cont_entity.id != row['cont_path']:
+            cont_entity = container.get_entity_by_path(row['cont_path'])
             prev_cont_entity = cont_entity
 
         period = container.timeline.get_period_by_alias(row['cont_var'].timescale, row['time_period'])[0]
