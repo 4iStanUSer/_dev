@@ -11,13 +11,15 @@ import {AppComponent} from './app.component';
 
 import {AppRoutingModule} from "./app-routing.module";
 
-import {LandingPageComponent} from "./common/pages/landing-page/landing-page.component";
+//import {LandingPageComponent} from "./common/pages/landing-page/landing-page.component";
 
 import {CommonServicesModule} from "./common/module/common-services.module";
 
 import {ForecastModule} from "./forecast/forecast.module";
 
 import {LoginModule} from "./common/module/login/login.module";
+
+import {LandingPageModule} from "./landing-page/landing-page.module";
 
 @NgModule({
     imports: [
@@ -27,11 +29,11 @@ import {LoginModule} from "./common/module/login/login.module";
         AppRoutingModule,
         CommonServicesModule,
         LoginModule,
-        ForecastModule
+        ForecastModule,
+        LandingPageModule
     ],
     declarations: [
-        AppComponent,
-        LandingPageComponent
+        AppComponent
     ],
     providers: [
         {provide: LocationStrategy, useClass: HashLocationStrategy},

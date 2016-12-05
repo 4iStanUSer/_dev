@@ -3,6 +3,10 @@ import {BarChartDataInput} from "../../common/cmp/bar-chart/bar-chart.component"
 import {TableWidgetData} from "../../common/cmp/table-widget/table-widget.component";
 
 
+/**
+ * Data structure for showing Decomposition Waterfall (absolute and rate mode)
+ * and row with changes under waterfall
+ */
 export interface DecompositionTypeData {
     abs: WaterfallChartDataInput;
     rate: WaterfallChartDataInput;
@@ -13,6 +17,10 @@ export interface DecompositionTypeData {
     }>;
 }
 
+/**
+ * Data structure for showing variables tab(s) inside Forecast Section
+ * in absolute or growth rate modes and CAGR block
+ */
 export interface VariableData {
     abs: BarChartDataInput,
     rate: Array<{
@@ -25,6 +33,10 @@ export interface VariableData {
         value: number;
     }>
 }
+
+/**
+ * Data structure for showing Table via TableWidget and storage of rows IDs
+ */
 export interface ClickableTable {
     data: TableWidgetData;
     rows_data: {

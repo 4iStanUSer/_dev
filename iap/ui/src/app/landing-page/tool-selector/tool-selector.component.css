@@ -1,0 +1,11 @@
+.lp-tool-item{
+    border: 1px solid #0b97c4;
+    padding: 10px;
+    margin: 10px;
+}
+.lp-project-item{
+    border: 1px solid #0b97c4;
+    padding: 10px;
+    margin: 10px;
+    cursor: pointer;
+}

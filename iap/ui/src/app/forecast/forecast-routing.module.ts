@@ -20,7 +20,8 @@ import {LandingPageComponent} from "./landing-page/landing-page.component"
                 path: 'forecast',
                 component: ForecastComponent,
                 canActivate: [AuthGuard],
-                // canActivateChild: [AuthGuard],
+                canActivateChild: [AuthGuard],
+                // canDeactivate: [CanDeactivateGuard]
                 children: [
                     {
                         path: '',
@@ -48,7 +49,6 @@ import {LandingPageComponent} from "./landing-page/landing-page.component"
                             {
                                 path: 'driver-summary',
                                 component: DriverSummaryComponent,
-                                //canDeactivate: [CanDeactivateGuard]
                             },
                             {
                                 path: 'driver-details',

@@ -39,5 +39,9 @@ import {IterateObjectByOrderPipe} from "../pipe/iterate-object-by-order.pipe";
         IterateObjectByOrderPipe
     ]
 })
+/**
+ * Module for all common services.
+ * Main aim - make one instance of each service for all ngModules.
+ */
 export class CommonServicesModule {
 }

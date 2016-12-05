@@ -3,6 +3,9 @@ import {Pipe, PipeTransform} from '@angular/core';
 @Pipe({
     name: 'keys'
 })
+/**
+ * Pipe for getting list of keys of object
+ */
 export class KeysPipe implements PipeTransform {
 
     transform(value, args?: string[]): Array<string|number> {

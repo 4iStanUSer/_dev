@@ -4,6 +4,9 @@ import {Pipe, PipeTransform} from '@angular/core';
     name: 'filterList',
     pure: false
 })
+/**
+ * Pipe for filtering array of objects by property value of each object
+ */
 export class FilterListPipe implements PipeTransform {
 
     transform(list: Array<any>, args: {key: string, value: any}): Array<any> {

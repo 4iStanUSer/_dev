@@ -1,8 +1,15 @@
+/**
+ * Data Interface for describing one item in any selector
+ */
 export interface SelectorItemInput {
     name: string;
     id: number|string;
     parent_id: number|string;
 }
+
+/**
+ * Data Interface for configuration one selector in SelectorsComponent
+ */
 export interface SelectorConfigInput {
     name: string;
     placeholder: string;
@@ -12,6 +19,13 @@ export interface SelectorConfigInput {
     disabled?: boolean;
 }
 
+
+/**
+ * Model for selector's item (any selector). It contains description of item,
+ * links to parent and children and convenient methods for work
+ * with item's data and item's parent/children data.
+ * It manages only item's data and doesn't know how and where show item!
+ */
 export class SelectorItemModel {
     id: string = null; //number|
     name: string = null;
@@ -33,12 +47,21 @@ export class SelectorItemModel {
         this.disabled = !!disabled;
     }
 
+    /**
+     * Links this item and his parent.
+     * @param parent SelectorItemModel
+     */
     addParent(parent: SelectorItemModel) {
         this.parent = parent;
         this.parent.children.push(this);
         this.depth = this.parent.depth + 1;
     }
 
+    /**
+     * Changes expand status for this item.
+     * Should be used when user clicks on expand/collapse button.
+     * Run procedure of hiding/showing for children
+     */
     changeExpandStatus() {
         if (this.children && this.children.length) {
             let expandStatus = !this.isExpanded;
@@ -54,6 +77,10 @@ export class SelectorItemModel {
         }
     }
 
+    /**
+     * Shows this item, item's children
+     * and sub-children of expanded children
+     */
     showToBottom() {
         this.isHidden = false;
         if (this.children && this.children.length) {
@@ -67,6 +94,9 @@ export class SelectorItemModel {
         }
     }
 
+    /**
+     * Hides this item and all children.
+     */
     hideToBottom() {
         this.isHidden = true;
         if (this.children && this.children.length) {
@@ -76,15 +106,23 @@ export class SelectorItemModel {
         }
     }
 
+    /**
+     * Shows this item and all parents (recursively)
+     */
     showToUp() {
         this.isHidden = false;
         if (this.parent) {
             this.parent.showToUp();
         }
     }
-
-
 }
+
+/**
+ * Model for data of one selector (for all types of selectors).
+ * It contains set of SelectorItemModel (one selector's item)
+ * and some methods for work with selector's data.
+ * This model doesn't know how to show selector, it contains only data!
+ */
 export class SelectorModel {
     key: string;
     name: string;
@@ -106,6 +144,11 @@ export class SelectorModel {
     constructor() {
     }
 
+    /**
+     * Recreates storage (with hierarchy) of all selector's items,
+     * deselects all previously selected items
+     * @param items Array<SelectorItemInput>
+     */
     setData(items: Array<SelectorItemInput>): void {
         this.deselect(this.selected);
 
@@ -137,6 +180,10 @@ export class SelectorModel {
         this.flatListItems = this.getFlat(this.getFirstLevelItems());
     }
 
+    /**
+     * Selects all items by passed id, (!)deselects all others
+     * @param ids Array<string>
+     */
     forceSelect(ids: Array<string>): void {
         let toSelect = ids.filter((id) => {
             return !!(this.selected.indexOf(id) == -1);
@@ -150,6 +197,10 @@ export class SelectorModel {
         this.fixSelection();
     }
 
+    /**
+     * Selects all passed items (match by id). Previous selection stays.
+     * @param ids Array<string>
+     */
     select(ids: Array<string>): void {
         if (!this.multiple) {
             this.deselect(this.selected);
@@ -164,6 +215,10 @@ export class SelectorModel {
         }
     }
 
+    /**
+     * Deselects all passed items, remove this items from this.selected too
+     * @param src_ids Array<string>
+     */
     deselect(src_ids: Array<string>): void {
         let ids = src_ids.map((id) => { return id; });
         for (let i=0;i<ids.length; i++) {
@@ -177,24 +232,39 @@ export class SelectorModel {
         }
     }
 
-    getFirstLevelItems(): Array<SelectorItemModel> {
+    /**
+     * Returns all root (first level) items
+     * @returns {SelectorItemModel[]}
+     */
+    getFirstLevelItems(): SelectorItemModel[] {
         return this.rootItems.map((id) => {
             return this.items[id];
         }, this);
     }
 
-    getSelectedItems(): Array<SelectorItemModel> {
+    /**
+     * Returns all selected items (as SelectorItemModel) in flat list
+     * @returns {SelectorItemModel[]>}
+     */
+    getSelectedItems(): SelectorItemModel[] {
         return this.selected.map((id) => {
             return this.items[id];
         }, this);
     }
 
-    getFlatListItems() {
+    /**
+     * Returns all items (as SelectorItemModel) in flat list
+     * @returns {SelectorItemModel[]}
+     */
+    getFlatListItems(): SelectorItemModel[] {
         return this.flatListItems.map((id) => {
             return this.items[id];
         }, this);
     }
 
+    /**
+     * Removes from selection non-existed items
+     */
     private fixSelection() {
         this.selected = this.selected.filter((id) => {
             return !!(this.items[id]);
@@ -205,6 +275,11 @@ export class SelectorModel {
         }
     }
 
+    /**
+     * Returns hierarchical items as flat list of strings
+     * @param inputList Array<SelectorItemModel>
+     * @returns {Array<string>}
+     */
     private getFlat(inputList: Array<SelectorItemModel>) : Array<string> {
         let outputList: Array<string> = [];
         for (let i = 0; i < inputList.length; i++) {
@@ -221,6 +296,4 @@ export class SelectorModel {
         }
         return outputList;
     }
-
-
 }

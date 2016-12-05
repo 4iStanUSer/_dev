@@ -7,6 +7,13 @@ import * as _ from 'lodash';
     templateUrl: './donut-chart.component.html',
     styleUrls: ['./donut-chart.component.css']
 })
+/**
+ * Simple wrapper component for Donut/Pie Chart.
+ * http://www.highcharts.com/demo/pie-donut
+ * Main aim - configure chart options, process/transform input data
+ * for using inside Highcharts library.
+ * Should be used inside template of page/tab components
+ */
 export class DonutChartComponent implements OnInit {
     private donuts: Array<Chart> = [];
 

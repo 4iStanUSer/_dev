@@ -1,0 +1,20 @@
+.lp-header {
+    min-height: 50px;
+}
+.lp-menu {
+    float: left;
+}
+ul li {
+    display: inline-block;
+    margin: 0 15px;
+}
+ul li a.active {
+    font-weight: bold;
+}
+.lp-logout {
+    float: right;
+}
+.logo_4i {
+    float: right;
+    max-width: 50px;
+}

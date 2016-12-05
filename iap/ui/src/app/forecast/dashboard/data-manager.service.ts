@@ -1,15 +1,10 @@
 import {Injectable} from '@angular/core';
 
-import {Observable} from 'rxjs/Observable';
 import {Subject} from 'rxjs/Subject';
 
-/*======TEMP=====*/
 import {
-    defaultState, dashboardConfig,
-    // selectorsDataTEMP, selectorsConfigTEMP,
+    defaultState, dashboardConfig
 } from './data';
-/*======.TEMP=====*/
-
 
 import {AjaxService} from "./../../common/service/ajax.service";
 import {
@@ -40,10 +35,33 @@ class Period {
 }
 
 @Injectable()
+/**
+ * Service for serving Dashboard Page - DashboardComponent
+ * and all child components (tab components).
+ * It is singleton and isn't removed every time when route is changed.
+ * Main aim is to store and manage data for the components
+ * and don't send repeated queries to server for data.
+ * In some cases it works asynchronously(it depends on data which is returned).
+ */
 export class DataManagerService {
 
+    /**
+     * Name of page. It uses for passing into external services
+     * for getting data (like StaticDataService, etc.)
+     * @type {string}
+     */
     private pageName: string = 'dashboard';
 
+    /**
+     * Variable for storing statuses for requests: dynamic and static data
+     * for dashboard page.
+     * It uses to define is needed initial data for Dashboard page resolved.
+     * There are 3 main statuses for each request:
+     * - sent query to server,
+     * - received response,
+     * - processed data
+     * @type {{dynamic: {sent: boolean; received: boolean; processed: boolean}; static: {sent: boolean; received: boolean; processed: boolean}}}
+     */
     isData: Object = {
         dynamic: {
             sent: false,
@@ -57,20 +75,47 @@ export class DataManagerService {
         }
     };
 
+    /**
+     * Flag to define is initial data is resolved
+     * @type {boolean}
+     */
     dataIsResolved: boolean = false;
 
+    /**
+     * Link to DashboardDataModel, which contains data's logic
+     * @type {DashboardDataModel}
+     */
     dataModel: DashboardDataModel = null;
 
+    /**
+     * Container of Insights. It uses for showing insights block
+     * @type {Array<InsightInput>}
+     */
     insights: Array<InsightInput> = [];
 
+    /**
+     * State of dashboard page: selected options, view modes, etc.
+     * @type {PageState}
+     */
     state: PageState = null;
 
-    config: Object = null; // TODO Interface for config
+    /**
+     * Static configuration: labels, configuration for widgets, etc.
+     * @type {any}
+     */
+    config: Object = null;
 
-    ddConfig: Object = null; // Dynamic Data Config
-
+    /**
+     * Observable for subscription at component level.
+     * It resolves when all data (dynamic and static) for page is received.
+     * @type {Subject}
+     */
     initResolver: Subject<number> = null;
 
+    /**
+     * All periods for dashboard page
+     * @type {{main: Period; decomp: Period}}
+     */
     periods: {
         main: Period,
         decomp: Period
@@ -78,20 +123,33 @@ export class DataManagerService {
         main: null,
         decomp: null
     };
+
+    /**
+     * Configuration for dynamic data,
+     * like allowed timescales for decomposition, default periods, etc.
+     * @type {Object}
+     */
+    ddConfig: Object = null;
+
+    // ----------------------------- //
+    selectors: {data: Object, config: Object} = {data: null, config: null};
     // ----------------------------- //
 
-    selectors: {data: Object, config: Object} = {data: null, config: null};
 
     constructor(private req: AjaxService,
-                private sds: StaticDataService) { //private stateService: StateService,
-
-        //this.init();
+                private sds: StaticDataService) {
     }
 
+    /**
+     * Runs getting initial data for dashboard page.
+     * Main aim - make only one query to receive dynamic and static data.
+     * Component, which runs this method, doesn't matter:
+     * for all dependent components one request to server
+     * @returns {Subject<number>}
+     */
     init() {
         if (!this.initResolver) {
             this.initResolver = new Subject();
-            // this.initSelectors();
             this.initDynamicData();
             this.initStaticData();
             this.initResolver.subscribe(() => {
@@ -105,6 +163,9 @@ export class DataManagerService {
         return this.initResolver;
     }
 
+    /**
+     * Resolves observable which is locating in this.initResolver
+     */
     private resolveInitObervable() {
         if (this.dataInitialized()) {
             this.dataIsResolved = true;
@@ -112,29 +173,19 @@ export class DataManagerService {
         }
     }
 
+    /**
+     * Checks receiving initial data
+     * @returns {boolean}
+     */
     private dataInitialized() {
         return (this.isData['dynamic']['received']
         && this.isData['static']['received']);
     }
 
-    // private initSelectors(): void {
-    //     this.req.get({
-    //         url_id: 'forecast/get_entity_selectors_config',
-    //         data: {}
-    //     }).subscribe((data) => {
-    //         this.selectors['config'] = data;
-    //     });
-    //
-    //     this.req.get({
-    //         url_id: 'forecast/get_options_for_entity_selector',
-    //         data: {
-    //             query: [null, null, null, null]
-    //         }
-    //     }).subscribe((data) => {
-    //         this.selectors['data'] = data;
-    //     });
-    // }
-
+    /**
+     * Runs procedure of getting initial dynamic data from server
+     * and creating all dependent objects/models from this data.
+     */
     private initDynamicData(): void {
         if (this.isData['dynamic']['sent']) return;
 
@@ -144,7 +195,7 @@ export class DataManagerService {
         this.req.get({
             'url_id': 'forecast/get_dashboard_data',
             'data': {
-                'entities_ids': [2]
+                'entities_ids': [2] // TODO Replace
             }
         }).subscribe((data)=> {
                 this.isData['dynamic']['received'] = true;
@@ -181,14 +232,6 @@ export class DataManagerService {
                     d['decomp_type_factors'],
                 );
 
-
-                ////////////////////
-                // this.selectors = {
-                //     data: selectorsDataTEMP,
-                //     config: selectorsConfigTEMP
-                // };
-                ////////////////////
-
                 this.isData['dynamic']['processed'] = true;
 
                 this.resolveInitObervable();
@@ -198,6 +241,9 @@ export class DataManagerService {
             });
     }
 
+    /**
+     * Procedure of getting configuration and state from local service
+     */
     private proceedStaticData() {
         this.isData['static']['received'] = true;
 
@@ -207,6 +253,9 @@ export class DataManagerService {
         this.resolveInitObervable();
     }
 
+    /**
+     * Runs procedure of getting static data from server
+     */
     private initStaticData() {
         if (this.isData['static']['sent']) return;
 
@@ -236,10 +285,23 @@ export class DataManagerService {
         }
     }
 
+    /**
+     * Returns requested Period object (from this.periods)
+     * @param name
+     * @returns {null}
+     */
     getPeriod(name: string): Period {
         return (this.periods[name]) ? this.periods[name] : null;
     }
 
+    /**
+     * Set values for passed period (into this.periods)
+     * @param name
+     * @param timescale
+     * @param start
+     * @param end
+     * @param mid
+     */
     setPeriod(name: string, timescale: string, start: string,
               end: string, mid: string = null) {
         if (this.periods[name]) {
@@ -324,8 +386,14 @@ export class DataManagerService {
         return output;
     }
 
+    /**
+     * Loads from server changes over period for passed period
+     * @param timescale_id
+     * @param periods
+     * @returns {Observable<any>}
+     */
     loadChangesOverPeriod(timescale_id: string,
-                            periods: Array<{start: string, end: string}>) {
+                          periods: Array<{start: string, end: string}>) {
         return this.req.get({
             url_id: 'forecast/get_changes_for_period',
             data: {
@@ -335,6 +403,18 @@ export class DataManagerService {
         })
     }
 
+    /**
+     * Collects Variable's data: absolute values, growth rates and CAGRS.
+     * Works ASYNCHRONOUSLY!
+     * Uses this.getVariableData()
+     * If dataModel doesn't have requested data - it loads
+     * missing data from server!
+     * @param timescale_id
+     * @param timepoints_ids
+     * @param variable_id
+     * @param cagrsPeriod
+     * @returns {Subject}
+     */
     getVariableDataAsync(timescale_id: string,
                          timepoints_ids: Array<string>,
                          variable_id: string,
@@ -478,6 +558,17 @@ export class DataManagerService {
         return output;
     }
 
+    /**
+     * Collects Decomposition's data: absolute values and growth rates.
+     * Works ASYNCHRONOUSLY!
+     * If dataModel doesn't have requested data - it loads
+     * missing data from server!
+     * @param decomp_type_id
+     * @param timescale_id
+     * @param start
+     * @param end
+     * @returns {Subject}
+     */
     getDecompositionDataAsync(decomp_type_id: string,
                               timescale_id: string,
                               start: string,
@@ -518,6 +609,11 @@ export class DataManagerService {
         return subject;
     }
 
+    /**
+     * Returns data for TimePeriodSelector in forecast section in
+     * General component.
+     * @returns {TimeSelectorDataInput}
+     */
     getData_ForecastTimelabels(): TimeSelectorDataInput {
         let output = {
             order: this.dataModel.getTimeScalesOrder(),
@@ -532,6 +628,11 @@ export class DataManagerService {
         return output;
     }
 
+    /**
+     * Returns data for TimePeriodSelector in decomposition section in
+     * General component.
+     * @returns {TimeSelectorDataInput}
+     */
     getDecompPeriodLabels(): TimeSelectorDataInput {
         let allowedTs = this.ddConfig['decomp_timescales'];
         let allTs = this.dataModel.getTimeScalesOrder();
@@ -554,6 +655,15 @@ export class DataManagerService {
         return output;
     }
 
+    /**
+     * Returns data for Table in DriverSummary tab.
+     * @param start
+     * @param end
+     * @param mid
+     * @param timescale
+     * @param selRowId
+     * @returns {ClickableTable}
+     */
     getData_DriverSummaryTableData(start: string,
                                    end: string,
                                    mid: string,
@@ -687,15 +797,27 @@ export class DataManagerService {
         };
     }
 
+    /**
+     * Returns full list of Timelabels for requested period
+     * @param timescale
+     * @param start
+     * @param end
+     * @returns {string[]|Array}
+     */
     getFullPeriod(timescale: string, start: string,
                   end: string): Array<string> {
         let timelabels = this.dataModel.getTimeLine(timescale, start, end);
         return (timelabels && timelabels.length)
             ? timelabels.map((el) => {
-            return el.full_name
+            return el.id
         }) : [];
     }
 
+    /**
+     * Returns list of factors(id and name) for passed decomposition type
+     * @param decompType
+     * @returns {Array}
+     */
     getFactorsList(decompType: string): Array<{id: string; name: string}> {
         let output = [];
         let factors = this.dataModel.getDecompTypeFactors(decompType);
@@ -713,7 +835,6 @@ export class DataManagerService {
         }
         return output;
     }
-
 
     /**
      * Returns data for Decomposition Types Switcher.
@@ -749,11 +870,21 @@ export class DataManagerService {
         return output;
     }
 
-
+    /**
+     * Returns list of drivers id (variables with type 'driver')
+     * for passed factor
+     * @param decompType
+     * @param factorId
+     * @returns {Array<string>}
+     */
     getDriversForFactor(decompType: string, factorId: string): Array<string> {
         return this.dataModel.getFactorDrivers(factorId);
     }
 
+    /**
+     * Returns dictionary with labels for TimePeriodSelector
+     * @returns {{apply: string, cancel: string}}
+     */
     getLanguagePackForTimeSelector() {
         return {
             'apply': this.config['apply'],
