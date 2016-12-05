@@ -3,8 +3,7 @@ from pyramid.config import Configurator
 from pyramid.response import Response
 
 from .common import security
-from .common.views import default as common
-from .common.views import landing_page as landing
+from .common.views import common_view as common
 
 from .forecasting.views import dashboard as f_dashboard
 from .forecasting.views import default as f_common
@@ -20,12 +19,8 @@ def common_routing(config):
     config.add_static_view(name='images', path='iap.ui:images',
                            cache_max_age=3600)
 
-    config.add_notfound_view(common.notfound_view)
-    config.add_forbidden_view(common.forbidden_view)
-
-    # http://docs.pylonsproject.org/projects/pyramid/en/latest/api/config.html#pyramid.config.Configurator.add_tween
-    # config.add_tween('.common.tweens.timing_tween_factory', over=pyramid.tweens.MAIN)
-    # config.add_tween(common.tweens.login_tween_factory)
+    #config.add_notfound_view(common.notfound_view)
+    #config.add_forbidden_view(common.forbidden_view)
 
     config.add_route('common.index', '/')
     config.add_view(common.index_view, route_name='common.index')
@@ -36,22 +31,30 @@ def common_routing(config):
                     route_name='common.get_page_configuration',
                     request_method='POST', renderer='json')
 
-    config.add_route('landing.get_tools_list', '/landing')
-    config.add_view(landing.get_tools_list,
-                    route_name='landing.get_tools_list',
+    config.add_route('common.get_languages', '/get_languages')
+    config.add_view(common.get_languages_list,
+                    route_name='common.get_languages',
                     request_method='POST', renderer='json')
 
-    config.add_route('landing.set_tool_selection', '/set_tool_selection')
-    config.add_view(landing.set_tool_selection,
-                    route_name='landing.set_tool_selection',
+    config.add_route('common.set_language', '/set_language')
+    config.add_view(common.set_language,
+                    route_name='common.set_language',
                     request_method='POST', renderer='json')
 
+    config.add_route('common.get_landing', '/get_landing')
+    config.add_view(common.get_landing_page_data,
+                    route_name='common.get_landing',
+                    request_method='POST', renderer='json')
 
-    config.add_route('common.login', '/login')
-    config.add_view(common.login_view, route_name='common.login')
+    config.add_route('common.client_user_view', '/get_client_user_view')
+    config.add_view(common.get_client_and_user_info,
+                    route_name='common.client_user_view',
+                    request_method='POST', renderer='json')
 
-    config.add_route('common.logout', '/logout')
-    config.add_view(common.logout_view, route_name='common.logout')
+    config.add_route('common.select_project', '/select_project')
+    config.add_view(common.set_project_selection,
+                    route_name='common.select_project',
+                    request_method='POST', renderer='json')
 
     config.include(security)
 
