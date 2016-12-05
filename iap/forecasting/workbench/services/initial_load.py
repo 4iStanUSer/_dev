@@ -9,8 +9,9 @@ def init_load_container(dev_template, wh, container, config):
                              timelines_info['top_ts_points'])
     gr_periods = []
     for ts_name in dev_template['timelines']['properties'].keys():
-        cagr_periods = \
-            config.get_common_option('dashboard_cagr_periods')[ts_name]
+        cagr_periods = container.timeline\
+            .get_carg_periods(ts_name,
+                              config.get_property('dash_top_ts_period'))
         gr_periods.extend(cagr_periods)
         gr_periods.extend(container.timeline.get_growth_periods(ts_name))
     # Create container structure

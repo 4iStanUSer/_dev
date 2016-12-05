@@ -3,6 +3,8 @@ import copy
 from ...common.helper import Meta, Variable
 from .helper import SlotType
 
+LANGKEY = 'languages'
+
 
 class DataConfiguration:
     """Describe class here"""
@@ -10,7 +12,8 @@ class DataConfiguration:
     def __init__(self):
 
         # Common configuration.
-        self._common = dict()
+        self._project_properties = dict()
+        self._ts_properties = []
         self._by_meta = dict()
         self._by_entity = dict()
 
@@ -18,9 +21,12 @@ class DataConfiguration:
         self._wh_input = []
 
     def get_backup(self):
-        # Save general options.
-        project_options = [dict(name=x, value=y) for x, y in
-                           self._common.items()]
+        # Save project properties.
+        project_props = [dict(name=x, value=y) for x, y in
+                           self._project_properties.items()]
+
+        # Save time scales properties.
+        ts_props = [x.get_for_save() for x in self._ts_properties]
 
         # Save config by meta.
         by_meta = []
@@ -50,16 +56,26 @@ class DataConfiguration:
         ) for item in self._wh_input]
 
         # Collect backup together.
-        return dict(project_options=project_options, by_meta=by_meta,
-                    by_entities=by_entities, wh_input_long=wh_input)
+        return dict(
+            project_properties=project_props,
+            timescales_properties=ts_props,
+            by_meta=by_meta,
+            by_entities=by_entities,
+            wh_input_long=wh_input
+        )
 
     def load_from_backup(self, backup):
         self.init_load(backup)
 
     def init_load(self, config):
-        # Fill common configuration.
-        for item in config['project_options']:
-            self._common[item['name']] = copy.copy(item['value'])
+        # Fill project configuration.
+        for item in config['project_properties']:
+            self._project_properties[item['name']] = copy.copy(item['value'])
+
+        # Fill timescales properties.
+        for item in config['timescales_properties']:
+            self._ts_properties = [ItemConfig(x)
+                                   for x in config['timescales_properties']]
 
         # Fill config for meta groups.
         for meta_config in config['by_meta']:
@@ -110,39 +126,55 @@ class DataConfiguration:
                 )
         return
 
-    def get_option(self, prop_name, meta=None, entity_path=None):
+    def get_property(self, prop_name, meta=None, entity_path=None):
         try:
             ent_options = self._get_entity_config(meta, entity_path)
             if ent_options is not None:
-                prop_val = ent_options.general_options.get(prop_name)
+                prop_val = ent_options.general_props.get(prop_name)
                 if prop_val is not None:
                     return prop_val
         except Exception:
             pass
         finally:
-            prop_val = self._common.get(prop_name)
+            prop_val = self._project_properties.get(prop_name)
             if prop_val is not None:
                 return prop_val
             else:
                 raise Exception
 
-    def get_view_variables(self, meta, entity_path=None):
+    def get_vars_for_view(self, meta, entity_path=None):
         ent_options = self._get_entity_config(meta, entity_path)
         if ent_options is None:
             raise Exception
-        return ent_options.get_view_options('variables')
+        return ent_options.get_view_vars('variables')
 
-    def get_view_decomposition(self, meta, entity_path=None):
+    def get_decomp_vars_for_view(self, meta, entity_path=None):
         ent_options = self._get_entity_config(meta, entity_path)
         if ent_options is None:
             raise Exception
-        return ent_options.get_view_options('decomposition')
+        return ent_options.get_view_vars('decomposition')
 
-    def get_variable_options(self, var_id, lang, meta, entity_path=None):
+    def get_variables_properties(self, vars_ids, lang, meta, entity_path=None):
         ent_options = self._get_entity_config(meta, entity_path)
         if ent_options is None:
             raise Exception
-        return ent_options.get_variable_options(var_id, lang)
+        return ent_options.get_vars_props(vars_ids, lang)
+
+    def get_timescales_info(self, ts_ids, lang):
+        return [x.get_for_view(lang)
+                for x in self._ts_properties if x.id in ts_ids]
+
+    def get_dec_types_info(self, lang, meta, entity_path=None):
+        ent_options = self._get_entity_config(meta, entity_path)
+        if ent_options is None:
+            raise Exception
+        return ent_options.get_dec_types_info(lang)
+
+    def get_factor_drivers_relations(self, meta, entity_path=None):
+        ent_options = self._get_entity_config(meta, entity_path)
+        if ent_options is None:
+            raise Exception
+        return ent_options.get_factor_drivers_relations()
 
     @property
     def wh_inputs(self):
@@ -160,97 +192,124 @@ class DataConfiguration:
 class EntityConfiguration:
 
     def __init__(self):
-        self.var_properties = dict()
-        self.view_options = []
-        self.general_options = dict()
+        self.var_props = []
+        self.view_vars = []
+        self.general_props = dict()
+        self.dec_types = []
+        self.factor_drivers = dict()
 
     def get_backup(self):
-        # Save variables properties.
-        variables_properties = []
-        for var_id, var_props in self.var_properties.items():
-            full_props = copy.copy(var_props)
-            full_props['var_id'] = var_id
-            variables_properties.append(full_props)
-
         # Save view options.
         view_options = []
-        for item in self.view_options:
+        for item in self.view_vars:
             option = []
-            meta_options = dict(meta=item['meta'],
-                                data=option)
+            meta_options = dict(filter=item['filter'],
+                                variables=option)
             view_options.append(meta_options)
-            for var_opts in item['data']['variables']:
+            for var_opts in item['variables']['variables']:
                 option.append(dict(
-                    var_id=var_opts['id'],
+                    id=var_opts['id'],
                     view_type=var_opts['type']
                 ))
-            for var_opts in item['data']['decomposition']:
+            for var_opts in item['variables']['decomposition']:
                 option.append(dict(
-                    var_id=var_opts['id'],
+                    id=var_opts['id'],
                     view_type='decomposition',
                     dec_type=var_opts['type']
                 ))
 
-        # Save general options.
-        general_options = [dict(name=key, value=value) for key, value in
-                           self.general_options.items()]
-
         # Collect backup together.
-        return dict(variables_properties=variables_properties,
-                    view_options=view_options,
-                    general_options=general_options)
+        return dict(
+            view_variables=view_options,
+            variables_properties=[x.get_for_save() for x in self.var_props],
+            general_properties=[dict(name=key, value=value) for key, value in self.general_props.items()],
+            decomposition_types=[x.get_for_save() for x in self.dec_types],
+            factor_drivers = copy.copy(self.factor_drivers)
+        )
 
     def init_load(self, config):
 
         # Load variables properties.
         if 'variables_properties' in config:
-            for item in config['variables_properties']:
-                self.var_properties[item['var_id']] = \
-                    {key: copy.copy(value) for key, value in item.items()
-                     if key != 'var_id'}
+            self.var_props = [ItemConfig(x)
+                              for x in config['variables_properties']]
 
         # Load view options.
-        if 'view_options' in config:
-            for item in config['view_options']:
+        if 'view_variables' in config:
+            for item in config['view_variables']:
                 entity_view = dict(variables=[], decomposition=[])
-                self.view_options.append(dict(meta=copy.copy(item['meta']),
-                                              data=entity_view))
-                for var_view in item['data']:
+                self.view_vars.append(dict(filter=copy.copy(item['filter']),
+                                           variables=entity_view))
+                for var_view in item['variables']:
                     view_type = var_view['view_type']
                     if view_type == 'decomposition':
-                        d = dict(id=var_view['var_id'],
+                        d = dict(id=var_view['id'],
                                  type=var_view['dec_type'])
                         entity_view['decomposition'].append(d)
                     else:
-                        d = dict(id=var_view['var_id'],
+                        d = dict(id=var_view['id'],
                                  type=view_type)
                         entity_view['variables'].append(d)
 
+        # Load dec types.
+        if 'decomposition_types' in config:
+            self.dec_types = [ItemConfig(x)
+                              for x in config['decomposition_types']]
+
+        # Load connections between factors and drivers.
+        if 'factor_drivers' in config:
+            self.factor_drivers = copy.copy(config['factor_drivers'])
+
         # Load general options.
-        if 'general_options' in config:
-            for item in config['general_options']:
-                self.general_options[item['name']] = copy.copy(item['value'])
+        if 'general_properties' in config:
+            for item in config['general_properties']:
+                self.general_props[item['name']] = copy.copy(item['value'])
         return
 
-    def get_view_options(self, view_type):
+    def get_view_vars(self, view_type):
         result = []
-        for option in self.view_options:
-            item = dict()
-            for var in option['data'][view_type]:
-                if var['type'] not in item:
-                    item[var['type']] = []
-                item[var['type']].append(var['id'])
-            if len(item) > 0:
-                result.append(dict(meta=option['meta'], data=item))
+        for option in self.view_vars:
+            if len(option['variables'][view_type]) > 0:
+                result.append(
+                    dict(filter=option['filter'],
+                         variables=copy.copy(option['variables'][view_type]))
+                )
         return result
 
-    def get_variable_options(self, var_id, lang):
-        var_properties = self.var_properties.get(var_id)
-        if var_properties is None:
+    def get_vars_props(self, vars_ids, lang):
+        return [x.get_for_view(lang)
+                for x in self.var_props if x.id in vars_ids]
+
+    def get_dec_types_info(self, lang):
+        return [x.get_for_view(lang) for x in self.dec_types if x.id]
+
+    def get_factor_drivers_relations(self):
+        return copy.copy(self.factor_drivers)
+
+
+class ItemConfig:
+
+    def __init__(self, props):
+        if 'id' not in props.keys():
             raise Exception
-        if lang not in var_properties['languages']:
-            raise Exception
-        var_options = copy.copy(var_properties)
-        del var_options['languages']
-        return {**var_options, **var_properties['languages'][lang]}
+        self.general_props = {x: y for x, y in props.items() if x != LANGKEY}
+        if LANGKEY in props:
+            self.lang_specific_props = copy.copy(props[LANGKEY])
+
+    @property
+    def id(self):
+        return self.general_props['id']
+
+    def get_for_view(self, lang):
+        return {
+            **copy.copy(self.general_props),
+            **copy.copy(self.lang_specific_props[lang])
+        }
+
+    def get_for_save(self):
+        result = copy.copy(self.general_props)
+        result[LANGKEY] = copy.copy(self.lang_specific_props)
+        return result
+
+
 

@@ -13,7 +13,7 @@
       "decomp_period": {
         "timescale": "annual",
         "end": "2018",
-        "start": "2013"
+        "start": "2015"
       }
     },
     "data": {
@@ -27,183 +27,39 @@
       ],
       "variables": [
         {
-          "id": "Avg % Discount",
-          "full_name": "Avg % Discount",
-          "short_name": "Avg % Discount",
-          "type": "driver",
-          "metric": "%",
-          "format": "",
-          "hint": ""
-        },
-        {
-          "id": "Above Unit Price",
-          "full_name": "Above Unit Price",
-          "short_name": "Above Unit Price",
-          "type": "driver",
-          "metric": "%",
-          "format": "",
-          "hint": ""
-        },
-        {
-          "id": "Price per Unit",
-          "full_name": "Price per Unit",
-          "short_name": "Price per Unit",
-          "type": "driver",
-          "metric": "Dollar Per Unit",
-          "format": "",
-          "hint": ""
-        },
-        {
-          "id": "Value",
-          "full_name": "Value",
-          "short_name": "Value",
+          "id": "value",
+          "full_name": "Sales",
+          "short_name": "Sales",
           "type": "output",
-          "metric": "Dollar",
-          "format": "",
+          "metric": "Local currency",
+          "format": "0,000",
           "hint": ""
         },
         {
-          "id": "Avg % Volume sold as Promo",
-          "full_name": "Avg % Volume sold as Promo",
-          "short_name": "Avg % Volume sold as Promo",
-          "type": "driver",
-          "metric": "%",
-          "format": "",
+          "id": "eq_price",
+          "full_name": "Price",
+          "short_name": "Price",
+          "type": "output",
+          "metric": "Local currency",
+          "format": "0.00",
           "hint": ""
         },
         {
-          "id": "Distribution",
+          "id": "distribution",
           "full_name": "Distribution",
           "short_name": "Distribution",
           "type": "driver",
           "metric": "TDP",
-          "format": "",
+          "format": "0,000",
           "hint": ""
         },
         {
-          "id": "Media Spend",
-          "full_name": "Media Spend",
-          "short_name": "Media Spend",
-          "type": "driver",
-          "metric": "Dollar",
-          "format": "",
-          "hint": ""
-        },
-        {
-          "id": "Unit Volume",
-          "full_name": "Unit Volume",
-          "short_name": "Unit Volume",
-          "type": "driver",
-          "metric": "Unit",
-          "format": "",
-          "hint": ""
-        },
-        {
-          "id": "EQ Volume",
-          "full_name": "EQ Volume",
-          "short_name": "EQ Volume",
-          "type": "output",
-          "metric": "Liter",
-          "format": "",
-          "hint": ""
-        },
-        {
-          "id": "Premiumization",
-          "full_name": "Premiumization",
-          "short_name": "Premiumization",
-          "type": "driver",
-          "metric": "index",
-          "format": "",
-          "hint": ""
-        },
-        {
-          "id": "Avg % Promo Support",
-          "full_name": "Avg % Promo Support",
-          "short_name": "Avg % Promo Support",
-          "type": "driver",
-          "metric": "%",
-          "format": "",
-          "hint": ""
-        },
-        {
-          "id": "Unit Size",
-          "full_name": "Unit Size",
-          "short_name": "Unit Size",
-          "type": "driver",
-          "metric": "Litter per Unit",
-          "format": "",
-          "hint": ""
-        },
-        {
-          "id": "Innovation TDP share",
-          "full_name": "Innovation TDP share",
-          "short_name": "Innovation TDP share",
-          "type": "driver",
-          "metric": "% of TDP",
-          "format": "",
-          "hint": ""
-        },
-        {
-          "id": "Price per EQ",
-          "full_name": "Price per EQ",
-          "short_name": "Price per EQ",
-          "type": "output",
-          "metric": "Dollar Per Liter",
-          "format": "",
-          "hint": ""
-        },
-        {
-          "id": "LTT",
-          "full_name": "LTT",
-          "short_name": "LTT",
-          "type": "driver",
-          "metric": "%",
-          "format": "",
-          "hint": ""
-        },
-        {
-          "id": "ImpactVar1",
-          "full_name": "ImpactVar1",
-          "short_name": "ImpactVar1",
+          "id": "dec_val_economy",
+          "full_name": "Economy",
+          "short_name": "Economy",
           "type": "impact",
           "metric": "%",
-          "format": "",
-          "hint": ""
-        },
-        {
-          "id": "ImpactVar2",
-          "full_name": "ImpactVar2",
-          "short_name": "ImpactVar2",
-          "type": "impact",
-          "metric": "%",
-          "format": "",
-          "hint": ""
-        },
-        {
-          "id": "ImpactVar3",
-          "full_name": "ImpactVar3",
-          "short_name": "ImpactVar3",
-          "type": "impact",
-          "metric": "%",
-          "format": "",
-          "hint": ""
-        },
-        {
-          "id": "ImpactVar4",
-          "full_name": "ImpactVar4",
-          "short_name": "ImpactVar4",
-          "type": "impact",
-          "metric": "%",
-          "format": "",
-          "hint": ""
-        },
-        {
-          "id": "ImpactVar5",
-          "full_name": "ImpactVar5",
-          "short_name": "ImpactVar5",
-          "type": "impact",
-          "metric": "%",
-          "format": "",
+          "format": "0.00%",
           "hint": ""
         }
       ],
@@ -374,12 +230,12 @@
       "timescales": [
         {
           "id": "annual",
-          "full_name": "annual",
-          "short_name": "annual",
+          "full_name": "Annual",
+          "short_name": "A",
           "lag": 1
         }
       ],
-      "timelables": [
+      "timelabels": [
         {
           "id": "2013",
           "full_name": "2013",
@@ -426,13 +282,13 @@
       "decomp_types": [
         {
           "id": "value",
-          "full_name": "Value",
-          "short_name": "value"
+          "full_name": "Sales Value",
+          "short_name": "S"
         },
         {
           "id": "volume",
           "full_name": "Volume",
-          "short_name": "volume"
+          "short_name": "V"
         }
       ],
       "change_over_period": {
@@ -1418,26 +1274,26 @@
         }
       },
       "factor_drivers": {
-        "ImpactVar1": [
+        "dec_vol_demo": [
           {
-            "factor": "ImpactVar1",
-            "driver": "Avg % Discount"
+            "factor": "dec_vol_demo",
+            "driver": "population"
           }
         ],
-        "ImpactVar2": [
+        "dec_vol_innovations": [
           {
-            "factor": "ImpactVar2",
-            "driver": "Above Unit Price"
+            "factor": "dec_vol_innovations",
+            "driver": "innovations"
           }
         ],
-        "ImpactVar3": [
+        "dec_vol_trade_promo": [
           {
-            "factor": "ImpactVar4",
-            "driver": "Price per Unit"
+            "factor": "dec_vol_trade",
+            "driver": "discount"
           },
           {
-            "factor": "ImpactVar5",
-            "driver": "Avg % Volume sold as Promo"
+            "factor": "dec_vol_promo",
+            "driver": "support"
           }
         ]
       }

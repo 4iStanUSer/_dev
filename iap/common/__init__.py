@@ -1,6 +1,7 @@
-from .run_time_storage import RunTimeStorage
+from .runtime_storage import RunTimeStorage
+from .persistent_storage import PersistentStorage
 
-rt_storage = RunTimeStorage()
-
+runtimet_storage = RunTimeStorage()
+persistent_storage = PersistentStorage()
 
 

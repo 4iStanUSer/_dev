@@ -607,19 +607,28 @@ dev_template_JJLean = {
 
 dev_template_JJOralCare = {
     'configuration': {
-        'project_options': [
+        'project_properties': [
             {'name': 'dimensions', 'value': ['Geography', 'Products']},
-            {'name': 'dashboard_top_ts', 'value': 'annual'},
-            {'name': 'dashboard_bottom_ts', 'value': 'annual'},
-            {'name': 'dashboard_period', 'value': {'annual': ['2013', '2018']}},
-            {'name': 'dashboard_cagr_periods', 'value': {'annual': [('2013', '2015'), ('2015', '2018')]}}
+            {'name': 'dash_timescales', 'value': ['annual']},
+            {'name': 'dash_decomposition_timescales', 'value': ['annual']},
+            {'name': 'dash_top_ts_period', 'value': ('2013', '2018')}
+        ],
+        'timescales_properties': [
+            {
+                'id': 'annual',
+                'lag': 1,
+                'languages': {
+                    'en': {'full_name': 'Annual', 'short_name': 'A'},
+                    'ru': {'full_name': 'Годовой', 'short_name': 'Г'}
+                }
+            }
         ],
         'by_meta': [
             {
                 'meta_key': ('Geography', 'Country'),
                 'variables_properties': [
                     {
-                        'var_id': 'population',
+                        'id': 'population',
                         'multiplier': 1000000,
                         'format': '0,000',
                         'languages': {
@@ -628,7 +637,7 @@ dev_template_JJOralCare = {
                         }
                     },
                     {
-                        'var_id': 'cpi',
+                        'id': 'cpi',
                         'multiplier': 1,
                         'format': '0',
                         'languages': {
@@ -637,7 +646,7 @@ dev_template_JJOralCare = {
                         }
                     },
                     {
-                        'var_id': 'gdp',
+                        'id': 'gdp',
                         'multiplier': 1000,
                         'format': '0,000',
                         'languages': {
@@ -646,443 +655,493 @@ dev_template_JJOralCare = {
                         }
                     }
                 ],
-                'view_options': {},
-                'general_options': {}
+                'view_variables': {},
+                'general_properties': {}
             },
             {
-                'meta_key': ('Product', 'Category'),
+                'meta_key': ('Products', 'Category'),
                 'variables_properties': [
                     {
-                        'var_id': 'value',
+                        'id': 'value',
                         'multiplier': 1000,
                         'format': '0,000',
                         'languages': {
-                            'en': {'name': 'Sales', 'metric': 'Local currency'},
-                            'ru': {'name': 'Продажи', 'metric': 'Локальная валюта'}
+                            'en': {'full_name': 'Sales', 'short_name': 'Sales', 'metric': 'Local currency'},
+                            'ru': {'full_name': 'Продажи', 'short_name': 'Продажи','metric': 'Локальная валюта'}
                         }
                     },
                     {
-                        'var_id': 'eq_volume',
+                        'id': 'eq_volume',
                         'multiplier': 1000,
                         'format': '0,000',
                         'languages': {
-                            'en': {'name': 'Volume', 'metric': 'EQ'},
-                            'ru': {'name': 'Обьем продаж', 'metric': 'Эквивалетные единицы'}
+                            'en': {'full_name': 'Volume', 'short_name': 'Volume', 'metric': 'EQ'},
+                            'ru': {'full_name': 'Обьем продаж', 'short_name': 'Обьем продаж', 'metric': 'Эквивалетные единицы'}
                         }
                     },
                     {
-                        'var_id': 'eq_price',
+                        'id': 'eq_price',
                         'multiplier': 1,
-                        'format': '0,000',
+                        'format': '0.00',
                         'languages': {
-                            'en': {'name': 'eq_price', 'metric': 'Local currency'},
-                            'ru': {'name': 'Цена за эквивалент', 'metric': 'Локальная валюта'}
+                            'en': {'full_name': 'Price', 'short_name': 'Price', 'metric': 'Local currency'},
+                            'ru': {'full_name': 'Цена за эквивалент', 'short_name': 'Цена за эквивалент', 'metric': 'Локальная валюта'}
                         }
                     },
                     {
-                        'var_id': 'units',
+                        'id': 'units',
                         'multiplier': 1000,
                         'format': '0,000',
                         'languages': {
-                            'en': {'name': 'Units', 'metric': 'Items'},
-                            'ru': {'name': 'Обьем продаж', 'metric': 'Штуки'}
+                            'en': {'full_name': 'Units', 'short_name': 'Units', 'metric': 'Items'},
+                            'ru': {'full_name': 'Обьем продаж', 'short_name': 'Обьем продаж', 'metric': 'Штуки'}
                         }
                     },
                     {
-                        'var_id': 'distribution',
+                        'id': 'distribution',
                         'multiplier': 1000,
                         'format': '0,000',
                         'languages': {
-                            'en': {'name': 'distribution', 'metric': 'TDP'},
-                            'ru': {'name': 'Дистрибуция', 'metric': 'Единицы дистрибуции'}
+                            'en': {'full_name': 'Distribution', 'short_name': 'Distribution', 'metric': 'TDP'},
+                            'ru': {'full_name': 'Дистрибуция', 'short_name': 'Дистрибуция', 'metric': 'Единицы дистрибуции'}
                         }
                     },
                     {
-                        'var_id': 'innovations',
+                        'id': 'innovations',
                         'multiplier': 1,
                         'format': '0.##%',
                         'languages': {
-                            'en': {'name': 'Innovations Share', 'metric': '%'},
-                            'ru': {'name': 'Доля инноваций', 'metric': '%'}
+                            'en': {'full_name': 'Innovations Share', 'short_name': 'Innovations Share', 'metric': '%'},
+                            'ru': {'full_name': 'Доля инноваций', 'short_name': 'Доля инноваций', 'metric': '%'}
                         }
                     },
                     {
-                        'var_id': 'unit_price',
+                        'id': 'unit_price',
                         'multiplier': 1,
                         'format': '0.00',
                         'languages': {
-                            'en': {'name': 'unit_price', 'metric': 'Local currency'},
-                            'ru': {'name': 'Цена за упаковку', 'metric': 'Локальная валюта'}
+                            'en': {'full_name': 'Price per Unit', 'short_name': 'unit_price', 'metric': 'Local currency'},
+                            'ru': {'full_name': 'Цена за упаковку', 'short_name': 'Цена за упаковку', 'metric': 'Локальная валюта'}
                         }
                     },
                     {
-                        'var_id': 'unit_size',
+                        'id': 'unit_size',
                         'multiplier': 1,
                         'format': '0.000',
                         'languages': {
-                            'en': {'name': 'unit_size', 'metric': 'EQ'},
-                            'ru': {'name': 'Размер упаковки', 'metric': 'Эквиваленты'}
+                            'en': {'full_name': 'Unit Size', 'short_name': 'unit_size', 'metric': 'EQ'},
+                            'ru': {'full_name': 'Размер упаковки', 'short_name': 'Размер упаковки', 'metric': 'Эквиваленты'}
                         }
                     },
                     {
-                        'var_id': 'premiumization',
+                        'id': 'premiumization',
                         'multiplier': 1,
                         'format': '0.00',
                         'languages': {
-                            'en': {'name': 'premiumization', 'metric': 'Index'},
-                            'ru': {'name': 'Премиумизация', 'metric': 'Индекс'}
+                            'en': {'full_name': 'Premiumization', 'short_name': 'premiumization', 'metric': 'Index'},
+                            'ru': {'full_name': 'Премиумизация', 'short_name': 'Премиумизация', 'metric': 'Индекс'}
                         }
                     },
                     {
-                        'var_id': 'media',
+                        'id': 'media',
                         'multiplier': 1000,
                         'format': '0,000',
                         'languages': {
-                            'en': {'name': 'Advertising', 'metric': 'Local currency'},
-                            'ru': {'name': 'Реклама', 'metric': 'Локальная валюта'}
+                            'en': {'full_name': 'Advertising', 'short_name': 'Advertising', 'metric': 'Local currency'},
+                            'ru': {'full_name': 'Реклама', 'short_name': 'Реклама', 'metric': 'Локальная валюта'}
                         }
                     },
                     {
-                        'var_id': 'discount',
+                        'id': 'discount',
                         'multiplier': 1,
                         'format': '0.00%',
                         'languages': {
-                            'en': {'name': 'Average Discount', 'metric': '%'},
-                            'ru': {'name': 'Средняя скидка', 'metric': '%'}
+                            'en': {'full_name': 'Average Discount', 'short_name': 'Average Discount', 'metric': '%'},
+                            'ru': {'full_name': 'Средняя скидка', 'short_name': 'Средняя скидка', 'metric': '%'}
                         }
                     },
                     {
-                        'var_id': 'support',
+                        'id': 'support',
                         'multiplier': 1,
                         'format': '0.00%',
                         'languages': {
-                            'en': {'name': 'Average Promo Support', 'metric': '%'},
-                            'ru': {'name': 'Среднее покрытие акции', 'metric': '%'}
+                            'en': {'full_name': 'Average Promo Support', 'short_name': 'Average Promo Support', 'metric': '%'},
+                            'ru': {'full_name': 'Среднее покрытие акции', 'short_name': 'Среднее покрытие акции', 'metric': '%'}
                         }
                     },
                     {
-                        'var_id': 'ltt',
+                        'id': 'ltt',
                         'multiplier': 1,
                         'format': '0.00%',
                         'languages': {
-                            'en': {'name': 'Consumer Trend', 'metric': '%'},
-                            'ru': {'name': 'Потребительские тенденции', 'metric': '%'}
+                            'en': {'full_name': 'Consumer Trend', 'short_name': 'Consumer Trend', 'metric': '%'},
+                            'ru': {'full_name': 'Потребительские тенденции', 'short_name': 'Потребительские тенденции', 'metric': '%'}
                         }
                     },
 
                     {
-                        'var_id': 'dec_val_demo',
+                        'id': 'dec_val_demo',
                         'multiplier': 1,
                         'format': '0.00%',
                         'languages': {
-                            'en': {'name': 'Demographics', 'metric': '%'},
-                            'ru': {'name': 'Демография', 'metric': '%'}
+                            'en': {'full_name': 'Demographics', 'short_name': 'Demographics', 'metric': '%'},
+                            'ru': {'full_name': 'Демография', 'short_name': 'Демография', 'metric': '%'}
                         }
                     },
                     {
-                        'var_id': 'dec_val_economy',
+                        'id': 'dec_val_economy',
                         'multiplier': 1,
                         'format': '0.00%',
                         'languages': {
-                            'en': {'name': 'Economy', 'metric': '%'},
-                            'ru': {'name': 'Экономика', 'metric': '%'}
+                            'en': {'full_name': 'Economy', 'short_name': 'Economy', 'metric': '%'},
+                            'ru': {'full_name': 'Экономика', 'short_name': 'Экономика', 'metric': '%'}
                         }
                     },
                     {
-                        'var_id': 'dec_val_distribution',
+                        'id': 'dec_val_distribution',
                         'multiplier': 1,
                         'format': '0.00%',
                         'languages': {
-                            'en': {'name': 'distribution', 'metric': '%'},
-                            'ru': {'name': 'Распостранение', 'metric': '%'}
+                            'en': {'full_name': 'Distribution', 'short_name': 'Distribution', 'metric': '%'},
+                            'ru': {'full_name': 'Распостранение', 'short_name': 'Распостранение', 'metric': '%'}
                         }
                     },
                     {
-                        'var_id': 'dec_val_innovations',
+                        'id': 'dec_val_innovations',
                         'multiplier': 1,
                         'format': '0.00%',
                         'languages': {
-                            'en': {'name': 'Innovations', 'metric': '%'},
-                            'ru': {'name': 'Инновации', 'metric': '%'}
+                            'en': {'full_name': 'Innovations', 'short_name': 'Innovations', 'metric': '%'},
+                            'ru': {'full_name': 'Инновации', 'short_name': 'Инновации', 'metric': '%'}
                         }
                     },
                     {
-                        'var_id': 'dec_val_advertising',
+                        'id': 'dec_val_advertising',
                         'multiplier': 1,
                         'format': '0.00%',
                         'languages': {
-                            'en': {'name': 'Advertising', 'metric': '%'},
-                            'ru': {'name': 'Реклама', 'metric': '%'}
+                            'en': {'full_name': 'Advertising', 'short_name': 'Advertising', 'metric': '%'},
+                            'ru': {'full_name': 'Реклама', 'short_name': 'Реклама', 'metric': '%'}
                         }
                     },
                     {
-                        'var_id': 'dec_vol_trade_on_vol',
+                        'id': 'dec_vol_trade_on_vol',
                         'multiplier': 1,
                         'format': '0.00%',
                         'languages': {
-                            'en': {'name': 'Trade on Volume', 'metric': '%'},
-                            'ru': {'name': 'Торговля на обьем', 'metric': '%'}
+                            'en': {'full_name': 'Trade on Volume', 'short_name': 'Trade on Volume','metric': '%'},
+                            'ru': {'full_name': 'Торговля на обьем', 'short_name': 'Торговля на обьем', 'metric': '%'}
                         }
                     },
                     {
-                        'var_id': 'dec_vol_promo_on_vol',
+                        'id': 'dec_vol_promo_on_vol',
                         'multiplier': 1,
                         'format': '0.00%',
                         'languages': {
-                            'en': {'name': 'Promo on Volume', 'metric': '%'},
-                            'ru': {'name': 'Промо акции на обьем', 'metric': '%'}
+                            'en': {'full_name': 'Promo on Volume', 'short_name': 'Promo on Volume', 'metric': '%'},
+                            'ru': {'full_name': 'Промо акции на обьем', 'short_name': 'Промо акции на обьем', 'metric': '%'}
                         }
                     },
                     {
-                        'var_id': 'dec_val_trade_promo_on_vol',
+                        'id': 'dec_val_trade_promo_on_vol',
                         'multiplier': 1,
                         'format': '0.00%',
                         'languages': {
-                            'en': {'name': 'Trade and Promo on Volume', 'metric': '%'},
-                            'ru': {'name': 'Торговля и промо акции на обьем', 'metric': '%'}
+                            'en': {'full_name': 'Trade and Promo on Volume', 'short_name': 'Trade and Promo on Volume','metric': '%'},
+                            'ru': {'full_name': 'Торговля и промо акции на обьем', 'short_name': 'Торговля и промо акции на обьем', 'metric': '%'}
                         }
                     },
                     {
-                        'var_id': 'dec_val_price_on_vol',
+                        'id': 'dec_val_price_on_vol',
                         'multiplier': 1,
                         'format': '0.00%',
                         'languages': {
-                            'en': {'name': 'Pricing', 'metric': '%'},
-                            'ru': {'name': 'Цена', 'metric': '%'}
+                            'en': {'full_name': 'Pricing', 'short_name': 'Pricing', 'metric': '%'},
+                            'ru': {'full_name': 'Цена', 'short_name': 'Цена', 'metric': '%'}
                         }
                     },
                     {
-                        'var_id': 'dec_val_unit_size_on_vol',
+                        'id': 'dec_val_unit_size_on_vol',
                         'multiplier': 1,
                         'format': '0.00%',
                         'languages': {
-                            'en': {'name': 'unit_size on Volume', 'metric': '%'},
-                            'ru': {'name': 'Размер упаковки на обьем', 'metric': '%'}
+                            'en': {'full_name': 'unit_size on Volume', 'short_name': 'unit_size on Volume', 'metric': '%'},
+                            'ru': {'full_name': 'Размер упаковки на обьем', 'short_name': 'Размер упаковки на обьем','metric': '%'}
                         }
                     },
                     {
-                        'var_id': 'dec_val_inflation',
+                        'id': 'dec_val_inflation',
                         'multiplier': 1,
                         'format': '0.00%',
                         'languages': {
-                            'en': {'name': 'Inflation', 'metric': '%'},
-                            'ru': {'name': 'Инфляция', 'metric': '%'}
+                            'en': {'full_name': 'Inflation', 'short_name': 'Inflation', 'metric': '%'},
+                            'ru': {'full_name': 'Инфляция', 'short_name': 'Инфляция','metric': '%'}
                         }
                     },
                     {
-                        'var_id': 'dec_val_man_pricing',
+                        'id': 'dec_val_man_pricing',
                         'multiplier': 1,
                         'format': '0.00%',
                         'languages': {
-                            'en': {'name': 'Manufacturer pricing', 'metric': '%'},
-                            'ru': {'name': 'Цена производителя', 'metric': '%'}
+                            'en': {'full_name': 'Manufacturer pricing', 'short_name': 'Manufacturer pricing','metric': '%'},
+                            'ru': {'full_name': 'Цена производителя', 'short_name': 'Цена производителя', 'metric': '%'}
                         }
                     },
                     {
-                        'var_id': 'dec_val_premiumization',
+                        'id': 'dec_val_premiumization',
                         'multiplier': 1,
                         'format': '0.00%',
                         'languages': {
-                            'en': {'name': 'premiumization', 'metric': '%'},
-                            'ru': {'name': 'Премиумизация', 'metric': '%'}
+                            'en': {'full_name': 'Premiumization', 'short_name': 'Premiumization','metric': '%'},
+                            'ru': {'full_name': 'Премиумизация', 'short_name': 'Премиумизация','metric': '%'}
                         }
                     },
                     {
-                        'var_id': 'dec_val_trade',
+                        'id': 'dec_val_trade',
                         'multiplier': 1,
                         'format': '0.00%',
                         'languages': {
-                            'en': {'name': 'Trade', 'metric': '%'},
-                            'ru': {'name': 'Торговля', 'metric': '%'}
+                            'en': {'full_name': 'Trade', 'short_name': 'Trade','metric': '%'},
+                            'ru': {'full_name': 'Торговля', 'short_name': 'Торговля','metric': '%'}
                         }
                     },
                     {
-                        'var_id': 'dec_val_promo',
+                        'id': 'dec_val_promo',
                         'multiplier': 1,
                         'format': '0.00%',
                         'languages': {
-                            'en': {'name': 'Promo', 'metric': '%'},
-                            'ru': {'name': 'Промо акции', 'metric': '%'}
+                            'en': {'full_name': 'Promo', 'short_name': 'Promo','metric': '%'},
+                            'ru': {'full_name': 'Промо акции', 'short_name': 'Промо акции','metric': '%'}
                         }
                     },
                     {
-                        'var_id': 'dec_val_trade_promo',
+                        'id': 'dec_val_trade_promo',
                         'multiplier': 1,
                         'format': '0.00%',
                         'languages': {
-                            'en': {'name': 'Trade and Promo', 'metric': '%'},
-                            'ru': {'name': 'Торговля и промо акции', 'metric': '%'}
+                            'en': {'full_name': 'Trade and Promo', 'short_name': 'Trade and Promo','metric': '%'},
+                            'ru': {'full_name': 'Торговля и промо акции', 'short_name': 'Торговля и промо акции','metric': '%'}
                         }
                     },
                     {
-                        'var_id': 'dec_val_unit_size',
+                        'id': 'dec_val_unit_size',
                         'multiplier': 1,
                         'format': '0.00%',
                         'languages': {
-                            'en': {'name': 'unit_size in Price', 'metric': '%'},
-                            'ru': {'name': 'Размер упаковки', 'metric': '%'}
+                            'en': {'full_name': 'Unit size in Price', 'short_name': 'Unit size in Price', 'metric': '%'},
+                            'ru': {'full_name': 'Размер упаковки', 'short_name': 'Размер упаковки', 'metric': '%'}
                         }
                     },
                     {
-                        'var_id': 'dec_val_other',
+                        'id': 'dec_val_other',
                         'multiplier': 1,
                         'format': '0.00%',
                         'languages': {
-                            'en': {'name': 'Other', 'metric': '%'},
-                            'ru': {'name': 'Другое', 'metric': '%'}
+                            'en': {'full_name': 'Other', 'short_name': 'Other', 'metric': '%'},
+                            'ru': {'full_name': 'Другое', 'short_name': 'Другое', 'metric': '%'}
                         }
                     },
                     {
-                        'var_id': 'dec_vol_demo',
+                        'id': 'dec_vol_demo',
                         'multiplier': 1,
                         'format': '0.00%',
                         'languages': {
-                            'en': {'name': 'Demographics', 'metric': '%'},
-                            'ru': {'name': 'Демография', 'metric': '%'}
+                            'en': {'full_name': 'Demographics', 'short_name': 'Demographics', 'metric': '%'},
+                            'ru': {'full_name': 'Демография', 'short_name': 'Демография', 'metric': '%'}
                         }
                     },
                     {
-                        'var_id': 'dec_vol_economy',
+                        'id': 'dec_vol_economy',
                         'multiplier': 1,
                         'format': '0.00%',
                         'languages': {
-                            'en': {'name': 'Economy', 'metric': '%'},
-                            'ru': {'name': 'Экономика', 'metric': '%'}
+                            'en': {'full_name': 'Economy', 'short_name': 'Economy', 'metric': '%'},
+                            'ru': {'full_name': 'Экономика', 'short_name': 'Экономика', 'metric': '%'}
                         }
                     },
                     {
-                        'var_id': 'dec_vol_distribution',
+                        'id': 'dec_vol_distribution',
                         'multiplier': 1,
                         'format': '0.00%',
                         'languages': {
-                            'en': {'name': 'distribution', 'metric': '%'},
-                            'ru': {'name': 'Распостранение', 'metric': '%'}
+                            'en': {'full_name': 'Distribution', 'short_name': 'Distribution', 'metric': '%'},
+                            'ru': {'full_name': 'Распостранение', 'short_name': 'Распостранение', 'metric': '%'}
                         }
                     },
                     {
-                        'var_id': 'dec_vol_innovations',
+                        'id': 'dec_vol_innovations',
                         'multiplier': 1,
                         'format': '0.00%',
                         'languages': {
-                            'en': {'name': 'Innovations', 'metric': '%'},
-                            'ru': {'name': 'Инновации', 'metric': '%'}
+                            'en': {'full_name': 'Innovations', 'short_name': 'Innovations', 'metric': '%'},
+                            'ru': {'full_name': 'Инновации', 'short_name': 'Инновации', 'metric': '%'}
                         }
                     },
                     {
-                        'var_id': 'dec_vol_advertising',
+                        'id': 'dec_vol_advertising',
                         'multiplier': 1,
                         'format': '0.00%',
                         'languages': {
-                            'en': {'name': 'Advertising', 'metric': '%'},
-                            'ru': {'name': 'Реклама', 'metric': '%'}
+                            'en': {'full_name': 'Advertising', 'short_name': 'Advertising', 'metric': '%'},
+                            'ru': {'full_name': 'Реклама', 'short_name': 'Реклама', 'metric': '%'}
                         }
                     },
                     {
-                        'var_id': 'dec_vol_trade_on_vol',
+                        'id': 'dec_vol_trade_on_vol',
                         'multiplier': 1,
                         'format': '0.00%',
                         'languages': {
-                            'en': {'name': 'Trade on Volume', 'metric': '%'},
-                            'ru': {'name': 'Торговля на обьем', 'metric': '%'}
+                            'en': {'full_name': 'Trade on Volume', 'short_name': 'Trade on Volume', 'metric': '%'},
+                            'ru': {'full_name': 'Торговля на обьем', 'short_name': 'Торговля на обьем', 'metric': '%'}
                         }
                     },
                     {
-                        'var_id': 'dec_vol_promo_on_vol',
+                        'id': 'dec_vol_promo_on_vol',
                         'multiplier': 1,
                         'format': '0.00%',
                         'languages': {
-                            'en': {'name': 'Promo on Volume', 'metric': '%'},
-                            'ru': {'name': 'Промо акции на обьем', 'metric': '%'}
+                            'en': {'full_name': 'Promo on Volume', 'short_name': 'Promo on Volume', 'metric': '%'},
+                            'ru': {'full_name': 'Промо акции на обьем', 'short_name': 'Промо акции на обьем', 'metric': '%'}
                         }
                     },
                     {
-                        'var_id': 'dec_vol_trade_promo_on_vol',
+                        'id': 'dec_vol_trade_promo_on_vol',
                         'multiplier': 1,
                         'format': '0.00%',
                         'languages': {
-                            'en': {'name': 'Trade and Promo on Volume', 'metric': '%'},
-                            'ru': {'name': 'Торговля и промо акции на обьем', 'metric': '%'}
+                            'en': {'full_name': 'Trade and Promo on Volume', 'short_name': 'Trade and Promo on Volume', 'metric': '%'},
+                            'ru': {'full_name': 'Торговля и промо акции на обьем', 'short_name': 'Торговля и промо акции на обьем',  'metric': '%'}
                         }
                     },
                     {
-                        'var_id': 'dec_vol_price_on_vol',
+                        'id': 'dec_vol_price_on_vol',
                         'multiplier': 1,
                         'format': '0.00%',
                         'languages': {
-                            'en': {'name': 'Pricing', 'metric': '%'},
-                            'ru': {'name': 'Цена', 'metric': '%'}
+                            'en': {'full_name': 'Pricing', 'short_name': 'Pricing', 'metric': '%'},
+                            'ru': {'full_name': 'Цена', 'short_name': 'Цена', 'metric': '%'}
                         }
                     },
                     {
-                        'var_id': 'dec_vol_unit_size_on_vol',
+                        'id': 'dec_vol_unit_size_on_vol',
                         'multiplier': 1,
                         'format': '0.00%',
                         'languages': {
-                            'en': {'name': 'unit_size on Volume', 'metric': '%'},
-                            'ru': {'name': 'Размер упаковки на обьем', 'metric': '%'}
+                            'en': {'full_name': 'Unit size on Volume', 'short_name': 'Unit size on Volume', 'metric': '%'},
+                            'ru': {'full_name': 'Размер упаковки на обьем', 'short_name': 'Размер упаковки на обьем', 'metric': '%'}
                         }
                     },
                     {
-                        'var_id': 'dec_vol_ltt',
+                        'id': 'dec_vol_ltt',
                         'multiplier': 1,
                         'format': '0.00%',
                         'languages': {
-                            'en': {'name': 'Consumer Trend', 'metric': '%'},
-                            'ru': {'name': 'Потребительские тенденции', 'metric': '%'}
+                            'en': {'full_name': 'Consumer Trend', 'short_name': 'Consumer Trend', 'metric': '%'},
+                            'ru': {'full_name': 'Потребительские тенденции', 'short_name': 'Потребительские тенденции', 'metric': '%'}
                         }
                     }
                 ],
-                'view_options': [
+                'view_variables': [
                         {
-                            'meta': {'type': 0},
-                            'data': [
-                                {'var_id': 'value', 'view_type': 'outputs'},
-                                {'var_id': 'eq_volume', 'view_type': 'outputs'},
-                                {'var_id': 'eq_price', 'view_type': 'outputs'},
-                                {'var_id': 'unit_price', 'view_type': 'drivers'},
-                                {'var_id': 'unit_size', 'view_type': 'drivers'},
-                                {'var_id': 'distribution', 'view_type': 'drivers'},
-                                {'var_id': 'innovations', 'view_type': 'drivers'},
-                                {'var_id': 'premiumization', 'view_type': 'drivers'},
-                                {'var_id': 'media', 'view_type': 'drivers'},
-                                {'var_id': 'discount', 'view_type': 'drivers'},
-                                {'var_id': 'support', 'view_type': 'drivers'},
-                                {'var_id': 'ltt', 'view_type': 'drivers'},
-                                {'var_id': 'dec_val_demo', 'dec_type': 'value', 'view_type': 'decomposition'},
-                                {'var_id': 'dec_val_economy', 'dec_type':'value', 'view_type': 'decomposition'},
-                                {'var_id': 'dec_val_distribution', 'dec_type':'value', 'view_type': 'decomposition'},
-                                {'var_id': 'dec_val_innovations', 'dec_type':'value', 'view_type': 'decomposition'},
-                                {'var_id': 'dec_val_advertising', 'dec_type':'value', 'view_type': 'decomposition'},
-                                {'var_id': 'dec_val_trade_promo_on_vol', 'dec_type':'value', 'view_type': 'decomposition'},
-                                {'var_id': 'dec_val_price_on_vol', 'dec_type':'value', 'view_type': 'decomposition'},
-                                {'var_id': 'dec_val_unit_size_on_vol', 'dec_type':'value', 'view_type': 'decomposition'},
-                                {'var_id': 'dec_val_inflation', 'dec_type':'value', 'view_type': 'decomposition'},
-                                {'var_id': 'dec_val_man_pricing', 'dec_type':'value', 'view_type': 'decomposition'},
-                                {'var_id': 'dec_val_premiumization', 'dec_type':'value', 'view_type': 'decomposition'},
-                                {'var_id': 'dec_val_trade_promo', 'dec_type':'value', 'view_type': 'decomposition'},
-                                {'var_id': 'dec_val_unit_size', 'dec_type':'value', 'view_type': 'decomposition'},
-                                {'var_id': 'dec_val_other', 'dec_type':'value', 'view_type': 'decomposition'},
-                                {'var_id': 'dec_vol_demo', 'dec_type':'volume', 'view_type': 'decomposition'},
-                                {'var_id': 'dec_vol_economy', 'dec_type':'volume', 'view_type': 'decomposition'},
-                                {'var_id': 'dec_vol_distribution', 'dec_type':'volume', 'view_type': 'decomposition'},
-                                {'var_id': 'dec_vol_innovations', 'dec_type':'volume', 'view_type': 'decomposition'},
-                                {'var_id': 'dec_vol_advertising', 'dec_type':'volume', 'view_type': 'decomposition'},
-                                {'var_id': 'dec_vol_trade_promo', 'dec_type':'volume', 'view_type': 'decomposition'},
-                                {'var_id': 'dec_vol_price', 'dec_type':'volume', 'view_type': 'decomposition'},
-                                {'var_id': 'dec_vol_unit_size', 'dec_type':'volume', 'view_type': 'decomposition'},
-                                {'var_id': 'dec_vol_ltt', 'dec_type': 'volume', 'view_type': 'decomposition'}
+                            'filter': {'type': 0},
+                            'variables': [
+                                {'id': 'value', 'view_type': 'output'},
+                                {'id': 'eq_volume', 'view_type': 'output'},
+                                {'id': 'eq_price', 'view_type': 'output'},
+                                {'id': 'unit_price', 'view_type': 'driver'},
+                                {'id': 'unit_size', 'view_type': 'driver'},
+                                {'id': 'distribution', 'view_type': 'driver'},
+                                {'id': 'innovations', 'view_type': 'driver'},
+                                {'id': 'premiumization', 'view_type': 'driver'},
+                                {'id': 'media', 'view_type': 'driver'},
+                                {'id': 'discount', 'view_type': 'driver'},
+                                {'id': 'support', 'view_type': 'driver'},
+                                {'id': 'ltt', 'view_type': 'driver'},
+                                {'id': 'dec_val_demo', 'dec_type': 'value', 'view_type': 'decomposition'},
+                                {'id': 'dec_val_economy', 'dec_type':'value', 'view_type': 'decomposition'},
+                                {'id': 'dec_val_distribution', 'dec_type':'value', 'view_type': 'decomposition'},
+                                {'id': 'dec_val_innovations', 'dec_type':'value', 'view_type': 'decomposition'},
+                                {'id': 'dec_val_advertising', 'dec_type':'value', 'view_type': 'decomposition'},
+                                {'id': 'dec_val_trade_promo_on_vol', 'dec_type':'value', 'view_type': 'decomposition'},
+                                {'id': 'dec_val_price_on_vol', 'dec_type':'value', 'view_type': 'decomposition'},
+                                {'id': 'dec_val_unit_size_on_vol', 'dec_type':'value', 'view_type': 'decomposition'},
+                                {'id': 'dec_val_inflation', 'dec_type':'value', 'view_type': 'decomposition'},
+                                {'id': 'dec_val_man_pricing', 'dec_type':'value', 'view_type': 'decomposition'},
+                                {'id': 'dec_val_premiumization', 'dec_type':'value', 'view_type': 'decomposition'},
+                                {'id': 'dec_val_trade_promo', 'dec_type':'value', 'view_type': 'decomposition'},
+                                {'id': 'dec_val_unit_size', 'dec_type':'value', 'view_type': 'decomposition'},
+                                {'id': 'dec_val_other', 'dec_type':'value', 'view_type': 'decomposition'},
+                                {'id': 'dec_vol_demo', 'dec_type':'volume', 'view_type': 'decomposition'},
+                                {'id': 'dec_vol_economy', 'dec_type':'volume', 'view_type': 'decomposition'},
+                                {'id': 'dec_vol_distribution', 'dec_type':'volume', 'view_type': 'decomposition'},
+                                {'id': 'dec_vol_innovations', 'dec_type':'volume', 'view_type': 'decomposition'},
+                                {'id': 'dec_vol_advertising', 'dec_type':'volume', 'view_type': 'decomposition'},
+                                {'id': 'dec_vol_trade_promo', 'dec_type':'volume', 'view_type': 'decomposition'},
+                                {'id': 'dec_vol_price', 'dec_type':'volume', 'view_type': 'decomposition'},
+                                {'id': 'dec_vol_unit_size', 'dec_type':'volume', 'view_type': 'decomposition'},
+                                {'id': 'dec_vol_ltt', 'dec_type': 'volume', 'view_type': 'decomposition'}
                             ]
                         },
                         {
-                            'meta': {'type': 3, 'meta_filter': ('Geography', 'Country')},
-                            'data': [
-                                {'var_id': 'population', 'view_type': 'drivers'},
-                                {'var_id': 'cpi', 'view_type': 'drivers'},
-                                {'var_id': 'gdp', 'view_type': 'drivers'}
+                            'filter': {'type': 3, 'meta_filter': ('Geography', 'Country')},
+                            'variables': [
+                                {'id': 'population', 'view_type': 'driver'},
+                                {'id': 'cpi', 'view_type': 'driver'},
+                                {'id': 'gdp', 'view_type': 'driver'}
                             ]
                         },
                     ],
-                'general_options': []
+                'decomposition_types': [
+                    {
+                        'id': 'value',
+                        'languages': {
+                            'en': {'full_name': 'Sales Value', 'short_name': 'S'},
+                            'ru': {'full_name': 'Продажи', 'short_name': 'П'}
+                        }
+                    },
+                    {
+                        'id': 'volume',
+                        'languages': {
+                            'en': {'full_name': 'Volume', 'short_name': 'V'},
+                            'ru': {'full_name': 'Обьем продаж', 'short_name': 'О'}
+                        }
+                    },
+                ],
+                'factor_drivers': {
+                    'dec_val_demo': [('dec_val_demo', 'population')],
+                    'dec_val_economy': [('dec_val_economy', 'gdp')],
+                    'dec_val_distribution': [('dec_val_distribution', 'distribution')],
+                    'dec_val_innovations': [('dec_val_innovations', 'innovations')],
+                    'dec_val_advertising': [('dec_val_advertising', 'media')],
+                    'dec_val_trade_promo_on_vol': [
+                        ('dec_val_trade_on_vol','discount'),
+                        ('dec_val_promo_on_vol', 'support')
+                    ],
+                    'dec_val_price_on_vol': [('dec_val_price_on_vol','unit_price')],
+                    'dec_val_unit_size_on_vol': [('dec_val_unit_size_on_vol','unit_size')],
+                    'dec_val_inflation': [('dec_val_inflation', 'cpi')],
+                    'dec_val_man_pricing': [(None, None)],
+                    'dec_val_premiumization': [('dec_val_premiumization', 'premiumization')],
+                    'dec_val_trade_promo': [
+                        ('dec_val_trade', 'discount'),
+                        ('dec_val_promo', 'support')
+                    ],
+                    'dec_val_unit_size': [('dec_val_unit_size','unit_size')],
+                    'dec_val_other': [(None, None)],
+                    'dec_vol_demo': [('dec_vol_demo', 'population')],
+                    'dec_vol_economy': ['dec_val_economy', 'gdp'],
+                    'dec_vol_distribution': [('dec_vol_distribution', 'distribution')],
+                    'dec_vol_innovations': [('dec_vol_innovations', 'innovations')],
+                    'dec_vol_advertising': [('dec_vol_advertising', 'media')],
+                    'dec_vol_trade_promo': [
+                        ('dec_vol_trade', 'discount'),
+                        ('dec_vol_promo', 'support')
+                    ],
+                    'dec_vol_price': [('dec_vol_price','unit_price')],
+                    'dec_vol_unit_size': [('dec_vol_unit_size', 'unit_size')],
+                    'dec_vol_ltt': [('dec_vol_ltt', 'ltt')]
+                },
+                'general_properties': []
             }
         ],
         'by_entities': [],
@@ -1701,7 +1760,7 @@ dev_template_JJOralCare = {
                         ],
                         'coefficients':[
                             ('economy_sensitivity', 2),
-                            ('innovations_ensitivity', 2),
+                            ('innovations_sensitivity', 2),
                             ('distribution_sensitivity', 2),
                             ('unit_price_elasticity', 2),
                             ('unit_size_elasticity', 2),
@@ -2112,10 +2171,10 @@ dev_template_JJOralCare = {
             'path': ['Mexico', 'Mouthwash'],
             'coefficients': [
                 {'name': 'economy_sensitivity', 'ts': 'annual', 'value': 0.62},
-                {'name': 'innovations_ensitivity', 'ts': 'annual', 'value': 0.71},
+                {'name': 'innovations_sensitivity', 'ts': 'annual', 'value': 0.71},
                 {'name': 'distribution_sensitivity', 'ts': 'annual', 'value': 0.23},
                 {'name': 'unit_price_elasticity', 'ts': 'annual', 'value': -0.21},
-                {'name': 'unit_size Elasticity', 'ts': 'annual', 'value': 0.67},
+                {'name': 'unit_size_elasticity', 'ts': 'annual', 'value': 0.67},
                 {'name': 'advertising_sensitivity', 'ts': 'annual', 'value': 0.01}
             ],
             'data': [
@@ -2144,10 +2203,10 @@ dev_template_JJOralCare = {
             'path': ['US', 'Mouthwash'],
             'coefficients': [
                 {'name': 'economy_sensitivity', 'ts': 'annual', 'value': 0.16},
-                {'name': 'innovations_ensitivity', 'ts': 'annual', 'value': 0.08},
+                {'name': 'innovations_sensitivity', 'ts': 'annual', 'value': 0.08},
                 {'name': 'distribution_sensitivity', 'ts': 'annual', 'value': 0.03},
                 {'name': 'unit_price_elasticity', 'ts': 'annual', 'value': -0.27},
-                {'name': 'unit_size Elasticity', 'ts': 'annual', 'value': 0.70},
+                {'name': 'unit_size_elasticity', 'ts': 'annual', 'value': 0.70},
                 {'name': 'advertising_sensitivity', 'ts': 'annual', 'value': 0.01},
                 {'name': 'trade_promo_sensitivity', 'ts': 'annual', 'value': 0.35}
             ],
@@ -2177,10 +2236,10 @@ dev_template_JJOralCare = {
             'path': ['Brazil', 'Mouthwash'],
             'coefficients': [
                 {'name': 'economy_sensitivity', 'ts': 'annual', 'value': 0.25},
-                {'name': 'innovations_ensitivity', 'ts': 'annual', 'value': 0.43},
+                {'name': 'innovations_sensitivity', 'ts': 'annual', 'value': 0.43},
                 {'name': 'distribution_sensitivity', 'ts': 'annual', 'value': 0.14},
                 {'name': 'unit_price_elasticity', 'ts': 'annual', 'value': -0.35},
-                {'name': 'unit_size Elasticity', 'ts': 'annual', 'value': 0.05},
+                {'name': 'unit_size_elasticity', 'ts': 'annual', 'value': 0.05},
                 {'name': 'advertising_sensitivity', 'ts': 'annual', 'value': 0.01}
             ],
             'data': [
@@ -2209,10 +2268,10 @@ dev_template_JJOralCare = {
             'path': ['Italy', 'Mouthwash'],
             'coefficients': [
                 {'name': 'economy_sensitivity', 'ts': 'annual', 'value': 0.65},
-                {'name': 'innovations_ensitivity', 'ts': 'annual', 'value': 0.85},
+                {'name': 'innovations_sensitivity', 'ts': 'annual', 'value': 0.85},
                 {'name': 'distribution_sensitivity', 'ts': 'annual', 'value': 0.77},
                 {'name': 'unit_price_elasticity', 'ts': 'annual', 'value': -0.24},
-                {'name': 'unit_size Elasticity', 'ts': 'annual', 'value': 0.47},
+                {'name': 'unit_size_elasticity', 'ts': 'annual', 'value': 0.47},
                 {'name': 'trade_promo_sensitivity', 'ts': 'annual', 'value': 0.62}
             ],
             'data': [
@@ -2241,10 +2300,10 @@ dev_template_JJOralCare = {
             'path': ['Spain', 'Mouthwash'],
             'coefficients': [
                 {'name': 'economy_sensitivity', 'ts': 'annual', 'value': 0.25},
-                {'name': 'innovations_ensitivity', 'ts': 'annual', 'value': 0.96},
+                {'name': 'innovations_sensitivity', 'ts': 'annual', 'value': 0.96},
                 {'name': 'distribution_sensitivity', 'ts': 'annual', 'value': 0.13},
                 {'name': 'unit_price_elasticity', 'ts': 'annual', 'value': -0.20},
-                {'name': 'unit_size Elasticity', 'ts': 'annual', 'value': 0.12},
+                {'name': 'unit_size_elasticity', 'ts': 'annual', 'value': 0.12},
                 {'name': 'trade_promo_sensitivity', 'ts': 'annual', 'value': 0.67}
             ],
             'data': [
@@ -2273,10 +2332,10 @@ dev_template_JJOralCare = {
             'path': ['Australia', 'Mouthwash'],
             'coefficients': [
                 {'name': 'economy_sensitivity', 'ts': 'annual', 'value': 0.20},
-                {'name': 'innovations_ensitivity', 'ts': 'annual', 'value': 0.31},
+                {'name': 'innovations_sensitivity', 'ts': 'annual', 'value': 0.31},
                 {'name': 'distribution_sensitivity', 'ts': 'annual', 'value': 0.08},
                 {'name': 'unit_price_elasticity', 'ts': 'annual', 'value': -0.22},
-                {'name': 'unit_size Elasticity', 'ts': 'annual', 'value': 0.08},
+                {'name': 'unit_size_elasticity', 'ts': 'annual', 'value': 0.08},
                 {'name': 'advertising_sensitivity', 'ts': 'annual', 'value': 0.03},
                 {'name': 'trade_promo_sensitivity', 'ts': 'annual', 'value': 0.08}
             ],
@@ -2306,10 +2365,10 @@ dev_template_JJOralCare = {
             'path': ['Canada', 'Mouthwash'],
             'coefficients': [
                 {'name': 'economy_sensitivity', 'ts': 'annual', 'value': 0.21},
-                {'name': 'innovations_ensitivity', 'ts': 'annual', 'value': 0.10},
+                {'name': 'innovations_sensitivity', 'ts': 'annual', 'value': 0.10},
                 {'name': 'distribution_sensitivity', 'ts': 'annual', 'value': 0.05},
                 {'name': 'unit_price_elasticity', 'ts': 'annual', 'value': -0.44},
-                {'name': 'unit_size Elasticity', 'ts': 'annual', 'value': 0.42},
+                {'name': 'unit_size_elasticity', 'ts': 'annual', 'value': 0.42},
                 {'name': 'advertising_sensitivity', 'ts': 'annual', 'value': 0.06},
                 {'name': 'trade_promo_sensitivity', 'ts': 'annual', 'value': 0.67}
             ],
@@ -2339,10 +2398,10 @@ dev_template_JJOralCare = {
             'path': ['Japan', 'Mouthwash'],
             'coefficients': [
                 {'name': 'economy_sensitivity', 'ts': 'annual', 'value': 0.47},
-                {'name': 'innovations_ensitivity', 'ts': 'annual', 'value': 0.82},
+                {'name': 'innovations_sensitivity', 'ts': 'annual', 'value': 0.82},
                 {'name': 'distribution_sensitivity', 'ts': 'annual', 'value': 0.75},
                 {'name': 'unit_price_elasticity', 'ts': 'annual', 'value': -0.19},
-                {'name': 'unit_size Elasticity', 'ts': 'annual', 'value': 0.45},
+                {'name': 'unit_size_elasticity', 'ts': 'annual', 'value': 0.45},
                 {'name': 'advertising_sensitivity', 'ts': 'annual', 'value': 0.01}
             ],
             'data': [
@@ -2371,10 +2430,10 @@ dev_template_JJOralCare = {
             'path': ['UK', 'Mouthwash'],
             'coefficients': [
                 {'name': 'economy_sensitivity', 'ts': 'annual', 'value': 0.18},
-                {'name': 'innovations_ensitivity', 'ts': 'annual', 'value': 0.95},
+                {'name': 'innovations_sensitivity', 'ts': 'annual', 'value': 0.95},
                 {'name': 'distribution_sensitivity', 'ts': 'annual', 'value': 0.09},
                 {'name': 'unit_price_elasticity', 'ts': 'annual', 'value': -0.50},
-                {'name': 'unit_size Elasticity', 'ts': 'annual', 'value': 0.13},
+                {'name': 'unit_size_elasticity', 'ts': 'annual', 'value': 0.13},
                 {'name': 'advertising_sensitivity', 'ts': 'annual', 'value': 0.08},
                 {'name': 'trade_promo_sensitivity', 'ts': 'annual', 'value': 0.10}
             ],

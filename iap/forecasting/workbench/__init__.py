@@ -65,7 +65,7 @@ class Workbench:
 
     def _init_wb(self, user_access_rights):
         # Build search index.
-        dim_names = self.data_config.get_common_option('dimensions')
+        dim_names = self.data_config.get_property('dimensions')
         self.search_index = \
             dim_service.build_search_index(self.container, dim_names)
         # Init local access manager.

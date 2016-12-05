@@ -1,3 +1,6 @@
+import copy
+
+from ....common.helper import dicts_left_join
 from ..helper import VariableType, SlotType, AccessMask
 
 
@@ -38,238 +41,253 @@ def set_entity_values(wb, entity_id, values):
     return
 
 
-def get_entity_data(container, config, entities_ids):
+def get_entity_data(container, config, entities_ids, lang):
+    # Initialize structure for output.
+    entity_data = dict(
+        data=dict(
+            timescales=None,
+            variables=None,
+            decomp_types=None,
+            timelabels=None,
+            variable_values=None,
+            change_over_period=None,
+            decomp=None,
+            factor_drivers=None,
+            insights=None
+        ),
+        config=None
+    )
 
     # Get requested entities.
     entity_id = entities_ids[0]
     ent = container.get_entity_by_id(entity_id)
 
-    # Load parameters from configuration.
-    main_timescales = config.get_option('dash_timescales', ent.meta, ent.path)
-    dec_timescales = config.get_option('dash_decomposition_timescales',
-                                       ent.meta, ent.path)
-    top_ts_period = config.get_option('dash_top_ts_period', ent.meta, ent.path)
-
-    # Define default selection for time periods
+    # Define default selection for time periods.
+    main_timescales = config.get_property('dash_timescales', ent.meta,
+                                          ent.path)
+    top_ts_period = config.get_property('dash_top_ts_period', ent.meta,
+                                        ent.path)
+    dec_timescales = config.get_property('dash_decomposition_timescales',
+                                         ent.meta, ent.path)
     top_ts = str(main_timescales[0])
+    bottom_ts = str(main_timescales[-1])
     mid = container.timeline.get_period_by_alias(top_ts, 'history')[0][1]
-
-    # Collect page configurations.
-    page_config = dict(
+    entity_data['config'] = dict(
         decomp_timescales=[str(x) for x in dec_timescales],
         main_period=dict(timescale=top_ts, start=top_ts_period[0], mid=mid,
                          end=top_ts_period[1]),
         decomp_period=dict(timescale=top_ts, start=mid, end=top_ts_period[1])
     )
 
+    # Get timelabels tree and time borders for every timescale.
+    ts_tree, ts_borders = container \
+        .timeline.get_timeline_tree(top_ts, bottom_ts, top_ts_period)
+    entity_data['data']['timelabels'] = ts_tree
 
+    # Get timescales view settings.
+    timescales_info = config.get_timescales_info(main_timescales, lang)
+    timescales_view_info = []
+    for ts_info in timescales_info:
+        ts_view_props = dict(
+            id=None,
+            full_name=None,
+            short_name=None,
+            lag=None
+        )
+        dicts_left_join(ts_view_props, ts_info)
+        ts_view_props['lag'] = \
+            container.timeline.get_growth_lag(ts_info['id'])
+        timescales_view_info.append(ts_view_props)
+    entity_data['data']['timescales'] = timescales_view_info
 
-
-
-
-
-
-    # Load configuration parameters.
-    try:
-        top_ts = config['dashboard_top_ts']
-        bottom_ts = config['dashboard_bottom_ts']
-        period = config['dashboard_period'][top_ts]
-        cagr_periods = config['dashboard_cagr_periods'][top_ts]
-    except KeyError:
-        raise Exception
-
-    # Define default selection for time periods
-    mid = container.timeline.get_period_by_alias(top_ts, 'history')[0][1]
-    main_period = dict(timesecale=top_ts, start=period[0], mid=mid, end=period[1])
-    decomp_period = dict(timescale=top_ts, start=mid, end=period[1])
-
-
-
-    # Define connections between decomposition factors and drivers.
-    factors_drivers = {x: {} for x in config[ent.meta].keys()}
-    for dec_type, dec_factors in config[ent.meta].items():
-        for factor_dict in dec_factors:
-            factors_drivers[dec_type][factor_dict['factor']] = factor_dict['drivers']
-
-    # Get list of timescales.
-    ts_tree, ts_borders = container.timeline.get_timeline_tree(top_ts,
-                                                               bottom_ts,
-                                                               period)
-    timescales = [dict(key=x, name=x,
-                       growth_lag=container.timeline.get_growth_lag(x))
-                  for x in ts_borders.keys()]
     # Get time labels for every timescale.
     # Get growth rates periods for every timescale.
     time_labels = dict()
     gr_periods = dict()
     for ts_name, ts_period in ts_borders.items():
-        time_labels[ts_name] = container.timeline.get_names(ts_name, ts_period)
+        time_labels[ts_name] = \
+            container.timeline.get_names(ts_name, ts_period)
         gr_periods[ts_name] = \
             container.timeline.get_growth_periods(ts_name, ts_period)
-    # Fill output variables properties.
-    out_vars_props = dict()
-    for var in ent.variables:
-        var_type = var.get_property('type')
-        if var_type is None:
-            continue
-        if not (var_type & VariableType.is_output or
-                var_type & VariableType.is_driver):
-            continue
-        out_vars_props[var.name] = \
-            dict(name=var.name,
-                 metric=var.get_property('metric'),
-                 multiplier=var.get_property('mult'),
-                 type=transform_var_type(var.get_property('type')))
+        gr_periods[ts_name].extend(
+            container.timeline.get_carg_periods(ts_name, ts_period)
+        )
 
-    # Collect growth rates and CAGRS.
-    grs = []
-    for ts_name, periods in gr_periods.items():
-        for p in periods:
-            grs.extend(_get_entity_growth(ent, ts_name, p))
-    for period in cagr_periods:
-        grs.extend(_get_entity_growth(ent, top_ts, period))
-    # Transform structure for output.
-    growth = dict()
-    for item in grs:
-        if item['var_name'] not in growth:
-            growth[item['var_name']] = []
-        growth[item['var_name']].append(dict(timescale=top_ts,
-                                             start=item['start'],
-                                             end=item['end'],
-                                             value=item['value']))
+    # Get variables to view. Values, growth rates, CAGRS.
+    vars_view_props = []
+    time_series_data = dict([(x, dict()) for x in ts_borders.keys()])
+    periods_data = copy.copy(time_series_data)
+
+    items_view_props = config.get_vars_for_view(ent.meta, ent.path)
+    for item in items_view_props:
+        # Get entity to get variables from.
+        curr_ent = container.get_entity_by_filter(ent, item['filter'])
+
+        # Collect variables data.
+        absent_vars_ids = []
+        for var_info in item['variables']:
+            var = curr_ent.get_variable(var_info['id'])
+            if var is None:
+                absent_vars_ids.append(var_info['id'])
+                continue
+            for ts_name, ts_period in ts_borders.items():
+                ts = var.get_time_series(ts_name)
+                values = ts.get_values_for_period(ts_period)
+                ps = var.get_periods_series(ts_name)
+                time_series_data[ts_name][var_info['id']] = \
+                    {time_labels[ts_name][i]: values[i]
+                     for i in range(len(values))}
+                periods_data[ts_name][var_info['id']] = \
+                    [dict(abs=0, rate=ps.get_value(p), start=p[0], end=p[1])
+                     for p in gr_periods[ts_name]]
+
+        # Get variables properties.
+        vars_ids = [var_info['id']
+                    for var_info in item['variables']
+                    if var_info['id'] not in absent_vars_ids]
+        vars_types = [var_info['type']
+                      for var_info in item['variables']
+                      if var_info['id'] not in absent_vars_ids]
+
+        vars_props = config\
+            .get_variables_properties(vars_ids, lang, curr_ent.meta,
+                                      curr_ent.path)
+        for index, v_props in enumerate(vars_props):
+            view_props = dict(
+                id=None,
+                full_name=None,
+                short_name=None,
+                type=None,
+                metric=None,
+                format=None,
+                hint=''
+            )
+            dicts_left_join(view_props, v_props)
+            view_props['type'] = vars_types[index]
+            vars_view_props.append(view_props)
+    entity_data['data']['variable_values'] = time_series_data
+    entity_data['data']['change_over_period'] = periods_data
+
+    # Get decomposition types properties.
+    decs_types_view_props = []
+    dec_types_props = config.get_dec_types_info(lang, ent.meta, ent.path)
+    for dec_type in dec_types_props:
+        dec_type_view_props = dict(id=None, full_name=None, short_name=None)
+        dicts_left_join(dec_type_view_props, dec_type)
+        decs_types_view_props.append(dec_type_view_props)
+    entity_data['data']['decomp_types'] = decs_types_view_props
+
     # Get decomposition.
-    dec_periods = container.timeline.get_growth_periods(top_ts, ts_borders[top_ts])
-    dec_periods.extend(cagr_periods)
-    dec_config = config[ent.meta]
-    decomposition = [_get_entity_dec(ent, dec_config, top_ts, p)
-                     for p in dec_periods]
 
-    # Init structure for output data.
-    data = dict([(x, dict()) for x in ts_borders.keys()])
-    # Get drivers and outputs from container.
-    for var in ent.variables:
-        var_type = var.get_property('type')
-        if var_type is None:
-            continue
-        if not (var_type & VariableType.is_output or
-                var_type & VariableType.is_driver):
-            continue
-        for ts_name, ts_period in ts_borders.items():
-            ts = var.get_time_series(ts_name)
-            # Fill output data structure.
-            values = ts.get_values_for_period(ts_period)
-            data[ts_name][var.name] = \
-                [dict(timestamp=time_labels[ts_name][i], value=values[i])
-                 for i in range(len(values))]
+    dec_periods = {key: value for key, value in gr_periods.items()
+                   if key in dec_timescales}
 
-    # Insights.
-    insights = [dict(text=x) for x in ent.insights]
+    decomp_data_for_view = \
+        get_decomposition(container, config, entities_ids, dec_periods)
+    entity_data['data']['decomp'] = decomp_data_for_view
 
+    # Extend variables properties.
+    for item in config.get_decomp_vars_for_view(ent.meta, ent.path):
+        curr_ent = container.get_entity_by_filter(ent, item['filter'])
+        vars_ids = [var_info['id'] for var_info in item['variables']]
+        vars_props = \
+            config.get_variables_properties(vars_ids, lang, curr_ent.meta,
+                                            curr_ent.path)
+        for index, v_props in enumerate(vars_props):
+            view_props = dict(id=None, full_name=None, short_name=None,
+                              type=None, metric=None, format=None, hint='')
+            dicts_left_join(view_props, v_props)
+            view_props['type'] = 'impact'
+            vars_view_props.append(view_props)
+    entity_data['data']['variables'] = vars_view_props
 
-    # Return entire entity data.
-    result = dict(
-        data=dict(
-            timescales=timescales,
-            timelabels=ts_tree,
-            variables=out_vars_props,
-            data=data,
-            growth=growth,
-            decomposition=decomposition,
-            insights=insights),
-        config=dict(main_period=main_period,
-                    decomp_period=decomp_period,
-                    factors_drivers=factors_drivers,
-                    dec_timescales=[top_ts])
-    )
-    return result
+    # Relations between factors and drivers
+    factor_drivers = config.get_factor_drivers_relations(ent.meta, ent.path)
+    for factor, fd_rel in factor_drivers.items():
+        factor_drivers[factor] = \
+            [dict(factor=x[0], driver=x[1]) for x in fd_rel]
+    entity_data['data']['factor_drivers'] = factor_drivers
+
+    # Get Insights.
+    entity_data['data']['insights'] = [dict(text=x) for x in ent.insights]
+
+    return entity_data
 
 
-def get_decomposition(container, config, entities_ids, periods):
-    # Load configuration parameters.
-    try:
-        timescale = config['dashboard_top_ts']
-    except KeyError:
-        raise Exception
+def get_decomposition(container, config, entities_ids, timescales_periods):
+
     # Get requested entity.
     entity_id = entities_ids[0]
     ent = container.get_entity_by_id(entity_id)
-    # Get types of decomposition and list of variables
-    dec_config = config[ent.meta]
-    # Collect decomposition data.
-    all_dec = []
-    for p in periods:
-        try:
-            period_dec = _get_entity_dec(ent, dec_config, timescale, p)
-        except Exception:
-            period_dec = None
-        all_dec.append(period_dec)
-    return all_dec
 
+    # Get list of decomposition variables.
+    entities_dec_vars = config.get_decomp_vars_for_view(ent.meta, ent.path)
 
-def _get_entity_dec(entity, dec_config, timescale, period):
-    decomp_tree = dict(start=period[0], end=period[1])
-    for dec_type, dec_vars in dec_config.items():
-        decomp_tree[dec_type] = []
-        decomp_tree[dec_type].append(dict(name='ini_val', value=1,
-                                          growth=0, children=None))
-        for item in dec_vars:
-            var_name = item['factor']
-            var = entity.get_variable(var_name)
+    # Collect all decomposition data to the flat list.
+    decomp_data = []
+    for item in entities_dec_vars:
+        # Get entity to get variables from.
+        curr_ent = container.get_entity_by_filter(ent, item['filter'])
+        for var_info in item['variables']:
+            var = curr_ent.get_variable(var_info['id'])
             if var is None:
                 continue
-            ps = var.get_periods_series(timescale)
-            value = ps.get_value(period)
-            if value is None:
-                raise Exception
-            decomp_tree[dec_type].append(dict(name=var_name, value=value,
-                                              growth=0, children=None))
-        decomp_tree[dec_type].append(dict(name='end_val', value=0,
-                                          growth=0, children=None))
-    return decomp_tree
+            for ts_name, periods in timescales_periods.items():
+                ps = var.get_periods_series(ts_name)
+                for p in periods:
+                    decomp_data.append(
+                        dict(ts_name=ts_name, dec_type=var_info['type'],
+                             start=p[0], end=p[1], var_id=var_info['id'],
+                             abs=0, rate=ps.get_value(p))
+                    )
+
+    # Transform flat list to view format.
+    decomp_data_for_view = dict()
+    for row in decomp_data:
+        if row['ts_name'] not in decomp_data_for_view:
+            decomp_data_for_view[row['ts_name']] = dict()
+        if row['dec_type'] not in decomp_data_for_view[row['ts_name']]:
+            decomp_data_for_view[row['ts_name']][row['dec_type']] = []
+        decomp_set = decomp_data_for_view[row['ts_name']][row['dec_type']]
+        decomp_over_period = None
+        for period in decomp_set:
+            if period['start'] == row['start'] and period['end'] == row['end']:
+                decomp_over_period = period
+        if decomp_over_period is None:
+            decomp_over_period = dict(
+                start=row['start'],
+                end=row['end'],
+                factors=[]
+            )
+            decomp_set.append(decomp_over_period)
+        decomp_over_period['factors'].append(dict(var_id=row['var_id'],
+                                                  abs=0, rate=row['rate']))
+
+    return decomp_data_for_view
 
 
-def get_cagrs(container, config, entities_ids, periods):
-    # Load configuration parameters.
-    try:
-        timescale = config['dashboard_top_ts']
-    except KeyError:
-        raise Exception
+def get_cagrs(container, config, entities_ids, timescales_periods):
     # Get requested entity.
     entity_id = entities_ids[0]
     ent = container.get_entity_by_id(entity_id)
-    all_cagrs = []
-    for period in periods:
-        try:
-            period_cagrs = _get_entity_growth(ent, timescale, period)
-        except Exception:
-            period_cagrs = None
-        all_cagrs.extend(period_cagrs)
-    out_cagrs = dict()
-    for item in all_cagrs:
-        if item['var_name'] not in out_cagrs:
-            out_cagrs['var_name'] = []
-        out_cagrs['var_name'].append(dict(start=item['start'],
-                                          end=item['end'],
-                                          value=item['value']))
-    return out_cagrs
 
+    # Get list of variables to calculate cagr.
+    items_view_props = config.get_vars_for_view(ent.meta, ent.path)
 
-def _get_entity_growth(entity, timescale, period):
-    growth = []
-    # Get drivers and outputs from container.
-    for var in entity.variables:
-        var_type = var.get_property('type')
-        if var_type is None:
-            continue
-        if not (var_type & VariableType.is_output or
-                    var_type & VariableType.is_driver):
-            continue
-        ps = var.get_periods_series(timescale)
-        value = ps.get_value(period)
-        if value is None:
-            raise Exception
-        growth.append(dict(var_name=var.name,
-                          start=period[0],
-                          end=period[1],
-                          value=value))
-    return growth
+    # Collect growth.
+    growth_over_period = []
+    for item in items_view_props:
+        # Get entity to get variables from.
+        curr_ent = container.get_entity_by_filter(ent, item['filter'])
+
+        # Collect variables data.
+        for var_info in item['variables']:
+            var = curr_ent.get_variable(var_info['id'])
+            if var is None:
+                continue
+            for ts_name, periods in timescales_periods.items():
+                ps = var.get_periods_series(ts_name)
+                growth_over_period[ts_name][var_info['id']] = \
+                    [dict(abs=0, rate=ps.get_value(p), start=p[0], end=p[1])
+                     for p in periods]
+    return growth_over_period

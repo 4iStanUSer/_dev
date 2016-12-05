@@ -61,10 +61,13 @@ class TimeLineManager:
         for i in range(start, end + 1):
             top_point = top_ts['timeline'][i]
             # Add top point to tree.
-            tree.append(dict(short_name=top_point['name_short'],
-                             full_name=top_point['name_full'],
-                             timescale=top_ts['name'],
-                             parent_index=None))
+            tree.append(dict(
+                id=top_point['name_full'],
+                short_name=top_point['name_short'],
+                full_name=top_point['name_full'],
+                timescale=top_ts['name'],
+                parent_index=None)
+            )
             # Collect points from lower timescales recursively.
             # Define borders for every lower timescale.
             top_point_ind = len(tree) - 1
@@ -162,3 +165,22 @@ class TimeLineManager:
                 periods.append((self.get_label(ts_name, i - 1),
                                 self.get_label(ts_name, i)))
         return periods
+
+    def get_carg_periods(self, ts_name, ts_period=None):
+        ts = self._get_ts(ts_name)[0]
+        mid, mid_index = self.get_last_actual(ts_name)
+        first, first_index = ts['timeline'][0]['name_full'], 0
+        last, last_index = \
+            ts['timeline'][-1]['name_full'], len(ts['timeline']) - 1
+        if ts_period is not None:
+            user_f, user_f_index = \
+                ts_period[0], self.get_index(ts_name, ts_period[0])
+            if user_f_index > first_index:
+                first, first_index = user_f, user_f_index
+            user_l, user_l_index = \
+                ts_period[1], self.get_index(ts_name, ts_period[1])
+            if user_l_index < last_index:
+                last, last_index = user_l, user_l_index
+        if first_index > mid_index or mid_index > last_index:
+            raise Exception
+        return [(first, mid), (mid, last)]

@@ -30,3 +30,9 @@ def is_equal_meta(meta1, meta2):
     if meta1.dimension == meta2.dimension and meta1.level == meta2.level:
         return True
     return False
+
+
+def dicts_left_join(d1, d2):
+    for key in d1.keys():
+        if key in d2:
+            d1[key] = d2[key]

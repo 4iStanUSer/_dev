@@ -14,7 +14,7 @@ def kernel(empty_kernel):
     empty_kernel.load_instructions(dev_template_JJOralCare['calc_instructions'])
     return empty_kernel
 
-
+@pytest.mark.skip()
 def test_serialization(kernel, empty_kernel):
     backup = kernel.get_backup()
     recovered_kernel = empty_kernel

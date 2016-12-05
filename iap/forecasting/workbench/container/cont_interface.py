@@ -2,7 +2,8 @@ import copy
 from .timelines import TimeLineManager
 from .entity_data import EntityData
 from .entities_hierarchy import Node
-from ..helper import SlotType
+from ..helper import SlotType, FilterType
+from ....common.helper import Meta
 
 class Container:
 
@@ -80,6 +81,24 @@ class Container:
             self._root.get_children_by_meta(meta_filter, nodes_ids)
         return [self.get_entity_by_id(x) for x in nodes_ids]
 
+    def get_entity_by_filter(self, main_ent, ent_filter):
+        meta_type = ent_filter['type']
+        if meta_type == FilterType.empty:
+            res_entity = main_ent
+        elif meta_type == FilterType.path:
+            res_entity = self.get_entity_by_path(ent_filter['path'])
+        elif meta_type == FilterType.relative_path:
+            res_entity = main_ent.get_child_by_relative_path(ent_filter['path'])
+        elif meta_type == FilterType.meta_filter:
+            res_entity = \
+                main_ent.get_parent_by_meta(Meta(ent_filter['meta_filter'][0],
+                                                 ent_filter['meta_filter'][1]))
+        else:
+            raise Exception
+        if res_entity is None:
+            raise Exception
+        return res_entity
+
 
 class Entity:
 
@@ -115,7 +134,8 @@ class Entity:
     @property
     def path(self):
         p = []
-        self._node.get_path(p)
+        m = []
+        self._node.get_path(p, m)
         return p
 
     @property
