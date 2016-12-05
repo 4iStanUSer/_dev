@@ -127,12 +127,12 @@ def test_add_child(list_of_pathes, description):
     decode_node_into_list_of_pathes(add_child("Number"), path=[])
     actual = [val for val in encoded_path.values()]
     expected = list_of_pathes
-    assert actual == expected
+    assert actual.sort() == expected.sort()
 
     decode_node_into_list_of_pathes(add_child("Kiev"), path=[])
     actual = [val for val in encoded_path.values()]
     expected = list_of_pathes
-    assert actual == expected
+    assert actual.sort() == expected.sort()
 
 def test_get_node_by_path(list_of_pathes, description):
     '''Test for  method get_node_by_path(self,path)
