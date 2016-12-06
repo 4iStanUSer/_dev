@@ -13,7 +13,7 @@ def backup():
 #load test data
 @pytest.fixture
 def load_data():
-    with open('json/timeline.json') as data_file:
+    with open('json/timeline_manager/timeline_manager.json') as data_file:
         i = data_file
         time_line = json.load(data_file)
     return time_line
