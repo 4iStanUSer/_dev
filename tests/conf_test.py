@@ -80,22 +80,23 @@ interface_backup = {"container":
         },
         {
             "path": ["Ukraine", "Odessa"],
-            "metas": ["Geo", "Region"],
+            "metas": [["Geo", "Country"], ["Geo", "Region"]],
             "data": backup,
             "insights": []
         },
         {
             "path": ["Ukraine", "Kiev"],
-            "metas": ["Geo", "Region"],
+            "metas": [["Geo", "Country"],["Geo", "Region"]],
             "data": backup,
             "insights": []
         },
         {
             "path": ["Ukraine", "Kiev", "Candy"],
-            "metas": ["Food", "Delicios"],
+            "metas": [["Geo", "Country"], ["Geo", "Region"], ["Food", "Delicios"]],
             "data": backup,
             "insights": []
         }
     ],
     "timeline": prep_timeseries_backup(timeline, timeline_correct)
 }
+
