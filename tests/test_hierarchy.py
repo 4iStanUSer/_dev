@@ -5,7 +5,7 @@ import pytest
 
 #Load data from json
 import json
-input_data = open('json/hierarchy_data.json').read()
+input_data = open('json/hierarchy.json').read()
 data = json.loads(input_data)
 
 #get description data

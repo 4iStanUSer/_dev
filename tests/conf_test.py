@@ -1,3 +1,33 @@
+import json
+
+with open('json/timeline_manager/timeline_manager.json') as f:
+    timeline = json.load(f)
+
+with open('json/timeline_manager/timescale.timeline_correct.json') as f:
+    timeline_correct = json.load(f)
+
+
+def prep_timeseries_backup(timeline, timeline_correct):
+    # load data
+    ts_properties = timeline['properties']
+    alias = timeline['alias']
+    top_ts_points = timeline['top_ts_points']
+    backup = {}
+    backup['alias'] = {}
+    backup['timescales'] = []
+
+    for period_name, ts_borders in alias.items():
+        backup['alias'][period_name] = dict(ts_properties)
+
+    for name, props in ts_properties.items():
+        for timeserie in timeline_correct:
+            if name == timeserie['name']:
+                time_line = timeserie['timeline']
+                growth_lag = timeserie['growth_lag']
+                backup['timescales'].append(dict(name=name, growth_lag=growth_lag, timeline=time_line))
+    return backup
+
+#Entity Data Back_Up
 backup = {
   "var_names" : ["Sales", "Popularity" , "Income", "Costs"],
   "var_properties" :
@@ -38,3 +68,34 @@ backup = {
                   ]
 }
 
+#Interface Backup
+interface_backup = {"container":
+        [
+
+        {
+            "path": ["Ukraine"],
+            "metas": ["Geo", "Country"],
+            "data": backup,
+            "insights": ["a", "b", "c", "d"]
+        },
+        {
+            "path": ["Ukraine", "Odessa"],
+            "metas": ["Geo", "Region"],
+            "data": backup,
+            "insights": []
+        },
+        {
+            "path": ["Ukraine", "Kiev"],
+            "metas": ["Geo", "Region"],
+            "data": backup,
+            "insights": []
+        },
+        {
+            "path": ["Ukraine", "Kiev", "Candy"],
+            "metas": ["Food", "Delicios"],
+            "data": backup,
+            "insights": []
+        }
+    ],
+    "timeline": prep_timeseries_backup(timeline, timeline_correct)
+}

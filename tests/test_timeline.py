@@ -7,30 +7,30 @@ from iap.forecasting.workbench.container.timelines import TimeLineManager
 #load test data
 @pytest.fixture
 def load_data():
-    with open('json/timeline.json') as data_file:
+    with open('json/timeline_manager/timeline_manager.json') as data_file:
         time_line = json.load(data_file)
     return time_line
 
 #load correct timeseries
 @pytest.fixture
 def load_correct_timeseries():
-    with open("json/timeline_correct.json") as f:
-        correct_data = json.load(f)
-    return correct_data
+    with open("json/timeline_manager/timescale.timeline_correct.json") as f:
+        correct_timeseries = json.load(f)
+    return correct_timeseries
 
 #load incorrect timeseries
 @pytest.fixture
 def load_incorrect_timeseries():
-    with open("json/timeline_incorrect.json") as f:
-        correct_data = json.load(f)
-    return correct_data
+    with open("json/timeline_manager/timescale.timeline_incorrect.json") as f:
+        incorrect_timeseries = json.load(f)
+    return incorrect_timeseries
 
 #load correct tree
 @pytest.fixture
 def load_tree():
-    with open("json/tree.json") as f:
-        correct_data = json.load(f)
-    return correct_data
+    with open("json/timeline_manager/tree.json") as f:
+        tree = json.load(f)
+    return tree
 
 #backup preparation
 @pytest.fixture
@@ -49,15 +49,19 @@ def backup(load_data, load_correct_timeseries):
     for name, props in ts_properties.items():
         for timeserie in load_correct_timeseries:
             if name == timeserie['name']:
-                timeline = timeserie
+                timeline = timeserie['timeline']
+                growth_lag = timeserie['growth_lag']
+                backup['timescales'].append(dict(name=name,growth_lag = growth_lag, timeline = timeline))
     return backup
 
 #timeline manager preparation
 @pytest.fixture
 def timeline_manager(load_data):
+
     ts_properties = load_data['properties']
     alias = load_data['alias']
     top_ts_points = load_data['top_ts_points']
+
     _time_line_manager = TimeLineManager()
     _time_line_manager.load_timelines(ts_properties, alias, top_ts_points)
     return _time_line_manager
@@ -101,16 +105,13 @@ def test_load_timelines(timeline_manager, backup, load_correct_timeseries, load_
     :return:
 
     '''
-
-    actual = timeline_manager.get_backup()
-    expected = backup
-    print(actual)
-    print(expected)
-    assert len(actual['timescales']) == len(expected['timescales'])
+    actual = timeline_manager.get_backup()['timescales']
+    expected = backup['timescales']
+    assert len(actual) == len(expected)
     assert [i['name'] for i in expected].sort() == \
            [i['name'] for i in actual].sort()
-    assert [(i['name'], len(i['timeline'])) for i in expected].sort() == \
-           [(i['timeline'], len(i['timeline'])) for i in actual].sort()
+    assert [(i['name'], len(i['timeline'])) for i in expected] == \
+           [(i['name'], len(i['timeline'])) for i in actual]
 
 
 def test_load_timelines_1(timeline_manager, load_correct_timeseries):
