@@ -1,6 +1,5 @@
 import {
     Component,
-    OnInit,
     OnChanges,
     Input,
     Output,
@@ -8,61 +7,48 @@ import {
     EventEmitter,
 } from '@angular/core';
 
-export type LanguageSelectorInput = Array<{
-    id: string;
-    name: string;
-    selected?: boolean
-}>;
-export type LanguageSelectorOutput = {
-    lang_id: string;
-}
+import { LanguageItem } from "../../app.model"
 
 @Component({
     selector: 'language-selector',
     templateUrl: './language-selector.component.html',
     styleUrls: ['./language-selector.component.css']
 })
-export class LanguageSelectorComponent implements OnInit, OnChanges {
+export class LanguageSelectorComponent implements OnChanges {
 
     private currLangId: string = null;
-
-    @Input() langs: LanguageSelectorInput = [];
-
-    @Output() changed: EventEmitter<LanguageSelectorOutput> = new EventEmitter();
+    @Input() languages: LanguageItem[] = [];
+    @Output() changed: EventEmitter<string> = new EventEmitter();
 
     constructor() {
     }
 
-    ngOnInit() {
-    }
 
-    ngOnChanges(ch: SimpleChanges) {
-        console.info('LanguageSelectorComponent: ngOnChanges()');
-
-        if (ch['langs']) {
-            let l = ch['langs']['currentValue'].length;
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes['languages']) {
+            console.log('lang_changed');
+            let l = changes['languages']['currentValue'].length;
             for (let i = 0; i < l; i++) {
-                if (ch['langs']['currentValue'][i]['selected']) {
-                    this.currLangId = ch['langs']['currentValue'][i]['id'];
+                let item = changes['languages']['currentValue'][i]
+                if (item['selected']) {
+                    this.currLangId = item['id'];
                 }
             }
-            if (this.currLangId === null && ch['langs']['currentValue'][0]) {
-                this.currLangId = ch['langs']['currentValue'][0]['id'];
-                ch['langs']['currentValue'][0]['selected'] = true;
+            if (this.currLangId === null && changes['languages']['currentValue'][0]) {
+                this.currLangId = changes['languages']['currentValue'][0]['id'];
+                changes['languages']['currentValue'][0]['selected'] = true;
             }
         }
     }
 
     private onChangedLang(langId: string) {
         if (langId) {
-            let exists = this.langs.filter((el) => {
+            let exists = this.languages.filter((el) => {
                 return (el['id'] == langId);
             }, this);
             if (exists.length) {
                 this.currLangId = langId;
-                this.changed.emit({
-                    lang_id: langId
-                });
+                this.changed.emit(langId);
             }
         }
     }

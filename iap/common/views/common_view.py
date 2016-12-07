@@ -14,6 +14,25 @@ def index_view(req):
                               request=req)
 
 
+def check_logged_in(req):
+    return send_success_response(True)
+
+
+def login(req):
+    return send_success_response(dict(logged=True, user=None))
+
+
+def logout(req):
+    return send_success_response()
+
+
+def get_routing_config(req):
+    config = {
+        '/get_landing': {'url': '/get_landing', 'allowNotAuth': True}
+    }
+    return send_success_response(config)
+
+
 def get_page_configuration(req):
     # Get parameters from request.
     try:
@@ -25,18 +44,9 @@ def get_page_configuration(req):
     try:
         state = rt.get_state(user_id)
         tool_id = state.tool_id
-        language = state.lang
+        language = state.language
         config = get_page_config(tool_id, page_name, language)
         return send_success_response(config)
-    except Exception as e:
-        msg = ErrorManager.get_error_message(e)
-        return send_error_response(msg)
-
-
-def get_languages_list(req):
-    try:
-        lang_list = common_getter.get_languages_list(pt)
-        return send_success_response(lang_list)
     except Exception as e:
         msg = ErrorManager.get_error_message(e)
         return send_error_response(msg)
@@ -51,14 +61,14 @@ def set_language(req):
         msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
         return send_error_response(msg)
     try:
-        user_state = rt.update_state(user_id, language=lang)
-        send_success_response()
+        rt.update_state(user_id, language=lang)
+        return send_success_response()
     except Exception as e:
         msg = ErrorManager.get_error_message(e)
         return send_error_response(msg)
 
 
-def get_landing_page_data(req):
+def get_tools_with_projects(req):
     try:
         user_id = req.user
     except KeyError:
@@ -69,30 +79,30 @@ def get_landing_page_data(req):
         if not user_id:
             data['tools'] = common_getter.get_tools_info(pt)
         else:
-            lang = rt.get_state(user_id)
-            data['user'] = common_getter.get_user_info(pt, user_id, lang)
-            data['client'] = common_getter.get_client_info(pt, user_id, lang)
-            tools_ids, projects_ids = pt.get_user_tools_and_projects(user_id)
+            lang = rt.get_state(user_id).language
+            tools_ids, projects_ids = pt.get_user_tools_with_projects(user_id)
             data['tools'] = common_getter.get_tools_info(pt, tools_ids, lang)
             data['projects'] = common_getter.get_projects_info(pt, projects_ids, lang)
-        send_success_response(data)
+        return send_success_response(data)
     except Exception as e:
         msg = ErrorManager.get_error_message(e)
         return send_error_response(msg)
 
 
-def get_client_and_user_info(req):
+def get_data_for_header(req):
     try:
         user_id = req.user
     except KeyError:
         msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
         return send_error_response(msg)
     try:
-        info = dict()
-        lang = rt.get_state(user_id)
-        info['user'] = common_getter.get_user_info(pt, user_id, lang)
-        info['client'] = common_getter.get_client_info(pt, user_id, lang)
-        send_success_response(info)
+        header_data = dict()
+        lang = rt.get_state(user_id).language
+        header_data['languages'] = common_getter.get_languages_list(pt, lang)
+        header_data['user'] = common_getter.get_user_info(pt, user_id, lang)
+        header_data['client'] = common_getter.get_client_info(pt, user_id,
+                                                              lang)
+        return send_success_response(header_data)
     except Exception as e:
         msg = ErrorManager.get_error_message(e)
         return send_error_response(msg)
@@ -112,5 +122,3 @@ def set_project_selection(req):
     except Exception as e:
         msg = ErrorManager.get_error_message(e)
         return send_error_response(msg)
-
-

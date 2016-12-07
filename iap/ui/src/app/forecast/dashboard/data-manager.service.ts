@@ -268,9 +268,9 @@ export class DataManagerService {
                 'config': dashboardConfig
             };
             this.req.get({
-                'url_id': 'forecast/get_page_static_data',
+                'url_id': 'get_page_configuration',
                 'data': {
-                    'page_name': this.pageName
+                    'page': this.pageName
                 }
             }).subscribe((d)=> {
                     this.sds.addPage(this.pageName, frontData, d);

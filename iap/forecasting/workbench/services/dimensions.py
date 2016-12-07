@@ -2,6 +2,36 @@ import copy
 
 JOIN_SYMBOL = '|-|-|'
 
+def get_selectors_config(config):
+
+
+
+    selectiors_config = dict(
+        selectors={
+            'brand': {
+                'name': 'Brand',
+                'placeholder': 'brand',
+                'multiple': True,  # false|true,
+                'type': 'flat',  # flat | hierarchical | region
+                'icon': '',
+                'disabled': False,
+            },
+            'category': {
+                'name': 'Category',
+                'placeholder': 'category',
+                'multiple': True,
+                'type': 'hierarchical',  # flat | hierarchical | region
+                'icon': '',
+                'disabled': False,
+            }
+        },
+        order=config.get_property('dimensions')
+    )
+
+
+
+
+
 def build_search_index(container, dim_names):
     search_index = dict()
     for ent in container.top_entities:

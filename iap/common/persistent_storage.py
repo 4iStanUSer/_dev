@@ -1,9 +1,15 @@
 class PersistentStorage:
-    def get_user_tools_and_projects(self, user_id):
-        pass
+    def get_user_tools_with_projects(self, user_id):
+        return ['forecast'], ['JJOralCare']
 
     def get_project(self, **kwargs):
-        return True
+
+        class TmpProject:
+            def __init__(self):
+                self.id = 'JJOralCare'
+                self.tool_id = 'forecast'
+
+        return TmpProject()
 
 
 

@@ -3,7 +3,7 @@ from ..workbench.services import dimensions
 from ...common import exceptions as ex
 from ...common.error_manager import ErrorManager
 from ...common.helper import send_success_response, send_error_response
-from ...common import rt_storage
+from ...common import runtime_storage as rt
 
 def index_view(req):
     return render_to_response('iap.forecasting:templates/index.jinja2',
@@ -20,9 +20,26 @@ def get_options_for_entity_selector(req):
         msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
         return send_error_response(msg)
     try:
-        wb = rt_storage.get_wb(user_id, TOOL)
+        wb = rt.get_wb(user_id)
         data = dimensions.search_by_query(wb.search_index, query)
         return send_success_response(data)
     except Exception as e:
         msg = ErrorManager.get_error_message(e)
         return send_error_response(msg)
+
+
+def get_entity_selectors_config(req):
+    try:
+        user_id = req.user
+    except KeyError:
+        msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
+        return send_error_response(msg)
+    try:
+        lang = rt.get_state(user_id).language
+        wb = rt.get_wb(user_id)
+
+
+
+        return send_success_response(data)
+    else:
+        return send_auth_error()

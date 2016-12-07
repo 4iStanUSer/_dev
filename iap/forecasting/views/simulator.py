@@ -2,7 +2,7 @@ from ...common.helper import send_success_response, send_error_response
 from ..workbench.helper import TOOL
 from ...common import exceptions as ex
 from ...common.error_manager import ErrorManager
-from ...common import rt_storage
+from ...common import runtime_storage as rt
 from ..workbench.services import data_management as data_service
 from ..workbench.helper import Feature
 
@@ -17,7 +17,7 @@ def set_values(req):
         msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
         return send_error_response(msg)
     try:
-        wb = rt_storage.get_wb(user_id, TOOL)
+        wb = rt.get_wb(user_id, TOOL)
         # Check access to feature.
         if not wb.access.check_feature_access(Feature.edit_values):
             raise Exception
