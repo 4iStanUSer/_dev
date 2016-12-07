@@ -97,16 +97,16 @@ def test_get_ts_vals(entity_data, backup):
 
     entity_data.load_backup(backup)
     expected = [0, 1, 2, 3]
-    actual = entity_data.get_ts_vals("Sales", "annual", ("2016", "2017"), 4)
+    actual = entity_data.get_ts_vals("Costs", "annual", ("2016", "2017"), 4)
     assert expected == actual
 
-    expected = [0, 1, 2, 3, 4, 5]
-    actual = entity_data.get_ts_vals("Costs", "annual", ("2012", "2018"), 3)
+    expected = [0, 1, 2]
+    actual = entity_data.get_ts_vals("Income", "annual", ("2012", "2018"), 3)
     assert expected == actual
 
     entity_data.load_backup(backup)
     expected = [0, 1, 2, 3]
-    actual = entity_data.get_ts_vals("Income", "", ("2012","2016"), 3)
+    actual = entity_data.get_ts_vals("Sales", "annual", ("2012",None), 4)
 
     assert expected == actual
 
@@ -125,21 +125,21 @@ def test_set_ts_vals(entity_data, backup):
     """
 
     entity_data.load_backup(backup)
-    entity_data.set_ts_vals("Sales", "annual", ("2012", "2013"), [1, 2])
+    entity_data.set_ts_vals("Sales", "annual", [1, 2], ("2012", "2013"))
     expected = [1, 2, 2, 4, 6]
-    actual = entity_data._time_series[('Sales', 'annual')]
+    actual = entity_data._time_series[('Costs', 'annual')]
     assert actual == expected
     # Failed test
 
     entity_data.load_backup(backup)
-    entity_data.set_ts_vals("Income", "annual", ("2014", "2016"), [0, 1, 3])
-    expected = [2, 2, 0, 4, 6]
-    actual = entity_data._time_series[('Sales', 'annual')]
+    entity_data.set_ts_vals("Income", "annual", [0, 1], ("2014", "2016"))
+    expected = [0, 1, 0, 1, 4, 5, 6]
+    actual = entity_data._time_series[('Income', 'annual')]
     assert actual == expected
     # Failed test
 
     entity_data.load_backup(backup)
-    entity_data.set_ts_vals("Costs", "month", ("2016", "2017"), [1, 10, 20, 30])
+    entity_data.set_ts_vals("Costs", "month", [1], ("2016", "2017"))
     expected = [1, 2, 3, 0, 6]
     actual = entity_data._time_series[('Sales', 'annual')]
     assert actual == expected
@@ -161,20 +161,24 @@ def test_get_period_vals(entity_data, backup):
     actual = entity_data.get_period_val("Sales", "annual", ("2012", "2013"))
     assert expected == actual
 
-    expected = 101
-    actual = entity_data.get_period_val("Costs", "annual", ("2012", "2013"))
-    assert expected == actual
-
-    expected = 0
-    actual = entity_data.get_period_val("Sales", "day", ("2012", "2013"))
+    expected = 4
+    actual = entity_data.get_period_val("Sales", "annual", ("2016", "2017"))
     assert expected == actual
 
     expected = 1
-    actual = entity_data.get_period_val("Outcome", "month", ("2012", "2013"))
+    actual = entity_data.get_period_val("Sales", "annual", ("2013", "2014"))
     assert expected == actual
 
-    expected = 101
-    actual = entity_data.get_period_val("Costs", "annual", ("2018", "2013"))
+    expected = 0
+    actual = entity_data.get_period_val("Costs", "month", ("2012", "2013"))
+    assert expected == actual
+
+    expected = 2
+    actual = entity_data.get_period_val("Costs", "annual", ("2014", "2015"))
+    assert expected == actual
+
+    expected = 5
+    actual = entity_data.get_period_val("Costs", "annual", ("2017", "2018"))
     assert expected == actual
 
 
@@ -199,6 +203,13 @@ def test_set_period_vals(entity_data, backup):
 def test_get_all_period(entity_data, backup):
     """Test for method get all periods
 
+    Args:
+        (string): var_name - variable name
+        (string): ts_name  - time series name
+
+    Return:
+        (list): of periods
+
     :param entity_data:
     :param backup:
     :return:
@@ -207,19 +218,20 @@ def test_get_all_period(entity_data, backup):
 
     entity_data.load_backup(backup)
 
-    expected = [('2015', '2016'), ('2016', '2017'), ('2014', '2015'), ('2012', '2013'), ('2013', '2014'),
-                ('2017', '2018')]
+    expected = [('2012', '2013'), ('2013', '2014'), ('2015', '2016'), ('2016', '2017'), ('2017', '2018')]
     actual = entity_data.get_all_periods("Sales", "annual")
-    assert expected == actual
+    assert sorted(list(expected), key=lambda l: l[0]) == \
+           sorted(list(actual), key=lambda l: l[0])
 
-    expected = []
+    expected = [('2012', '2013'), ('2013', '2014'), ('2015', '2016'), ('2016', '2017'), ('2017', '2018')]
     actual = entity_data.get_all_periods("Costs", "annual")
-    assert expected == actual
+    assert sorted(list(expected), key=lambda l: l[0]) == \
+           sorted(list(actual), key=lambda l: l[0])
 
-    expected = [('2015', '2016'), ('2016', '2017'), ('2014', '2015'), ('2012', '2013'), ('2013', '2014'),
-                ('2017', '2018')]
+    expected = [('2012', '2013'), ('2013', '2014'), ('2015', '2016'), ('2016', '2017'), ('2017', '2018')]
     actual = entity_data.get_all_periods("Income", "annual")
-    assert expected == actual
+    assert sorted(list(expected), key=lambda l: l[0]) ==\
+           sorted(list(actual), key=lambda l: l[0])
 
 
 def test_is_exist(entity_data, backup):
@@ -246,9 +258,8 @@ def test_is_exist(entity_data, backup):
     expected = True
     actual = entity_data.is_exist("Sales", "annual", DataType.scalar)
     assert expected == actual
-    # Failed test
 
-    expected = True
+    expected = False
     actual = entity_data.is_exist("Cloth", "annual", DataType.time_series)
     assert expected == actual
 
@@ -271,26 +282,26 @@ def test_rename_variable(entity_data, backup):
 
     Return:
 
-    :param old_name:
-    :param new_name:
+    :param :
+    :param :
     :return:
 
     """
 
     entity_data.load_backup(backup)
     entity_data.rename_variable("Sales", "Pre-sales")
-    assert "Pre-sales" in entity_data._variables.keys()
-    assert "Sales" in entity_data._variables.keys()
+    assert "Pre-sales" in list(entity_data._variables.keys())
+    assert "Sales" not in list(entity_data._variables.keys())
 
     entity_data.load_backup(backup)
     entity_data.rename_variable("Costs", "Pre-sales")
-    assert "Pre-sales" in entity_data._variables.keys()
-    assert "Costs" in entity_data._variables.keys()
+    assert "Pre-sales" in list(entity_data._variables.keys())
+    assert "Costs" not in list(entity_data._variables.keys())
 
     entity_data.load_backup(backup)
     entity_data.rename_variable("Income", "Pre-sales")
-    assert "Pre-sales" in entity_data._variables.keys()
-    assert "Income" in entity_data._variables.keys()
+    assert "Pre-sales" in list(entity_data._variables.keys())
+    assert "Income" not in list(entity_data._variables.keys())
 
 
 def test_set_var_property(entity_data, backup):
@@ -313,26 +324,12 @@ def test_set_var_property(entity_data, backup):
 
     entity_data.load_backup(backup)
     entity_data.set_var_property("Costs", 'total', 100)
-    assert entity_data._variables['Costs'] == {'total': 100}
+    assert entity_data._variables["Costs"] == {'total': 100}
     # Failed test
-
-    entity_data.load_backup(backup)
-    entity_data.set_var_property("Income", 'untotal', 500)
-    assert entity_data._variables['Income'] == {'untotal': 500}
-    # Failed test
-
-    entity_data.load_backup(backup)
-    entity_data.set_var_property("Pre-Sales", 'untotal', 10)
-    assert entity_data._variables['Pre-Sales'] == {'untotal': 10}
-    # Failed test
-
-    entity_data.load_backup(backup)
-    entity_data.set_var_property("Pre-Costs", 'untotal', 100)
-    assert entity_data._variables['Pre-Costs'] == {'untotal': 100}
 
     entity_data.load_backup(backup)
     entity_data.set_var_property("Income", 'total', 500)
-    assert entity_data._variables['Income'] == {'total': 500}
+    assert entity_data._variables["Income"] == {"total": 500}
 
 
 def test_get_var_property(entity_data, backup):
@@ -347,15 +344,15 @@ def test_get_var_property(entity_data, backup):
     """
 
     entity_data.load_backup(backup)
-    expected = "10"
+    expected = "1000"
     actual = entity_data.get_var_property("Sales", "total")
     assert actual == expected
 
-    expected = "10"
+    expected = "1000"
     actual = entity_data.get_var_property("Costs", "total")
     assert actual == expected
 
-    expected = "10"
+    expected = "1000"
     actual = entity_data.get_var_property("Income", "total")
     assert actual == expected
 
@@ -381,10 +378,6 @@ def test_get_var_properties(entity_data, backup):
     actual = entity_data.get_var_properties("Costs")
     assert actual == expected
 
-    expected = {"total": "1000"}
-    actual = entity_data.get_var_properties("Sales")
-    assert actual == expected
-
 
 def test_var_names(entity_data, backup):
     """Return value of variable property
@@ -400,13 +393,7 @@ def test_var_names(entity_data, backup):
     actual = entity_data.var_names
     expected = ['Sales', 'Income', 'Costs']
 
-    assert list(actual) == len(expected)
-
-    entity_data.load_backup(backup)
-    actual = entity_data.var_names
-    expected = ['Sales', 'Outcome', 'Costs']
-
-    assert list(actual) == len(expected)
+    assert sorted(list(expected)) == sorted(list(actual))
 
 
 def test_add_variable(entity_data, backup):
@@ -441,3 +428,70 @@ def test_add_variable(entity_data, backup):
     assert 5 in actual
     assert list(actual).count(5) == 1
 
+
+def test_get_scalar_val(entity_data, backup):
+    """Test for method get scalar:
+    Check excepted and output value equality
+
+    Args:
+        (string): var_name - variable name
+        (string): ts_name - name of time series
+    Return:
+        list()
+
+    :param entity_data:
+    :param backup:
+    :return:
+
+    """
+    entity_data.load_backup(backup)
+
+    expected = 10
+    actual = entity_data.get_scalar_val('Loan', 'annual')
+    assert expected == actual
+
+    expected = 10
+    actual = entity_data.get_scalar_val('Tax', 'annual')
+    assert expected == actual
+
+    expected = 100
+    actual = entity_data.get_scalar_val('Rate', 'annual')
+    assert expected == actual
+
+    expected = 0
+    actual = entity_data.get_scalar_val('Index', 'annual')
+    assert expected == actual
+
+
+def test_set_scalar_val(entity_data, backup):
+    """Return list of variables
+
+    Args:
+        (string): var_name
+        (string): ts_name
+        (int): value
+
+    :return:
+
+    """
+    entity_data.load_backup(backup)
+
+    entity_data.set_scalar_val('Loan', 'annual', 500)
+    expected = 500
+    actual =  entity_data._scalars[('Loan', 'annual')]
+    assert expected == actual
+
+    entity_data.set_scalar_val('Tax', 'annual', 1000)
+    expected = 1000
+    actual = entity_data._scalars[('Tax', 'annual')]
+    assert expected == actual
+
+    entity_data.set_scalar_val('Rate', 'annual', 2000)
+    expected = 2000
+    actual = entity_data._scalars[('Rate', 'annual')]
+    assert expected == actual
+
+    entity_data.set_scalar_val('Index', 'annual', 4000)
+    expected = 4000
+    actual = entity_data._scalars[('Index', 'annual')]
+    assert expected == actual
