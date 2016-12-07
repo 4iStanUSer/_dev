@@ -6,7 +6,7 @@ from .common import security
 from .common.views import common_view as common
 
 from .forecasting.views import dashboard as f_dashboard
-from .forecasting.views import default as f_common
+from .forecasting.views import common as f_common
 from .forecasting.views import scenarios as f_scenarios
 from .forecasting.views import simulator as f_simulator
 
@@ -119,7 +119,11 @@ def forecast_routing(config):
                     route_name='forecast.get_options_for_entity_selector',
                     request_method='POST', renderer='json')
 
-
+    config.add_route('forecast.get_entity_selectors_config',
+                     '/get_entity_selectors_config')
+    config.add_view(f_common.get_entity_selectors_config,
+                    route_name='forecast.get_entity_selectors_config',
+                    request_method='POST', renderer='json')
 
 # def wsgi_app(global_config, **settings):
 def main(global_config, **settings):

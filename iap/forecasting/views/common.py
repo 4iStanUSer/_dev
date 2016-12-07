@@ -15,7 +15,7 @@ def get_options_for_entity_selector(req):
     # Get parameters from request.
     try:
         user_id = req.user
-        query = req.json_body('query')
+        query = req.json_body['query']
     except KeyError:
         msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
         return send_error_response(msg)
@@ -37,9 +37,9 @@ def get_entity_selectors_config(req):
     try:
         lang = rt.get_state(user_id).language
         wb = rt.get_wb(user_id)
-
-
-
-        return send_success_response(data)
-    else:
-        return send_auth_error()
+        selectors_config = \
+            dimensions.get_selectors_config(wb.data_config, lang)
+        return send_success_response(selectors_config)
+    except Exception as e:
+        msg = ErrorManager.get_error_message(e)
+        return send_error_response(msg)
