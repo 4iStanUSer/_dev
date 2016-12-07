@@ -21,8 +21,8 @@ def get_options_for_entity_selector(req):
         return send_error_response(msg)
     try:
         wb = rt.get_wb(user_id)
-        data = dimensions.search_by_query(wb.search_index, query)
-        return send_success_response(data)
+        options, entities = dimensions.search_by_query(wb.search_index, query)
+        return send_success_response(options)
     except Exception as e:
         msg = ErrorManager.get_error_message(e)
         return send_error_response(msg)

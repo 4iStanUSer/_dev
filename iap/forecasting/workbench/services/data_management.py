@@ -40,7 +40,6 @@ def set_entity_values(wb, entity_id, values):
             raise Exception
     return
 
-
 def get_entity_data(container, config, entities_ids, lang):
     # Initialize structure for output.
     entity_data = dict(
@@ -53,7 +52,8 @@ def get_entity_data(container, config, entities_ids, lang):
             change_over_period=None,
             decomp=None,
             factor_drivers=None,
-            insights=None
+            insights=None,
+            decomp_type_factors=None
         ),
         config=None
     )
@@ -116,7 +116,7 @@ def get_entity_data(container, config, entities_ids, lang):
     # Get variables to view. Values, growth rates, CAGRS.
     vars_view_props = []
     time_series_data = dict([(x, dict()) for x in ts_borders.keys()])
-    periods_data = copy.copy(time_series_data)
+    periods_data = dict([(x, dict()) for x in ts_borders.keys()])
 
     items_view_props = config.get_vars_for_view(ent.meta, ent.path)
     for item in items_view_props:
@@ -166,7 +166,7 @@ def get_entity_data(container, config, entities_ids, lang):
             view_props['type'] = vars_types[index]
             vars_view_props.append(view_props)
     entity_data['data']['variable_values'] = time_series_data
-    entity_data['data']['change_over_period'] = periods_data
+
 
     # Get decomposition types properties.
     decs_types_view_props = []
@@ -182,9 +182,26 @@ def get_entity_data(container, config, entities_ids, lang):
     dec_periods = {key: value for key, value in gr_periods.items()
                    if key in dec_timescales}
 
-    decomp_data_for_view = \
+    decomp_data = \
         get_decomposition(container, config, entities_ids, dec_periods)
+    decomp_data_for_view = transform_decomp_for_view(decomp_data)
+
+    # Update periods data with decomposition
+    for row in decomp_data:
+        if row['var_id'] not in periods_data[row['ts_name']]:
+            periods_data[row['ts_name']][row['var_id']] = []
+        periods_data[row['ts_name']][row['var_id']]\
+            .append(dict(abs=row['abs'], rate=row['rate'],
+                         start=row['start'], end=row['end']))
+
     entity_data['data']['decomp'] = decomp_data_for_view
+    entity_data['data']['change_over_period'] = periods_data
+
+    # Fill factors for dec type.
+    dec_type_factors = dict()
+    for dec_type, values in next(iter(decomp_data_for_view.values())).items():
+        dec_type_factors[dec_type] = [x['var_id'] for x in values[0]['factors']]
+    entity_data['data']['decomp_type_factors'] = dec_type_factors
 
     # Extend variables properties.
     for item in config.get_decomp_vars_for_view(ent.meta, ent.path):
@@ -240,7 +257,9 @@ def get_decomposition(container, config, entities_ids, timescales_periods):
                              start=p[0], end=p[1], var_id=var_info['id'],
                              abs=0, rate=ps.get_value(p))
                     )
+    return decomp_data
 
+def transform_decomp_for_view(decomp_data):
     # Transform flat list to view format.
     decomp_data_for_view = dict()
     for row in decomp_data:
@@ -262,7 +281,6 @@ def get_decomposition(container, config, entities_ids, timescales_periods):
             decomp_set.append(decomp_over_period)
         decomp_over_period['factors'].append(dict(var_id=row['var_id'],
                                                   abs=0, rate=row['rate']))
-
     return decomp_data_for_view
 
 

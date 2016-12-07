@@ -313,8 +313,8 @@ export class DashboardDataModel {
                 }
             }
         }
-        console.error('Don\'t have previous period for:',
-            timescale_id, timelabel_id, lag);
+        //console.error('Don\'t have previous period for:',
+        //    timescale_id, timelabel_id, lag);
         return null;
     }
 
@@ -364,7 +364,7 @@ export class DashboardDataModel {
             }
         } catch (e) {
             console.error('Don\'t have decomposition data for:',
-                timescale_id, start, end);
+                timescale_id, decomp_type_id, start, end);
         }
         return null;
     }

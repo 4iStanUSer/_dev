@@ -15,9 +15,10 @@ def get_dashboard_data(req):
         msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
         return send_error_response(msg)
     try:
-        wb = rt_storage.get_wb(user_id, TOOL)
-        data = data_service.get_entity_data(wb.container, wb.config,
-                                              entities_ids)
+        lang = rt.get_state(user_id).language
+        wb = rt.get_wb(user_id)
+        data = data_service.get_entity_data(wb.container, wb.data_config,
+                                            entities_ids, lang)
         return send_success_response(data)
     except Exception as e:
         msg = ErrorManager.get_error_message(e)

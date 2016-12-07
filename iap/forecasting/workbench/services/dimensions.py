@@ -6,9 +6,8 @@ JOIN_SYMBOL = '|-|-|'
 def get_selectors_config(config, lang):
     if lang == 'en':
         return dict(
-            selectors=[
+            selectors=dict(Geography=
                 dict(
-                    id='geography',
                     multiple=True,
                     type='region',
                     icon='',
@@ -16,8 +15,7 @@ def get_selectors_config(config, lang):
                     name='Country',
                     placeholder='Country'
                 ),
-                dict(
-                    id='products',
+                Products=dict(
                     multiple=True,
                     type='flat',
                     icon='',
@@ -25,14 +23,13 @@ def get_selectors_config(config, lang):
                     name='Category',
                     placeholder='Category'
                 )
-            ],
-            order=['geography', 'products']
+            ),
+            order=['Geography', 'Products']
         )
     else:
         return dict(
-            selectors=[
+            selectors=dict(Geography=
                 dict(
-                    id='geography',
                     multiple=True,
                     type='region',
                     icon='',
@@ -40,8 +37,8 @@ def get_selectors_config(config, lang):
                     name='Страна',
                     placeholder='Страна'
                 ),
-                dict(
-                    id='products',
+                Products=dict(
+                    id='Products',
                     multiple=True,
                     type='flat',
                     icon='',
@@ -49,8 +46,8 @@ def get_selectors_config(config, lang):
                     name='Категория',
                     placeholder='Категория'
                 )
-            ],
-            order=['geography', 'products']
+            ),
+            order=['Geography', 'Products']
         )
 
 
@@ -68,6 +65,8 @@ def _add_entity_to_index(entity, curr_point, search_index, dim_names):
     sub_index = search_index
     for i in range(len(dim_names)):
         dim_path = curr_point['coords'][dim_names[i]]
+        if len(dim_path) == 0:
+            continue
         key = tuple(dim_path)
         if i < len(dim_names) - 1:
             if key not in sub_index:
