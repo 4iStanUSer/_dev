@@ -2,34 +2,56 @@ import copy
 
 JOIN_SYMBOL = '|-|-|'
 
-def get_selectors_config(config):
 
-
-
-    selectiors_config = dict(
-        selectors={
-            'brand': {
-                'name': 'Brand',
-                'placeholder': 'brand',
-                'multiple': True,  # false|true,
-                'type': 'flat',  # flat | hierarchical | region
-                'icon': '',
-                'disabled': False,
-            },
-            'category': {
-                'name': 'Category',
-                'placeholder': 'category',
-                'multiple': True,
-                'type': 'hierarchical',  # flat | hierarchical | region
-                'icon': '',
-                'disabled': False,
-            }
-        },
-        order=config.get_property('dimensions')
-    )
-
-
-
+def get_selectors_config(config, lang):
+    if lang == 'en':
+        return dict(
+            selectors=[
+                dict(
+                    id='geography',
+                    multiple=True,
+                    type='region',
+                    icon='',
+                    disabled=False,
+                    name='Country',
+                    placeholder='Country'
+                ),
+                dict(
+                    id='products',
+                    multiple=True,
+                    type='flat',
+                    icon='',
+                    disabled=False,
+                    name='Category',
+                    placeholder='Category'
+                )
+            ],
+            order=['geography', 'products']
+        )
+    else:
+        return dict(
+            selectors=[
+                dict(
+                    id='geography',
+                    multiple=True,
+                    type='region',
+                    icon='',
+                    disabled=False,
+                    name='Страна',
+                    placeholder='Страна'
+                ),
+                dict(
+                    id='products',
+                    multiple=True,
+                    type='flat',
+                    icon='',
+                    disabled=False,
+                    name='Категория',
+                    placeholder='Категория'
+                )
+            ],
+            order=['geography', 'products']
+        )
 
 
 def build_search_index(container, dim_names):
@@ -61,25 +83,33 @@ def _add_entity_to_index(entity, curr_point, search_index, dim_names):
 
 
 def search_by_query(search_index, query):
-    query = _transform_query(query)
-    options = []
+    order = search_index['order']
+    search_indexes = [search_index['index']]
+
+    options = dict()
     entities_ids = []
-    search_indexes = [search_index]
-    for i in range(len(query)):
-        dimension_selection = query[i]
+
+    if query is None:
+        query = dict(zip(order, [[]]*len(order)))
+    query = _split_ids(query)
+
+    for i, dim_id in enumerate(order):
+        dimension_selection = query.get(dim_id)
+        if dimension_selection is None:
+            raise Exception
         if len(dimension_selection) == 0:
                 keys = []
                 for item in search_indexes:
                     keys.extend(item.keys())
                 dimension_selection = [keys[0]]
-                options.append(_fill_options(keys, keys[0]))
+                options[dim_id] = _fill_options(keys, keys[0])
         next_iter_indexes = []
         for selected in dimension_selection:
             for curr_search_index in search_indexes:
                 search_res = curr_search_index.get(selected)
                 if search_res is None:
                     continue
-                if i < len(query) - 1:
+                if i < len(order) - 1:
                     if not isinstance(search_res, dict):
                         raise Exception
                     next_iter_indexes.append(search_res)
@@ -87,7 +117,7 @@ def search_by_query(search_index, query):
                     if isinstance(search_res, dict):
                         raise Exception
                     entities_ids.append(search_res)
-        if len(next_iter_indexes) == 0 and i != len(query) - 1:
+        if len(next_iter_indexes) == 0 and i != len(order) - 1:
             raise Exception
         search_indexes = next_iter_indexes
     return options, entities_ids
@@ -111,9 +141,10 @@ def _fill_options(keys_list, selected):
     return options
 
 
-def _transform_query(query):
-    for i in range(len(query)):
-        for j in range(len(query[i])):
-            if query[i][j] is not None:
-                query[i][j] = tuple(query[i][j].split(JOIN_SYMBOL))
+def _split_ids(query):
+    for dim_name in query.keys():
+        for j in range(len(query[dim_name])):
+            if query[dim_name][j] is not None:
+                query[dim_name][j] = \
+                    tuple(query[dim_name][j].split(JOIN_SYMBOL))
     return query
