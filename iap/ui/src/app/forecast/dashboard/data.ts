@@ -23,13 +23,13 @@ export const defaultState = {
     'forecast_collapse_expand': 'collapse', // collapse|expand
     'forecast_active_tab': 'all', // all|(name of variable)
     'forecast_tab': 'all', // all|(or name of variable)
-    'decomp_value_volume_price': 'Value', // value|volume|price (name of type)
+    'decomp_value_volume_price': 'value', // value|volume|price (name of type)
 
     'd_summary_table_collapsed_expanded': 'expanded', // collapsed|expanded
 
     'd_details_table_collapsed_expanded': 'expanded', // collapsed|expanded
 
-    'd_details_selected_megadriver': null, // null(get first)|mega driver key
+    'd_details_selected_factor': null, // null(get first)|mega driver key
 };
 
 export const dashboardConfig = {

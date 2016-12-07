@@ -222,7 +222,7 @@ export class DataManagerService {
 
                 this.dataModel = new DashboardDataModel(
                     d['timescales'],
-                    d['timelables'],
+                    d['timelabels'],
                     d['variables'],
                     d['variable_values'],
                     d['change_over_period'],
@@ -268,9 +268,9 @@ export class DataManagerService {
                 'config': dashboardConfig
             };
             this.req.get({
-                'url_id': 'forecast/get_page_static_data',
+                'url_id': 'get_page_configuration',
                 'data': {
-                    'page_name': this.pageName
+                    'page': this.pageName
                 }
             }).subscribe((d)=> {
                     this.sds.addPage(this.pageName, frontData, d);
@@ -673,7 +673,6 @@ export class DataManagerService {
 
         let variables = this.dataModel.getVariablesByType('driver');
         let timelabels = this.dataModel.getTimeLine(timescale, start, end);
-
         let vars: Array<TableWidgetRowColItem> = [],
             tls: Array<TableWidgetRowColItem> = [],
             vals: TableWidgetValues = {},
@@ -681,7 +680,6 @@ export class DataManagerService {
             l: number;
 
         let growthLag = this.dataModel.getTimeScaleLag(timescale);
-
         // For ROWS
         l = (timelabels && timelabels.length) ? timelabels.length : 0;
         for (let i = 0; i < l; i++) {
@@ -702,6 +700,7 @@ export class DataManagerService {
                 start: start,
                 end: timelabel.full_name
             };
+
             tls.push({
                 id: timelabel.id,
                 parent_id: (pTimelabel) ? pTimelabel.id : null,
@@ -819,6 +818,7 @@ export class DataManagerService {
      * @returns {Array}
      */
     getFactorsList(decompType: string): Array<{id: string; name: string}> {
+
         let output = [];
         let factors = this.dataModel.getDecompTypeFactors(decompType);
         if (factors) {

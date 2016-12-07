@@ -55,12 +55,12 @@ export class DriverDetailComponent implements OnInit {
      */
     private collectData() {
         // Order is important - maybe remake - do with subscribers
+
         this.dTypesSwitcherData = this.getDecompositionTypes();
         this.megaDriversSelectorData = this.getMegaDriversSelectorData();
         this.tableData = this.getTableData();
         this.dynamicData = this.getDynamicData();
-
-        this.imapactData = this.getImapactData();
+        this.imapactData = this.getImpactData();
     }
 
 
@@ -237,7 +237,7 @@ export class DriverDetailComponent implements OnInit {
         this.megaDriversSelectorData = this.getMegaDriversSelectorData();
         this.tableData = this.getTableData();
         this.dynamicData = this.getDynamicData();
-        this.imapactData = this.getImapactData();
+        this.imapactData = this.getImpactData();
     }
     private onChangeMegaDriver(newValue: string) {
         this.dm.state.set('d_details_selected_factor', newValue);
@@ -246,7 +246,7 @@ export class DriverDetailComponent implements OnInit {
         this.megaDriversSelectorData = this.getMegaDriversSelectorData();
         this.tableData = this.getTableData();
         this.dynamicData = this.getDynamicData();
-        this.imapactData = this.getImapactData();
+        this.imapactData = this.getImpactData();
     }
     private onClickTableToggleButton(e: MouseEvent) {
         e.preventDefault();
@@ -264,9 +264,8 @@ export class DriverDetailComponent implements OnInit {
             this.selectedDriver = null;
             console.error('There is no such id for selected row', o['row_id']);
         }
-
         this.dynamicData = this.getDynamicData();
-        this.imapactData = this.getImapactData()
+        this.imapactData = this.getImpactData();
     }
 
     /*-----------.TABLE-SECTION--------------*/
@@ -292,7 +291,7 @@ export class DriverDetailComponent implements OnInit {
         return (driverData) ? driverData : null;
     }
 
-    private getImapactData(): VariableData {
+    private getImpactData(): VariableData {
         let period = this.dm.getPeriod('main');
         let driverKey = this.selectedDriver;
         let pss = this.dm.dataModel.getRelatedFactor(

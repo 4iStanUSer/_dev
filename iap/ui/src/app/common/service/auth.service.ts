@@ -78,7 +78,7 @@ export class AuthService {
     init(): Observable<boolean> {
         //this.req = req;
         this.initObs = this.req.get({
-            url_id: 'check_logged_in',
+            url_id: 'check_auth',
             sync: true,
             data: {}
         });

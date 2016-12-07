@@ -1,3 +1,4 @@
+"""
 from ..common.helper_lib import send_success_response, send_error_response
 
 
@@ -2457,3 +2458,4 @@ def get_changes_for_period(req):
         return send_success_response(data)
     else:
         return send_auth_error()
+"""

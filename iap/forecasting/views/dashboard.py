@@ -3,7 +3,7 @@ from ..workbench.services import data_management as data_service
 
 from ...common import exceptions as ex
 from ...common.error_manager import ErrorManager
-from ...common import rt_storage
+from ...common import runtime_storage as rt
 TOOL = 'forecast'
 
 def get_dashboard_data(req):
@@ -15,9 +15,10 @@ def get_dashboard_data(req):
         msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
         return send_error_response(msg)
     try:
-        wb = rt_storage.get_wb(user_id, TOOL)
-        data = data_service.get_entity_data(wb.container, wb.config,
-                                              entities_ids)
+        lang = rt.get_state(user_id).language
+        wb = rt.get_wb(user_id)
+        data = data_service.get_entity_data(wb.container, wb.data_config,
+                                            entities_ids, lang)
         return send_success_response(data)
     except Exception as e:
         msg = ErrorManager.get_error_message(e)
@@ -36,7 +37,7 @@ def get_cagrs_for_period(req):
         msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
         return send_error_response(msg)
     try:
-        wb = rt_storage.get_wb(user_id, TOOL)
+        wb = rt.get_wb(user_id, TOOL)
         cagrs = data_service.get_cagrs(wb.container, wb.config, entities_ids,
                                          (start, end))
         return send_success_response(cagrs)
@@ -57,7 +58,7 @@ def get_decomposition_for_period(req):
         msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
         return send_error_response(msg)
     try:
-        wb = rt_storage.get_wb(user_id, TOOL)
+        wb = rt.get_wb(user_id, TOOL)
         dec_data = data_service.get_decomposition(wb.container, wb.config,
                                                     entities_ids, (start, end))
         return send_success_response(dec_data)

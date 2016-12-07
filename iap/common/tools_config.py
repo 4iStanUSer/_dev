@@ -23,7 +23,7 @@ def get_page_config(tool_id, page_name, language):
         for config in configs:
             for section_name, section_content in config.items():
                 for par_name, par_value in section_content.items():
-                    final_config[section_name + '_' + par_name] = par_value
+                    final_config[section_name + '***' + par_name] = par_value
         return final_config
 
     registry = threadlocal.get_current_registry()

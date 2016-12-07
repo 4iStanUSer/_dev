@@ -23,7 +23,7 @@ class Workbench:
         self.calc_kernel = CalculationKernel()
         self.access = Access()
         self.tool_config = {}
-        self.search_index = None
+        self.search_index = dict(order=None, index=None)
 
     def get_backup(self):
         container_backup = self.container.get_backup()
@@ -66,8 +66,10 @@ class Workbench:
     def _init_wb(self, user_access_rights):
         # Build search index.
         dim_names = self.data_config.get_property('dimensions')
-        self.search_index = \
+        search_index = \
             dim_service.build_search_index(self.container, dim_names)
+        self.search_index['order'] = dim_names
+        self.search_index['index'] = search_index
         # Init local access manager.
         #for item in user_access_rights:
         #    ent = self.container.get_entity_by_path(item['path'])

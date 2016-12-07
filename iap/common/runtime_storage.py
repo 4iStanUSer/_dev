@@ -7,9 +7,9 @@ from ..forecasting.workbench import Workbench
 
 class State:
 
-    def __init__(self):
-        self._user_id = None
-        self._tool_id = 'common'
+    def __init__(self, user_id):
+        self._user_id = user_id
+        self._tool_id = None
         self._project_id = None
         self._lang = 'en'
 
@@ -46,20 +46,21 @@ class RunTimeStorage:
         user_box = self._get_user_box(user_id)
         if 'language' in kwargs.keys():
             with self._lock:
-                user_box['state'] = kwargs['language']
+                user_box['state']._lang = kwargs['language']
         elif 'tool_id' and 'project_id' in kwargs.keys():
-            old_tool_id = user_box['state'].tool_id
-            old_project_id = user_box['state'].project_id
-            if (old_tool_id != kwargs['tool_id']
-                    or old_project_id != kwargs['project_id']):
-                persistent_storage\
-                    .save_backup(user_id, old_tool_id, old_project_id,
-                                 user_box['wb'].get_backup())
-                new_wb = self._load_wb(user_id, kwargs['tool_id'],
-                                       kwargs['project_id'])
+            new_tool = kwargs['tool_id']
+            new_proj = kwargs['project_id']
+            old_tool = user_box['state'].tool_id
+            old_proj = user_box['state'].project_id
+            if old_tool != new_tool or old_proj != new_proj:
+                if old_tool is not None and old_proj is not None:
+                    persistent_storage\
+                        .save_backup(user_id, old_tool, old_proj,
+                                     user_box['wb'].get_backup())
+                new_wb = self._load_wb(user_id, new_tool, new_proj)
                 with self._lock:
-                    user_box['state'].tool_id = kwargs['tool_id']
-                    user_box['state'].project_id = kwargs['project_id']
+                    user_box['state']._tool_id = new_tool
+                    user_box['state']._project_id = new_proj
                     user_box['wb'] = new_wb
         else:
             raise Exception
@@ -68,18 +69,19 @@ class RunTimeStorage:
     def _get_user_box(self, user_id):
         user_box = self._collection.get(user_id)
         if user_box is None:
-            state = self._load_state()
+            state = self._load_state(user_id)
             wb = self._load_wb(state.user_id, state.tool_id, state.project_id)
             user_box = dict(state=state, wb=wb)
             with self._lock:
                 self._collection[user_id] = user_box
-            return user_box
+        return user_box
 
-    @staticmethod
-    def _load_state(self):
-        return State()
+    def _load_state(self, user_id):
+        return State(user_id)
 
     def _load_wb(self, user_id, tool_id, project_id):
+        if tool_id is None or project_id is None:
+            return None
         # Load backup
         backup = persistent_storage.load_backup(user_id, tool_id, project_id,
                                                 'default')
@@ -89,7 +91,7 @@ class RunTimeStorage:
         if wb_class is None:
             raise ex.UnknownToolError(tool_id)
         wb = wb_class(user_id)
-        wb.load_from_backup(backup)
+        wb.load_from_backup(backup, None)
         return wb
 
     @staticmethod

@@ -1120,14 +1120,14 @@ dev_template_JJOralCare = {
                     'dec_val_price_on_vol': [('dec_val_price_on_vol','unit_price')],
                     'dec_val_unit_size_on_vol': [('dec_val_unit_size_on_vol','unit_size')],
                     'dec_val_inflation': [('dec_val_inflation', 'cpi')],
-                    'dec_val_man_pricing': [(None, None)],
+                    'dec_val_man_pricing': [('dec_val_inflation', 'cpi')],
                     'dec_val_premiumization': [('dec_val_premiumization', 'premiumization')],
                     'dec_val_trade_promo': [
                         ('dec_val_trade', 'discount'),
                         ('dec_val_promo', 'support')
                     ],
                     'dec_val_unit_size': [('dec_val_unit_size','unit_size')],
-                    'dec_val_other': [(None, None)],
+                    'dec_val_other': [('dec_val_inflation', 'cpi')],
                     'dec_vol_demo': [('dec_vol_demo', 'population')],
                     'dec_vol_economy': ['dec_val_economy', 'gdp'],
                     'dec_vol_distribution': [('dec_vol_distribution', 'distribution')],

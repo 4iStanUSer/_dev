@@ -1,16 +1,13 @@
 <!--TEMP-->
 <div>
-    <button (click)="onClickLogout()">Logout</button>
+    <button (click)="onClickLogout()">{{ logoutLabel}}</button>
 </div>
 
 <language-selector
-    *ngIf="langsData"
-    [langs]="langsData"
+    *ngIf="langsList.length>0"
+    [languages]="langsList"
     (changed)="languageChanged($event)"></language-selector>
 <!--/TEMP-->
 
-<menu-widget
-    *ngIf="topMenuData"
-    [data]="topMenuData"></menu-widget>
-
+<menu-widget *ngIf="menuItems" [menu]="menuItems"></menu-widget>
 <router-outlet></router-outlet>

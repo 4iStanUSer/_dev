@@ -45,6 +45,7 @@ export class DriverSummaryComponent implements OnInit {
      */
     private collectData() {
         // TODO Question about default selection
+
         let period = this.dm.getPeriod('main');
         let start = period.start;
         let end = period.end;
@@ -60,14 +61,13 @@ export class DriverSummaryComponent implements OnInit {
             mid: mid,
             type: this.dm.state.get('decomp_value_volume_price')
         };
-
         this.tableData = this.dm.getData_DriverSummaryTableData(
             start, end, mid, timescale, this.selTableRowId
         );
-
         this.rebuildDecompositionChart();
 
         this.dTypesSwitcherData = this.getDecompositionTypes();
+
     }
 
 

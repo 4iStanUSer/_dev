@@ -115,7 +115,7 @@ export class AjaxService {
      * Url for getting urls configuration
      * @type {string}
      */
-    private urlsSource: string = '/temp/get_urls';
+    private urlsSource: string = '/routing_config';
 
     /**
      * Flag for request for urlMapper
@@ -390,8 +390,9 @@ export class AjaxService {
      * @returns {String}
      */
     private getUrl(url_id: string) {
-        return (url_id && this.urlsMapper && this.urlsMapper[url_id])
-            ? this.urlsMapper[url_id].url : null;
+        return url_id
+        //return (url_id && this.urlsMapper && this.urlsMapper[url_id])
+        //    ? this.urlsMapper[url_id].url : null;
     }
 
     /**
