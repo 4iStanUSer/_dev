@@ -1,6 +1,38 @@
+<div class="c-top-info">
+
+    <div class="c-top-info__item" *ngFor="let sel of selectorsOrder | iterateObjectByOrder: selectors; let i = index" >
+        <div
+                class="c-top-info__inner c-top-info__inner--location"
+                (click)="onPreviewClick(selectorsOrder[i], $event)"
+        >
+            <span *ngIf="sel['selected'] && sel['selected'].length > 0">
+                <span *ngFor="let s of sel['selected']">
+                    {{ s.name }}
+                </span>
+            </span>
+            <span *ngIf="!sel['selected'] || sel['selected'].length == 0">
+                {{ sel['model']['placeholder'] }}
+            </span>
+        </div>
+    </div>
+
+    <!--?<div class="c-top-info__item">
+      <div class="c-top-info__inner c-top-info__inner--location"><span>United States, Texas, Dallas</span></div>
+    </div>
+    <div class="c-top-info__item">
+      <div class="c-top-info__inner c-top-info__inner--channel"><span>Channel1, Channel2, Categ</span></div>
+    </div>
+    <div class="c-top-info__item">
+      <div class="c-top-info__inner c-top-info__inner--type"><span>Training pants, women’s s</span></div>
+    </div>
+    <div class="c-top-info__item">
+      <div class="c-top-info__inner c-top-info__inner--brand"><span>Nike, Puma, New Balance</span></div>
+    </div>-->
+</div>
+
 <div class="wrapper">
 
-    <ul class="selectors">
+    <!--?<ul class="selectors">
         <li *ngFor="let sel of selectorsOrder | iterateObjectByOrder: selectors; let i = index">
 
             <div class="selector-preview" (click)="onPreviewClick(selectorsOrder[i], $event)">
@@ -17,7 +49,7 @@
             </div>
 
         </li>
-    </ul>
+    </ul>-->
 
     <div *ngIf="state['isExpanded']" class="expanded-block">
 

@@ -141,54 +141,6 @@
       -ms-flex: 1;
           flex: 1;
 }
-.c-top-info {
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-justify-content: space-around;
-      -ms-flex-pack: distribute;
-          justify-content: space-around;
-}
-.c-top-info__item {
-  width: calc(25% - 20px);
-  padding: 10px;
-}
-.c-top-info__inner {
-  height: 26px;
-  padding: 6px 9px 0 35px;
-  border-radius: 4px;
-  font-family: 'open_sanssemibold';
-  font-size: 12px;
-  font-style: normal;
-  font-stretch: normal;
-  text-align: left;
-  text-transform: uppercase;
-  color: #626970;
-  background-color: #fff;
-  background-repeat: no-repeat;
-  background-position: 9px center;
-}
-.c-top-info__inner span {
-  display: block;
-  white-space: nowrap;
-  overflow: hidden;
-  border-bottom: 1px solid rgba(46,52,56,0.2);
-}
-.c-top-info__inner--location {
-  background-image: url("/static/assets/images/icons/ic-location.svg");
-}
-.c-top-info__inner--channel {
-  background-image: url("/static/assets/images/icons/ic-channel.svg");
-}
-.c-top-info__inner--type {
-  background-image: url("/static/assets/images/icons/ic-type.svg");
-}
-.c-top-info__inner--brand {
-  background-image: url("/static/assets/images/icons/ic-brand.svg");
-}
-.c-top-info__inner:hover {
-  cursor: pointer;
-}
 .c-board {
   display: box;
   box-orient: horizontal;
