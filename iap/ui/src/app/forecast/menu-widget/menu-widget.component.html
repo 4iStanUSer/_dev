@@ -1,5 +1,5 @@
 <ul class="c-menu">
-    <li *ngFor="let link of links |  filterList:{key: 'disabled', value: false}" class="c-menu__item" routerLinkActive="c-menu__item--active">
+    <li *ngFor="let link of menu |  filterList:{key: 'disabled', value: false}" class="c-menu__item" routerLinkActive="c-menu__item--active">
         <a href="#"
             [routerLink]="link.path"
             routerLinkActive="active">

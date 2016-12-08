@@ -13,13 +13,13 @@
     </div>
     <div class="c-top-pane__item c-top-pane__item--nav">
         <menu-widget
-    *ngIf="topMenuData"
-    [data]="topMenuData"></menu-widget>
+    *ngIf="menuItems"
+    [menu]="menuItems"></menu-widget>
     </div>
     <div class="c-top-pane__item c-top-pane__item--info">
       <div class="c-info">
         <div class="c-info__item c-info__item--notification"><a href="#">1 Notification</a></div>
-        <div class="c-info__item c-info__item--logout"><a (click)="onClickLogout()">Log Out</a></div>
+        <div class="c-info__item c-info__item--logout"><a (click)="onClickLogout()">{{ logoutLabel}}</a></div>
       </div>
     </div>
     <div class="c-top-pane__item c-top-pane__item--logo">
@@ -35,11 +35,14 @@
 <!--?<div>
     <button (click)="onClickLogout()">Logout</button>
 </div>-->
-
 <language-selector
+    *ngIf="langsList.length>0"
+    [languages]="langsList"
+    (changed)="languageChanged($event)"></language-selector>
+<!--?<language-selector
     *ngIf="langsData"
     [langs]="langsData"
-    (changed)="languageChanged($event)"></language-selector>
+    (changed)="languageChanged($event)"></language-selector>-->
 <!--/TEMP-->
 
 <!--?<menu-widget
