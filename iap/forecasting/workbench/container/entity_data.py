@@ -210,6 +210,18 @@ class EntityData:
         :return:
 
         '''
+        '''Bool function check wether variable are in backup
+
+        Args:
+            (string): var_name - name of variable
+            (string): ts_name - timeseries name
+            (DataType): data_type - specific data type
+        Return
+            (bool)
+
+        :return:
+
+        '''
         if data_type == DataType.time_series:
             return (var_name, ts_name) in self._time_series
         elif data_type == SlotType.scalar:

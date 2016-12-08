@@ -90,7 +90,11 @@ def test_get_ts_vals(entity_data, backup):
     '''
 
     entity_data.load_backup(backup)
+<<<<<<< HEAD
     expected = [0,1]
+=======
+    expected = [0]
+>>>>>>> origin/feature/DL_unittests_container
     actual = entity_data.get_ts_vals("Sales", "annual", ("2012", "2013"), 0)
     assert expected == actual
     # Failed test
