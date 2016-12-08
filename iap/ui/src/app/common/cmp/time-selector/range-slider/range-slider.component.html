@@ -1,14 +1,15 @@
 <div class="track">
     <svg width="100%" [attr.height]="svgConfig['height']" xmlns="http://www.w3.org/2000/svg">
         <g>
-            <path stroke="green" stroke-width="5" [attr.d]="svgData['track']" ></path>
+            <path stroke="#44b3c2" stroke-width="2" [attr.d]="svgData['track']" ></path>
         </g>
         <g *ngIf="svgData['sliders']">
             <polygon
                 *ngFor="let slider of getKeys(svgData['sliders'])"
                 [attr.points]="svgData['sliders'][slider]"
                 (mousedown)="onSliderMousedown(slider, $event)"
-                style="cursor:pointer;fill:lime;stroke:purple;stroke-width:1;fill-rule:nonzero;" />
+                style="cursor:pointer; fill:#44b3c2; stroke:#44b3c2; stroke-width:1; fill-rule:nonzero;"
+            />
         </g>
     </svg>
 </div>

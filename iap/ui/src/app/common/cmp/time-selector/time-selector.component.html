@@ -1,3 +1,95 @@
+<div class="c-select c-select--date" (click)="setExpandedMode(true)">
+    <span *ngIf="selectedPoints">
+        (
+        <span *ngIf="selectedPoints['start']">
+            {{ selectedPoints['start'].getName() }}
+        </span>
+        -
+        <span *ngIf="selectedPoints['mid']">
+            {{ selectedPoints['mid'].getName() }}
+        </span>
+        <span *ngIf="selectedPoints['mid']">
+            -
+        </span>
+        <span *ngIf="selectedPoints['end']">
+            {{ selectedPoints['end'].getName() }}
+        </span>
+        )
+    </span>
+    <!--?selctor end-->
+    <!--?pop-up start-->
+    <div class="c-popup c-popup--date" *ngIf="expandedMode">
+        <div class="c-popup__changer" *ngIf="scales">
+            <div class="c-triple-changer">
+                <div
+                        *ngFor="let scale of scales"
+                        class="c-triple-changer__item"
+                        (click)="changeScale(scale)"
+                        [ngClass]="{'c-triple-changer__item--active': (scale == currScale)}"
+                >
+                    {{ scale }}
+                </div>
+            </div>
+        </div>
+        <div class="c-popup__slider">
+            <div class="c-range-slider">
+                <div class="c-range-slider__inputs">
+                    <input class="c-range-slider__input"
+                           *ngIf="preSelectedPoints[currScale] && preSelectedPoints[currScale]['start']"
+                           value="{{ preSelectedPoints[currScale]['start'].getName() }}"
+                           readonly
+                    >
+                    <span>- </span>
+                    <!--? c-range-slider__input--active-->
+                    <input class="c-range-slider__input"
+                           *ngIf="preSelectedPoints[currScale] && preSelectedPoints[currScale]['mid']"
+                           value="{{ preSelectedPoints[currScale]['mid'].getName() }}"
+                           readonly
+                    >
+                    <span>- </span>
+                    <input class="c-range-slider__input"
+                           *ngIf="preSelectedPoints[currScale] && preSelectedPoints[currScale]['end']"
+                           value="{{ preSelectedPoints[currScale]['end'].getName() }}"
+                           readonly
+                    >
+                </div>
+                <range-slider
+                        [data]="currPoints"
+                        [selected]="preSelectedPoints[currScale]"
+                        (changed)="onSliderChange($event)"
+                ></range-slider>
+                <!--?<div class="c-range-slider__center">
+                <div class="c-range-slider__line">
+                <div class="c-range-slider__item">
+                <div class="c-range-slider__marker c-range-slider__marker--start"></div>
+                <div class="c-range-slider__label c-range-slider__label--start">Q1, 2015</div>
+                </div>
+                <div class="c-range-slider__item c-range-slider__item--active">
+                <div class="c-range-slider__marker c-range-slider__marker--middle"></div>
+                <div class="c-range-slider__label c-range-slider__label--middle">Q3, 2016</div>
+                </div>
+                <div class="c-range-slider__item">
+                <div class="c-range-slider__marker c-range-slider__marker--end"></div>
+                <div class="c-range-slider__label c-range-slider__label--end">Q4, 2017</div>
+                </div>
+                </div>
+                </div>-->
+                <div class="c-range-slider__buttons">
+                    <button class="c-button c-button--green c-button--90" (click)="save()">{{ lang['apply'] }}</button>
+                    <button class="c-button c-button--transparent c-button--90" (click)="setExpandedMode(false)">{{ lang['cancel'] }}</button>
+                </div>
+                <!--?<div class="buttons">
+                    <button (click)="save()">{{ lang['apply'] }}</button>
+                    <button (click)="setExpandedMode(false)">{{ lang['cancel'] }}</button>
+                </div>-->
+
+            </div>
+        </div>
+    </div>
+    <!--?pop-up end-->
+</div>
+
+<!--?
 <div class="component-container">
     <div class="full-current-selection">
         <div class="text">
@@ -23,7 +115,10 @@
     </div>
 
     <div class="expanded-selector" *ngIf="expandedMode">
-        <div class="scales" *ngIf="scales && scales.length > 1">
+        -->
+<!--?<div class="scales" *ngIf="scales && scales.length > 1">--><!--?
+
+        <div class="scales" *ngIf="scales">
             <span *ngFor="let scale of scales" [ngClass]="{'selected': (scale == currScale)}" (click)="changeScale(scale)"> {{ scale }}</span>
         </div>
         <div class="pre-selection">
@@ -46,3 +141,4 @@
         </div>
     </div>
 </div>
+-->

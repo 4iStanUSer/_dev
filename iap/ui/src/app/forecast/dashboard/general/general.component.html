@@ -1,41 +1,138 @@
-<div class="wrapper" *ngIf="dm.dataIsResolved">
+<div class="c-parts" *ngIf="dm.dataIsResolved">
+    <!--horizontal item #1-->
+    <div class="c-parts__item c-parts__item--forecast">
+        <div class="c-diag">
+            <!--item top pane-->
+            <div class="c-diag__pane">
+                <div class="c-diag__title">
+                    <h3>{{ dm.config['forecast_block'] }}</h3>
+                </div>
+                <div class="c-diag__date">
+                    <time-selector
+                        *ngIf="fPeriodSelectorData"
+                        [data]="fPeriodSelectorData['data']"
+                        [selected]="fPeriodSelectorData['selected']"
+                        [static]="fPeriodSelectorData['static']"
+                        (changed)="onChangedForecastPeriod($event)"
+                    ></time-selector>
+                </div>
+                <div class="c-diag__changer c-diag__changer--forecast">
+                    <buttons-group
+                        *ngIf="absRateSwitcherData"
+                        [data]="absRateSwitcherData"
+                        (changed)="onChangedAbsRateState($event)"
+                    ></buttons-group>
+                </div>
+                <div class="c-diag__button">
+                    <button
+                            class="c-button c-button--expand"
+                            [class.js-btn-collpase]="(dm.state.get('forecast_collapse_expand') != 'collapse')"
+                            *ngIf="dm.state.get('forecast_active_tab') == 'all'"
+                            (click)="onClickForecastToggleButton()">
+                        {{ ((dm.state.get('forecast_collapse_expand') == 'collapse') ? dm.config['expand'] : dm.config['collapse']) }}
+                    </button>
+                </div>
+            </div>
 
-    <div class="forecasting-section">
+            <div class="c-diag__tabs">
+                <div class="c-diag-tabs">
+                    <div class="c-diag-tabs__item c-diag-tabs__item--all" >
+                        <a
+                                class="c-color-tab c-color-tab--grey"
+                                (click)="onClickForecastTab('all')"
+                                [class.c-color-tab--active]="dm.state.get('forecast_active_tab') == 'all'"
+                        >
+                            {{ dm.config['tab_all'] }}
+                        </a>
+                    </div>
 
-        <div class="header">
+                    <div
+                            *ngFor="let tab of fTabsAbsData; let i = index"
+                            class="c-diag-tabs__item"
+                            [class.c-diag-tabs__item--sales]="tab.variable.short_name == 'Value'"
+                            [class.c-diag-tabs__item--volume]="tab.variable.short_name == 'EQ Volume'"
+                            [class.c-diag-tabs__item--price]="tab.variable.short_name == 'Price per EQ'"
+                    >
+                        <a
+                                class="c-color-tab"
+                                (click)="onClickForecastTab(tab.variable.id)"
+                                [class.c-color-tab--active]="dm.state.get('forecast_active_tab') == tab.variable.id"
+                                [class.c-color-tab--orange]="tab.variable.short_name == 'Value'"
+                                [class.c-color-tab--red]="tab.variable.short_name == 'EQ Volume'"
+                                [class.c-color-tab--blue]="tab.variable.short_name == 'Price per EQ'"
+                        >
+                            {{ tab.variable.full_name + ' - ' + tab.variable.metric }}
+                        </a>
+                    </div>
 
-            {{ dm.config['forecast_block'] }}
+                    <!--?<div class="c-diag-tabs__item c-diag-tabs__item--sales">
+                        <a class="c-color-tab c-color-tab--orange">Sales, $ MM</a>
+                    </div>
+                    <div class="c-diag-tabs__item c-diag-tabs__item--volume">
+                        <a class="c-color-tab c-color-tab--red">Volume - EQ, Thousands</a>
+                    </div>
+                    <div class="c-diag-tabs__item c-diag-tabs__item--price">
+                        <a class="c-color-tab c-color-tab--blue">Price - per EQ, $</a>
+                    </div>-->
+                </div>
+            </div>
 
-            <time-selector
-                *ngIf="fPeriodSelectorData"
-                [data]="fPeriodSelectorData['data']"
-                [selected]="fPeriodSelectorData['selected']"
-                [static]="fPeriodSelectorData['static']"
-                (changed)="onChangedForecastPeriod($event)"
-            ></time-selector>
-
-            <buttons-group
-                *ngIf="absRateSwitcherData"
-                [data]="absRateSwitcherData"
-                (changed)="onChangedAbsRateState($event)"
-            ></buttons-group>
-
-            <button *ngIf="dm.state.get('forecast_active_tab') == 'all'" (click)="onClickForecastToggleButton()">
-                {{ ((dm.state.get('forecast_collapse_expand') == 'collapse') ? dm.config['expand'] : dm.config['collapse']) }}
-            </button>
-
-        </div>
-
-        <div class="content">
-
-            <ul class="forecast-tabs">
+           <div class="c-diag__graph">
+               <div class="c-graph">
+                   <div class="c-graph__item c-graph__item--all c-graph__item--active" >
+                       <div class="c-graph__diag"><img class="h-test-img" src="/static/assets/images/common/ic-high-charts.svg"></div>
+                   </div>
+               </div>
+           </div>
+            <!--? <ul class="forecast-tabs">
                 <li (click)="onClickForecastTab('all')" [class.active]="dm.state.get('forecast_active_tab') == 'all'">
                     {{ dm.config['tab_all'] }}
                 </li>
                 <li *ngFor="let tab of fTabsAbsData; let i = index" (click)="onClickForecastTab(tab.variable.id)" [class.active]="dm.state.get('forecast_active_tab') == tab.variable.id">
                     {{ tab.variable.full_name + ' - ' + tab.variable.metric }}
                 </li>
-            </ul>
+            </ul>-->
+
+
+        </div>
+    </div>
+
+    <div class="forecasting-section">
+
+        <!--?<div class="header">
+
+            {{ dm.config['forecast_block'] }}
+
+           --><!--? <time-selector
+                *ngIf="fPeriodSelectorData"
+                [data]="fPeriodSelectorData['data']"
+                [selected]="fPeriodSelectorData['selected']"
+                [static]="fPeriodSelectorData['static']"
+                (changed)="onChangedForecastPeriod($event)"
+            ></time-selector>--><!--?
+
+            --><!--?<buttons-group
+                *ngIf="absRateSwitcherData"
+                [data]="absRateSwitcherData"
+                (changed)="onChangedAbsRateState($event)"
+            ></buttons-group>
+--><!--?
+            --><!--?<button *ngIf="dm.state.get('forecast_active_tab') == 'all'" (click)="onClickForecastToggleButton()">
+                {{ ((dm.state.get('forecast_collapse_expand') == 'collapse') ? dm.config['expand'] : dm.config['collapse']) }}
+            </button>--><!--?
+
+        </div>-->
+
+        <div class="content">
+
+            <!--?<ul class="forecast-tabs">
+                <li (click)="onClickForecastTab('all')" [class.active]="dm.state.get('forecast_active_tab') == 'all'">
+                    {{ dm.config['tab_all'] }}
+                </li>
+                <li *ngFor="let tab of fTabsAbsData; let i = index" (click)="onClickForecastTab(tab.variable.id)" [class.active]="dm.state.get('forecast_active_tab') == tab.variable.id">
+                    {{ tab.variable.full_name + ' - ' + tab.variable.metric }}
+                </li>
+            </ul>-->
 
             <div class="forecast-tabs-content" >
                 <!--*ngIf="dm.state.get('forecast_absolute_rate') == 'absolute'"-->

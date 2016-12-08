@@ -11,3 +11,292 @@ ul.forecast-tabs li {
 ul.forecast-tabs li.active {
     background: whitesmoke;
 }
+
+.c-parts {
+  height: 100%;
+  width: 100%;
+  display: box;
+  box-orient: vertical;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+.c-parts__item {
+  height: calc(50% - 3px);
+  margin-bottom: 6px;
+  border-radius: 4px;
+  box-shadow: 0 0 4.8px 0.3px rgba(0,0,0,0.05);
+  overflow: hidden;
+}
+.c-parts__item:last-child {
+  margin-bottom: 0;
+}
+.c-parts__item:first-child {
+  border-top-left-radius: 0;
+}
+.c-diag {
+  height: 100%;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  overflow: hidden;
+}
+.c-diag:after {
+  content: '';
+  display: table;
+  clear: both;
+}
+.c-diag__pane {
+  padding: 16px 12px 10px;
+  height: 28px;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  background-color: #fff;
+}
+.c-diag__pane:after {
+  content: '';
+  display: table;
+  clear: both;
+}
+.c-diag__title {
+  padding: 0 2% 0 1.6%;
+}
+.c-diag__title h3 {
+  margin: 0;
+  font-family: 'open_sansbold';
+  font-size: 18px;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.94;
+  text-align: left;
+  color: #2e3438;
+}
+.c-diag__date {
+  margin-left: auto;
+  max-width: 22%;
+  min-width: 150px;
+  width: 150px;
+  width: 100%;
+}
+.c-diag__changer {
+  margin-left: 2%;
+}
+.c-diag__button {
+  margin-left: 2%;
+}
+.c-button {
+  position: relative;
+  font-family: 'open_sansbold';
+  font-size: 12px;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 26px;
+  text-align: center;
+  color: #44b3c2;
+  border-radius: 4px;
+  background-color: #fff;
+  border: solid 1px #44b3c2;
+}
+.c-button--expand {
+  width: 75px;
+  padding-right: 15px;
+}
+.c-button--expand:after {
+  content: '';
+  display: block;
+  position: absolute;
+  top: 0;
+  right: 12px;
+  width: 10px;
+  height: 100%;
+  background: url("/static/assets/images/icons/ic-expand.svg") no-repeat center;
+  background-size: 10px 13px;
+}
+.c-button:hover {
+  cursor: pointer;
+}
+.c-button:focus {
+  outline: none;
+}
+.js-btn-collpase:after {
+  -webkit-transform: rotate(180deg);
+      -ms-transform: rotate(180deg);
+          transform: rotate(180deg);
+}
+
+
+.c-diag__tabs {
+  max-height: 34px;
+  height: 34px;
+  padding: 0 12px;
+  background-color: #fff;
+}
+
+
+.c-diag-tabs {
+  border-bottom: 2px solid #d8e0ee;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-justify-content: space-between;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+.c-diag-tabs__item {
+  position: relative;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: flex-end;
+      -ms-flex-align: end;
+          align-items: flex-end;
+  max-width: 222px;
+  width: 25%;
+}
+.c-diag-tabs__item--all {
+  min-width: 82px;
+  width: 82px;
+  height: 32px;
+}
+.c-diag-tabs__item:last-child {
+  margin-right: 3.4%;
+}
+.c-diag-tabs__item .c-color-tab:before {
+  content: '';
+  display: block;
+  width: 18px;
+  height: 100%;
+  position: absolute;
+  left: 12px;
+  top: 0;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100%;
+  opacity: 0.7;
+}
+.c-diag-tabs__item--sales .c-color-tab:before {
+  width: 25px;
+  background-image: url("/static/assets/images/icons/ic-value-choose.svg");
+}
+.c-diag-tabs__item--volume .c-color-tab:before {
+  background-image: url("/static/assets/images/icons/ic-volume-choose.svg");
+}
+.c-diag-tabs__item--price .c-color-tab:before {
+  background-image: url("/static/assets/images/icons/ic-price-choose.svg");
+}
+.c-color-tab {
+  position: relative;
+  display: block;
+  width: 100%;
+  font-family: 'open_sanssemibold';
+  font-size: 12px;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 27px;
+  text-align: center;
+  color: rgba(255,255,255,0.7);
+  text-decoration: none;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+}
+.c-color-tab:after {
+  content: '';
+  display: block;
+  width: 8px;
+  height: 8px;
+  position: absolute;
+  bottom: 5px;
+  right: 4px;
+  background: url("/static/assets/images/icons/ic-expand-triangle.svg") no-repeat center;
+  opacity: 0.7;
+}
+.c-color-tab--orange {
+  background-color: #f1a94e;
+}
+.c-color-tab--red {
+  background-color: #e45641;
+}
+.c-color-tab--blue {
+  background-color: #44b3c2;
+}
+.c-color-tab--grey {
+  background-color: #d8e0ee;
+  color: #2e3438;
+}
+.c-color-tab--grey:after {
+  display: none;
+}
+.c-color-tab--active {
+  font-size: 14px;
+  line-height: 32px;
+}
+.c-color-tab:hover {
+  cursor: pointer;
+}
+/*graps start*/
+
+.c-diag__graph {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  height: calc(100% - 88px);
+}
+.c-graph {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  height: 100%;
+}
+.c-graph__diag {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  height: calc(100% - 10px);
+  margin-bottom: 10px;
+  width: calc(100% - 194px);
+  background: #ecf0f7;
+}
+.c-graph__item {
+  padding: 0 12px;
+  display: none;
+  height: 100%;
+  background-color: #fff;
+  border-radius: 4px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+.c-graph__item--decomposition .c-graph__diag {
+  width: 100%;
+}
+.c-graph__item--active {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-justify-content: space-between;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+.c-graph__item--all .c-graph__diag {
+  width: 100%;
+}
+.h-test-img {
+  margin: 100px auto;
+  height: 50px;
+}
+/*graps end*/

@@ -1,4 +1,53 @@
-<div>
+<div class="c-insights">
+<div class="c-insights__title">
+  <h2>Insights</h2>
+</div>
+<ul class="c-insights__list" *ngFor="let insight of storage; let i = index">
+  <li class="c-insights__item">
+    <div [class.c-quote-rect--full]="insight.expanded" class="c-quote-rect">
+      <div class="c-quote-rect__number">{{ insight['nomber'] }}</div>
+      <div class="c-quote-rect__caption" *ngIf="!insight.expanded">
+        {{ insight.shortText }}
+      </div>
+        <div class="c-quote-rect__caption" *ngIf="insight.expanded">
+        {{ insight.fullText }}
+      </div>
+        <div class="c-quote-rect__link">
+        <a *ngIf="insight.expandable" [class.c-read-more--less]="insight.expanded" class="c-read-more" (click)="onExpandButtonClick(insight, $event)">
+            {{ ((insight.expanded) ? lang['less_link'] : lang['more_link'] ) }}
+        </a>
+        </div>
+      <!--?<div class="c-quote-rect__link"><a class="c-read-more" href="#">Read more</a></div>-->
+    </div>
+  </li>
+</ul>
+</div>
+<div class="c-close"></div>
+<div class="c-open">Insights</div>
+
+
+
+<!--?<ul class="c-insights__list" *ngFor="let insight of storage; let i = index">
+  <li class="c-insights__item">
+    <div [class.c-quote-rect--full]="insight.expanded" class="c-quote-rect">
+      <div class="c-quote-rect__number">{{ insight['nomber'] }}</div>
+      <div class="c-quote-rect__caption" *ngIf="!insight.expanded">
+        {{ insight.shortText }}
+      </div>
+        <div class="c-quote-rect__caption" *ngIf="insight.expanded">
+        {{ insight.fullText }}
+      </div>
+        <div class="c-quote-rect__link">
+        <a *ngIf="insight.expandable" [class.c-read-more--less]="insight.expanded" class="c-read-more" (click)="onExpandButtonClick(insight, $event)">
+            {{ ((insight.expanded) ? lang['less_link'] : lang['more_link'] ) }}
+        </a>
+        </div>
+      <div class="c-quote-rect__link"><a class="c-read-more" href="#">Read more</a></div>
+    </div>
+  </li>
+</ul>-->
+
+<!--?<div>
     <div *ngFor="let insight of storage; let i = index">
         <div>{{ insight['nomber'] }}</div>
         <div *ngIf="!insight.expanded">
@@ -10,4 +59,4 @@
         <a *ngIf="insight.expandable" (click)="onExpandButtonClick(insight, $event)">{{ ((insight.expanded) ? ('< ' + lang['less_link']) : ('> ' + lang['more_link']) ) }}</a>
     </div>
 
-</div>
+</div>-->
