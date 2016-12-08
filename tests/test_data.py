@@ -195,8 +195,8 @@ def test_set_period_vals(entity_data, backup):
 
     entity_data.load_backup(backup)
     expected = 10
-    entity_data.set_period_val("Sales", "annual", ("2012","2013"),10)
-    actual = entity_data._periods_series[("Sales", "annual")][("2012","2013")]
+    entity_data.set_period_val("Sales", "annual", ("2012", "2013"), 10)
+    actual = entity_data._periods_series[("Sales", "annual")][("2012", "2013")]
     assert actual == expected
 
 
@@ -256,7 +256,7 @@ def test_is_exist(entity_data, backup):
     # Failed test
 
     expected = True
-    actual = entity_data.is_exist("Sales", "annual", DataType.scalar)
+    actual = entity_data.is_exist("Tax", "annual", DataType.scalar)
     assert expected == actual
 
     expected = False
@@ -391,7 +391,7 @@ def test_var_names(entity_data, backup):
 
     entity_data.load_backup(backup)
     actual = entity_data.var_names
-    expected = ['Sales', 'Income', 'Costs']
+    expected = ['Sales','Popularity', 'Income', 'Costs']
 
     assert sorted(list(expected)) == sorted(list(actual))
 
