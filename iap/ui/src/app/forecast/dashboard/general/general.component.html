@@ -46,34 +46,26 @@
                         </a>
                     </div>
 
+                    <!--? TODO remove hardoded ids -->
+
                     <div
                             *ngFor="let tab of fTabsAbsData; let i = index"
                             class="c-diag-tabs__item"
-                            [class.c-diag-tabs__item--sales]="tab.variable.short_name == 'Value'"
-                            [class.c-diag-tabs__item--volume]="tab.variable.short_name == 'EQ Volume'"
-                            [class.c-diag-tabs__item--price]="tab.variable.short_name == 'Price per EQ'"
+                            [class.c-diag-tabs__item--sales]="tab.variable.id == 'value'"
+                            [class.c-diag-tabs__item--volume]="tab.variable.id == 'eq_volume'"
+                            [class.c-diag-tabs__item--price]="tab.variable.id == 'eq_price'"
                     >
                         <a
                                 class="c-color-tab"
                                 (click)="onClickForecastTab(tab.variable.id)"
                                 [class.c-color-tab--active]="dm.state.get('forecast_active_tab') == tab.variable.id"
-                                [class.c-color-tab--orange]="tab.variable.short_name == 'Value'"
-                                [class.c-color-tab--red]="tab.variable.short_name == 'EQ Volume'"
-                                [class.c-color-tab--blue]="tab.variable.short_name == 'Price per EQ'"
+                                [class.c-color-tab--orange]="tab.variable.id == 'value'"
+                                [class.c-color-tab--red]="tab.variable.id == 'eq_volume'"
+                                [class.c-color-tab--blue]="tab.variable.id == 'eq_price'"
                         >
                             {{ tab.variable.full_name + ' - ' + tab.variable.metric }}
                         </a>
                     </div>
-
-                    <!--?<div class="c-diag-tabs__item c-diag-tabs__item--sales">
-                        <a class="c-color-tab c-color-tab--orange">Sales, $ MM</a>
-                    </div>
-                    <div class="c-diag-tabs__item c-diag-tabs__item--volume">
-                        <a class="c-color-tab c-color-tab--red">Volume - EQ, Thousands</a>
-                    </div>
-                    <div class="c-diag-tabs__item c-diag-tabs__item--price">
-                        <a class="c-color-tab c-color-tab--blue">Price - per EQ, $</a>
-                    </div>-->
                 </div>
             </div>
 
@@ -309,27 +301,67 @@
 
     <!----------------------------------------------------------------------->
 
+    <!--?cc block start-->
+    <div class="c-parts__item c-parts__item--decomposition">
+        <div class="c-diag">
+            <!--item top pane-->
+            <div class="c-diag__pane">
+                <div class="c-diag__title">
+                    <h3>{{ dm.config['decomposition_block'] }}</h3>
+                </div>
+                <div class="c-diag__date">
+                    <time-selector
+                        *ngIf="dPeriodSelectorData"
+                        [data]="dPeriodSelectorData['data']"
+                        [selected]="dPeriodSelectorData['selected']"
+                        [static]="dPeriodSelectorData['static']"
+                        (changed)="onChangedDecompPeriod($event)"
+                    ></time-selector>
+                </div>
+                <div class="c-diag__changer c-diag__changer--decomp">
+                    <buttons-group
+                        *ngIf="dTypesSwitcherData"
+                        [data]="dTypesSwitcherData"
+                        (changed)="onChangedDecompType($event)"
+                    ></buttons-group>
+                </div>
+                <div class="c-diag__button">
+                    <button class="c-button c-button--expand"> {{ dm.config['explore'] }} </button>
+                </div>
+            </div>
+
+           <div class="c-diag__graph">
+               <div class="c-graph">
+                   <div class="c-graph__item c-graph__item--all c-graph__item--active" >
+                       <div class="c-graph__diag"><img class="h-test-img" src="/static/assets/images/common/ic-high-charts.svg"></div>
+                   </div>
+               </div>
+           </div>
+        </div>
+    </div>
+    <!--?cc block end-->
+
     <div class="decomposition-section">
 
-        <div class="header">
-            {{ dm.config['decomposition_block'] }}
+       <!--? <div class="header">
+           --><!--? {{ dm.config['decomposition_block'] }}--><!--?
 
-            <time-selector
+            --><!--?<time-selector
                 *ngIf="dPeriodSelectorData"
                 [data]="dPeriodSelectorData['data']"
                 [selected]="dPeriodSelectorData['selected']"
                 [static]="dPeriodSelectorData['static']"
                 (changed)="onChangedDecompPeriod($event)"
-            ></time-selector>
+            ></time-selector>--><!--?
 
-            <buttons-group
+            --><!--?<buttons-group
                 *ngIf="dTypesSwitcherData"
                 [data]="dTypesSwitcherData"
                 (changed)="onChangedDecompType($event)"
-            ></buttons-group>
+            ></buttons-group>--><!--?
 
-            <button>{{ dm.config['explore'] }}</button>
-        </div>
+            --><!--?<button>{{ dm.config['explore'] }}</button>--><!--?
+        </div>-->
 
         <div class="content" *ngIf="dTypeData">
             <div>

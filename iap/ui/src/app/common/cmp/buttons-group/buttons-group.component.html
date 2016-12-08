@@ -4,7 +4,12 @@
     <div
             *ngFor="let button of data; let i = index"
             (click)="onButtonClick(i)"
-            class="c-changer__item {{ button['name'] == 'Value' ? 'c-changer__item--abs' : 'c-changer__item--growth'}}"
+            class="c-changer__item"
+            [class.c-changer__item--abs]= "button['name'] == 'Value'"
+            [class.c-changer__item--growth]= "button['name'] == 'Growth rate'"
+            [class.c-changer__item--value]= "button['name'] == 'value'"
+            [class.c-changer__item--volume]= "button['name'] == 'volume'"
+            [class.c-changer__item--price]= "button['name'] == 'price'"
             [class.c-changer__item--active]="i == selected"
     ></div>
 </div>
