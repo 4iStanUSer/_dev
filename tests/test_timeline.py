@@ -81,7 +81,7 @@ def timeline_manager(data):
     return _time_line_manager
 
 
-def test_load_backup(backup):
+def test_load_backup(backup, correct_timeseries):
     """Test for load backup method
 
     :param:
@@ -100,19 +100,18 @@ def test_load_backup(backup):
     assert [i['name'] for i in expected].sort() == \
            [i['name'] for i in actual].sort()
 
-    assert sorted([(i['name'], len(i['timeline'])) for i in expected], key=lambda l: l[0]) == \
-           sorted([(i['name'], len(i['timeline'])) for i in actual], key=lambda l: l[0])
+    assert sorted([(i['name'], len(i['timeline'])) for i in expected], key=lambda l: l[1]) == \
+           sorted([(i['name'], len(i['timeline'])) for i in actual], key=lambda l: l[1])
 
     actual = _time_line_manager._timescales
     expected = correct_timeseries
-
     assert len(actual) == len(expected)
 
     assert [i['name'] for i in expected].sort() == \
            [i['name'] for i in actual].sort()
 
-    assert sorted([(i['name'], len(i['timeline'])) for i in expected], key = lambda l: l[0]) == \
-           sorted([(i['name'], len(i['timeline'])) for i in actual], key = lambda l: l[0])
+    assert sorted([(i['name'], len(i['timeline'])) for i in expected], key = lambda l: l[1]) == \
+           sorted([(i['name'], len(i['timeline'])) for i in actual], key = lambda l: l[1])
 
 
 def test_load_backup_raise_exception_value_error():

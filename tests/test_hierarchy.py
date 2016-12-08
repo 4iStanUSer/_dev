@@ -1,4 +1,3 @@
-#load modules
 from iap.forecasting.workbench.container.entities_hierarchy import Node
 from iap.common.helper_lib import Meta
 import pytest
@@ -45,9 +44,9 @@ def graph():
 
 
 #encoded list of pathes
-encoded_path = {}
+ENCODED_PATH = {}
 #list of nodes
-list_of_nodes = {}
+LIST_OF_NODES = {}
 
 
 def setup_function(function):
@@ -58,7 +57,7 @@ def setup_function(function):
 
     '''
     list_of_nodes = {}
-    encoded_path.clear()
+    ENCODED_PATH.clear()
 
 
 def teardown_function(function):
@@ -68,8 +67,8 @@ def teardown_function(function):
     :return:
 
     '''
-    list_of_nodes.clear()
-    encoded_path.clear()
+    LIST_OF_NODES.clear()
+    ENCODED_PATH.clear()
 
 
 def encode_list_of_pathes_into_node(root_node, list_of_pathes, description):
@@ -88,10 +87,38 @@ def encode_list_of_pathes_into_node(root_node, list_of_pathes, description):
         metas = []
         for node_name in path:
             metas.append(Meta(description[node_name][0], description[node_name][1]))
-        new_node = root_node.add_node_by_path(path, metas,depth,new_nodes)
+        new_node = root_node.add_node_by_path(path, metas, depth, new_nodes)
         new_node.id = list_of_pathes.index(path)
-        list_of_nodes[new_node.id] = new_node
+        LIST_OF_NODES[new_node.id] = new_node
     return list_of_pathes
+
+
+def encode(root_node, path):
+    """Inteface for de encode_list_of_pathes_into_node
+
+    :param root_node:
+    :param path:
+    :return:
+
+    """
+
+    LIST_OF_NODES = {}
+    encode_list_of_pathes_into_node(root_node, list_of_pathes, description)
+    return LIST_OF_NODES
+
+
+def decode(root_node, path):
+    """Inteface for de decode_node_into_list_of_pathes
+
+    :param root_node:
+    :param path:
+    :return:
+
+    """
+
+    ENCODED_PATH = {}
+    decode_node_into_list_of_pathes(root_node, path)
+    return ENCODED_PATH
 
 
 def decode_node_into_list_of_pathes(root_node, path):
@@ -106,8 +133,22 @@ def decode_node_into_list_of_pathes(root_node, path):
     for node in root_node.children:
         new_path = path[:]
         new_path.append(node.name)
-        encoded_path[node.id] = new_path
+        ENCODED_PATH[node.id] = new_path
         decode_node_into_list_of_pathes(node, new_path)
+
+
+def decode(root_node, path):
+    """Inteface for de decode_node_into_list_of_pathes
+
+    :param root_node:
+    :param path:
+    :return:
+
+    """
+
+    ENCODED_PATH = {}
+    decode_node_into_list_of_pathes(root_node, path)
+    return ENCODED_PATH
 
 
 def test_preparation(description, list_of_pathes):
@@ -127,7 +168,7 @@ def test_preparation(description, list_of_pathes):
     encode_list_of_pathes_into_node(root_node, list_of_pathes, description)
     decode_node_into_list_of_pathes(root_node, path=[])
 
-    assert list_of_pathes == [val for val in encoded_path.values()]
+    assert list_of_pathes == [val for val in ENCODED_PATH.values()]
 
 
 def test_add_child(list_of_pathes, description):
@@ -147,13 +188,13 @@ def test_add_child(list_of_pathes, description):
         tree = list_of_pathes[:-1]
         root_node = Node('root', (None, None))
         encode_list_of_pathes_into_node(root_node, list_of_pathes[:-1], description)
-        last_node = list_of_nodes[depth]
+        last_node = LIST_OF_NODES[depth]
         last_node.add_child(name, Meta(description[name][0], description[name][1]))
         last_node.children[-1].id = depth+1
         return root_node
 
     decode_node_into_list_of_pathes(add_child("Number"), path=[])
-    actual = [val for val in encoded_path.values()]
+    actual = [val for val in ENCODED_PATH.values()]
     expected = list_of_pathes
     assert actual.sort() == expected.sort()
 
@@ -176,7 +217,7 @@ def test_add_child_raise_exception_value_error(list_of_pathes, description):
         tree = list_of_pathes[:-1]
         root_node = Node('root', (None, None))
         encode_list_of_pathes_into_node(root_node, list_of_pathes[:-1], description)
-        last_node = list_of_nodes[depth]
+        last_node = LIST_OF_NODES[depth]
         last_node.add_child(name, Meta(description[name][0], description[name][1]))
         last_node.children[-1].id = depth+1
         return root_node
@@ -204,7 +245,7 @@ def test_add_child_raise_exception_type_error(list_of_pathes, description):
         tree = list_of_pathes[:-1]
         root_node = Node('root', (None, None))
         encode_list_of_pathes_into_node(root_node, list_of_pathes[:-1], description)
-        last_node = list_of_nodes[depth]
+        last_node = LIST_OF_NODES[depth]
         last_node.add_child(name, Meta(description[name][0], description[name][1]))
         last_node.children[-1].id = depth+1
         return root_node
@@ -310,7 +351,7 @@ def test_get_children_by_meta(list_of_pathes, description):
     '''
 
     def get_children_by_meta(meta, nodes_ids):
-        root_node = Node('root', (None,None))
+        root_node = Node('root', (None, None))
         encode_list_of_pathes_into_node(root_node, list_of_pathes, description)
         node_ids = []
         meta_filter = Meta(meta[0], meta[1])
@@ -344,7 +385,6 @@ def test_get_children_by_meta_exception_value_error(list_of_pathes, description)
         node_ids = []
         meta_filter = Meta(meta[0], meta[1])
         output_node = root_node.get_children_by_meta(meta_filter, node_ids)
-        print(list_of_pathes)
         return node_ids
 
     with pytest.raises(Exception):
@@ -390,7 +430,7 @@ def test_parent_by_meta(list_of_pathes, description):
         meta_filter = Meta(meta_filter[0], meta_filter[1])
         root_node = Node('root', (None, None))
         encode_list_of_pathes_into_node(root_node, list_of_pathes, description)
-        default_node = list_of_nodes[id]
+        default_node = LIST_OF_NODES[id]
         output_node = default_node.get_parent_by_meta(meta_filter)
         return output_node
 
@@ -418,7 +458,7 @@ def test_parent_by_meta_raise_exception_value_error(list_of_pathes, description)
         meta_filter = Meta(meta_filter[0], meta_filter[1])
         root_node = Node('root', (None, None))
         encode_list_of_pathes_into_node(root_node, list_of_pathes, description)
-        default_node = list_of_nodes[id]
+        default_node = LIST_OF_NODES[id]
         output_node = default_node.get_parent_by_meta(meta_filter)
         return output_node
 
@@ -441,7 +481,7 @@ def test_parent_by_meta_raise_exception_type_error(list_of_pathes, description):
         meta_filter = Meta(meta_filter[0], meta_filter[1])
         root_node = Node('root', (None, None))
         encode_list_of_pathes_into_node(root_node, list_of_pathes, description)
-        default_node = list_of_nodes[id]
+        default_node = LIST_OF_NODES[id]
         output_node = default_node.get_parent_by_meta(meta_filter)
         return output_node
 
@@ -482,7 +522,7 @@ def test_rename_raise_exception_value_error():
     '''
 
     def rename(new_name):
-        root_node = Node('root', (None,None))
+        root_node = Node('root', (None, None))
         root_node.rename(new_name)
         return root_node.name
 
@@ -506,7 +546,7 @@ def test_get_path(list_of_pathes, description):
         path = []
         metas = []
         encode_list_of_pathes_into_node(root_node, list_of_pathes, description)
-        default_node = list_of_nodes[id]
+        default_node = LIST_OF_NODES[id]
         default_node.get_path(path, metas)
         return path
 
@@ -523,7 +563,7 @@ def test_get_path(list_of_pathes, description):
     assert actual == expected
 
     actual = get_path(2)
-    expected= ["Ukraine", "Odessa"]
+    expected = ["Ukraine", "Odessa"]
     assert actual == expected
 
 
@@ -543,7 +583,7 @@ def test_get_path_raise_exception_value_error(list_of_pathes, description):
         path = []
         metas = []
         encode_list_of_pathes_into_node(root_node, list_of_pathes, description)
-        default_node = list_of_nodes[id]
+        default_node = LIST_OF_NODES[id]
         default_node.get_path(path, metas)
         return path
 
@@ -559,7 +599,6 @@ def test_get_path_raise_exception_type_error(list_of_pathes, description):
     Expected path equality
 
     :return:
-
     '''
 
     def get_path(id):
@@ -567,9 +606,12 @@ def test_get_path_raise_exception_type_error(list_of_pathes, description):
         path = []
         metas = []
         encode_list_of_pathes_into_node(root_node, list_of_pathes, description)
-        default_node = list_of_nodes[id]
+        default_node = LIST_OF_NODES[id]
         default_node.get_path(path, metas)
         return path
 
     with pytest.raises(Exception):
         get_path("Test")
+
+
+
