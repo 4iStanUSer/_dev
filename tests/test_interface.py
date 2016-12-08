@@ -1,7 +1,7 @@
 import pytest
 from conf_test import interface_backup as backup
-from iap.forecasting.workbench.container.interface import Container
-from iap.common.helper_lib import Meta
+from iap.forecasting.workbench.container.cont_interface import Container
+from iap.common.helper import Meta
 
 @pytest.fixture
 def container():
@@ -137,10 +137,12 @@ def test_top_entities(container):
     top_entities = container.top_entities
     expected = ["Ukraine"]
     actual = [entity.name for entity in top_entities]
+    assert  expected == actual
 
     top_entities = container.top_entities
     expected = ["Ukraine","Kiev"]
     actual = [entity.name for entity in top_entities]
+    assert expected == actual
 
 
 def test_container_get_entity_by_meta(container):

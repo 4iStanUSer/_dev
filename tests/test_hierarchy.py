@@ -1,5 +1,5 @@
 from iap.forecasting.workbench.container.entities_hierarchy import Node
-from iap.common.helper_lib import Meta
+from iap.common.helper import Meta
 import pytest
 
 
@@ -7,14 +7,19 @@ import json
 input_data = open('json/hierarchy.json').read()
 data = json.loads(input_data)
 
+ENCODED_PATH = {}
+
+LIST_OF_NODES = {}
+
+
 
 @pytest.fixture
 def description():
-    '''Get description data
+    """Get description data
 
     :return:
 
-    '''
+    """
     description = data['description']
     # meta information about each node
     return description
@@ -22,11 +27,11 @@ def description():
 
 @pytest.fixture
 def list_of_pathes():
-    '''Get pathes data
+    """Get pathes data
 
     :return:
 
-    '''
+    """
     l = []
     for i in data['path']:
         l.insert(i['id'], i['node'])
@@ -35,18 +40,12 @@ def list_of_pathes():
 
 @pytest.fixture
 def graph():
-    '''Get graph data
+    """Get graph data
 
     :return:
 
-    '''
+    """
     return data['graph']
-
-
-#encoded list of pathes
-ENCODED_PATH = {}
-#list of nodes
-LIST_OF_NODES = {}
 
 
 def setup_function(function):
@@ -72,14 +71,14 @@ def teardown_function(function):
 
 
 def encode_list_of_pathes_into_node(root_node, list_of_pathes, description):
-    '''Function serialise json list of pathes into Node object root_node
+    """Function serialise json list of pathes into Node object root_node
 
     :param root_node: root node
     :param list_of_pathes: list of pathes in graph
     :param description: meta data of each node
     :return:
 
-    '''
+    """
 
     for path in list_of_pathes:
         new_nodes = []
@@ -200,7 +199,7 @@ def test_add_child(list_of_pathes, description):
 
 
 def test_add_child_raise_exception_value_error(list_of_pathes, description):
-    '''Test for add_child(self,name,meta)
+    """Test for add_child(self,name,meta)
     Check raising exception on wrong value of input
 
     Input cutted tree - without last element
@@ -210,7 +209,7 @@ def test_add_child_raise_exception_value_error(list_of_pathes, description):
     :param description:
     :return:
 
-    '''
+    """
 
     def add_child(name):
         depth = len(list_of_pathes)-2
@@ -227,7 +226,7 @@ def test_add_child_raise_exception_value_error(list_of_pathes, description):
 
 
 def test_add_child_raise_exception_type_error(list_of_pathes, description):
-    '''Test for add_child(self,name,meta)
+    """Test for add_child(self,name,meta)
     Check raising exception on wrong type of input
 
     Input cutted tree - without last element
@@ -238,7 +237,7 @@ def test_add_child_raise_exception_type_error(list_of_pathes, description):
     :param description:
     :return:
 
-    '''
+    """
 
     def add_child(name):
         depth = len(list_of_pathes)-2
@@ -255,8 +254,7 @@ def test_add_child_raise_exception_type_error(list_of_pathes, description):
 
 
 def test_get_node_by_path(list_of_pathes, description):
-
-    '''Test for  method get_node_by_path(self,path)
+    """Test for  method get_node_by_path(self,path)
 
     Input: path
     Output: node's name
@@ -266,7 +264,7 @@ def test_get_node_by_path(list_of_pathes, description):
     :param description:
     :return:
 
-    '''
+    """
 
     def get_node_by_path(path):
         root_node = Node('root', (None, None))
@@ -292,7 +290,7 @@ def test_get_node_by_path(list_of_pathes, description):
 
 
 def test_get_node_by_path_raise_exception_value_error(list_of_pathes, description):
-    '''Test for  method get_node_by_path(self,path)
+    """Test for  method get_node_by_path(self,path)
     Check raising exception on wrong value of input
 
     Input: path
@@ -303,7 +301,7 @@ def test_get_node_by_path_raise_exception_value_error(list_of_pathes, descriptio
     :param description:
     :return:
 
-    '''
+    """
 
     def get_node_by_path(path):
         root_node = Node('root', (None, None))
@@ -316,7 +314,7 @@ def test_get_node_by_path_raise_exception_value_error(list_of_pathes, descriptio
 
 
 def test_get_node_by_path_raise_exception_type_error(list_of_pathes, description):
-    '''Test for  method get_node_by_path(self,path)
+    """Test for  method get_node_by_path(self,path)
     Check raising exception on wrong type of input
 
     Input: path
@@ -327,7 +325,7 @@ def test_get_node_by_path_raise_exception_type_error(list_of_pathes, description
     :param description:
     :return:
 
-    '''
+    """
 
     def get_node_by_path(path):
         root_node = Node('root', (None, None))
@@ -340,7 +338,7 @@ def test_get_node_by_path_raise_exception_type_error(list_of_pathes, description
 
 
 def test_get_children_by_meta(list_of_pathes, description):
-    '''Test for method get_children_by_meta(self,meta_filter,node_ids)
+    """Test for method get_children_by_meta(self,meta_filter,node_ids)
 
     Input: meta filter
     Output: meta data of founded node by input filter
@@ -348,7 +346,7 @@ def test_get_children_by_meta(list_of_pathes, description):
 
     :return:
 
-    '''
+    """
 
     def get_children_by_meta(meta, nodes_ids):
         root_node = Node('root', (None, None))
@@ -368,7 +366,7 @@ def test_get_children_by_meta(list_of_pathes, description):
 
 
 def test_get_children_by_meta_exception_value_error(list_of_pathes, description):
-    '''Test for method get_children_by_meta(self,meta_filter,node_ids)
+    """Test for method get_children_by_meta(self,meta_filter,node_ids)
     Check raising exception on wrong value of input
 
     Input: meta filter
@@ -377,7 +375,7 @@ def test_get_children_by_meta_exception_value_error(list_of_pathes, description)
 
     :return:
 
-    '''
+    """
 
     def get_children_by_meta(meta, nodes_ids):
         root_node = Node('root', (None,None))
@@ -392,7 +390,7 @@ def test_get_children_by_meta_exception_value_error(list_of_pathes, description)
 
 
 def test_get_children_by_meta_raise_exception_type_error(list_of_pathes, description):
-    '''Test for method get_children_by_meta(self,meta_filter,node_ids)
+    """Test for method get_children_by_meta(self,meta_filter,node_ids)
     Check raising exception on wrong type of input
 
     Input: meta filter
@@ -401,7 +399,7 @@ def test_get_children_by_meta_raise_exception_type_error(list_of_pathes, descrip
 
     :return:
 
-    '''
+    """
 
     def get_children_by_meta(meta, nodes_ids):
         root_node = Node('root', (None,None))
@@ -417,14 +415,14 @@ def test_get_children_by_meta_raise_exception_type_error(list_of_pathes, descrip
 
 
 def test_parent_by_meta(list_of_pathes, description):
-    '''Test for method get_parent_by_meta(self,meta_filter)
+    """Test for method get_parent_by_meta(self,meta_filter)
 
     Input: meta data filters, node id
     Output: list of meta data of getted parent node
 
     :return:
 
-    '''
+    """
 
     def get_parent_by_meta(meta_filter, id):
         meta_filter = Meta(meta_filter[0], meta_filter[1])
@@ -444,7 +442,7 @@ def test_parent_by_meta(list_of_pathes, description):
 
 
 def test_parent_by_meta_raise_exception_value_error(list_of_pathes, description):
-    '''Test for method get_parent_by_meta(self,meta_filter)
+    """Test for method get_parent_by_meta(self,meta_filter)
     Check raising exception on wrong value of input
 
     Input: meta data filters, node id
@@ -452,7 +450,7 @@ def test_parent_by_meta_raise_exception_value_error(list_of_pathes, description)
 
     :return:
 
-    '''
+    """
 
     def get_parent_by_meta(meta_filter, id):
         meta_filter = Meta(meta_filter[0], meta_filter[1])
@@ -467,7 +465,7 @@ def test_parent_by_meta_raise_exception_value_error(list_of_pathes, description)
 
 
 def test_parent_by_meta_raise_exception_type_error(list_of_pathes, description):
-    '''Test for method get_parent_by_meta(self,meta_filter)
+    """Test for method get_parent_by_meta(self,meta_filter)
     Check raising exception on wrong type of input
 
     Input: meta data filters, node id
@@ -475,7 +473,7 @@ def test_parent_by_meta_raise_exception_type_error(list_of_pathes, description):
 
     :return:
 
-    '''
+    """
 
     def get_parent_by_meta(meta_filter, id):
         meta_filter = Meta(meta_filter[0], meta_filter[1])
@@ -490,7 +488,7 @@ def test_parent_by_meta_raise_exception_type_error(list_of_pathes, description):
 
 
 def test_rename():
-    '''Test for rename(self,new_name) method
+    """Test for rename(self,new_name) method
 
     Input: new_name
     Output: node's new name
@@ -498,7 +496,7 @@ def test_rename():
 
     :return:
 
-    '''
+    """
 
     def rename(new_name):
         root_node = Node('root', (None, None))
@@ -511,7 +509,7 @@ def test_rename():
 
 
 def test_rename_raise_exception_value_error():
-    '''Test for rename(self,new_name) method
+    """Test for rename(self,new_name) method
 
     Input: new_name
     Output: node's new name
@@ -519,7 +517,7 @@ def test_rename_raise_exception_value_error():
 
     :return:
 
-    '''
+    """
 
     def rename(new_name):
         root_node = Node('root', (None, None))
@@ -531,7 +529,7 @@ def test_rename_raise_exception_value_error():
 
 
 def test_get_path(list_of_pathes, description):
-    '''Test for get_path(self,node) method
+    """Test for get_path(self,node) method
 
     Input node id
     Output path of node
@@ -539,7 +537,7 @@ def test_get_path(list_of_pathes, description):
 
     :return:
 
-    '''
+    """
 
     def get_path(id):
         root_node = Node('root', (None, None))
@@ -568,7 +566,7 @@ def test_get_path(list_of_pathes, description):
 
 
 def test_get_path_raise_exception_value_error(list_of_pathes, description):
-    '''Test for get_path(self,node) method
+    """Test for get_path(self,node) method
 
     Input node id
     Output path of node
@@ -576,7 +574,7 @@ def test_get_path_raise_exception_value_error(list_of_pathes, description):
 
     :return:
 
-    '''
+    """
 
     def get_path(id):
         root_node = Node('root', (None, None))
@@ -592,14 +590,14 @@ def test_get_path_raise_exception_value_error(list_of_pathes, description):
 
 
 def test_get_path_raise_exception_type_error(list_of_pathes, description):
-    '''Test for get_path(self,node) method
+    """Test for get_path(self,node) method
 
     Input node id
     Output path of node
     Expected path equality
 
     :return:
-    '''
+    """
 
     def get_path(id):
         root_node = Node('root', (None, None))
