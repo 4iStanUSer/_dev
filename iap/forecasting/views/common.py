@@ -11,23 +11,6 @@ def index_view(req):
                               request=req)
 
 
-def get_options_for_entity_selector(req):
-    # Get parameters from request.
-    try:
-        user_id = req.user
-        query = req.json_body['query']
-    except KeyError:
-        msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
-        return send_error_response(msg)
-    try:
-        wb = rt.get_wb(user_id)
-        options, entities = dimensions.search_by_query(wb.search_index, query)
-        return send_success_response(options)
-    except Exception as e:
-        msg = ErrorManager.get_error_message(e)
-        return send_error_response(msg)
-
-
 def get_entity_selectors_config(req):
     try:
         user_id = req.user
@@ -40,6 +23,45 @@ def get_entity_selectors_config(req):
         selectors_config = \
             dimensions.get_selectors_config(wb.data_config, lang)
         return send_success_response(selectors_config)
+    except Exception as e:
+        msg = ErrorManager.get_error_message(e)
+        return send_error_response(msg)
+
+
+def get_options_for_entity_selector(req):
+    # Get parameters from request.
+    try:
+        user_id = req.user
+        query = req.json_body['query']
+    except KeyError:
+        msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
+        return send_error_response(msg)
+    try:
+        wb = rt.get_wb(user_id)
+        if query is None:
+            options = \
+                dimensions.get_options_by_ents(wb.search_index, wb.selection)
+        else:
+            options, ents = dimensions.search_by_query(wb.search_index, query)
+        return send_success_response(options)
+    except Exception as e:
+        msg = ErrorManager.get_error_message(e)
+        return send_error_response(msg)
+
+
+def set_entity_selection(req):
+    # Get parameters from request.
+    try:
+        user_id = req.user
+        query = req.json_body['query']
+    except KeyError:
+        msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
+        return send_error_response(msg)
+    try:
+        wb = rt.get_wb(user_id)
+        options, ents = dimensions.search_by_query(wb.search_index, query)
+        wb.selection = ents
+        return send_success_response()
     except Exception as e:
         msg = ErrorManager.get_error_message(e)
         return send_error_response(msg)

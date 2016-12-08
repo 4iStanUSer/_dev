@@ -9,7 +9,7 @@ def get_selectors_config(config, lang):
             selectors=dict(Geography=
                 dict(
                     multiple=True,
-                    type='region',
+                    type='flat',
                     icon='',
                     disabled=False,
                     name='Country',
@@ -51,17 +51,28 @@ def get_selectors_config(config, lang):
         )
 
 
+def get_empty_query(search_index):
+    order = search_index['order']
+    return {x: [] for x in order}
+
+
 def build_search_index(container, dim_names):
-    search_index = dict()
+    direct_index = dict()
+    points = []
     for ent in container.top_entities:
         point = dict(node_id=None, coords={x: [] for x in dim_names})
-        _add_entity_to_index(ent, point, search_index, dim_names)
-    return search_index
+        _add_entity_to_index(ent, point, direct_index, dim_names, points)
+
+    reverse_index = {x['node_id']: x['coords'] for x in points}
+    return direct_index, reverse_index
 
 
-def _add_entity_to_index(entity, curr_point, search_index, dim_names):
+def _add_entity_to_index(entity, curr_point, search_index, dim_names, points):
     curr_point['coords'][entity.meta.dimension].append(entity.name)
     curr_point['node_id'] = entity.id
+
+    points.append(curr_point)
+
     sub_index = search_index
     for i in range(len(dim_names)):
         dim_path = curr_point['coords'][dim_names[i]]
@@ -78,30 +89,44 @@ def _add_entity_to_index(entity, curr_point, search_index, dim_names):
             sub_index[key] = curr_point['node_id']
     for child in entity.children:
         new_point = copy.copy(curr_point)
-        _add_entity_to_index(child, new_point, search_index, dim_names)
+        _add_entity_to_index(child, new_point, search_index, dim_names, points)
+
+
+def get_options_by_ents(search_index, entities_ids):
+    reverse_index = search_index['reverse']
+    # Filter entities by list from input.
+    ents_coords = [coords for node_id, coords in reverse_index.items()
+                   if node_id in entities_ids]
+    # Create entity based on coords.
+    query = get_empty_query(search_index)
+    for ent in ents_coords:
+        for dim, coords in ent.items():
+            merged_coords = JOIN_SYMBOL.join(coords)
+            if merged_coords not in query[dim]:
+                query[dim].append(merged_coords)
+    opts, ents = search_by_query(search_index, query)
+    return opts
 
 
 def search_by_query(search_index, query):
     order = search_index['order']
-    search_indexes = [search_index['index']]
-
+    search_indexes = [search_index['direct']]
     options = dict()
     entities_ids = []
-
-    if query is None:
-        query = dict(zip(order, [[]]*len(order)))
-    query = _split_ids(query)
-
+    query_internal = _transform(query)
     for i, dim_id in enumerate(order):
-        dimension_selection = query.get(dim_id)
-        if dimension_selection is None:
-            raise Exception
+        # Collect available options.
+        keys = []
+        for item in search_indexes:
+            keys.extend(item.keys())
+        # Get current selection.
+        dimension_selection = query_internal.get(dim_id)
+        # Verify current selection.
+        # If selection is empty or not valid set default selection.
+        dimension_selection = [x for x in dimension_selection if x in keys]
         if len(dimension_selection) == 0:
-                keys = []
-                for item in search_indexes:
-                    keys.extend(item.keys())
-                dimension_selection = [keys[0]]
-                options[dim_id] = _fill_options(keys, keys[0])
+            dimension_selection = [sorted(keys)[0]]
+        options[dim_id] = _fill_options(keys, dimension_selection)
         next_iter_indexes = []
         for selected in dimension_selection:
             for curr_search_index in search_indexes:
@@ -122,8 +147,11 @@ def search_by_query(search_index, query):
     return options, entities_ids
 
 
-def _fill_options(keys_list, selected):
-    options = dict(data=[], selected=[JOIN_SYMBOL.join(selected)])
+def _fill_options(keys_list, selected_items):
+    options = dict(
+        data=[],
+        selected=[JOIN_SYMBOL.join(x) for x in selected_items]
+    )
     for item in keys_list:
         if len(item) == 0:
             continue
@@ -140,10 +168,9 @@ def _fill_options(keys_list, selected):
     return options
 
 
-def _split_ids(query):
-    for dim_name in query.keys():
-        for j in range(len(query[dim_name])):
-            if query[dim_name][j] is not None:
-                query[dim_name][j] = \
-                    tuple(query[dim_name][j].split(JOIN_SYMBOL))
-    return query
+def _transform(query):
+    tuppled_query = dict()
+    for dim_name, dim_selection in query.items():
+        tuppled_query[dim_name] = \
+            [tuple(x.split(JOIN_SYMBOL)) for x in dim_selection]
+    return tuppled_query

@@ -47,7 +47,7 @@ export class SelectorsComponent implements OnInit { //, OnChanges
     private data: SelectorsDataInput = null;
 
 
-    @Output() changed: EventEmitter<SelectorsChangedOutput> = new EventEmitter();
+    @Output() changed = new EventEmitter();
 
     private selectors: {
         [selector_key: string]: {
@@ -86,7 +86,20 @@ export class SelectorsComponent implements OnInit { //, OnChanges
                 query: query
             }
         }).subscribe((data) => {
+            console.log('received options');
             this.initData(data);
+        });
+    }
+
+    setData(query: { [selector_id: string]: Array<string>} = null) {
+        this.req.get({
+            url_id: 'forecast/set_entity_selection',
+            data: {
+                query: query
+            }
+        }).subscribe((data) => {
+            console.log('data sent');
+            this.changed.emit();
         });
     }
 
@@ -206,8 +219,7 @@ export class SelectorsComponent implements OnInit { //, OnChanges
         }
         if (changed) {
             console.log('-->SELECTORS changed', output);
-            this.getData(output);// TODO Test reselecting
-            this.changed.emit(output);
+            this.setData(output);// TODO Test reselecting
         }
     }
 

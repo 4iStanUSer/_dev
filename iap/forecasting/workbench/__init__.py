@@ -3,6 +3,7 @@ Describe package here.
 """
 
 import pickle
+import copy
 
 from .container import Container
 from .configuration import DataConfiguration
@@ -23,7 +24,8 @@ class Workbench:
         self.calc_kernel = CalculationKernel()
         self.access = Access()
         self.tool_config = {}
-        self.search_index = dict(order=None, index=None)
+        self.search_index = dict(order=None, direct=None, reverse=None)
+        self.selection = []
 
     def get_backup(self):
         container_backup = self.container.get_backup()
@@ -66,10 +68,17 @@ class Workbench:
     def _init_wb(self, user_access_rights):
         # Build search index.
         dim_names = self.data_config.get_property('dimensions')
-        search_index = \
+        direct_index, reverse_index = \
             dim_service.build_search_index(self.container, dim_names)
         self.search_index['order'] = dim_names
-        self.search_index['index'] = search_index
+        self.search_index['direct'] = direct_index
+        self.search_index['reverse'] = reverse_index
+        # Set selection by default.
+        empty_query = dim_service.get_empty_query(self.search_index)
+        opts, ents = \
+            dim_service.search_by_query(self.search_index, empty_query)
+        self.selection = ents
+
         # Init local access manager.
         #for item in user_access_rights:
         #    ent = self.container.get_entity_by_path(item['path'])

@@ -119,6 +119,12 @@ def forecast_routing(config):
                     route_name='forecast.get_options_for_entity_selector',
                     request_method='POST', renderer='json')
 
+    config.add_route('forecast.set_entity_selection',
+                     '/set_entity_selection')
+    config.add_view(f_common.set_entity_selection,
+                    route_name='forecast.set_entity_selection',
+                    request_method='POST', renderer='json')
+
     config.add_route('forecast.get_entity_selectors_config',
                      '/get_entity_selectors_config')
     config.add_view(f_common.get_entity_selectors_config,
