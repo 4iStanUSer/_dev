@@ -220,6 +220,8 @@ def test_get_all_period(entity_data, backup):
 
     expected = [('2012', '2013'), ('2013', '2014'), ('2015', '2016'), ('2016', '2017'), ('2017', '2018')]
     actual = entity_data.get_all_periods("Sales", "annual")
+    print(list(actual))
+    print(list(expected))
     assert sorted(list(expected), key=lambda l: l[0]) == \
            sorted(list(actual), key=lambda l: l[0])
 

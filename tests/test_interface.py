@@ -1,6 +1,4 @@
 import pytest
-import json
-
 from conf_test import interface_backup as backup
 from iap.forecasting.workbench.container.interface import Container
 from iap.common.helper_lib import Meta
@@ -21,8 +19,6 @@ def test_container_save(container):
     Return:
         (dict):backup :{'timeline': ,'container':}
 
-    :param container:
-    :param backup:
     :return:
 
     """
@@ -233,8 +229,6 @@ def test_add_entity(container):
         (string): path
         (list): list of metadata
 
-    :param path:
-    :param metas:
     :return:
 
     """
@@ -242,7 +236,7 @@ def test_add_entity(container):
     expected = ['Ukraine', 'Kiev', 'Delicios', 'Shop']
     expected_id = 6
     metas = [["Geo", "Country"], ["Geo", "Region"], ["Food", "Delicios"], ['Market', 'Small']]
-    actual = container.add_entity(['Ukraine', 'Kiev', 'Delicios',' Shop'], metas)
+    actual = container.add_entity(['Ukraine', 'Kiev', 'Delicios', 'Shop'], metas)
 
     assert actual.name == expected[-1]
     assert actual.id == expected_id
@@ -266,8 +260,7 @@ def test_add_entity_raise_exception_wrong_type(container):
         (string): path
         (list): list of metadata
 
-    :param path:
-    :param metas:
+
     :return:
 
     """
