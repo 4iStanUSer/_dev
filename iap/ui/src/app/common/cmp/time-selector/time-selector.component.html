@@ -1,4 +1,4 @@
-<div class="c-select c-select--date" (click)="setExpandedMode(true)">
+<div class="c-select c-select--date" *ngIf="!expandedMode" (click)="setExpandedMode(true)">
     <span *ngIf="selectedPoints">
         (
         <span *ngIf="selectedPoints['start']">
@@ -16,8 +16,30 @@
         </span>
         )
     </span>
-    <!--?selctor end-->
-    <!--?pop-up start-->
+</div>
+
+<div class="c-select c-select--date" *ngIf="expandedMode">
+    <span *ngIf="selectedPoints">
+        (
+        <span *ngIf="selectedPoints['start']">
+            {{ selectedPoints['start'].getName() }}
+        </span>
+        -
+        <span *ngIf="selectedPoints['mid']">
+            {{ selectedPoints['mid'].getName() }}
+        </span>
+        <span *ngIf="selectedPoints['mid']">
+            -
+        </span>
+        <span *ngIf="selectedPoints['end']">
+            {{ selectedPoints['end'].getName() }}
+        </span>
+        )
+    </span>
+<!--?selctor end-->
+
+
+<!--?pop-up start-->
     <div class="c-popup c-popup--date" *ngIf="expandedMode">
         <div class="c-popup__changer" *ngIf="scales">
             <div class="c-triple-changer">
@@ -46,7 +68,7 @@
                            value="{{ preSelectedPoints[currScale]['mid'].getName() }}"
                            readonly
                     >
-                    <span>- </span>
+                    <span *ngIf="preSelectedPoints[currScale] && preSelectedPoints[currScale]['mid']">- </span>
                     <input class="c-range-slider__input"
                            *ngIf="preSelectedPoints[currScale] && preSelectedPoints[currScale]['end']"
                            value="{{ preSelectedPoints[currScale]['end'].getName() }}"
