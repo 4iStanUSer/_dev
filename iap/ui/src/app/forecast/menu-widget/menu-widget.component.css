@@ -1,7 +1,22 @@
-ul li {
-    display: inline-block;
-    margin: 0 15px;
+.c-menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  text-align: center;
 }
-ul li a.active {
-    font-weight: bold;
+.c-menu__item {
+  display: inline-block;
+  padding: 0 13px;
+}
+.c-menu__item a {
+  font-family: 'open_sansbold';
+  font-size: 14px;
+  font-style: normal;
+  font-stretch: normal;
+  color: #626970;
+  opacity: 0.5;
+  text-decoration: none;
+}
+.c-menu__item--active a {
+  opacity: 1;
 }

@@ -1,7 +1,40 @@
+<div class="l-app">
+    <div class="l-app__wrapper">
+<header class="l-app__header">
+  <div class="c-top-pane">
+    <div class="c-top-pane__item c-top-pane__item--domik">
+      <div class="c-domik">
+        <div class="c-domik__img"><img src="/static/assets/images/common/company-nike.svg" alt="Nike"></div>
+        <div class="c-domik__caption">
+          <div class="c-domik__company">Nike, Inc</div>
+          <div class="c-domik__name">Mike Nilson</div>
+        </div>
+      </div>
+    </div>
+    <div class="c-top-pane__item c-top-pane__item--nav">
+        <menu-widget
+    *ngIf="topMenuData"
+    [data]="topMenuData"></menu-widget>
+    </div>
+    <div class="c-top-pane__item c-top-pane__item--info">
+      <div class="c-info">
+        <div class="c-info__item c-info__item--notification"><a href="#">1 Notification</a></div>
+        <div class="c-info__item c-info__item--logout"><a (click)="onClickLogout()">Log Out</a></div>
+      </div>
+    </div>
+    <div class="c-top-pane__item c-top-pane__item--logo">
+      <div class="c-logo">
+        <div class="c-logo__img"><a href="../index.html"><img src="/static/assets/images/common/main-logo.svg" alt="Brandname"></a></div>
+        <div class="c-logo__text">Brandname    </div>
+      </div>
+    </div>
+  </div>
+</header>
+
 <!--TEMP-->
-<div>
+<!--?<div>
     <button (click)="onClickLogout()">Logout</button>
-</div>
+</div>-->
 
 <language-selector
     *ngIf="langsData"
@@ -9,8 +42,13 @@
     (changed)="languageChanged($event)"></language-selector>
 <!--/TEMP-->
 
-<menu-widget
+<!--?<menu-widget
     *ngIf="topMenuData"
-    [data]="topMenuData"></menu-widget>
+    [data]="topMenuData"></menu-widget>-->
 
-<router-outlet></router-outlet>
+        <router-outlet></router-outlet>
+
+</div>
+</div>
+
+

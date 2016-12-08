@@ -35,11 +35,11 @@ class InsightsFilters { // TODO Implement filters (VL)
 export class InsightsComponent implements OnInit, OnChanges {
 
     private lang: Object = {
-        'less_link': 'less',
-        'more_link': 'read more'
+        'less_link': 'Less',
+        'more_link': 'Read more'
     };
     private conf: Object = {
-        'preview_length': 130
+        'preview_length': 4
     };
 
     private storage: Array<InsightModel> = [];

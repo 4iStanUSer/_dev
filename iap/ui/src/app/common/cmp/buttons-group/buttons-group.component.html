@@ -1,7 +1,10 @@
-<div class="wrapper">
-
-    <div *ngFor="let button of data; let i = index" (click)="onButtonClick(i)" [class.active]="i == selected">
-        {{ button['name'] }}
-    </div>
-
+<div class="c-changer c-changer--main">
+    <!--? TODO replace button['name'] == 'Value' ? 'c-changer__item--abs' : 'c-changer__item--growth'
+            with the class name passed from backend -->
+    <div
+            *ngFor="let button of data; let i = index"
+            (click)="onButtonClick(i)"
+            class="c-changer__item {{ button['name'] == 'Value' ? 'c-changer__item--abs' : 'c-changer__item--growth'}}"
+            [class.c-changer__item--active]="i == selected"
+    ></div>
 </div>

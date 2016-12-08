@@ -1,15 +1,68 @@
-<div class="container-fluid dashboard-container">
+<section class="l-app__main">
+    <div class="l-workflow l-workflow--dashboards">
+        <div class="l-workflow__left">
+            <div class="l-dash-area">
+                <!--top pane-->
+                <div class="l-dash-area__top">
+                    <selectors></selectors>
+                    <div class="c-top-info">
+                        <div class="c-top-info__item">
+                          <div class="c-top-info__inner c-top-info__inner--location"><span>United States, Texas, Dallas</span></div>
+                        </div>
+                        <div class="c-top-info__item">
+                          <div class="c-top-info__inner c-top-info__inner--channel"><span>Channel1, Channel2, Categ</span></div>
+                        </div>
+                        <div class="c-top-info__item">
+                          <div class="c-top-info__inner c-top-info__inner--type"><span>Training pants, women’s s</span></div>
+                        </div>
+                        <div class="c-top-info__item">
+                          <div class="c-top-info__inner c-top-info__inner--brand"><span>Nike, Puma, New Balance</span></div>
+                        </div>
+                    </div>
+                </div>
+                <!--breadcrumbs-->
+                <div class="l-dash-area__breadcrumbs">
+                  <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><span>Dashboard</span></li>
+                  </ul>
+                </div>
+                <div class="l-dash-area__main">
+                    <div class="c-board">
+                        <!--left sidebar-->
+                        <div class="c-board__aside">
+                            <ul class="c-aside-tabs" *ngIf="dm.dataIsResolved">
+                                <li class="c-aside-tabs__item" routerLinkActive="c-aside-tabs__item--active">
+                                    <a routerLink="./general" routerLinkActive="active">{{ dm.config['dashboard_tab'] }}</a>
+                                </li>
+                                <li class="c-aside-tabs__item" routerLinkActive="c-aside-tabs__item--active">
+                                    <a routerLink="./driver-details" routerLinkActive="active">{{ dm.config['drivers_details_tab'] }}</a>
+                                </li>
+                                <li class="c-aside-tabs__item" routerLinkActive="c-aside-tabs__item--active">
+                                    <a routerLink="./driver-summary" routerLinkActive="active">{{ dm.config['drivers_summary_tab'] }}</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!--right part (chart area)-->
+                        <div class="c-board__diag">
+                            <router-outlet></router-outlet>
+                        </div>
+                    </div>
+                </div>
 
-    <selectors></selectors>
+            <!--?<ul class="navigation" *ngIf="dm.dataIsResolved">
+                <li><a routerLink="./general" routerLinkActive="active">{{ dm.config['dashboard_tab'] }}</a></li>
+                <li><a routerLink="./driver-details" routerLinkActive="active">{{ dm.config['drivers_details_tab'] }}</a></li>
+                <li><a routerLink="./driver-summary" routerLinkActive="active">{{ dm.config['drivers_summary_tab'] }}</a></li>
+            </ul>-->
 
-    <ul class="navigation" *ngIf="dm.dataIsResolved">
-        <li><a routerLink="./general" routerLinkActive="active">{{ dm.config['dashboard_tab'] }}</a></li>
-        <li><a routerLink="./driver-details" routerLinkActive="active">{{ dm.config['drivers_details_tab'] }}</a></li>
-        <li><a routerLink="./driver-summary" routerLinkActive="active">{{ dm.config['drivers_summary_tab'] }}</a></li>
-    </ul>
 
-    <router-outlet></router-outlet>
+            </div>
+        </div>
 
-    <insights [data]="dm.insights"></insights>
+        <div class="l-workflow__right">
+            <insights [data]="dm.insights"></insights>
+        </div>
 
-</div>
+    </div>
+</section>
