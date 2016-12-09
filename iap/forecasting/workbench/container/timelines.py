@@ -58,17 +58,19 @@ class TimeLineManager:
 
         '''
 
-        self._timescales = \
-            [dict(name=name, growth_lag=props['growth_lag'], timeline=[])
-             for name, props in ts_properties.items()]
+        for props in ts_properties:
+            self._timescales.append(dict(name= props['name'], growth_lag=props['growth_lag'], timeline=[]))
+
         for period_name, ts_borders in alias.items():
             self._period_alias[period_name] = dict(ts_borders)
         for point in top_ts_points:
             self._process_inp_node(point, None, 0)
 
+
     def _process_inp_node(self, inp_node, parent, depth):
-        '''Recursive function that process hierarchical structure of timescale point
-        add neccessary inforamtion to self._timescales
+        '''Recursive functmake
+        ion that process hierarchical structure of timescale point
+        add necessary information to self._timescales
         Args:
             (dict): point in timeseries
             (dict): parent point in timeseries
@@ -104,9 +106,9 @@ class TimeLineManager:
         :return:
 
         '''
-        print(self._timescales)
-        for index, ts in enumerate(self._timescales):
+        for ts in self._timescales:
             if ts['name'] == ts_name:
+                index = self._timescales.index(ts)
                 return ts, index
         raise ex.TlmNonExistentName(ts_name)
 

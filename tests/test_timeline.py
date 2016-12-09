@@ -2,6 +2,7 @@ import pytest
 import json
 import unittest
 from iap.forecasting.workbench.container.timelines import TimeLineManager
+from conf_test import  tree
 
 @pytest.fixture
 def data():
@@ -25,18 +26,6 @@ def correct_timeseries():
     return correct_timeseries
 
 @pytest.fixture
-def tree():
-    '''Load correct tree
-
-    :return:
-
-    '''
-    with open("json/timeline_manager/tree.json") as f:
-        _tree = json.load(f)
-    return _tree
-
-
-@pytest.fixture
 def backup(data, correct_timeseries):
     """Backup preparation
 
@@ -54,10 +43,11 @@ def backup(data, correct_timeseries):
     backup['timescales'] = []
 
     for period_name, ts_borders in alias.items():
-        backup['alias'][period_name] = dict(ts_properties)
-    for name, props in ts_properties.items():
+        backup['alias'][period_name] = ts_properties
+    for props in ts_properties:
         for timeserie in correct_timeseries:
-            if name == timeserie['name']:
+            if timeserie['name'] == props['name']:
+                name = timeserie['name']
                 timeline = timeserie['timeline']
                 growth_lag = timeserie['growth_lag']
                 backup['timescales'].append(dict(name=name,growth_lag = growth_lag, timeline = timeline))
@@ -75,7 +65,7 @@ def timeline_manager(data):
     ts_properties = data['properties']
     alias = data['alias']
     top_ts_points = data['top_ts_points']
-
+    print("PROPERTIES", ts_properties)
     _time_line_manager = TimeLineManager()
     _time_line_manager.load_timelines(ts_properties, alias, top_ts_points)
     return _time_line_manager
@@ -163,8 +153,7 @@ def test_load_timelines(timeline_manager, backup, correct_timeseries):
 
     actual = timeline_manager.get_backup()['timescales']
     expected = backup['timescales']
-
-    assert len(actual) == len(expected)
+    assert len(actual)== len(expected)
 
     assert [i['name'] for i in expected].sort() == \
            [i['name'] for i in actual].sort()
@@ -175,14 +164,14 @@ def test_load_timelines(timeline_manager, backup, correct_timeseries):
 
     actual = timeline_manager._timescales
     expected = correct_timeseries
-
-    assert len(actual) == len(expected)
+    assert len(actual)== len(expected)
 
     assert [i['name'] for i in expected].sort() == \
            [i['name'] for i in actual].sort()
 
     assert sorted([(i['name'], len(i['timeline'])) for i in expected], key=lambda l: l[0]) == \
            sorted([(i['name'], len(i['timeline'])) for i in actual], key=lambda l: l[0])
+
 
 
 def test_load_timelines_raise_exception_value_error():
@@ -220,7 +209,8 @@ def test_get_ts(timeline_manager, correct_timeseries):
     :return:
 
     """
-
+    actual = timeline_manager._get_ts('annual')
+    print(actual)
     expected = [i for i in correct_timeseries if i['name'] == 'annual'][0]
     actual = timeline_manager._get_ts('annual')[0]
 
@@ -400,8 +390,8 @@ def test_get_index(timeline_manager):
     actual = timeline_manager.get_index("annual","2013")
     assert expected == actual
 
-    expected = 1
-    actual = timeline_manager.get_index("month", "Jan")
+    expected = 0
+    actual = timeline_manager.get_index("month", "January")
     assert expected == actual
 
 
@@ -468,7 +458,7 @@ def test_get_label(timeline_manager):
     actual = timeline_manager.get_label("annual", 1)
     assert actual == expected
 
-    expected = "Fabruary"
+    expected = "February"
     actual = timeline_manager.get_label("month", 1)
     assert actual == expected
 
@@ -532,7 +522,7 @@ def test_get_period_by_alias(timeline_manager):
 
     """
 
-    expected = (("2012", "2016"), (0, 4))
+    expected = (("2012", "2018"), (0, 6))
     actual = timeline_manager.get_period_by_alias('annual', "all")
     assert expected == actual
 
@@ -540,12 +530,8 @@ def test_get_period_by_alias(timeline_manager):
     actual = timeline_manager.get_period_by_alias('annual', "history")
     assert expected == actual
 
-    expected = (("Jan", "Dec"), (0, 11))
+    expected = (("January", "March"), (0, 2))
     actual = timeline_manager.get_period_by_alias('month', "history")
-    assert expected == actual
-
-    expected = (("January", "June"), (0, 6))
-    actual = timeline_manager.get_period_by_alias('month', "all")
     assert expected == actual
 
     expected = (("January", "March"), (0, 2))
@@ -616,7 +602,7 @@ def test_get_timeline_by_period(timeline_manager):
     actual = timeline_manager.get_timeline_by_period('month', ['January', 'March'])
     assert excepted == actual
 
-    excepted = ['2012', '2014', '2015', '2016']
+    excepted = ['2012', '2013', '2014', '2015', '2016']
     actual = timeline_manager.get_timeline_by_period('annual', ["2012", '2016'])
     assert excepted == actual
 
@@ -677,7 +663,7 @@ def test_get_names(timeline_manager):
 
     """
 
-    expected = ['2013', '2014', '2015', '2016', '2017', '2018']
+    expected = ['2012','2013', '2014', '2015', '2016', '2017', '2018']
     actual = timeline_manager.get_names('annual', 'all')
     assert expected == actual
 
@@ -823,17 +809,14 @@ def test_get_last_actual(timeline_manager):
 
     '''
 
-    expected = ("2016", 5)
+    expected = ("2016", 4)
     actual = timeline_manager.get_last_actual("annual")
     assert expected == actual
 
-    expected = ("June", 5)
+    expected = ("March", 2)
     actual = timeline_manager.get_last_actual("month")
     assert expected == actual
 
-    expected = ("31", "30")
-    actual = timeline_manager.get_last_actual("day")
-    assert expected == actual
 
 
 def test_get_last_actual_raise_exception_value_error(timeline_manager):
@@ -892,7 +875,7 @@ def test_get_growth_period(timeline_manager):
     actual = timeline_manager.get_growth_periods("annual", ["2012", "2013"])
     assert expected == actual
 
-    expected = [("2012", "2013")]
+    expected = [("2012", "2013"), ("2013", "2014"), ("2014", "2015"), ("2015", "2016"),("2016", "2017"),("2017", "2018")]
     actual = timeline_manager.get_growth_periods("annual", None)
     assert expected == actual
 
@@ -947,7 +930,7 @@ def test_get_growth_period_raise_exception_type_error(timeline_manager):
         timeline_manager.get_growth_periods(["annual"], "2013")
 
 
-def test_get_timeline_tree(timeline_manager, tree):
+def test_get_timeline_tree(timeline_manager):
 
     """Test for get_timeline_tree(self, timeline_manager, tree) method
 
@@ -964,21 +947,13 @@ def test_get_timeline_tree(timeline_manager, tree):
     """
 
     excepted = tree
-    print(tree)
     actual = timeline_manager.get_timeline_tree("annual", "month", ["2012", "2013"])
-    assert len(actual) == len(excepted)
+    assert len(actual[0]) == len(excepted[0])
     assert sorted([[el['timescale'], el['full_name'], el['parent_index']]
-                   for el in actual], key=lambda l: l['full_name']) == \
+                   for el in actual[0]], key=lambda el: el[1]) == \
            sorted([[el['timescale'], el['full_name'], el['parent_index']]
-                   for el in excepted], key=lambda l: l['full_name'])
+                   for el in excepted[0]], key=lambda el: el[1])
 
-    excepted = tree
-    actual = timeline_manager.get_timeline_tree("annual", "day", ["2012", "2018"])
-    assert len(actual) == len(excepted)
-    assert sorted([[el['timescale'], el['full_name'], el['parent_index']]
-                   for el in actual], key=lambda l: l['full_name']) == \
-           sorted([[el['timescale'], el['full_name'], el['parent_index']]
-                   for el in excepted], key=lambda l: l['full_name'])
 
 
 def test_get_timeline_tree_raise_exception_value_error(timeline_manager):

@@ -137,18 +137,12 @@ def test_top_entities(container):
     top_entities = container.top_entities
     expected = ["Ukraine"]
     actual = [entity.name for entity in top_entities]
-<<<<<<< HEAD
     assert  expected == actual
-=======
->>>>>>> origin/feature/DL_unittests_container
 
     top_entities = container.top_entities
     expected = ["Ukraine","Kiev"]
     actual = [entity.name for entity in top_entities]
-<<<<<<< HEAD
     assert expected == actual
-=======
->>>>>>> origin/feature/DL_unittests_container
 
 
 def test_container_get_entity_by_meta(container):

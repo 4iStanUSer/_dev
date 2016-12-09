@@ -90,26 +90,22 @@ def test_get_ts_vals(entity_data, backup):
     '''
 
     entity_data.load_backup(backup)
-<<<<<<< HEAD
     expected = [0,1]
-=======
-    expected = [0]
->>>>>>> origin/feature/DL_unittests_container
     actual = entity_data.get_ts_vals("Sales", "annual", ("2012", "2013"), 0)
     assert expected == actual
     # Failed test
 
     entity_data.load_backup(backup)
-    expected = [0, 1, 2, 3]
+    expected = [4, 5]
     actual = entity_data.get_ts_vals("Costs", "annual", ("2016", "2017"), 4)
     assert expected == actual
 
-    expected = [0, 1, 2]
-    actual = entity_data.get_ts_vals("Income", "annual", ("2012", "2018"), 3)
+    expected = [0, 1, 2, 3, 4, 5]
+    actual = entity_data.get_ts_vals("Income", "annual", ("2012", "2017"), 3)
     assert expected == actual
 
     entity_data.load_backup(backup)
-    expected = [0, 1, 2, 3]
+    expected = [0, 1, 2, 3, 4]
     actual = entity_data.get_ts_vals("Sales", "annual", ("2012",None), 4)
 
     assert expected == actual
@@ -129,23 +125,23 @@ def test_set_ts_vals(entity_data, backup):
     """
 
     entity_data.load_backup(backup)
-    entity_data.set_ts_vals("Sales", "annual", [1, 2], ("2012", "2013"))
-    expected = [1, 2, 2, 4, 6]
-    actual = entity_data._time_series[('Costs', 'annual')]
+    entity_data.set_ts_vals("Sales", "annual", [1, 2], "2012")
+    expected = [1, 2, 2, 3, 4, 5, 0]
+    actual = entity_data._time_series[('Sales', 'annual')]
     assert actual == expected
     # Failed test
 
     entity_data.load_backup(backup)
-    entity_data.set_ts_vals("Income", "annual", [0, 1], ("2014", "2016"))
-    expected = [0, 1, 0, 1, 4, 5, 6]
+    entity_data.set_ts_vals("Income", "annual", [0, 1], "2014")
+    expected = [0, 1, 0, 1, 4, 5, 0]
     actual = entity_data._time_series[('Income', 'annual')]
     assert actual == expected
     # Failed test
 
     entity_data.load_backup(backup)
-    entity_data.set_ts_vals("Costs", "month", [1], ("2016", "2017"))
-    expected = [1, 2, 3, 0, 6]
-    actual = entity_data._time_series[('Sales', 'annual')]
+    entity_data.set_ts_vals("Costs", "annual", [1], "2016")
+    expected = [0, 1, 2, 3, 1, 5, 0]
+    actual = entity_data._time_series[('Costs', 'annual')]
     assert actual == expected
 
 
@@ -174,7 +170,7 @@ def test_get_period_vals(entity_data, backup):
     assert expected == actual
 
     expected = 0
-    actual = entity_data.get_period_val("Costs", "month", ("2012", "2013"))
+    actual = entity_data.get_period_val("Costs", "annual", ("2012", "2013"))
     assert expected == actual
 
     expected = 2
@@ -222,19 +218,19 @@ def test_get_all_period(entity_data, backup):
 
     entity_data.load_backup(backup)
 
-    expected = [('2012', '2013'), ('2013', '2014'), ('2015', '2016'), ('2016', '2017'), ('2017', '2018')]
+    expected = [('2012', '2013'), ('2013', '2014'), ('2014', '2015'), ('2015', '2016'), ('2016', '2017'), ('2017', '2018')]
     actual = entity_data.get_all_periods("Sales", "annual")
     print(list(actual))
     print(list(expected))
     assert sorted(list(expected), key=lambda l: l[0]) == \
            sorted(list(actual), key=lambda l: l[0])
 
-    expected = [('2012', '2013'), ('2013', '2014'), ('2015', '2016'), ('2016', '2017'), ('2017', '2018')]
+    expected = [('2012', '2013'), ('2013', '2014'), ('2014', '2015'),('2015', '2016'), ('2016', '2017'), ('2017', '2018')]
     actual = entity_data.get_all_periods("Costs", "annual")
     assert sorted(list(expected), key=lambda l: l[0]) == \
            sorted(list(actual), key=lambda l: l[0])
 
-    expected = [('2012', '2013'), ('2013', '2014'), ('2015', '2016'), ('2016', '2017'), ('2017', '2018')]
+    expected = [('2012', '2013'), ('2013', '2014'), ('2014', '2015'), ('2015', '2016'), ('2016', '2017'), ('2017', '2018')]
     actual = entity_data.get_all_periods("Income", "annual")
     assert sorted(list(expected), key=lambda l: l[0]) ==\
            sorted(list(actual), key=lambda l: l[0])
@@ -257,25 +253,25 @@ def test_is_exist(entity_data, backup):
 
     entity_data.load_backup(backup)
     expected = True
-    actual = entity_data.is_exist("Sales", "annual", DataType.time_series)
+    actual = entity_data.is_exist("Sales", "annual", SlotType.time_series)
     assert expected == actual
     # Failed test
 
     expected = True
-    actual = entity_data.is_exist("Tax", "annual", DataType.scalar)
+    actual = entity_data.is_exist("Tax", "annual", SlotType.scalar)
     assert expected == actual
 
     expected = False
-    actual = entity_data.is_exist("Cloth", "annual", DataType.time_series)
+    actual = entity_data.is_exist("Cloth", "annual", SlotType.time_series)
     assert expected == actual
 
     expected = True
-    actual = entity_data.is_exist("Loan", "annual", DataType.scalar)
+    actual = entity_data.is_exist("Loan", "annual", SlotType.scalar)
     assert expected == actual
 
     entity_data.load_backup(backup)
     expected = True
-    actual = entity_data.is_exist("Income", "annual", DataType.period_series)
+    actual = entity_data.is_exist("Income", "annual", SlotType.period_series)
     assert expected == actual
 
 

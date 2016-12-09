@@ -180,7 +180,7 @@ class EntityData:
         return
 
     def rename_variable(self, old_name, new_name):
-        '''Method that rename variable
+        """Method that rename variable
 
         Args:
             (string): old_name - old name of variable
@@ -192,37 +192,24 @@ class EntityData:
         :param new_name:
         :return:
 
-        '''
+        """
         pass
 
     def is_exist(self, var_name, ts_name, data_type):
 
+        """Bool function check wether variable are in backup
+
+        Args:
+            (string): var_name - name of variable
+            (string): ts_name - timeseries name
+            (DataType): data_type - specific data type
+        Return
+            (bool)
+
+        :return:
+
+        """
         if data_type == SlotType.time_series:
-        '''Bool function check wether variable are in backup
-
-        Args:
-            (string): var_name - name of variable
-            (string): ts_name - timeseries name
-            (DataType): data_type - specific data type
-        Return
-            (bool)
-
-        :return:
-
-        '''
-        '''Bool function check wether variable are in backup
-
-        Args:
-            (string): var_name - name of variable
-            (string): ts_name - timeseries name
-            (DataType): data_type - specific data type
-        Return
-            (bool)
-
-        :return:
-
-        '''
-        if data_type == DataType.time_series:
             return (var_name, ts_name) in self._time_series
         elif data_type == SlotType.scalar:
             return (var_name, ts_name) in self._scalars
@@ -232,7 +219,7 @@ class EntityData:
             raise Exception
 
     def init_slot(self, var_name, ts_name, data_type):
-        '''Init homogeneus slot depending form input
+        """Init homogeneus slot depending form input
         data_types in
             time-series - init list
             scalars - init scalar type
@@ -241,8 +228,7 @@ class EntityData:
 
         :return:
 
-        '''
-        if data_type == DataType.time_series:
+        """
         if data_type == SlotType.time_series:
             def_value = self.get_var_property(var_name, 'default_value')
             if def_value is None:
@@ -260,7 +246,7 @@ class EntityData:
             raise Exception
 
     def get_ts_vals(self, var_name, ts_name, period, length):
-        '''Get's value of variable  for specific period
+        """Get's value of variable  for specific period
            in ts_name timeseries and length
 
         Args:
@@ -273,7 +259,7 @@ class EntityData:
 
         :return:
 
-        '''
+        """
         # Get time series.
         ts = self._time_series.get((var_name, ts_name))
         if ts is None:
@@ -296,7 +282,7 @@ class EntityData:
         return ts[start_index:end_index + 1]
 
     def set_ts_vals(self, var_name, ts_name, values, stamp=None):
-        '''
+        """
 
         Args:
             (string): var_name - variable name
@@ -307,7 +293,7 @@ class EntityData:
 
         :return:
 
-        '''
+        """
         # Get time series.
         ts = self._time_series.get((var_name, ts_name))
         if ts is None:
@@ -325,7 +311,7 @@ class EntityData:
         ts[start_index:end_index] = values
 
     def get_scalar_val(self, var_name, ts_name):
-        '''Return variable values in ts_name timeseries
+        """Return variable values in ts_name timeseries
 
         Args:
             (string): var_name - variable name
@@ -334,7 +320,7 @@ class EntityData:
             list()
         :return:
 
-        '''
+        """
         scalar = self._scalars.get((var_name, ts_name))
         if scalar is None:
             raise Exception

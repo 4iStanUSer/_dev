@@ -1,13 +1,13 @@
-{"properties": {
-                "annual": {"name": "Annual", "growth_lag": 1},
-                "month": {"name": "Month", "growth_lag": 1},
-                "day": {"name": "Days", "growth_lag": 1},
-                "hour": {"name": "Hour", "growth_lag": 1}
-                },
+{"properties": [
+                {"name": "annual", "growth_lag": 1, "id":"0"},
+                {"name": "month", "growth_lag": 1, "id":"1"},
+                {"name": "day", "growth_lag": 1, "id":"2"},
+                {"name": "hour", "growth_lag": 1, "id":"3"}
+              ],
 "alias":{
-        "all": {"annual": ["2012", "2018"],"month":["January", "June"], "day":["1", "31"], "hour":["0", "24"]},
-        "history": {"annual": ["2014", "2016"], "month":["January", "June"], "day":["1", "31"], "hour":["0", "24"]},
-        "forecast": {"annual": ["2013", "2018"], "month":["January", "June"], "day":["1","31"], "hour":["0", "24"]}
+        "all": {"annual": ["2012", "2018"],"month":["January", "March"], "day":["1", "31"], "hour":["0", "24"]},
+        "history": {"annual": ["2014", "2016"], "month":["January", "March"], "day":["1", "31"], "hour":["0", "24"]},
+        "forecast": {"annual": ["2013", "2018"], "month":["January", "March"], "day":["1","31"], "hour":["0", "24"]}
         },
 "top_ts_points": [
             {

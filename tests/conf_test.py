@@ -17,14 +17,14 @@ def prep_timeseries_backup(timeline, timeline_correct):
     backup['timescales'] = []
 
     for period_name, ts_borders in alias.items():
-        backup['alias'][period_name] = dict(ts_properties)
+        backup['alias'][period_name] = ts_properties
 
-    for name, props in ts_properties.items():
+    for props in ts_properties:
         for timeserie in timeline_correct:
-            if name == timeserie['name']:
+            if props['name'] == timeserie['name']:
                 time_line = timeserie['timeline']
                 growth_lag = timeserie['growth_lag']
-                backup['timescales'].append(dict(name=name, growth_lag=growth_lag, timeline=time_line))
+                backup['timescales'].append(dict(name=props['name'], growth_lag=growth_lag, timeline=time_line))
     return backup
 
 #Entity Data Back_Up
@@ -101,4 +101,21 @@ interface_backup = {"container":
     ],
     "timeline": prep_timeseries_backup(timeline, timeline_correct)
 }
+
+
+#Tree
+tree =[
+  [
+  {"timescale": "annual", "short_name": "2012", "parent_index": None, "full_name": "2012"},
+  {"timescale": "month", "short_name": "Jan", "parent_index": 0, "full_name": "January"},
+  {"timescale": "month", "short_name": "Feb", "parent_index": 0, "full_name": "February"},
+  {"timescale": "month", "short_name": "Mar", "parent_index": 0, "full_name": "March"},
+  {"timescale": "annual", "short_name": "2013", "parent_index": None, "full_name": "2013"},
+  {"timescale": "month", "short_name": "Jan", "parent_index": 4, "full_name": "January"},
+  {"timescale": "month", "short_name": "Feb", "parent_index": 4, "full_name": "February"},
+  {"timescale": "month", "short_name": "Mar", "parent_index": 4, "full_name": "March"}
+  ],
+  {"annual": ["2012", "2013"], "month": ["January", "March"]}
+]
+
 

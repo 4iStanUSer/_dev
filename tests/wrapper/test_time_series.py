@@ -119,17 +119,16 @@ def test_timeseries_get_values_for_period(timeseries):
     :return:
 
     """
-    expected = [0,1]
-    actual = timeseries.get_values_for_period(('2012', '2013'))
-    assert expected == actual
-
-    expected = [3, 4]
-    actual = timeseries.get_values_for_period([('2015', '2016'), ('2016', '2017')])
+    expected = [0, 1]
+    actual = timeseries.get_values_for_period(['2012', '2013'])
     assert expected == actual
 
     expected = [3, 4, 5]
-    actual = timeseries.get_values_for_period([('2015', '2016'), ('2016', '2017'),
-                                        ('2017','2018')])
+    actual = timeseries.get_values_for_period(['2015', '2017'])
+    assert expected == actual
+
+    expected = [3, 4, 5, 0]
+    actual = timeseries.get_values_for_period(['2015', '2018'])
     assert expected == actual
 
 
@@ -145,16 +144,19 @@ def test_timeseries_set_value(timeseries):
     :return:
 
     """
-    expected = [0]
-    actual = timeseries.set_value(('2012', '2013'),1)
+    expected = [1,1]
+    timeseries.set_value('2012', 1)
+    actual = timeseries.get_value('2012')
     assert expected == actual
 
-    expected = [3, 4]
-    actual = timeseries.set_value(('2015', '2016'), 4)
+    expected = [4, 4]
+    timeseries.set_value('2015', 4)
+    actual = timeseries.get_value('2015')
     assert expected == actual
 
-    expected = [3, 4, 5]
-    actual = timeseries.set_value(('2016', '2017'), 10)
+    expected = [10, 5]
+    timeseries.set_value('2016', 10)
+    actual = timeseries.get_value('2016')
     assert expected == actual
 
 
@@ -170,19 +172,19 @@ def test_timeseries_set_value_from(timeseries):
     :return:
 
     """
-    expected = [1]
-    timeseries.set_values_from([1], ('2012', '2013'))
-    actual = timeseries.get_values_for_period(('2012', '2013'))
+    expected = [1,1]
+    timeseries.set_values_from([1], '2012')
+    actual = timeseries.get_values_for_period(['2012', '2013'])
     assert expected == actual
 
-    expected = [3, 4]
-    timeseries.get_values_from([3, 4], ('2016', '2017'))
-    actual = timeseries.get_values_for_period(('2016', '2017'))
+    expected = [3, 5]
+    timeseries.set_values_from([3], '2016')
+    actual = timeseries.get_values_for_period(['2016', '2017'])
     assert expected == actual
 
-    expected = [5, 6]
-    timeseries.get_values_from([5,6],('2017', '2018'))
-    actual = timeseries.get_values_for_period(('2017', '2018'))
+    expected = [6, 0]
+    timeseries.set_values_from([6], '2017')
+    actual = timeseries.get_values_for_period(['2017', '2018'])
     assert expected == actual
 
 

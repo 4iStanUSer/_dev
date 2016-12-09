@@ -1,6 +1,6 @@
 import copy
 from .timelines import TimeLineManager
-from .entity_data import EntityData, DataType
+from .entity_data import EntityData, SlotType
 from .entities_hierarchy import Node
 
 
@@ -438,7 +438,7 @@ class Variable:
 
         '''
 
-        if self._data.is_exist(self._var_name, ts_name, DataType.time_series):
+        if self._data.is_exist(self._var_name, ts_name, SlotType.time_series):
             return TimeSeries(self._data, self._var_name, ts_name)
         else:
             return None
@@ -451,7 +451,7 @@ class Variable:
 
         '''
 
-        if self._data.is_exist(self._var_name, ts_name, DataType.scalar):
+        if self._data.is_exist(self._var_name, ts_name, SlotType.scalar):
             return Scalar(self._data, self._var_name, ts_name)
         else:
             return None
@@ -465,7 +465,7 @@ class Variable:
         '''
 
         if self._data.is_exist(self._var_name, ts_name,
-                               DataType.period_series):
+                               SlotType.period_series):
             return PeriodSeries(self._data, self._var_name, ts_name)
         else:
             return None
@@ -479,8 +479,8 @@ class Variable:
         '''
 
         if not self._data.is_exist(self._var_name, ts_name,
-                                   DataType.time_series):
-            self._data.init_slot(self._var_name, ts_name, DataType.time_series)
+                                   SlotType.time_series):
+            self._data.init_slot(self._var_name, ts_name, SlotType.time_series)
         return TimeSeries(self._data, self._var_name, ts_name)
 
     def add_scalar(self, ts_name):
@@ -491,8 +491,8 @@ class Variable:
 
         '''
 
-        if not self._data.is_exist(self._var_name, ts_name, DataType.scalar):
-            self._data.init_slot(self._var_name, ts_name, DataType.scalar)
+        if not self._data.is_exist(self._var_name, ts_name, S.scalar):
+            self._data.init_slot(self._var_name, ts_name, SlotType.scalar)
         return Scalar(self._data, self._var_name, ts_name)
 
     def add_periods_series(self, ts_name):
@@ -504,9 +504,9 @@ class Variable:
         '''
 
         if not self._data.is_exist(self._var_name, ts_name,
-                                   DataType.period_series):
+                                   SlotType.period_series):
             self._data.init_slot(self._var_name, ts_name,
-                                 DataType.period_series)
+                                 SlotType.period_series)
         return PeriodSeries(self._data, self._var_name, ts_name)
 
 

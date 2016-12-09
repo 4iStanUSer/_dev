@@ -1,4 +1,5 @@
 [
+  [
   {"timescale": "annual", "short_name": "2012", "parent_index": "None", "full_name": "2012"},
   {"timescale": "month", "short_name": "Jan", "parent_index": 0, "full_name": "January"}, 
   {"timescale": "month", "short_name": "Feb", "parent_index": 0, "full_name": "February"},
@@ -6,6 +7,7 @@
   {"timescale": "annual", "short_name": "2013", "parent_index": "None", "full_name": "2013"}, 
   {"timescale": "month", "short_name": "Jan", "parent_index": 4, "full_name": "January"}, 
   {"timescale": "month", "short_name": "Feb", "parent_index": 4, "full_name": "February"}, 
-  {"timescale": "month", "short_name": "Mar", "parent_index": 4, "full_name": "March"},
+  {"timescale": "month", "short_name": "Mar", "parent_index": 4, "full_name": "March"}
+  ],
   {"annual": ["2012", "2013"], "month": ["January", "March"]}
 ]

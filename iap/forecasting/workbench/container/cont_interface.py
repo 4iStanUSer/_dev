@@ -205,6 +205,13 @@ class Container:
         return [self.get_entity_by_id(x) for x in nodes_ids]
 
     def get_entity_by_filter(self, main_ent, ent_filter):
+        """Get entity by filter
+
+        :param main_ent:
+        :param ent_filter:
+        :return:
+        """
+
         meta_type = ent_filter['type']
         if meta_type == FilterType.empty:
             res_entity = main_ent
@@ -460,39 +467,17 @@ class Variable:
 
     def get_time_series(self, ts_name):
         if self._data.is_exist(self._var_name, ts_name, SlotType.time_series):
-        '''
-
-        :param ts_name:
-        :return:
-
-        '''
-
-        if self._data.is_exist(self._var_name, ts_name, DataType.time_series):
             return TimeSeries(self._data, self._var_name, ts_name)
         else:
             return None
 
     def get_scalar(self, ts_name):
         if self._data.is_exist(self._var_name, ts_name, SlotType.scalar):
-        '''
-
-        :param ts_name:
-        :return:
-
-        '''
-
-        if self._data.is_exist(self._var_name, ts_name, DataType.scalar):
             return Scalar(self._data, self._var_name, ts_name)
         else:
             return None
 
     def get_periods_series(self, ts_name):
-        '''
-
-        :param ts_name:
-        :return:
-
-        '''
 
         if self._data.is_exist(self._var_name, ts_name,
                                SlotType.period_series):
@@ -501,12 +486,6 @@ class Variable:
             return None
 
     def add_time_series(self, ts_name):
-        '''
-
-        :param ts_name:
-        :return:
-
-        '''
 
         if not self._data.is_exist(self._var_name, ts_name,
                                    SlotType.time_series):
@@ -523,17 +502,11 @@ class Variable:
 
         '''
 
-        if not self._data.is_exist(self._var_name, ts_name, DataType.scalar):
-            self._data.init_slot(self._var_name, ts_name, DataType.scalar)
+        if not self._data.is_exist(self._var_name, ts_name, SlotType.scalar):
+            self._data.init_slot(self._var_name, ts_name, SlotType.scalar)
         return Scalar(self._data, self._var_name, ts_name)
 
     def add_periods_series(self, ts_name):
-        '''
-
-        :param ts_name:
-        :return:
-
-        '''
 
         if not self._data.is_exist(self._var_name, ts_name,
                                    SlotType.period_series):
@@ -543,10 +516,10 @@ class Variable:
 
 
 class TimeSeries:
-    '''Wrapper around timeseries of Entity Data
-    '''
+    """Wrapper around timeseries of Entity Data
+    """
     def __init__(self, data, var_name, ts_name):
-        '''Initialise TimeSeries
+        """Initialise TimeSeries
         Args:
             (EntityData):entity data
             (string): variable name
@@ -556,14 +529,14 @@ class TimeSeries:
         :param var_name:
         :param ts_name:
 
-        '''
+        """
 
         self._data = data
         self._var_name = var_name
         self._ts_name = ts_name
 
     def get_value(self, stamp):
-        '''Wrapper for method get_ts_vals
+        """Wrapper for method get_ts_vals
 
         Args:
             (string): stamp - start point of period
@@ -574,12 +547,12 @@ class TimeSeries:
         :param stamp:
         :return:
 
-        '''
+        """
         return self._data.get_ts_vals(self._var_name, self._ts_name,
                                       (stamp, None), 1)
 
     def get_values_from(self, stamp, length):
-        '''Wrapper for method get_ts_vals
+        """Wrapper for method get_ts_vals
 
         Args:
             (string): stamp - start point of period
@@ -592,12 +565,12 @@ class TimeSeries:
         :param stamp:
         :return:
 
-        '''
+        """
         return self._data.get_ts_vals(self._var_name, self._ts_name,
                                       (stamp, None), length)
 
     def get_values_for_period(self, period):
-        '''Wrapper for method get_ts_vals
+        """Wrapper for method get_ts_vals
 
         Args:
             (period): stamp - start point of period
@@ -609,39 +582,38 @@ class TimeSeries:
         :param stamp:
         :return:
 
-        '''
+        """
         return self._data.get_ts_vals(self._var_name, self._ts_name, period,
                                       None)
 
     def set_value(self, stamp, value):
-        '''
+        """
 
         :param stamp:
         :param value:
         :return:
 
-        '''
+        """
         self._data.set_ts_vals(self._var_name, self._ts_name, [value], stamp)
 
     def set_values_from(self, values, stamp):
-        '''
+        """
 
         :param values:
         :param stamp:
         :return:
 
-        '''
+        """
         self._data.set_ts_vals(self._var_name, self._ts_name, values, stamp)
 
 
 class Scalar:
-    '''
+    """Wrapper around EntityData scalar
 
-    Wrapper around EntityData scalar
-
-    '''
+    """
     def __init__(self, data, var_name, ts_name):
-        '''Initalisation of Scalar object
+        """Initalisation of Scalar object
+
         Args:
             (EntityData): EntityData name
             (string): var_name - variable name
@@ -650,36 +622,40 @@ class Scalar:
         :param data:
         :param var_name:
         :param ts_name:
-        '''
+        """
+
         self._data = data
         self._var_name = var_name
         self._ts_name = ts_name
 
+
     def get_value(self):
-        '''Get value of variable for specific timeseries
+        """Get value of variable for current scalar
 
         :return:
 
-        '''
+        """
+
         return self._data.get_scalar_val(self._var_name, self._ts_name)
 
+
     def set_value(self, value):
-        '''Set scpecific value for variable for specific timeseries
+        """Set specific value for variable for specific scalar
 
         :param value:
         :return:
 
-        '''
+        """
 
         self._data.set_scalar_val(self._var_name, self._ts_name, value)
 
 
 class PeriodSeries:
-    '''Wrapper around entity_data.period_series attribute
+    """Wrapper around entity_data.period_series attribute
     Object realise distinct period of timeseries of variable
-    '''
+    """
     def __init__(self, data, var_name, ts_name):
-        '''Initiaise period series
+        """Initiaise period series
         Args:
             (Entity Data): data
             (string): var_name - name of variable
@@ -689,30 +665,42 @@ class PeriodSeries:
         :param var_name:
         :param ts_name:
 
-        '''
+        """
 
         self._data = data
         self._var_name = var_name
         self._ts_name = ts_name
 
+
     def get_periods(self):
-        '''Get all periods
+        """Get all periods
+
 
         Return:
         (list): list of period with specifc value
 
         :return:
 
-        '''
+        """
 
         self._data.get_all_periods(self._var_name, self._ts_name)
 
+
     def get_value(self, period):
+        """Get value for specific period
+        Args:
+            (list or tuple): period - start and end time point's
+
+        :param period:
+        :return:
+
+        """
+
         return self._data.get_period_val(self._var_name, self._ts_name, period)
 
 
     def set_value(self, period, value):
-        '''Set value of variable for period
+        """Set value of variable for period
 
         Args:
             (list): period
@@ -723,5 +711,6 @@ class PeriodSeries:
         :param value:
         :return:
 
-        '''
+        """
+
         self._data.set_period_val(self._var_name, self._ts_name, period, value)
