@@ -193,7 +193,23 @@ class EntityData:
         :return:
 
         """
-        pass
+        self._variables[new_name] = self._variables.pop(old_name)
+        for item in self._periods_series.keys():
+            if item[0] == old_name:
+                new_item = (new_name, item[1])
+                self._periods_series[new_item] = self._periods_series.pop(item)
+                break
+            else:
+                pass
+
+        for item in self._time_series.keys():
+            if item[0] == old_name:
+                new_item = (new_name, item[1])
+                self._time_series[new_item] = self._time_series.pop(item)
+                break
+            else:
+                pass
+
 
     def is_exist(self, var_name, ts_name, data_type):
 

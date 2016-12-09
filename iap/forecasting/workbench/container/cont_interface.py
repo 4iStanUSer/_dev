@@ -84,6 +84,7 @@ class Container:
 
 
         '''
+
     def get_backup(self):
         backup = []
         for node_id, node_info in self._nodes_dict.items():
@@ -116,6 +117,7 @@ class Container:
 
         return [self.get_entity_by_id(x.id) for x in self._root.children]
 
+
     def add_entity(self, path, metas):
         '''Add node by path to the root node, add new node to the _node_dict.
 
@@ -140,6 +142,7 @@ class Container:
         # Transform node to entity
         return self.get_entity_by_id(latest_node.id)
 
+
     def get_entity_by_id(self, ent_id):
         '''Get entity by id from _node_dict
 
@@ -159,6 +162,7 @@ class Container:
         return Entity(self, node_info['node'],
                       node_info['data'],
                       node_info['insights'])
+
 
     def get_entity_by_path(self, path):
         '''Get entity by path.

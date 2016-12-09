@@ -115,7 +115,7 @@ class Node:
         :return:
 
         """
-        pass
+        self.name = new_name
 
 
     def get_path(self, path, metas):

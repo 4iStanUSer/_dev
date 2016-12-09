@@ -294,16 +294,31 @@ def test_rename_variable(entity_data, backup):
     entity_data.rename_variable("Sales", "Pre-sales")
     assert "Pre-sales" in list(entity_data._variables.keys())
     assert "Sales" not in list(entity_data._variables.keys())
+    assert "Pre-sales" in [i[0] for i in list(entity_data._time_series.keys())]
+    assert "Sales" not in [i[0] for i in list(entity_data._time_series.keys())]
+    assert "Pre-sales" in [i[0] for i in list(entity_data._periods_series.keys())]
+    assert "Sales" not in [i[0] for i in list(entity_data._periods_series.keys())]
+
 
     entity_data.load_backup(backup)
     entity_data.rename_variable("Costs", "Pre-sales")
     assert "Pre-sales" in list(entity_data._variables.keys())
     assert "Costs" not in list(entity_data._variables.keys())
+    assert "Pre-sales" in [i[0] for i in list(entity_data._time_series.keys())]
+    assert "Costs" not in [i[0] for i in list(entity_data._time_series.keys())]
+    assert "Pre-sales" in [i[0] for i in list(entity_data._periods_series.keys())]
+    assert "Costs" not in [i[0] for i in list(entity_data._periods_series.keys())]
+
+
 
     entity_data.load_backup(backup)
     entity_data.rename_variable("Income", "Pre-sales")
     assert "Pre-sales" in list(entity_data._variables.keys())
     assert "Income" not in list(entity_data._variables.keys())
+    assert "Pre-sales" in [i[0] for i in list(entity_data._time_series.keys())]
+    assert "Income" not in [i[0] for i in list(entity_data._time_series.keys())]
+    assert "Pre-sales" in [i[0] for i in list(entity_data._periods_series.keys())]
+    assert "Income" not in [i[0] for i in list(entity_data._periods_series.keys())]
 
 
 def test_set_var_property(entity_data, backup):

@@ -2,7 +2,7 @@ from threading import Lock
 
 from ..common import exceptions as ex
 from ..repository import persistent_storage
-from ..forecasting.workbench import Workbench
+from ..forecasting.workbench import *
 
 
 class State:
