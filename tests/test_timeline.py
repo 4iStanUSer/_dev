@@ -343,9 +343,8 @@ def test_get_growth_lag_raise_exception_value_error(timeline_manager):
     :return:
 
     """
-
     with pytest.raises(Exception):
-        timeline_manager.get_growth_lag("day")
+        timeline_manager.get_growth_lag("second")
 
 
 def test_get_growth_lag_raise_exception_type_error(timeline_manager):
@@ -905,29 +904,9 @@ def test_get_growth_period_raise_exception_value_error(timeline_manager):
 
     '''
 
-    with pytest.raises(Exception):
-        timeline_manager.get_growth_periods("hour", ["2019", "2012"])
-
-
-def test_get_growth_period_raise_exception_type_error(timeline_manager):
-    '''Test for get_growth)period(self,ts_name,period)
-    Check exception on wrong input
-
-
-    Args:
-        (string): ts_names - name of
-        (list): period - start and end of period
-
-    Return :
-        (list): list of tuples (start_interva,end_interval)
-
-
-    :return:
-
-    '''
-
-    with pytest.raises(Exception):
-        timeline_manager.get_growth_periods(["annual"], "2013")
+    expected = []
+    actual = timeline_manager.get_growth_periods("hour", ["2019", "2012"])
+    assert expected == actual
 
 
 def test_get_timeline_tree(timeline_manager):

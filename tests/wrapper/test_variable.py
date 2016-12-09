@@ -79,9 +79,9 @@ def test_variable_get_property_raise_exception(variable):
     :param variable:
     :return:
     """
-    with pytest.raises(Exception):
-        variable.get_property('untotal')
-
+    expected = None
+    actual = variable.get_property('untotal')
+    assert expected == actual
 
 def test_variable_set_property(variable):
     """Test for method get_property
@@ -95,29 +95,18 @@ def test_variable_set_property(variable):
     assert expected == actual
 
 
-def test_variable_set_property_raise_exception(variable):
-    """Test for method get_property
-
-    :param variable:
-    :return:
-    """
-    with pytest.raises(Exception):
-        variable.set_property('untotal', 10)
-
-
 def test_variable_get_time_series(variable, timeseries):
 
     expected = timeseries
-    print("EXPECTED", expected)
     actual = variable.get_time_series("annual")
-    print("ACTUAL", actual)
     assert expected._ts_name == actual._ts_name
 
 
 def test_variable_get_time_series_raise_exception(variable):
 
-    with pytest.raises(Exception):
-        variable.get_time_series('seconds')
+    expected = variable.get_time_series('seconds')
+    actual = None
+    assert expected == actual
 
 
 def test_variable_get_scalar(variable, scalar):
@@ -129,8 +118,10 @@ def test_variable_get_scalar(variable, scalar):
 
 
 def test_variable_get_scalar_raise_exception(variable):
-    with pytest.raises(Exception):
-        variable.get_time_series('seconds')
+
+    expected = None
+    actual =  variable.get_time_series('seconds')
+    assert expected == actual
 
 
 def test_variable_get_periods_series(variable, period_series):
@@ -142,8 +133,9 @@ def test_variable_get_periods_series(variable, period_series):
 
 def test_variable_get_periods_series_raise_exception(variable):
 
-    with pytest.raises(Exception):
-        variable.get_periods_series('seconds')
+    expected = None
+    actual = variable.get_periods_series('seconds')
+    assert expected == actual
 
 
 def test_variable_add_time_series(variable, timeseries):

@@ -309,8 +309,9 @@ def test_get_node_by_path_raise_exception_value_error(list_of_pathes, descriptio
         output_node = root_node.get_node_by_path(path)
         return output_node
 
-    with pytest.raises(Exception):
-        get_node_by_path(["Ukraine", "Odessa", "Wine", "Market", "Supermarket"])
+    expected = None
+    actual = get_node_by_path(["Ukraine", "Odessa", "Wine", "Market", "Supermarket"])
+    assert expected == actual
 
 
 def test_get_node_by_path_raise_exception_type_error(list_of_pathes, description):
@@ -333,8 +334,9 @@ def test_get_node_by_path_raise_exception_type_error(list_of_pathes, description
         output_node = root_node.get_node_by_path(path)
         return output_node
 
-    with pytest.raises(Exception):
-        get_node_by_path("Supermarket")
+    expected = None
+    actual = get_node_by_path("Supermarket")
+    assert expected == actual
 
 
 def test_get_children_by_meta(list_of_pathes, description):
@@ -385,8 +387,9 @@ def test_get_children_by_meta_exception_value_error(list_of_pathes, description)
         output_node = root_node.get_children_by_meta(meta_filter, node_ids)
         return node_ids
 
-    with pytest.raises(Exception):
-        get_children_by_meta(["Market", "Region"], nodes_ids=[])
+    expected = []
+    actual = get_children_by_meta(["Market", "Region"], nodes_ids=[])
+    assert expected == actual
 
 
 def test_get_children_by_meta_raise_exception_type_error(list_of_pathes, description):
@@ -407,11 +410,11 @@ def test_get_children_by_meta_raise_exception_type_error(list_of_pathes, descrip
         node_ids = []
         meta_filter = Meta(meta[0], meta[1])
         output_node = root_node.get_children_by_meta(meta_filter, node_ids)
-        print(list_of_pathes)
         return node_ids
 
-    with pytest.raises(Exception):
-        get_children_by_meta("Market", nodes_ids=[])
+    expected = []
+    actual = get_children_by_meta("Market", nodes_ids=[])
+    assert expected == actual
 
 
 def test_parent_by_meta(list_of_pathes, description):
@@ -460,8 +463,9 @@ def test_parent_by_meta_raise_exception_value_error(list_of_pathes, description)
         output_node = default_node.get_parent_by_meta(meta_filter)
         return output_node
 
-    with pytest.raises(Exception):
-        get_parent_by_meta(["Product", "Drink"], 7)
+    expected = None
+    actual = get_parent_by_meta(["Product", "Drink"], 7)
+    assert expected == actual
 
 
 def test_parent_by_meta_raise_exception_type_error(list_of_pathes, description):
@@ -483,8 +487,9 @@ def test_parent_by_meta_raise_exception_type_error(list_of_pathes, description):
         output_node = default_node.get_parent_by_meta(meta_filter)
         return output_node
 
-    with pytest.raises(Exception):
-        get_parent_by_meta("Product", 7)
+    expected = None
+    actual = get_parent_by_meta("Product", 7)
+    assert expected == actual
 
 
 def test_rename():

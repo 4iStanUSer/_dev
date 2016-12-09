@@ -116,21 +116,6 @@ def test_container_get_entity_by_path_raise_exception_wrong_value(container):
     assert actual == expected
 
 
-def test_container_get_entity_by_path_raise_exception_wrong_type(container):
-    """Test for method get_entity_by_path
-    Check raising exception on wrong input
-
-    Args:
-        (string): path of node
-    Return:
-        (Entity): coresponding Entity
-
-
-    """
-    with pytest.raises(Exception):
-        container.get_entity_by_path('Ukraine')
-
-
 def test_top_entities(container):
     """Test for get tope_entities
     """
