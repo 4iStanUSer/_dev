@@ -111,7 +111,7 @@ def test_get_ts_vals(entity_data, backup):
     assert expected == actual
 
 
-def test_set_ts_vals(entity_data, backup):
+ddef test_set_ts_vals(entity_data, backup):
     """
     Args:
         (string): var_name - variable name
@@ -444,6 +444,26 @@ def test_add_variable(entity_data, backup):
 
     assert 5 in actual
     assert list(actual).count(5) == 1
+
+def test_add_variable(entity_data, backup):
+    """Add new variable to backup
+
+    Args:
+        (string): var_name
+    Return:
+
+    :return:
+
+    """
+
+    entity_data.load_backup(backup)
+    entity_data.add_variable("asdasdasd")
+    actual = entity_data._variables.keys()
+
+    assert "New Sales" in actual
+    assert list(actual).count("New Sales") == 1
+
+
 
 
 def test_get_scalar_val(entity_data, backup):

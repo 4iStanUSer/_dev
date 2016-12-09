@@ -507,7 +507,7 @@ class Variable:
                                    SlotType.period_series):
             self._data.init_slot(self._var_name, ts_name,
                                  SlotType.period_series)
-        return PeriodSeries(self._data, self._var_name, ts_name)
+        return PeriodSeries(self._data, self._var_naвшкme, ts_name)
 
 
 class TimeSeries:
