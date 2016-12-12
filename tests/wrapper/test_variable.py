@@ -111,9 +111,8 @@ def test_variable_get_time_series_raise_exception(variable):
 
 def test_variable_get_scalar(variable, scalar):
 
-    actual = variable.get_scalar("annual")
+    actual = variable.get_scalar('annual')
     expected = scalar
-
     assert actual._ts_name == expected._ts_name
 
 

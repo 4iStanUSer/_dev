@@ -23,19 +23,6 @@ class EntityData:
     def get_backup(self):
         """Get back_up_method
         collect data from attributes into dictionary
-        #attributes:
-
-        self._variables = {'var_name':{'var_prop':'prop_value'}}
-        self._time_series = {(var_name, ts_name):[def_values]]
-        self.scalars = {('variable_name', 'ts_name') :'value'}
-        self._periods_series = [(variable, ts):{'period':'value'}]
-
-        #backup
-        var_names = ['Sales','Income',...]
-        var_properties = [{'var_name':{'var_prop':'prop_value'}}]
-        time_series = [{'var': var_name, 'ts': ts_name, 'line': [val_1,val_2,val_3....]}]
-        scalars = [{'var': var_name, 'ts': ts_name, 'val': val}]
-        period_series = [{'var'= variable_name, 'ts' = ts, period= [period_st,period_end], value=value)]
 
         :return:
 
@@ -385,9 +372,10 @@ class EntityData:
         :return:
 
         '''
+
         ps = self._periods_series.get((var_name, ts_name))
         if ps is not None:
-            return ps.keys()
+            return list(ps.keys())
         else:
             return []
 

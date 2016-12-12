@@ -45,7 +45,8 @@ backup = {
                   {"var": "Loan", "ts": "annual", "value": 10},
                   {"var": "Tax", "ts": "annual", "value": 10},
                   {"var": "Rate", "ts": "annual", "value": 100},
-                  {"var": "Index", "ts": "annual", "value": 0}
+                  {"var": "Index", "ts": "annual", "value": 0},
+                  {"var": "Sales", "ts": "annual", "value": 0}
 
               ],
   "periods_series":[

@@ -662,20 +662,12 @@ def test_get_names(timeline_manager):
 
     """
 
-    expected = ['2012','2013', '2014', '2015', '2016', '2017', '2018']
-    actual = timeline_manager.get_names('annual', 'all')
+    expected = ['2012', '2013', '2014', '2015', '2016', '2017', '2018']
+    actual = timeline_manager.get_names('annual', ('2012', '2018'))
     assert expected == actual
 
     expected = ['January', 'February', 'March']
-    actual = timeline_manager.get_names('month', 'all')
-    assert expected == actual
-
-    expected = []
-    actual = timeline_manager.get_names('hour', 'all')
-    assert expected == actual
-
-    expected = []
-    actual = timeline_manager.get_names('day', 'all')
+    actual = timeline_manager.get_names('month', ('January', 'March'))
     assert expected == actual
 
 
@@ -899,9 +891,9 @@ def test_get_growth_period_raise_exception_value_error(timeline_manager):
 
     '''
 
-    expected = []
-    actual = timeline_manager.get_growth_periods("hour", ["2019", "2012"])
-    assert expected == actual
+    with pytest.raises(Exception):
+        timeline_manager.get_growth_periods("hour", ["2019", "2012"])
+
 
 
 def test_get_timeline_tree(timeline_manager):

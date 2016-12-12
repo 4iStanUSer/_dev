@@ -474,6 +474,7 @@ class Variable:
             return None
 
     def get_scalar(self, ts_name):
+
         if self._data.is_exist(self._var_name, ts_name, SlotType.scalar):
             return Scalar(self._data, self._var_name, ts_name)
         else:
@@ -684,9 +685,8 @@ class PeriodSeries:
         :return:
 
         """
-
-        self._data.get_all_periods(self._var_name, self._ts_name)
-
+        periods = self._data.get_all_periods(self._var_name, self._ts_name)
+        return periods
 
     def get_value(self, period):
         """Get value for specific period

@@ -404,13 +404,14 @@ class TimeLineManager:
             end = period[1]
 
         periods = []
-        if ts_name == 'annual':
-            start_ind = self.get_index(ts_name, start)
-            end_ind = self.get_index(ts_name, end)
-            for i in range(start_ind + 1, end_ind + 1):
-                periods.append((self.get_label(ts_name, i - 1),
-                                self.get_label(ts_name, i)))
+        #if ts_name == 'annual':
+        start_ind = self.get_index(ts_name, start)
+        end_ind = self.get_index(ts_name, end)
+        for i in range(start_ind + 1, end_ind + 1):
+            periods.append((self.get_label(ts_name, i - 1),
+                            self.get_label(ts_name, i)))
         return periods
+
 
     def get_carg_periods(self, ts_name, ts_period=None):
         ts = self._get_ts(ts_name)[0]

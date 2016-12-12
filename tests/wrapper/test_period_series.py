@@ -84,9 +84,9 @@ def test_period_series_get_periods(period_series):
 
     """
 
-    expected = ['2013', '2014', '2015', '2016', '2017', '2018']
+    expected = [('2012', '2013'), ('2013', '2014'), ('2014', '2015'), ('2015', '2016'), ('2016', '2017'), ('2017', '2018')]
     actual = period_series.get_periods()
-    assert expected == actual
+    assert sorted(expected, key=lambda el: el[0]) == sorted(actual, key=lambda el: el[0])
 
 
 def test_period_series_get_value(period_series):
@@ -94,7 +94,7 @@ def test_period_series_get_value(period_series):
     Check whether expected and output value equal
     change
 
-    :param period_se
+    :param period_series
 
     """
 
