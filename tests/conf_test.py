@@ -29,7 +29,7 @@ def prep_timeseries_backup(timeline, timeline_correct):
 
 #Entity Data Back_Up
 backup = {
-  "var_names" : ["Sales", "Popularity" , "Income", "Costs"],
+  "var_names" : ["Sales", "Popularity", "Income", "Costs"],
   "var_properties" :
                   [
                       {"var":"Sales","prop":"total","value": "1000"},

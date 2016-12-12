@@ -4,6 +4,8 @@ from .entity_data import EntityData
 from .entities_hierarchy import Node
 from ..helper import SlotType, FilterType
 from ....common.helper import Meta
+from ....common.exceptions import *
+
 
 class Container:
 
@@ -24,9 +26,7 @@ class Container:
         self.timeline = TimeLineManager()
         self._root = Node('root', (None, None))
         self._nodes_dict = {}
-
         #self._nodes_dict[node.id] = dict(node=node, data=EntityData(self.timeline), insights=[])
-
         self._max_node_id = 0
 
     def _clean(self):
@@ -46,7 +46,7 @@ class Container:
         self._max_node_id = 0
 
     def load(self, backup):
-        '''Load container
+        """Load container
 
         backup = {'timeline':{}, 'container':[{'path': , 'metas': ,'data': ,'insights':}]}
 
@@ -60,7 +60,7 @@ class Container:
         :param backup:
         :return:
 
-        '''
+        """
         self._clean()
         self.timeline.load_backup(backup['timeline'])
         for node_info in backup['container']:
@@ -142,7 +142,6 @@ class Container:
         # Transform node to entity
         return self.get_entity_by_id(latest_node.id)
 
-
     def get_entity_by_id(self, ent_id):
         '''Get entity by id from _node_dict
 
@@ -162,7 +161,6 @@ class Container:
         return Entity(self, node_info['node'],
                       node_info['data'],
                       node_info['insights'])
-
 
     def get_entity_by_path(self, path):
         '''Get entity by path.
@@ -228,9 +226,9 @@ class Container:
                 main_ent.get_parent_by_meta(Meta(ent_filter['meta_filter'][0],
                                                  ent_filter['meta_filter'][1]))
         else:
-            raise Exception
+            raise UnknowMetaFilterError
         if res_entity is None:
-            raise Exception
+            raise EntityNotFound
         return res_entity
 
 

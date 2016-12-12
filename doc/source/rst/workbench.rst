@@ -1,5 +1,8 @@
-Workbench
+IAP
 *************************************************************
 .. toctree::
-  container
+  common/common
+  data_loading/data_loading
+  forecasting/forecasting
+  pyramid/pyramid
 

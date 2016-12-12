@@ -1,5 +1,3 @@
-from iap.common.helper import Meta, is_equal_meta
-
 class Node:
 
     def __init__(self, name, meta):
@@ -74,7 +72,7 @@ class Node:
         """
 
         if name in [x.name for x in self.children]:
-            raise NameDublicateError
+            raise Exception
         new_child = Node(name, meta)
         self.children.append(new_child)
         new_child.parents.append(self)
@@ -137,7 +135,7 @@ class Node:
         path.insert(0, self.name)
         metas.insert(0, self.meta)
         if len(self.parents) != 1:
-            raise MultiParentError
+            raise Exception
         self.parents[0].get_path(path, metas)
 
 
@@ -183,3 +181,4 @@ class Node:
             if res is not None:
                 return res
         return None
+

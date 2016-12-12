@@ -1,10 +1,10 @@
 import copy
 from ..helper import SlotType
-
+from iap.common.exceptions import *
 
 class EntityData:
     def __init__(self, time_manager):
-        '''
+        """
         Initialisation of entity data
 
         Args:
@@ -13,7 +13,7 @@ class EntityData:
         :param time_manager:
 
 
-        '''
+        """
         self.time_manager = time_manager
         self._variables = {}
         self._time_series = {}
@@ -21,7 +21,7 @@ class EntityData:
         self._periods_series = {}
 
     def get_backup(self):
-        '''Get back_up_method
+        """Get back_up_method
         collect data from attributes into dictionary
         #attributes:
 
@@ -39,7 +39,7 @@ class EntityData:
 
         :return:
 
-        '''
+        """
         # Variables.
         var_names = list(self._variables.keys())
         var_properties = []
@@ -69,7 +69,7 @@ class EntityData:
         return backup
 
     def load_backup(self, backup):
-        '''Decode back_up dictionary into object attribute
+        """Decode back_up dictionary into object attribute
         Args:
             (dict):
 
@@ -82,7 +82,7 @@ class EntityData:
         :param backup:
         :return:
 
-        '''
+        """
 
         try:
             # Variables.
@@ -107,21 +107,22 @@ class EntityData:
                 self.set_period_val(item['var'], item['ts'], item['period'],
                                     item['value'])
         except KeyError:
-            raise Exception
+            raise CorruptedBackupError
         return
 
     @property
     def var_names(self):
-        '''Return names of variables
+        """Return names of variables
         Args:
 
         Return:
             (list): names of variables
-        '''
+        """
         return self._variables.keys()
 
     def add_variable(self, var_name):
-        '''Add new variable to backup
+        """
+        Add new variable to backup
 
         Args:
             (string): var_name
@@ -129,12 +130,16 @@ class EntityData:
 
         :return:
 
-        '''
+        """
+
         if var_name not in self._variables:
             self._variables[var_name] = dict()
+        else:
+            return VariableAlreadyExistdError
+
 
     def get_var_properties(self, var_name):
-        '''Get properties of variable
+        """Get properties of variable
         Args:
             (name)
 
@@ -143,11 +148,13 @@ class EntityData:
 
         :return:
 
-        '''
+        """
+
         return copy.copy(self._variables[var_name])
 
+
     def get_var_property(self, var_name, prop_name):
-        '''Return value of variable property
+        """Return value of variable property
         Args:
             (string): var_name - variable name
             (string): prop_name -  property name
@@ -155,7 +162,7 @@ class EntityData:
             value
         :return:
 
-        '''
+        """
         var_props = self._variables.get(var_name)
         if var_props is not None:
             return var_props.get(prop_name)
@@ -163,7 +170,7 @@ class EntityData:
             return None
 
     def set_var_property(self, var_name, prop_name, value):
-        '''Set specific value for variable propery
+        """Set specific value for variable propery
         Args:
             (string): var_name -variable name
             (string): prop_name - property name
@@ -173,9 +180,9 @@ class EntityData:
 
         :return:
 
-        '''
+        """
         if var_name not in self._variables:
-            raise Exception
+            raise VariableNotFoundError
         self._variables[var_name][prop_name] = value
         return
 
@@ -194,21 +201,24 @@ class EntityData:
 
         """
         self._variables[new_name] = self._variables.pop(old_name)
-        for item in self._periods_series.keys():
-            if item[0] == old_name:
-                new_item = (new_name, item[1])
-                self._periods_series[new_item] = self._periods_series.pop(item)
-                break
-            else:
-                pass
+        if old_name in [item[0] for item in list(self._periods_series.keys())]:
+            for item in self._periods_series.keys():
+                print(item)
+                if item[0] == old_name:
+                    new_item = (new_name, item[1])
+                    self._periods_series[new_item] = self._periods_series.pop(item)
+                    break
+        else:
+            raise VariableNotFoundError
 
-        for item in self._time_series.keys():
-            if item[0] == old_name:
-                new_item = (new_name, item[1])
-                self._time_series[new_item] = self._time_series.pop(item)
-                break
-            else:
-                pass
+        if old_name in [item[0] for item in list(self._time_series.keys())]:
+            for item in self._time_series.keys():
+                if item[0] == old_name:
+                    new_item = (new_name, item[1])
+                    self._time_series[new_item] = self._time_series.pop(item)
+                    break
+        else:
+            raise VariableNotFoundError
 
 
     def is_exist(self, var_name, ts_name, data_type):
@@ -232,7 +242,8 @@ class EntityData:
         elif data_type == SlotType.period_series:
             return (var_name, ts_name) in self._periods_series
         else:
-            raise Exception
+            raise UnknowSlotTypeError
+
 
     def init_slot(self, var_name, ts_name, data_type):
         """Init homogeneus slot depending form input
@@ -259,7 +270,7 @@ class EntityData:
         elif data_type == SlotType.period_series:
             self._periods_series[(var_name, ts_name)] = dict()
         else:
-            raise Exception
+            raise SlotNotFoundError
 
     def get_ts_vals(self, var_name, ts_name, period, length):
         """Get's value of variable  for specific period
@@ -279,7 +290,7 @@ class EntityData:
         # Get time series.
         ts = self._time_series.get((var_name, ts_name))
         if ts is None:
-            raise Exception
+            raise TimeSeriesNotFoundError
         # Define borders.
         start_index = 0
         if period[0] is not None:
@@ -293,7 +304,7 @@ class EntityData:
             end_index = start_index + length
         # Check indexes correctness
         if start_index > end_index or end_index > len(ts):
-            raise Exception
+            raise PeriodOutOfRangeError
         # Return requested segment.
         return ts[start_index:end_index + 1]
 
@@ -313,7 +324,7 @@ class EntityData:
         # Get time series.
         ts = self._time_series.get((var_name, ts_name))
         if ts is None:
-            raise Exception
+            raise TimeSeriesNotFoundError
         # Define borders.
         start_index = 0
         if stamp is not None:
@@ -322,12 +333,13 @@ class EntityData:
         end_index = len(values) + start_index
         # Check index.
         if end_index > len(ts):
-            raise Exception
+            raise TimeSeriesOutOfRangeError
         # Set values.
         ts[start_index:end_index] = values
 
     def get_scalar_val(self, var_name, ts_name):
-        """Return variable values in ts_name timeseries
+        """
+        Return variable values in ts_name timeseries
 
         Args:
             (string): var_name - variable name
@@ -337,13 +349,14 @@ class EntityData:
         :return:
 
         """
+
         scalar = self._scalars.get((var_name, ts_name))
         if scalar is None:
-            raise Exception
+            raise ScalarNotFoundError
         return scalar
 
     def set_scalar_val(self, var_name, ts_name, value):
-        '''Return list of variables
+        """Return list of variables
 
         Args:
             (string): var_name
@@ -352,11 +365,11 @@ class EntityData:
 
         :return:
 
-        '''
+        """
         if (var_name, ts_name) in self._scalars:
             self._scalars[(var_name, ts_name)] = value
         else:
-            raise Exception
+            raise ScalarNotFoundError
         return
 
     def get_all_periods(self, var_name, ts_name):
@@ -379,18 +392,18 @@ class EntityData:
             return []
 
     def get_period_val(self, var_name, ts_name, period):
-        '''Return
+        """Return
 
         :return:
 
-        '''
+        """
         ps = self._periods_series.get((var_name, ts_name))
         if ps is None:
-            raise Exception
+            raise PeriodSeiresNotFoundError
         return ps.get(period)
 
     def set_period_val(self, var_name, ts_name, period, value):
-        '''Return list of variables
+        """Return list of variables
 
         Args:
             (string): var_name - variable name
@@ -399,9 +412,9 @@ class EntityData:
 
         :return:
 
-        '''
+        """
         ps = self._periods_series.get((var_name, ts_name))
         if ps is None:
-            raise Exception
+            raise PeriodSeiresNotFoundError
         ps[period] = value
         return

@@ -878,14 +878,9 @@ def test_get_growth_period(timeline_manager):
     actual = timeline_manager.get_growth_periods("annual", None)
     assert expected == actual
 
-    expected = [("January", "February"), ("February", "March")]
-    actual = timeline_manager.get_growth_periods("month", ["January", "March"])
+    expected = [("January", "February")]
+    actual = timeline_manager.get_growth_periods("month", ["January", "February"])
     assert expected == actual
-
-    expected =[]
-    actual = timeline_manager.get_growth_periods("day", None)
-    assert expected == actual
-
 
 
 def test_get_growth_period_raise_exception_value_error(timeline_manager):

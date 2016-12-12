@@ -1,5 +1,5 @@
 import copy
-from .. import exceptions as ex
+from iap.common.exceptions import *
 
 class TimeLineManager:
 
@@ -253,7 +253,7 @@ class TimeLineManager:
             if point['name_full'] == ts_period[1]:
                 end = index
         if start is None or end is None or start > end:
-            raise Exception
+            raise PeriodOutOfRangeError
         return [x['name_full'] for x in ts['timeline'][start:end+1]]
 
     def get_time_length(self, ts_name):
@@ -428,5 +428,5 @@ class TimeLineManager:
             if user_l_index < last_index:
                 last, last_index = user_l, user_l_index
         if first_index > mid_index or mid_index > last_index:
-            raise Exception
+            raise WrongCargsPeriodError
         return [(first, mid), (mid, last)]
