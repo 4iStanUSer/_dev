@@ -6,7 +6,10 @@ from ...common import exceptions as ex
 from ...common import runtime_storage as rt
 from ...common import persistent_storage as pt
 from ..services import common_info as common_getter
-
+from ...common.security import get_user
+from pyramid.session import SignedCookieSessionFactory
+from pyramid.security import forget
+from pyramid.security import remember
 
 def index_view(req):
     return render_to_response('iap.common:templates/index.jinja2',
@@ -19,10 +22,22 @@ def check_logged_in(req):
 
 
 def login(req):
-    return send_success_response(dict(logged=True, user=None))
-
+    user_id = get_user(req)
+    req.create_jwt_token(1000000, name="user.name")
+    print(help(req.authenticated_userid))
+    if user_id:
+        return {
+            'result': 'ok',
+            'token': req.create_jwt_token(user_id, name="user.name")
+        }
+    else:
+        return {
+            'result': 'error'
+        }
 
 def logout(req):
+    req.create_jwt_token(1, name=2)
+    print(req.session)
     return send_success_response()
 
 
