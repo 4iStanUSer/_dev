@@ -1,4 +1,51 @@
-<div>
+<div class="c-summary">
+    <div class="c-table">
+         <div class="c-table__head">
+             <div class="c-table__row" *ngFor="let colMetaIndex of range(colsMetaCount)" >
+                 <div class="c-table__td" *ngFor="let rowMetaIndex of range(rowsMetaCount)" >
+                     <span>{{ appendix[rowsMetaCount*colMetaIndex + rowMetaIndex] }}</span>
+                 </div>
+                 <div class="c-table__td" *ngFor="let col of cols" >
+                     <span>{{ col.meta[colMetaIndex]['name'] }}</span>
+                 </div>
+             </div>
+         </div>
+
+        <div class="c-table__body">
+            <div
+                    *ngFor="let row of rows | filterList:{key: 'isHidden', value: false}"
+                    [class.c-table__row--active]="selectedRowId === row.id"
+                    (click)="onClickRow(row)"
+                    class="c-table__row"
+            >
+                <div class="c-table__td" *ngFor="let meta of row.meta" >
+
+                    <!--? TODO find out the usage of the following
+                    <span *ngFor="let i of range(row.depth)">&nbsp;&nbsp;&nbsp;</span>
+                    <span
+                            *ngIf="row.children.length > 0"
+                            (click)="row.changeExpandStatus($event)" style="cursor: pointer;">
+                        <span *ngIf="row.isExpanded">-</span>
+                        <span *ngIf="!row.isExpanded">+</span>
+                    </span>
+                    <span *ngIf="row.children.length == 0">
+                        &nbsp;
+                    </span>
+                    -->
+
+                    <span>{{ meta['name'] }}</span>
+                </div>
+                <div class="c-table__td" *ngFor="let col of cols">
+                    <span>{{ getValue(row.id, col.id) }}</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!--?<div>
 
     <table>
 
@@ -42,4 +89,4 @@
 
     </table>
 
-</div>
+</div>-->
