@@ -962,3 +962,15 @@ def test_get_timeline_tree_raise_exception_type_error(timeline_manager):
 
     with pytest.raises(Exception):
         timeline_manager.get_timeline_tree(["hour"], ["month"], [1, 2, 3, 4])
+
+def test_get_carg_period(timeline_manager):
+    """Test for get lat_varg_period method"""
+    actual = timeline_manager.get_carg_periods("annual")
+    expected = [('2012','2016'), ('2016', '2018')]
+    assert expected == actual
+
+
+def test_get_carg_period_raise_exception_type_error(timeline_manager):
+    """Test for get lat_varg_period method"""
+    with pytest.raises(Exception):
+        timeline_manager.get_carg_periods("seconds")

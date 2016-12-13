@@ -1,7 +1,8 @@
 import pyramid
 from pyramid.config import Configurator
 from pyramid.response import Response
-
+from pyramid.security import Authenticated
+from pyramid.security import Allow
 from .common import security
 from .common.views import common_view as common
 
@@ -9,6 +10,17 @@ from .forecasting.views import dashboard as f_dashboard
 from .forecasting.views import common as f_common
 from .forecasting.views import scenarios as f_scenarios
 from .forecasting.views import simulator as f_simulator
+from pyramid.authorization import ACLAuthorizationPolicy
+
+
+class Root:
+    __acl__ = [
+        (Allow, Authenticated, ('read',)),
+    ]
+
+    def __init__(self, request):
+        pass
+
 
 
 def common_routing(config):
@@ -23,7 +35,7 @@ def common_routing(config):
     #config.add_forbidden_view(common.forbidden_view)
 
     config.add_route('common.index', '/')
-    config.add_view(common.index_view, route_name='common.index')
+    config.add_view(common.index_view, permission='read', route_name='common.index')
 
     config.add_route('common.get_routing_config', '/routing_config')
     config.add_view(common.get_routing_config,
@@ -33,7 +45,8 @@ def common_routing(config):
     config.add_route('common.check_logged_in', '/check_auth')
     config.add_view(common.check_logged_in,
                     route_name='common.check_logged_in',
-                    request_method='POST', renderer='json')
+                    request_method='POST', renderer='json', permission='read')
+
     config.add_route('common.login', '/login')
     config.add_view(common.login,
                     route_name='common.login',
@@ -70,7 +83,14 @@ def common_routing(config):
                     route_name='common.select_project',
                     request_method='POST', renderer='json')
 
+
+
+    config.set_authorization_policy(ACLAuthorizationPolicy())
+    config.include('pyramid_jwt')
+    config.set_root_factory(Root)
+    config.set_jwt_authentication_policy('secret', http_header='X-Token')
     config.include(security)
+
 
 
 def forecast_routing(config):
