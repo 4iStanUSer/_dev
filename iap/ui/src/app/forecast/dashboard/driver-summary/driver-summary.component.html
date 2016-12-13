@@ -1,5 +1,91 @@
+<div class="c-parts c-parts--summary" *ngIf="dm.dataIsResolved" >
+    <!--Module Drivers Summary-->
+    <!--horizontal item #1-->
+    <div class="c-parts__item">
+        <div class="c-diag">
+            <!--item top pane-->
+            <div class="c-diag__pane">
+                <div class="c-diag__title">
+                    <h3>{{ dm.config['drivers_summary_block'] }}</h3>
+                </div>
+                <div class="c-diag__text"><span>Click the row to view the Decomposition</span></div>
+                <div class="c-diag__button">
+                    <button class="c-button c-button--collapse" (click)="onClickTableToggleButton()" >
+                        {{ ((dm.state.get('d_summary_table_collapsed_expanded') == 'collapsed') ? dm.config['expand'] : dm.config['collapse']) }}
+                    </button>
+                </div>
+            </div>
+            <div class="c-diag__table" *ngIf="dm.state.get('d_summary_table_collapsed_expanded') == 'expanded'" >
+                <table-widget
+                *ngIf="tableData && tableData.data"
+                [data]="tableData.data"
+                (row-select)="onRowSelect($event)"
+            ></table-widget>
+            </div>
+        </div>
+    </div>
+    <div class="c-parts__item c-parts__item--decomposition">
+        <div class="c-diag">
+            <!--item top pane-->
+            <div class="c-diag__pane">
+                <div class="c-diag__title">
+                    <h3>
+                        {{ dm.config['decomposition_block'] }}
+                        {{ ((decompData) ? (decompData['start'] +'-'+ decompData['end']) : null) }}
+                    </h3>
+                </div>
+                <div class="c-diag__changer c-diag__changer--decomp">
+                    <buttons-group
+                            *ngIf="dTypesSwitcherData"
+                            [data]="dTypesSwitcherData"
+                            (changed)="onChangedDecompType($event)"
+                    ></buttons-group>
+                </div>
+                <div class="c-diag__text"><span>Click the row to view the Decomposition</span></div>
+            </div>
+            <!--item chart-->
+            <div class="c-diag__graph c-diag__graph--decomposition">
+                <div class="c-graph">
+                    <div class="c-graph__item c-graph__item--decomposition c-graph__item--active">
+                        <div class="c-graph__diag">
+                            <!--?<img class="h-test-img" src="../assets/img/test/ic-high-charts.svg">-->
+
+                            <div class="content" *ngIf="dTypeData">
+                                <!--?<div>
+                                    {{ dm.config['driver_contribution'] }}
+                                </div>-->
+                                <waterfall-chart
+                                        *ngIf="dTypeData['abs']"
+                                        [data]="dTypeData['abs']"
+                                ></waterfall-chart>
+                                <!--?<div>
+                                    {{ dm.config['driver_change_cagr'] }}
+                                </div>-->
+                                <!--?<div>
+                                    <table border="1">
+                                        <tr>
+                                            <td *ngFor="let rate of dTypeData['table']">
+                                                {{ rate['value'] }}
+                                                {{ rate['metric'] }}
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>-->
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--?
+
 <div class="wrapper" *ngIf="dm.dataIsResolved">
-    <div class="table-section">
+    -->
+<!--?<div class="table-section">
 
         <div class="header">
             {{ dm.config['drivers_summary_block'] }}
@@ -17,7 +103,8 @@
             ></table-widget>
 
         </div>
-    </div>
+    </div>--><!--?
+
 
     <div class="decomp-section">
         <div class="header">
@@ -63,3 +150,4 @@
     </div>
 
 </div>
+-->

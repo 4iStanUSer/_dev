@@ -1,3 +1,87 @@
+<div class="l-cat-popup__main l-cat-popup__main--brands l-cat-popup__main--orange l-cat-popup__main--active">
+    <div class="l-cat-popup__sidebar">
+        <div class="c-cat-block c-cat-block--search">
+            <div class="c-cat-block__pane">{{ lang['search_title'] }}</div>
+            <div class="c-cat-block__area">
+                <div class="c-search">
+                    <!--?<input type="submit" value="">
+                    <input type="search" name="search" placeholder="Search">-->
+                    <input
+                            [ngModel]="searchText"
+                            (ngModelChange)="onSearchTextChange($event)"
+                            [attr.placeholder]="lang['search_placeholder']"
+                            type="search"
+                    >
+                    <!--?<span *ngIf="searchText && searchText.length" (click)="onSearchTextChange(null)" [attr.title]="lang['search_clear']" class="clear-button">X</span>-->
+                </div>
+            </div>
+        </div>
+        <div class="c-cat-block c-cat-block--results">
+            <div class="c-cat-block__pane">{{ lang['items_title'] }}</div>
+            <div class="c-cat-block__area">
+
+                <ul class="c-results-list" *ngIf="itemsToShow.length > 0">
+                    <li class="c-results-list__item" *ngFor="let item of itemsToShow" [class.active]="item.isSelected" >
+                        <div class="c-results-list__res">
+                            <div class="c-checkbox">
+                                <input type="checkbox" [ngModel]="item.isSelected" (click)="onItemClick(item)"  id="result1">
+                                <label class="c-checkbox__label" for="result1"></label>
+                            </div>
+                            <span *ngFor="let i of range(item.depth)">&nbsp;&nbsp;</span>
+                            <span>{{ item.name }}</span>
+
+                            <!--?TODO replace the following when have hierarchical data-->
+                            <span *ngIf="!(searchText && searchText.length) && item.children.length > 0" (click)="changeExpandStatus(item)">
+                                <span *ngIf="item.isExpanded">-</span>
+                                <span *ngIf="!item.isExpanded">+</span>
+                            </span>
+
+                        </div>
+                    </li>
+                </ul>
+
+            </div>
+<!--?
+
+                <ul *ngIf="itemsToShow.length > 0">
+                    <li *ngFor="let item of itemsToShow" [class.active]="item.isSelected" >
+                        <input type="checkbox" [ngModel]="item.isSelected" (click)="onItemClick(item)" >
+                        <span *ngFor="let i of range(item.depth)">&nbsp;&nbsp;</span>
+
+                        {{ item.name }}
+
+                        <span *ngIf="!(searchText && searchText.length) && item.children.length > 0" (click)="changeExpandStatus(item)">
+                            <span *ngIf="item.isExpanded">-</span>
+                            <span *ngIf="!item.isExpanded">+</span>
+                        </span>
+                    </li>
+                </ul>
+                <span *ngIf="itemsToShow.length == 0">{{ lang['not_found_items'] }}</span>-->
+
+        </div>
+    </div>
+    <div class="l-cat-popup__right">
+
+        <div class="c-cat-block c-cat-block--selected c-cat-block--selected-large">
+            <div class="c-cat-block__pane">{{ lang['selected_title'] }}</div>
+            <div class="c-cat-block__area">
+                <div class="c-select-list">
+                    <div class="c-select-list__item" *ngFor="let item_id of model.selected" >
+                        <span>{{ model['items'][item_id]['name'] }}</span>
+                        <div (click)="onDeselectItemClick(item_id)" class="c-select-list__close"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!--?
+
+
+
 <div>
 
     <div class="items">
@@ -40,3 +124,4 @@
     </div>
 
 </div>
+-->

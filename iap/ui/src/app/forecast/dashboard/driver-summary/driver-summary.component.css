@@ -1,0 +1,202 @@
+.c-diag {
+  height: 100%;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  overflow: hidden;
+}
+.c-diag__graph {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  height: calc(100% - 88px);
+}
+.c-diag__graph--decomposition {
+  height: calc(100% - 54px);
+}
+.c-diag__pane {
+  padding: 16px 12px 10px;
+  height: 28px;
+  min-height: 28px;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  background-color: #fff;
+}
+.c-diag__pane:after {
+  content: '';
+  display: table;
+  clear: both;
+}
+.c-diag__title {
+  margin: 0 2% 0 1.6%;
+}
+.c-diag__title h3 {
+  display: block;
+  width: 100%;
+  margin: 0;
+  font-family: 'open_sansbold';
+  font-size: 18px;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.94;
+  text-align: left;
+  color: #2e3438;
+  white-space: nowrap;
+}
+.c-diag__date {
+  margin-left: auto;
+  max-width: 22%;
+  min-width: 150px;
+  width: 150px;
+  width: 100%;
+}
+.c-diag__date select {
+  width: 100%;
+  height: 28px;
+}
+.c-diag__text {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: flex-end;
+      -ms-flex-align: end;
+          align-items: flex-end;
+  margin-left: auto;
+  font-family: 'open_sanssemibold';
+  font-size: 10px;
+  text-align: left;
+  color: rgba(98,105,112,0.7);
+}
+.c-diag__changer {
+  margin-left: 2%;
+}
+.c-diag__tabs {
+  max-height: 34px;
+  height: 34px;
+  padding: 0 12px;
+  background-color: #fff;
+}
+.c-diag__table {
+  height: calc(100% - 54px);
+  background: #fff;
+}
+.c-diag__button {
+  margin-left: 2%;
+}
+.c-diag:after {
+  content: '';
+  display: table;
+  clear: both;
+}
+.c-parts {
+  height: 100%;
+  width: 100%;
+  display: box;
+  box-orient: vertical;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  /*display: none; vira*/
+}
+.c-parts__item {
+  height: calc(50% - 3px);
+  margin-bottom: 6px;
+  border-radius: 4px;
+  box-shadow: 0 0 4.8px 0.3px rgba(0,0,0,0.05);
+  overflow: hidden;
+}
+.c-parts__item:last-child {
+  margin-bottom: 0;
+}
+.c-parts__item:first-child {
+  border-top-left-radius: 0;
+}
+
+
+/*buttons start*/
+.c-button {
+  position: relative;
+  font-family: 'open_sansbold';
+  font-size: 12px;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 26px;
+  text-align: center;
+  color: #44b3c2;
+  border-radius: 4px;
+  background-color: #fff;
+  border: solid 1px #44b3c2;
+}
+.c-button--expand {
+  width: 75px;
+  padding-right: 15px;
+}
+.c-button--expand:after {
+  content: '';
+  display: block;
+  position: absolute;
+  top: 0;
+  right: 12px;
+  width: 10px;
+  height: 100%;
+  background: url("/static/assets/images/icons/ic-expand.svg") no-repeat center;
+  background-size: 10px 13px;
+}
+.c-button:hover {
+  cursor: pointer;
+}
+.c-button:focus {
+  outline: none;
+}
+/*buttons end*/
+
+
+.c-parts__item--details {
+  height: 100%;
+}
+.c-parts__item--details .c-graph__item--details {
+  height: calc(50% - 3px);
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  margin-bottom: 6px;
+}
+.c-parts__item--details .c-graph__item--details:last-child {
+  margin-bottom: 0;
+}
+.c-parts__item--details .c-graph__left-tab {
+  display: block;
+}
+.c-parts__item--details .c-diag__date {
+  margin-left: 20px;
+}
+.c-parts__item--details .c-diag__table {
+  height: 155px;
+}
+.c-parts__item--details .c-diag__table .c-table {
+  padding-top: 6px;
+}
+.c-parts__item--details .c-diag__table .c-table__head {
+  height: 30px;
+}
+.c-parts__item--details .c-diag__table .c-table__row {
+  border-top-left-radius: 4px;
+}
+.c-parts__item--details .c-diag__graph {
+  height: calc(100% - 208px);
+}
+.c-parts--active {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}

@@ -1,4 +1,138 @@
-<div class="wrapper" *ngIf="dm.dataIsResolved">
+<div class="c-parts c-parts--details" *ngIf="dm.dataIsResolved">
+    <!--Module Drivers Details-->
+    <!--horizontal item #1-->
+    <div class="c-parts__item c-parts__item--details">
+        <div class="c-diag">
+            <!--item top pane-->
+            <div class="c-diag__pane">
+                <div class="c-diag__title">
+                    <!--?TODO replace title for config details-->
+                    <h3>{{ dm.config['drivers_summary_block'] }}</h3>
+                </div>
+                <!--?TODO find out if changer is needed-->
+                <!--?<div class="c-diag__changer">
+                    <buttons-group
+                            *ngIf="dTypesSwitcherData"
+                            [data]="dTypesSwitcherData"
+                            (changed)="onChangedDecompType($event)"
+                    ></buttons-group>
+                </div>-->
+                <!--?TODO get styles for ordinary dropdown selector-->
+                <div class="c-diag__date">
+                   <!--? <div class="c-select c-select--date" id="detailsUnitSize">
+                        (Unit Size, EQ/Unit)
+                    </div>-->
+                    <select class="c-select"
+                            *ngIf="megaDriversSelectorData"
+                            [ngModel]="megaDriversSelectorData.selected"
+                            (ngModelChange)="onChangeMegaDriver($event)">
+                        <option
+                                *ngFor="let opt of megaDriversSelectorData.options"
+                                [value]="opt.id">
+                            {{ opt.name }}
+                        </option>
+                    </select>
+                </div>
+                <div class="c-diag__text"><span>Click the row to view details</span></div>
+                <div class="c-diag__button">
+                    <button
+                            class="c-button c-button--collapse"
+                            (click)="onClickTableToggleButton($event)"
+                    >
+                        {{ ((dm.state.get('d_details_table_collapsed_expanded') == 'collapsed') ? dm.config['expand'] : dm.config['collapse']) }}
+                    </button>
+
+                </div>
+            </div>
+            <!--item table-->
+            <div class="c-diag__table" *ngIf="dm.state.get('d_details_table_collapsed_expanded') == 'expanded'">
+                <table-widget
+                        *ngIf="tableData && tableData['data']"
+                        [data]="tableData['data']"
+                        (row-select)="onRowSelect($event)"
+                ></table-widget>
+            </div>
+
+            <div class="c-diag__graph">
+                <div class="c-graph">
+                    <!--?sub_drivers_dynamic-->
+                    <div class="c-graph__item c-graph__item--details">
+                        <div class="c-graph__left-tab">
+                            <div class="c-color-tab c-color-tab--blue c-color-tab--vertical" >
+                                <div class="c-color-tab__wrapper"><span>{{ dm.config['sub_drivers_dynamic'] }} </span></div>
+                            </div>
+                        </div>
+                        <div class="c-graph__diag">
+                            <bar-chart
+                                    *ngIf="dynamicData.abs"
+                                    [data]="dynamicData.abs"
+                            ></bar-chart>
+                            <!--?<img class="h-test-img" src="../assets/img/test/ic-high-charts.svg">-->
+                        </div>
+                        <div class="c-graph__cagr">
+                            <div class="c-cagr">
+                                <div class="c-cagr__title">
+                                    <h4>Growth<span>(CAGR)</span></h4>
+                                </div>
+                                <div class="c-cagr__main">
+                                    <div class="c-cagr__value" *ngFor="let cagr of dynamicData.cagr">
+                                        <span>{{ cagr.start }}/{{ cagr.end }}</span>
+                                        <span>{{ cagr.value }}%</span>
+                                    </div>
+                                    <!--?<div class="c-cagr__value c-cagr__value--active"><span>13/15</span><span>-4%</span></div>
+                                    <div class="c-cagr__value"><span>15/20F</span><span>+11%</span></div>-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--?sub_drivers_impact-->
+                    <div class="c-graph__item c-graph__item--details">
+                        <div class="c-graph__left-tab">
+                            <div class="c-color-tab c-color-tab--blue c-color-tab--vertical" >
+                                <div class="c-color-tab__wrapper"><span>{{ dm.config['sub_drivers_impact'] }}</span></div>
+                            </div>
+                        </div>
+                        <div class="c-graph__diag">
+                            <bar-chart
+                                    *ngIf="imapactData.abs"
+                                    [data]="imapactData.abs"
+                            ></bar-chart>
+                            <!--?<img class="h-test-img" src="../assets/img/test/ic-high-charts.svg">-->
+                        </div>
+                        <div class="c-graph__cagr">
+                            <div class="c-cagr">
+                                <div class="c-cagr__title">
+                                    <h4>Growth<span>(CAGR)</span></h4>
+                                </div>
+                                <div class="c-cagr__main">
+                                    <div class="c-cagr__value" *ngFor="let cagr of imapactData.cagr">
+                                        <span>{{ cagr.start }}/{{ cagr.end }}</span>
+                                        <span>{{ cagr.value }}%</span>
+                                    </div>
+                                    <!--?<div class="c-cagr__value c-cagr__value--active"><span>13/15</span><span>-4%</span></div>
+                                    <div class="c-cagr__value"><span>15/20F</span><span>+11%</span></div>-->
+                                </div>
+                                <!--?<div style="display:inline-block;width:24%" class="cagrs">
+                                    <div *ngFor="let cagr of dynamicData.cagr">
+                                        {{ dm.config['cagr'] }}<br>
+                                        {{ cagr.start }}/{{ cagr.end }}<br>
+                                        {{ cagr.value }}%
+                                    </div>
+                                </div>-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+<!--?<div class="wrapper" *ngIf="dm.dataIsResolved">
 
 
     <div class="table-section">
@@ -45,10 +179,8 @@
 
         <div class="header">
             <h3>{{ dm.config['sub_drivers_dynamic'] }}</h3>
-
         </div>
         <div class="content">
-
             <div *ngIf="dynamicData">
                 <div style="position: relative"
                      class="chart-rates">
@@ -56,7 +188,6 @@
                         <div style="display:inline-block;width:24%">
                             {{ dm.config['driver_contribution'] }}
                         </div>
-
                         <bar-chart
                             *ngIf="dynamicData.abs"
                             [data]="dynamicData.abs"
@@ -83,18 +214,14 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 
     <div class="table-section">
-
         <div class="header">
             <h3>{{ dm.config['sub_drivers_impact'] }}</h3>
-
         </div>
         <div class="content">
-
             <div *ngIf="imapactData">
                 <div style="position: relative"
                      class="chart-rates">
@@ -102,7 +229,6 @@
                         <div style="display:inline-block;width:24%">
                             {{ dm.config['absolute'] }}
                         </div>
-
                         <bar-chart
                             *ngIf="imapactData.abs"
                             [data]="imapactData.abs"
@@ -129,9 +255,8 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 
 
-</div>
+</div>-->
