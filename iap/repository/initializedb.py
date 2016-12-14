@@ -1,5 +1,6 @@
 import os
 import sys
+import json
 
 import transaction
 from pyramid.paster import (get_appsettings, setup_logging)
@@ -14,6 +15,8 @@ from ..repository.interface.imanage_access import IManageAccess
 
 from ..repository import persistent_storage
 from ..forecasting.workbench import Workbench
+
+
 from ..common.dev_template import dev_template_JJLean, dev_template_JJOralCare
 
 def usage(argv):
@@ -63,11 +66,23 @@ def main(argv=sys.argv):
         #backup = wb.get_backup()
         #persistent_storage.save_backup(user_id, tool_id, 'JJLean', backup)
 
-        wb = Workbench(user_id)
-        wb.initial_load(wh, dev_template_JJOralCare, None)
-        backup = wb.get_backup()
-        persistent_storage.save_backup(user_id, tool_id, 'JJOralCare', backup)
 
+        #filename = os.path.join(settings['path.dev_templates'], 'JJOralCare.json')
+        #with open(filename) as file:
+        #    template = json.load(file)
+
+        #wb = Workbench(user_id)
+        #wb.initial_load(wh, template, dev_template_JJOralCare['calc_instructions'], None)
+        #backup = wb.get_backup()
+        #persistent_storage.save_backup(user_id, tool_id, 'JJOralCare', backup)
+
+        filename = os.path.join(settings['path.dev_templates'], 'JJLean.json')
+        with open(filename) as file:
+            template = json.load(file)
+        wb = Workbench(user_id)
+        wb.initial_load(wh, template, None, None)
+        backup = wb.get_backup()
+        persistent_storage.save_backup(user_id, tool_id, 'JJLean', backup)
 
 
         imanage_access = IManageAccess(ssn=ssn)

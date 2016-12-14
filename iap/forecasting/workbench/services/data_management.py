@@ -63,12 +63,9 @@ def get_entity_data(container, config, entities_ids, lang):
     ent = container.get_entity_by_id(entity_id)
 
     # Define default selection for time periods.
-    main_timescales = config.get_property('dash_timescales', ent.meta,
-                                          ent.path)
-    top_ts_period = config.get_property('dash_top_ts_period', ent.meta,
-                                        ent.path)
-    dec_timescales = config.get_property('dash_decomposition_timescales',
-                                         ent.meta, ent.path)
+    main_timescales = config.get_property('dash_timescales')
+    top_ts_period = config.get_property('dash_top_ts_period')
+    dec_timescales = config.get_property('dash_decomposition_timescales')
     top_ts = str(main_timescales[0])
     bottom_ts = str(main_timescales[-1])
     mid = container.timeline.get_period_by_alias(top_ts, 'history')[0][1]
@@ -85,7 +82,7 @@ def get_entity_data(container, config, entities_ids, lang):
     entity_data['data']['timelabels'] = ts_tree
 
     # Get timescales view settings.
-    timescales_info = config.get_timescales_info(main_timescales, lang)
+    timescales_info = config.get_objects_properties('timescale', main_timescales, lang)
     timescales_view_info = []
     for ts_info in timescales_info:
         ts_view_props = dict(
@@ -118,7 +115,7 @@ def get_entity_data(container, config, entities_ids, lang):
     time_series_data = dict([(x, dict()) for x in ts_borders.keys()])
     periods_data = dict([(x, dict()) for x in ts_borders.keys()])
 
-    items_view_props = config.get_vars_for_view(ent.meta, ent.path)
+    items_view_props = config.get_vars_for_view(meta=ent.meta, path=ent.path)
     for item in items_view_props:
         # Get entity to get variables from.
         curr_ent = container.get_entity_by_filter(ent, item['filter'])
@@ -150,8 +147,7 @@ def get_entity_data(container, config, entities_ids, lang):
                       if var_info['id'] not in absent_vars_ids]
 
         vars_props = config\
-            .get_variables_properties(vars_ids, lang, curr_ent.meta,
-                                      curr_ent.path)
+            .get_objects_properties('variable', vars_ids, lang)
         for index, v_props in enumerate(vars_props):
             view_props = dict(
                 id=None,
@@ -170,7 +166,7 @@ def get_entity_data(container, config, entities_ids, lang):
 
     # Get decomposition types properties.
     decs_types_view_props = []
-    dec_types_props = config.get_dec_types_info(lang, ent.meta, ent.path)
+    dec_types_props = config.get_objects_properties('decomposition', ['value', 'volume'], lang)
     for dec_type in dec_types_props:
         dec_type_view_props = dict(id=None, full_name=None, short_name=None)
         dicts_left_join(dec_type_view_props, dec_type)
@@ -204,12 +200,11 @@ def get_entity_data(container, config, entities_ids, lang):
     entity_data['data']['decomp_type_factors'] = dec_type_factors
 
     # Extend variables properties.
-    for item in config.get_decomp_vars_for_view(ent.meta, ent.path):
+    for item in config.get_decomp_vars_for_view(meta=ent.meta, path=ent.path):
         curr_ent = container.get_entity_by_filter(ent, item['filter'])
         vars_ids = [var_info['id'] for var_info in item['variables']]
         vars_props = \
-            config.get_variables_properties(vars_ids, lang, curr_ent.meta,
-                                            curr_ent.path)
+            config.get_objects_properties('variable', vars_ids, lang)
         for index, v_props in enumerate(vars_props):
             view_props = dict(id=None, full_name=None, short_name=None,
                               type=None, metric=None, format=None, hint='')
@@ -219,7 +214,7 @@ def get_entity_data(container, config, entities_ids, lang):
     entity_data['data']['variables'] = vars_view_props
 
     # Relations between factors and drivers
-    factor_drivers = config.get_factor_drivers_relations(ent.meta, ent.path)
+    factor_drivers = config.get_factor_drivers_relations(meta=ent.meta, path=ent.path)
     for factor, fd_rel in factor_drivers.items():
         factor_drivers[factor] = \
             [dict(factor=x[0], driver=x[1]) for x in fd_rel]
@@ -238,7 +233,7 @@ def get_decomposition(container, config, entities_ids, timescales_periods):
     ent = container.get_entity_by_id(entity_id)
 
     # Get list of decomposition variables.
-    entities_dec_vars = config.get_decomp_vars_for_view(ent.meta, ent.path)
+    entities_dec_vars = config.get_decomp_vars_for_view(meta=ent.meta, path=ent.path)
 
     # Collect all decomposition data to the flat list.
     decomp_data = []
