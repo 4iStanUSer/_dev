@@ -21,6 +21,7 @@ def index_view(req):
                               request=req)
 
 
+
 def check_logged_in(req):
     """Check user existed
 
@@ -32,11 +33,23 @@ def check_logged_in(req):
     """
     #add session verification
     user_id = get_user(req)
-    if user_id == None:
-        #check login in session
-        return send_success_response(False)
-    elif user_id!=None and check_session(req):
-        return send_success_response(True)
+    if user_id == None or check_session(req) == False:
+        return send_error_response('Unauthorised')
+    elif user_id!=None and check_session(req) == True:
+        return send_success_response()
+
+
+def forbidden_view(f):
+    def deco(request):
+        user_id = get_user(request)
+        if user_id != None and check_session(request) == True:
+            print('Authorised')
+            return f(request)
+        else:
+            print('Unauthorised')
+            return send_error_response('Unauthorised')
+            return send_error_response('Unauthorised')
+    return deco
 
 
 def login(req):
@@ -47,12 +60,8 @@ def login(req):
     :return:
     :rtype: Dict[str, str]
     """
-    #check login and password
-    #check if user exist
+
     if authorise(req)!=None:
-        #check correct password
-        #authorise should return id
-        #set session
         user_id = authorise(req)['id']
         login = authorise(req)['login']
         token = req.create_jwt_token(user_id, login=login)
@@ -62,9 +71,7 @@ def login(req):
             'token': token
         }
     else:
-        return {
-            'result': 'error'
-        }
+        return send_error_response('Unauthorised')
 
 
 
@@ -76,6 +83,7 @@ def logout(req):
     return response
 
 
+@forbidden_view
 def get_routing_config(req):
     config = {
         '/get_landing': {'url': '/get_landing', 'allowNotAuth': True}
@@ -83,6 +91,7 @@ def get_routing_config(req):
     return send_success_response(config)
 
 
+@forbidden_view
 def get_page_configuration(req):
     # Get parameters from request.
     try:

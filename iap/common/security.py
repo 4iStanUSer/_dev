@@ -5,6 +5,7 @@ from pyramid.security import Allow
 my_session_factory = SignedCookieSessionFactory('itsaseekreet')
 
 
+
 def authorise(request):
     """Authorise function that check correctness of user password
 
@@ -39,7 +40,7 @@ def check_session(request):
             return True
         else:
             return False
-    return Exception
+    return False
 
 
 def get_user(request):
