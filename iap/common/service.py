@@ -1,3 +1,4 @@
+from iap.repository.db.models_access import User
 
 
 
@@ -16,7 +17,6 @@ def get_user_by_id(id):
     :rtype:
 
     """
-
     users = [{"id": 1, "login": 'default_user', 'password': '123456'},
     {"id": 2, "login": 'user_1', 'password':'12345'},
     {"id": 3, "login": 'user_2', 'password':'12345'},
