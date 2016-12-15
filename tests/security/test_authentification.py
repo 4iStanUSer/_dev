@@ -93,10 +93,9 @@ def test_check_auth_non_existet_user(web_app):
 
 def test_login_wrong_head(web_app):
     res = web_app.post_json('/login')
-    token = str(res.json_body['token'])
-    print(token)
-    next_res = web_app.post('/check_auth', headers={'user': token})
-    print(next_res)
+    expected = {"error": True, "data": "Unauthorised"}
+    actual = res.json
+    assert expected == actual
 
 
 def test_login_wrong_value(web_app):

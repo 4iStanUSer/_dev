@@ -59,16 +59,15 @@ def login(req):
 
     """
 
-    if authorise(req)!=Exception:
+    if authorise(req)==Exception:
+        return send_error_response('Unauthorised')
+    else:
         user_id = authorise(req).id
         login = authorise(req).email
+        print('User', user_id)
         token = req.create_jwt_token(user_id, login=login)
         req.session['token'] = token
         return {'result': 'ok', 'token': token}
-
-    else:
-        return send_error_response('Unauthorised')
-
 
 
 def logout(req):

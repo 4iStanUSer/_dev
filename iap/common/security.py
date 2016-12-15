@@ -23,6 +23,7 @@ def authorise(request):
     else:
         try:
             user = request.dbsession.query(User).filter(User.email == login).one()
+            #user.check_password(password)
             #user = service.check_password(login, password)
             return user
         except:
