@@ -3,7 +3,7 @@ from pyramid.session import SignedCookieSessionFactory
 from pyramid.security import Authenticated
 from pyramid.security import Allow
 my_session_factory = SignedCookieSessionFactory('itsaseekreet')
-
+from iap.repository.db.models_access import User
 
 
 def authorise(request):
@@ -19,10 +19,14 @@ def authorise(request):
         login = request.json_body['login']
         password = request.json_body['password']
     except:
-        raise Exception
+        return Exception
     else:
-        user = service.check_password(login, password)
-        return user
+        try:
+            user = request.dbsession.query(User).filter(User.email == login).one()
+            #user = service.check_password(login, password)
+            return user
+        except:
+            return Exception
 
 
 def check_session(request):
@@ -57,10 +61,14 @@ def get_user(request):
         user_id = request.unauthenticated_userid
         login = request.jwt_claims['login']
     except:
-        raise Exception
-    if user_id is not None:
-        user = service.get_user_by_id(user_id)
-        return user
+        return Exception
+    else:
+        try:
+            user = request.dbsession.query(User).filter(User.id == user_id and User.email == login).one()
+            #user = service.get_user_by_id(request,user_id, login)
+            return user
+        except:
+            return Exception
 
 
 def includeme(config):
