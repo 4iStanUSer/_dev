@@ -34,8 +34,9 @@ def check_password(login, password):
              {"id": 4, "login": 'user_3', 'password': '12345'}]
     for user in users:
         if user["login"] == login and user['password'] == password:
-            return True
+            return user
     return None
+
 
 def get_user_by_email(email):
     return None

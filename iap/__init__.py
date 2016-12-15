@@ -5,14 +5,13 @@ from pyramid.security import Authenticated
 from pyramid.security import Allow
 from .common import security
 from .common.views import common_view as common
-
 from .forecasting.views import dashboard as f_dashboard
 from .forecasting.views import common as f_common
 from .forecasting.views import scenarios as f_scenarios
 from .forecasting.views import simulator as f_simulator
 from pyramid.authorization import ACLAuthorizationPolicy
-from pyramid.authentication import SessionAuthenticationPolicy
 from .common.security import get_user
+
 
 class Root:
     __acl__ = [
