@@ -8,6 +8,7 @@ from sqlalchemy import (
     Boolean,
 )
 from sqlalchemy.orm import relationship, backref
+from passlib.hash import bcrypt
 from .meta import Base
 
 
@@ -50,7 +51,11 @@ class User(Base):
 
     foreacst_perm_values = relationship("FrcastPermValue")
 
+    def set_password(self, password):
+        self.password = bcrypt.encrypt(password)
 
+    def check_password(self,password):
+        return bcrypt.verify(password, self.password)
 
 role_features_tbl = Table(
     'role_feature', Base.metadata,
