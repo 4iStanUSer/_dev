@@ -8,6 +8,7 @@ from ...common import persistent_storage as pt
 from ..services import common_info as common_getter
 from ...common.security import authorise
 from ...common.security import get_user
+from ...common.security import check_session
 from pyramid.session import SignedCookieSessionFactory
 from pyramid.security import authenticated_userid
 from pyramid.security import unauthenticated_userid
@@ -30,12 +31,11 @@ def check_logged_in(req):
 
     """
     #add session verification
-    print(req.headers['X-Token'])
     user_id = get_user(req)
     if user_id == None:
         #check login in session
         return send_success_response(False)
-    else:
+    elif user_id!=None and check_session(req):
         return send_success_response(True)
 
 
@@ -53,7 +53,10 @@ def login(req):
         #check correct password
         #authorise should return id
         #set session
-        token = req.create_jwt_token(1, login=login)
+        user_id = authorise(req)['id']
+        login = authorise(req)['login']
+        token = req.create_jwt_token(user_id, login=login)
+        req.session['token'] = token
         return {
             'result': 'ok',
             'token': token
@@ -67,6 +70,7 @@ def login(req):
 
 def logout(req):
     #provide mechanism for session leaving
+    del req.session['token']
     del req.headers['X-Token']
     response = req.response
     return response
