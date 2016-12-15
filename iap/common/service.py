@@ -8,8 +8,34 @@
 
 
 def get_user_by_id(id):
+    """Get user by id
+
+    :param id:
+    :type id:
+    :return:
+    :rtype:
+
+    """
+
+    users = [{"id": 1, "login": 'default_user', 'password': '123456'},
+    {"id": 2, "login": 'user_1', 'password':'12345'},
+    {"id": 3, "login": 'user_2', 'password':'12345'},
+    {"id": 4, "login": 'user_3', 'password':'12345'}]
+    for user in users:
+        if user["id"] == id:
+            return user
     return None
 
+
+def check_password(login, password):
+    users = [{"id": 1, "login": 'default_user', 'password': '123456'},
+             {"id": 2, "login": 'user_1', 'password': '12345'},
+             {"id": 3, "login": 'user_2', 'password': '12345'},
+             {"id": 4, "login": 'user_3', 'password': '12345'}]
+    for user in users:
+        if user["login"] == login and user['password'] == password:
+            return True
+    return None
 
 def get_user_by_email(email):
     return None

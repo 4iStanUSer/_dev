@@ -11,7 +11,8 @@ from .forecasting.views import common as f_common
 from .forecasting.views import scenarios as f_scenarios
 from .forecasting.views import simulator as f_simulator
 from pyramid.authorization import ACLAuthorizationPolicy
-
+from pyramid.authentication import SessionAuthenticationPolicy
+from .common.security import get_user
 
 class Root:
     __acl__ = [
@@ -87,9 +88,11 @@ def common_routing(config):
 
     config.set_authorization_policy(ACLAuthorizationPolicy())
     config.include('pyramid_jwt')
+    config.add_request_method(get_user, 'user', reify=True)
     config.set_root_factory(Root)
     config.set_jwt_authentication_policy('secret', http_header='X-Token')
     config.include(security)
+
 
 
 

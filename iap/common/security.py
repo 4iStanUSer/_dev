@@ -4,31 +4,47 @@ from pyramid.security import Authenticated
 from pyramid.security import Allow
 my_session_factory = SignedCookieSessionFactory('itsaseekreet')
 
-class Root:
-    __acl__ = [
-        (Allow, Authenticated, ('read',)),
-    ]
 
-    def __init__(self, request):
-        pass
+def authorise(request):
+    """Authorise function that check correctness of user password
 
-def validate_the_token():
-    pass
+    :param request:
+    :type request:
+    :return bool:
+    :rtype:
 
+    """
+    try:
+        login = request.json_body['login']
+        password = request.json_body['password']
+    except:
+        raise Exception
+    else:
+        user = service.check_password(login, password)
+        return user
 
 def get_user(request):
-    return 111
-    #user_id = request.unauthenticated_userid
-    #if user_id is not None:
-    #    #user = request.dbsession.query(User).get(user_id)
-    #    user = service.get_user_by_id(user_id)
-    #    return user
+    """
 
+    :param request:
+    :type request: pyramid.util.Request
+    :return:
+    :rtype: int
+    """
+    #add exception on non existen  id,login in token
 
+    try:
+        user_id = request.unauthenticated_userid
+        login = request.jwt_claims['login']
+    except:
+        raise Exception
+    if user_id is not None:
+        user = service.get_user_by_id(user_id)
+        return user
 
 
 def includeme(config):
     settings = config.get_settings()
-    config.set_jwt_authentication_policy('secret', http_header='X-Token')
     config.set_session_factory(my_session_factory)
     config.add_request_method(get_user, 'user', reify=True)
+    config.add_request_method(authorise, 'user', reify=True)

@@ -6,10 +6,13 @@ from ...common import exceptions as ex
 from ...common import runtime_storage as rt
 from ...common import persistent_storage as pt
 from ..services import common_info as common_getter
+from ...common.security import authorise
 from ...common.security import get_user
 from pyramid.session import SignedCookieSessionFactory
-from pyramid.security import forget
-from pyramid.security import remember
+from pyramid.security import authenticated_userid
+from pyramid.security import unauthenticated_userid
+from pyramid.security import Authenticated
+
 
 def index_view(req):
     return render_to_response('iap.common:templates/index.jinja2',
@@ -18,27 +21,55 @@ def index_view(req):
 
 
 def check_logged_in(req):
-    return send_success_response(True)
+    """Check user existed
+
+    :param req:
+    :type req: pyramid.util.Request
+    :return:
+    :rtype: Dict[str, bool]
+
+    """
+    #add session verification
+    print(req.headers['X-Token'])
+    user_id = get_user(req)
+    if user_id == None:
+        #check login in session
+        return send_success_response(False)
+    else:
+        return send_success_response(True)
 
 
 def login(req):
-    user_id = get_user(req)
-    req.create_jwt_token(1000000, name="user.name")
-    print(help(req.authenticated_userid))
-    if user_id:
+    """View function for
+
+    :param req:
+    :type req: pyramid.util.Request
+    :return:
+    :rtype: Dict[str, str]
+    """
+    #check login and password
+    #check if user exist
+    if authorise(req)!=None:
+        #check correct password
+        #authorise should return id
+        #set session
+        token = req.create_jwt_token(1, login=login)
         return {
             'result': 'ok',
-            'token': req.create_jwt_token(user_id, name="user.name")
+            'token': token
         }
     else:
         return {
             'result': 'error'
         }
 
+
+
 def logout(req):
-    req.create_jwt_token(1, name=2)
-    print(req.session)
-    return send_success_response()
+    #provide mechanism for session leaving
+    del req.headers['X-Token']
+    response = req.response
+    return response
 
 
 def get_routing_config(req):

@@ -23,15 +23,64 @@ def web_app():
 
 
 def test_login(web_app):
+    """"""
+    login = "default_user"
+    password = "123456"
+    res = web_app.post_json('/login', {"login": login, 'password': password})
+    print(res)
+
+
+def test_login_exception_non_existend(web_app):
+
+    login = "username"
+    password = "123456"
+    res = web_app.post_json('/login', {"login": login, 'password': password})
+    expected = {"result": "error"}
+    actual = res
+    assert expected == actual.json
+
+
+def test_check_auth(web_app):
+    """
+    {'login': 'default_user', 'password': '123456', 'id'=1}
+
+    :param web_app:
+    :type web_app:
+    :return:
+    :rtype:
+
+    """
+    token = "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImxvZ2luIjoiZGVmYXVsdF91c2VyIiwiaWF0IjoxNDgxNzk0MjI5fQ.mW8JQOAbnFxDFVBmt5RznYmrVaqdoQIRmUDtCZ6r7KcixsiBWYB6JaCF3SXgZg6nt8kmzEULwT2B5n18R1OaTg"
+    res = web_app.post('/check_auth', headers={'X-Token': token})
+    print(res)
+
+
+def test_check_auth_non_existet_user(web_app):
+    """
+    {'login': 'unexisted_user', 'password': '123456', 'id'=10}
+
+    :param web_app:
+    :type web_app:
+    :return:
+    :rtype:
+
+    """
+    token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJsb2dpbiI6InVuZXhpc3RlZF91c2VyIiwic3ViIjoxMCwiaWF0IjoxNDgxNzk1OTcyfQ.zXdgnG8ouQIf38aMg3166jx9FKlxDcNqzqzfl6ibsdoZd7CgQ6JPzjFgOaYRNxtYkerRrQoj8Hbm243XqdzFiA"
+    res = web_app.post('/check_auth', headers={'X-Token': token})
+    print(res)
+
+
+def test_login_wrong_head(web_app):
     res = web_app.post_json('/login')
     token = str(res.json_body['token'])
     print(token)
-    next_res = web_app.post('/check_auth', headers={'X-Token': token})
+    next_res = web_app.post('/check_auth', headers={'user': token})
     print(next_res)
 
 
-def test_loggedin(web_app):
-    res = web_app.post_json('/check_auth')
+def test_login_wrong_value(web_app):
+    token = "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImxvZ2luIjoiZGVmYXVsdF91c2VyIiwiaWF0IjoxNDgxNzk0MjI5fQ.mW8JQOAbnFxDFVBmt5RznYmrVaqdoQIRmUDtCZ6r7KcixsiBWYB6JaCF3SXgZg6nt8kmzEULwT2B5n18R1OaTg"
+    res = web_app.post_json('/logout', headers={'X-Token': token})
     print(res)
 
 
@@ -47,7 +96,10 @@ def test_main_page(web_app):
     next_res = web_app.post('/check_auth', headers={'X-Token': token})
     print(next_res)
 
-def test_page(web_app):
-    token = ".je9YtVbQuBvi65DlkieHGX5l5opM7o24mFcRfp5LLhEVOUSgEGnYLrwx2EOBeSIG2igECbcmw4OX2xFpuhrVPQ"
-    next_res = web_app.post('/check_auth', headers={'X-Token': token})
-    print(next_res)
+
+def test_first_step_authentification(web_app):
+
+    token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOjEsImlhdCI6MTQ4MTcyNjc4NSwibG9naW4iOiJsZW9uaWRkaWR1a2gifQ.uHLOtwNOxATfjbQX0AQL__rH1evj_76T000AV7UnLPkagK1dMD39S-ldWBxklNEHysnc6JU4EZkt6J4IewumLg"
+    res = web_app.post('/login', headers={'X-Token': token})
+
+    print(res)
