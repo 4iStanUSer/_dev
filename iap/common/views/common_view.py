@@ -13,13 +13,13 @@ from pyramid.session import SignedCookieSessionFactory
 from pyramid.security import authenticated_userid
 from pyramid.security import unauthenticated_userid
 from pyramid.security import Authenticated
+from iap.repository.db.models_access import User
 
 
 def index_view(req):
     return render_to_response('iap.common:templates/index.jinja2',
                               {'title': 'Home page'},
                               request=req)
-
 
 
 def check_logged_in(req):
@@ -33,21 +33,18 @@ def check_logged_in(req):
     """
     #add session verification
     user_id = get_user(req)
-    if user_id == None or check_session(req) == False:
+    if user_id == Exception or check_session(req) == False:
         return send_error_response('Unauthorised')
-    elif user_id!=None and check_session(req) == True:
+    elif user_id!=Exception and check_session(req) == True:
         return send_success_response()
 
 
 def forbidden_view(f):
     def deco(request):
         user_id = get_user(request)
-        if user_id != None and check_session(request) == True:
-            print('Authorised')
+        if user_id != Exception and check_session(request) == True:
             return f(request)
         else:
-            print('Unauthorised')
-            return send_error_response('Unauthorised')
             return send_error_response('Unauthorised')
     return deco
 
@@ -59,17 +56,16 @@ def login(req):
     :type req: pyramid.util.Request
     :return:
     :rtype: Dict[str, str]
+
     """
 
-    if authorise(req)!=None:
-        user_id = authorise(req)['id']
-        login = authorise(req)['login']
+    if authorise(req)!=Exception:
+        user_id = authorise(req).id
+        login = authorise(req).email
         token = req.create_jwt_token(user_id, login=login)
         req.session['token'] = token
-        return {
-            'result': 'ok',
-            'token': token
-        }
+        return {'result': 'ok', 'token': token}
+
     else:
         return send_error_response('Unauthorised')
 

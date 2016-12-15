@@ -51,6 +51,7 @@ class User(Base):
     foreacst_perm_values = relationship("FrcastPermValue")
 
 
+
 role_features_tbl = Table(
     'role_feature', Base.metadata,
     Column('role_id', Integer, ForeignKey('roles.id')),
