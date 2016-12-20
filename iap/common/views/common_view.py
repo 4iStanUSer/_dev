@@ -7,8 +7,7 @@ from ...common import runtime_storage as rt
 from ...common import persistent_storage as pt
 from ..services import common_info as common_getter
 from ...common.security import authorise
-from ...common.security import get_user
-from ...common.security import check_session
+from ...common.security import *
 from pyramid.session import SignedCookieSessionFactory
 from pyramid.security import authenticated_userid
 from pyramid.security import unauthenticated_userid
@@ -32,10 +31,9 @@ def check_logged_in(req):
 
     """
     #add session verification
-    user_id = get_user(req)
-    if user_id == Exception or check_session(req) == False:
+    if get_user(req) == Exception or check_session(req) == False:
         return send_error_response('Unauthorised')
-    elif user_id!=Exception and check_session(req) == True:
+    elif get_user(req)!=Exception and check_session(req) == True:
         return send_success_response()
 
 
@@ -58,16 +56,16 @@ def login(req):
     :rtype: Dict[str, str]
 
     """
-
-    if authorise(req)==Exception:
+    user = authorise(req)
+    if user==Exception:
         return send_error_response('Unauthorised')
     else:
-        user_id = authorise(req).id
-        login = authorise(req).email
+        user_id = user.id
+        login = user.email
         print('User', user_id)
         token = req.create_jwt_token(user_id, login=login)
         req.session['token'] = token
-        return {'result': 'ok', 'token': token}
+        return send_success_response(token)
 
 
 def logout(req):
@@ -78,7 +76,6 @@ def logout(req):
     return response
 
 
-@forbidden_view
 def get_routing_config(req):
     config = {
         '/get_landing': {'url': '/get_landing', 'allowNotAuth': True}
@@ -86,7 +83,7 @@ def get_routing_config(req):
     return send_success_response(config)
 
 
-@forbidden_view
+
 def get_page_configuration(req):
     # Get parameters from request.
     try:

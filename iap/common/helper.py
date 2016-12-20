@@ -1,20 +1,16 @@
 from collections import namedtuple
 Variable = namedtuple('Variable', ['variable', 'timescale', 'slot'])
 Meta = namedtuple('Meta', ['dimension', 'level'])
-
+import json
+from pyramid.response import Response
 
 def send_success_response(data=None):
-    return {
-        'error': False,
-        'data': data
-    }
 
+    return {'error': False,'data': data}
 
 def send_error_response(data):
-    return {
-        'error': True,
-        'data': data
-    }
+
+    return {'error': True,'data': data}
 
 
 def is_equal_path(path1, path2):

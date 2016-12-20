@@ -2,32 +2,24 @@ from . import service
 from pyramid.session import SignedCookieSessionFactory
 from pyramid.security import Authenticated
 from pyramid.security import Allow
-my_session_factory = SignedCookieSessionFactory('itsaseekreet')
 from iap.repository.db.models_access import User
+my_session_factory = SignedCookieSessionFactory('itsaseekreet')
 
 
-def authorise(request):
+def authorise(req):
     """Authorise function that check correctness of user password
-
-    :param request:
-    :type request:
-    :return bool:
-    :rtype:
-
+        # user.check_password(password)
+        # user = service.check_password(login, password)
     """
+
     try:
-        login = request.json_body['login']
-        password = request.json_body['password']
+        username = req.json_body['username']
+        password = req.json_body['password']
+        user = req.dbsession.query(User).filter(User.email == username).one()
+        return user
     except:
         return Exception
-    else:
-        try:
-            user = request.dbsession.query(User).filter(User.email == login).one()
-            #user.check_password(password)
-            #user = service.check_password(login, password)
-            return user
-        except:
-            return Exception
+
 
 
 def check_session(request):
@@ -39,6 +31,7 @@ def check_session(request):
     :rtype: int
     """
     #add exception on non existen  id,login in token
+
     session = request.session
     if 'token' in session:
         if request.headers['X-Token'] == session['token']:
@@ -57,24 +50,16 @@ def get_user(request):
     :rtype: int
     """
     #add exception on non existen  id,login in token
-
     try:
         user_id = request.unauthenticated_userid
         login = request.jwt_claims['login']
+        user = request.dbsession.query(User).filter(User.id == user_id and User.email == login).one()
+        # user = service.get_user_by_id(request,user_id, login)
+        return user
     except:
         return Exception
-    else:
-        try:
-            user = request.dbsession.query(User).filter(User.id == user_id and User.email == login).one()
-            #user = service.get_user_by_id(request,user_id, login)
-            return user
-        except:
-            return Exception
 
 
 def includeme(config):
     settings = config.get_settings()
     config.set_session_factory(my_session_factory)
-    config.add_request_method(get_user, 'user', reify=True)
-    config.add_request_method(authorise, 'user', reify=True)
-    config.add_request_method(check_session, 'user', reify=True)

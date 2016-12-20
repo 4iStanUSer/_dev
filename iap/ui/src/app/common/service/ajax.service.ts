@@ -161,7 +161,52 @@ export class AjaxService {
      */
     get(options: IRequestOptions): Observable<any> { //Subject<any>
         // TODO Fix bad request !!!
+        console.log('Start get, options', options);
         if (!this.urlsMapper && !this.reqForUrlMapperSent) {
+            console.log("Load Url Mapper");
+            this.loadUrlMapper();
+        }
+        if (
+            options.url_id
+            && typeof options.url_id == 'string'
+            && options.url_id.length > 0
+        ) {
+            let id = this.counter++;
+            let sync = (options.sync) ? options.sync : false;
+            let url_id = options.url_id;
+            let subject = new Subject<any>();
+            let req = this.makeRequestInst({
+                url: this.getUrl(url_id),
+                method: 'get',
+                data: options.data
+            });
+            console.log('reqQueue',req);
+            this.reqQueue.push({
+                'id': id,
+                'url_id': url_id,
+                'sync': sync,
+                'sent': false,
+                'observable': subject,
+                'request': req
+            });
+            // subject.subscribe((data) => {
+            //     console.log('subject.subscribe', data);
+            // });
+            setTimeout(() => {
+                this.mapQueue(); // TODO Review
+            }, 25);
+            return subject;
+        } else {
+            console.error('Wrong request "url_id" property')
+        }
+        return null;
+    }
+
+    post(options: IRequestOptions): Observable<any> {
+        // TODO Fix bad request !!!
+        console.log('Start post, options', options);
+        if (!this.urlsMapper && !this.reqForUrlMapperSent) {
+            console.log("Load Url Mapper");
             this.loadUrlMapper();
         }
         if (
@@ -178,6 +223,7 @@ export class AjaxService {
                 method: 'post',
                 data: options.data
             });
+            console.log('reqQueue',req);
             this.reqQueue.push({
                 'id': id,
                 'url_id': url_id,
@@ -191,17 +237,13 @@ export class AjaxService {
             // });
             setTimeout(() => {
                 this.mapQueue(); // TODO Review
-            }, 10);
+            }, 25);
+            console.log('Subject', subject);
             return subject;
         } else {
             console.error('Wrong request "url_id" property')
+            return null;
         }
-        return null;
-    }
-
-    post(options: IRequestOptions): Observable<any> {
-        console.error('Implement AjaxService.post()');
-        return null;
     }
 
     /**
@@ -325,16 +367,19 @@ export class AjaxService {
         this.counter += 1;
         let pid = 'request_' + this.counter;
         this.loading.show(pid);
+        console.log('HTTP Request',req);
 
         this.http.request(req)
             .map((res: Response) => {
+
                 let body = res.json();
                 let resp = new ServerResponse();
                 _.extend(resp, body);
                 // TODO Add request meta into Response
+                console.log(resp);
+                console.log(body);
                 return resp;
-            })
-            .subscribe( // TODO check unsubscribe for blackbox subscription
+            }).subscribe( // TODO check unsubscribe for blackbox subscription
                 (res: ServerResponse) => {
                     this.loading.hide(pid);
                     if (res.hasError()) {
@@ -359,6 +404,8 @@ export class AjaxService {
      */
     private handleSiteError(res: ServerResponse, blackBox: Subject<any>) {
         // TODO Show error at view
+        console.log(res)
+        console.log("App data:" + res.getData());
         console.error('App Error message: ' + res.getError());
         if (res.isAuthError() && this.auth) {
             this.auth.logoutByBackend();
@@ -375,6 +422,7 @@ export class AjaxService {
      */
     private handleServerError(error: Response, blackBox: Subject<any>) {
         // TODO handlers for ERROR TYPES
+        console.log(error);
         if (error.status === 500) {
         } else if (error.status === 404) {
         }
@@ -415,6 +463,7 @@ export class AjaxService {
         };
 
         let method = RequestMethod.Post;
+        console.log('Request Method', options.method);
         if (options.method && options.method != 'post') {
             switch (options.method) {
                 case 'get':

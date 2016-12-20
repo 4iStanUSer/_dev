@@ -28,13 +28,16 @@ export class LoginFormComponent implements OnInit {
             data: userCredentials
         }).subscribe(
             () => {
+                console.log(userCredentials)
                 console.log('Successful login');
             },
             (e) => {
+                console.log("")
                 console.log(e);
                 this.alertService.error(e);
             },
             () => {
+                console.log(userCredentials)
                 console.log('Complete!');
             }
         );
