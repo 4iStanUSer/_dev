@@ -20,6 +20,7 @@ interface IWidgetsConfiguration {
 }
 
 
+
 @Injectable()
 export class ComponentFactoryService {
 
