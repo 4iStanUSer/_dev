@@ -1,5 +1,4 @@
 import {Injectable} from '@angular/core';
-
 import {Observable} from 'rxjs/Observable';
 
 import {AjaxService} from "./ajax.service";
@@ -43,7 +42,7 @@ export class AuthService {
      * @type {UserModel}
      */
     user: UserModel = null;
-    token: string;
+    token: string = localStorage.getItem('currentUser');
     /**
      * Observable for .isLoggedIn()
      * @type {Observable<boolean>}
@@ -52,10 +51,6 @@ export class AuthService {
 
     constructor(private req: AjaxService) {
         this.req.auth = this; // TODO Remake
-
-        if (localStorage.getItem('token')){ this.token = localStorage.getItem('token')}
-        else{this.token = ""};
-
         this.init();
     }
 
@@ -87,7 +82,7 @@ export class AuthService {
         this.initObs = this.req.post({
             url_id: 'check_auth',
             sync: true,
-            data: {'token': this.token}
+            data: {'X-Token': this.token}
         });
         this.initObs.subscribe(
             (d) => {
@@ -97,7 +92,6 @@ export class AuthService {
             (e) => {
                 this.initialized = true;
                 this.setLoggedStatus(false);
-                console.log('setLoggedStatus False');
             },
             () => {
                 console.log('complete  init()');
@@ -126,7 +120,7 @@ export class AuthService {
                 // TODO Improve response handling
                 //if (d && d['user']) {
                     this.token = d
-                    this.setLoggedStatus(true, d['user']);
+                    this.setLoggedStatus(true, d);
                 //} else {
                 //    this.setLoggedStatus(false);
                // }
@@ -163,7 +157,7 @@ export class AuthService {
      */
     logoutByBackend() {
         this.setLoggedStatus(false);
-        localStorage.removeItem('token');
+        localStorage.removeItem('currentUser');
     }
 
     /**
@@ -176,9 +170,7 @@ export class AuthService {
         if (status === true) {
             this.is_logged_in = status;
             this.user = user
-            localStorage.setItem(this.token, 'token');
-            console.log('token',this.token);
-            console.log('ls token',localStorage.getItem('token'));
+            localStorage.setItem('currentUser',this.token);
         } else {
             this.is_logged_in = status;
             this.user = null;
