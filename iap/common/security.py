@@ -4,7 +4,7 @@ from pyramid.security import Authenticated
 from pyramid.security import Allow
 from iap.repository.db.models_access import User
 my_session_factory = SignedCookieSessionFactory('itsaseekreet')
-
+import jwt
 
 def authorise(req):
     """Authorise function that check correctness of user password
@@ -34,7 +34,7 @@ def check_session(request):
 
     session = request.session
     if 'token' in session:
-        if request.headers['X-Token'] == session['token']:
+        if request.json_body['X-Token'] == session['token']:
             return True
         else:
             return False
@@ -51,8 +51,11 @@ def get_user(request):
     """
     #add exception on non existen  id,login in token
     try:
-        user_id = request.unauthenticated_userid
-        login = request.jwt_claims['login']
+
+        token = request.json_body['X-Token']
+        token_data = jwt.decode(token, 'secret', algorithms=['HS512'])
+        user_id = token_data['sub']
+        login = token_data['login']
         user = request.dbsession.query(User).filter(User.id == user_id and User.email == login).one()
         # user = service.get_user_by_id(request,user_id, login)
         return user

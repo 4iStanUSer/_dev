@@ -13,7 +13,7 @@ from pyramid.security import authenticated_userid
 from pyramid.security import unauthenticated_userid
 from pyramid.security import Authenticated
 from iap.repository.db.models_access import User
-
+import jwt
 
 def index_view(req):
     return render_to_response('iap.common:templates/index.jinja2',
@@ -34,7 +34,8 @@ def check_logged_in(req):
     if get_user(req) == Exception or check_session(req) == False:
         return send_error_response('Unauthorised')
     elif get_user(req)!=Exception and check_session(req) == True:
-        return send_success_response()
+        new_token = req.session['token']
+        return send_success_response(new_token)
 
 
 def forbidden_view(f):
@@ -71,9 +72,7 @@ def login(req):
 def logout(req):
     #provide mechanism for session leaving
     del req.session['token']
-    del req.headers['X-Token']
-    response = req.response
-    return response
+    return send_success_response("")
 
 
 def get_routing_config(req):
