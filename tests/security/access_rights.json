@@ -1,0 +1,20 @@
+"User":
+{"id":
+  "password":
+  "profile":
+  "roles":
+  "groups":
+  "foreacst_perm_values":{
+                          "role_id":
+                          "feature_id":
+                          }
+
+
+}
+"Tool":
+{
+
+
+}
+
+"Roles":["Scenario's Author", "Other Authorized Users", "Supervisor"]

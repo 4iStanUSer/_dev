@@ -34,36 +34,29 @@ def common_routing(config):
     config.add_route('common.login', '/login')
     config.add_view(common.login, route_name='common.login',renderer='json')
     config.add_route('common.logout', 'logout')
-    config.add_view(common.logout,
-                    route_name='common.logout',
-                    request_method='POST', renderer='json')
+    config.add_view(common.logout, route_name='common.logout', renderer='json')
 
     config.add_route('common.get_page_configuration',
                      '/get_page_configuration')
-    config.add_view(common.get_page_configuration,
-                    route_name='common.get_page_configuration',
-                    request_method='POST', renderer='json')
+    config.add_view(common.get_page_configuration, route_name='common.get_page_configuration',renderer='json')
 
     config.add_route('common.get_data_for_header', '/get_header_data')
-    config.add_view(common.get_data_for_header,
-                    route_name='common.get_data_for_header',
-                    request_method='POST', renderer='json')
+    config.add_view(common.get_data_for_header, route_name='common.get_data_for_header',renderer='json')
 
     config.add_route('common.set_language', '/set_language')
-    config.add_view(common.set_language,
-                    route_name='common.set_language',
-                    request_method='POST', renderer='json')
+    config.add_view(common.set_language, route_name='common.set_language',renderer='json')
 
     config.add_route('common.get_tools_with_projects',
                      '/get_tools_with_projects')
-    config.add_view(common.get_tools_with_projects,
-                    route_name='common.get_tools_with_projects',
-                    request_method='POST', renderer='json')
+    config.add_view(common.get_tools_with_projects,route_name='common.get_tools_with_projects',renderer='json')
 
     config.add_route('common.select_project', '/select_project')
-    config.add_view(common.set_project_selection,
-                    route_name='common.select_project',
-                    request_method='POST', renderer='json')
+    config.add_view(common.set_project_selection,route_name='common.select_project',renderer='json')
+
+    #this is test view to check the database
+    config.add_route('common.model_overview', '/model_overview')
+    config.add_view(common.model_overview, route_name='common.model_overview',renderer='json')
+
 
     config.set_authorization_policy(ACLAuthorizationPolicy())
     config.include('pyramid_jwt')
@@ -90,38 +83,28 @@ def forecast_routing(config):
     config.add_route('forecast.get_scenarios_list',
                      '/get_scenarios_list')
     config.add_view(f_scenarios.get_scenarios_list,
-                    route_name='forecast.get_scenarios_list',
-                    request_method='POST', renderer='json')
+                    route_name='forecast.get_scenarios_list', renderer='json')
 
     config.add_route('forecast.get_dashboard_data',
                      '/get_dashboard_data')
     config.add_view(f_dashboard.get_dashboard_data,
-                    route_name='forecast.get_dashboard_data',
-                    request_method='POST', renderer='json')
+                    route_name='forecast.get_dashboard_data', renderer='json')
 
-    config.add_route('forecast.get_cagrs_for_period',
-                     '/get_cagrs_for_period')
-    config.add_view(f_dashboard.get_cagrs_for_period,
-                    route_name='forecast.get_cagrs_for_period',
-                    request_method='POST', renderer='json')
+    config.add_route('forecast.get_cagrs_for_period', '/get_cagrs_for_period')
+    config.add_view(f_dashboard.get_cagrs_for_period, route_name='forecast.get_cagrs_for_period', renderer='json')
 
-    config.add_route('forecast.get_decomposition_for_period',
-                     '/get_decomposition_for_period')
-    config.add_view(f_dashboard.get_decomposition_for_period,
-                    route_name='forecast.get_decomposition_for_period',
-                    request_method='POST', renderer='json')
+    config.add_route('forecast.get_decomposition_for_period', '/get_decomposition_for_period')
+    config.add_view(f_dashboard.get_decomposition_for_period, route_name='forecast.get_decomposition_for_period',renderer='json')
 
     config.add_route('forecast.get_options_for_entity_selector',
                      '/get_options_for_entity_selector')
     config.add_view(f_common.get_options_for_entity_selector,
-                    route_name='forecast.get_options_for_entity_selector',
-                    request_method='POST', renderer='json')
+                    route_name='forecast.get_options_for_entity_selector', renderer='json')
 
     config.add_route('forecast.get_entity_selectors_config',
                      '/get_entity_selectors_config')
     config.add_view(f_common.get_entity_selectors_config,
-                    route_name='forecast.get_entity_selectors_config',
-                    request_method='POST', renderer='json')
+                    route_name='forecast.get_entity_selectors_config', renderer='json')
 
 # def wsgi_app(global_config, **settings):
 def main(global_config, **settings):
