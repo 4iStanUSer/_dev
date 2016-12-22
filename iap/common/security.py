@@ -1,10 +1,8 @@
-from . import service
 from pyramid.session import SignedCookieSessionFactory
-from pyramid.security import Authenticated
-from pyramid.security import Allow
 from iap.repository.db.models_access import User
-my_session_factory = SignedCookieSessionFactory('itsaseekreet')
 import jwt
+
+my_session_factory = SignedCookieSessionFactory('itsaseekreet')
 
 def authorise(req):
     """Authorise function that check correctness of user password
@@ -21,7 +19,6 @@ def authorise(req):
         return Exception
 
 
-
 def check_session(request):
     """
 
@@ -31,7 +28,6 @@ def check_session(request):
     :rtype: int
     """
     #   add exception on non existen  id,login in token
-
     session = request.session
     if 'token' in session:
         if request.json_body['X-Token'] == session['token']:
@@ -61,6 +57,12 @@ def get_user(request):
         return user
     except:
         return Exception
+
+
+def includeme(config):
+    settings = config.get_settings()
+    config.add_request_method(get_user, 'user', reify=True)
+    config.set_session_factory(my_session_factory)
 
 
 class AccessManager:
@@ -103,7 +105,3 @@ class AccessManager:
         pass
 
 
-def includeme(config):
-    settings = config.get_settings()
-    config.add_request_method(get_user, 'user', reify=True)
-    config.set_session_factory(my_session_factory)
