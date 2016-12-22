@@ -1,3 +1,4 @@
+from ...repository.db.models_access import Tool, User, Feature, UserGroup
 from pyramid.renderers import render_to_response
 from ...common.helper import send_success_response, send_error_response
 from ...common.tools_config import get_page_config
@@ -7,6 +8,7 @@ from ...common import runtime_storage as rt
 from ...common import persistent_storage as pt
 from ..services import common_info as common_getter
 from ..security import *
+
 
 def index_view(req):
     return render_to_response('iap.common:templates/index.jinja2',
@@ -32,6 +34,14 @@ def check_logged_in(req):
 
 
 def forbidden_view(f):
+    """Decorator that check if user is authentificated and
+     allow to continue view function execution in succcesive case
+    :param f:
+    :type f:
+    :return:
+    :rtype:
+
+    """
     def deco(request):
         user_id = get_user(request)
         if user_id != Exception and check_session(request) == True:
@@ -63,10 +73,12 @@ def login(req):
 
 
 def logout(req):
-    #provide mechanism for session leaving
+    """
+    Provide mechanism for session leaving
+    """
     if 'token' in req.session:
         del req.session['token']
-    return send_success_response("")
+    return send_success_response("Session expired")
 
 
 def get_routing_config(req):
@@ -166,6 +178,7 @@ def set_project_selection(req):
         msg = ErrorManager.get_error_message(e)
         return send_error_response(msg)
 
+
 def model_overview(req):
     """
 
@@ -188,4 +201,29 @@ def model_overview(req):
         roles.append(role.name)
     for feature in req.dbsession.query(Feature).all():
         features.append(feature.name)
-    return {'users': users,'tools': tools, 'roles': roles, 'features':features}
+    return {'users': users, 'tools': tools, 'roles': roles, 'features':features}
+
+
+def model_update(req):
+    """
+
+    :param req:
+    :type req:
+    :return:
+    :rtype:
+
+    """
+    tools = []
+    users = []
+    features = []
+    roles = []
+    for user in req.dbsession.query(User).all():
+        users.append(user.id)
+        users.append(user.email)
+    for tool in req.dbsession.query(Tool).all():
+        tools.append(tool.name)
+    for role in req.dbsession.query(Role).all():
+        roles.append(role.name)
+    for feature in req.dbsession.query(Feature).all():
+        features.append(feature.name)
+    return {'users': users, 'tools': tools, 'roles': roles, 'features': features}
