@@ -94,17 +94,19 @@ def forecast_routing(config):
     config.add_view(f_dashboard.get_cagrs_for_period, route_name='forecast.get_cagrs_for_period', renderer='json')
 
     config.add_route('forecast.get_decomposition_for_period', '/get_decomposition_for_period')
-    config.add_view(f_dashboard.get_decomposition_for_period, route_name='forecast.get_decomposition_for_period',renderer='json')
+    config.add_view(f_dashboard.get_decomposition_for_period, route_name='forecast.get_decomposition_for_period',
+                    renderer='json')
 
-    config.add_route('forecast.get_options_for_entity_selector',
-                     '/get_options_for_entity_selector')
-    config.add_view(f_common.get_options_for_entity_selector,
-                    route_name='forecast.get_options_for_entity_selector', renderer='json')
+    config.add_route('forecast.get_options_for_entity_selector', '/get_options_for_entity_selector')
+    config.add_view(f_common.get_options_for_entity_selector, route_name='forecast.get_options_for_entity_selector',
+                    renderer='json')
+
+    config.add_route('forecast.set_entity_selection', '/set_entity_selection')
+    config.add_view(f_common.set_entity_selection, route_name='forecast.set_entity_selection', renderer='json')
 
     config.add_route('forecast.get_entity_selectors_config',
                      '/get_entity_selectors_config')
-    config.add_view(f_common.get_entity_selectors_config,
-                    route_name='forecast.get_entity_selectors_config', renderer='json')
+    config.add_view(f_common.get_entity_selectors_config, route_name='forecast.get_entity_selectors_config', renderer='json')
 
 # def wsgi_app(global_config, **settings):
 def main(global_config, **settings):
