@@ -202,28 +202,3 @@ def model_overview(req):
     for feature in req.dbsession.query(Feature).all():
         features.append(feature.name)
     return {'users': users, 'tools': tools, 'roles': roles, 'features':features}
-
-
-def model_update(req):
-    """
-
-    :param req:
-    :type req:
-    :return:
-    :rtype:
-
-    """
-    tools = []
-    users = []
-    features = []
-    roles = []
-    for user in req.dbsession.query(User).all():
-        users.append(user.id)
-        users.append(user.email)
-    for tool in req.dbsession.query(Tool).all():
-        tools.append(tool.name)
-    for role in req.dbsession.query(Role).all():
-        roles.append(role.name)
-    for feature in req.dbsession.query(Feature).all():
-        features.append(feature.name)
-    return {'users': users, 'tools': tools, 'roles': roles, 'features': features}
