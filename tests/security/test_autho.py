@@ -16,5 +16,5 @@ def web_app():
 
 
 def test_model_overview(web_app):
-    res = web_app.post('/model_overview')
-    print(res)
+    feature = ["Forecast Dashboard","Saved Scenario", "Compare", "Simulator / Scenario Editor"]
+    res = web_app.post('/model_overview', {'feature':feature})

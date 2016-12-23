@@ -26,9 +26,9 @@ def check_logged_in(req):
 
     """
     #add session verification
-    if get_user(req) == Exception or check_session(req) == False:
+    if get_user(req) == Exception: #check_session(req) == False:
         return send_error_response('Unauthorised')
-    elif get_user(req)!=Exception and check_session(req) == True:
+    elif get_user(req)!= Exception and check_session(req) == True:
         new_token = req.session['token']
         return send_success_response(new_token)
 
@@ -61,7 +61,7 @@ def login(req):
 
     """
     user = authorise(req)
-    if user==Exception:
+    if user == Exception:
         return send_error_response('Unauthorised')
     else:
         user_id = user.id

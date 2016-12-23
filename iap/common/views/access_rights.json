@@ -1,338 +1,298 @@
 {
   "Tool": [
-    "Forecast":
-    {
-      "Features":
-        [
-          "Dashboard":
+    "Forecast Dashboard":
+      {
+        "Features":
+          [
+            "Select":
+            {
+              "Roles":
+                [
+                  "Forecaster",
+                  "Supervisor",
+                  "Forecaster of Macro-Economics",
+                  "Data Manager",
+                  "Admin"
+                ]
+            },
+
+            "Decomposition":
+            {
+              "Roles":
+                [
+                  "Forecaster",
+                  "Supervisor",
+                  "Forecaster of Macro-Economics",
+                  "Data Manager",
+                  "Admin"
+               ]
+            }
+          ]
+        },
+      "Saved Scenario":
           {
-            "Roles":
-            [
-              "Forecaster":
-                {
-                  "Responsibility":
-                    [
-                    ]
-                },
-              "Supervisor":
-                {
-                  "Responsibility":
-                    [
-                    ]
-                },
-              "Forecaster of Macro-Economics":
-                {
-                  "Responsibility":
-                    [
-                      "Change macro-economic projections",
-                    ]
-                },
-              "Forecaster of Macro-Drivers":
-                {
-                  "Responsibility":
-                    [
-                      "Change change macro-drivers common"
-                    ]
-                },
-              "Data Manager":
-                {
-                  "Responsibility":
-                    [
-                    ]
-                },
-              "Admin":
-                {
-                  "Responsibility":
-                    [
-                    ]
-                }
-            ]
+            "Features":
+              [
+                "Create a new scenario":
+                  {
+                    "Roles":
+                      [
+                        "Scenario’s Author",
+                        "Other Authorized Users",
+                        "Supervisor",
+                        "Forecaster"
+                      ]
+                  },
+                "View description of a selected scenario":
+                  {
+                    "Roles":
+                      [
+                        "Scenario’s Author",
+                        "Other Authorized Users",
+                        "Supervisor"
+                      ]
+                  },
+                "Copy/paste a selected scenario":
+                  {
+                    "Roles":
+                      [
+                        "Scenario’s Author",
+                        "Other Authorized Users",
+                        "Supervisor"
+                      ]
+                  },
+                "Review a selected scenario":
+                  {
+                    "Roles":
+                      [
+                        "Scenario’s Author",
+                        "Other Authorized Users",
+                        "Supervisor"
+                      ]
+                  },
+                "Rename and change description of a selected scenario":
+                  {
+                    "Roles":
+                      [
+                        "Scenario’s Author",
+                        "Other Authorized Users",
+                        "Supervisor"
+                      ]
+                  },
+                "Modify a selected scenario":
+                  {
+                    "Roles":
+                      [
+                        "Scenario’s Author"
+                      ]
+                  },
+                "Delete a selected scenario":
+                  {
+                    "Roles":
+                      [
+                        "Scenario’s Author"
+                      ]
+                  },
+                 "Publish a selected scenario to the central repository":
+                  {
+                    "Roles":
+                      [
+                        "Scenario’s Author",
+                        "Forecaster"
+                      ]
+                  },
+                "Mark scenario as final":
+                  {
+                    "Roles":
+                      [
+                        "Supervisor"
+                      ]
+                  },
+                "Include scenario in the aggregated scenarios":
+                  {
+                    "Roles":
+                      [
+                        "Supervisor"
+                      ]
+                  }
+              ]
           },
-          "Saved Scenario":
+      "Compare":
           {
-            "Roles": [
-              "Forecaster":
-                {
-                  "Responsibility":
-                    [
-                      "Create",
-                      "Read",
-                      "Update",
-                      "Delete",
-                      "Publish",
-                      "Review",
-                      "Build aggregation",
-                      "Change macro-economic projections",
-                      "Change change macro-drivers common"
-                    ]
-                },
-              "Supervisor":
-                {
-                  "Responsibility":
-                    [
-                      "Create",
-                      "Read",
-                      "Update",
-                      "Delete",
-                      "Publish",
-                      "Review",
-                      "Build aggregation",
-                      "Change macro-economic projections",
-                      "Change change macro-drivers common"
-                    ]
-                },
-              "Forecaster of Macro-Economics":
-                {
-                  "Responsibility":
-                    [
-                      "Create",
-                      "Read",
-                      "Update",
-                      "Delete",
-                      "Publish",
-                      "Review",
-                      "Build aggregation",
-                      "Change macro-economic projections",
-                      "Change change macro-drivers common"
-                    ]
-                },
-              "Forecaster of Macro-Drivers":
-                {
-                  "Responsibility":
-                    [
-                      "Create",
-                      "Read",
-                      "Update",
-                      "Delete",
-                      "Publish",
-                      "Review",
-                      "Build aggregation",
-                      "Change macro-economic projections",
-                      "Change change macro-drivers common"
-                    ]
-                },
-              "Data Manager":
-                {
-                  "Responsibility":
-                    [
-                      "Create",
-                      "Read",
-                      "Update",
-                      "Delete",
-                      "Publish",
-                      "Review",
-                      "Build aggregation",
-                      "Change macro-economic projections",
-                      "Change change macro-drivers common"
-                    ]
-                },
-              "Admin":
-                {
-                  "Responsibility":
-                    [
-                      "Create",
-                      "Read",
-                      "Update",
-                      "Delete",
-                      "Publish",
-                      "Review",
-                      "Build aggregation",
-                      "Change macro-economic projections",
-                      "Change change macro-drivers common"
-                    ]
-                },
-              "Scenario's Author":
-                {
-                  "Responsibility":
-                    [
-                      "Create",
-                      "Read",
-                      "Update",
-                      "Delete",
-                      "Publish",
-                      "Review",
-                      "Build aggregation",
-                      "Change macro-economic projections",
-                      "Change change macro-drivers common"
-                    ]
-                },
-              "Other Authorized Users":
-                {
-                  "Responsibility":
-                    [
-                      "Create",
-                      "Read",
-                      "Update",
-                      "Delete",
-                      "Publish",
-                      "Review",
-                      "Build aggregation",
-                      "Change macro-economic projections",
-                      "Change change macro-drivers common"
-                    ]
-                }
-            ]
+            "Features":
+              [
+                "Create a new scenario":
+                  {
+                    "Roles":
+                      [
+                        "Scenario’s Author",
+                        "Other Authorized Users",
+                        "Supervisor",
+                        "Forecaster"
+                      ]
+                  },
+                "View description of a selected scenario":
+                  {
+                    "Roles":
+                      [
+                        "Scenario’s Author",
+                        "Other Authorized Users",
+                        "Supervisor"
+                      ]
+                  },
+                "Copy/paste a selected scenario":
+                  {
+                    "Roles":
+                      [
+                        "Scenario’s Author",
+                        "Other Authorized Users",
+                        "Supervisor"
+                      ]
+                  },
+                "Review a selected scenario":
+                  {
+                    "Roles":
+                      [
+                        "Scenario’s Author",
+                        "Other Authorized Users",
+                        "Supervisor"
+                      ]
+                  },
+                "Rename and change description of a selected scenario":
+                  {
+                    "Roles":
+                      [
+                        "Scenario’s Author",
+                        "Other Authorized Users",
+                        "Supervisor"
+                      ]
+                  },
+                "Modify a selected scenario":
+                  {
+                    "Roles":
+                      [
+                        "Scenario’s Author"
+                      ]
+                  },
+                "Delete a selected scenario":
+                  {
+                    "Roles":
+                      [
+                        "Scenario’s Author"
+                      ]
+                  },
+                 "Publish a selected scenario to the central repository":
+                  {
+                    "Roles":
+                      [
+                        "Scenario’s Author",
+                        "Forecaster"
+                      ]
+                  },
+                "Mark scenario as final":
+                  {
+                    "Roles":
+                      [
+                        "Supervisor"
+                      ]
+                  },
+                "Include scenario in the aggregated scenarios":
+                  {
+                    "Roles":
+                      [
+                        "Supervisor"
+                      ]
+                  }
+              ]
           },
-          "Compare":
+          "Simulator / Scenario Editor":
           {
-            "Roles": [
-              "Forecaster":
-                {
-                  "Responsibility":
-                    [
-                    ]
-                },
-              "Supervisor":
-                {
-                  "Responsibility":
-                    [
-                      "Create a new scenario",
-                      "View description of a selected scenario",
-                      "Copy/paste a selected scenario",
-                      "Review a selected scenario",
-                      "Mark scenario as final",
-                      "Include scenario in the aggregated scenarios for higher-level nodes final forecasts of the region/product hierarchy",
-                    ]
-                },
-              "Forecaster of Macro-Economics":
-                {
-                  "Responsibility":
-                    [
-                      "Change macro-economic projections",
-                    ]
-                },
-              "Forecaster of Macro-Drivers":
-                {
-                  "Responsibility":
-                    [
-                      "Change change macro-drivers common"
-                    ]
-                },
-              "Data Manager":
-                {
-                  "Responsibility":
-                    [
-                    ]
-                },
-              "Admin":
-                {
-                  "Responsibility":
-                    [
-                    ]
-                },
-              "Scenario's Author":
-                {
-                  "Responsibility":
-                    [
-                      "Create a new scenario",
-                      "View description of a selected scenario",
-                      "Copy/paste a selected scenario",
-                      "Review a selected scenario",
-                      "Rename and change description of a selected scenario",
-                      "Modify a selected scenario",
-                      "Delete a selected scenario",
-                      "Publish a selected scenario to the central repository"
-                    ]
-                },
-              "Other Authorized Users":
-                {
-                  "Responsibility":
-                    [
-                      "Create a new scenario",
-                      "View description of a selected scenario",
-                      "Copy/paste a selected scenario",
-                      "Review a selected scenario"
-                    ]
-                }
-            ]
+            "Features":
+              [
+                "Create a new scenario":
+                  {
+                    "Roles":
+                      [
+                        "Scenario’s Author",
+                        "Other Authorized Users",
+                        "Supervisor",
+                        "Forecaster"
+                      ]
+                  },
+                "View description of a selected scenario":
+                  {
+                    "Roles":
+                      [
+                        "Scenario’s Author",
+                        "Other Authorized Users",
+                        "Supervisor"
+                      ]
+                  },
+                "Copy/paste a selected scenario":
+                  {
+                    "Roles":
+                      [
+                        "Scenario’s Author",
+                        "Other Authorized Users",
+                        "Supervisor"
+                      ]
+                  },
+                "Review a selected scenario":
+                  {
+                    "Roles":
+                      [
+                        "Scenario’s Author",
+                        "Other Authorized Users",
+                        "Supervisor"
+                      ]
+                  },
+                "Rename and change description of a selected scenario":
+                  {
+                    "Roles":
+                      [
+                        "Scenario’s Author",
+                        "Other Authorized Users",
+                        "Supervisor"
+                      ]
+                  },
+                "Modify a selected scenario":
+                  {
+                    "Roles":
+                      [
+                        "Scenario’s Author"
+                      ]
+                  },
+                "Delete a selected scenario":
+                  {
+                    "Roles":
+                      [
+                        "Scenario’s Author"
+                      ]
+                  },
+                 "Publish a selected scenario to the central repository":
+                  {
+                    "Roles":
+                      [
+                        "Scenario’s Author",
+                        "Forecaster"
+                      ]
+                  },
+                "Mark scenario as final":
+                  {
+                    "Roles":
+                      [
+                        "Supervisor"
+                      ]
+                  },
+                "Include scenario in the aggregated scenarios":
+                  {
+                    "Roles":
+                      [
+                        "Supervisor"
+                      ]
+                  }
+              ]
           },
-          "Simulate":
-          {
-            "Roles": [
-              "Forecaster":
-                {
-                  "Responsibility":
-                    [
-                      "Create",
-                      "Read",
-                      "Update",
-                      "Delete"
-                    ]
-                },
-              "Supervisor":
-                {
-                  "Responsibility":
-                    [
-                      "Create a new scenario",
-                      "View description of a selected scenario",
-                      "Copy/paste a selected scenario",
-                      "Review a selected scenario",
-                      "Mark scenario as final",
-                      "Include scenario in the aggregated scenarios for higher-level nodes final forecasts of the region/product hierarchy",
-                    ]
-                },
-              "Forecaster of Macro-Economics":
-                {
-                  "Responsibility":
-                    [
-                      "Change macro-economic projections"
-                    ]
-                },
-              "Forecaster of Macro-Drivers":
-                {
-                  "Responsibility":
-                    [
-                      "Change change macro-drivers common"
-                    ]
-                },
-              "Data Manager":
-                {
-                  "Responsibility":
-                    [
-                      "Create",
-                      "Read",
-                      "Update",
-                      "Delete"
-                    ]
-                },
-              "Admin":
-                {
-                  "Responsibility":
-                    [
-                      "Create",
-                      "Read",
-                      "Update",
-                      "Delete"
-                    ]
-                },
-              "Scenario's Author":
-                {
-                  "Responsibility":
-                    [
-                      "Create a new scenario",
-                      "View description of a selected scenario",
-                      "Copy/paste a selected scenario",
-                      "Review a selected scenario",
-                      "Rename and change description of a selected scenario",
-                      "Modify a selected scenario",
-                      "Delete a selected scenario",
-                      "Publish a selected scenario to the central repository"
-                    ]
-                },
-              "Other Authorized Users":
-                {
-                  "Responsibility":
-                    [
-                      "Create a new scenario",
-                      "View description of a selected scenario",
-                      "Copy/paste a selected scenario",
-                      "Review a selected scenario"
-                    ]
-                }
-            ]
-          }
-        ]
-    },
     "Price Promo",
     "Marketing Mix"
   ]
