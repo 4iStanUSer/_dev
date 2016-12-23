@@ -63,6 +63,8 @@ def get_user(request):
 def includeme(config):
     settings = config.get_settings()
     config.add_request_method(get_user, 'user', reify=True)
+    config.add_request_method(check_session, 'has_session', reify=True)
+    config.add_request_method(authorise, 'autorised', reify=True)
     config.set_session_factory(my_session_factory)
 
 

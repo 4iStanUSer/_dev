@@ -2,7 +2,8 @@ from iap.repository.db.models_access import User
 from iap.repository.db.warehouse import Entity
 from ..common.helper import send_success_response, send_error_response
 from iap.common.security import get_user
-
+from pyramid.interfaces import IAuthorizationPolicy
+from zope.interface import implementer
 
 def check_permission(f):
     """Decorator that check if user is authorisaed and
@@ -25,23 +26,31 @@ def check_permission(f):
     return deco
 
 
-
-
+@implementer(IAuthorizationPolicy)
 class AccessManager:
     """Access Manager that control right for
     data and functionality
     """
-    def __init__(self, req):
-        """Initialisation
+    def __init__(self):
+        """Initialisaion
         :param req:
         :type req:
         """
-        self.request = req
         self.features = []
         self.roles = []
         self.user_groups=[]
         self.tools = []
         self.entities = []
+
+    def permits(self, context, identity, permission):
+        """ Return True if the userid is allowed the permission in the
+                  current context, else return False"""
+        pass
+
+    def authorized_userid(self, identity):
+        """ Return the userid of the user identified by the identity
+                  or 'None' if no user exists related to the identity """
+        pass
 
     def fill_attributes(self, request):
         """Fill attributes of accces rights
@@ -99,3 +108,4 @@ class AccessManager:
             return True
         else:
             return False
+

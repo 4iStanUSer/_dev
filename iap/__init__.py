@@ -10,6 +10,8 @@ from .forecasting.views import common as f_common
 from .forecasting.views import scenarios as f_scenarios
 from .forecasting.views import simulator as f_simulator
 from pyramid.authorization import ACLAuthorizationPolicy
+from .common.access_manager import AccessManager
+
 
 def common_routing(config):
     """
@@ -58,7 +60,8 @@ def common_routing(config):
     config.add_view(common.model_overview, route_name='common.model_overview',renderer='json')
 
 
-    config.set_authorization_policy(ACLAuthorizationPolicy())
+    #config.set_authorization_policy(ACLAuthorizationPolicy())
+    config.set_authorization_policy(AccessManager())
     config.include('pyramid_jwt')
     config.set_jwt_authentication_policy('secret', http_header='X-Token')
     config.include(security)
