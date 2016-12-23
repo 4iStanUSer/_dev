@@ -1,4 +1,4 @@
-from ...repository.db.models_access import Tool, User, Feature, UserGroup
+from ...repository.db.models_access import Tool, User, Feature, UserGroup, Role
 from pyramid.renderers import render_to_response
 from ...common.helper import send_success_response, send_error_response
 from ...common.tools_config import get_page_config
@@ -188,6 +188,8 @@ def model_overview(req):
     :rtype:
 
     """
+    feature = Feature(name="Dashboard")
+    req.dbsession.add(feature)
     tools = []
     users = []
     features = []
@@ -201,4 +203,5 @@ def model_overview(req):
         roles.append(role.name)
     for feature in req.dbsession.query(Feature).all():
         features.append(feature.name)
-    return {'users': users, 'tools': tools, 'roles': roles, 'features':features}
+    urls = [req.current_route_url(), req.current_route_path()]
+    return {'users': users, 'tools': tools, 'roles': roles, 'features':features, "urls": urls}

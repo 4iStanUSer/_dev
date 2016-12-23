@@ -123,7 +123,7 @@ def incude_scenario(request):
         scenario_id = request.json_body['scenario_id']
         parent_scenario = request.dbconn.query(Scenario).filter(Scenario.id == parent_scenario_id).one()
         current_scenario = request.dbconn.query(Scenario).filter(Scenario.id == scenario_id).one()
-        parent_scenario.update({'children'=current_scenario})
+        parent_scenario.update({'children': current_scenario})
         request.dbconn.commit()
         return send_success_response("Include finished successive")
     except:

@@ -19,7 +19,7 @@ class Scenario(Base):
     __tablename__ = 'scenario'
 
     id = Column(Integer, primary_key=True)
-    parent_id = Column(Integer, ForeignKey('node.id'))
+    parent_id = Column(Integer, ForeignKey('scenario.id'))
 
     name = Column(String(length=255))
     description = Column(String(length=255))
@@ -34,9 +34,9 @@ class Scenario(Base):
     products = Column(String(length=255))
     channel = Column(String(length=255))
 
-    author = relationship("User", backref="scenario")
+    #author = relationship("User", backref="scenario")
 
-    children = relationship("Scenario", backref=backref('parent', remote_side=[id]))
+    children = relationship("Scenario",  remote_side=[id])
 
 
 
