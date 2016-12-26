@@ -8,7 +8,7 @@ from ...common import runtime_storage as rt
 from ...common import persistent_storage as pt
 from ..services import common_info as common_getter
 from ..security import *
-
+from ..access_manager import check_permission
 
 def index_view(req):
     return render_to_response('iap.common:templates/index.jinja2',
@@ -181,6 +181,7 @@ def set_project_selection(req):
 
 def model_overview(req):
     """
+    To Do refactor
 
     :param req:
     :type req:
@@ -192,7 +193,6 @@ def model_overview(req):
     req.dbsession.query(Role).delete()
     req.dbsession.query(Feature).delete()
     data = req.json_body['data']
-    print(data)
     for tool_name in data['Tool'].keys():
         tool = Tool(name = tool_name)
         if data['Tool'][tool_name]=={}:
@@ -223,3 +223,4 @@ def model_overview(req):
         features.append(feature.name)
     urls = [req.current_route_url(), req.current_route_path()]
     return {'users': users, 'tools': tools, 'roles': roles, 'features':features, "urls": urls}
+

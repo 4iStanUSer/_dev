@@ -18,5 +18,25 @@ def web_app():
 
 
 def test_model_overview(web_app):
-    res = web_app.post_json('/model_overview', {'data': rights})
+    #res = web_app.post_json('/model_overview', {'data': rights})
+    #print(res)
+    pass
+
+def test_authorisation(web_app):
+    login = "default_user"
+    password = "123456"
+    res = web_app.post_json('/login', {"username": login, 'password': password})
     print(res)
+    token = str(res.json_body['data'])
+
+    res = web_app.post_json('/check_auth', {'X-Token': token})
+    expected = {"data": token, "error": False}
+    actual = res.json
+    print(actual)
+
+    res = web_app.post_json('/', {'X-Token': token})
+    expected = {"data": token, "error": False}
+    actual = res.json
+    print(actual)
+
+    assert actual == expected

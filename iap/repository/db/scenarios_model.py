@@ -9,6 +9,7 @@ from sqlalchemy import (
     Interval,
     DateTime
 )
+from .models_access import User
 from sqlalchemy.orm import relationship, backref
 from .models_access import User
 from passlib.hash import bcrypt

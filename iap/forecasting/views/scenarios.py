@@ -1,9 +1,11 @@
 from ...repository.db.scenarios_model import Scenario
+from ...repository.db.models_access import User
+
 from  ...repository.db.scenarios_model import User
 from ...common.helper import send_success_response, send_error_response
+from ...common.access_manager import check_permission
 
-
-
+@check_permission
 def create_scenario(request):
     """Function for creating new scenario
     args:
@@ -245,4 +247,5 @@ def get_scenarios_list(req):
             }
         }
     ]
+
     return send_success_response(scenarios)
