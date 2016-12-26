@@ -5,6 +5,8 @@ import json
 from iap import main
 ABS_PATH = os.path.abspath('../')
 print(os.curdir)
+import json
+from access_rights import rights
 
 @pytest.fixture
 def web_app():
@@ -16,5 +18,5 @@ def web_app():
 
 
 def test_model_overview(web_app):
-    feature = ["Forecast Dashboard","Saved Scenario", "Compare", "Simulator / Scenario Editor"]
-    res = web_app.post('/model_overview', {'feature':feature})
+    res = web_app.post_json('/model_overview', {'data': rights})
+    print(res)

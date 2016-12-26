@@ -188,11 +188,29 @@ def model_overview(req):
     :rtype:
 
     """
-    feature = Feature(name="Dashboard")
-    req.dbsession.add(feature)
-    tools = []
+    req.dbsession.query(Tool).delete()
+    req.dbsession.query(Role).delete()
+    req.dbsession.query(Feature).delete()
+    data = req.json_body['data']
+    print(data)
+    for tool_name in data['Tool'].keys():
+        tool = Tool(name = tool_name)
+        if data['Tool'][tool_name]=={}:
+            pass
+        else:
+            for feature_name in data['Tool'][tool_name]['Features'].keys():
+                feature = Feature(name=feature_name)
+                tool.features.append(feature)
+                for role_name in data['Tool'][tool_name]['Features'][feature_name]['Roles']:
+                    role = Role(name = role_name)
+                    feature.roles.append(role)
+                    tool.roles.append(role)
+                    req.dbsession.add(role)
+                req.dbsession.add(feature)
+            req.dbsession.add(tool)
     users = []
     features = []
+    tools = []
     roles = []
     for user in req.dbsession.query(User).all():
         users.append(user.id)

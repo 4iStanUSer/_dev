@@ -1,9 +1,9 @@
-{
-  "Tool": [
+rights = {
+  "Tool": {
     "Forecast Dashboard":
       {
         "Features":
-          [
+          {
             "Select":
             {
               "Roles":
@@ -27,12 +27,12 @@
                   "Admin"
                ]
             }
-          ]
+          }
         },
       "Saved Scenario":
           {
             "Features":
-              [
+              {
                 "Create a new scenario":
                   {
                     "Roles":
@@ -115,12 +115,12 @@
                         "Supervisor"
                       ]
                   }
-              ]
+              }
           },
       "Compare":
           {
             "Features":
-              [
+              {
                 "Create a new scenario":
                   {
                     "Roles":
@@ -203,12 +203,12 @@
                         "Supervisor"
                       ]
                   }
-              ]
+              }
           },
-          "Simulator / Scenario Editor":
+      "Simulator / Scenario Editor":
           {
             "Features":
-              [
+              {
                 "Create a new scenario":
                   {
                     "Roles":
@@ -291,11 +291,10 @@
                         "Supervisor"
                       ]
                   }
-              ]
+              }
           },
-    "Price Promo",
-    "Marketing Mix"
-  ]
+    "Price Promo":{},"Marketing Mix":{}
+  }
 }
 
 
