@@ -99,7 +99,7 @@ rights = {
                     "Roles":
                       [
                         "Scenario’s Author"
-                      ]
+                      ],
                     "URL":"delete"
                   },
                  "Publish a selected scenario to the central repository":

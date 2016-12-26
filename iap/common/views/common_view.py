@@ -8,7 +8,6 @@ from ...common import runtime_storage as rt
 from ...common import persistent_storage as pt
 from ..services import common_info as common_getter
 from ..security import *
-from ..access_manager import check_permission
 
 def index_view(req):
     return render_to_response('iap.common:templates/index.jinja2',
@@ -31,24 +30,6 @@ def check_logged_in(req):
     elif get_user(req)!= Exception and check_session(req) == True:
         new_token = req.session['token']
         return send_success_response(new_token)
-
-
-def forbidden_view(f):
-    """Decorator that check if user is authentificated and
-     allow to continue view function execution in succcesive case
-    :param f:
-    :type f:
-    :return:
-    :rtype:
-
-    """
-    def deco(request):
-        user_id = get_user(request)
-        if user_id != Exception and check_session(request) == True:
-            return f(request)
-        else:
-            return send_error_response('Unauthorised')
-    return deco
 
 
 def login(req):
@@ -106,7 +87,7 @@ def get_page_configuration(req):
         msg = ErrorManager.get_error_message(e)
         return send_error_response(msg)
 
-
+@forbidden_view
 def set_language(req):
     # Get parameters from request.
     try:
@@ -122,7 +103,7 @@ def set_language(req):
         msg = ErrorManager.get_error_message(e)
         return send_error_response(msg)
 
-
+@forbidden_view
 def get_tools_with_projects(req):
     try:
         user_id = req.user

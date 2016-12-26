@@ -3,9 +3,10 @@ from ...repository.db.models_access import User
 
 from  ...repository.db.scenarios_model import User
 from ...common.helper import send_success_response, send_error_response
-from ...common.access_manager import check_permission
+from ...common.security import requires_roles, forbidden_view
 
-@check_permission
+@forbidden_view
+@requires_roles("Supervisor", "Authorised User")
 def create_scenario(request):
     """Function for creating new scenario
     args:
@@ -131,7 +132,8 @@ def incude_scenario(request):
     except:
         return send_error_response("Failed to include")
 
-
+@forbidden_view
+@requires_roles()
 def get_scenarios_list(req):
     scenarios = [
         {

@@ -3,14 +3,13 @@ from pyramid.config import Configurator
 from pyramid.response import Response
 
 from .common import security
+from .common.security import set_manager
 from .common.views import common_view as common
 
 from .forecasting.views import dashboard as f_dashboard
 from .forecasting.views import common as f_common
 from .forecasting.views import scenarios as f_scenarios
 from .forecasting.views import simulator as f_simulator
-from pyramid.authorization import ACLAuthorizationPolicy
-from .common.access_manager import AccessManager
 
 
 def common_routing(config):
@@ -61,7 +60,9 @@ def common_routing(config):
 
 
     #config.set_authorization_policy(ACLAuthorizationPolicy())
-    config.set_authorization_policy(AccessManager())
+    #config.set_authorization_policy(AccessManager())
+    config.add_directive('set_manager', set_manager)
+    config.set_manager()
     config.include('pyramid_jwt')
     config.set_jwt_authentication_policy('secret', http_header='X-Token')
     config.include(security)
