@@ -1,12 +1,8 @@
-from ...repository.db.scenarios_model import Scenario
-from ...repository.db.models_access import User
-
-from  ...repository.db.scenarios_model import User
+from ...repository.db.models_access import Scenario, User
 from ...common.helper import send_success_response, send_error_response
 from ...common.security import requires_roles, forbidden_view
+import datetime
 
-@forbidden_view
-@requires_roles("Supervisor", "Authorised User")
 def create_scenario(request):
     """Function for creating new scenario
     args:
@@ -21,12 +17,17 @@ def create_scenario(request):
     :rtype:
     """
     try:
-        input_data = request.json_body()
-        scenario = Scenario(name=input_data['name'], description=input_data['description'],
-                        geographies=input_data['geographies'], product=input_data['product'],
-                        channel=input_data['channel'])
-
-        request.dbconn.add(scenario)
+        input_data = request.json_body
+        print(input_data)
+        print(request.dbsession.query(Scenario).all())
+        #check user permisssion
+        #_criteria = request.dbsession.query(Entity).filter(Entity._dimension_name == input_data['geographies'] and
+        #                            Entity._layer==input_data['channel'] and Entity._name==input_data['product'])
+        date_of_last_mod = str(datetime.datetime.now())
+        print('+')
+        scenario = Scenario(name=input_data['name'], description=input_data['description'],date_of_last_modification=date_of_last_mod, status="New")
+        print(scenario)
+        request.dbsession.add(scenario)
         request.commit()
     except:
         return send_error_response("Failed to create scenario")
@@ -36,14 +37,20 @@ def create_scenario(request):
 
 def search_and_view_scenario(request, *kwarg):
 
-    scenario = request.dbconn.query(Scenario).filter()
+    scenario = request.dbsession.query(Scenario).filter()
     pass
 
 def get_scenario_description(request):
-    #check firstly acccess rights
+    """
+    Return scenario description by given scenario id
+    :param request:
+    :type request:
+    :return:
+    :rtype:
+    """
     try:
-        scenario_id = request.json_body['scenario']
-        scenario = request.dbconn.query(Scenario).filter(Scenario.id == scenario_id).one()
+        scenario_id = request.json_body['id']
+        scenario = request.dbsession.query(Scenario).filter(Scenario.id == scenario_id).one()
         description = scenario.description
     except:
         return send_error_response("Failed to get scenario description")
@@ -74,8 +81,25 @@ def change_scenario_name(request):
 def check_scenario_name(request):
     pass
 
+
 def modify(request):
-    pass
+    """
+
+    :param request:
+    :type request:
+    :return:
+    :rtype:
+    """
+    try:
+        new_values = request.json_body['modification']
+        scenario_id = request.json_body['scenario_id']
+        for parameter in new_values.keys():
+            request.dbconn.query(Scenario).filter(Scenario.id == scenario_id).update({parameter: new_values[parameter]})
+    except:
+        return send_error_response("Failed to modify selcted scenario")
+    else:
+        return send_success_response(new_values)
+
 
 def delete(request):
     """
@@ -132,8 +156,8 @@ def incude_scenario(request):
     except:
         return send_error_response("Failed to include")
 
-@forbidden_view
-@requires_roles()
+#@forbidden_view
+#@requires_roles()
 def get_scenarios_list(req):
     scenarios = [
         {

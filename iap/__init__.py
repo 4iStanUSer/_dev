@@ -84,6 +84,21 @@ def forecast_routing(config):
     config.add_route('forecast.get_index_page_data',
                      '/get_index_page_data')
 
+    config.add_route('forecast.create_scenario',
+                     '/create_scenario')
+    config.add_view(f_scenarios.create_scenario,
+                    route_name='forecast.create_scenario', renderer='json')
+
+    config.add_route('forecast.get_scenario_description',
+                     '/get_scenario_description')
+    config.add_view(f_scenarios.get_scenario_description,
+                    route_name='forecast.get_scenario_description', renderer='json')
+
+    config.add_route('forecast.search_and_view_scenario',
+                     '/search_and_view_scenario')
+    config.add_view(f_scenarios.search_and_view_scenario,
+                    route_name='forecast.search_and_view_scenario', renderer='json')
+
     config.add_route('forecast.get_scenarios_list',
                      '/get_scenarios_list')
     config.add_view(f_scenarios.get_scenarios_list,

@@ -6,11 +6,13 @@ from sqlalchemy import (
     String,
     Float,
     Boolean,
+    DateTime
 )
+from .warehouse import Entity
 from sqlalchemy.orm import relationship, backref
 from passlib.hash import bcrypt
 from .meta import Base
-
+import datetime
 
 class Tool(Base):
     __tablename__ = 'tool'
@@ -193,3 +195,31 @@ PERMS_MODELS_MAP = {
 #     variable_id = Column(Integer, ForeignKey('variable.id'), primary_key=True)
 #     decline_flag = Column(Boolean(create_constraint=True, name='validator'),
 #                           default=False)
+class Scenario(Base):
+    __tablename__ = 'scenarios'
+
+    id = Column(Integer, primary_key=True)
+    parent_id = Column(Integer, ForeignKey('scenarios.id'), nullable=True)
+
+    name = Column(String(length=255))
+    description = Column(String(length=255))
+    date_of_last_modification = Column(String)
+
+    status = Column(String(length=255))
+    shared = Column(String(length=255), nullable=True)
+    start_date = Column(DateTime,  nullable=True)
+    end_date = Column(DateTime, nullable=True)
+
+    criteria_id = Column(Integer, ForeignKey('entities._id'), nullable=True)
+    criteria = relationship("Entity",  back_populates="scenario")
+    children = relationship("Scenario",  remote_side=[id])
+
+
+class Driver(Base):
+    __tablename__="drivers"
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+    growth = Column(Float)
+    #scenario = relationship("Scenario",backref="drivers")
+
+

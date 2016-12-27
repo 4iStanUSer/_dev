@@ -105,11 +105,6 @@ class AccessManager:
         :param req:
         :type req:
         """
-        self.features = []
-        self.roles = []
-        self.user_groups=[]
-        self.tools = []
-        self.entities = []
 
     def permits(self, context, identity, permission):
         """ Return True if the userid is allowed the permission in the
@@ -158,14 +153,15 @@ class AccessManager:
         :rtype:
         """
         user = request.dbsession.query(User).filter(User.id == user_id).one()
+        groups = []
         for group in user.roles:
-            self.groups.append(group.id)
-        if entity_id in self.groups:
+            groups.append(group.id)
+        if entity_id in groups:
             return True
         else:
             return False
 
-    def check_feature_permission(self, request,user_id, tool_id, feature_id):
+    def check_feature_permission(self, request, user_id, tool_id, feature_id):
         """Boolean function that check whether user have specific
         right for tools  and features
 
@@ -173,19 +169,21 @@ class AccessManager:
         :rtype:
         """
         user = request.dbsession.query(User).filter(User.id == user_id).one()
+        tools = []
+        features = []
         for role in user.roles:
-            self.tools.append(role.tool_id)
+            tools.append(role.tool_id)
             for feature in role.features:
-                self.features.append(feature.id)
-        if tool_id in self.tools and feature_id in self.features:
+                features.append(feature.id)
+        if tool_id in tools and feature_id in features:
             return True
         else:
             return False
 
-    def _check_access(self,request, user_id, roles):
+    def _check_access(self, request, user_id, roles):
         user = request.dbsession.query(User).filter(User.id == user_id).one()
         roles_names  = [role.name for role in user.roles]
-        if list(set(roles_names) & set(roles)) != []:
+        if list(set(roles_names) & set(roles)) is not []:
             return True
         else:
             return False

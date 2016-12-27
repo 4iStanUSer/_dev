@@ -18,3 +18,34 @@ def web_app():
 def test_scenario(web_app):
     res = web_app.get("/forecast/get_scenarios_list")
     print(res)
+
+
+def test_create_scenario(web_app):
+    """Test for create scenario
+
+    :param web_app:
+    :type web_app:
+    :return:
+    :rtype:
+    """
+    scenario_data = {"name": "Scenario",
+                     "description": "some description",
+                     "status": "new",
+                     "shared": "True",
+                     "geographie": "Ukraine",
+                     "product": "Salo",
+                     "channel": "Main"}
+
+    res = web_app.post_json("/forecast/create_scenario", scenario_data)
+    print(res)
+
+def test_get_scenario_description(web_app):
+    """Test for get scenario description
+
+    :param web_app:
+    :type web_app:
+    :return:
+    :rtype:
+    """
+    res = web_app.post_json("/forecast/get_scenario_description", {'id': 0})
+    print(res)

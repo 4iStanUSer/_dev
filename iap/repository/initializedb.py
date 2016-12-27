@@ -10,6 +10,7 @@ from iap.repository.tmp_template import tool_template
 from .db import (get_engine, get_session_factory, get_tm_session)
 from .db.meta import Base
 from .db.warehouse import Entity, Warehouse
+from .db.models_access import Scenario
 from ..repository.interface.imanage_access import IManageAccess
 
 from ..repository import persistent_storage
@@ -44,10 +45,11 @@ def main(argv=sys.argv):
         # Create all tables
         Base.metadata.create_all(engine)
         # Add root to entities tree.
+
         root = Entity(_name='root', _layer='root', _dimension_name='root')
         ssn.add(root)
-
         transaction.manager.commit()
+
 
         wh = Warehouse(session_factory)
         loader = Loader(wh)
