@@ -65,12 +65,21 @@ export class ScenariosListComponent implements OnInit {
         }
     }
     clickView(id:number){
+        /*
+        scenarios/search_and_view
+        */
         console.log('View ' + id);
     }
     clickEdit(id:number){
+        /*
+        scenarios/modify
+        */
         console.log('Edit ' + id);
     }
     clickDelete(id:number){
+        /*
+        scenarios/delete
+        */
         console.log('Delete ' + id);
     }
 

@@ -14,6 +14,9 @@ from passlib.hash import bcrypt
 from .meta import Base
 import datetime
 
+
+
+
 class Tool(Base):
     __tablename__ = 'tool'
     id = Column(Integer, primary_key=True)
@@ -96,8 +99,6 @@ class Feature(Base):
 
 
 
-
-
 class UserProfile(Base):
     __tablename__ = 'users_profiles'
     id = Column(Integer, primary_key=True)
@@ -105,6 +106,13 @@ class UserProfile(Base):
     first_name = Column(String(length=255))
     last_name = Column(String(length=255))
     user = relationship('User', back_populates='profile')
+
+
+#Permission for Data Access
+user_perm_data_ass_table = Table('group_perm_ass', Base.metadata,
+    Column('data_perm_id', Integer, ForeignKey('data_permission_access.id')),
+    Column('group_id', Integer, ForeignKey('group.id'))
+)
 
 
 class UserGroup(Base):
@@ -117,7 +125,21 @@ class UserGroup(Base):
 
     users = relationship('User', secondary=user_ugroup_tbl,
                          back_populates='groups')
+    data_perm = relationship(
+        "DataPermissionAccess",
+        secondary=user_perm_data_ass_table,
+        back_populates="groups")
 
+
+class DataPermissionAccess(Base):
+    __tablename_ = "data_permission_access"
+    id = Column(Integer, primary_key=True)
+    name = Column(String(length=255))#description
+    value = Column(String(length=255))
+    groups = relationship(
+            "Group",
+            secondary=user_perm_data_ass_table,
+            back_populates="data_perm")
 
 # region Models For User's Permissions to ForecastTool
 
@@ -160,7 +182,7 @@ class FrcastPermValue(Base):
     id = Column(Integer, primary_key=True)
     perm_node_id = Column(Integer, ForeignKey('forecast_perm_node.id'))
     value = Column(Integer)
-    user_id = Column(Integer, ForeignKey('users.id'))
+    user_id = Column(Integer, ForeignKey('group.id'))
 
     perm_node = relationship("FrcastPermNode", back_populates='perm_values')
 
@@ -195,6 +217,10 @@ PERMS_MODELS_MAP = {
 #     variable_id = Column(Integer, ForeignKey('variable.id'), primary_key=True)
 #     decline_flag = Column(Boolean(create_constraint=True, name='validator'),
 #                           default=False)
+
+
+
+
 class Scenario(Base):
     __tablename__ = 'scenarios'
 
