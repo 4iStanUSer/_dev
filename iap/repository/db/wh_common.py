@@ -2,7 +2,7 @@ from sqlalchemy import or_, and_
 
 from ...repository import exceptions as ex
 from .models import *
-from .access_models import *
+from .models_access import *
 
 
 def add_variables(ssn, properties_map):

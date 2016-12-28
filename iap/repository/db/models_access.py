@@ -109,9 +109,9 @@ class UserProfile(Base):
 
 
 #Permission for Data Access
-user_perm_data_ass_table = Table('group_perm_ass', Base.metadata,
-    Column('data_perm_id', Integer, ForeignKey('data_permission_access.id')),
-    Column('group_id', Integer, ForeignKey('group.id'))
+group_perm_ass_tbl = Table('group_perm_ass', Base.metadata,
+    Column('group_id', Integer, ForeignKey('user_groups.id')),
+    Column('data_perm_id', Integer, ForeignKey('data_permission_access.id'))
 )
 
 
@@ -125,21 +125,16 @@ class UserGroup(Base):
 
     users = relationship('User', secondary=user_ugroup_tbl,
                          back_populates='groups')
-    data_perm = relationship(
-        "DataPermissionAccess",
-        secondary=user_perm_data_ass_table,
-        back_populates="groups")
+    data_perm = relationship("DataPermissionAccess", secondary=group_perm_ass_tbl,
+                            back_populates="groups")
 
 
 class DataPermissionAccess(Base):
-    __tablename_ = "data_permission_access"
+    __tablename__ = "data_permission_access"
     id = Column(Integer, primary_key=True)
     name = Column(String(length=255))#description
     value = Column(String(length=255))
-    groups = relationship(
-            "Group",
-            secondary=user_perm_data_ass_table,
-            back_populates="data_perm")
+    groups = relationship("UserGroup",secondary=group_perm_ass_tbl, back_populates="data_perm")
 
 # region Models For User's Permissions to ForecastTool
 
@@ -182,7 +177,7 @@ class FrcastPermValue(Base):
     id = Column(Integer, primary_key=True)
     perm_node_id = Column(Integer, ForeignKey('forecast_perm_node.id'))
     value = Column(Integer)
-    user_id = Column(Integer, ForeignKey('group.id'))
+    user_id = Column(Integer, ForeignKey('users.id'))
 
     perm_node = relationship("FrcastPermNode", back_populates='perm_values')
 

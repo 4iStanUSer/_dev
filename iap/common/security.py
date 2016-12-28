@@ -34,10 +34,17 @@ def authorise(req):
         # user = service.check_password(login, password)
     """
 
+    print(req)
+    users = req.dbsession.query(User).all()
+    print(users)
     try:
         username = req.json_body['username']
         password = req.json_body['password']
+        print(username)
+        users = req.dbsession.query(User).all()
+        print(users)
         user = req.dbsession.query(User).filter(User.email == username).one()
+
         #TO DO add check password
         return user
     except:
