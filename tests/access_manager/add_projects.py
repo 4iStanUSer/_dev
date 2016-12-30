@@ -17,6 +17,14 @@ def web_app():
 
 @pytest.fixture
 def token(web_app):
+    """
+    Feature preparetion login and authentification
+
+    :param web_app:
+    :type web_app:
+    :return:
+    :rtype:
+    """
     login = "default_user"
     password = "123456"
     res = web_app.post_json('/login', {"username": login, 'password': password})
@@ -25,6 +33,14 @@ def token(web_app):
 
 
 def test_get_tools_info(web_app):
+    """
+    Test for view get_tools_with_projects
+
+    :param web_app:
+    :type web_app: webtest.app.TestApp
+    :return:
+    :rtype: None
+    """
     login = "default_user"
     password = "123456"
     res = web_app.post_json('/login', {"username": login, 'password': password})
@@ -32,4 +48,6 @@ def test_get_tools_info(web_app):
 
     res = web_app.post_json('/get_tools_with_projects', {'X-Token': token})
 
-    print(res)
+    expected = {"data": {"projects": [{"id": 1, "name": "Oral Care Forecasting", "description": null}, {"id": 2, "name": "Lean Forecasting", "description": null}], "tools": [{"id": 1, "name": "Forecasting", "description": "This is forecasting"}]}, "error": False}
+    actual = res.json
+    assert actual==expected

@@ -5,16 +5,36 @@ import datetime
 
 
 def create_table(request):
+    """
+    Create Scenario Table
+    :param request:
+    :type request:
+    :return:
+    :rtype:
+    """
     from iap.repository.db.meta import Base
     _engine = request.dbsession.bind.engine
     # Create all tables
     Base.metadata.create_all(_engine)
 
 def prepare_scenario_testing(request):
+    """
+    Prepare db for testing
+    :param request:
+    :type request: pyramid.util.Request
+    :return:
+    :rtype: None
+    """
     scenarios = request.dbsession.query(Scenario).all()
     for scenario in scenarios:
         print(scenario.id)
-        request.dbsession.delete(scenario)
+        request.dbsession.delete(scenario)\
+
+    users = request.dbsession.query(User).all()
+    for user in users:
+        print(user.id)
+        request.dbsession.delete(user)
+
 
 def serialise_scenario(scenarios):
     scenario_info_list = []

@@ -101,10 +101,28 @@ def get_role_by_id(ssn, role_id):
 
 
 def get_role_by_name(ssn, name):
+    """
+    Return role selected by name
+    :param ssn:
+    :type ssn:
+    :param name:
+    :type name:
+    :return:
+    :rtype:
+    """
     return ssn.query(mdls.Role).filter(mdls.Role.name == name).one_or_none()
 
 
 def get_tool_by_id(ssn, tool_id):
+    """
+    Return tool by id selected
+    :param ssn:
+    :type ssn:
+    :param tool_id:
+    :type tool_id:
+    :return:
+    :rtype:
+    """
     return ssn.query(mdls.Tool).get(tool_id)
 
 
@@ -123,6 +141,20 @@ def add_role(ssn, name):  # , client=None, tool=None
 
 
 def add_user(ssn, email, password, roles=None):
+    """
+    Create new user
+
+    :param ssn:
+    :type ssn:
+    :param email:
+    :type email:
+    :param password:
+    :type password:
+    :param roles:
+    :type roles:
+    :return:
+    :rtype:
+    """
     new_user = mdls.User(email=email, password=password)
     if roles is None:
         ssn.add(new_user)

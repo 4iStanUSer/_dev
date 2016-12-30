@@ -29,7 +29,9 @@ def main(argv=sys.argv):
     if len(argv) < 2:
         usage(argv)
     config_uri = argv[1]
+    #get path to .ini file
     options = parse_vars(argv[2:])
+    #get parameters ~ options
     setup_logging(config_uri)
     settings = get_appsettings(config_uri, options=options)
 

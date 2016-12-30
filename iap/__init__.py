@@ -55,8 +55,9 @@ def common_routing(config):
     config.add_view(common.set_project_selection, route_name='common.select_project',renderer='json')
 
     #this is test view to check the database
-    config.add_route('common.model_overview', '/model_overview')
-    config.add_view(common.model_overview, route_name='common.model_overview',renderer='json')
+    config.add_route('common.test_preparation', '/test_preparation')
+    config.add_view(common.test_preparation, route_name='common.test_preparation',renderer='json')
+
 
 
     #config.set_authorization_policy(ACLAuthorizationPolicy())
@@ -118,12 +119,6 @@ def forecast_routing(config):
                      '/mark_as_final')
     config.add_view(f_scenarios.mark_as_final,
                     route_name='forecast.mark_as_final', renderer='json')
-    #support UI
-    config.add_route('forecast.test_scenario',
-                     '/test_scenario')
-    config.add_view(f_scenarios.prepare_scenario_testing,
-                    route_name='forecast.test_scenario', renderer='json')
-
 
     config.add_route('forecast.get_scenarios_list',
                      '/get_scenarios_list')

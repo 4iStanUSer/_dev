@@ -24,7 +24,7 @@ def token(web_app):
 
 def setup_module():
     server = web_app()
-    res = server.get("/forecast/test_scenario")
+    res = server.post_json("/test_preparation", {'test_name': "scenario"})
     print(res)
 
 
