@@ -16,26 +16,41 @@ def web_app():
     testapp = TestApp(app)
     return testapp
 
+@pytest.fixture
+def token(web_app):
+    """
+    Feature preparetion login and authentification
 
-def test_model_overview(web_app):
-    #res = web_app.post_json('/model_overview', {'data': rights})
-    #print(res)
-    pass
-
-def test_authorisation(web_app):
+    :param web_app:
+    :type web_app:
+    :return:
+    :rtype:
+    """
     login = "default_user"
     password = "123456"
     res = web_app.post_json('/login', {"username": login, 'password': password})
-    print(res)
     token = str(res.json_body['data'])
+    return token
 
-    res = web_app.post_json('/check_auth', {'X-Token': token})
-    expected = {"data": token, "error": False}
-    actual = res.json
-    print(actual)
+def setup_module():
+    server = web_app()
+    res = server.post_json("/test_preparation", {'test_name': "authorisation"})
+    print(res)
+
+
+def test_authorisation_success_expected(web_app, token):
 
     res = web_app.post_json('/forecast/get_scenarios_list', {'X-Token': token})
     expected = {"error": False}
+    actual = res.json
+    print(actual)
+
+    assert actual["error"] == expected["error"]
+
+def test_authorisation_error_expected(web_app, token):
+
+    res = web_app.post_json('/forecast/mark_as_final', {'X-Token': token})
+    expected = {"error": True}
     actual = res.json
     print(actual)
 

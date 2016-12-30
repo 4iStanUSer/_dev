@@ -206,24 +206,24 @@ def test_preparation(request):
         from iap.repository.db.models_access import User, Role, UserGroup, DataPermissionAccess
         prepare_scenario_testing(request)
         #1.1 create User
-        new_user = User(user_name="default_user", password="123456")
+        new_user = User(email="default_user", password="123456")
         request.dbsession.add(new_user)
         #1.2 add entity add role,group
-        role = Role(name="forecater")
-        request.dbsession.add(role)
-        new_user.roles.append(role)
-        role.users.append(new_user)
+
         #1.3 set permission for user
         return send_success_response("Test Prepared")
-    if test_name == "authentification":
+    if test_name == "authorisation":
         from ...forecasting.views.scenarios import create_table, prepare_scenario_testing
         from iap.repository.db.models_access import User, Role, UserGroup, DataPermissionAccess
         prepare_scenario_testing(request)
         #1.1 create User
-        new_user = User(user_name="default_user", password="123456")
+        new_user = User(email="default_user", password="123456")
         request.dbsession.add(new_user)
         #1.2 set Role
-
+        role = Role(name="forecaster")
+        request.dbsession.add(role)
+        new_user.roles.append(role)
+        role.users.append(new_user)
     if test_name == "project_creation":
         from ...forecasting.views.scenarios import create_table, prepare_scenario_testing
         prepare_scenario_testing(request)
