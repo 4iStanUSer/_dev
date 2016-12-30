@@ -115,7 +115,3 @@ def test_second_step_authentification(web_app):
     expected = {"data": token, "error": False}
     actual = res.json
     assert actual == expected
-
-
-    res = web_app.post('/routing_config', {'X-Token': token})
-    print(res)

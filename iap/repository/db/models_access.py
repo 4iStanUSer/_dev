@@ -217,6 +217,7 @@ PERMS_MODELS_MAP = {
 
 
 class Scenario(Base):
+
     __tablename__ = 'scenarios'
 
     id = Column(Integer, primary_key=True)
@@ -225,6 +226,7 @@ class Scenario(Base):
     name = Column(String(length=255))
     description = Column(String(length=255))
     date_of_last_modification = Column(String)
+
 
     status = Column(String(length=255))
     shared = Column(String(length=255), nullable=True)

@@ -1,4 +1,5 @@
 from ...repository.db.models_access import Tool, User, Feature, UserGroup, Role
+from ...repository.db.models import Project,Pr_Tool
 from pyramid.renderers import render_to_response
 from ...common.helper import send_success_response, send_error_response
 from ...common.tools_config import get_page_config
@@ -71,6 +72,14 @@ def get_routing_config(req):
 
 
 def get_page_configuration(req):
+    """
+    View for get_page_configuration
+    By givem user_id and page_name
+    :param req:
+    :type req:
+    :return:
+    :rtype:
+    """
     # Get parameters from request.
     try:
         user_id = req.user
@@ -107,7 +116,7 @@ def set_language(req):
 
 def get_tools_with_projects(req):
     try:
-        user_id = req.user
+        user_id = get_user(req).id
     except KeyError:
         msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
         return send_error_response(msg)
@@ -116,10 +125,13 @@ def get_tools_with_projects(req):
         if not user_id:
             data['tools'] = common_getter.get_tools_info(pt)
         else:
-            lang = rt.get_state(user_id).language
-            tools_ids, projects_ids = pt.get_user_tools_with_projects(user_id)
-            data['tools'] = common_getter.get_tools_info(pt, tools_ids, lang)
-            data['projects'] = common_getter.get_projects_info(pt, projects_ids, lang)
+            #lang = rt.get_state(user_id).language
+            #tools_ids, projects_ids = pt.get_user_tools_with_projects(user_id)
+            #data['tools'] = common_getter.get_tools_info(req, pt, tools_ids, lang)
+
+            data['tools'] = common_getter.get_tools_info(req)
+            #data['projects'] = common_getter.get_projects_info(req, pt, projects_ids, lang)
+            data['projects'] = common_getter.get_projects_info(req)
         return send_success_response(data)
     except Exception as e:
         msg = ErrorManager.get_error_message(e)
@@ -128,7 +140,7 @@ def get_tools_with_projects(req):
 
 def get_data_for_header(req):
     try:
-        user_id = req.user
+        user_id = req.user.id
     except KeyError:
         msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
         return send_error_response(msg)
@@ -147,6 +159,7 @@ def get_data_for_header(req):
 
 def set_project_selection(req):
     try:
+        print(req.user.id)
         user_id = req.user
         project_id = req.json_body['project_id']
     except KeyError:
@@ -206,3 +219,18 @@ def model_overview(req):
     urls = [req.current_route_url(), req.current_route_path()]
     return {'users': users, 'tools': tools, 'roles': roles, 'features':features, "urls": urls}
 
+def create_table(request):
+    from iap.repository.db.meta import Base
+    _engine = request.dbsession.bind.engine
+    # Create all tables
+    Base.metadata.create_all(_engine)
+    tool = Pr_Tool(name='Forecasting', description='This is forecasting')
+    request.dbsession.add(tool)
+
+    project_1 = Project(name='Oral Care Forecasting')
+    project_1.pr_tools.append(tool)
+    request.dbsession.add(project_1)
+
+    project_2 = Project(name='Lean Forecasting')
+    project_2.pr_tools.append(tool)
+    request.dbsession.add(project_2)

@@ -35,8 +35,8 @@ def test_authorisation(web_app):
     print(actual)
 
     res = web_app.post_json('/forecast/get_scenarios_list', {'X-Token': token})
-    expected = {"data": "Unauthorised", "error": True}
+    expected = {"error": False}
     actual = res.json
     print(actual)
 
-    assert actual == expected
+    assert actual["error"] == expected["error"]

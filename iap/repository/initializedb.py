@@ -10,6 +10,7 @@ from iap.repository.tmp_template import tool_template
 from .db import (get_engine, get_session_factory, get_tm_session)
 from .db.meta import Base
 from .db.warehouse import Entity, Warehouse
+from .db.models import Project,Pr_Tool
 from .db.models_access import Scenario
 from ..repository.interface.imanage_access import IManageAccess
 
@@ -33,7 +34,6 @@ def main(argv=sys.argv):
     settings = get_appsettings(config_uri, options=options)
 
     engine = get_engine(settings, prefix='sqlalchemy.')
-
     session_factory = get_session_factory(engine)
 
     with transaction.manager:
@@ -43,13 +43,13 @@ def main(argv=sys.argv):
         # Drop all tables
         Base.metadata.drop_all(engine)
         # Create all tables
+        from .db.models import Project, Pr_Tool
         Base.metadata.create_all(engine)
         # Add root to entities tree.
 
         root = Entity(_name='root', _layer='root', _dimension_name='root')
         ssn.add(root)
         transaction.manager.commit()
-
 
         wh = Warehouse(session_factory)
         loader = Loader(wh)

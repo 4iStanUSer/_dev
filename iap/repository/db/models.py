@@ -11,6 +11,28 @@ from sqlalchemy.orm import relationship, backref
 from .meta import Base
 
 
+project_tool_tbl = Table("project_tool", Base.metadata,
+                                Column("projects_id", Integer, ForeignKey("projects.id"),primary_key=True),
+                                Column("tools_id", Integer, ForeignKey("tools.id"), primary_key=True)
+                          )
+
+class Project(Base):
+    __tablename__ = "projects"
+    id = Column(Integer, primary_key=True)
+    name = Column(String(length=255))
+    description = Column(String(length=255))
+    pr_tools = relationship("Pr_Tool", secondary=project_tool_tbl, back_populates="projects")
+
+
+class Pr_Tool(Base):
+    __tablename__ = "tools"
+    id = Column(Integer, primary_key=True)
+    name = Column(String(length=255))
+    description = Column(String(length=255))
+    project_id = Column(Integer, ForeignKey('projects.id'))
+    projects = relationship("Project", secondary=project_tool_tbl, back_populates="pr_tools")
+
+
 # point_coordinates = Table(
 #     'point_coordinates',
 #     Base.metadata,

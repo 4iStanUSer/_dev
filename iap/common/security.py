@@ -1,6 +1,6 @@
 from pyramid.session import SignedCookieSessionFactory
 from ..common.helper import send_error_response
-from iap.repository.db.models_access import User
+from iap.repository.db.models_access import User, DataPermissionAccess
 from iap.repository.db.warehouse import Entity
 from pyramid.interfaces import IAuthorizationPolicy
 from zope.interface import implementer
@@ -33,16 +33,11 @@ def authorise(req):
         # user.check_password(password)
         # user = service.check_password(login, password)
     """
-
-    print(req)
     users = req.dbsession.query(User).all()
-    print(users)
     try:
         username = req.json_body['username']
         password = req.json_body['password']
-        print(username)
         users = req.dbsession.query(User).all()
-        print(users)
         user = req.dbsession.query(User).filter(User.email == username).one()
 
         #TO DO add check password
@@ -71,6 +66,7 @@ def check_session(request):
 
 def get_user(request):
     """
+    Return user decoding token
 
     :param request:
     :type request: pyramid.util.Request
@@ -78,6 +74,7 @@ def get_user(request):
     :rtype: int
     """
     #add exception on non existen  id,login in token
+    print(request.json_body['X-Token'])
     try:
         token = request.json_body['X-Token']
         token_data = jwt.decode(token, 'secret', algorithms=['HS512'])
@@ -91,6 +88,15 @@ def get_user(request):
 
 
 def requires_roles(*roles):
+    """
+    Decorator that wrap around view function
+    Check permission access for specific view function
+
+    :param roles:
+    :type roles:
+    :return:
+    :rtype: function
+    """
     def wrapper(f):
         @wraps(f)
         def wrapped(request):
@@ -123,12 +129,27 @@ class AccessManager:
                   or 'None' if no user exists related to the identity """
         pass
 
-    def get_entity_data_access(self, request, user_id, tool_id, path, *kwarg):
+    def get_entity_data_access(self, request, user_id):
         """
+        Return entitie's mask
         :return:
         :rtype:
         """
-        pass
+        mask = []
+        access_data = []
+        user = request.dbsession.query(User).filter(User.id == user_id).one()
+        for group in user.groups:
+            for dataperm in group.data_perm:
+                access_data.append(dataperm.id)
+        data_permission_accesss = request.dbsession.query(DataPermissionAccess).all()
+        for data in data_permission_accesss:
+            mask.append(data.id)
+        for el in mask:
+            if el in access_data:
+                mask[mask.index(el)]=1
+            else:
+                mask[mask.index(el)]=0
+        return mask
 
 
     def get_user_entities(self, request, user_id, tool_id):
@@ -188,6 +209,17 @@ class AccessManager:
             return False
 
     def _check_access(self, request, user_id, roles):
+        """
+        Verify if specific user has specific role
+        :param request:
+        :type request: pyramid.util.Request
+        :param user_id:
+        :type user_id: int
+        :param roles:
+        :type roles: Tuple
+        :return:
+        :rtype: bool
+        """
         user = request.dbsession.query(User).filter(User.id == user_id).one()
         roles_names  = [role.name for role in user.roles]
         if list(set(roles_names) & set(roles)) is not []:
