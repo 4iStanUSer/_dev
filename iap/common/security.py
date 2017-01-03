@@ -244,7 +244,7 @@ def set_manager(config):
 def includeme(config):
     config.add_request_method(get_user, 'user', reify=True)
     config.add_request_method(check_session, 'has_session', reify=True)
-    config.add_request_method(authorise, 'autorised', reify=True)
+    config.add_request_method(authorise, 'authorised', reify=True)
     config.set_session_factory(my_session_factory)
 
 

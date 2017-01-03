@@ -147,7 +147,7 @@ export class AuthService {
         resp.subscribe((d) => {
             console.log('logout success');
             this.is_logged_in = false;
-            localStorage.removeItem('token');
+            localStorage.removeItem('currentUser');
         });
         return resp;
     }
@@ -171,10 +171,11 @@ export class AuthService {
             this.is_logged_in = status;
             this.user = user
             localStorage.setItem('currentUser',this.token);
+            console.log("LocalStorage",localStorage.getItem('currentUser'))
         } else {
             this.is_logged_in = status;
             this.user = null;
-            localStorage.removeItem('token');
+            localStorage.removeItem('currentUser');
         }
     }
 }

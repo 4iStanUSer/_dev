@@ -31,8 +31,9 @@ export class LandingPageComponent implements OnInit {
         this.req
             .get({
                 'url_id': 'landing',
-                'data': {}
-            })
+                'data': {'X-token':localStorage.getItem('currentUser')}
+}
+            )
             .subscribe((tools: Object) => {
                 console.log('LandingPageComponent->ngOnInit', tools);
                 this.tools = tools;

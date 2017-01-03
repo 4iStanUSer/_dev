@@ -37,7 +37,9 @@ export class ScenariosListComponent implements OnInit {
     ngOnInit() {
         this.req.get({
             url_id: 'forecast/get_scenarios_list',
-            data: {}
+            data: {'X-Token':localStorage.getItem('currentUser')}
+
+
         }).subscribe((d) => {
             this.all_sce = [];
             if (d && _.isArray(d)) {

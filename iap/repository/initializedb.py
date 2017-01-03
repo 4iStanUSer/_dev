@@ -140,6 +140,26 @@ def main(argv=sys.argv):
         ssn.add(user_2)
         transaction.manager.commit()
 
+        #Add Project and Pr_Tool
+
+        """
+        Create table for storing inforamtion about pojects and tools
+
+        :param request:
+        :type request:
+        :return:
+        :rtype:
+        """
+        pr_tool = Pr_Tool(name='Forecasting', description='This is forecasting')
+
+        project_1 = Project(name='Oral Care Forecasting')
+        project_1.pr_tools.append(pr_tool)
+
+        project_2 = Project(name='Lean Forecasting')
+        project_2.pr_tools.append(pr_tool)
+
+        ssn.add(project_1)
+        ssn.add(project_2)
 
         user_id = '111'
         tool_id = 'forecast'

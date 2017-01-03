@@ -260,26 +260,3 @@ def model_overview(req):
     return {'users': users, 'tools': tools, 'roles': roles, 'features':features, "urls": urls}
 
 
-def create_table_projects_and_tools(request):
-    """
-    Create table for storing inforamtion about pojects and tools
-
-    :param request:
-    :type request:
-    :return:
-    :rtype:
-    """
-    from iap.repository.db.meta import Base
-    _engine = request.dbsession.bind.engine
-    # Create all tables
-    Base.metadata.create_all(_engine)
-    tool = Pr_Tool(name='Forecasting', description='This is forecasting')
-    request.dbsession.add(tool)
-
-    project_1 = Project(name='Oral Care Forecasting')
-    project_1.pr_tools.append(tool)
-    request.dbsession.add(project_1)
-
-    project_2 = Project(name='Lean Forecasting')
-    project_2.pr_tools.append(tool)
-    request.dbsession.add(project_2)
