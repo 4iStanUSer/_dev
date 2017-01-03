@@ -50,4 +50,4 @@ def test_get_tools_info(web_app):
 
     expected = {"data": {"projects": [{"id": 1, "name": "Oral Care Forecasting", "description": null}, {"id": 2, "name": "Lean Forecasting", "description": null}], "tools": [{"id": 1, "name": "Forecasting", "description": "This is forecasting"}]}, "error": False}
     actual = res.json
-    assert actual==expected
+    assert actual['data']['projects']==expected['data']['projects']

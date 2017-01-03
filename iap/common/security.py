@@ -136,36 +136,28 @@ class AccessManager:
         :rtype:
         """
         mask = []
-        access_data = []
         user = request.dbsession.query(User).filter(User.id == user_id).one()
-        for group in user.groups:
-            for dataperm in group.data_perm:
-                access_data.append(dataperm.id)
-        data_permission_accesss = request.dbsession.query(DataPermissionAccess).all()
-        for data in data_permission_accesss:
-            mask.append(data.id)
-        for el in mask:
-            if el in access_data:
-                mask[mask.index(el)]=1
-            else:
-                mask[mask.index(el)]=0
+        for permission in user.perms:
+            for dataperm in permission.data_perms:
+                mask.append(dataperm.mask)
         return mask
 
-
-    def get_user_entities(self, request, user_id, tool_id):
-        """Get user entities
+    def get_user_entities(self, request, user_id):
+        """Retunr list of dictionary - with keys
+        in_path, out_path, mask
 
         :return:
         :rtype:
         """
         entities = []
         user = request.dbsession.query(User).filter(User.id == user_id).one()
-        for group in user.groups:
-            entity = request.dbsession.query(Entity).filter(Entity.id == group.id).one()
-            entities.append(entity.id)
+        for permission in user.perms:
+            for data_perm in permission.data_perms:
+                entities.append({'in_path':data_perm.in_path, 'out_path':data_perm.out_path, 'mask':data_perm.mask})
         return entities
 
-    def check_data_permission(self, request, user_id, group_id, entity_id):
+
+    def check_data_permission(self, request, user_id, entity_id, mask):
         """
         Check data permission
 
@@ -181,13 +173,12 @@ class AccessManager:
         :rtype:
         """
         user = request.dbsession.query(User).filter(User.id == user_id).one()
-        groups = []
-        for group in user.roles:
-            groups.append(group.id)
-        if entity_id in groups:
-            return True
-        else:
-            return False
+        for permission in user.perms:
+            for data_perm in permission.data_perms:
+                if entity_id==data_perm.id and mask == data_perm.mask:
+                    return True
+        return False
+
 
     def check_feature_permission(self, request, user_id, tool_id, feature_id):
         """Boolean function that check whether user have specific
