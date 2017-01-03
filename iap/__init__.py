@@ -120,6 +120,10 @@ def forecast_routing(config):
     config.add_view(f_scenarios.mark_as_final,
                     route_name='forecast.mark_as_final', renderer='json')
 
+    config.add_route('forecast.include_scenario', '/include_scenario')
+    config.add_view(f_scenarios.include_scenario,
+                    route_name='forecast.include_scenario', renderer='json')
+
     config.add_route('forecast.get_scenarios_list',
                      '/get_scenarios_list')
     config.add_view(f_scenarios.get_scenarios_list,

@@ -1,4 +1,5 @@
-from ...repository.db.models_access import Scenario, User, Role
+from ...repository.db.models_access import Scenario, User, Feature, Role
+from ...repository.db.warehouse import Entity
 from ...common.helper import send_success_response, send_error_response
 from ...common.security import requires_roles, forbidden_view
 import datetime
@@ -17,6 +18,7 @@ def create_table(request):
     # Create all tables
     Base.metadata.create_all(_engine)
 
+
 def prepare_scenario_testing(request):
     """
     Prepare db for testing
@@ -25,23 +27,33 @@ def prepare_scenario_testing(request):
     :return:
     :rtype: None
     """
+    users = request.dbsession.query(User).all()
+    for user in users:
+        print(user.email)
+    features = request.dbsession.query(Feature).all()
+    for feature in features:
+        print(feature.name)
+    #delete created Scenario's
     scenarios = request.dbsession.query(Scenario).all()
     for scenario in scenarios:
         print(scenario.id)
         request.dbsession.delete(scenario)\
 
-    roles = request.dbsession.query(Role).delete()
-
-
-    users = request.dbsession.query(User).all()
-    for user in users:
-        print(user.id)
-        request.dbsession.delete(user)
-
+    #delete created Role's
+    roles = request.dbsession.query(Role).all()
+    for role in roles:
+        print(role.name)
 
 
 
 def serialise_scenario(scenarios):
+    """
+    Serialise scenario into dictionary
+    :param scenarios:
+    :type scenarios:
+    :return:
+    :rtype:
+    """
     scenario_info_list = []
     scenario_info = {}
     for scenario in scenarios:
@@ -54,7 +66,7 @@ def serialise_scenario(scenarios):
 
 
 @forbidden_view
-@requires_roles()
+@requires_roles('Create a new scenario')
 def create_scenario(request):
     """Function for creating new scenario
     args:
@@ -70,15 +82,13 @@ def create_scenario(request):
     """
     try:
         input_data = request.json_body
-        #_criteria = request.dbsession.query(Entity).filter(Entity._dimension_name == input_data['geographies'] and
-        #                            Entity._layer==input_data['channel'] and Entity._name==input_data['product'])
+        #add entity to scenario
         date_of_last_mod = str(datetime.datetime.now())
-        scenario = Scenario(name=input_data['name'], description=input_data['description'],shared = input_data['shared'],
-                            date_of_last_modification=date_of_last_mod, status="New")
-        #scenario.criteria = criteria
+        scenario = Scenario(name=input_data['name'], description=input_data['description'],shared=input_data['shared'],
+                            date_of_last_modification=date_of_last_mod, status="New", criteria=input_data['description'])
+        #add user
         #scenario.authoe = user
         request.dbsession.add(scenario)
-
     except:
         return send_error_response("Failed to create scenario")
     else:
@@ -86,7 +96,7 @@ def create_scenario(request):
 
 
 @forbidden_view
-@requires_roles()
+@requires_roles('search_and_view_scenario')
 def search_and_view_scenario(request):
     """
     Return list of scenario by given filters
@@ -98,8 +108,6 @@ def search_and_view_scenario(request):
     :return:
     :rtype:
     """
-    scenario_info_list = []
-    scenario_info = {}
     try:
         filters = request.json_body['filters']
         if all(filter == [] for filter in filters.values()):
@@ -108,12 +116,7 @@ def search_and_view_scenario(request):
             scenarios = request.dbsession.query(Scenario).\
                 filter(Scenario.name == filters['authors'] and Scenario.criteria.name == filters['criteria']).all()
 
-        for scenario in scenarios:
-            scenario_info['id'] = scenario.id
-            scenario_info['name'] = scenario.name
-            scenario_info['status'] = scenario.status
-            scenario_info['shared'] = scenario.shared
-            scenario_info_list.append(scenario_info)
+        scenario_info_list = serialise_scenario(scenarios)
     except:
         return send_error_response("Error during searching")
     else:
@@ -121,7 +124,7 @@ def search_and_view_scenario(request):
 
 
 @forbidden_view
-@requires_roles()
+@requires_roles('get_scenario_description')
 def get_scenario_description(request):
     """
     Return scenario description by given scenario id
@@ -140,8 +143,9 @@ def get_scenario_description(request):
     else:
         return send_success_response(description)
 
+
 @forbidden_view
-@requires_roles()
+@requires_roles('change_scenario_name')
 def change_scenario_name(request):
     """
     Change scenario name
@@ -163,7 +167,7 @@ def change_scenario_name(request):
 
 
 @forbidden_view
-@requires_roles()
+@requires_roles('check_scenario_name')
 def check_scenario_name(request):
     try:
         scenario_id = request.json_body['id']
@@ -178,7 +182,7 @@ def check_scenario_name(request):
 
 
 @forbidden_view
-@requires_roles()
+@requires_roles('modify')
 def modify(request):
     """
     Modify scenario
@@ -208,7 +212,7 @@ def modify(request):
 
 
 @forbidden_view
-@requires_roles()
+@requires_roles('delete')
 def delete(request):
     """
     Delete selected scenario
@@ -231,7 +235,7 @@ def delete(request):
 
 
 @forbidden_view
-@requires_roles()
+@requires_roles('publish_scenario')
 def publish_scenario(request):
     """Publish selected scenario to central repository
     :param request:
@@ -243,7 +247,7 @@ def publish_scenario(request):
 
 
 @forbidden_view
-@requires_roles('supervisor')
+@requires_roles('mark_scenario_as_final')
 def mark_as_final(request):
     """Marks selected scenario
 
@@ -265,7 +269,7 @@ def mark_as_final(request):
 
 
 @forbidden_view
-@requires_roles()
+@requires_roles('include_scenario')
 def include_scenario(request):
 
     try:
@@ -280,7 +284,7 @@ def include_scenario(request):
 
 
 @forbidden_view
-@requires_roles('forecaster')
+@requires_roles('get_scenarios_list')
 def get_scenarios_list(request):
     scenarios = [
         {

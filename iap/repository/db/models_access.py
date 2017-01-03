@@ -8,7 +8,6 @@ from sqlalchemy import (
     Boolean,
     DateTime
 )
-from .warehouse import Entity
 from sqlalchemy.orm import relationship, backref
 from passlib.hash import bcrypt
 from .meta import Base
@@ -54,12 +53,15 @@ class User(Base):
     groups = relationship('UserGroup', secondary=user_ugroup_tbl,
                           back_populates='users')
 
+    scenarios = relationship("Scenario", back_populates="user")
+    perms = relationship("Permission", back_populates="user")
+
     foreacst_perm_values = relationship("FrcastPermValue")
 
     def set_password(self, password):
         self.password = bcrypt.encrypt(password)
 
-    def check_password(self,password):
+    def check_password(self, password):
         return bcrypt.verify(password, self.password)
 
 role_features_tbl = Table(
@@ -67,6 +69,26 @@ role_features_tbl = Table(
     Column('role_id', Integer, ForeignKey('roles.id')),
     Column('feature_id', Integer, ForeignKey('features.id'))
 )
+
+
+class DataPermission(Base):
+    __tablename__ = "data_permissions"
+    id = Column(Integer, primary_key=True)
+    out_path = Column(String(length=255))
+    in_path = Column(String(length=255))
+    project = Column(String(length=255))
+    mask = Column(Integer)
+    perms = relationship('Permission', back_populates="data_perm")
+
+
+class Permission(Base):
+    __tablename__ = "permissions"
+    id = Column(Integer, primary_key=True)
+    name = Column(String(length=255))
+    data_perm_id = Column(Integer, ForeignKey("data_permissions.id"))
+    data_perm = relationship('DataPermission', back_populates='perms')
+    user_id = Column(Integer, ForeignKey("users.id"))
+    user = relationship('User', back_populates='perms')
 
 
 class Role(Base):
@@ -226,15 +248,16 @@ class Scenario(Base):
     name = Column(String(length=255))
     description = Column(String(length=255))
     date_of_last_modification = Column(String)
-
+    criteria = Column(String())
 
     status = Column(String(length=255))
     shared = Column(String(length=255), nullable=True)
     start_date = Column(DateTime,  nullable=True)
     end_date = Column(DateTime, nullable=True)
 
-    criteria_id = Column(Integer, ForeignKey('entities._id'), nullable=True)
-    criteria = relationship("Entity",  back_populates="scenario")
+    user_id = Column(Integer, ForeignKey('users.id'))
+    user = relationship("User", back_populates="scenarios")
+
     children = relationship("Scenario",  remote_side=[id])
 
 

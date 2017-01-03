@@ -117,6 +117,15 @@ def set_language(req):
 
 
 def get_tools_with_projects(req):
+    """
+    Return all projects and tool information
+    TODO remake to query from database
+
+    :param req:
+    :type req: pyramid.util.Request
+    :return:
+    :rtype: None
+    """
     try:
         user_id = get_user(req).id
     except KeyError:
@@ -186,51 +195,31 @@ def test_preparation(request):
     :return:
     :rtype:
     """
+    from ...forecasting.views.scenarios import create_table, prepare_scenario_testing
+    from iap.repository.db.models_access import User, Role, UserGroup, DataPermissionAccess
     test_name = request.json_body['test_name']
     if test_name == "scenario":
-            #1.1 create table
-            from ...forecasting.views.scenarios import create_table, prepare_scenario_testing
-            create_table(request)
-            prepare_scenario_testing(request)
-            #1.2 add entity
-            #from iap.repository.db.warehouse import Entity
-            #entity = Entity(_name="Nike", _dimension_name="Brazil",_layer="Main")
-            #request.dbsession.add(entity)
-            #1.3 create user and set role
-            from iap.repository.db.models_access import User
-            new_user = User(email="default_user", password="123456")
-            request.dbsession.add(new_user)
-            return send_success_response("Test Prepared")
-    elif test_name == "authentification":
-        from ...forecasting.views.scenarios import create_table, prepare_scenario_testing
-        from iap.repository.db.models_access import User, Role, UserGroup, DataPermissionAccess
+        #1.1 create table
+        create_table(request)
         prepare_scenario_testing(request)
-        #1.1 create User
-        new_user = User(email="default_user", password="123456")
-        request.dbsession.add(new_user)
-        #1.2 add entity add role,group
+        #1.2 add entity
+        #1.3 create user and set role
+        return send_success_response("Test Prepared")
 
+    elif test_name == "authentification":
+        prepare_scenario_testing(request)
+        #new_user.roles.append(role)
         #1.3 set permission for user
         return send_success_response("Test Prepared")
     if test_name == "authorisation":
-        from ...forecasting.views.scenarios import create_table, prepare_scenario_testing
-        from iap.repository.db.models_access import User, Role, UserGroup, DataPermissionAccess
         prepare_scenario_testing(request)
-        #1.1 create User
-        new_user = User(email="default_user", password="123456")
-        request.dbsession.add(new_user)
-        #1.2 set Role
-        role = Role(name="forecaster")
-        request.dbsession.add(role)
-        new_user.roles.append(role)
-        role.users.append(new_user)
+
     if test_name == "project_creation":
         from ...forecasting.views.scenarios import create_table, prepare_scenario_testing
         prepare_scenario_testing(request)
         #1.1 create Project
         #1.2 create fill db
     pass
-
 
 
 def model_overview(req):
@@ -279,7 +268,15 @@ def model_overview(req):
     return {'users': users, 'tools': tools, 'roles': roles, 'features':features, "urls": urls}
 
 
-def create_table(request):
+def create_table_projects_and_tools(request):
+    """
+    Create table for storing inforamtion about pojects and tools
+
+    :param request:
+    :type request:
+    :return:
+    :rtype:
+    """
     from iap.repository.db.meta import Base
     _engine = request.dbsession.bind.engine
     # Create all tables

@@ -102,7 +102,7 @@ def requires_roles(*roles):
         def wrapped(request):
             user = get_user(request)
             if request.check_access(user.id, roles) == False:
-                return send_error_response("User {0} Unauthorised".format(user.id))
+                return send_error_response("User {0} Unauthorised".format(user.email))
             return f(request)
         return wrapped
     return wrapper
@@ -208,7 +208,7 @@ class AccessManager:
         else:
             return False
 
-    def _check_access(self, request, user_id, roles):
+    def _check_access(self, request, user_id, in_features):
         """
         Verify if specific user has specific role
         :param request:
@@ -221,8 +221,11 @@ class AccessManager:
         :rtype: bool
         """
         user = request.dbsession.query(User).filter(User.id == user_id).one()
-        roles_names  = [role.name for role in user.roles]
-        if list(set(roles_names) & set(roles)) is not []:
+        features = []
+        for role in user.roles:
+            for feature in role.features:
+                features.append(feature.name)
+        if list(set(in_features) & set(features)) != []:
             return True
         else:
             return False
@@ -240,6 +243,7 @@ def set_manager(config):
     policy = AccessManager()
 
     def check_access(request, user_id, roles):
+        print("Check access")
         return policy._check_access(request, user_id, roles)
 
     config.set_authorization_policy(policy)
