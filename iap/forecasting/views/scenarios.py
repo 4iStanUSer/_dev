@@ -1,4 +1,4 @@
-from ...repository.db.models_access import Scenario, User, Feature, Role
+from ...repository.db.models_access import Scenario, User, Feature, Role,Permission
 from ...repository.db.warehouse import Entity
 from ...common.helper import send_success_response, send_error_response
 from ...common.security import requires_roles, forbidden_view
@@ -27,7 +27,13 @@ def prepare_scenario_testing(request):
     :return:
     :rtype: None
     """
+
+    permissions = request.dbsession.query(Permission).all()
+    for permission in permissions:
+        print(permission.name)
+        print([i.in_path for i in permission.data_perms])
     users = request.dbsession.query(User).all()
+
     for user in users:
         print(user.email)
     features = request.dbsession.query(Feature).all()
@@ -43,6 +49,7 @@ def prepare_scenario_testing(request):
     roles = request.dbsession.query(Role).all()
     for role in roles:
         print(role.name)
+
 
 
 
@@ -96,7 +103,7 @@ def create_scenario(request):
 
 
 @forbidden_view
-@requires_roles('search_and_view_scenario')
+@requires_roles('View Scenario')
 def search_and_view_scenario(request):
     """
     Return list of scenario by given filters
@@ -124,7 +131,7 @@ def search_and_view_scenario(request):
 
 
 @forbidden_view
-@requires_roles('get_scenario_description')
+@requires_roles('View Scenario')
 def get_scenario_description(request):
     """
     Return scenario description by given scenario id
@@ -133,7 +140,6 @@ def get_scenario_description(request):
     :return:
     :rtype:
     """
-    scenario_info = {}
     try:
         scenario_id = request.json_body['id']
         scenario = request.dbsession.query(Scenario).filter(Scenario.id==scenario_id).one()
@@ -145,7 +151,7 @@ def get_scenario_description(request):
 
 
 @forbidden_view
-@requires_roles('change_scenario_name')
+@requires_roles('View Scenario')
 def change_scenario_name(request):
     """
     Change scenario name
@@ -167,7 +173,7 @@ def change_scenario_name(request):
 
 
 @forbidden_view
-@requires_roles('check_scenario_name')
+@requires_roles('View Scenario')
 def check_scenario_name(request):
     try:
         scenario_id = request.json_body['id']
@@ -182,7 +188,7 @@ def check_scenario_name(request):
 
 
 @forbidden_view
-@requires_roles('modify')
+@requires_roles('Modify Scenario')
 def modify(request):
     """
     Modify scenario
@@ -212,7 +218,7 @@ def modify(request):
 
 
 @forbidden_view
-@requires_roles('delete')
+@requires_roles('Delete Scenario')
 def delete(request):
     """
     Delete selected scenario
@@ -235,7 +241,7 @@ def delete(request):
 
 
 @forbidden_view
-@requires_roles('publish_scenario')
+@requires_roles('Publish Scenario')
 def publish_scenario(request):
     """Publish selected scenario to central repository
     :param request:
@@ -247,7 +253,7 @@ def publish_scenario(request):
 
 
 @forbidden_view
-@requires_roles('mark_scenario_as_final')
+@requires_roles('View Scenario')
 def mark_as_final(request):
     """Marks selected scenario
 
@@ -258,9 +264,7 @@ def mark_as_final(request):
     """
     try:
         scenario_id = request.json_body['id']
-        print(scenario_id)
         scenario = request.dbsession.query(Scenario).filter(Scenario.id == scenario_id).one()
-        print('scenario', scenario)
         scenario.status = "final"
     except:
         return send_error_response("Marking as final failed")
@@ -269,7 +273,7 @@ def mark_as_final(request):
 
 
 @forbidden_view
-@requires_roles('include_scenario')
+@requires_roles('Include_scenario')
 def include_scenario(request):
 
     try:
@@ -284,7 +288,7 @@ def include_scenario(request):
 
 
 @forbidden_view
-@requires_roles('get_scenarios_list')
+@requires_roles('View Scenario')
 def get_scenarios_list(request):
     scenarios = [
         {

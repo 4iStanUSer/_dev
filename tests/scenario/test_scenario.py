@@ -119,7 +119,7 @@ def test_get_scenario_description(web_app, token):
     """
 
     res = web_app.post_json("/forecast/get_scenario_description", {'id': 1, 'X-Token': token})
-    expected = {"data": "new scenario description", "error": False}
+    expected = {"data": "New Scenario Description", "error": False}
     actual = res.json
     assert actual == expected
 

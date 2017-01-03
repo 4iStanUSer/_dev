@@ -314,6 +314,7 @@ class IManageAccess:
 
     def get_group_users(self, group_id):
         """
+
         Return Get User of Specific Group
 
         :param group_id:
@@ -333,6 +334,8 @@ class IManageAccess:
 
     def get_group_data_permissions(self, group_id, tool_id):
         """
+        TEMPRORARY DOESN'T WORK
+
         TO DO Method don't return anything
         Ver.1 - Get data by group
         Q:Why to put tool_id if data access is fully defined by group_id?
@@ -361,6 +364,8 @@ class IManageAccess:
 
     def add_user_to_group(self, user_id, group_id):
         """
+        TEMPRORARY DOESN'T WORK
+
         Add user to group
 
         :param user_id:
@@ -389,6 +394,7 @@ class IManageAccess:
 
     def add_data_permissions_to_group(self, group_id, permisssions_id):
         """
+        TEMPRORARY DOESN'T WORK
 
         :param group_id:
         :type group_id:
@@ -410,7 +416,15 @@ class IManageAccess:
         return permissions
 
     def update_group_data_permissions(self, group_id, permisssions_id):
-
+        """
+        TEMPRORARY DOESN'T WORK
+        :param group_id:
+        :type group_id:
+        :param permisssions_id:
+        :type permisssions_id:
+        :return:
+        :rtype:
+        """
         group_id = _get_id_or_err(group_id, 'group_id')
         group = wha.get_user_group_by_id(self.ssn, group_id)
         group_data_perm = [data_perm.id for data_perm in group.data_perm]
@@ -430,6 +444,17 @@ class IManageAccess:
         return to_keep
 
     def update_user_data_permissions(self, tool_id, user_id, permissions):
+        """
+        TEMPRORARY DOESN'T WORK
+        :param tool_id:
+        :type tool_id:
+        :param user_id:
+        :type user_id:
+        :param permissions:
+        :type permissions:
+        :return:
+        :rtype:
+        """
         #TODO
 
         # Validate inputs
@@ -457,6 +482,8 @@ class IManageAccess:
 
     def _add_permission(self, tool, storage, perm, user=None):
         """
+        TEMPRORARY DOESN'T WORK
+
         Adds permission node(PermNode obj) into variable 'storage'.
         Looks for existing parent and adds into him as child node.
         Inserts all not existing parents.
@@ -529,6 +556,8 @@ class IManageAccess:
 
     def _get_permission_node(self, tool, path, name):
         """
+        TEMPRORARY DOESN'T WORK
+
         Look for permission node in DB for tool by name and path
         :param tool: Tool instance
         :param path: list strings(parents' names)
@@ -573,6 +602,8 @@ class IManageAccess:
 
     def _get_node_types_from_path(self, path, n_type):
         """
+        TEMPRORARY DOESN'T WORK
+
         Generate list of types for path of this node.
         Output list has same length as variable 'path'.
         Example:

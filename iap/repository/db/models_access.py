@@ -78,15 +78,15 @@ class DataPermission(Base):
     in_path = Column(String(length=255))
     project = Column(String(length=255))
     mask = Column(Integer)
-    perms = relationship('Permission', back_populates="data_perm")
+    perm_id = Column(Integer, ForeignKey("permissions.id"))
+    perm = relationship('Permission', back_populates='data_perms')
 
 
 class Permission(Base):
     __tablename__ = "permissions"
     id = Column(Integer, primary_key=True)
     name = Column(String(length=255))
-    data_perm_id = Column(Integer, ForeignKey("data_permissions.id"))
-    data_perm = relationship('DataPermission', back_populates='perms')
+    data_perms = relationship('DataPermission', back_populates="perm")
     user_id = Column(Integer, ForeignKey("users.id"))
     user = relationship('User', back_populates='perms')
 

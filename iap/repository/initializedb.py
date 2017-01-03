@@ -63,19 +63,22 @@ def main(argv=sys.argv):
         loader.run_processing('JJOralCare')
         transaction.manager.commit()
 
-        #Add  user@mail.com User
+
+        #Create Tool Forecating
+        tool = Tool(name="Forecasting")
+        #Add  user@mail.com User for Project #1
+
         email = "user@mail.com"
         password = "qweasdZXC"
         user_1 = User(email=email, password=password)
 
-        # Add default_user User
+        # Add default_user User for Project #2
         email = "default_user"
         password = "123456"
         user_2 = User(email=email, password=password)
 
         #Add Roles Forecaster
-        features = ['Create a new scenario', 'View Scenario', 'Mark scenario as final']
-        tool = Tool(name="Forecasting")
+        features = ['Create a new scenario', 'View Scenario', 'Mark scenario as final', 'Modify Scenario',"Delete Scenario"]
         role_forecast = Role(name="forecaster")
         tool.roles.append(role_forecast)
 
@@ -84,43 +87,57 @@ def main(argv=sys.argv):
 
         # Add Roles Superviser
         features = ['Create a new scenario', 'View Scenario', 'Publish Scenario', 'Mark scenario as final',
-                    'Include Scenario']
+                    'Modify Scenario', 'Include Scenario']
         role_superviser = Role(name="superviser")
+        tool.roles.append(role_superviser)
 
         for feature in features:
             role_superviser.features.append(Feature(name=feature))
-        role_admin = Role(name="admin")
 
-        #Commit
+        #Add Roles
 
         user_1.roles.append(role_superviser)
-        user_1.roles.append(role_admin)
-        ssn.add(user_1)
+        user_1.roles.append(role_forecast)
 
         user_2.roles.append(role_forecast)
-        ssn.add(user_2)
-        transaction.manager.commit()
 
         #Add data permission:
+
         from .access_rights_data import perm_data
 
-        permission = Permission("Development Template")
-        projects = perm_data.keys()
-        for project in projects:
-            for data in perm_data[project]:
-                data_permission = DataPermission(project=project, in_path=data['in_path'],
-                                                 out_path=data['out_path'],mask=data['mask'])
-                permission.data_perm.append(data_permission)
-                ssn.add(data_permission)
+        permission = Permission(name = "Development Template")
 
-        #Set Permission for User
+        for data in perm_data["JJOralCare"]:
+            data_permission = DataPermission(project="JJOralCare", in_path=data['in_path'],
+                                             out_path=data['out_path'],mask=data['mask'])
+            permission.data_perms.append(data_permission)
+            ssn.add(data_permission)
+
+        #Set Permission for User #1
         user_1.perms.append(permission)
-        transaction.manager.commit()
+
+        permission = Permission(name="Development Template")
+
+        for data in perm_data["JJLean"]:
+            data_permission = DataPermission(project="JJLean", in_path=data['in_path'],
+                                             out_path=data['out_path'], mask=data['mask'])
+            permission.data_perms.append(data_permission)
+            ssn.add(data_permission)
+
+        user_2.perms.append(permission)
 
         #Add Scenario
-        scenario = Scenario(name="Price Growth Dynamics", description="Dynamics of Price Growth in Brazil",
-                            status="New",shared="No",criteria="Brazil-Nike-Main")
-        user_1.scenarios.append(scenario)
+        scenario_1 = Scenario(name="Price Growth Dynamics JJOralCare", description="Dynamics of Price Growth in Brazil",
+                            status="New", shared="No", criteria="Brazil-Nike-Main")
+        user_1.scenarios.append(scenario_1)
+
+        # Add Scenario
+        scenario_2 = Scenario(name="Price Growth Dynamics JJLean", description="Dynamics of Price Growth in USA",
+                              status="New", shared="No", criteria="USA-iPhone-Main")
+        user_2.scenarios.append(scenario_2)
+
+        ssn.add(user_1)
+        ssn.add(user_2)
         transaction.manager.commit()
 
 
