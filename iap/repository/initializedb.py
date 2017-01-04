@@ -2,6 +2,7 @@ import os
 import sys
 
 import transaction
+import json
 from pyramid.paster import (get_appsettings, setup_logging)
 from pyramid.scripts.common import parse_vars
 
@@ -10,7 +11,9 @@ from iap.repository.tmp_template import tool_template
 from .db import (get_engine, get_session_factory, get_tm_session)
 from .db.meta import Base
 from .db.warehouse import Entity, Warehouse
-from .db.models_access import Scenario
+from .db.models import Project,Pr_Tool
+from .db.models_access import Scenario, User, Role, Feature, Tool, DataPermission, Permission
+
 from ..repository.interface.imanage_access import IManageAccess
 
 from ..repository import persistent_storage
@@ -45,11 +48,10 @@ def main(argv=sys.argv):
         # Create all tables
         Base.metadata.create_all(engine)
         # Add root to entities tree.
-
         root = Entity(_name='root', _layer='root', _dimension_name='root')
         ssn.add(root)
-        transaction.manager.commit()
 
+        transaction.manager.commit()
 
         wh = Warehouse(session_factory)
         loader = Loader(wh)
@@ -57,6 +59,103 @@ def main(argv=sys.argv):
         loader.run_processing('JJOralCare')
         transaction.manager.commit()
 
+
+        #Create Tool Forecating
+        tool = Tool(name="Forecasting")
+        #Add  user@mail.com User for Project #1
+
+        email = "user@mail.com"
+        password = "qweasdZXC"
+        user_1 = User(email=email, password=password)
+
+        # Add default_user User for Project #2
+        email = "default_user"
+        password = "123456"
+        user_2 = User(email=email, password=password)
+
+        #Add Roles Forecaster
+        features = ['Create a new scenario', 'View Scenario', 'Mark scenario as final', 'Modify Scenario',"Delete Scenario"]
+        role_forecast = Role(name="forecaster")
+        tool.roles.append(role_forecast)
+
+        for feature in features:
+            role_forecast.features.append(Feature(name=feature))
+
+        # Add Roles Superviser
+        features = ['Create a new scenario', 'View Scenario', 'Publish Scenario', 'Mark scenario as final',
+                    'Modify Scenario', 'Include Scenario']
+        role_superviser = Role(name="superviser")
+        tool.roles.append(role_superviser)
+
+        for feature in features:
+            role_superviser.features.append(Feature(name=feature))
+
+        #Add Roles
+
+        user_1.roles.append(role_superviser)
+        user_1.roles.append(role_forecast)
+
+        user_2.roles.append(role_forecast)
+
+        #Add data permission:
+
+        from .access_rights_data import perm_data
+
+        permission = Permission(name = "Development Template")
+
+        for data in perm_data["JJOralCare"]:
+            data_permission = DataPermission(project="JJOralCare", in_path=data['in_path'],
+                                             out_path=data['out_path'],mask=data['mask'])
+            permission.data_perms.append(data_permission)
+            ssn.add(data_permission)
+
+        #Set Permission for User #1
+        user_1.perms.append(permission)
+
+        permission = Permission(name="Development Template")
+
+        for data in perm_data["JJLean"]:
+            data_permission = DataPermission(project="JJLean", in_path=data['in_path'],
+                                             out_path=data['out_path'], mask=data['mask'])
+            permission.data_perms.append(data_permission)
+            ssn.add(data_permission)
+
+        user_2.perms.append(permission)
+
+        #Add Scenario
+        scenario_1 = Scenario(name="Price Growth Dynamics JJOralCare", description="Dynamics of Price Growth in Brazil",
+                            status="New", shared="No", criteria="Brazil-Nike-Main")
+        user_1.scenarios.append(scenario_1)
+
+        # Add Scenario
+        scenario_2 = Scenario(name="Price Growth Dynamics JJLean", description="Dynamics of Price Growth in USA",
+                              status="New", shared="No", criteria="USA-iPhone-Main")
+        user_2.scenarios.append(scenario_2)
+
+        ssn.add(user_1)
+        ssn.add(user_2)
+        transaction.manager.commit()
+
+        #Add Project and Pr_Tool
+
+        """
+        Create table for storing inforamtion about pojects and tools
+
+        :param request:
+        :type request:
+        :return:
+        :rtype:
+        """
+        pr_tool = Pr_Tool(name='Forecasting', description='This is forecasting')
+
+        project_1 = Project(name='Oral Care Forecasting')
+        project_1.pr_tools.append(pr_tool)
+
+        project_2 = Project(name='Lean Forecasting')
+        project_2.pr_tools.append(pr_tool)
+
+        ssn.add(project_1)
+        ssn.add(project_2)
 
         user_id = '111'
         tool_id = 'forecast'

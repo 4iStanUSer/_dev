@@ -213,7 +213,6 @@ class Entity(Base):
                             secondaryjoin=_id == entities_edge.c.child_id,
                             backref='parents')
     _variables = relationship('Variable', back_populates='_entity')
-    scenario = relationship("Scenario", uselist=False, back_populates="criteria")
 
     @property
     def id(self):

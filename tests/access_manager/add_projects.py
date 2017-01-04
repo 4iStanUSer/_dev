@@ -5,8 +5,7 @@ import json
 from iap import main
 ABS_PATH = os.path.abspath('../')
 print(os.curdir)
-import json
-from access_rights import rights
+
 
 @pytest.fixture
 def web_app():
@@ -32,26 +31,23 @@ def token(web_app):
     token = str(res.json_body['data'])
     return token
 
-def setup_module():
-    server = web_app()
-    res = server.post_json("/test_preparation", {'test_name': "authorisation"})
-    print(res)
 
+def test_get_tools_info(web_app):
+    """
+    Test for view get_tools_with_projects
 
-def test_authorisation_success_expected(web_app, token):
+    :param web_app:
+    :type web_app: webtest.app.TestApp
+    :return:
+    :rtype: None
+    """
+    login = "default_user"
+    password = "123456"
+    res = web_app.post_json('/login', {"username": login, 'password': password})
+    token = str(res.json_body['data'])
 
-    res = web_app.post_json('/forecast/get_scenarios_list', {'X-Token': token})
-    expected = {"error": False}
+    res = web_app.post_json('/get_tools_with_projects', {'X-Token': token})
+
+    expected = {"data": {"projects": [{"id": 1, "name": "Oral Care Forecasting", "description": null}, {"id": 2, "name": "Lean Forecasting", "description": null}], "tools": [{"id": 1, "name": "Forecasting", "description": "This is forecasting"}]}, "error": False}
     actual = res.json
-    print(actual)
-
-    assert actual["error"] == expected["error"]
-
-def test_authorisation_error_expected(web_app, token):
-
-    res = web_app.post_json('/forecast/mark_as_final', {'X-Token': token})
-    expected = {"error": True}
-    actual = res.json
-    print(actual)
-
-    assert actual["error"] == expected["error"]
+    assert actual['data']['projects']==expected['data']['projects']

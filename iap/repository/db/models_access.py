@@ -8,7 +8,6 @@ from sqlalchemy import (
     Boolean,
     DateTime
 )
-from .warehouse import Entity
 from sqlalchemy.orm import relationship, backref
 from passlib.hash import bcrypt
 from .meta import Base
@@ -54,12 +53,15 @@ class User(Base):
     groups = relationship('UserGroup', secondary=user_ugroup_tbl,
                           back_populates='users')
 
+    scenarios = relationship("Scenario", back_populates="user")
+    perms = relationship("Permission", back_populates="user")
+
     foreacst_perm_values = relationship("FrcastPermValue")
 
     def set_password(self, password):
         self.password = bcrypt.encrypt(password)
 
-    def check_password(self,password):
+    def check_password(self, password):
         return bcrypt.verify(password, self.password)
 
 role_features_tbl = Table(
@@ -67,6 +69,26 @@ role_features_tbl = Table(
     Column('role_id', Integer, ForeignKey('roles.id')),
     Column('feature_id', Integer, ForeignKey('features.id'))
 )
+
+
+class DataPermission(Base):
+    __tablename__ = "data_permissions"
+    id = Column(Integer, primary_key=True)
+    out_path = Column(String(length=255))
+    in_path = Column(String(length=255))
+    project = Column(String(length=255))
+    mask = Column(Integer)
+    perm_id = Column(Integer, ForeignKey("permissions.id"))
+    perm = relationship('Permission', back_populates='data_perms')
+
+
+class Permission(Base):
+    __tablename__ = "permissions"
+    id = Column(Integer, primary_key=True)
+    name = Column(String(length=255))
+    data_perms = relationship('DataPermission', back_populates="perm")
+    user_id = Column(Integer, ForeignKey("users.id"))
+    user = relationship('User', back_populates='perms')
 
 
 class Role(Base):
@@ -109,9 +131,9 @@ class UserProfile(Base):
 
 
 #Permission for Data Access
-user_perm_data_ass_table = Table('group_perm_ass', Base.metadata,
-    Column('data_perm_id', Integer, ForeignKey('data_permission_access.id')),
-    Column('group_id', Integer, ForeignKey('group.id'))
+group_perm_ass_tbl = Table('group_perm_ass', Base.metadata,
+    Column('group_id', Integer, ForeignKey('user_groups.id')),
+    Column('data_perm_id', Integer, ForeignKey('data_permission_access.id'))
 )
 
 
@@ -125,21 +147,16 @@ class UserGroup(Base):
 
     users = relationship('User', secondary=user_ugroup_tbl,
                          back_populates='groups')
-    data_perm = relationship(
-        "DataPermissionAccess",
-        secondary=user_perm_data_ass_table,
-        back_populates="groups")
+    data_perm = relationship("DataPermissionAccess", secondary=group_perm_ass_tbl,
+                            back_populates="groups")
 
 
 class DataPermissionAccess(Base):
-    __tablename_ = "data_permission_access"
+    __tablename__ = "data_permission_access"
     id = Column(Integer, primary_key=True)
     name = Column(String(length=255))#description
     value = Column(String(length=255))
-    groups = relationship(
-            "Group",
-            secondary=user_perm_data_ass_table,
-            back_populates="data_perm")
+    groups = relationship("UserGroup",secondary=group_perm_ass_tbl, back_populates="data_perm")
 
 # region Models For User's Permissions to ForecastTool
 
@@ -182,7 +199,7 @@ class FrcastPermValue(Base):
     id = Column(Integer, primary_key=True)
     perm_node_id = Column(Integer, ForeignKey('forecast_perm_node.id'))
     value = Column(Integer)
-    user_id = Column(Integer, ForeignKey('group.id'))
+    user_id = Column(Integer, ForeignKey('users.id'))
 
     perm_node = relationship("FrcastPermNode", back_populates='perm_values')
 
@@ -222,6 +239,7 @@ PERMS_MODELS_MAP = {
 
 
 class Scenario(Base):
+
     __tablename__ = 'scenarios'
 
     id = Column(Integer, primary_key=True)
@@ -230,14 +248,16 @@ class Scenario(Base):
     name = Column(String(length=255))
     description = Column(String(length=255))
     date_of_last_modification = Column(String)
+    criteria = Column(String())
 
     status = Column(String(length=255))
     shared = Column(String(length=255), nullable=True)
     start_date = Column(DateTime,  nullable=True)
     end_date = Column(DateTime, nullable=True)
 
-    criteria_id = Column(Integer, ForeignKey('entities._id'), nullable=True)
-    criteria = relationship("Entity",  back_populates="scenario")
+    user_id = Column(Integer, ForeignKey('users.id'))
+    user = relationship("User", back_populates="scenarios")
+
     children = relationship("Scenario",  remote_side=[id])
 
 

@@ -49,14 +49,15 @@ def common_routing(config):
 
     config.add_route('common.get_tools_with_projects',
                      '/get_tools_with_projects')
-    config.add_view(common.get_tools_with_projects,route_name='common.get_tools_with_projects',renderer='json')
+    config.add_view(common.get_tools_with_projects, route_name='common.get_tools_with_projects',renderer='json')
 
     config.add_route('common.select_project', '/select_project')
-    config.add_view(common.set_project_selection,route_name='common.select_project',renderer='json')
+    config.add_view(common.set_project_selection, route_name='common.select_project',renderer='json')
 
     #this is test view to check the database
-    config.add_route('common.model_overview', '/model_overview')
-    config.add_view(common.model_overview, route_name='common.model_overview',renderer='json')
+    config.add_route('common.test_preparation', '/test_preparation')
+    config.add_view(common.test_preparation, route_name='common.test_preparation',renderer='json')
+
 
 
     #config.set_authorization_policy(ACLAuthorizationPolicy())
@@ -99,6 +100,30 @@ def forecast_routing(config):
     config.add_view(f_scenarios.search_and_view_scenario,
                     route_name='forecast.search_and_view_scenario', renderer='json')
 
+    config.add_route('forecast.change_scenario_name',
+                     '/change_scenario_name')
+    config.add_view(f_scenarios.change_scenario_name,
+                    route_name='forecast.change_scenario_name', renderer='json')
+
+    config.add_route('forecast.delete',
+                     '/delete_scenario')
+    config.add_view(f_scenarios.delete,
+                    route_name='forecast.delete', renderer='json')
+
+    config.add_route('forecast.publish_scenario',
+                     '/publish_scenario')
+    config.add_view(f_scenarios.publish_scenario,
+                    route_name='forecast.publish_scenario', renderer='json')
+
+    config.add_route('forecast.mark_as_final',
+                     '/mark_as_final')
+    config.add_view(f_scenarios.mark_as_final,
+                    route_name='forecast.mark_as_final', renderer='json')
+
+    config.add_route('forecast.include_scenario', '/include_scenario')
+    config.add_view(f_scenarios.include_scenario,
+                    route_name='forecast.include_scenario', renderer='json')
+
     config.add_route('forecast.get_scenarios_list',
                      '/get_scenarios_list')
     config.add_view(f_scenarios.get_scenarios_list,
@@ -126,6 +151,7 @@ def forecast_routing(config):
     config.add_route('forecast.get_entity_selectors_config',
                      '/get_entity_selectors_config')
     config.add_view(f_common.get_entity_selectors_config, route_name='forecast.get_entity_selectors_config', renderer='json')
+
 
 # def wsgi_app(global_config, **settings):
 def main(global_config, **settings):

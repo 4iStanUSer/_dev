@@ -65,7 +65,7 @@ def test_check_auth(web_app):
 
     """
     token = "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImxvZ2luIjoiZGVmYXVsdF91c2VyIiwiaWF0IjoxNDgxNzk0MjI5fQ.mW8JQOAbnFxDFVBmt5RznYmrVaqdoQIRmUDtCZ6r7KcixsiBWYB6JaCF3SXgZg6nt8kmzEULwT2B5n18R1OaTg"
-    res = web_app.post('/check_auth', {'X-Token': token})
+    res = web_app.post_json('/check_auth', {'X-Token': token})
     print(res)
 
 
@@ -80,8 +80,10 @@ def test_check_auth_non_existet_user(web_app):
 
     """
     token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJsb2dpbiI6InVuZXhpc3RlZF91c2VyIiwic3ViIjoxMCwiaWF0IjoxNDgxNzk1OTcyfQ.zXdgnG8ouQIf38aMg3166jx9FKlxDcNqzqzfl6ibsdoZd7CgQ6JPzjFgOaYRNxtYkerRrQoj8Hbm243XqdzFiA"
-    res = web_app.post('/check_auth', {'X-Token': token})
-    print(res)
+    res = web_app.post_json('/check_auth', {'X-Token': token})
+    expected = {"error": True, "data": "Unauthorised"}
+    actual = res.json
+    assert expected == actual
 
 
 def test_login_wrong_head(web_app):
@@ -108,14 +110,10 @@ def test_second_step_authentification(web_app):
 
     login = "default_user"
     password = "123456"
-    res = web_app.post_json('/login', {"login": login, 'password': password})
+    res = web_app.post_json('/login', {"username": login, 'password': password})
     token = str(res.json_body['data'])
     res = web_app.post_json('/check_auth', {'X-Token': token})
 
     expected = {"data": token, "error": False}
     actual = res.json
     assert actual == expected
-
-
-    res = web_app.post('/routing_config', {'X-Token': token})
-    print(res)
