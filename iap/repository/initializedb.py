@@ -2,7 +2,6 @@ import os
 import sys
 
 import transaction
-import json
 from pyramid.paster import (get_appsettings, setup_logging)
 from pyramid.scripts.common import parse_vars
 
@@ -46,12 +45,14 @@ def main(argv=sys.argv):
         # Drop all tables
         Base.metadata.drop_all(engine)
         # Create all tables
+        from .db.models import Project, Pr_Tool
         Base.metadata.create_all(engine)
         # Add root to entities tree.
+
         root = Entity(_name='root', _layer='root', _dimension_name='root')
         ssn.add(root)
-
         transaction.manager.commit()
+
 
         wh = Warehouse(session_factory)
         loader = Loader(wh)

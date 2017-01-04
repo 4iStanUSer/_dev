@@ -5,7 +5,7 @@ import zope.sqlalchemy
 
 # Base.metadata prior to any initialization routines
 from .models import *
-from .models_access import *
+#from .models_access import *
 from .meta import Base
 # from . import wh_common
 # run configure_mappers after defining all of the models to ensure
@@ -14,10 +14,23 @@ configure_mappers()
 
 
 def get_engine(settings, prefix='sqlalchemy.'):
+    """
+    Create a new Engine instance using a configuration dictionary.
+    confiduration is setting
+    """
     return engine_from_config(settings, prefix)
 
 
 def get_session_factory(engine):
+    """
+    Return New Session
+
+    The sessionmaker factory generates new Session objects
+    :param engine:
+    :type engine: sqlalchemy.engine.base.Engine
+    :return:
+    :rtype: sqlalchemy.orm.session.sessionmaker
+    """
     factory = sessionmaker()
     factory.configure(bind=engine)
     return factory

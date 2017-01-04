@@ -213,7 +213,9 @@ export class AjaxService {
             options.url_id
             && typeof options.url_id == 'string'
             && options.url_id.length > 0
+
         ) {
+            options.data['X_token'] = localStorage.getItem('currentUser');
             let id = this.counter++;
             let sync = (options.sync) ? options.sync : false;
             let url_id = options.url_id;
@@ -222,6 +224,7 @@ export class AjaxService {
                 url: this.getUrl(url_id),
                 method: 'post',
                 data: options.data
+
             });
             console.log('reqQueue',req);
             this.reqQueue.push({
