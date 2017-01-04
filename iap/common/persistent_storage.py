@@ -9,7 +9,12 @@ class PersistentStorage:
                 self.id = 'JJOralCare'
                 self.tool_id = 'forecast'
 
-        return TmpProject()
+        p = TmpProject()
+
+        if 'id' in kwargs:
+            p.id = kwargs['id']
+
+        return p
 
 
 

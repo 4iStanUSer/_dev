@@ -116,9 +116,11 @@ def _process_storage(sheet, section):
             result_row = dict()
             for j in range(1, 6):
                 val = sheet.cell(i, j).value
+                if type(val) == float:
+                    val = str(int(val))
                 if type(val) == str:
                     if '*-*' in val:
-                        val = val.split('*-*')
+                        val = [x for x in val.split('*-*') if x != '']
                 result_row[header_row[j].value] = val
             result_row['values'] = []
             j = 7

@@ -1,5 +1,5 @@
 import copy
-from iap.common.exceptions import *
+from ....common import exceptions as ex
 
 class TimeLineManager:
 
@@ -292,7 +292,7 @@ class TimeLineManager:
         try:
             return [x['name_full'] for x in ts['timeline']].index(label)
         except ValueError:
-            raise ex.TlmNonExistentLabel(ts_name, label)
+            raise ex.TimeSeriesNotFoundError(ts_name, label)
 
     def get_label(self, ts_name, index):
         '''Get point's full name by given position in time series

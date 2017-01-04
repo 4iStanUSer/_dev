@@ -95,14 +95,16 @@ class DataConfiguration:
         result = ent_options.get_view_vars('decomposition')
         if result is not None:
             return result
-        raise Exception
+        return []
+        #raise Exception
 
     def get_factor_drivers_relations(self, **kwargs):
         ent_options = self._get_entity_config(**kwargs)
         result = ent_options.get_factor_drivers()
         if result is not None:
             return result
-        raise Exception
+        return dict()
+        #raise Exception
 
     def get_objects_properties(self, object_type, ids, lang, **kwargs):
         ent_options = self._get_entity_config(**kwargs)
@@ -170,8 +172,6 @@ class Config:
         self.wh_inputs = copy.copy(inputs)
 
     def get_wh_inputs(self):
-        if len(self.wh_inputs) == 0:
-            return None
         return copy.copy(self.wh_inputs)
 
     def get_view_vars(self, view_type):

@@ -67,20 +67,20 @@ def main(argv=sys.argv):
         #persistent_storage.save_backup(user_id, tool_id, 'JJLean', backup)
 
 
-        #filename = os.path.join(settings['path.dev_templates'], 'JJOralCare.json')
-        #with open(filename) as file:
-        #    template = json.load(file)
+        filename = os.path.join(settings['path.dev_templates'], 'JJOralCare.json')
+        with open(filename) as file:
+            template = json.load(file)
 
-        #wb = Workbench(user_id)
-        #wb.initial_load(wh, template, dev_template_JJOralCare['calc_instructions'], None)
-        #backup = wb.get_backup()
-        #persistent_storage.save_backup(user_id, tool_id, 'JJOralCare', backup)
+        wb = Workbench(user_id)
+        wb.initial_load(wh, template, dev_template_JJOralCare['calc_instructions'], None)
+        backup = wb.get_backup()
+        persistent_storage.save_backup(user_id, tool_id, 'JJOralCare', backup)
 
         filename = os.path.join(settings['path.dev_templates'], 'JJLean.json')
         with open(filename) as file:
             template = json.load(file)
         wb = Workbench(user_id)
-        wb.initial_load(wh, template, None, None)
+        wb.initial_load(wh, template, dict(queues=[]), None)
         backup = wb.get_backup()
         persistent_storage.save_backup(user_id, tool_id, 'JJLean', backup)
 

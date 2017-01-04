@@ -40,6 +40,7 @@ def set_entity_values(wb, entity_id, values):
             raise Exception
     return
 
+
 def get_entity_data(container, config, entities_ids, lang):
     # Initialize structure for output.
     entity_data = dict(
@@ -195,9 +196,10 @@ def get_entity_data(container, config, entities_ids, lang):
 
     # Fill factors for dec type.
     dec_type_factors = dict()
-    for dec_type, values in next(iter(decomp_data_for_view.values())).items():
-        dec_type_factors[dec_type] = [x['var_id'] for x in values[0]['factors']]
-    entity_data['data']['decomp_type_factors'] = dec_type_factors
+    if len(decomp_data_for_view) > 0:
+        for dec_type, values in next(iter(decomp_data_for_view.values())).items():
+            dec_type_factors[dec_type] = [x['var_id'] for x in values[0]['factors']]
+        entity_data['data']['decomp_type_factors'] = dec_type_factors
 
     # Extend variables properties.
     for item in config.get_decomp_vars_for_view(meta=ent.meta, path=ent.path):

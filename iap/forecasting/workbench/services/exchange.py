@@ -22,10 +22,10 @@ def download_data_from_wh(warehouse, container, mapping):
         period = container.timeline.get_period_by_alias(row['cont_ts'], row['time_period'])[0]
         # Get data from warehouse.
         try:
-            wh_var = wh_entity.get_variable(row['wh_var'].variable)
+            wh_var = wh_entity.get_variable(row['wh_var'])
             if wh_var is None:
                 continue
-            wh_ts = wh_var.get_time_series(row['wh_var'].timescale)
+            wh_ts = wh_var.get_time_series(row['wh_ts'])
             if wh_ts is None:
                 continue
             values = wh_ts.get_values(period)

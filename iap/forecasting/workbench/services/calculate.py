@@ -1,11 +1,10 @@
 
 
-def load_formulas(self, instructions):
-    # Calculation engine
-    init_calc_engine(self.kernel, instructions)
-
 
 def calculate(calc_engine, container):
+
+    if len(calc_engine.queues) == 0:
+        return
     calc_engine.calculate(container, container.timeline, 'main', period_ali='all')
     calc_engine.calculate(container, container.timeline, 'country_growth', in_period=('2013', '2014'))
     calc_engine.calculate(container, container.timeline, 'category_growth', in_period=('2013', '2014'))
