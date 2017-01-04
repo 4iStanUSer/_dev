@@ -50,20 +50,22 @@ class Workbench:
         # Init wb
         self._init_wb(user_access)
 
-    def initial_load(self, warehouse, dev_template, user_access):
+    def initial_load(self, warehouse, dev_template, calc_instructions,
+                     user_access):
         # Init Data configuration.
-        self.data_config.init_load(dev_template['configuration'])
+        self.data_config.init_load(dev_template)
         # Init Container.
         init_load_service.init_load_container(dev_template, warehouse,
                                               self.container, self.data_config)
         exchange_service.download_data_from_wh(warehouse, self.container,
                                                self.data_config.wh_inputs)
         # Init Calculation kernel.
-        self.calc_kernel.load_instructions(dev_template['calc_instructions'])
+        self.calc_kernel.load_instructions(calc_instructions)
         # Init wb
         self._init_wb(user_access)
         # Run initial calculations.
         calc_service.calculate(self.calc_kernel, self.container)
+        return
 
     def _init_wb(self, user_access_rights):
         # Build search index.

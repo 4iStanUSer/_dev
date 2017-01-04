@@ -8,23 +8,35 @@ def init_load_container(dev_template, wh, container, config):
                              timelines_info['alias'],
                              timelines_info['top_ts_points'])
     gr_periods = []
-    for ts_name in dev_template['timelines']['properties'].keys():
-        cagr_periods = container.timeline\
-            .get_carg_periods(ts_name,
-                              config.get_property('dash_top_ts_period'))
-        gr_periods.extend(cagr_periods)
-        gr_periods.extend(container.timeline.get_growth_periods(ts_name))
+
+
+
+    ts_name = config.get_property('dash_timescales')[0]
+    cagr_periods = container.timeline\
+        .get_carg_periods(ts_name,
+                          config.get_property('dash_top_ts_period'))
+    gr_periods.extend(cagr_periods)
+    gr_periods.extend(container.timeline.get_growth_periods(ts_name))
     # Create container structure
     # Find top entity and run entity init function recursively.
     #top_entity_path = dev_template['top_entity']['path']
     #wh_ent = wh.get_entity(top_entity_path)
     # Get paths of entities to copy
     ent_paths = dev_template['entities']
-    for path in ent_paths:
-        wh_ent = wh.get_entity(path)
-        if wh_ent is None:
-            raise Exception
-        _init_entity(dev_template, wh_ent, container, gr_periods)
+    for path_info in ent_paths:
+        #wh_ent = wh.get_entity(path)
+        #if wh_ent is None:
+        #    raise Exception
+
+        path = path_info['path']
+        metas = [''] * len(path)
+        metas[-1] = [path_info['dimension'], path_info['level']]
+        container.add_entity(path, metas)
+
+        #_init_entity(dev_template, path, container, gr_periods)
+
+    _add_variables(dev_template['entities_variables'], container, gr_periods)
+
     # Load developer data
     _load_dev_data(dev_template, container)
 
@@ -42,9 +54,34 @@ def _clean_path(path, metas):
            [x for index, x in enumerate(metas) if index in indexes_to_keep]
 
 
-def _init_entity(dev_template, wh_ent, container, gr_periods):
+def _add_variables(entities_variables, container, gr_periods):
+    for item in entities_variables:
+        if 'filter' in item:
+            ents = container.get_entities_by_meta(
+                Meta(dimension=item['filter'][0], level=item['filter'][1]),
+                None)
+            for cont_ent in ents:
+                var = cont_ent.add_variable(item['id'])
+                if int(item['slot']) & SlotType.time_series:
+                    var.add_time_series(item['ts'])
+                if int(item['slot']) & SlotType.scalar:
+                    var.add_scalar(item['ts'])
+                if int(item['slot']) & SlotType.period_series:
+                    ps = var.add_periods_series(item['ts'])
+                    # TODO delete the following row.
+                    if item['ts'] == 'annual':
+                        [ps.set_value(x, 0) for x in gr_periods]
+    return
+
+
+def _init_entity(dev_template, path_info, container, gr_periods):
     # Clean path
-    path, metas = _clean_path(wh_ent.path, wh_ent.path_meta)
+
+    path = path_info['path']
+
+    metas = ['']* len(path)
+    metas[-1] = Meta(dimension=path_info['dimension'], level=path_info['level'])
+
     cont_ent = container.add_entity(path, metas)
     # Find level parameters in developers template.
     level_params = None
@@ -79,24 +116,15 @@ def _init_entity(dev_template, wh_ent, container, gr_periods):
 def _load_dev_data(dev_template, container):
     for item in dev_template['dev_storage']:
         cont_ent = container.get_entity_by_path(item['path'])
-        if 'coefficients' in item:
-            for info in item['coefficients']:
-                try:
-                    var = cont_ent.get_variable(info['name'])
-                    scalar = var.get_scalar(info['ts'])
-                    scalar.set_value(info['value'])
-                except AttributeError:
-                    continue
-        if 'data' in item:
-            for info in item['data']:
-                try:
-                    var = cont_ent.get_variable(info['name'])
-                    ts = var.get_time_series(info['ts'])
-                    ts.set_values_from(info['values'], info['start'])
-                except AttributeError:
-                    continue
-        if 'insights' in item:
-            for text in item['insights']:
-                cont_ent.add_insight(text)
-
+        if cont_ent is None:
+            kk = 3
+        var = cont_ent.get_variable(item['var_id'])
+        if var is None:
+            kk = 3
+        if int(item['slot']) & SlotType.time_series:
+            ts = var.get_time_series(item['timescale'])
+            ts.set_values_from(item['values'], item['start'])
+        if int(item['slot']) & SlotType.scalar:
+            scalar = var.get_scalar(item['timescale'])
+            scalar.set_value(item['values'])
     return

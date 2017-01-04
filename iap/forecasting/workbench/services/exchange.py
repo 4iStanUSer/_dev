@@ -19,20 +19,20 @@ def download_data_from_wh(warehouse, container, mapping):
             cont_entity = container.get_entity_by_path(row['cont_path'])
             prev_cont_entity = cont_entity
 
-        period = container.timeline.get_period_by_alias(row['cont_var'].timescale, row['time_period'])[0]
+        period = container.timeline.get_period_by_alias(row['cont_ts'], row['time_period'])[0]
         # Get data from warehouse.
         try:
-            wh_var = wh_entity.get_variable(row['wh_var'].variable)
+            wh_var = wh_entity.get_variable(row['wh_var'])
             if wh_var is None:
                 continue
-            wh_ts = wh_var.get_time_series(row['wh_var'].timescale)
+            wh_ts = wh_var.get_time_series(row['wh_ts'])
             if wh_ts is None:
                 continue
             values = wh_ts.get_values(period)
             # Set data to container.
 
-            var = cont_entity.get_variable(row['cont_var'].variable)
-            ts = var.get_time_series(row['cont_var'].timescale)
+            var = cont_entity.get_variable(row['cont_var'])
+            ts = var.get_time_series(row['cont_ts'])
             ts.set_values_from(values, period[0])
         except AttributeError:
             continue

@@ -4,51 +4,26 @@ JOIN_SYMBOL = '|-|-|'
 
 
 def get_selectors_config(config, lang):
-    if lang == 'en':
-        return dict(
-            selectors=dict(Geography=
-                dict(
-                    multiple=True,
-                    type='flat',
-                    icon='',
-                    disabled=False,
-                    name='Country',
-                    placeholder='Country'
-                ),
-                Products=dict(
-                    multiple=True,
-                    type='flat',
-                    icon='',
-                    disabled=False,
-                    name='Category',
-                    placeholder='Category'
-                )
-            ),
-            order=['Geography', 'Products']
+
+    dimensions = config.get_property('dimensions')
+    sel_props = config.get_objects_properties('selector', dimensions, lang)
+
+    selectors_for_view = dict()
+    for item in sel_props:
+
+        sel_view_options = dict(
+            multiple=item['multiple'],
+            type=item['type'],
+            icon=item['icon'],
+            disabled=False,
+            name=item['name'],
+            placeholder=item['name']
         )
-    else:
-        return dict(
-            selectors=dict(Geography=
-                dict(
-                    multiple=True,
-                    type='region',
-                    icon='',
-                    disabled=False,
-                    name='Страна',
-                    placeholder='Страна'
-                ),
-                Products=dict(
-                    id='Products',
-                    multiple=True,
-                    type='flat',
-                    icon='',
-                    disabled=False,
-                    name='Категория',
-                    placeholder='Категория'
-                )
-            ),
-            order=['Geography', 'Products']
-        )
+        selectors_for_view[item['id']] = sel_view_options
+
+    return dict(
+        selectors=selectors_for_view,
+        order=dimensions)
 
 
 def get_empty_query(search_index):
@@ -77,7 +52,8 @@ def _add_entity_to_index(entity, curr_point, search_index, dim_names, points):
     for i in range(len(dim_names)):
         dim_path = curr_point['coords'][dim_names[i]]
         if len(dim_path) == 0:
-            continue
+            dim_path = ['total']
+            #continue
         key = tuple(dim_path)
         if i < len(dim_names) - 1:
             if key not in sub_index:
@@ -88,7 +64,7 @@ def _add_entity_to_index(entity, curr_point, search_index, dim_names, points):
                 raise Exception
             sub_index[key] = curr_point['node_id']
     for child in entity.children:
-        new_point = copy.copy(curr_point)
+        new_point = copy.deepcopy(curr_point)
         _add_entity_to_index(child, new_point, search_index, dim_names, points)
 
 
