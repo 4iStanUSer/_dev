@@ -1,6 +1,6 @@
 from pyramid.session import SignedCookieSessionFactory
 from ..common.helper import send_error_response
-from iap.repository.db.models_access import User
+from iap.repository.db.models_access import User, DataPermissionAccess
 from iap.repository.db.warehouse import Entity
 from pyramid.interfaces import IAuthorizationPolicy
 from zope.interface import implementer
@@ -33,11 +33,13 @@ def authorise(req):
         # user.check_password(password)
         # user = service.check_password(login, password)
     """
-
+    users = req.dbsession.query(User).all()
     try:
         username = req.json_body['username']
         password = req.json_body['password']
+        users = req.dbsession.query(User).all()
         user = req.dbsession.query(User).filter(User.email == username).one()
+
         #TO DO add check password
         return user
     except:
@@ -64,6 +66,7 @@ def check_session(request):
 
 def get_user(request):
     """
+    Return user decoding token
 
     :param request:
     :type request: pyramid.util.Request
@@ -71,6 +74,7 @@ def get_user(request):
     :rtype: int
     """
     #add exception on non existen  id,login in token
+    print(request.json_body['X-Token'])
     try:
         token = request.json_body['X-Token']
         token_data = jwt.decode(token, 'secret', algorithms=['HS512'])
@@ -84,12 +88,21 @@ def get_user(request):
 
 
 def requires_roles(*roles):
+    """
+    Decorator that wrap around view function
+    Check permission access for specific view function
+
+    :param roles:
+    :type roles:
+    :return:
+    :rtype: function
+    """
     def wrapper(f):
         @wraps(f)
         def wrapped(request):
             user = get_user(request)
             if request.check_access(user.id, roles) == False:
-                return send_error_response("User {0} Unauthorised".format(user.id))
+                return send_error_response("User {0} Unauthorised".format(user.email))
             return f(request)
         return wrapped
     return wrapper
@@ -116,28 +129,35 @@ class AccessManager:
                   or 'None' if no user exists related to the identity """
         pass
 
-    def get_entity_data_access(self, request, user_id, tool_id, path, *kwarg):
+    def get_entity_data_access(self, request, user_id):
         """
+        Return entitie's mask
         :return:
         :rtype:
         """
-        pass
+        mask = []
+        user = request.dbsession.query(User).filter(User.id == user_id).one()
+        for permission in user.perms:
+            for dataperm in permission.data_perms:
+                mask.append(dataperm.mask)
+        return mask
 
-
-    def get_user_entities(self, request, user_id, tool_id):
-        """Get user entities
+    def get_user_entities(self, request, user_id):
+        """Retunr list of dictionary - with keys
+        in_path, out_path, mask
 
         :return:
         :rtype:
         """
         entities = []
         user = request.dbsession.query(User).filter(User.id == user_id).one()
-        for group in user.groups:
-            entity = request.dbsession.query(Entity).filter(Entity.id == group.id).one()
-            entities.append(entity.id)
+        for permission in user.perms:
+            for data_perm in permission.data_perms:
+                entities.append({'in_path':data_perm.in_path, 'out_path':data_perm.out_path, 'mask':data_perm.mask})
         return entities
 
-    def check_data_permission(self, request, user_id, group_id, entity_id):
+
+    def check_data_permission(self, request, user_id, entity_id, mask):
         """
         Check data permission
 
@@ -153,13 +173,12 @@ class AccessManager:
         :rtype:
         """
         user = request.dbsession.query(User).filter(User.id == user_id).one()
-        groups = []
-        for group in user.roles:
-            groups.append(group.id)
-        if entity_id in groups:
-            return True
-        else:
-            return False
+        for permission in user.perms:
+            for data_perm in permission.data_perms:
+                if entity_id==data_perm.id and mask == data_perm.mask:
+                    return True
+        return False
+
 
     def check_feature_permission(self, request, user_id, tool_id, feature_id):
         """Boolean function that check whether user have specific
@@ -180,10 +199,24 @@ class AccessManager:
         else:
             return False
 
-    def _check_access(self, request, user_id, roles):
+    def _check_access(self, request, user_id, in_features):
+        """
+        Verify if specific user has specific role
+        :param request:
+        :type request: pyramid.util.Request
+        :param user_id:
+        :type user_id: int
+        :param roles:
+        :type roles: Tuple
+        :return:
+        :rtype: bool
+        """
         user = request.dbsession.query(User).filter(User.id == user_id).one()
-        roles_names  = [role.name for role in user.roles]
-        if list(set(roles_names) & set(roles)) is not []:
+        features = []
+        for role in user.roles:
+            for feature in role.features:
+                features.append(feature.name)
+        if list(set(in_features) & set(features)) != []:
             return True
         else:
             return False
@@ -201,6 +234,7 @@ def set_manager(config):
     policy = AccessManager()
 
     def check_access(request, user_id, roles):
+        print("Check access")
         return policy._check_access(request, user_id, roles)
 
     config.set_authorization_policy(policy)
@@ -210,7 +244,7 @@ def set_manager(config):
 def includeme(config):
     config.add_request_method(get_user, 'user', reify=True)
     config.add_request_method(check_session, 'has_session', reify=True)
-    config.add_request_method(authorise, 'autorised', reify=True)
+    config.add_request_method(authorise, 'authorised', reify=True)
     config.set_session_factory(my_session_factory)
 
 
