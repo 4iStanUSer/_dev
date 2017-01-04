@@ -14,7 +14,6 @@ from datetime import datetime
 import enum
 from ...common.helper import Meta
 
-
 from .meta import Base
 
 from operator import attrgetter

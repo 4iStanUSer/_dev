@@ -57,6 +57,7 @@ class IManageAccess:
         return None
 
     def init_user_wb(self, user_id, tool_id):
+        #???
         # Validate inputs
         tool_id = _get_id_or_err(tool_id, 'tool_id')
         user_id = _get_id_or_err(user_id, 'user_id')
@@ -119,6 +120,15 @@ class IManageAccess:
         return wha.add_user(self.ssn, email, password, roles)
 
     def add_role(self, name, tool_id):
+        """
+        Add role is correct
+        :param name:
+        :type name:
+        :param tool_id:
+        :type tool_id:
+        :return:
+        :rtype:
+        """
         # Validate inputs
         name = _get_str_or_err(name, 'name')
         tool_id = _get_id_or_err(tool_id, 'tool_id')
@@ -138,6 +148,14 @@ class IManageAccess:
         return new_role
 
     def get_users(self, tool_id=None):
+        """
+        Return user object by given tool
+
+        :param tool_id:
+        :type tool_id:
+        :return:
+        :rtype:
+        """
         # Validate inputs & Get object
         if tool_id is not None:
             tool_id = _get_id_or_err(tool_id, 'tool_id')
@@ -150,6 +168,14 @@ class IManageAccess:
         return wha.get_all_users(self.ssn)
 
     def get_user_roles(self, user_id):
+        """
+        Return Users Role's
+
+        :param user_id:
+        :type user_id:
+        :return:
+        :rtype:
+        """
         user_id = _get_id_or_err(user_id, 'user_id')
         user = wha.get_user_by_id(self.ssn, user_id)
         if user is None:
@@ -158,6 +184,14 @@ class IManageAccess:
         return user.roles
 
     def get_roles(self, tool_id):
+        """
+        Return roles related to given tool
+
+        :param tool_id:
+        :type tool_id:
+        :return:
+        :rtype:
+        """
         # Validate inputs
         tool_id = _get_id_or_err(tool_id, 'tool_id')
 
@@ -169,6 +203,14 @@ class IManageAccess:
         return tool.roles
 
     def get_features(self, tool_id):
+        """
+        Return features related to given tool
+
+        :param tool_id:
+        :type tool_id:
+        :return:
+        :rtype:
+        """
         # Validate inputs
         tool_id = _get_id_or_err(tool_id, 'tool_id')
 
@@ -180,6 +222,14 @@ class IManageAccess:
         return wha.get_features_by_tool(self.ssn, tool)
 
     def get_role_features(self, role_id):
+        """
+        Return Features related to Role
+
+        :param role_id:
+        :type role_id:
+        :return:
+        :rtype:
+        """
         # Validate inputs
         role_id = _get_id_or_err(role_id, 'id')
 
@@ -191,6 +241,17 @@ class IManageAccess:
         return role.features
 
     def update_role_features(self, role_id, features_id):
+        """
+        Update role by given list of features.
+        Delete non common features, and add new
+
+        :param role_id:
+        :type role_id:
+        :param features_id:
+        :type features_id:
+        :return:
+        :rtype:
+        """
         # Validate inputs
         role_id = _get_id_or_err(role_id, 'id')
         if features_id is None or not isinstance(features_id, list):
@@ -225,6 +286,16 @@ class IManageAccess:
         return role.features
 
     def add_group(self, name, tool_id):
+        """
+        Add user group to Tool
+
+        :param name:
+        :type name:
+        :param tool_id:
+        :type tool_id:
+        :return:
+        :rtype:
+        """
         # Validate inputs
         name = _get_str_or_err(name, 'name')
         tool_id = _get_id_or_err(tool_id, 'tool_id')
@@ -242,6 +313,15 @@ class IManageAccess:
         return wha.add_user_group(self.ssn, name, tool)
 
     def get_group_users(self, group_id):
+        """
+
+        Return Get User of Specific Group
+
+        :param group_id:
+        :type group_id:
+        :return:
+        :rtype:
+        """
         # Validate inputs
         group_id = _get_id_or_err(group_id, 'group_id')
 
@@ -252,7 +332,21 @@ class IManageAccess:
 
         return group.users
 
-    def get_group_data_perimissions(self, group_id, tool_id):
+    def get_group_data_permissions(self, group_id, tool_id):
+        """
+        TEMPRORARY DOESN'T WORK
+
+        TO DO Method don't return anything
+        Ver.1 - Get data by group
+        Q:Why to put tool_id if data access is fully defined by group_id?
+
+        :param group_id:
+        :type group_id:
+        :param tool_id:
+        :type tool_id:
+        :return:
+        :rtype:
+        """
         # Validate inputs
         tool_id = _get_id_or_err(tool_id, 'tool_id')
         group_id = _get_id_or_err(group_id, 'group_id')
@@ -266,9 +360,21 @@ class IManageAccess:
         if group is None:
             raise ex.NotExistsError('UserGroup', 'id', group_id)
 
-        pass  # TODO Realize
+        return wha.get_data_permission(group_id)
 
     def add_user_to_group(self, user_id, group_id):
+        """
+        TEMPRORARY DOESN'T WORK
+
+        Add user to group
+
+        :param user_id:
+        :type user_id:
+        :param group_id:
+        :type group_id:
+        :return:
+        :rtype:
+        """
         # Validate inputs
         user_id = _get_id_or_err(user_id, 'user_id')
         group_id = _get_id_or_err(group_id, 'group_id')
@@ -286,13 +392,71 @@ class IManageAccess:
 
         return group.users.append(user)
 
-    # def add_data_permissions_to_group(self):
-    #     pass  # TODO Realize
+    def add_data_permissions_to_group(self, group_id, permisssions_id):
+        """
+        TEMPRORARY DOESN'T WORK
 
-    def update_group_data_permissions(self):
-        pass  # TODO Realize
+        :param group_id:
+        :type group_id:
+        :param permisssions_id:
+        :type permisssions_id:
+        :return:
+        :rtype:
+        """
+        group_id = _get_id_or_err(group_id, 'group_id')
+        group = wha.get_user_group_by_id(self.ssn, group_id)
+        permissions = []
+        for perm_id in permisssions_id:
+            if perm_id in [perm.id for perm in group.data_perm]:
+                pass
+            else:
+                perm_data_access = wha.get_data_permission_by_id(perm_id)
+                permissions.append(perm_data_access)
+                group.data_perm.append(perm_data_access)
+        return permissions
+
+    def update_group_data_permissions(self, group_id, permisssions_id):
+        """
+        TEMPRORARY DOESN'T WORK
+        :param group_id:
+        :type group_id:
+        :param permisssions_id:
+        :type permisssions_id:
+        :return:
+        :rtype:
+        """
+        group_id = _get_id_or_err(group_id, 'group_id')
+        group = wha.get_user_group_by_id(self.ssn, group_id)
+        group_data_perm = [data_perm.id for data_perm in group.data_perm]
+
+        to_keep = set(group_data_perm).intersection(permisssions_id)
+        # Delete
+        if len(group_data_perm) > len(permisssions_id):
+            delete_ids = set(group_data_perm) - set(to_keep)
+            wha.del_perm_data_from_group(self.ssn, group_id, delete_ids)
+            #TO DO del_perm_data_from_group
+        # Add
+        if len(group_data_perm) > len(to_keep):
+            add = set(permisssions_id) - set(to_keep)
+            to_add_features = [x for x in permisssions_id if x.id in add]
+            wha.add_perm_data_from_group(self.ssn, group_id, to_add_features)
+            #TO DO add_perm_data_from_group
+        return to_keep
 
     def update_user_data_permissions(self, tool_id, user_id, permissions):
+        """
+        TEMPRORARY DOESN'T WORK
+        :param tool_id:
+        :type tool_id:
+        :param user_id:
+        :type user_id:
+        :param permissions:
+        :type permissions:
+        :return:
+        :rtype:
+        """
+        #TODO
+
         # Validate inputs
         tool_id = _get_id_or_err(tool_id, 'user_id')
         user_id = _get_id_or_err(user_id, 'user_id')
@@ -318,6 +482,8 @@ class IManageAccess:
 
     def _add_permission(self, tool, storage, perm, user=None):
         """
+        TEMPRORARY DOESN'T WORK
+
         Adds permission node(PermNode obj) into variable 'storage'.
         Looks for existing parent and adds into him as child node.
         Inserts all not existing parents.
@@ -390,6 +556,8 @@ class IManageAccess:
 
     def _get_permission_node(self, tool, path, name):
         """
+        TEMPRORARY DOESN'T WORK
+
         Look for permission node in DB for tool by name and path
         :param tool: Tool instance
         :param path: list strings(parents' names)
@@ -434,6 +602,8 @@ class IManageAccess:
 
     def _get_node_types_from_path(self, path, n_type):
         """
+        TEMPRORARY DOESN'T WORK
+
         Generate list of types for path of this node.
         Output list has same length as variable 'path'.
         Example:

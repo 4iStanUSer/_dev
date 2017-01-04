@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
-
 import {Observable} from 'rxjs/Observable';
 
 import {AjaxService} from "./ajax.service";
+
 
 class UserModel {
     email: string = null;
@@ -42,7 +42,7 @@ export class AuthService {
      * @type {UserModel}
      */
     user: UserModel = null;
-
+    token: string = localStorage.getItem('currentUser');
     /**
      * Observable for .isLoggedIn()
      * @type {Observable<boolean>}
@@ -65,6 +65,8 @@ export class AuthService {
         if (this.initObs) {
             return this.initObs;
         } else {
+            /*check the localStorage for token */
+
             return Observable.of(this.is_logged_in);
         }
     }
@@ -77,10 +79,10 @@ export class AuthService {
      */
     init(): Observable<boolean> {
         //this.req = req;
-        this.initObs = this.req.get({
+        this.initObs = this.req.post({
             url_id: 'check_auth',
             sync: true,
-            data: {}
+            data: {'X-Token': this.token}
         });
         this.initObs.subscribe(
             (d) => {
@@ -107,24 +109,28 @@ export class AuthService {
      */
     login(credentials: Object): Observable<boolean> {
         // return Observable.of(true).delay(1000).do(val => this.isLoggedIn = true);
-        let resp = this.req.get({
+        let resp = this.req.post({
             url_id: 'login',
             sync: true,
             data: credentials
         });
+
         resp.subscribe(
             (d) => {
                 // TODO Improve response handling
-                if (d && d['logged']) {
-                    this.setLoggedStatus(true, d['user']);
-                } else {
-                    this.setLoggedStatus(false);
-                }
+                //if (d && d['user']) {
+                    this.token = d
+                    this.setLoggedStatus(true, d);
+                //} else {
+                //    this.setLoggedStatus(false);
+               // }
             },
             (e) => {
                 this.setLoggedStatus(false);
             }
+
         );
+
         return resp;
     }
 
@@ -133,7 +139,7 @@ export class AuthService {
      * @returns {Observable<boolean>}
      */
     logout(): Observable<boolean> {
-        let resp = this.req.get({
+        let resp = this.req.post({
             url_id: 'logout',
             sync: true,
             data: {}
@@ -141,6 +147,7 @@ export class AuthService {
         resp.subscribe((d) => {
             console.log('logout success');
             this.is_logged_in = false;
+            localStorage.removeItem('currentUser');
         });
         return resp;
     }
@@ -150,6 +157,7 @@ export class AuthService {
      */
     logoutByBackend() {
         this.setLoggedStatus(false);
+        localStorage.removeItem('currentUser');
     }
 
     /**
@@ -161,10 +169,13 @@ export class AuthService {
     private setLoggedStatus(status: boolean, user: UserModel = null) {
         if (status === true) {
             this.is_logged_in = status;
-            this.user = user;
+            this.user = user
+            localStorage.setItem('currentUser',this.token);
+            console.log("LocalStorage",localStorage.getItem('currentUser'))
         } else {
             this.is_logged_in = status;
             this.user = null;
+            localStorage.removeItem('currentUser');
         }
     }
 }

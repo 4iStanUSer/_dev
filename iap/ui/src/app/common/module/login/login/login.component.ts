@@ -23,6 +23,7 @@ export class LoginComponent implements OnInit {
             username: this.model.username,
             password: this.model.password
         };
+        console.log('Data gathered', userCredentials);
         this.auth.login(userCredentials)
             .subscribe(
                 () => {
@@ -36,7 +37,8 @@ export class LoginComponent implements OnInit {
                         this.router.navigate([redirect]);
                     }
                 },
-                (e) => {
+                (e)=>{
+                    console.log("Failed");
                     console.log(e);
                 },
                 () => {

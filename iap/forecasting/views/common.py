@@ -31,7 +31,7 @@ def get_entity_selectors_config(req):
 def get_options_for_entity_selector(req):
     # Get parameters from request.
     try:
-        user_id = req.user
+        user_id = req.user.id
         query = req.json_body['query']
     except KeyError:
         msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)

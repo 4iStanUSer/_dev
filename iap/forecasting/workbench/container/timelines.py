@@ -412,8 +412,23 @@ class TimeLineManager:
                             self.get_label(ts_name, i)))
         return periods
 
-
     def get_carg_periods(self, ts_name, ts_period=None):
+        """
+        Return list of two periods
+        Args:
+            (string): timeseries name
+        Return:
+            (list): list of two periods start point - middle point
+                    middle point - end point
+
+        :param ts_name:
+        :type ts_name:
+        :param ts_period:
+        :type ts_period:
+        :return:
+        :rtype:
+        """
+
         ts = self._get_ts(ts_name)[0]
         mid, mid_index = self.get_last_actual(ts_name)
         first, first_index = ts['timeline'][0]['name_full'], 0

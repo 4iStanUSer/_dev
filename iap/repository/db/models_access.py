@@ -6,9 +6,14 @@ from sqlalchemy import (
     String,
     Float,
     Boolean,
+    DateTime
 )
 from sqlalchemy.orm import relationship, backref
+from passlib.hash import bcrypt
 from .meta import Base
+import datetime
+
+
 
 
 class Tool(Base):
@@ -48,14 +53,42 @@ class User(Base):
     groups = relationship('UserGroup', secondary=user_ugroup_tbl,
                           back_populates='users')
 
+    scenarios = relationship("Scenario", back_populates="user")
+    perms = relationship("Permission", back_populates="user")
+
     foreacst_perm_values = relationship("FrcastPermValue")
 
+    def set_password(self, password):
+        self.password = bcrypt.encrypt(password)
+
+    def check_password(self, password):
+        return bcrypt.verify(password, self.password)
 
 role_features_tbl = Table(
     'role_feature', Base.metadata,
     Column('role_id', Integer, ForeignKey('roles.id')),
     Column('feature_id', Integer, ForeignKey('features.id'))
 )
+
+
+class DataPermission(Base):
+    __tablename__ = "data_permissions"
+    id = Column(Integer, primary_key=True)
+    out_path = Column(String(length=255))
+    in_path = Column(String(length=255))
+    project = Column(String(length=255))
+    mask = Column(Integer)
+    perm_id = Column(Integer, ForeignKey("permissions.id"))
+    perm = relationship('Permission', back_populates='data_perms')
+
+
+class Permission(Base):
+    __tablename__ = "permissions"
+    id = Column(Integer, primary_key=True)
+    name = Column(String(length=255))
+    data_perms = relationship('DataPermission', back_populates="perm")
+    user_id = Column(Integer, ForeignKey("users.id"))
+    user = relationship('User', back_populates='perms')
 
 
 class Role(Base):
@@ -87,6 +120,7 @@ class Feature(Base):
                          back_populates='features')
 
 
+
 class UserProfile(Base):
     __tablename__ = 'users_profiles'
     id = Column(Integer, primary_key=True)
@@ -94,6 +128,13 @@ class UserProfile(Base):
     first_name = Column(String(length=255))
     last_name = Column(String(length=255))
     user = relationship('User', back_populates='profile')
+
+
+#Permission for Data Access
+group_perm_ass_tbl = Table('group_perm_ass', Base.metadata,
+    Column('group_id', Integer, ForeignKey('user_groups.id')),
+    Column('data_perm_id', Integer, ForeignKey('data_permission_access.id'))
+)
 
 
 class UserGroup(Base):
@@ -106,7 +147,16 @@ class UserGroup(Base):
 
     users = relationship('User', secondary=user_ugroup_tbl,
                          back_populates='groups')
+    data_perm = relationship("DataPermissionAccess", secondary=group_perm_ass_tbl,
+                            back_populates="groups")
 
+
+class DataPermissionAccess(Base):
+    __tablename__ = "data_permission_access"
+    id = Column(Integer, primary_key=True)
+    name = Column(String(length=255))#description
+    value = Column(String(length=255))
+    groups = relationship("UserGroup",secondary=group_perm_ass_tbl, back_populates="data_perm")
 
 # region Models For User's Permissions to ForecastTool
 
@@ -184,3 +234,38 @@ PERMS_MODELS_MAP = {
 #     variable_id = Column(Integer, ForeignKey('variable.id'), primary_key=True)
 #     decline_flag = Column(Boolean(create_constraint=True, name='validator'),
 #                           default=False)
+
+
+
+
+class Scenario(Base):
+
+    __tablename__ = 'scenarios'
+
+    id = Column(Integer, primary_key=True)
+    parent_id = Column(Integer, ForeignKey('scenarios.id'), nullable=True)
+
+    name = Column(String(length=255))
+    description = Column(String(length=255))
+    date_of_last_modification = Column(String)
+    criteria = Column(String())
+
+    status = Column(String(length=255))
+    shared = Column(String(length=255), nullable=True)
+    start_date = Column(DateTime,  nullable=True)
+    end_date = Column(DateTime, nullable=True)
+
+    user_id = Column(Integer, ForeignKey('users.id'))
+    user = relationship("User", back_populates="scenarios")
+
+    children = relationship("Scenario",  remote_side=[id])
+
+
+class Driver(Base):
+    __tablename__="drivers"
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+    growth = Column(Float)
+    #scenario = relationship("Scenario",backref="drivers")
+
+

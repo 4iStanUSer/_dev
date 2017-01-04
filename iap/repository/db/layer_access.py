@@ -101,10 +101,28 @@ def get_role_by_id(ssn, role_id):
 
 
 def get_role_by_name(ssn, name):
+    """
+    Return role selected by name
+    :param ssn:
+    :type ssn:
+    :param name:
+    :type name:
+    :return:
+    :rtype:
+    """
     return ssn.query(mdls.Role).filter(mdls.Role.name == name).one_or_none()
 
 
 def get_tool_by_id(ssn, tool_id):
+    """
+    Return tool by id selected
+    :param ssn:
+    :type ssn:
+    :param tool_id:
+    :type tool_id:
+    :return:
+    :rtype:
+    """
     return ssn.query(mdls.Tool).get(tool_id)
 
 
@@ -123,6 +141,20 @@ def add_role(ssn, name):  # , client=None, tool=None
 
 
 def add_user(ssn, email, password, roles=None):
+    """
+    Create new user
+
+    :param ssn:
+    :type ssn:
+    :param email:
+    :type email:
+    :param password:
+    :type password:
+    :param roles:
+    :type roles:
+    :return:
+    :rtype:
+    """
     new_user = mdls.User(email=email, password=password)
     if roles is None:
         ssn.add(new_user)
@@ -309,5 +341,68 @@ def del_perm_values_for_user(ssn, tool, user):
     results = ssn.query(_v).filter(and_(_v.user_id.is_(user.id))).all()
     for res in results:
         ssn.delete(res)
-
 # endregion
+
+
+def get_data_permission_by_group(ssn, group_id):
+    """
+    Return list of possible permission for input group
+
+    :param ssn:
+    :type ssn:
+    :param group_id:
+    :type group_id:
+    :return:
+    :rtype:
+    """
+    permissions = []
+    if group_id is not None:
+        group = ssn.query(mdls.Group).filter(mdls.Group.id == group_id).one()
+        for perm in group.data_perm:
+            permissions.append((perm.name, perm.value))
+    return permissions
+
+
+def get_data_permission_by_id(ssn, data_perm_id):
+    """
+    Return data permissison access by given id
+    :param ssn:
+    :type ssn:
+    :param data_perm_id:
+    :type data_perm_id:
+    :return:
+    :rtype:
+    """
+    data_perm = ssn.query(mdls.DataPermissionAccess).\
+        filter(mdls.DataPermissionAccess.id == data_perm_id).one()
+    return data_perm
+
+def add_perm_data_from_group(ssn, group_id, to_add_perm_data):
+    """
+    Add data permission by given id
+    :param ssn:
+    :type ssn:
+    :param data_perm_id:
+    :type data_perm_id:
+    :return:
+    :rtype:
+    """
+    group = ssn.query(mdls.Group).filter(mdls.Group.id == group_id).one()
+    for perm_data_id in to_add_perm_data:
+        perm = get_data_permission_by_id(ssn, perm_data_id)
+        group.data_perm.append(perm)
+
+def del_perm_data_from_group(ssn, group_id, to_add_perm_data):
+    """
+    Delete data permission by given id
+    :param ssn:
+    :type ssn:
+    :param data_perm_id:
+    :type data_perm_id:
+    :return:
+    :rtype:
+    """
+    group = ssn.query(mdls.Group).filter(mdls.Group.id == group_id).one()
+    for perm_data_id in to_add_perm_data:
+        perm = get_data_permission_by_id(ssn, perm_data_id)
+        group.data_perm.remove(perm)
