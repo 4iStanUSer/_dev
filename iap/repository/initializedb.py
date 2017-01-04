@@ -2,7 +2,6 @@ import os
 import sys
 
 import transaction
-import json
 from pyramid.paster import (get_appsettings, setup_logging)
 from pyramid.scripts.common import parse_vars
 
@@ -52,6 +51,7 @@ def main(argv=sys.argv):
         ssn.add(root)
 
         transaction.manager.commit()
+
 
         wh = Warehouse(session_factory)
         loader = Loader(wh)
