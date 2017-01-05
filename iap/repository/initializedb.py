@@ -1,6 +1,6 @@
 import os
 import sys
-
+import json
 import transaction
 from pyramid.paster import (get_appsettings, setup_logging)
 from pyramid.scripts.common import parse_vars
@@ -25,6 +25,10 @@ def usage(argv):
           '(example: "%s development.ini")' % (cmd, cmd))
     sys.exit(1)
 
+def load_json():
+    file = open("C:/Users/Alex/Desktop/JJOralCare.json").read()
+    data = json.loads(file)
+    return data
 
 def main(argv=sys.argv):
     if len(argv) < 2:
@@ -146,6 +150,7 @@ def main(argv=sys.argv):
         :return:
         :rtype:
         """
+
         pr_tool = Pr_Tool(name='Forecasting', description='This is forecasting')
 
         project_1 = Project(name='Oral Care Forecasting')
@@ -165,7 +170,8 @@ def main(argv=sys.argv):
         #persistent_storage.save_backup(user_id, tool_id, 'JJLean', backup)
 
         wb = Workbench(user_id)
-        wb.initial_load(wh, dev_template_JJOralCare, None)
+        #load_json()
+        wb.initial_load(wh, load_json(), dev_template_JJOralCare['calc_instructions'], None)
         backup = wb.get_backup()
         persistent_storage.save_backup(user_id, tool_id, 'JJOralCare', backup)
 
@@ -207,9 +213,9 @@ def main(argv=sys.argv):
         user_jj_admin = imanage_access.get_user(email='jj_admin@gmail.com')
         user_admin_id = user_jj_admin.id
 
-        imanage_access.set_permissions_template(f_tool_id, tool_template)
+        #imanage_access.set_permissions_template(f_tool_id, tool_template)
 
-        imanage_access.init_user_wb(f_tool_id, user_admin_id)
+        #imanage_access.init_user_wb(f_tool_id, user_admin_id)
         # imanage_access.update_user_data_permissions(1, 1, permissions)
 
         transaction.manager.commit()

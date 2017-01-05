@@ -4,17 +4,33 @@ from ..helper import SlotType
 def init_load_container(dev_template, wh, container, config):
     # Initialize time scales.
     timelines_info = dev_template['timelines']
-    container.timeline.load_timelines(timelines_info['properties'],
-                             timelines_info['alias'],
-                             timelines_info['top_ts_points'])
+    timelines_properties = dev_template['timelines_properties']
+    alias = {}
+    for i in timelines_properties:
+        print(i['alias'])
+        print(i)
+        alias[i["alias"]] = {i['alias name '][0]:[i['aliase start'], i['aliase end']]}
+    print("Alias", alias)
+    properties = [dict(name=i['properties'][0], growth_lag=i['growth_lag'], id ="0") for i in timelines_info]
+    print('Properties', list(properties))
+
+    top_ts_points = [dict(name_full=i['name_full'], name_short=i['name_short'], children=[])
+                     for i in timelines_info]
+    print("Top Points", top_ts_points)
+    container.timeline.load_timelines(properties,
+                                      alias,
+                                      top_ts_points)
     gr_periods = []
 
 
-
+    print("Config",config)
     ts_name = config.get_property('dash_timescales')[0]
+    print("TS NAME", ts_name)
+    print('Dash TimeScales', config.get_property('dash_timescales'))
+    print("Period", config.get_property('dash_top_ts_period'))
     cagr_periods = container.timeline\
-        .get_carg_periods(ts_name,
-                          config.get_property('dash_top_ts_period'))
+            .get_carg_periods(ts_name, config.get_property('dash_top_ts_period'))
+
     gr_periods.extend(cagr_periods)
     gr_periods.extend(container.timeline.get_growth_periods(ts_name))
     # Create container structure
@@ -32,7 +48,7 @@ def init_load_container(dev_template, wh, container, config):
         metas = [''] * len(path)
         metas[-1] = [path_info['dimension'], path_info['level']]
         container.add_entity(path, metas)
-
+        print("Conrainer", container._root.name)
         #_init_entity(dev_template, path, container, gr_periods)
 
     _add_variables(dev_template['entities_variables'], container, gr_periods)
@@ -118,13 +134,18 @@ def _load_dev_data(dev_template, container):
         cont_ent = container.get_entity_by_path(item['path'])
         if cont_ent is None:
             kk = 3
+        print("Container", cont_ent)
+        print("Item", item)
+
         var = cont_ent.get_variable(item['var_id'])
         if var is None:
             kk = 3
-        if int(item['slot']) & SlotType.time_series:
+            pass
+        elif int(item['slot']) & SlotType.time_series:
             ts = var.get_time_series(item['timescale'])
+            print("Timescale", item['timescale'])
             ts.set_values_from(item['values'], item['start'])
-        if int(item['slot']) & SlotType.scalar:
+        elif int(item['slot']) & SlotType.scalar:
             scalar = var.get_scalar(item['timescale'])
             scalar.set_value(item['values'])
     return

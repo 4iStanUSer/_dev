@@ -1992,7 +1992,7 @@ dev_template_JJOralCare = {
         ['UK'], ['UK', 'JJOralCare', 'Mouthwash']
     ],
     'timelines': {
-        'properties': {'annual': {'name': 'Annual', 'growth_lag': 1}},
+        'properties': [{"name": "annual", "growth_lag": 1, "id":"0"}],
         'alias': {
             'all': {'annual': ('2013', '2018')},
             'history': {'annual': ('2013', '2015')},
