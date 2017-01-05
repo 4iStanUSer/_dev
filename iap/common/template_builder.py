@@ -1,3 +1,5 @@
+#!/usr/bin/python
+# -*- coding: ascii -*-
 import os.path
 import xlrd
 import json
@@ -35,10 +37,13 @@ def _generate_template(sheet):
         'selector_properties',
         'view_properties',
         'factor_drivers',
-        'wh_inputs'
+        'wh_inputs',
+        'timelines',
+        'timelines_properties'
     ]
 
     for name in section_names:
+        print("name", name)
         if name in sections:
             template[name] = \
                 _process_section(sheet, sections[name])
@@ -79,12 +84,14 @@ def _process_section(sheet, section):
     if section['end'] - section['start'] > 1:
         header_row = sheet.row_slice(section['start'], 0,
                                      end_colx=section['header_len'])
+        print(header_row)
         for i in range(section['start'] + 1, section['end']):
             result_row = dict()
             for j in range(1, len(header_row)):
                 header_val = header_row[j].value
                 cell_val = sheet.cell(i, j).value
-                if header_val[:4] == 'lang':
+                if type(header_val) == str and header_val[:4] == 'lang':
+
                     lang = header_val[5:7]
                     par_name = header_val[8:]
                     if 'languages' not in result_row:
@@ -137,3 +144,5 @@ def _process_storage(sheet, section):
                 j += 1
             dev_storage.append(result_row)
     return dev_storage
+
+generate_templates("C:/Users/Alex/Desktop")

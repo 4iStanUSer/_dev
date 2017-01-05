@@ -37,7 +37,8 @@ class TimeLineManager:
         self._period_alias = backup['alias']
 
     def load_timelines(self, ts_properties, alias, top_ts_points):
-        '''Process dictionary and add necessary data to object attributes:
+        '''
+        Process dictionary and add necessary data to object attributes:
         Args:
             (string): time series name
         Return:
@@ -55,11 +56,13 @@ class TimeLineManager:
         self.period_name:
 
         self._proceess_inp_node:
-
         '''
 
+        print('Ts_properties', ts_properties)
+        print('Alias', alias)
+        print('Top_ts_points', top_ts_points)
         for props in ts_properties:
-            self._timescales.append(dict(name= props['name'], growth_lag=props['growth_lag'], timeline=[]))
+            self._timescales.append(dict(name=props['name'], growth_lag=props['growth_lag'], timeline=[]))
 
         for period_name, ts_borders in alias.items():
             self._period_alias[period_name] = dict(ts_borders)
@@ -106,11 +109,15 @@ class TimeLineManager:
         :return:
 
         '''
+        print("TimeScales", self._timescales)
         for ts in self._timescales:
+            print(ts)
+            print(ts_name)
             if ts['name'] == ts_name:
                 index = self._timescales.index(ts)
                 return ts, index
-        raise ex.TlmNonExistentName(ts_name)
+        #raise ex.TlmNonExistentName(ts_name)
+        raise Exception
 
     def get_growth_lag(self, ts_name):
         '''Retuns timeseries growth_lag
@@ -229,7 +236,7 @@ class TimeLineManager:
             self._add_point_to_tree(child, point_ind, max_depth, tree, borders)
 
     def get_names(self, ts_name, ts_period):
-        '''Function return list of point in specific timeseries
+        """Function return list of point in specific timeseries
         during specific period
 
         Args:
@@ -243,7 +250,7 @@ class TimeLineManager:
         :param ts_period:
         :return:
 
-        '''
+        """
         ts = self._get_ts(ts_name)[0]
         start = None
         end = None
@@ -290,7 +297,11 @@ class TimeLineManager:
 
         ts = self._get_ts(ts_name)[0]
         try:
-            return [x['name_full'] for x in ts['timeline']].index(label)
+            print("TS", [x['name_full'] for x in ts['timeline']])
+            print("Time Series Name", ts_name)
+            print("Label", type(label))
+            print("Label", type(ts['timeline'][0]['name_full']))
+            return [str(x['name_full']) for x in ts['timeline']].index(str(label))
         except ValueError:
             raise ex.TimeSeriesNotFoundError(ts_name, label)
 
@@ -334,7 +345,7 @@ class TimeLineManager:
         :return:
 
         '''
-
+        print("Period",self._period_alias)
         start_label, end_label = self._period_alias[period_alias][ts_name]
         start_index = self.get_index(ts_name, start_label)
         end_index = self.get_index(ts_name, end_label)
@@ -430,13 +441,16 @@ class TimeLineManager:
         """
 
         ts = self._get_ts(ts_name)[0]
+        print("TimeSeriesName", ts)
         mid, mid_index = self.get_last_actual(ts_name)
         first, first_index = ts['timeline'][0]['name_full'], 0
         last, last_index = \
             ts['timeline'][-1]['name_full'], len(ts['timeline']) - 1
         if ts_period is not None:
+            print("Time Series Period", ts_name)
+            print("Time Series Period", ts_period)
             user_f, user_f_index = \
-                ts_period[0], self.get_index(ts_name, ts_period[0])
+                    ts_period[0], self.get_index(ts_name, ts_period[0])
             if user_f_index > first_index:
                 first, first_index = user_f, user_f_index
             user_l, user_l_index = \

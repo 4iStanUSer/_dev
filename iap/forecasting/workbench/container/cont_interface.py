@@ -107,7 +107,7 @@ class Container:
 
     @property
     def top_entities(self):
-        '''Return EnityData that coressponds to the fist generation of Node
+        '''Return EnityData that coresspond to the fist generation of Node
 
             Return:
              (list): list of EntityData
@@ -155,7 +155,9 @@ class Container:
         :return:
 
         '''
+
         node_info = self._nodes_dict.get(ent_id, None)
+        print("Node Info", node_info)
         if node_info is None:
             return None
         return Entity(self, node_info['node'],
@@ -175,9 +177,11 @@ class Container:
         :return:
 
         '''
+        print('ROOT', self._root)
         if self._root is None:
             return None
         node = self._root.get_node_by_path(path)
+        print("Node", node)
         if node is not None:
             return self.get_entity_by_id(node.id)
         else:
@@ -361,6 +365,7 @@ class Entity:
                 for x in self._data.var_names]
 
     def get_variable(self, name):
+        print("Data Name", self._data.var_names)
         if name in self._data.var_names:
             return Variable(self._data, name)
         else:

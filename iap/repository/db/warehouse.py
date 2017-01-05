@@ -149,7 +149,9 @@ class TimeScale(Base):
     def get_stamp_by_label(self, label):
         try:
             for x in self.timeline:
-                if x.name == label:
+                print("Stamp", x.name, label)
+                print("Stamp", type(x.name), type(label))
+                if x.name == str(label):
                     return x.timestamp
             return None
 
@@ -354,6 +356,7 @@ class Entity(Base):
         return [x.name for x in self._variables]
 
     def get_variable(self, name):
+        print(self._variables)
         for var in self._variables:
             if var.name == name:
                 return var
@@ -529,6 +532,7 @@ class TimeSeries(Base):
                 point_to_set.set(values[ind])
 
     def get_values(self, period=None):
+        print('Period',period)
         if period is None:
             # Get all points
             return [x.get() for x in
@@ -538,9 +542,13 @@ class TimeSeries(Base):
             start = self._time_scale.get_stamp_by_label(period[0])
             end = self._time_scale.get_stamp_by_label(period[1])
             # Get all points in range start end.
+            print("Period", period)
+            print("Start",start)
+            print("End", end)
             points = sorted([x for x in self._values
                              if start <= x.timestamp <= end],
                             key=lambda x: x.timestamp)
+
             return [x.get() for x in points]
 
     def get_value(self, time_label):

@@ -19,6 +19,7 @@ def download_data_from_wh(warehouse, container, mapping):
             cont_entity = container.get_entity_by_path(row['cont_path'])
             prev_cont_entity = cont_entity
 
+        print(row['cont_ts'], row['time_period'])
         period = container.timeline.get_period_by_alias(row['cont_ts'], row['time_period'])[0]
         # Get data from warehouse.
         try:
@@ -29,6 +30,8 @@ def download_data_from_wh(warehouse, container, mapping):
             if wh_ts is None:
                 continue
             values = wh_ts.get_values(period)
+            if values is None:
+                pass
             # Set data to container.
 
             var = cont_entity.get_variable(row['cont_var'])

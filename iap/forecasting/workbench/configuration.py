@@ -27,7 +27,7 @@ class DataConfiguration:
         self._by_entity = copy.copy(backup['by_entity'])
 
     def init_load(self, config):
-
+        print("Set Data Configuration Init")
         # Fill project configuration.
         if 'project_properties' in config:
             self._general.load_properties(config['project_properties'])
@@ -140,7 +140,9 @@ class Config:
         self.wh_inputs = []
 
     def load_properties(self, props):
+        print("Load Properties")
         for item in props:
+            print(item)
             self.properties[item['name']] = copy.copy(item['value'])
 
     def load_objects_properties(self, object_type, props):
