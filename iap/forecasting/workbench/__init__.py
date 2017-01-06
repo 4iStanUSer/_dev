@@ -57,9 +57,10 @@ class Workbench:
         # Init Container.
         print("2.Init Container.")
         init_load_service.init_load_container(dev_template, warehouse,
-                                              self.container, self.data_config)
+                                                  self.container, self.data_config)
         exchange_service.download_data_from_wh(warehouse, self.container,
                                                self.data_config.wh_inputs)
+
         # Init Calculation kernel.
         self.calc_kernel.load_instructions(calc_instructions)
         # Init wb

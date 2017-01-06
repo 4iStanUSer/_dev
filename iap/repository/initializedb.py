@@ -26,6 +26,9 @@ def usage(argv):
     sys.exit(1)
 
 def load_json():
+
+
+
     file = open("C:/Users/Alex/Desktop/JJOralCare.json").read()
     data = json.loads(file)
     return data
