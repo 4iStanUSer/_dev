@@ -64,6 +64,8 @@ class Workbench:
         # Init Calculation kernel.
         self.calc_kernel.load_instructions(calc_instructions)
         # Init wb
+        #Init db with user access
+        print("User_Access", user_access)
         self._init_wb(user_access)
         # Run initial calculations.
         calc_service.calculate(self.calc_kernel, self.container)
@@ -71,6 +73,7 @@ class Workbench:
 
     def _init_wb(self, user_access_rights):
         # Build search index.
+
         dim_names = self.data_config.get_property('dimensions')
         direct_index, reverse_index = \
             dim_service.build_search_index(self.container, dim_names)
@@ -88,4 +91,4 @@ class Workbench:
         #    ent = self.container.get_entity_by_path(item['path'])
         #    if ent is not None:
         #        item['entity_id'] = ent.id
-        #self.access.load_user_rights(user_access_rights)
+        self.access.load(user_access_rights,self.container)

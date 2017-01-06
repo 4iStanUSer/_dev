@@ -39,7 +39,9 @@ def _generate_template(sheet):
         'factor_drivers',
         'wh_inputs',
         'timelines',
-        'timelines_properties'
+        'timelines_properties',
+        'features',
+        'user_data_access'
     ]
 
     for name in section_names:

@@ -6,7 +6,7 @@ def init_load_container(dev_template, wh, container, config):
     timelines_info = dev_template['timelines']
     #1.Get timeseries data
     timelines_properties = dev_template['timelines_properties']
-    #2.Get time series Properties
+    #2.Get Time Series Properties
     alias = {}
     #3.Form properties
     print("Time Line Properties", timelines_properties)

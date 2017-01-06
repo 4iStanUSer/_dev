@@ -8,12 +8,13 @@ class Access:
 
     _features = None
     entities = {}
-
+    #sctructure = {"features":[], "entities":[{'path_e':[], "path_c":[], "name":[],"mask":[], "node_type":[]}]}
     def load(self, permissions: dict, container: Container):
 
         self._features = permissions['features']
-
+        #get features
         permissions_data = permissions['entities']
+        #get permissions data
 
         # sort by paths for correct nesting
         permissions_data.sort(key=lambda data: len(data['path_c']))
@@ -22,8 +23,8 @@ class Access:
         for element in permissions_data:
 
             entity_id = container.get_entity_by_path(element['path_e'])
-            entity_key = 'entity_id_{}'.format(entity_id)
-
+            entity_key = 'entity_id_{}'.format(entity_id.id)
+            print(element)
             if element['node_type'] == 'ent':
                 self.entities[entity_key] = {
                     'name': element['name'],
@@ -31,6 +32,8 @@ class Access:
                     'vars': []
                 }
             elif element['node_type'] == 'var':
+                print("Entity Key", entity_key)
+                print("entities", self.entities)
                 self.entities[entity_key]['vars'].append({
                     'name': element['name'],
                     'mask': element.get('mask', self.entities[entity_key]['mask']),
