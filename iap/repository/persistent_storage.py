@@ -26,6 +26,7 @@ def save_backup(user_id, tool_id, project_id, data_to_save,
 
     file_path = __get_backup_file_path(user_id, tool_id, project_id,
                                        backup_name)
+    print("File Path", file_path)
     file_info = {
         'name': backup_name,
         'user_id': user_id,

@@ -174,7 +174,9 @@ def main(argv=sys.argv):
 
         wb = Workbench(user_id)
         #load_json()
-        wb.initial_load(wh, load_json(), dev_template_JJOralCare['calc_instructions'], None)
+        user_access_rights = {"features": load_json()['features'],
+                              "entities":load_json()['user_data_access']}
+        wb.initial_load(wh, load_json(), dev_template_JJOralCare['calc_instructions'], user_access_rights)
         backup = wb.get_backup()
         persistent_storage.save_backup(user_id, tool_id, 'JJOralCare', backup)
 
