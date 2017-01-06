@@ -32,7 +32,7 @@ def init_load_container(dev_template, wh, container, config):
     gr_periods.extend(container.timeline.get_growth_periods(ts_name))
     # Create container structure
     # Find top entity and run entity init function recursively.
-    #top_entity_path = dev_template['top_entity']['path']
+    #top_entity_path = dev_templates['top_entity']['path']
     #wh_ent = wh.get_entity(top_entity_path)
     # Get paths of entities to copy
     ent_paths = dev_template['entities']
@@ -46,7 +46,7 @@ def init_load_container(dev_template, wh, container, config):
         metas[-1] = [path_info['dimension'], path_info['level']]
         container.add_entity(path, metas)
 
-        #_init_entity(dev_template, path, container, gr_periods)
+        #_init_entity(dev_templates, path, container, gr_periods)
 
     _add_variables(dev_template['entities_variables'], container, gr_periods)
 

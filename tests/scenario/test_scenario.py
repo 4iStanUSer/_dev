@@ -15,7 +15,7 @@ def web_app():
     :rtype: webtest.app.TestApp
     """
     settings = get_appsettings(os.path.join(ABS_PATH, 'test.ini'), name='main')
-    app = main(global_config = None, **settings)
+    app = main(global_config=None, **settings)
     from webtest import TestApp
     testapp = TestApp(app)
     return testapp
@@ -36,6 +36,7 @@ def token(web_app):
     res = web_app.post_json('/login', {"username": login, 'password': password})
     token = str(res.json_body['data'])
     return token
+
 
 def setup_module():
     """
@@ -64,7 +65,6 @@ def test_scenario(web_app, token):
     print("Actual", actual)
     assert actual['error'] == False
     assert type(actual['data']) == list
-
 
 
 def test_create_scenario(web_app, token):

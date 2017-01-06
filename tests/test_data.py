@@ -39,7 +39,8 @@ def time_line_manager(data):
 
 @pytest.fixture
 def entity_data(time_line_manager):
-    """Entity data
+    """
+    Entity data
 
     :param time_line_manager:
     :return:
@@ -50,7 +51,8 @@ def entity_data(time_line_manager):
 
 
 def test_get_backup(entity_data, backup):
-    """Test for get_backup method
+    """
+    Test for get_backup method
 
     :param entity_data:
     :param backup:
@@ -90,7 +92,7 @@ def test_get_ts_vals(entity_data, backup):
     '''
 
     entity_data.load_backup(backup)
-    expected = [0,1]
+    expected = [0, 1]
     actual = entity_data.get_ts_vals("Sales", "annual", ("2012", "2013"), 0)
     assert expected == actual
     # Failed test
@@ -218,19 +220,22 @@ def test_get_all_period(entity_data, backup):
 
     entity_data.load_backup(backup)
 
-    expected = [('2012', '2013'), ('2013', '2014'), ('2014', '2015'), ('2015', '2016'), ('2016', '2017'), ('2017', '2018')]
+    expected = [('2012', '2013'), ('2013', '2014'), ('2014', '2015'), ('2015', '2016'), ('2016', '2017'),
+                ('2017', '2018')]
     actual = entity_data.get_all_periods("Sales", "annual")
     print(list(actual))
     print(list(expected))
     assert sorted(list(expected), key=lambda l: l[0]) == \
            sorted(list(actual), key=lambda l: l[0])
 
-    expected = [('2012', '2013'), ('2013', '2014'), ('2014', '2015'),('2015', '2016'), ('2016', '2017'), ('2017', '2018')]
+    expected = [('2012', '2013'), ('2013', '2014'), ('2014', '2015'),('2015', '2016'), ('2016', '2017'),
+                ('2017', '2018')]
     actual = entity_data.get_all_periods("Costs", "annual")
     assert sorted(list(expected), key=lambda l: l[0]) == \
            sorted(list(actual), key=lambda l: l[0])
 
-    expected = [('2012', '2013'), ('2013', '2014'), ('2014', '2015'), ('2015', '2016'), ('2016', '2017'), ('2017', '2018')]
+    expected = [('2012', '2013'), ('2013', '2014'), ('2014', '2015'), ('2015', '2016'), ('2016', '2017'),
+                ('2017', '2018')]
     actual = entity_data.get_all_periods("Income", "annual")
     assert sorted(list(expected), key=lambda l: l[0]) ==\
            sorted(list(actual), key=lambda l: l[0])

@@ -4,7 +4,7 @@ import json
 import transaction
 from pyramid.paster import (get_appsettings, setup_logging)
 from pyramid.scripts.common import parse_vars
-
+from .access_rights_data import perm_data
 from iap.data_loading.data_loader import Loader
 from iap.repository.tmp_template import tool_template
 from .db import (get_engine, get_session_factory, get_tm_session)
@@ -26,7 +26,7 @@ def usage(argv):
     sys.exit(1)
 
 
-def load_dev_templates():
+def load_dev_templates(settings, project_name):
     """
     Load dev template form json
 
@@ -34,10 +34,10 @@ def load_dev_templates():
     :rtype:
 
     """
-    base_path = os.path.abspath('.')
+    base_path = settings['path.dev_templates']
     print("Base Path", base_path)
-    #template_path = os.path.join(base_path)
-    file = open("C:/Users/Alex/Desktop/JJOralCare.json").read()
+    template_path = os.path.join(base_path,"{0}.json".format(project_name)).replace("\\", "/")
+    file = open(template_path).read()
     data = json.loads(file)
     return data
 
@@ -91,10 +91,10 @@ def main(argv=sys.argv):
         user_2 = User(email=email, password=password)
 
         #Add Roles Forecaster
-        features = ['Create a new scenario', 'View Scenario', 'Mark scenario as final', 'Modify Scenario',"Delete Scenario"]
+        features = ['Create a new scenario', 'View Scenario', 'Mark scenario as final', 'Modify Scenario',
+                    'Delete Scenario']
         role_forecast = Role(name="forecaster")
         tool.roles.append(role_forecast)
-
         for feature in features:
             role_forecast.features.append(Feature(name=feature))
 
@@ -103,21 +103,16 @@ def main(argv=sys.argv):
                     'Modify Scenario', 'Include Scenario']
         role_superviser = Role(name="superviser")
         tool.roles.append(role_superviser)
-
         for feature in features:
             role_superviser.features.append(Feature(name=feature))
 
         #Add Roles
-
         user_1.roles.append(role_superviser)
         user_1.roles.append(role_forecast)
 
         user_2.roles.append(role_forecast)
 
         #Add data permission:
-
-        from .access_rights_data import perm_data
-
         permission = Permission(name = "Development Template")
 
         for data in perm_data["JJOralCare"]:
@@ -182,10 +177,10 @@ def main(argv=sys.argv):
         #persistent_storage.save_backup(user_id, tool_id, 'JJLean', backup)
 
         wb = Workbench(user_id)
-        #load_dev_templates()
-        user_access_rights = {"features": load_dev_templates()['features'],
-                              "entities": load_dev_templates()['user_data_access']}
-        wb.initial_load(wh, load_dev_templates(), dev_template_JJOralCare['calc_instructions'], user_access_rights)
+        template = load_dev_templates(settings, "JJOralCare")
+        user_access_rights = {"features": template['features'],
+                              "entities": template['user_data_access']}
+        wb.initial_load(wh, template, dev_template_JJOralCare['calc_instructions'], user_access_rights)
         backup = wb.get_backup()
         persistent_storage.save_backup(user_id, tool_id, 'JJOralCare', backup)
 
@@ -239,8 +234,5 @@ def main(argv=sys.argv):
                                             [f.id for f in features])
 
         basepath = os.path.abspath('.').strip("env\Scripts")
-        print(basepath)
-        print(os.path.join(basepath, ""))
-        print(sys.argv)
-        print(settings)
+
         transaction.manager.commit()
