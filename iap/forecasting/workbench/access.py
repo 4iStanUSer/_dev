@@ -24,7 +24,6 @@ class Access:
 
             entity_id = container.get_entity_by_path(element['path_e'])
             entity_key = 'entity_id_{}'.format(entity_id.id)
-            print(element)
             if element['node_type'] == 'ent':
                 self.entities[entity_key] = {
                     'name': element['name'],
@@ -32,8 +31,6 @@ class Access:
                     'vars': []
                 }
             elif element['node_type'] == 'var':
-                print("Entity Key", entity_key)
-                print("entities", self.entities)
                 self.entities[entity_key]['vars'].append({
                     'name': element['name'],
                     'mask': element.get('mask', self.entities[entity_key]['mask']),

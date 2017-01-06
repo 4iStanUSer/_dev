@@ -4,40 +4,41 @@ from ....common import exceptions as ex
 class TimeLineManager:
 
     def __init__(self):
-        ''' Initialisation of TimeLineManager
+        """
+        Initialisation of TimeLineManager
 
-        '''
+        """
 
         self._timescales = []
         self._period_alias = dict()
 
     def get_backup(self):
-        '''Return  attributes timesclales and period_alias in dictionary form
+        """
+        Return  attributes timesclales and period_alias in dictionary form
 
         list of dictionary with  keys name,growth_lag and timeline = [] - list 0f points
         self.timescales = [dict(name=name, growth_lag=props['growth_lag'], timeline=[])
 
         :return:
 
-        '''
+        """
 
         return dict(timescales=self._timescales, alias=self._period_alias)
 
     def load_backup(self, backup):
 
-        '''
-
+        """
         :param backup:
 
         :return:
 
-        '''
+        """
 
         self._timescales =  backup['timescales']
         self._period_alias = backup['alias']
 
     def load_timelines(self, ts_properties, alias, top_ts_points):
-        '''
+        """
         Process dictionary and add necessary data to object attributes:
         Args:
             (string): time series name
@@ -56,11 +57,7 @@ class TimeLineManager:
         self.period_name:
 
         self._proceess_inp_node:
-        '''
-
-        print('Ts_properties', ts_properties)
-        print('Alias', alias)
-        print('Top_ts_points', top_ts_points)
+        """
         for props in ts_properties:
             self._timescales.append(dict(name=props['name'], growth_lag=props['growth_lag'], timeline=[]))
 
@@ -71,7 +68,8 @@ class TimeLineManager:
 
 
     def _process_inp_node(self, inp_node, parent, depth):
-        '''Recursive functmake
+        """
+        Recursive function make
         ion that process hierarchical structure of timescale point
         add necessary information to self._timescales
         Args:
@@ -87,7 +85,7 @@ class TimeLineManager:
 
         :return:
 
-        '''
+        """
 
         time_point = dict(depth=depth,
                           name_full=inp_node['name_full'],
@@ -109,7 +107,6 @@ class TimeLineManager:
         :return:
 
         '''
-        print("TimeScales", self._timescales)
         for ts in self._timescales:
             print(ts)
             print(ts_name)
@@ -194,7 +191,8 @@ class TimeLineManager:
         return tree, borders
 
     def _add_point_to_tree(self, point, parent_ind, max_depth, tree, borders):
-        '''Function add specific point of timeseries to tree
+        """
+        Function add specific point of timeseries to tree
         point, parent_ind, max_depth, tree, borders
         Args:
             (string): ts_name - time series name
@@ -211,7 +209,7 @@ class TimeLineManager:
         :param borders:
         :return:
 
-        '''
+        """
 
         # Stop if point is too deep.
         if point['depth'] > max_depth:
@@ -236,6 +234,7 @@ class TimeLineManager:
             self._add_point_to_tree(child, point_ind, max_depth, tree, borders)
 
     def get_names(self, ts_name, ts_period):
+
         """Function return list of point in specific timeseries
         during specific period
 
@@ -297,10 +296,6 @@ class TimeLineManager:
 
         ts = self._get_ts(ts_name)[0]
         try:
-            print("TS", [x['name_full'] for x in ts['timeline']])
-            print("Time Series Name", ts_name)
-            print("Label", type(label))
-            print("Label", type(ts['timeline'][0]['name_full']))
             return [str(x['name_full']) for x in ts['timeline']].index(str(label))
         except ValueError:
             raise ex.TimeSeriesNotFoundError(ts_name, label)
@@ -345,7 +340,6 @@ class TimeLineManager:
         :return:
 
         '''
-        print("Period by Alias",self._period_alias)
         start_label, end_label = self._period_alias[period_alias][ts_name]
         start_index = self.get_index(ts_name, start_label)
         end_index = self.get_index(ts_name, end_label)
@@ -441,13 +435,10 @@ class TimeLineManager:
         """
 
         ts = self._get_ts(ts_name)[0]
-        print("TimeSeriesName", ts)
         mid, mid_index = self.get_last_actual(ts_name)
         first, first_index = ts['timeline'][0]['name_full'], 0
         last, last_index = \
             ts['timeline'][-1]['name_full'], len(ts['timeline']) - 1
-        print("Time Series Period", ts_name)
-        print("Time Series Period", ts_period)
         if ts_period is not None:
 
             user_f, user_f_index = \
