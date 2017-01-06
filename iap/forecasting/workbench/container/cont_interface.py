@@ -602,6 +602,8 @@ class TimeSeries:
         :return:
 
         """
+        print("Stamp", stamp)
+        print("Value", value)
         self._data.set_ts_vals(self._var_name, self._ts_name, [value], stamp)
 
     def set_values_from(self, values, stamp):
@@ -612,6 +614,8 @@ class TimeSeries:
         :return:
 
         """
+        print("Stamp", stamp)
+        print("Values", values)
         self._data.set_ts_vals(self._var_name, self._ts_name, values, stamp)
 
 

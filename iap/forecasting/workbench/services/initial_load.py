@@ -4,29 +4,34 @@ from ..helper import SlotType
 def init_load_container(dev_template, wh, container, config):
     # Initialize time scales.
     timelines_info = dev_template['timelines']
+    #1.Get timeseries data
     timelines_properties = dev_template['timelines_properties']
+    #2.Get time series Properties
     alias = {}
+    #3.Form properties
+    print("Time Line Properties", timelines_properties)
     for i in timelines_properties:
-        print(i['alias'])
-        print(i)
-        alias[i["alias"]] = {i['alias name '][0]:[i['aliase start'], i['aliase end']]}
+        alias[i["alias"]] = {i['alias name ']:[i['aliase start'], i['aliase end']]}
     print("Alias", alias)
-    properties = [dict(name=i['properties'][0], growth_lag=i['growth_lag'], id ="0") for i in timelines_info]
+    print("Time Line Info", timelines_info)
+    properties = [dict(name=i['properties'], growth_lag=i['growth_lag'], id ="0") for i in timelines_info]
     print('Properties', list(properties))
 
     top_ts_points = [dict(name_full=i['name_full'], name_short=i['name_short'], children=[])
                      for i in timelines_info]
     print("Top Points", top_ts_points)
+    #4.Load Time Line's
     container.timeline.load_timelines(properties,
                                       alias,
                                       top_ts_points)
+
     gr_periods = []
-
-
-    print("Config",config)
+    #5.Configuration
+    print("Config", config)
+    #6.Load time series name form configuration
     ts_name = config.get_property('dash_timescales')[0]
     print("TS NAME", ts_name)
-    print('Dash TimeScales', config.get_property('dash_timescales'))
+    #7.Load period's data from configuration
     print("Period", config.get_property('dash_top_ts_period'))
     cagr_periods = container.timeline\
             .get_carg_periods(ts_name, config.get_property('dash_top_ts_period'))
@@ -39,13 +44,16 @@ def init_load_container(dev_template, wh, container, config):
     #wh_ent = wh.get_entity(top_entity_path)
     # Get paths of entities to copy
     ent_paths = dev_template['entities']
+    print("ent_path", ent_paths)
     for path_info in ent_paths:
         #wh_ent = wh.get_entity(path)
         #if wh_ent is None:
         #    raise Exception
 
         path = path_info['path']
+        print("PATH", path)
         metas = [''] * len(path)
+        print("PATH", metas)
         metas[-1] = [path_info['dimension'], path_info['level']]
         container.add_entity(path, metas)
         print("Conrainer", container._root.name)
@@ -144,6 +152,8 @@ def _load_dev_data(dev_template, container):
         elif int(item['slot']) & SlotType.time_series:
             ts = var.get_time_series(item['timescale'])
             print("Timescale", item['timescale'])
+            print("Values", item['values'])
+            print("Start", item['start'])
             ts.set_values_from(item['values'], item['start'])
         elif int(item['slot']) & SlotType.scalar:
             scalar = var.get_scalar(item['timescale'])

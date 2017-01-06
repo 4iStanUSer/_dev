@@ -345,7 +345,7 @@ class TimeLineManager:
         :return:
 
         '''
-        print("Period",self._period_alias)
+        print("Period by Alias",self._period_alias)
         start_label, end_label = self._period_alias[period_alias][ts_name]
         start_index = self.get_index(ts_name, start_label)
         end_index = self.get_index(ts_name, end_label)
@@ -446,9 +446,10 @@ class TimeLineManager:
         first, first_index = ts['timeline'][0]['name_full'], 0
         last, last_index = \
             ts['timeline'][-1]['name_full'], len(ts['timeline']) - 1
+        print("Time Series Period", ts_name)
+        print("Time Series Period", ts_period)
         if ts_period is not None:
-            print("Time Series Period", ts_name)
-            print("Time Series Period", ts_period)
+
             user_f, user_f_index = \
                     ts_period[0], self.get_index(ts_name, ts_period[0])
             if user_f_index > first_index:

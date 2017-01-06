@@ -3,7 +3,7 @@
 import os.path
 import xlrd
 import json
-
+from types import *
 
 def generate_templates(folder):
     infile = os.path.join(folder, 'dev_templates.xlsx')
@@ -43,7 +43,6 @@ def _generate_template(sheet):
     ]
 
     for name in section_names:
-        print("name", name)
         if name in sections:
             template[name] = \
                 _process_section(sheet, sections[name])
@@ -84,7 +83,6 @@ def _process_section(sheet, section):
     if section['end'] - section['start'] > 1:
         header_row = sheet.row_slice(section['start'], 0,
                                      end_colx=section['header_len'])
-        print(header_row)
         for i in range(section['start'] + 1, section['end']):
             result_row = dict()
             for j in range(1, len(header_row)):
@@ -101,14 +99,19 @@ def _process_section(sheet, section):
                     result_row['languages'][lang][par_name] = cell_val
                 else:
                     key = header_val
+                    if key in ["value"]:
+                        cell_val = \
+                            [x for x in cell_val.split('*-*') if x != '']
                     if key == 'address':
                         div_index = cell_val.find(':')
                         key = cell_val[:div_index]
                         cell_val = cell_val[div_index + 1:]
-                    if type(cell_val) == str:
+                    if type(cell_val) == unicode or type(cell_val)==str:
                         if '*-*' in cell_val:
                             cell_val = \
                                 [x for x in cell_val.split('*-*')if x != '']
+                    if type(cell_val)==float:
+                        cell_val = str(int(cell_val))
                     result_row[key] = cell_val
             result.append(result_row)
     return result
@@ -125,7 +128,7 @@ def _process_storage(sheet, section):
                 val = sheet.cell(i, j).value
                 if type(val) == float:
                     val = str(int(val))
-                if type(val) == str:
+                if type(val) == str or type(val) == unicode:
                     if '*-*' in val:
                         val = [x for x in val.split('*-*') if x != '']
                 result_row[header_row[j].value] = val

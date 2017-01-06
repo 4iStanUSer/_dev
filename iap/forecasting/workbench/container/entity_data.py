@@ -309,16 +309,21 @@ class EntityData:
 
         """
         # Get time series.
+        print("Var_name", var_name)
         ts = self._time_series.get((var_name, ts_name))
+        print('ts',ts)
         if ts is None:
             raise TimeSeriesNotFoundError
         # Define borders.
-        start_index = 0
+        start_index=0
         if stamp is not None:
             start_index = \
                 self.time_manager.get_index(ts_name, stamp)
         end_index = len(values) + start_index
         # Check index.
+        print('len ts',len(ts))
+        print('len values',len(values))
+        print("Start Index",start_index)
         if end_index > len(ts):
             raise TimeSeriesOutOfRangeError
         # Set values.
