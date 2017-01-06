@@ -190,7 +190,6 @@ class EntityData:
         self._variables[new_name] = self._variables.pop(old_name)
         if old_name in [item[0] for item in list(self._periods_series.keys())]:
             for item in self._periods_series.keys():
-                print(item)
                 if item[0] == old_name:
                     new_item = (new_name, item[1])
                     self._periods_series[new_item] = self._periods_series.pop(item)
