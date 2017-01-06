@@ -157,7 +157,6 @@ class Container:
         '''
 
         node_info = self._nodes_dict.get(ent_id, None)
-        print("Node Info", node_info)
         if node_info is None:
             return None
         return Entity(self, node_info['node'],
@@ -165,7 +164,8 @@ class Container:
                       node_info['insights'])
 
     def get_entity_by_path(self, path):
-        '''Get entity by path.
+        """
+        Get entity by path.
         Firstly get node by path, secondly get entity by id of selected node
 
         Args:
@@ -176,19 +176,18 @@ class Container:
         :param path:
         :return:
 
-        '''
-        print('ROOT', self._root)
+        """
         if self._root is None:
             return None
         node = self._root.get_node_by_path(path)
-        print("Node", node)
         if node is not None:
             return self.get_entity_by_id(node.id)
         else:
             return None
 
     def get_entities_by_meta(self, meta_filter, top_entity):
-        '''Get entity by meta of coresponding Node
+        """
+        Get entity by meta of coresponding Node
 
         Args:
             (list): meta_filter
@@ -201,7 +200,7 @@ class Container:
         :param top_entity:
         :return:
 
-        '''
+        """
         nodes_ids = []
         if top_entity is not None:
             node = self._nodes_dict[top_entity.id]['node']
@@ -239,7 +238,7 @@ class Container:
 class Entity:
 
     def __init__(self, container, node, data_block, insights):
-        '''
+        """
         Attr:
             (Container): _container
             (Node): node
@@ -251,7 +250,7 @@ class Entity:
         :param data_block:
         :param insights:
 
-        '''
+        """
         self._node = node
         self._data = data_block
         self._insights = insights
@@ -365,7 +364,6 @@ class Entity:
                 for x in self._data.var_names]
 
     def get_variable(self, name):
-        print("Data Name", self._data.var_names)
         if name in self._data.var_names:
             return Variable(self._data, name)
         else:
@@ -384,12 +382,13 @@ class Entity:
 
 
 class Variable:
-    '''Class realise variable from entity data
+    """
+    Class realise variable from entity data
 
-    '''
+    """
 
     def __init__(self, entity_data, var_name):
-        '''Initialise Variable
+        """Initialise Variable
 
         Args:
             (EntityData): entity_data
@@ -398,27 +397,30 @@ class Variable:
         :param entity_data:
         :param var_name:
 
-        '''
+        """
 
         self._data = entity_data
         self._var_name = var_name
 
     @property
     def name(self):
-        '''Property save name of variable
+        """
+
+        Property save name of variable
 
         Return:
             (string): variable name
 
         :return:
 
-        '''
+        """
 
         return self._var_name
 
     @name.setter
     def name(self, name):
-        '''Set new name of variable,
+        """
+        Set new name of variable,
         using EntityData method
 
         Args:
@@ -427,23 +429,24 @@ class Variable:
         :param name:
         :return:
 
-        '''
+        """
         self._data.rename_variable(self._var_name, name)
         self._var_name = name
 
     @property
     def properties(self):
-        '''Return properties of variable
+        """
+        Return properties of variable
         Return:
             (list): [{'prop': 'property_name', 'value': 'property_value'}]
 
         :return:
 
-        '''
+        """
         return self._data.get_var_properties(self._var_name)
 
     def get_property(self, name):
-        '''Return property value
+        """Return property value
 
         Args:
             (string): name - name of property
@@ -454,12 +457,12 @@ class Variable:
 
         :return:
 
-        '''
+        """
 
         return self._data.get_var_property(self._var_name, name)
 
     def set_property(self, name, value):
-        '''Set value for mentioned value
+        """Set value for mentioned value
         Args:
             (string) - name of property
             (obj) - property value
@@ -468,7 +471,7 @@ class Variable:
         :param value:
         :return:
 
-        '''
+        """
 
         self._data.set_var_property(self._var_name, name, value)
 
@@ -494,13 +497,20 @@ class Variable:
             return None
 
     def add_time_series(self, ts_name):
+        """
 
+        :param ts_name:
+        :type ts_name: str
+        :return:
+        :rtype: iap.forecasting.workbench.container.cont_interface.TimeSeries
+        """
         if not self._data.is_exist(self._var_name, ts_name,
                                    SlotType.time_series):
             self._data.init_slot(self._var_name, ts_name, SlotType.time_series)
         return TimeSeries(self._data, self._var_name, ts_name)
 
     def add_scalar(self, ts_name):
+
         if not self._data.is_exist(self._var_name, ts_name, SlotType.scalar):
             self._data.init_slot(self._var_name, ts_name, SlotType.scalar)
         '''
@@ -524,10 +534,12 @@ class Variable:
 
 
 class TimeSeries:
-    """Wrapper around timeseries of Entity Data
+    """
+    Wrapper around timeseries of Entity Data
     """
     def __init__(self, data, var_name, ts_name):
-        """Initialise TimeSeries
+        """
+        Initialise TimeSeries
         Args:
             (EntityData):entity data
             (string): variable name
@@ -544,7 +556,8 @@ class TimeSeries:
         self._ts_name = ts_name
 
     def get_value(self, stamp):
-        """Wrapper for method get_ts_vals
+        """
+        Wrapper for method get_ts_vals
 
         Args:
             (string): stamp - start point of period
@@ -560,7 +573,8 @@ class TimeSeries:
                                       (stamp, None), 1)
 
     def get_values_from(self, stamp, length):
-        """Wrapper for method get_ts_vals
+        """
+        Wrapper for method get_ts_vals
 
         Args:
             (string): stamp - start point of period
@@ -578,7 +592,8 @@ class TimeSeries:
                                       (stamp, None), length)
 
     def get_values_for_period(self, period):
-        """Wrapper for method get_ts_vals
+        """
+        Wrapper for method get_ts_vals
 
         Args:
             (period): stamp - start point of period
@@ -602,8 +617,7 @@ class TimeSeries:
         :return:
 
         """
-        print("Stamp", stamp)
-        print("Value", value)
+
         self._data.set_ts_vals(self._var_name, self._ts_name, [value], stamp)
 
     def set_values_from(self, values, stamp):
@@ -614,8 +628,7 @@ class TimeSeries:
         :return:
 
         """
-        print("Stamp", stamp)
-        print("Values", values)
+
         self._data.set_ts_vals(self._var_name, self._ts_name, values, stamp)
 
 

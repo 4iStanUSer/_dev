@@ -27,7 +27,6 @@ class DataConfiguration:
         self._by_entity = copy.copy(backup['by_entity'])
 
     def init_load(self, config):
-        print("Set Data Configuration Init")
         # Fill project configuration.
         if 'project_properties' in config:
             self._general.load_properties(config['project_properties'])

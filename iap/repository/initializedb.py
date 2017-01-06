@@ -25,6 +25,7 @@ def usage(argv):
           '(example: "%s development.ini")' % (cmd, cmd))
     sys.exit(1)
 
+
 def load_dev_templates():
     """
     Load dev template form json
@@ -40,6 +41,7 @@ def load_dev_templates():
     data = json.loads(file)
     return data
 
+
 def main(argv=sys.argv):
     if len(argv) < 2:
         usage(argv)
@@ -47,6 +49,7 @@ def main(argv=sys.argv):
     options = parse_vars(argv[2:])
     setup_logging(config_uri)
     settings = get_appsettings(config_uri, options=options)
+
 
     engine = get_engine(settings, prefix='sqlalchemy.')
 
@@ -179,10 +182,10 @@ def main(argv=sys.argv):
         #persistent_storage.save_backup(user_id, tool_id, 'JJLean', backup)
 
         wb = Workbench(user_id)
-        #load_json()
-        user_access_rights = {"features": load_json()['features'],
-                              "entities":load_json()['user_data_access']}
-        wb.initial_load(wh, load_json(), dev_template_JJOralCare['calc_instructions'], user_access_rights)
+        #load_dev_templates()
+        user_access_rights = {"features": load_dev_templates()['features'],
+                              "entities": load_dev_templates()['user_data_access']}
+        wb.initial_load(wh, load_dev_templates(), dev_template_JJOralCare['calc_instructions'], user_access_rights)
         backup = wb.get_backup()
         persistent_storage.save_backup(user_id, tool_id, 'JJOralCare', backup)
 
@@ -235,4 +238,9 @@ def main(argv=sys.argv):
         imanage_access.update_role_features(role_admin_id,
                                             [f.id for f in features])
 
+        basepath = os.path.abspath('.').strip("env\Scripts")
+        print(basepath)
+        print(os.path.join(basepath, ""))
+        print(sys.argv)
+        print(settings)
         transaction.manager.commit()

@@ -50,12 +50,7 @@ class Workbench:
         self._init_wb(user_access)
 
     def initial_load(self, warehouse, dev_template, calc_instructions, user_access):
-        # Init Data configuration.
-        print("1.Init Data configuration.")
         self.data_config.init_load(dev_template)
-        print("Config", self.data_config._general.properties)
-        # Init Container.
-        print("2.Init Container.")
         init_load_service.init_load_container(dev_template, warehouse,
                                                   self.container, self.data_config)
         exchange_service.download_data_from_wh(warehouse, self.container,
@@ -65,7 +60,6 @@ class Workbench:
         self.calc_kernel.load_instructions(calc_instructions)
         # Init wb
         #Init db with user access
-        print("User_Access", user_access)
         self._init_wb(user_access)
         # Run initial calculations.
         calc_service.calculate(self.calc_kernel, self.container)
