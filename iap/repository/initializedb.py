@@ -25,10 +25,17 @@ def usage(argv):
           '(example: "%s development.ini")' % (cmd, cmd))
     sys.exit(1)
 
-def load_json():
+def load_dev_templates():
+    """
+    Load dev template form json
 
+    :return:
+    :rtype:
 
-
+    """
+    base_path = os.path.abspath('.')
+    print("Base Path", base_path)
+    #template_path = os.path.join(base_path)
     file = open("C:/Users/Alex/Desktop/JJOralCare.json").read()
     data = json.loads(file)
     return data
@@ -153,7 +160,6 @@ def main(argv=sys.argv):
         :return:
         :rtype:
         """
-
         pr_tool = Pr_Tool(name='Forecasting', description='This is forecasting')
 
         project_1 = Project(name='Oral Care Forecasting')
