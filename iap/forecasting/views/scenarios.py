@@ -39,18 +39,10 @@ def prepare_scenario_testing(request):
     features = request.dbsession.query(Feature).all()
     for feature in features:
         print(feature.name)
-    #delete created Scenario's
     scenarios = request.dbsession.query(Scenario).all()
     for scenario in scenarios:
         print(scenario.id)
-        request.dbsession.delete(scenario)\
-
-    #delete created Role's
-    roles = request.dbsession.query(Role).all()
-    for role in roles:
-        print(role.name)
-
-
+        request.dbsession.delete(scenario)
 
 
 def serialise_scenario(scenarios):
@@ -89,12 +81,9 @@ def create_scenario(request):
     """
     try:
         input_data = request.json_body
-        #add entity to scenario
         date_of_last_mod = str(datetime.datetime.now())
         scenario = Scenario(name=input_data['name'], description=input_data['description'],shared=input_data['shared'],
                             date_of_last_modification=date_of_last_mod, status="New", criteria=input_data['description'])
-        #add user
-        #scenario.authoe = user
         request.dbsession.add(scenario)
     except:
         return send_error_response("Failed to create scenario")
@@ -227,11 +216,8 @@ def delete(request):
     :return:
     :rtype:
     """
-    #firstly check access right for current function
     try:
         scenario_id = request.json_body['id']
-        print(scenario_id)
-        print([i.id for i in request.dbsession.query(Scenario).all()])
         scenario = request.dbsession.query(Scenario).filter(Scenario.id == scenario_id).one()
         request.dbsession.delete(scenario)
     except:

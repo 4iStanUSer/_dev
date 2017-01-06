@@ -12,6 +12,7 @@ from ...common import persistent_storage as pt
 from ..services import common_info as common_getter
 from ..security import *
 
+
 def index_view(req):
     return render_to_response('iap.common:templates/index.jinja2',
                               {'title': 'Home page'},
@@ -27,10 +28,9 @@ def check_logged_in(req):
     :rtype: Dict[str, bool]
 
     """
-    #add session verification
-    if get_user(req) == Exception: #check_session(req) == False:
+    if get_user(req) == Exception and check_session(req)==False:
         return send_error_response('Unauthorised')
-    elif get_user(req)!= Exception and check_session(req) == True:
+    elif get_user(req)!= Exception and check_session(req)==True:
         new_token = req.session['token']
         return send_success_response(new_token)
 
@@ -45,13 +45,11 @@ def login(req):
 
     """
     user = authorise(req)
-    print(user)
     if user == Exception:
         return send_error_response('Unauthorised')
     else:
         user_id = user.id
         login = user.email
-        print('User', user_id)
         token = req.create_jwt_token(user_id, login=login)
         req.session['token'] = token
         return send_success_response(token)
@@ -82,7 +80,6 @@ def get_page_configuration(req):
     :return:
     :rtype:
     """
-    # Get parameters from request.
     try:
         user_id = req.user
         page_name = req.json_body['page']
@@ -185,7 +182,6 @@ def set_project_selection(req):
         return send_error_response(msg)
 
 
-
 def test_preparation(request):
     """
     Function called before each gunctional test executed
@@ -212,51 +208,4 @@ def test_preparation(request):
         from ...forecasting.views.scenarios import create_table, prepare_scenario_testing
         prepare_scenario_testing(request)
     pass
-
-
-def model_overview(req):
-    """
-    To Do refactor
-
-    :param req:
-    :type req:
-    :return:
-    :rtype:
-
-    """
-    req.dbsession.query(Tool).delete()
-    req.dbsession.query(Role).delete()
-    req.dbsession.query(Feature).delete()
-    data = req.json_body['data']
-    for tool_name in data['Tool'].keys():
-        tool = Tool(name = tool_name)
-        if data['Tool'][tool_name]=={}:
-            pass
-        else:
-            for feature_name in data['Tool'][tool_name]['Features'].keys():
-                feature = Feature(name=feature_name)
-                tool.features.append(feature)
-                for role_name in data['Tool'][tool_name]['Features'][feature_name]['Roles']:
-                    role = Role(name = role_name)
-                    feature.roles.append(role)
-                    tool.roles.append(role)
-                    req.dbsession.add(role)
-                req.dbsession.add(feature)
-            req.dbsession.add(tool)
-    users = []
-    features = []
-    tools = []
-    roles = []
-    for user in req.dbsession.query(User).all():
-        users.append(user.id)
-        users.append(user.email)
-    for tool in req.dbsession.query(Tool).all():
-        tools.append(tool.name)
-    for role in req.dbsession.query(Role).all():
-        roles.append(role.name)
-    for feature in req.dbsession.query(Feature).all():
-        features.append(feature.name)
-    urls = [req.current_route_url(), req.current_route_path()]
-    return {'users': users, 'tools': tools, 'roles': roles, 'features':features, "urls": urls}
-
 

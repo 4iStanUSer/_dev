@@ -149,5 +149,3 @@ def _process_storage(sheet, section):
                 j += 1
             dev_storage.append(result_row)
     return dev_storage
-
-generate_templates("C:/Users/Alex/Desktop")

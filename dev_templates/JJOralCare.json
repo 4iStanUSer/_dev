@@ -1,0 +1,7244 @@
+{
+    "entities_variables": [
+        {
+            "filter": [
+                "geography", 
+                "country"
+            ], 
+            "slot": "5", 
+            "id": "population", 
+            "ts": "annual"
+        }, 
+        {
+            "filter": [
+                "geography", 
+                "country"
+            ], 
+            "slot": "5", 
+            "id": "cpi", 
+            "ts": "annual"
+        }, 
+        {
+            "filter": [
+                "geography", 
+                "country"
+            ], 
+            "slot": "5", 
+            "id": "gdp", 
+            "ts": "annual"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "slot": "2", 
+            "id": "economy_sensitivity", 
+            "ts": "annual"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "slot": "2", 
+            "id": "innovations_sensitivity", 
+            "ts": "annual"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "slot": "2", 
+            "id": "distribution_sensitivity", 
+            "ts": "annual"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "slot": "2", 
+            "id": "unit_price_elasticity", 
+            "ts": "annual"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "slot": "2", 
+            "id": "unit_size_elasticity", 
+            "ts": "annual"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "slot": "2", 
+            "id": "advertising_sensitivity", 
+            "ts": "annual"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "slot": "2", 
+            "id": "trade_promo_sensitivity", 
+            "ts": "annual"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "slot": "5", 
+            "id": "innovations", 
+            "ts": "annual"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "slot": "5", 
+            "id": "discount", 
+            "ts": "annual"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "slot": "5", 
+            "id": "eq_volume", 
+            "ts": "annual"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "slot": "5", 
+            "id": "unit_size", 
+            "ts": "annual"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "slot": "5", 
+            "id": "unit_price", 
+            "ts": "annual"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "slot": "5", 
+            "id": "media", 
+            "ts": "annual"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "slot": "5", 
+            "id": "value", 
+            "ts": "annual"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "slot": "5", 
+            "id": "ltt", 
+            "ts": "annual"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "slot": "5", 
+            "id": "support", 
+            "ts": "annual"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "slot": "5", 
+            "id": "distribution", 
+            "ts": "annual"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "slot": "5", 
+            "id": "eq_price", 
+            "ts": "annual"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "slot": "5", 
+            "id": "volume_sold_as_promo", 
+            "ts": "annual"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "slot": "5", 
+            "id": "units", 
+            "ts": "annual"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "slot": "5", 
+            "id": "premiumization", 
+            "ts": "annual"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "slot": "1", 
+            "id": "dt_vol_innovations", 
+            "ts": "annual"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "slot": "1", 
+            "id": "dt_vol_discount", 
+            "ts": "annual"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "slot": "1", 
+            "id": "dt_vol_ltt", 
+            "ts": "annual"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "slot": "1", 
+            "id": "dt_vol_distribution", 
+            "ts": "annual"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "slot": "1", 
+            "id": "dt_vol_unit_size", 
+            "ts": "annual"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "slot": "1", 
+            "id": "dt_vol_demo", 
+            "ts": "annual"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "slot": "1", 
+            "id": "dt_vol_economy", 
+            "ts": "annual"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "slot": "1", 
+            "id": "dt_vol_price", 
+            "ts": "annual"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "slot": "1", 
+            "id": "dt_vol_advertising", 
+            "ts": "annual"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "slot": "1", 
+            "id": "dt_vol_support", 
+            "ts": "annual"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "slot": "1", 
+            "id": "dt_pr_unit_size", 
+            "ts": "annual"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "slot": "1", 
+            "id": "dt_pr_support", 
+            "ts": "annual"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "slot": "1", 
+            "id": "dt_pr_other", 
+            "ts": "annual"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "slot": "1", 
+            "id": "dt_pr_inflation", 
+            "ts": "annual"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "slot": "1", 
+            "id": "dt_pr_premiumization", 
+            "ts": "annual"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "slot": "1", 
+            "id": "dt_pr_discount", 
+            "ts": "annual"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "slot": "4", 
+            "id": "dec_val_other", 
+            "ts": "annual"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "slot": "4", 
+            "id": "dec_val_trade", 
+            "ts": "annual"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "slot": "4", 
+            "id": "dec_val_trade_on_vol", 
+            "ts": "annual"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "slot": "4", 
+            "id": "dec_val_inflation", 
+            "ts": "annual"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "slot": "4", 
+            "id": "dec_val_man_pricing", 
+            "ts": "annual"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "slot": "4", 
+            "id": "dec_val_premiumization", 
+            "ts": "annual"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "slot": "4", 
+            "id": "dec_val_unit_size", 
+            "ts": "annual"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "slot": "4", 
+            "id": "dec_val_economy", 
+            "ts": "annual"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "slot": "4", 
+            "id": "dec_val_demo", 
+            "ts": "annual"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "slot": "4", 
+            "id": "dec_val_promo_on_vol", 
+            "ts": "annual"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "slot": "4", 
+            "id": "dec_val_distribution", 
+            "ts": "annual"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "slot": "4", 
+            "id": "dec_val_trade_promo", 
+            "ts": "annual"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "slot": "4", 
+            "id": "dec_val_price_on_vol", 
+            "ts": "annual"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "slot": "4", 
+            "id": "dec_val_innovations", 
+            "ts": "annual"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "slot": "4", 
+            "id": "dec_val_advertising", 
+            "ts": "annual"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "slot": "4", 
+            "id": "dec_val_promo", 
+            "ts": "annual"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "slot": "4", 
+            "id": "dec_val_trade_promo_on_vol", 
+            "ts": "annual"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "slot": "4", 
+            "id": "dec_val_unit_size_on_vol", 
+            "ts": "annual"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "slot": "4", 
+            "id": "dec_vol_economy", 
+            "ts": "annual"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "slot": "4", 
+            "id": "dec_vol_advertising", 
+            "ts": "annual"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "slot": "4", 
+            "id": "dec_vol_trade_promo", 
+            "ts": "annual"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "slot": "4", 
+            "id": "dec_vol_trade", 
+            "ts": "annual"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "slot": "4", 
+            "id": "dec_vol_price", 
+            "ts": "annual"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "slot": "4", 
+            "id": "dec_vol_demo", 
+            "ts": "annual"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "slot": "4", 
+            "id": "dec_vol_ltt", 
+            "ts": "annual"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "slot": "4", 
+            "id": "dec_vol_innovations", 
+            "ts": "annual"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "slot": "4", 
+            "id": "dec_vol_promo", 
+            "ts": "annual"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "slot": "4", 
+            "id": "dec_vol_distribution", 
+            "ts": "annual"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "slot": "4", 
+            "id": "dec_vol_unit_size", 
+            "ts": "annual"
+        }
+    ], 
+    "factor_drivers": [
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "main_factor": "dec_val_premiumization", 
+            "driver": "premiumization", 
+            "factor": "dec_val_premiumization"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "main_factor": "dec_vol_distribution", 
+            "driver": "distribution", 
+            "factor": "dec_vol_distribution"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "main_factor": "dec_vol_trade_promo", 
+            "driver": "discount", 
+            "factor": "dec_vol_trade"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "main_factor": "dec_vol_trade_promo", 
+            "driver": "support", 
+            "factor": "dec_vol_promo"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "main_factor": "dec_vol_demo", 
+            "driver": "population", 
+            "factor": "dec_vol_demo"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "main_factor": "dec_vol_economy", 
+            "driver": "gdp", 
+            "factor": "dec_vol_economy"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "main_factor": "dec_val_advertising", 
+            "driver": "media", 
+            "factor": "dec_val_advertising"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "main_factor": "dec_val_trade_promo", 
+            "driver": "discount", 
+            "factor": "dec_val_trade_promo"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "main_factor": "dec_vol_ltt", 
+            "driver": "ltt", 
+            "factor": "dec_vol_ltt"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "main_factor": "dec_vol_innovations", 
+            "driver": "innovations", 
+            "factor": "dec_vol_innovations"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "main_factor": "dec_vol_advertising", 
+            "driver": "media", 
+            "factor": "dec_vol_advertising"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "main_factor": "dec_val_demo", 
+            "driver": "population", 
+            "factor": "dec_val_demo"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "main_factor": "dec_val_man_pricing", 
+            "driver": "cpi", 
+            "factor": "dec_val_man_pricing"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "main_factor": "dec_vol_unit_size", 
+            "driver": "unit_size", 
+            "factor": "dec_vol_unit_size"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "main_factor": "dec_val_economy", 
+            "driver": "gdp", 
+            "factor": "dec_val_economy"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "main_factor": "dec_val_trade_promo_on_vol", 
+            "driver": "discount", 
+            "factor": "dec_val_trade_on_vol"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "main_factor": "dec_val_trade_promo_on_vol", 
+            "driver": "support", 
+            "factor": "dec_val_promo_on_vol"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "main_factor": "dec_val_price_on_vol", 
+            "driver": "unit_price", 
+            "factor": "dec_val_price_on_vol"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "main_factor": "dec_val_unit_size_on_vol", 
+            "driver": "unit_size", 
+            "factor": "dec_val_unit_size_on_vol"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "main_factor": "dec_val_inflation", 
+            "driver": "cpi", 
+            "factor": "dec_val_inflation"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "main_factor": "dec_val_innovations", 
+            "driver": "innovations", 
+            "factor": "dec_val_innovations"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "main_factor": "dec_val_other", 
+            "driver": "cpi", 
+            "factor": "dec_val_other"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "main_factor": "dec_val_distribution", 
+            "driver": "distribution", 
+            "factor": "dec_val_distribution"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "main_factor": "dec_val_unit_size", 
+            "driver": "unit_size", 
+            "factor": "dec_val_unit_size"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "main_factor": "dec_vol_price", 
+            "driver": "unit_price", 
+            "factor": "dec_vol_price"
+        }
+    ], 
+    "dev_storage": [
+        {
+            "slot": "2", 
+            "timescale": "annual", 
+            "var_id": "economy_sensitivity", 
+            "start": "", 
+            "values": [
+                0.16
+            ], 
+            "path": [
+                "us", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "2", 
+            "timescale": "annual", 
+            "var_id": "innovations_sensitivity", 
+            "start": "", 
+            "values": [
+                0.08
+            ], 
+            "path": [
+                "us", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "2", 
+            "timescale": "annual", 
+            "var_id": "distribution_sensitivity", 
+            "start": "", 
+            "values": [
+                0.03
+            ], 
+            "path": [
+                "us", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "2", 
+            "timescale": "annual", 
+            "var_id": "unit_price_elasticity", 
+            "start": "", 
+            "values": [
+                -0.27
+            ], 
+            "path": [
+                "us", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "2", 
+            "timescale": "annual", 
+            "var_id": "unit_size_elasticity", 
+            "start": "", 
+            "values": [
+                0.7
+            ], 
+            "path": [
+                "us", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "2", 
+            "timescale": "annual", 
+            "var_id": "advertising_sensitivity", 
+            "start": "", 
+            "values": [
+                0.01
+            ], 
+            "path": [
+                "us", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "2", 
+            "timescale": "annual", 
+            "var_id": "trade_promo_sensitivity", 
+            "start": "", 
+            "values": [
+                0.35
+            ], 
+            "path": [
+                "us", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "2", 
+            "timescale": "annual", 
+            "var_id": "economy_sensitivity", 
+            "start": "", 
+            "values": [
+                0.62
+            ], 
+            "path": [
+                "mexico", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "2", 
+            "timescale": "annual", 
+            "var_id": "innovations_sensitivity", 
+            "start": "", 
+            "values": [
+                0.71
+            ], 
+            "path": [
+                "mexico", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "2", 
+            "timescale": "annual", 
+            "var_id": "distribution_sensitivity", 
+            "start": "", 
+            "values": [
+                0.23
+            ], 
+            "path": [
+                "mexico", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "2", 
+            "timescale": "annual", 
+            "var_id": "unit_price_elasticity", 
+            "start": "", 
+            "values": [
+                -0.21
+            ], 
+            "path": [
+                "mexico", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "2", 
+            "timescale": "annual", 
+            "var_id": "unit_size_elasticity", 
+            "start": "", 
+            "values": [
+                0.67
+            ], 
+            "path": [
+                "mexico", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "2", 
+            "timescale": "annual", 
+            "var_id": "advertising_sensitivity", 
+            "start": "", 
+            "values": [
+                0.01
+            ], 
+            "path": [
+                "mexico", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "2", 
+            "timescale": "annual", 
+            "var_id": "economy_sensitivity", 
+            "start": "", 
+            "values": [
+                0.23
+            ], 
+            "path": [
+                "germany", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "2", 
+            "timescale": "annual", 
+            "var_id": "innovations_sensitivity", 
+            "start": "", 
+            "values": [
+                0.22
+            ], 
+            "path": [
+                "germany", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "2", 
+            "timescale": "annual", 
+            "var_id": "distribution_sensitivity", 
+            "start": "", 
+            "values": [
+                0.7
+            ], 
+            "path": [
+                "germany", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "2", 
+            "timescale": "annual", 
+            "var_id": "unit_price_elasticity", 
+            "start": "", 
+            "values": [
+                -0.8
+            ], 
+            "path": [
+                "germany", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "2", 
+            "timescale": "annual", 
+            "var_id": "unit_size_elasticity", 
+            "start": "", 
+            "values": [
+                0.22
+            ], 
+            "path": [
+                "germany", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "2", 
+            "timescale": "annual", 
+            "var_id": "advertising_sensitivity", 
+            "start": "", 
+            "values": [
+                0.02
+            ], 
+            "path": [
+                "germany", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "2", 
+            "timescale": "annual", 
+            "var_id": "trade_promo_sensitivity", 
+            "start": "", 
+            "values": [
+                0.05
+            ], 
+            "path": [
+                "germany", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "2", 
+            "timescale": "annual", 
+            "var_id": "economy_sensitivity", 
+            "start": "", 
+            "values": [
+                0.18
+            ], 
+            "path": [
+                "uk", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "2", 
+            "timescale": "annual", 
+            "var_id": "innovations_sensitivity", 
+            "start": "", 
+            "values": [
+                0.95
+            ], 
+            "path": [
+                "uk", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "2", 
+            "timescale": "annual", 
+            "var_id": "distribution_sensitivity", 
+            "start": "", 
+            "values": [
+                0.09
+            ], 
+            "path": [
+                "uk", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "2", 
+            "timescale": "annual", 
+            "var_id": "unit_price_elasticity", 
+            "start": "", 
+            "values": [
+                -0.5
+            ], 
+            "path": [
+                "uk", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "2", 
+            "timescale": "annual", 
+            "var_id": "unit_size_elasticity", 
+            "start": "", 
+            "values": [
+                0.13
+            ], 
+            "path": [
+                "uk", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "2", 
+            "timescale": "annual", 
+            "var_id": "advertising_sensitivity", 
+            "start": "", 
+            "values": [
+                0.08
+            ], 
+            "path": [
+                "uk", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "2", 
+            "timescale": "annual", 
+            "var_id": "trade_promo_sensitivity", 
+            "start": "", 
+            "values": [
+                0.1
+            ], 
+            "path": [
+                "uk", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "2", 
+            "timescale": "annual", 
+            "var_id": "economy_sensitivity", 
+            "start": "", 
+            "values": [
+                0.25
+            ], 
+            "path": [
+                "brazil", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "2", 
+            "timescale": "annual", 
+            "var_id": "innovations_sensitivity", 
+            "start": "", 
+            "values": [
+                0.43
+            ], 
+            "path": [
+                "brazil", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "2", 
+            "timescale": "annual", 
+            "var_id": "distribution_sensitivity", 
+            "start": "", 
+            "values": [
+                0.14
+            ], 
+            "path": [
+                "brazil", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "2", 
+            "timescale": "annual", 
+            "var_id": "unit_price_elasticity", 
+            "start": "", 
+            "values": [
+                -0.35
+            ], 
+            "path": [
+                "brazil", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "2", 
+            "timescale": "annual", 
+            "var_id": "unit_size_elasticity", 
+            "start": "", 
+            "values": [
+                0.05
+            ], 
+            "path": [
+                "brazil", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "2", 
+            "timescale": "annual", 
+            "var_id": "advertising_sensitivity", 
+            "start": "", 
+            "values": [
+                0.01
+            ], 
+            "path": [
+                "brazil", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "2", 
+            "timescale": "annual", 
+            "var_id": "economy_sensitivity", 
+            "start": "", 
+            "values": [
+                0.65
+            ], 
+            "path": [
+                "italy", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "2", 
+            "timescale": "annual", 
+            "var_id": "innovations_sensitivity", 
+            "start": "", 
+            "values": [
+                0.85
+            ], 
+            "path": [
+                "italy", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "2", 
+            "timescale": "annual", 
+            "var_id": "distribution_sensitivity", 
+            "start": "", 
+            "values": [
+                0.77
+            ], 
+            "path": [
+                "italy", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "2", 
+            "timescale": "annual", 
+            "var_id": "unit_price_elasticity", 
+            "start": "", 
+            "values": [
+                -0.24
+            ], 
+            "path": [
+                "italy", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "2", 
+            "timescale": "annual", 
+            "var_id": "unit_size_elasticity", 
+            "start": "", 
+            "values": [
+                0.47
+            ], 
+            "path": [
+                "italy", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "2", 
+            "timescale": "annual", 
+            "var_id": "trade_promo_sensitivity", 
+            "start": "", 
+            "values": [
+                0.62
+            ], 
+            "path": [
+                "italy", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "2", 
+            "timescale": "annual", 
+            "var_id": "economy_sensitivity", 
+            "start": "", 
+            "values": [
+                0.25
+            ], 
+            "path": [
+                "spain", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "2", 
+            "timescale": "annual", 
+            "var_id": "innovations_sensitivity", 
+            "start": "", 
+            "values": [
+                0.96
+            ], 
+            "path": [
+                "spain", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "2", 
+            "timescale": "annual", 
+            "var_id": "distribution_sensitivity", 
+            "start": "", 
+            "values": [
+                0.13
+            ], 
+            "path": [
+                "spain", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "2", 
+            "timescale": "annual", 
+            "var_id": "unit_price_elasticity", 
+            "start": "", 
+            "values": [
+                -0.2
+            ], 
+            "path": [
+                "spain", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "2", 
+            "timescale": "annual", 
+            "var_id": "unit_size_elasticity", 
+            "start": "", 
+            "values": [
+                0.12
+            ], 
+            "path": [
+                "spain", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "2", 
+            "timescale": "annual", 
+            "var_id": "trade_promo_sensitivity", 
+            "start": "", 
+            "values": [
+                0.67
+            ], 
+            "path": [
+                "spain", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "2", 
+            "timescale": "annual", 
+            "var_id": "economy_sensitivity", 
+            "start": "", 
+            "values": [
+                0.2
+            ], 
+            "path": [
+                "australia", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "2", 
+            "timescale": "annual", 
+            "var_id": "innovations_sensitivity", 
+            "start": "", 
+            "values": [
+                0.31
+            ], 
+            "path": [
+                "australia", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "2", 
+            "timescale": "annual", 
+            "var_id": "distribution_sensitivity", 
+            "start": "", 
+            "values": [
+                0.08
+            ], 
+            "path": [
+                "australia", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "2", 
+            "timescale": "annual", 
+            "var_id": "unit_price_elasticity", 
+            "start": "", 
+            "values": [
+                -0.22
+            ], 
+            "path": [
+                "australia", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "2", 
+            "timescale": "annual", 
+            "var_id": "unit_size_elasticity", 
+            "start": "", 
+            "values": [
+                0.08
+            ], 
+            "path": [
+                "australia", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "2", 
+            "timescale": "annual", 
+            "var_id": "advertising_sensitivity", 
+            "start": "", 
+            "values": [
+                0.03
+            ], 
+            "path": [
+                "australia", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "2", 
+            "timescale": "annual", 
+            "var_id": "trade_promo_sensitivity", 
+            "start": "", 
+            "values": [
+                0.08
+            ], 
+            "path": [
+                "australia", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "2", 
+            "timescale": "annual", 
+            "var_id": "economy_sensitivity", 
+            "start": "", 
+            "values": [
+                0.21
+            ], 
+            "path": [
+                "canada", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "2", 
+            "timescale": "annual", 
+            "var_id": "innovations_sensitivity", 
+            "start": "", 
+            "values": [
+                0.1
+            ], 
+            "path": [
+                "canada", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "2", 
+            "timescale": "annual", 
+            "var_id": "distribution_sensitivity", 
+            "start": "", 
+            "values": [
+                0.05
+            ], 
+            "path": [
+                "canada", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "2", 
+            "timescale": "annual", 
+            "var_id": "unit_price_elasticity", 
+            "start": "", 
+            "values": [
+                -0.44
+            ], 
+            "path": [
+                "canada", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "2", 
+            "timescale": "annual", 
+            "var_id": "unit_size_elasticity", 
+            "start": "", 
+            "values": [
+                0.42
+            ], 
+            "path": [
+                "canada", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "2", 
+            "timescale": "annual", 
+            "var_id": "advertising_sensitivity", 
+            "start": "", 
+            "values": [
+                0.06
+            ], 
+            "path": [
+                "canada", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "2", 
+            "timescale": "annual", 
+            "var_id": "trade_promo_sensitivity", 
+            "start": "", 
+            "values": [
+                0.67
+            ], 
+            "path": [
+                "canada", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "2", 
+            "timescale": "annual", 
+            "var_id": "economy_sensitivity", 
+            "start": "", 
+            "values": [
+                0.47
+            ], 
+            "path": [
+                "japan", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "2", 
+            "timescale": "annual", 
+            "var_id": "innovations_sensitivity", 
+            "start": "", 
+            "values": [
+                0.82
+            ], 
+            "path": [
+                "japan", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "2", 
+            "timescale": "annual", 
+            "var_id": "distribution_sensitivity", 
+            "start": "", 
+            "values": [
+                0.75
+            ], 
+            "path": [
+                "japan", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "2", 
+            "timescale": "annual", 
+            "var_id": "unit_price_elasticity", 
+            "start": "", 
+            "values": [
+                -0.19
+            ], 
+            "path": [
+                "japan", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "2", 
+            "timescale": "annual", 
+            "var_id": "unit_size_elasticity", 
+            "start": "", 
+            "values": [
+                0.45
+            ], 
+            "path": [
+                "japan", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "2", 
+            "timescale": "annual", 
+            "var_id": "advertising_sensitivity", 
+            "start": "", 
+            "values": [
+                0.01
+            ], 
+            "path": [
+                "japan", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "cpi", 
+            "start": "2016", 
+            "values": [
+                240.837675, 
+                245.68995, 
+                251.19865
+            ], 
+            "path": [
+                "us"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "gdp", 
+            "start": "2016", 
+            "values": [
+                52446.01, 
+                53422.5, 
+                54390.55
+            ], 
+            "path": [
+                "us"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "population", 
+            "start": "2016", 
+            "values": [
+                323.995975, 
+                326.626, 
+                329.256
+            ], 
+            "path": [
+                "us"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "cpi", 
+            "start": "2016", 
+            "values": [
+                108.478375, 
+                110.614375, 
+                112.4365
+            ], 
+            "path": [
+                "germany"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "gdp", 
+            "start": "2016", 
+            "values": [
+                44043.24, 
+                44724.1, 
+                45222.91
+            ], 
+            "path": [
+                "germany"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "population", 
+            "start": "2016", 
+            "values": [
+                82.23958999999999, 
+                82.6217825, 
+                82.8304
+            ], 
+            "path": [
+                "germany"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "cpi", 
+            "start": "2016", 
+            "values": [
+                129.3525, 
+                132.912, 
+                135.57
+            ], 
+            "path": [
+                "uk"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "gdp", 
+            "start": "2016", 
+            "values": [
+                38741.52, 
+                39858.23, 
+                41009.62
+            ], 
+            "path": [
+                "uk"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "population", 
+            "start": "2016", 
+            "values": [
+                65.6499225, 
+                65.825, 
+                66.266
+            ], 
+            "path": [
+                "uk"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "cpi", 
+            "start": "2016", 
+            "values": [
+                178.771275, 
+                189.888125, 
+                200.0868
+            ], 
+            "path": [
+                "brazil"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "gdp", 
+            "start": "2016", 
+            "values": [
+                13826.275, 
+                13837.296, 
+                13985.584
+            ], 
+            "path": [
+                "brazil"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "population", 
+            "start": "2016", 
+            "values": [
+                209.776825, 
+                211.447225, 
+                213.07335
+            ], 
+            "path": [
+                "brazil"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "cpi", 
+            "start": "2016", 
+            "values": [
+                108.271075, 
+                109.473075, 
+                110.96745
+            ], 
+            "path": [
+                "italy"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "gdp", 
+            "start": "2016", 
+            "values": [
+                33142.232, 
+                33483.067, 
+                33779.199
+            ], 
+            "path": [
+                "italy"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "population", 
+            "start": "2016", 
+            "values": [
+                61.2083925, 
+                61.333949999999994, 
+                61.441135
+            ], 
+            "path": [
+                "italy"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "cpi", 
+            "start": "2016", 
+            "values": [
+                104.325, 
+                105.625, 
+                107.175
+            ], 
+            "path": [
+                "spain"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "gdp", 
+            "start": "2016", 
+            "values": [
+                33091.082, 
+                33997.85, 
+                34860.032
+            ], 
+            "path": [
+                "spain"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "population", 
+            "start": "2016", 
+            "values": [
+                46.295325, 
+                46.185915, 
+                46.059855000000006
+            ], 
+            "path": [
+                "spain"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "cpi", 
+            "start": "2016", 
+            "values": [
+                111.008175, 
+                113.9791, 
+                117.097675
+            ], 
+            "path": [
+                "australia"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "gdp", 
+            "start": "2016", 
+            "values": [
+                44132.7, 
+                44694.11, 
+                45214.49
+            ], 
+            "path": [
+                "australia"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "population", 
+            "start": "2016", 
+            "values": [
+                24.4255, 
+                24.8688975, 
+                25.3019775
+            ], 
+            "path": [
+                "australia"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "cpi", 
+            "start": "2016", 
+            "values": [
+                128.816725, 
+                131.120375, 
+                133.614425
+            ], 
+            "path": [
+                "canada"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "gdp", 
+            "start": "2016", 
+            "values": [
+                42342.5, 
+                42992.64, 
+                43736.77
+            ], 
+            "path": [
+                "canada"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "population", 
+            "start": "2016", 
+            "values": [
+                36.1642825, 
+                36.520765, 
+                36.876445
+            ], 
+            "path": [
+                "canada"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "cpi", 
+            "start": "2016", 
+            "values": [
+                103.91275, 
+                106.1169, 
+                107.44905
+            ], 
+            "path": [
+                "japan"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "gdp", 
+            "start": "2016", 
+            "values": [
+                35856.77, 
+                36377.827, 
+                36780.478
+            ], 
+            "path": [
+                "japan"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "population", 
+            "start": "2016", 
+            "values": [
+                126.293125, 
+                126.01010000000001, 
+                125.696875
+            ], 
+            "path": [
+                "japan"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "cpi", 
+            "start": "2016", 
+            "values": [
+                174.86765, 
+                180.902925, 
+                186.5323
+            ], 
+            "path": [
+                "mexico"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "gdp", 
+            "start": "2016", 
+            "values": [
+                16371.239999999998, 
+                16712.282, 
+                17090.916
+            ], 
+            "path": [
+                "mexico"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "population", 
+            "start": "2016", 
+            "values": [
+                128.8296, 
+                130.418675, 
+                131.982925
+            ], 
+            "path": [
+                "mexico"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "eq_price", 
+            "start": "2013", 
+            "values": [
+                7.091759524324119, 
+                6.994928133099753, 
+                6.925469218114112
+            ], 
+            "path": [
+                "spain", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "unit_price", 
+            "start": "2012", 
+            "values": [
+                3.4234727723292036, 
+                3.4713947906007516, 
+                3.391791291321095, 
+                3.414156830743183, 
+                3.446655475924154, 
+                3.488011362907764
+            ], 
+            "path": [
+                "spain", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "unit_size", 
+            "start": "2012", 
+            "values": [
+                0.4827395458894213, 
+                0.4962731173997677, 
+                0.48975617167564567, 
+                0.4932644845687578, 
+                0.49677279746187, 
+                0.5002811103549821
+            ], 
+            "path": [
+                "spain", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "distribution", 
+            "start": "2016", 
+            "values": [
+                1961.1187573894113, 
+                2040.704176519215, 
+                2120.289595649019
+            ], 
+            "path": [
+                "spain", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "innovations", 
+            "start": "2016", 
+            "values": [
+                0.06268254505111961, 
+                0.06840255971105078, 
+                0.07412257437098194
+            ], 
+            "path": [
+                "spain", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "premiumization", 
+            "start": "2016", 
+            "values": [
+                1.0092019843790767, 
+                1.0122693125054356, 
+                1.0153366406317945
+            ], 
+            "path": [
+                "spain", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "discount", 
+            "start": "2016", 
+            "values": [
+                0.0337671693365128, 
+                0.031347551815367414, 
+                0.028927934294222024
+            ], 
+            "path": [
+                "spain", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "support", 
+            "start": "2016", 
+            "values": [
+                0.17939699452824343, 
+                0.18448674296994505, 
+                0.18957649141164667
+            ], 
+            "path": [
+                "spain", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "ltt", 
+            "start": "2016", 
+            "values": [
+                -0.004586440720608488, 
+                -0.004586440720608488, 
+                -0.004586440720608488
+            ], 
+            "path": [
+                "spain", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "eq_price", 
+            "start": "2013", 
+            "values": [
+                10.981668576914146, 
+                10.603009256989354, 
+                10.212025670850325
+            ], 
+            "path": [
+                "australia", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "unit_price", 
+            "start": "2012", 
+            "values": [
+                5.395525595648162, 
+                5.344746344857922, 
+                5.228933874502955, 
+                5.198523405700236, 
+                5.153449005291559, 
+                5.1107043754548265
+            ], 
+            "path": [
+                "australia", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "unit_size", 
+            "start": "2012", 
+            "values": [
+                0.49132111007162693, 
+                0.5040782494210068, 
+                0.5120368909205412, 
+                0.5223947813449983, 
+                0.5327526717694554, 
+                0.5431105621939125
+            ], 
+            "path": [
+                "australia", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "distribution", 
+            "start": "2016", 
+            "values": [
+                3577.6004171464638, 
+                3624.7972951397296, 
+                3671.9941731329955
+            ], 
+            "path": [
+                "australia", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "innovations", 
+            "start": "2016", 
+            "values": [
+                0.06415713311494624, 
+                0.06415713311494624, 
+                0.06415713311494624
+            ], 
+            "path": [
+                "australia", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "media", 
+            "start": "2016", 
+            "values": [
+                3867.3404363161535, 
+                3470.982678267771, 
+                3115.247015675455
+            ], 
+            "path": [
+                "australia", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "premiumization", 
+            "start": "2016", 
+            "values": [
+                0.9692912421846874, 
+                0.9592660000027599, 
+                0.9493444474823418
+            ], 
+            "path": [
+                "australia", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "discount", 
+            "start": "2016", 
+            "values": [
+                0.33506709190642614, 
+                0.33702220380974046, 
+                0.3389773157130548
+            ], 
+            "path": [
+                "australia", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "support", 
+            "start": "2016", 
+            "values": [
+                0.23076803277115582, 
+                0.2439422811958904, 
+                0.257116529620625
+            ], 
+            "path": [
+                "australia", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "ltt", 
+            "start": "2016", 
+            "values": [
+                -0.00590595133993919, 
+                -0.00590595133993919, 
+                -0.00590595133993919
+            ], 
+            "path": [
+                "australia", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "eq_price", 
+            "start": "2012", 
+            "values": [
+                5.5514496352576765, 
+                5.5577644817489755, 
+                5.58430503092918, 
+                5.762558868192696
+            ], 
+            "path": [
+                "canada", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "unit_price", 
+            "start": "2012", 
+            "values": [
+                4.370160769686902, 
+                4.334142098357993, 
+                4.346719108130715, 
+                4.482944163027947, 
+                4.5468368832237305, 
+                4.6020785000121, 
+                4.655755289193757
+            ], 
+            "path": [
+                "canada", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "unit_size", 
+            "start": "2012", 
+            "values": [
+                0.7872107389629694, 
+                0.7798355098692631, 
+                0.7783813892787047, 
+                0.7779433174682565, 
+                0.7769972212677532, 
+                0.7760511250672498, 
+                0.7751050288667465
+            ], 
+            "path": [
+                "canada", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "distribution", 
+            "start": "2016", 
+            "values": [
+                4321.083802252717, 
+                4579.942442928557, 
+                4838.801083604398
+            ], 
+            "path": [
+                "canada", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "innovations", 
+            "start": "2016", 
+            "values": [
+                0.08878076262642151, 
+                0.09513452130647337, 
+                0.10148827998652524
+            ], 
+            "path": [
+                "canada", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "media", 
+            "start": "2016", 
+            "values": [
+                7559.89882815455, 
+                7111.6320813678785, 
+                6689.945462284286
+            ], 
+            "path": [
+                "canada", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "premiumization", 
+            "start": "2016", 
+            "values": [
+                1.082055438548645, 
+                1.1151040632747797, 
+                1.1481526880009145
+            ], 
+            "path": [
+                "canada", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "discount", 
+            "start": "2016", 
+            "values": [
+                0.2064649038369667, 
+                0.19395046576542618, 
+                0.18143602769388567
+            ], 
+            "path": [
+                "canada", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "support", 
+            "start": "2016", 
+            "values": [
+                0.3079878038908207, 
+                0.3145005236543914, 
+                0.3210132434179621
+            ], 
+            "path": [
+                "canada", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "ltt", 
+            "start": "2016", 
+            "values": [
+                -0.011384181480702938, 
+                -0.011384181480702938, 
+                -0.011384181480702938
+            ], 
+            "path": [
+                "canada", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "eq_price", 
+            "start": "2013", 
+            "values": [
+                10.08273974389426, 
+                10.183430799191738, 
+                10.377617095088805
+            ], 
+            "path": [
+                "mexico", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "unit_price", 
+            "start": "2013", 
+            "values": [
+                3.310608492829846, 
+                3.4090103827469096, 
+                3.5928822723034823, 
+                3.7426977064263025, 
+                3.8995118940187417, 
+                4.049656852686449
+            ], 
+            "path": [
+                "mexico", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "unit_size", 
+            "start": "2013", 
+            "values": [
+                0.3283441382918398, 
+                0.33476049967536325, 
+                0.3462145730934522, 
+                0.35514979049425843, 
+                0.36408500789506465, 
+                0.37302022529587087
+            ], 
+            "path": [
+                "mexico", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "distribution", 
+            "start": "2016", 
+            "values": [
+                3930.291242536172, 
+                3879.436863804258, 
+                3828.582485072344
+            ], 
+            "path": [
+                "mexico", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "innovations", 
+            "start": "2016", 
+            "values": [
+                0.054345236722778786, 
+                0.056346173214145964, 
+                0.05834710970551314
+            ], 
+            "path": [
+                "mexico", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "media", 
+            "start": "2016", 
+            "values": [
+                23974.42918666746, 
+                23506.804077509532, 
+                23048.300071549194
+            ], 
+            "path": [
+                "mexico", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "premiumization", 
+            "start": "2016", 
+            "values": [
+                0.9634064004322349, 
+                0.9515085672987751, 
+                0.9397576694910595
+            ], 
+            "path": [
+                "mexico", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "ltt", 
+            "start": "2016", 
+            "values": [
+                0.0016827836097968382, 
+                0.0016827836097968382, 
+                0.0016827836097968382
+            ], 
+            "path": [
+                "mexico", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "eq_price", 
+            "start": "2012", 
+            "values": [
+                5.212008114440809, 
+                5.327235585585646, 
+                5.408216549465374, 
+                5.571293232213734
+            ], 
+            "path": [
+                "us", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "unit_price", 
+            "start": "2012", 
+            "values": [
+                4.302853239557169, 
+                4.310633343771817, 
+                4.34037901709169, 
+                4.409313009043204, 
+                4.46840995461148, 
+                4.545304071148919, 
+                4.633181293452619
+            ], 
+            "path": [
+                "us", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "unit_size", 
+            "start": "2012", 
+            "values": [
+                0.825565337788968, 
+                0.8091688971735105, 
+                0.8025527412582537, 
+                0.7914343807193897, 
+                0.7825671224923292, 
+                0.7736998642652687, 
+                0.7648326060382082
+            ], 
+            "path": [
+                "us", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "distribution", 
+            "start": "2016", 
+            "values": [
+                6511.912124999997, 
+                6727.72208333333, 
+                6943.532041666664
+            ], 
+            "path": [
+                "us", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "innovations", 
+            "start": "2016", 
+            "values": [
+                0.07149432111617311, 
+                0.06790884451569826, 
+                0.0643233679152234
+            ], 
+            "path": [
+                "us", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "media", 
+            "start": "2016", 
+            "values": [
+                218549.74444444478, 
+                246878.35777777433, 
+                275206.97111111134
+            ], 
+            "path": [
+                "us", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "premiumization", 
+            "start": "2016", 
+            "values": [
+                1.0372801846843693, 
+                1.0495514696514587, 
+                1.0618227546185481
+            ], 
+            "path": [
+                "us", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "discount", 
+            "start": "2016", 
+            "values": [
+                0.11774790059129558, 
+                0.12114939813553037, 
+                0.12455089567976516
+            ], 
+            "path": [
+                "us", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "support", 
+            "start": "2016", 
+            "values": [
+                0.21544066732275866, 
+                0.21918935594381675, 
+                0.22293804456487484
+            ], 
+            "path": [
+                "us", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "ltt", 
+            "start": "2016", 
+            "values": [
+                -0.006133754021865972, 
+                -0.006133754021865972, 
+                -0.006133754021865972
+            ], 
+            "path": [
+                "us", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "eq_price", 
+            "start": "2013", 
+            "values": [
+                8.38663621497869, 
+                8.141729635434356, 
+                7.680938358896869
+            ], 
+            "path": [
+                "germany", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "unit_price", 
+            "start": "2013", 
+            "values": [
+                3.1342477482524465, 
+                3.0701088351587704, 
+                2.9762802821715204, 
+                2.8636260671237754, 
+                2.8187884235425305, 
+                2.768048625234021
+            ], 
+            "path": [
+                "germany", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "unit_size", 
+            "start": "2013", 
+            "values": [
+                0.3737192919676927, 
+                0.37708312270614747, 
+                0.3874891508176316, 
+                0.3908529815560863, 
+                0.394216812294541, 
+                0.3975806430329957
+            ], 
+            "path": [
+                "germany", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "distribution", 
+            "start": "2016", 
+            "values": [
+                3030.3010201089437, 
+                3101.174971256369, 
+                3172.0489224037947
+            ], 
+            "path": [
+                "germany", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "innovations", 
+            "start": "2016", 
+            "values": [
+                0.056287547404336086, 
+                0.061205368968216926, 
+                0.06612319053209777
+            ], 
+            "path": [
+                "germany", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "media", 
+            "start": "2016", 
+            "values": [
+                44897.51799026592, 
+                44390.22081808355, 
+                43888.65559796499
+            ], 
+            "path": [
+                "germany", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "premiumization", 
+            "start": "2016", 
+            "values": [
+                0.9759038410571617, 
+                0.9678717880762155, 
+                0.9598397350952694
+            ], 
+            "path": [
+                "germany", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "discount", 
+            "start": "2016", 
+            "values": [
+                0.07307060233794815, 
+                0.07307060233794815, 
+                0.07307060233794815
+            ], 
+            "path": [
+                "germany", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "support", 
+            "start": "2016", 
+            "values": [
+                0.10066496638868033, 
+                0.10066496638868033, 
+                0.10066496638868033
+            ], 
+            "path": [
+                "germany", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "ltt", 
+            "start": "2016", 
+            "values": [
+                0.01049579988448896, 
+                0.01049579988448896, 
+                0.01049579988448896
+            ], 
+            "path": [
+                "germany", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "eq_price", 
+            "start": "2013", 
+            "values": [
+                8.034946519651434, 
+                7.8786220839579055, 
+                7.863411249600394
+            ], 
+            "path": [
+                "japan", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "unit_price", 
+            "start": "2013", 
+            "values": [
+                4.473729566572889, 
+                4.532628338011287, 
+                4.590303318311921, 
+                4.58545788458556, 
+                4.662003127614491, 
+                4.699462814583099
+            ], 
+            "path": [
+                "japan", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "unit_size", 
+            "start": "2013", 
+            "values": [
+                0.5567839879993333, 
+                0.5753072415086923, 
+                0.5837547055096721, 
+                0.592202169510652, 
+                0.6006496335116318, 
+                0.6090970975126117
+            ], 
+            "path": [
+                "japan", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "distribution", 
+            "start": "2016", 
+            "values": [
+                4267.699841050082, 
+                4361.837281443877, 
+                4455.974721837672
+            ], 
+            "path": [
+                "japan", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "innovations", 
+            "start": "2016", 
+            "values": [
+                0.09717696208037764, 
+                0.10761285177640091, 
+                0.11804874147242418
+            ], 
+            "path": [
+                "japan", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "media", 
+            "start": "2016", 
+            "values": [
+                30323.991751655038, 
+                32382.98426796142, 
+                34441.9767842678
+            ], 
+            "path": [
+                "japan", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "premiumization", 
+            "start": "2016", 
+            "values": [
+                0.97874463301468, 
+                0.9717603870722031, 
+                0.9648259801681636
+            ], 
+            "path": [
+                "japan", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "ltt", 
+            "start": "2016", 
+            "values": [
+                0.04260669684581837, 
+                0.04260669684581837, 
+                0.04260669684581837
+            ], 
+            "path": [
+                "japan", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "eq_price", 
+            "start": "2013", 
+            "values": [
+                11.035422946435057, 
+                11.856188142980145, 
+                12.95601576898102
+            ], 
+            "path": [
+                "brazil", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "unit_price", 
+            "start": "2013", 
+            "values": [
+                3.575105840609736, 
+                3.87671399464803, 
+                4.352490438500688, 
+                4.788293479274191, 
+                5.218716433935326, 
+                5.6435970553832036
+            ], 
+            "path": [
+                "brazil", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "unit_size", 
+            "start": "2013", 
+            "values": [
+                0.3239663634065477, 
+                0.3269781103248913, 
+                0.3359435891488582, 
+                0.3419322020200134, 
+                0.3479208148911686, 
+                0.3539094277623238
+            ], 
+            "path": [
+                "brazil", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "distribution", 
+            "start": "2016", 
+            "values": [
+                3562.541845531916, 
+                3590.2085121985824, 
+                3617.875178865249
+            ], 
+            "path": [
+                "brazil", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "innovations", 
+            "start": "2016", 
+            "values": [
+                0.03182256509161042, 
+                0.03182256509161042, 
+                0.03182256509161042
+            ], 
+            "path": [
+                "brazil", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "media", 
+            "start": "2016", 
+            "values": [
+                345344.25060784817, 
+                413363.1690272689, 
+                481382.0874466598
+            ], 
+            "path": [
+                "brazil", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "premiumization", 
+            "start": "2016", 
+            "values": [
+                0.9964665852166016, 
+                0.9952915569194177, 
+                0.994117914209588
+            ], 
+            "path": [
+                "brazil", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "ltt", 
+            "start": "2016", 
+            "values": [
+                0.0, 
+                0.0, 
+                0.0
+            ], 
+            "path": [
+                "brazil", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "eq_price", 
+            "start": "2013", 
+            "values": [
+                8.844836875803171, 
+                8.45290149761382, 
+                8.263455490106109
+            ], 
+            "path": [
+                "italy", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "unit_price", 
+            "start": "2013", 
+            "values": [
+                4.221938926349765, 
+                3.984251659652736, 
+                3.885201202824285, 
+                3.725790102491671, 
+                3.594994458707462, 
+                3.4804995663944687
+            ], 
+            "path": [
+                "italy", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "unit_size", 
+            "start": "2013", 
+            "values": [
+                0.4773337242543984, 
+                0.4713472244740407, 
+                0.4701666521319153, 
+                0.4665831160706737, 
+                0.46299958000943214, 
+                0.4594160439481906
+            ], 
+            "path": [
+                "italy", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "da", 
+            "start": "2016", 
+            "values": [
+                2391.018024395378, 
+                2543.050421416059, 
+                2695.0828184367406
+            ], 
+            "path": [
+                "italy", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "innovations", 
+            "start": "2016", 
+            "values": [
+                0.08098173788015618, 
+                0.09157772806603336, 
+                0.10217371825191053
+            ], 
+            "path": [
+                "italy", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "premiumization", 
+            "start": "2016", 
+            "values": [
+                1.0245923879026482, 
+                1.0327898505368642, 
+                1.0409873131710803
+            ], 
+            "path": [
+                "italy", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "discount", 
+            "start": "2016", 
+            "values": [
+                0.1873753413704502, 
+                0.18158594930684246, 
+                0.17579655724323473
+            ], 
+            "path": [
+                "italy", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "support", 
+            "start": "2016", 
+            "values": [
+                0.18411993659850476, 
+                0.1941050254657259, 
+                0.20409011433294702
+            ], 
+            "path": [
+                "italy", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "ltt", 
+            "start": "2016", 
+            "values": [
+                0.013247745245919653, 
+                0.013247745245919653, 
+                0.013247745245919653
+            ], 
+            "path": [
+                "italy", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "eq_price", 
+            "start": "2013", 
+            "values": [
+                7.4298150036330695, 
+                7.6603936869631335, 
+                7.682702529645078
+            ], 
+            "path": [
+                "uk", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "unit_price", 
+            "start": "2013", 
+            "values": [
+                3.2350707185322483, 
+                3.353160481523764, 
+                3.3691330656449265, 
+                3.438418183801107, 
+                3.568726934620969, 
+                3.675949808993105
+            ], 
+            "path": [
+                "uk", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "unit_size", 
+            "start": "2013", 
+            "values": [
+                0.43541739827308573, 
+                0.43772691307371725, 
+                0.4385348843905547, 
+                0.4400936274492892, 
+                0.4416523705080237, 
+                0.4432111135667582
+            ], 
+            "path": [
+                "uk", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "distribution", 
+            "start": "2016", 
+            "values": [
+                2956.2650937852377, 
+                2989.3655456213673, 
+                3022.465997457497
+            ], 
+            "path": [
+                "uk", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "innovations", 
+            "start": "2016", 
+            "values": [
+                0.03242759776669813, 
+                0.03242759776669813, 
+                0.03242759776669813
+            ], 
+            "path": [
+                "uk", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "media", 
+            "start": "2016", 
+            "values": [
+                24352.785448333307, 
+                24576.472738333337, 
+                24800.16002833331
+            ], 
+            "path": [
+                "uk", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "premiumization", 
+            "start": "2016", 
+            "values": [
+                1.0470311890553587, 
+                1.0622781305944906, 
+                1.0775250721336225
+            ], 
+            "path": [
+                "uk", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "discount", 
+            "start": "2016", 
+            "values": [
+                0.3573837221644924, 
+                0.3713902241104543, 
+                0.38539672605641623
+            ], 
+            "path": [
+                "uk", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "support", 
+            "start": "2016", 
+            "values": [
+                0.3050360639562539, 
+                0.3125123672048923, 
+                0.3199886704535307
+            ], 
+            "path": [
+                "uk", 
+                "mouthwash"
+            ]
+        }, 
+        {
+            "slot": "1", 
+            "timescale": "annual", 
+            "var_id": "ltt", 
+            "start": "2016", 
+            "values": [
+                -0.027884212255649004, 
+                -0.027884212255649004, 
+                -0.027884212255649004
+            ], 
+            "path": [
+                "uk", 
+                "mouthwash"
+            ]
+        }
+    ], 
+    "entity_properties": [
+        {
+            "path": "us", 
+            "lang-en-name": "US", 
+            "lang-ru-name": "2US"
+        }, 
+        {
+            "path": "canada", 
+            "lang-en-name": "Canada", 
+            "lang-ru-name": "2Canada"
+        }, 
+        {
+            "path": "mexico", 
+            "lang-en-name": "Mexico", 
+            "lang-ru-name": "2Mexico"
+        }, 
+        {
+            "path": "germany", 
+            "lang-en-name": "Germany", 
+            "lang-ru-name": "2Germany"
+        }, 
+        {
+            "path": "brazil", 
+            "lang-en-name": "Brazil", 
+            "lang-ru-name": "2Brazil"
+        }, 
+        {
+            "path": "spain", 
+            "lang-en-name": "Spain", 
+            "lang-ru-name": "2Spain"
+        }, 
+        {
+            "path": "italy", 
+            "lang-en-name": "Italy", 
+            "lang-ru-name": "2Italy"
+        }, 
+        {
+            "path": "uk", 
+            "lang-en-name": "UK", 
+            "lang-ru-name": "2UK"
+        }, 
+        {
+            "path": "japan", 
+            "lang-en-name": "Japan", 
+            "lang-ru-name": "2Japan"
+        }, 
+        {
+            "path": "australia", 
+            "lang-en-name": "Australia", 
+            "lang-ru-name": "2Australia"
+        }, 
+        {
+            "path": [
+                "us", 
+                "mouthwash"
+            ], 
+            "lang-en-name": "Mouthwash", 
+            "lang-ru-name": "2Mouthwash"
+        }, 
+        {
+            "path": [
+                "canada", 
+                "mouthwash"
+            ], 
+            "lang-en-name": "Mouthwash", 
+            "lang-ru-name": "2Mouthwash"
+        }, 
+        {
+            "path": [
+                "mexico", 
+                "mouthwash"
+            ], 
+            "lang-en-name": "Mouthwash", 
+            "lang-ru-name": "2Mouthwash"
+        }, 
+        {
+            "path": [
+                "germany", 
+                "mouthwash"
+            ], 
+            "lang-en-name": "Mouthwash", 
+            "lang-ru-name": "2Mouthwash"
+        }, 
+        {
+            "path": [
+                "brazil", 
+                "mouthwash"
+            ], 
+            "lang-en-name": "Mouthwash", 
+            "lang-ru-name": "2Mouthwash"
+        }, 
+        {
+            "path": [
+                "spain", 
+                "mouthwash"
+            ], 
+            "lang-en-name": "Mouthwash", 
+            "lang-ru-name": "2Mouthwash"
+        }, 
+        {
+            "path": [
+                "italy", 
+                "mouthwash"
+            ], 
+            "lang-en-name": "Mouthwash", 
+            "lang-ru-name": "2Mouthwash"
+        }, 
+        {
+            "path": [
+                "uk", 
+                "mouthwash"
+            ], 
+            "lang-en-name": "Mouthwash", 
+            "lang-ru-name": "2Mouthwash"
+        }, 
+        {
+            "path": [
+                "japan", 
+                "mouthwash"
+            ], 
+            "lang-en-name": "Mouthwash", 
+            "lang-ru-name": "2Mouthwash"
+        }, 
+        {
+            "path": [
+                "australia", 
+                "mouthwash"
+            ], 
+            "lang-en-name": "Mouthwash", 
+            "lang-ru-name": "2Mouthwash"
+        }
+    ], 
+    "user_data_access": [
+        {
+            "node_type": "ent", 
+            "path_e": [
+                "us", 
+                "mouthwash"
+            ], 
+            "mask": "10001", 
+            "path_c": [
+                "us", 
+                "mouthwash"
+            ], 
+            "name": "us"
+        }, 
+        {
+            "node_type": "var", 
+            "path_e": [
+                "us", 
+                "mouthwash"
+            ], 
+            "mask": "10110", 
+            "path_c": [
+                "us", 
+                "mouthwash"
+            ], 
+            "name": "economy_sensitivity"
+        }, 
+        {
+            "node_type": "tp", 
+            "path_e": [
+                "us", 
+                "mouthwash"
+            ], 
+            "mask": "1", 
+            "path_c": [
+                "us", 
+                "mouthwash"
+            ], 
+            "name": "2012"
+        }, 
+        {
+            "node_type": "ts", 
+            "path_e": [
+                "us", 
+                "mouthwash"
+            ], 
+            "mask": "11111", 
+            "path_c": [
+                "us", 
+                "mouthwash"
+            ], 
+            "name": "annual"
+        }
+    ], 
+    "entities": [
+        {
+            "path": [
+                "us"
+            ], 
+            "dimension": "geography", 
+            "level": "country"
+        }, 
+        {
+            "path": [
+                "canada"
+            ], 
+            "dimension": "geography", 
+            "level": "country"
+        }, 
+        {
+            "path": [
+                "mexico"
+            ], 
+            "dimension": "geography", 
+            "level": "country"
+        }, 
+        {
+            "path": [
+                "germany"
+            ], 
+            "dimension": "geography", 
+            "level": "country"
+        }, 
+        {
+            "path": [
+                "brazil"
+            ], 
+            "dimension": "geography", 
+            "level": "country"
+        }, 
+        {
+            "path": [
+                "spain"
+            ], 
+            "dimension": "geography", 
+            "level": "country"
+        }, 
+        {
+            "path": [
+                "italy"
+            ], 
+            "dimension": "geography", 
+            "level": "country"
+        }, 
+        {
+            "path": [
+                "uk"
+            ], 
+            "dimension": "geography", 
+            "level": "country"
+        }, 
+        {
+            "path": [
+                "japan"
+            ], 
+            "dimension": "geography", 
+            "level": "country"
+        }, 
+        {
+            "path": [
+                "australia"
+            ], 
+            "dimension": "geography", 
+            "level": "country"
+        }, 
+        {
+            "path": [
+                "us", 
+                "mouthwash"
+            ], 
+            "dimension": "products", 
+            "level": "category"
+        }, 
+        {
+            "path": [
+                "canada", 
+                "mouthwash"
+            ], 
+            "dimension": "products", 
+            "level": "category"
+        }, 
+        {
+            "path": [
+                "mexico", 
+                "mouthwash"
+            ], 
+            "dimension": "products", 
+            "level": "category"
+        }, 
+        {
+            "path": [
+                "germany", 
+                "mouthwash"
+            ], 
+            "dimension": "products", 
+            "level": "category"
+        }, 
+        {
+            "path": [
+                "brazil", 
+                "mouthwash"
+            ], 
+            "dimension": "products", 
+            "level": "category"
+        }, 
+        {
+            "path": [
+                "spain", 
+                "mouthwash"
+            ], 
+            "dimension": "products", 
+            "level": "category"
+        }, 
+        {
+            "path": [
+                "italy", 
+                "mouthwash"
+            ], 
+            "dimension": "products", 
+            "level": "category"
+        }, 
+        {
+            "path": [
+                "uk", 
+                "mouthwash"
+            ], 
+            "dimension": "products", 
+            "level": "category"
+        }, 
+        {
+            "path": [
+                "japan", 
+                "mouthwash"
+            ], 
+            "dimension": "products", 
+            "level": "category"
+        }, 
+        {
+            "path": [
+                "australia", 
+                "mouthwash"
+            ], 
+            "dimension": "products", 
+            "level": "category"
+        }
+    ], 
+    "view_properties": [
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "dec_type": "", 
+            "nextfilter": [
+                "geography", 
+                "country"
+            ], 
+            "id": "population", 
+            "view_type": "driver"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "dec_type": "", 
+            "nextfilter": [
+                "geography", 
+                "country"
+            ], 
+            "id": "cpi", 
+            "view_type": "driver"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "dec_type": "", 
+            "nextfilter": [
+                "geography", 
+                "country"
+            ], 
+            "id": "gdp", 
+            "view_type": "driver"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "dec_type": "", 
+            "nextfilter": "", 
+            "id": "value", 
+            "view_type": "output"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "dec_type": "", 
+            "nextfilter": "", 
+            "id": "eq_volume", 
+            "view_type": "output"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "dec_type": "", 
+            "nextfilter": "", 
+            "id": "eq_price", 
+            "view_type": "output"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "dec_type": "", 
+            "nextfilter": "", 
+            "id": "distribution", 
+            "view_type": "driver"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "dec_type": "", 
+            "nextfilter": "", 
+            "id": "innovations", 
+            "view_type": "driver"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "dec_type": "", 
+            "nextfilter": "", 
+            "id": "unit_price", 
+            "view_type": "driver"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "dec_type": "", 
+            "nextfilter": "", 
+            "id": "unit_size", 
+            "view_type": "driver"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "dec_type": "", 
+            "nextfilter": "", 
+            "id": "premiumization", 
+            "view_type": "driver"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "dec_type": "", 
+            "nextfilter": "", 
+            "id": "media", 
+            "view_type": "driver"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "dec_type": "", 
+            "nextfilter": "", 
+            "id": "discount", 
+            "view_type": "driver"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "dec_type": "", 
+            "nextfilter": "", 
+            "id": "support", 
+            "view_type": "driver"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "dec_type": "", 
+            "nextfilter": "", 
+            "id": "ltt", 
+            "view_type": "driver"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "dec_type": "value", 
+            "nextfilter": "", 
+            "id": "dec_val_demo", 
+            "view_type": "decomposition"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "dec_type": "value", 
+            "nextfilter": "", 
+            "id": "dec_val_economy", 
+            "view_type": "decomposition"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "dec_type": "value", 
+            "nextfilter": "", 
+            "id": "dec_val_distribution", 
+            "view_type": "decomposition"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "dec_type": "value", 
+            "nextfilter": "", 
+            "id": "dec_val_innovations", 
+            "view_type": "decomposition"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "dec_type": "value", 
+            "nextfilter": "", 
+            "id": "dec_val_advertising", 
+            "view_type": "decomposition"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "dec_type": "value", 
+            "nextfilter": "", 
+            "id": "dec_val_trade_promo_on_vol", 
+            "view_type": "decomposition"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "dec_type": "value", 
+            "nextfilter": "", 
+            "id": "dec_val_price_on_vol", 
+            "view_type": "decomposition"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "dec_type": "value", 
+            "nextfilter": "", 
+            "id": "dec_val_unit_size_on_vol", 
+            "view_type": "decomposition"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "dec_type": "value", 
+            "nextfilter": "", 
+            "id": "dec_val_inflation", 
+            "view_type": "decomposition"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "dec_type": "value", 
+            "nextfilter": "", 
+            "id": "dec_val_man_pricing", 
+            "view_type": "decomposition"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "dec_type": "value", 
+            "nextfilter": "", 
+            "id": "dec_val_premiumization", 
+            "view_type": "decomposition"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "dec_type": "value", 
+            "nextfilter": "", 
+            "id": "dec_val_trade", 
+            "view_type": "decomposition"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "dec_type": "value", 
+            "nextfilter": "", 
+            "id": "dec_val_promo", 
+            "view_type": "decomposition"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "dec_type": "value", 
+            "nextfilter": "", 
+            "id": "dec_val_trade_promo", 
+            "view_type": "decomposition"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "dec_type": "value", 
+            "nextfilter": "", 
+            "id": "dec_val_unit_size", 
+            "view_type": "decomposition"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "dec_type": "value", 
+            "nextfilter": "", 
+            "id": "dec_val_other", 
+            "view_type": "decomposition"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "dec_type": "volume", 
+            "nextfilter": "", 
+            "id": "dec_vol_demo", 
+            "view_type": "decomposition"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "dec_type": "volume", 
+            "nextfilter": "", 
+            "id": "dec_vol_economy", 
+            "view_type": "decomposition"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "dec_type": "volume", 
+            "nextfilter": "", 
+            "id": "dec_vol_distribution", 
+            "view_type": "decomposition"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "dec_type": "volume", 
+            "nextfilter": "", 
+            "id": "dec_vol_innovations", 
+            "view_type": "decomposition"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "dec_type": "volume", 
+            "nextfilter": "", 
+            "id": "dec_vol_advertising", 
+            "view_type": "decomposition"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "dec_type": "volume", 
+            "nextfilter": "", 
+            "id": "dec_vol_trade_promo_on_vol", 
+            "view_type": "decomposition"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "dec_type": "volume", 
+            "nextfilter": "", 
+            "id": "dec_vol_price_on_vol", 
+            "view_type": "decomposition"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "dec_type": "volume", 
+            "nextfilter": "", 
+            "id": "dec_vol_unit_size_on_vol", 
+            "view_type": "decomposition"
+        }, 
+        {
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "dec_type": "volume", 
+            "nextfilter": "", 
+            "id": "dec_vol_ltt", 
+            "view_type": "decomposition"
+        }
+    ], 
+    "decomposition_properties": [
+        {
+            "lang-en-full_name": "Sales Value", 
+            "type": "meta-filter", 
+            "lang-ru-short_name": "2S", 
+            "lang-ru-full_name": "2Sales Value", 
+            "products*-*categor": [
+                "products", 
+                "category"
+            ], 
+            "id": "value", 
+            "lang-en-short_name": "S"
+        }, 
+        {
+            "lang-en-full_name": "Volume", 
+            "type": "meta-filter", 
+            "lang-ru-short_name": "2V", 
+            "lang-ru-full_name": "2Volume", 
+            "products*-*categor": [
+                "products", 
+                "category"
+            ], 
+            "id": "volume", 
+            "lang-en-short_name": "V"
+        }
+    ], 
+    "features": [
+        {
+            "name": "Create Scenario"
+        }, 
+        {
+            "name": "Read"
+        }, 
+        {
+            "name": "Modify"
+        }, 
+        {
+            "name": "Edit"
+        }, 
+        {
+            "name": "View"
+        }
+    ], 
+    "timescale_properties": [
+        {
+            "lang-en-full_name": "Annual", 
+            "lag": "1", 
+            "lang-ru-short_name": "2A", 
+            "lang-en-short_name": "A", 
+            "id": "annual", 
+            "lang-ru-full_name": "2Annual"
+        }
+    ], 
+    "wh_inputs": [
+        {
+            "wh_path": [
+                "US"
+            ], 
+            "wh_var": "Population, total", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "us"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "population"
+        }, 
+        {
+            "wh_path": [
+                "Canada"
+            ], 
+            "wh_var": "Population, total", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "canada"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "population"
+        }, 
+        {
+            "wh_path": [
+                "Mexico"
+            ], 
+            "wh_var": "Population, total", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "mexico"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "population"
+        }, 
+        {
+            "wh_path": [
+                "Germany"
+            ], 
+            "wh_var": "Population, total", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "germany"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "population"
+        }, 
+        {
+            "wh_path": [
+                "Brazil"
+            ], 
+            "wh_var": "Population, total", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "brazil"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "population"
+        }, 
+        {
+            "wh_path": [
+                "Spain"
+            ], 
+            "wh_var": "Population, total", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "spain"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "population"
+        }, 
+        {
+            "wh_path": [
+                "Italy"
+            ], 
+            "wh_var": "Population, total", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "italy"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "population"
+        }, 
+        {
+            "wh_path": [
+                "UK"
+            ], 
+            "wh_var": "Population, total", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "uk"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "population"
+        }, 
+        {
+            "wh_path": [
+                "Japan"
+            ], 
+            "wh_var": "Population, total", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "japan"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "population"
+        }, 
+        {
+            "wh_path": [
+                "Australia"
+            ], 
+            "wh_var": "Population, total", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "australia"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "population"
+        }, 
+        {
+            "wh_path": [
+                "US"
+            ], 
+            "wh_var": "Consumer price index", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "us"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "cpi"
+        }, 
+        {
+            "wh_path": [
+                "Canada"
+            ], 
+            "wh_var": "Consumer price index", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "canada"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "cpi"
+        }, 
+        {
+            "wh_path": [
+                "Mexico"
+            ], 
+            "wh_var": "Consumer price index", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "mexico"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "cpi"
+        }, 
+        {
+            "wh_path": [
+                "Germany"
+            ], 
+            "wh_var": "Consumer price index", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "germany"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "cpi"
+        }, 
+        {
+            "wh_path": [
+                "Brazil"
+            ], 
+            "wh_var": "Consumer price index", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "brazil"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "cpi"
+        }, 
+        {
+            "wh_path": [
+                "Spain"
+            ], 
+            "wh_var": "Consumer price index", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "spain"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "cpi"
+        }, 
+        {
+            "wh_path": [
+                "Italy"
+            ], 
+            "wh_var": "Consumer price index", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "italy"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "cpi"
+        }, 
+        {
+            "wh_path": [
+                "UK"
+            ], 
+            "wh_var": "Consumer price index", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "uk"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "cpi"
+        }, 
+        {
+            "wh_path": [
+                "Japan"
+            ], 
+            "wh_var": "Consumer price index", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "japan"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "cpi"
+        }, 
+        {
+            "wh_path": [
+                "Australia"
+            ], 
+            "wh_var": "Consumer price index", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "australia"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "cpi"
+        }, 
+        {
+            "wh_path": [
+                "US"
+            ], 
+            "wh_var": "GDP per capita, PPP exchange rate, real, US$", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "us"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "gdp"
+        }, 
+        {
+            "wh_path": [
+                "Canada"
+            ], 
+            "wh_var": "GDP per capita, PPP exchange rate, real, US$", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "canada"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "gdp"
+        }, 
+        {
+            "wh_path": [
+                "Mexico"
+            ], 
+            "wh_var": "GDP per capita, PPP exchange rate, real, US$", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "mexico"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "gdp"
+        }, 
+        {
+            "wh_path": [
+                "Germany"
+            ], 
+            "wh_var": "GDP per capita, PPP exchange rate, real, US$", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "germany"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "gdp"
+        }, 
+        {
+            "wh_path": [
+                "Brazil"
+            ], 
+            "wh_var": "GDP per capita, PPP exchange rate, real, US$", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "brazil"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "gdp"
+        }, 
+        {
+            "wh_path": [
+                "Spain"
+            ], 
+            "wh_var": "GDP per capita, PPP exchange rate, real, US$", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "spain"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "gdp"
+        }, 
+        {
+            "wh_path": [
+                "Italy"
+            ], 
+            "wh_var": "GDP per capita, PPP exchange rate, real, US$", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "italy"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "gdp"
+        }, 
+        {
+            "wh_path": [
+                "UK"
+            ], 
+            "wh_var": "GDP per capita, PPP exchange rate, real, US$", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "uk"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "gdp"
+        }, 
+        {
+            "wh_path": [
+                "Japan"
+            ], 
+            "wh_var": "GDP per capita, PPP exchange rate, real, US$", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "japan"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "gdp"
+        }, 
+        {
+            "wh_path": [
+                "Australia"
+            ], 
+            "wh_var": "GDP per capita, PPP exchange rate, real, US$", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "australia"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "gdp"
+        }, 
+        {
+            "wh_path": [
+                "US", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Value Sales", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "us", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "value "
+        }, 
+        {
+            "wh_path": [
+                "US", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Volume Sales", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "us", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "eq_volume "
+        }, 
+        {
+            "wh_path": [
+                "US", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Unit Sales", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "us", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "units "
+        }, 
+        {
+            "wh_path": [
+                "US", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " TDP", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "us", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "distribution "
+        }, 
+        {
+            "wh_path": [
+                "US", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Innovation TDP share", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "us", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "innovations "
+        }, 
+        {
+            "wh_path": [
+                "US", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Premiumization", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "us", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "premiumization "
+        }, 
+        {
+            "wh_path": [
+                "US", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Media Spend", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "us", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "media "
+        }, 
+        {
+            "wh_path": [
+                "US", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Avg % Discount", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "us", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "discount "
+        }, 
+        {
+            "wh_path": [
+                "US", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Avg % Promo Support", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "us", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "support "
+        }, 
+        {
+            "wh_path": [
+                "US", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Avg % Volume sold as Promo", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "us", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "volume_sold_as_promo "
+        }, 
+        {
+            "wh_path": [
+                "Canada", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Value Sales", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "canada", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "value "
+        }, 
+        {
+            "wh_path": [
+                "Canada", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Volume Sales", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "canada", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "eq_volume "
+        }, 
+        {
+            "wh_path": [
+                "Canada", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Unit Sales", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "canada", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "units "
+        }, 
+        {
+            "wh_path": [
+                "Canada", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " TDP", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "canada", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "distribution "
+        }, 
+        {
+            "wh_path": [
+                "Canada", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Innovation TDP share", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "canada", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "innovations "
+        }, 
+        {
+            "wh_path": [
+                "Canada", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Premiumization", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "canada", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "premiumization "
+        }, 
+        {
+            "wh_path": [
+                "Canada", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Media Spend", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "canada", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "media "
+        }, 
+        {
+            "wh_path": [
+                "Canada", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Avg % Discount", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "canada", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "discount "
+        }, 
+        {
+            "wh_path": [
+                "Canada", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Avg % Promo Support", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "canada", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "support "
+        }, 
+        {
+            "wh_path": [
+                "Canada", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Avg % Volume sold as Promo", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "canada", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "volume_sold_as_promo "
+        }, 
+        {
+            "wh_path": [
+                "Mexico", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Value Sales", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "mexico", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "value "
+        }, 
+        {
+            "wh_path": [
+                "Mexico", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Volume Sales", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "mexico", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "eq_volume "
+        }, 
+        {
+            "wh_path": [
+                "Mexico", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Unit Sales", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "mexico", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "units "
+        }, 
+        {
+            "wh_path": [
+                "Mexico", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " TDP", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "mexico", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "distribution "
+        }, 
+        {
+            "wh_path": [
+                "Mexico", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Innovation TDP share", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "mexico", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "innovations "
+        }, 
+        {
+            "wh_path": [
+                "Mexico", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Premiumization", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "mexico", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "premiumization "
+        }, 
+        {
+            "wh_path": [
+                "Mexico", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Media Spend", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "mexico", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "media "
+        }, 
+        {
+            "wh_path": [
+                "Mexico", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Avg % Discount", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "mexico", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "discount "
+        }, 
+        {
+            "wh_path": [
+                "Mexico", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Avg % Promo Support", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "mexico", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "support "
+        }, 
+        {
+            "wh_path": [
+                "Mexico", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Avg % Volume sold as Promo", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "mexico", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "volume_sold_as_promo "
+        }, 
+        {
+            "wh_path": [
+                "Germany", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Value Sales", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "germany", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "value "
+        }, 
+        {
+            "wh_path": [
+                "Germany", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Volume Sales", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "germany", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "eq_volume "
+        }, 
+        {
+            "wh_path": [
+                "Germany", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Unit Sales", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "germany", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "units "
+        }, 
+        {
+            "wh_path": [
+                "Germany", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " TDP", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "germany", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "distribution "
+        }, 
+        {
+            "wh_path": [
+                "Germany", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Innovation TDP share", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "germany", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "innovations "
+        }, 
+        {
+            "wh_path": [
+                "Germany", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Premiumization", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "germany", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "premiumization "
+        }, 
+        {
+            "wh_path": [
+                "Germany", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Media Spend", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "germany", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "media "
+        }, 
+        {
+            "wh_path": [
+                "Germany", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Avg % Discount", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "germany", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "discount "
+        }, 
+        {
+            "wh_path": [
+                "Germany", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Avg % Promo Support", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "germany", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "support "
+        }, 
+        {
+            "wh_path": [
+                "Germany", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Avg % Volume sold as Promo", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "germany", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "volume_sold_as_promo "
+        }, 
+        {
+            "wh_path": [
+                "Brazil", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Value Sales", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "brazil", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "value "
+        }, 
+        {
+            "wh_path": [
+                "Brazil", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Volume Sales", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "brazil", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "eq_volume "
+        }, 
+        {
+            "wh_path": [
+                "Brazil", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Unit Sales", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "brazil", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "units "
+        }, 
+        {
+            "wh_path": [
+                "Brazil", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " TDP", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "brazil", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "distribution "
+        }, 
+        {
+            "wh_path": [
+                "Brazil", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Innovation TDP share", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "brazil", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "innovations "
+        }, 
+        {
+            "wh_path": [
+                "Brazil", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Premiumization", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "brazil", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "premiumization "
+        }, 
+        {
+            "wh_path": [
+                "Brazil", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Media Spend", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "brazil", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "media "
+        }, 
+        {
+            "wh_path": [
+                "Brazil", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Avg % Discount", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "brazil", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "discount "
+        }, 
+        {
+            "wh_path": [
+                "Brazil", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Avg % Promo Support", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "brazil", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "support "
+        }, 
+        {
+            "wh_path": [
+                "Brazil", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Avg % Volume sold as Promo", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "brazil", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "volume_sold_as_promo "
+        }, 
+        {
+            "wh_path": [
+                "Spain", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Value Sales", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "spain", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "value "
+        }, 
+        {
+            "wh_path": [
+                "Spain", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Volume Sales", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "spain", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "eq_volume "
+        }, 
+        {
+            "wh_path": [
+                "Spain", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Unit Sales", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "spain", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "units "
+        }, 
+        {
+            "wh_path": [
+                "Spain", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " TDP", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "spain", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "distribution "
+        }, 
+        {
+            "wh_path": [
+                "Spain", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Innovation TDP share", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "spain", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "innovations "
+        }, 
+        {
+            "wh_path": [
+                "Spain", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Premiumization", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "spain", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "premiumization "
+        }, 
+        {
+            "wh_path": [
+                "Spain", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Media Spend", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "spain", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "media "
+        }, 
+        {
+            "wh_path": [
+                "Spain", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Avg % Discount", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "spain", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "discount "
+        }, 
+        {
+            "wh_path": [
+                "Spain", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Avg % Promo Support", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "spain", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "support "
+        }, 
+        {
+            "wh_path": [
+                "Spain", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Avg % Volume sold as Promo", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "spain", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "volume_sold_as_promo "
+        }, 
+        {
+            "wh_path": [
+                "Italy", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Value Sales", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "italy", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "value "
+        }, 
+        {
+            "wh_path": [
+                "Italy", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Volume Sales", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "italy", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "eq_volume "
+        }, 
+        {
+            "wh_path": [
+                "Italy", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Unit Sales", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "italy", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "units "
+        }, 
+        {
+            "wh_path": [
+                "Italy", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " TDP", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "italy", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "distribution "
+        }, 
+        {
+            "wh_path": [
+                "Italy", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Innovation TDP share", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "italy", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "innovations "
+        }, 
+        {
+            "wh_path": [
+                "Italy", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Premiumization", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "italy", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "premiumization "
+        }, 
+        {
+            "wh_path": [
+                "Italy", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Media Spend", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "italy", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "media "
+        }, 
+        {
+            "wh_path": [
+                "Italy", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Avg % Discount", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "italy", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "discount "
+        }, 
+        {
+            "wh_path": [
+                "Italy", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Avg % Promo Support", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "italy", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "support "
+        }, 
+        {
+            "wh_path": [
+                "Italy", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Avg % Volume sold as Promo", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "italy", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "volume_sold_as_promo "
+        }, 
+        {
+            "wh_path": [
+                "UK", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Value Sales", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "uk", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "value "
+        }, 
+        {
+            "wh_path": [
+                "UK", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Volume Sales", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "uk", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "eq_volume "
+        }, 
+        {
+            "wh_path": [
+                "UK", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Unit Sales", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "uk", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "units "
+        }, 
+        {
+            "wh_path": [
+                "UK", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " TDP", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "uk", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "distribution "
+        }, 
+        {
+            "wh_path": [
+                "UK", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Innovation TDP share", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "uk", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "innovations "
+        }, 
+        {
+            "wh_path": [
+                "UK", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Premiumization", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "uk", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "premiumization "
+        }, 
+        {
+            "wh_path": [
+                "UK", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Media Spend", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "uk", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "media "
+        }, 
+        {
+            "wh_path": [
+                "UK", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Avg % Discount", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "uk", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "discount "
+        }, 
+        {
+            "wh_path": [
+                "UK", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Avg % Promo Support", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "uk", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "support "
+        }, 
+        {
+            "wh_path": [
+                "UK", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Avg % Volume sold as Promo", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "uk", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "volume_sold_as_promo "
+        }, 
+        {
+            "wh_path": [
+                "Japan", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Value Sales", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "japan", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "value "
+        }, 
+        {
+            "wh_path": [
+                "Japan", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Volume Sales", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "japan", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "eq_volume "
+        }, 
+        {
+            "wh_path": [
+                "Japan", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Unit Sales", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "japan", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "units "
+        }, 
+        {
+            "wh_path": [
+                "Japan", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " TDP", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "japan", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "distribution "
+        }, 
+        {
+            "wh_path": [
+                "Japan", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Innovation TDP share", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "japan", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "innovations "
+        }, 
+        {
+            "wh_path": [
+                "Japan", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Premiumization", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "japan", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "premiumization "
+        }, 
+        {
+            "wh_path": [
+                "Japan", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Media Spend", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "japan", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "media "
+        }, 
+        {
+            "wh_path": [
+                "Japan", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Avg % Discount", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "japan", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "discount "
+        }, 
+        {
+            "wh_path": [
+                "Japan", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Avg % Promo Support", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "japan", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "support "
+        }, 
+        {
+            "wh_path": [
+                "Japan", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Avg % Volume sold as Promo", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "japan", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "volume_sold_as_promo "
+        }, 
+        {
+            "wh_path": [
+                "Australia", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Value Sales", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "australia", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "value "
+        }, 
+        {
+            "wh_path": [
+                "Australia", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Volume Sales", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "australia", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "eq_volume "
+        }, 
+        {
+            "wh_path": [
+                "Australia", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Unit Sales", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "australia", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "units "
+        }, 
+        {
+            "wh_path": [
+                "Australia", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " TDP", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "australia", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "distribution "
+        }, 
+        {
+            "wh_path": [
+                "Australia", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Innovation TDP share", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "australia", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "innovations "
+        }, 
+        {
+            "wh_path": [
+                "Australia", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Premiumization", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "australia", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "premiumization "
+        }, 
+        {
+            "wh_path": [
+                "Australia", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Media Spend", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "australia", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "media "
+        }, 
+        {
+            "wh_path": [
+                "Australia", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Avg % Discount", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "australia", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "discount "
+        }, 
+        {
+            "wh_path": [
+                "Australia", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Avg % Promo Support", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "australia", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "support "
+        }, 
+        {
+            "wh_path": [
+                "Australia", 
+                "JJOralCare", 
+                "Mouthwash"
+            ], 
+            "wh_var": " Avg % Volume sold as Promo", 
+            "cont_slot": "1", 
+            "wh_ts": "annual", 
+            "cont_ts": "annual", 
+            "cont_path": [
+                "australia", 
+                "mouthwash"
+            ], 
+            "time_period": "history", 
+            "wh_slot": "1", 
+            "cont_var": "volume_sold_as_promo "
+        }
+    ], 
+    "timelines_properties": [
+        {
+            "aliase end": "2018", 
+            "alias": "all", 
+            "alias name ": "annual", 
+            "aliase start": "2013"
+        }, 
+        {
+            "aliase end": "2015", 
+            "alias": "history", 
+            "alias name ": "annual", 
+            "aliase start": "2013"
+        }, 
+        {
+            "aliase end": "2018", 
+            "alias": "forecast", 
+            "alias name ": "annual", 
+            "aliase start": "2016"
+        }
+    ], 
+    "timelines": [
+        {
+            "growth_lag": "1", 
+            "name_full": "2012", 
+            "children": "", 
+            "name_short": "2012", 
+            "top_ts_points_id": "1", 
+            "properties": "annual"
+        }, 
+        {
+            "growth_lag": "1", 
+            "name_full": "2013", 
+            "children": "", 
+            "name_short": "2013", 
+            "top_ts_points_id": "2", 
+            "properties": "annual"
+        }, 
+        {
+            "growth_lag": "1", 
+            "name_full": "2014", 
+            "children": "", 
+            "name_short": "2014", 
+            "top_ts_points_id": "3", 
+            "properties": "annual"
+        }, 
+        {
+            "growth_lag": "1", 
+            "name_full": "2015", 
+            "children": "", 
+            "name_short": "2015", 
+            "top_ts_points_id": "4", 
+            "properties": "annual"
+        }, 
+        {
+            "growth_lag": "1", 
+            "name_full": "2016", 
+            "children": "", 
+            "name_short": "2016", 
+            "top_ts_points_id": "5", 
+            "properties": "annual"
+        }, 
+        {
+            "growth_lag": "1", 
+            "name_full": "2017", 
+            "children": "", 
+            "name_short": "2017", 
+            "top_ts_points_id": "6", 
+            "properties": "annual"
+        }, 
+        {
+            "growth_lag": "1", 
+            "name_full": "2018", 
+            "children": "", 
+            "name_short": "2018", 
+            "top_ts_points_id": "7", 
+            "properties": "annual"
+        }
+    ], 
+    "project_properties": [
+        {
+            "name": "dimensions", 
+            "value": [
+                "geography", 
+                "products"
+            ]
+        }, 
+        {
+            "name": "dash_timescales", 
+            "value": [
+                "annual"
+            ]
+        }, 
+        {
+            "name": "dash_decomposition_timescales", 
+            "value": [
+                "annual"
+            ]
+        }, 
+        {
+            "name": "dash_top_ts_period", 
+            "value": [
+                "2013", 
+                "2016"
+            ]
+        }
+    ], 
+    "selector_properties": [
+        {
+            "multiple": "1", 
+            "lang-ru-placeholder": "2Country", 
+            "lang-ru-name": "2Country", 
+            "type": "flat", 
+            "lang-en-placeholder": "Country", 
+            "lang-en-name": "Country", 
+            "id": "geography", 
+            "icon": ""
+        }, 
+        {
+            "multiple": "1", 
+            "lang-ru-placeholder": "2Category", 
+            "lang-ru-name": "2Category", 
+            "type": "flat", 
+            "lang-en-placeholder": "Category", 
+            "lang-en-name": "Category", 
+            "id": "products", 
+            "icon": ""
+        }
+    ], 
+    "variable_properties": [
+        {
+            "lang-en-full_name": "Population", 
+            "format": " '0,000'", 
+            "lang-ru-metric": "2Person", 
+            "lang-en-metric": "Person", 
+            "lang-ru-short_name": "2Population", 
+            "multiplier": "1000000", 
+            "lang-ru-full_name": "2Population", 
+            "id": "population", 
+            "lang-en-short_name": "Population"
+        }, 
+        {
+            "lang-en-full_name": "CPI", 
+            "format": "0'", 
+            "lang-ru-metric": "2Index", 
+            "lang-en-metric": "Index", 
+            "lang-ru-short_name": "2CPI", 
+            "multiplier": "1", 
+            "lang-ru-full_name": "2CPI", 
+            "id": "cpi", 
+            "lang-en-short_name": "CPI"
+        }, 
+        {
+            "lang-en-full_name": "Real GDP per capita", 
+            "format": " '0,000'", 
+            "lang-ru-metric": "2Local currency", 
+            "lang-en-metric": "Local currency", 
+            "lang-ru-short_name": "2Real GDP per capita", 
+            "multiplier": "1000", 
+            "lang-ru-full_name": "2Real GDP per capita", 
+            "id": "gdp", 
+            "lang-en-short_name": "Real GDP per capita"
+        }, 
+        {
+            "lang-en-full_name": "Sales", 
+            "format": "0,000", 
+            "lang-ru-metric": "2Local currency", 
+            "lang-en-metric": "Local currency", 
+            "lang-ru-short_name": "2Sales", 
+            "multiplier": "1000", 
+            "lang-ru-full_name": "2Sales", 
+            "id": "value", 
+            "lang-en-short_name": "Sales"
+        }, 
+        {
+            "lang-en-full_name": "Volume", 
+            "format": "0,000", 
+            "lang-ru-metric": "2EQ", 
+            "lang-en-metric": "EQ", 
+            "lang-ru-short_name": "2Volume", 
+            "multiplier": "1000", 
+            "lang-ru-full_name": "2Volume", 
+            "id": "eq_volume", 
+            "lang-en-short_name": "Volume"
+        }, 
+        {
+            "lang-en-full_name": "Price", 
+            "format": "0", 
+            "lang-ru-metric": "2Local currency", 
+            "lang-en-metric": "Local currency", 
+            "lang-ru-short_name": "2Price", 
+            "multiplier": "1", 
+            "lang-ru-full_name": "2Price", 
+            "id": "eq_price", 
+            "lang-en-short_name": "Price"
+        }, 
+        {
+            "lang-en-full_name": "Units", 
+            "format": "0,000", 
+            "lang-ru-metric": "2Items", 
+            "lang-en-metric": "Items", 
+            "lang-ru-short_name": "2Units", 
+            "multiplier": "1000", 
+            "lang-ru-full_name": "2Units", 
+            "id": "units", 
+            "lang-en-short_name": "Units"
+        }, 
+        {
+            "lang-en-full_name": "Distribution", 
+            "format": "0,000", 
+            "lang-ru-metric": "2TDP", 
+            "lang-en-metric": "TDP", 
+            "lang-ru-short_name": "2Distribution", 
+            "multiplier": "1000", 
+            "lang-ru-full_name": "2Distribution", 
+            "id": "distribution", 
+            "lang-en-short_name": "Distribution"
+        }, 
+        {
+            "lang-en-full_name": "Innovations Share", 
+            "format": "0.##%", 
+            "lang-ru-metric": "2%", 
+            "lang-en-metric": "%", 
+            "lang-ru-short_name": "2Innovations Share", 
+            "multiplier": "1", 
+            "lang-ru-full_name": "2Innovations Share", 
+            "id": "innovations", 
+            "lang-en-short_name": "Innovations Share"
+        }, 
+        {
+            "lang-en-full_name": "Price per Unit", 
+            "format": "0", 
+            "lang-ru-metric": "2Local currency", 
+            "lang-en-metric": "Local currency", 
+            "lang-ru-short_name": "2unit_price", 
+            "multiplier": "1", 
+            "lang-ru-full_name": "2Price per Unit", 
+            "id": "unit_price", 
+            "lang-en-short_name": "unit_price"
+        }, 
+        {
+            "lang-en-full_name": "Unit Size", 
+            "format": "0", 
+            "lang-ru-metric": "2EQ", 
+            "lang-en-metric": "EQ", 
+            "lang-ru-short_name": "2unit_size", 
+            "multiplier": "1", 
+            "lang-ru-full_name": "2Unit Size", 
+            "id": "unit_size", 
+            "lang-en-short_name": "unit_size"
+        }, 
+        {
+            "lang-en-full_name": "Premiumization", 
+            "format": "0", 
+            "lang-ru-metric": "2Index", 
+            "lang-en-metric": "Index", 
+            "lang-ru-short_name": "2premiumization", 
+            "multiplier": "1", 
+            "lang-ru-full_name": "2Premiumization", 
+            "id": "premiumization", 
+            "lang-en-short_name": "premiumization"
+        }, 
+        {
+            "lang-en-full_name": "Advertising", 
+            "format": "0,000", 
+            "lang-ru-metric": "2Local currency", 
+            "lang-en-metric": "Local currency", 
+            "lang-ru-short_name": "2Advertising", 
+            "multiplier": "1000", 
+            "lang-ru-full_name": "2Advertising", 
+            "id": "media", 
+            "lang-en-short_name": "Advertising"
+        }, 
+        {
+            "lang-en-full_name": "Average Discount", 
+            "format": "0", 
+            "lang-ru-metric": "%", 
+            "lang-en-metric": "%", 
+            "lang-ru-short_name": "2Average Discount", 
+            "multiplier": "1", 
+            "lang-ru-full_name": "2Average Discount", 
+            "id": "discount", 
+            "lang-en-short_name": "Average Discount"
+        }, 
+        {
+            "lang-en-full_name": "Average Promo Support", 
+            "format": "0", 
+            "lang-ru-metric": "%", 
+            "lang-en-metric": "%", 
+            "lang-ru-short_name": "2Average Promo Support", 
+            "multiplier": "1", 
+            "lang-ru-full_name": "2Average Promo Support", 
+            "id": "support", 
+            "lang-en-short_name": "Average Promo Support"
+        }, 
+        {
+            "lang-en-full_name": "Consumer Trend", 
+            "format": "0", 
+            "lang-ru-metric": "%", 
+            "lang-en-metric": "%", 
+            "lang-ru-short_name": "2Consumer Trend", 
+            "multiplier": "1", 
+            "lang-ru-full_name": "2Consumer Trend", 
+            "id": "ltt", 
+            "lang-en-short_name": "Consumer Trend"
+        }, 
+        {
+            "lang-en-full_name": "Demographics", 
+            "format": "0", 
+            "lang-ru-metric": "%", 
+            "lang-en-metric": "%", 
+            "lang-ru-short_name": "2Demographics", 
+            "multiplier": "1", 
+            "lang-ru-full_name": "2Demographics", 
+            "id": "dec_val_demo", 
+            "lang-en-short_name": "Demographics"
+        }, 
+        {
+            "lang-en-full_name": "Economy", 
+            "format": "0", 
+            "lang-ru-metric": "%", 
+            "lang-en-metric": "%", 
+            "lang-ru-short_name": "2Economy", 
+            "multiplier": "1", 
+            "lang-ru-full_name": "2Economy", 
+            "id": "dec_val_economy", 
+            "lang-en-short_name": "Economy"
+        }, 
+        {
+            "lang-en-full_name": "Distribution", 
+            "format": "0", 
+            "lang-ru-metric": "%", 
+            "lang-en-metric": "%", 
+            "lang-ru-short_name": "2Distribution", 
+            "multiplier": "1", 
+            "lang-ru-full_name": "2Distribution", 
+            "id": "dec_val_distribution", 
+            "lang-en-short_name": "Distribution"
+        }, 
+        {
+            "lang-en-full_name": "Innovations", 
+            "format": "0", 
+            "lang-ru-metric": "%", 
+            "lang-en-metric": "%", 
+            "lang-ru-short_name": "2Innovations", 
+            "multiplier": "1", 
+            "lang-ru-full_name": "2Innovations", 
+            "id": "dec_val_innovations", 
+            "lang-en-short_name": "Innovations"
+        }, 
+        {
+            "lang-en-full_name": "Advertising", 
+            "format": "0", 
+            "lang-ru-metric": "%", 
+            "lang-en-metric": "%", 
+            "lang-ru-short_name": "2Advertising", 
+            "multiplier": "1", 
+            "lang-ru-full_name": "2Advertising", 
+            "id": "dec_val_advertising", 
+            "lang-en-short_name": "Advertising"
+        }, 
+        {
+            "lang-en-full_name": "Trade on Volume", 
+            "format": "0", 
+            "lang-ru-metric": "%", 
+            "lang-en-metric": "%", 
+            "lang-ru-short_name": "2Trade on Volume", 
+            "multiplier": "1", 
+            "lang-ru-full_name": "2Trade on Volume", 
+            "id": "dec_vol_trade_on_vol", 
+            "lang-en-short_name": "Trade on Volume"
+        }, 
+        {
+            "lang-en-full_name": "Promo on Volume", 
+            "format": "0", 
+            "lang-ru-metric": "%", 
+            "lang-en-metric": "%", 
+            "lang-ru-short_name": "2Promo on Volume", 
+            "multiplier": "1", 
+            "lang-ru-full_name": "2Promo on Volume", 
+            "id": "dec_vol_promo_on_vol", 
+            "lang-en-short_name": "Promo on Volume"
+        }, 
+        {
+            "lang-en-full_name": "Trade and Promo on Volume", 
+            "format": "0", 
+            "lang-ru-metric": "%", 
+            "lang-en-metric": "%", 
+            "lang-ru-short_name": "2Trade and Promo on Volume", 
+            "multiplier": "1", 
+            "lang-ru-full_name": "2Trade and Promo on Volume", 
+            "id": "dec_val_trade_promo_on_vol", 
+            "lang-en-short_name": "Trade and Promo on Volume"
+        }, 
+        {
+            "lang-en-full_name": "Pricing", 
+            "format": "0", 
+            "lang-ru-metric": "%", 
+            "lang-en-metric": "%", 
+            "lang-ru-short_name": "2Pricing", 
+            "multiplier": "1", 
+            "lang-ru-full_name": "2Pricing", 
+            "id": "dec_val_price_on_vol", 
+            "lang-en-short_name": "Pricing"
+        }, 
+        {
+            "lang-en-full_name": "unit_size on Volume", 
+            "format": "0", 
+            "lang-ru-metric": "%", 
+            "lang-en-metric": "%", 
+            "lang-ru-short_name": "2unit_size on Volume", 
+            "multiplier": "1", 
+            "lang-ru-full_name": "2unit_size on Volume", 
+            "id": "dec_val_unit_size_on_vol", 
+            "lang-en-short_name": "unit_size on Volume"
+        }, 
+        {
+            "lang-en-full_name": "Inflation", 
+            "format": "0", 
+            "lang-ru-metric": "%", 
+            "lang-en-metric": "%", 
+            "lang-ru-short_name": "2Inflation", 
+            "multiplier": "1", 
+            "lang-ru-full_name": "2Inflation", 
+            "id": "dec_val_inflation", 
+            "lang-en-short_name": "Inflation"
+        }, 
+        {
+            "lang-en-full_name": "Manufacturer pricing", 
+            "format": "0", 
+            "lang-ru-metric": "%", 
+            "lang-en-metric": "%", 
+            "lang-ru-short_name": "2Manufacturer pricing", 
+            "multiplier": "1", 
+            "lang-ru-full_name": "2Manufacturer pricing", 
+            "id": "dec_val_man_pricing", 
+            "lang-en-short_name": "Manufacturer pricing"
+        }, 
+        {
+            "lang-en-full_name": "Premiumization", 
+            "format": "0", 
+            "lang-ru-metric": "%", 
+            "lang-en-metric": "%", 
+            "lang-ru-short_name": "2Premiumization", 
+            "multiplier": "1", 
+            "lang-ru-full_name": "2Premiumization", 
+            "id": "dec_val_premiumization", 
+            "lang-en-short_name": "Premiumization"
+        }, 
+        {
+            "lang-en-full_name": "Trade", 
+            "format": "0", 
+            "lang-ru-metric": "%", 
+            "lang-en-metric": "%", 
+            "lang-ru-short_name": "2Trade", 
+            "multiplier": "1", 
+            "lang-ru-full_name": "2Trade", 
+            "id": "dec_val_trade", 
+            "lang-en-short_name": "Trade"
+        }, 
+        {
+            "lang-en-full_name": "Promo", 
+            "format": "0", 
+            "lang-ru-metric": "%", 
+            "lang-en-metric": "%", 
+            "lang-ru-short_name": "2Promo", 
+            "multiplier": "1", 
+            "lang-ru-full_name": "2Promo", 
+            "id": "dec_val_promo", 
+            "lang-en-short_name": "Promo"
+        }, 
+        {
+            "lang-en-full_name": "Trade and Promo", 
+            "format": "0", 
+            "lang-ru-metric": "%", 
+            "lang-en-metric": "%", 
+            "lang-ru-short_name": "2Trade and Promo", 
+            "multiplier": "1", 
+            "lang-ru-full_name": "2Trade and Promo", 
+            "id": "dec_val_trade_promo", 
+            "lang-en-short_name": "Trade and Promo"
+        }, 
+        {
+            "lang-en-full_name": "Unit size in Price", 
+            "format": "0", 
+            "lang-ru-metric": "%", 
+            "lang-en-metric": "%", 
+            "lang-ru-short_name": "2Unit size in Price", 
+            "multiplier": "1", 
+            "lang-ru-full_name": "2Unit size in Price", 
+            "id": "dec_val_unit_size", 
+            "lang-en-short_name": "Unit size in Price"
+        }, 
+        {
+            "lang-en-full_name": "Other", 
+            "format": "0", 
+            "lang-ru-metric": "%", 
+            "lang-en-metric": "%", 
+            "lang-ru-short_name": "2Other", 
+            "multiplier": "1", 
+            "lang-ru-full_name": "2Other", 
+            "id": "dec_val_other", 
+            "lang-en-short_name": "Other"
+        }, 
+        {
+            "lang-en-full_name": "Demographics", 
+            "format": "0", 
+            "lang-ru-metric": "%", 
+            "lang-en-metric": "%", 
+            "lang-ru-short_name": "2Demographics", 
+            "multiplier": "1", 
+            "lang-ru-full_name": "2Demographics", 
+            "id": "dec_vol_demo", 
+            "lang-en-short_name": "Demographics"
+        }, 
+        {
+            "lang-en-full_name": "Economy", 
+            "format": "0", 
+            "lang-ru-metric": "%", 
+            "lang-en-metric": "%", 
+            "lang-ru-short_name": "2Economy", 
+            "multiplier": "1", 
+            "lang-ru-full_name": "2Economy", 
+            "id": "dec_vol_economy", 
+            "lang-en-short_name": "Economy"
+        }, 
+        {
+            "lang-en-full_name": "Distribution", 
+            "format": "0", 
+            "lang-ru-metric": "%", 
+            "lang-en-metric": "%", 
+            "lang-ru-short_name": "2Distribution", 
+            "multiplier": "1", 
+            "lang-ru-full_name": "2Distribution", 
+            "id": "dec_vol_distribution", 
+            "lang-en-short_name": "Distribution"
+        }, 
+        {
+            "lang-en-full_name": "Innovations", 
+            "format": "0", 
+            "lang-ru-metric": "%", 
+            "lang-en-metric": "%", 
+            "lang-ru-short_name": "2Innovations", 
+            "multiplier": "1", 
+            "lang-ru-full_name": "2Innovations", 
+            "id": "dec_vol_innovations", 
+            "lang-en-short_name": "Innovations"
+        }, 
+        {
+            "lang-en-full_name": "Advertising", 
+            "format": "0", 
+            "lang-ru-metric": "%", 
+            "lang-en-metric": "%", 
+            "lang-ru-short_name": "2Advertising", 
+            "multiplier": "1", 
+            "lang-ru-full_name": "2Advertising", 
+            "id": "dec_vol_advertising", 
+            "lang-en-short_name": "Advertising"
+        }, 
+        {
+            "lang-en-full_name": "Trade on Volume", 
+            "format": "0", 
+            "lang-ru-metric": "%", 
+            "lang-en-metric": "%", 
+            "lang-ru-short_name": "2Trade on Volume", 
+            "multiplier": "1", 
+            "lang-ru-full_name": "2Trade on Volume", 
+            "id": "dec_vol_trade_on_vol", 
+            "lang-en-short_name": "Trade on Volume"
+        }, 
+        {
+            "lang-en-full_name": "Promo on Volume", 
+            "format": "0", 
+            "lang-ru-metric": "%", 
+            "lang-en-metric": "%", 
+            "lang-ru-short_name": "2Promo on Volume", 
+            "multiplier": "1", 
+            "lang-ru-full_name": "2Promo on Volume", 
+            "id": "dec_vol_promo_on_vol", 
+            "lang-en-short_name": "Promo on Volume"
+        }, 
+        {
+            "lang-en-full_name": "Trade and Promo on Volume", 
+            "format": "0", 
+            "lang-ru-metric": "%", 
+            "lang-en-metric": "%", 
+            "lang-ru-short_name": "2Trade and Promo on Volume", 
+            "multiplier": "1", 
+            "lang-ru-full_name": "2Trade and Promo on Volume", 
+            "id": "dec_vol_trade_promo_on_vol", 
+            "lang-en-short_name": "Trade and Promo on Volume"
+        }, 
+        {
+            "lang-en-full_name": "Pricing", 
+            "format": "0", 
+            "lang-ru-metric": "%", 
+            "lang-en-metric": "%", 
+            "lang-ru-short_name": "2Pricing", 
+            "multiplier": "1", 
+            "lang-ru-full_name": "2Pricing", 
+            "id": "dec_vol_price_on_vol", 
+            "lang-en-short_name": "Pricing"
+        }, 
+        {
+            "lang-en-full_name": "Unit size on Volume", 
+            "format": "0", 
+            "lang-ru-metric": "%", 
+            "lang-en-metric": "%", 
+            "lang-ru-short_name": "2Unit size on Volume", 
+            "multiplier": "1", 
+            "lang-ru-full_name": "2Unit size on Volume", 
+            "id": "dec_vol_unit_size_on_vol", 
+            "lang-en-short_name": "Unit size on Volume"
+        }, 
+        {
+            "lang-en-full_name": "Consumer Trend", 
+            "format": "0", 
+            "lang-ru-metric": "%", 
+            "lang-en-metric": "%", 
+            "lang-ru-short_name": "2Consumer Trend", 
+            "multiplier": "1", 
+            "lang-ru-full_name": "2Consumer Trend", 
+            "id": "dec_vol_ltt", 
+            "lang-en-short_name": "Consumer Trend"
+        }
+    ]
+}
