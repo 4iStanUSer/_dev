@@ -81,6 +81,8 @@ def forecast_routing(config):
     #context='myproject.resources.Hello', renderer='json' !!!!!!
     config.add_route('forecast.index', '/')
     config.add_view(f_common.index_view, route_name='forecast.index')
+    config.add_view(f_common.index_view, route_name='forecast.index')
+    config.add_view(f_common.index_view, route_name='forecast.index')
 
     config.add_route('forecast.get_index_page_data',
                      '/get_index_page_data')
