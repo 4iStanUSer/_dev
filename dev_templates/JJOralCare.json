@@ -3885,11 +3885,39 @@
         }, 
         {
             "path": [
+                "uk", 
+                "mouthwash", 
+                "toothpaste"
+            ], 
+            "dimension": "products2", 
+            "level": "category"
+        }, 
+        {
+            "path": [
+                "uk", 
+                "mouthwash", 
+                "toothpaste", 
+                "wallmart"
+            ], 
+            "dimension": "market", 
+            "level": "channel"
+        }, 
+        {
+            "path": [
                 "japan", 
                 "mouthwash"
             ], 
             "dimension": "products", 
             "level": "category"
+        }, 
+        {
+            "path": [
+                "japan", 
+                "mouthwash", 
+                "wallmart"
+            ], 
+            "dimension": "market", 
+            "level": "channel"
         }, 
         {
             "path": [
@@ -6699,7 +6727,9 @@
             "name": "dimensions", 
             "value": [
                 "geography", 
-                "products"
+                "products", 
+                "products2", 
+                "market"
             ]
         }, 
         {

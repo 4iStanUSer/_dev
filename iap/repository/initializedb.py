@@ -113,7 +113,7 @@ def main(argv=sys.argv):
         user_2.roles.append(role_forecast)
 
         #Add data permission:
-        permission = Permission(name = "Development Template")
+        permission = Permission(name="Development Template")
 
         for data in perm_data["JJOralCare"]:
             data_permission = DataPermission(project="JJOralCare", in_path=data['in_path'],
@@ -151,7 +151,7 @@ def main(argv=sys.argv):
         #Add Project and Pr_Tool
 
         """
-        Create table for storing inforamtion about pojects and tools
+        Create table for storing information about projects and tools
 
         :param request:
         :type request:
