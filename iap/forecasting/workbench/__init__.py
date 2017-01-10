@@ -69,16 +69,31 @@ class Workbench:
         # Build search index.
 
         dim_names = self.data_config.get_property('dimensions')
+        #Build Search Index
         direct_index, reverse_index = \
             dim_service.build_search_index(self.container, dim_names)
+
         self.search_index['order'] = dim_names
         self.search_index['direct'] = direct_index
         self.search_index['reverse'] = reverse_index
+        print("Search Index", self.search_index)
+
         # Set selection by default.
-        empty_query = dim_service.get_empty_query(self.search_index)
+        #empty_query = #dim_service.get_empty_query(self.search_index)
+        empty_query = {'products': [], 'products2': [], 'geography': [],'market':["wallmart"]}
         opts, ents = \
             dim_service.search_by_query(self.search_index, empty_query)
+        print("Opts", opts)
+        print("Ents", ents)
+
         self.selection = ents
+        """
+        {'products': [], 'geography': []}
+
+        Opts {'products': {'data': [{'id': 'mouthwash', 'name': 'mouthwash', 'parent_id': None}, {'id': 'total', 'name': 'total', 'parent_id': None}], 'selected': ['mouthwash']}, 'geography': {'data': [{'id': 'mexico', 'name': 'mexico', 'parent_id': None}, {'id': 'italy', 'name': 'italy', 'parent_id': None}, {'id': 'germany', 'name': 'germany', 'parent_id': None}, {'id': 'brazil', 'name': 'brazil', 'parent_id': None}, {'id': 'japan', 'name': 'japan', 'parent_id': None}, {'id': 'uk', 'name': 'uk', 'parent_id': None}, {'id': 'canada', 'name': 'canada', 'parent_id': None}, {'id': 'us', 'name': 'us', 'parent_id': None}, {'id': 'spain', 'name': 'spain', 'parent_id': None}, {'id': 'australia', 'name': 'australia', 'parent_id': None}], 'selected': ['australia']}}
+Ents [20]
+        """
+
 
         # Init local access manager.
         #for item in user_access_rights:

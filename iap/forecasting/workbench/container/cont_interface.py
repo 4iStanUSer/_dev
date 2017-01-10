@@ -107,7 +107,7 @@ class Container:
 
     @property
     def top_entities(self):
-        '''Return EnityData that coresspond to the fist generation of Node
+        '''Return Entity Data that corresspond to the fist generation of Node
 
             Return:
              (list): list of EntityData
