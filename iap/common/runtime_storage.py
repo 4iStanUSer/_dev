@@ -28,7 +28,12 @@ class State:
     @property
     def language(self):
         return self._lang
-
+    @property
+    def isempty(self):
+        if self._tool_id==None and self._project_id == None:
+            return True
+        else:
+            return False
 
 class RunTimeStorage:
 
@@ -41,6 +46,7 @@ class RunTimeStorage:
 
     def get_state(self, user_id):
         return self._get_user_box(user_id)['state']
+
 
     def update_state(self, user_id, **kwargs):
         user_box = self._get_user_box(user_id)
@@ -68,8 +74,13 @@ class RunTimeStorage:
 
     def _get_user_box(self, user_id):
         user_box = self._collection.get(user_id)
+        print("Collection", self._collection)
+        print("User box", user_box)
+        if user_box is None and self._load_state(user_id) is None:
+            pass
         if user_box is None:
             state = self._load_state(user_id)
+            print("Load state", state)
             wb = self._load_wb(state.user_id, state.tool_id, state.project_id)
             user_box = dict(state=state, wb=wb)
             with self._lock:
@@ -85,6 +96,8 @@ class RunTimeStorage:
         # Load backup
         backup = persistent_storage.load_backup(user_id, tool_id, project_id,
                                                 'default')
+
+        print("Backup", backup)
         if backup is None:
             raise ex.BackupNotFoundError(user_id, tool_id, project_id)
         wb_class = self._get_wb_class_by_tool(tool_id)

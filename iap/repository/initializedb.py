@@ -169,7 +169,7 @@ def main(argv=sys.argv):
         ssn.add(project_1)
         ssn.add(project_2)
 
-        user_id = '111'
+        user_id = 2
         tool_id = 'forecast'
         #wb = Workbench(user_id)
         #wb.init_load(wh, dev_template_JJLean)

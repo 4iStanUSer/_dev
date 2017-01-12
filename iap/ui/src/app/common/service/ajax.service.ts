@@ -175,10 +175,11 @@ export class AjaxService {
             let sync = (options.sync) ? options.sync : false;
             let url_id = options.url_id;
             let subject = new Subject<any>();
+            let new_data = {'data': options.data, 'X_Token':localStorage.getItem('currentUser')};
             let req = this.makeRequestInst({
                 url: this.getUrl(url_id),
                 method: 'get',
-                data: options.data
+                data: new_data
             });
             console.log('reqQueue',req);
             this.reqQueue.push({
@@ -215,15 +216,16 @@ export class AjaxService {
             && options.url_id.length > 0
 
         ) {
-            options.data['X_token'] = localStorage.getItem('currentUser');
+
             let id = this.counter++;
             let sync = (options.sync) ? options.sync : false;
             let url_id = options.url_id;
             let subject = new Subject<any>();
+            let new_data = {'data': options.data, 'X-Token':localStorage.getItem('currentUser')};
             let req = this.makeRequestInst({
                 url: this.getUrl(url_id),
                 method: 'post',
-                data: options.data
+                data: new_data
 
             });
             console.log('reqQueue',req);

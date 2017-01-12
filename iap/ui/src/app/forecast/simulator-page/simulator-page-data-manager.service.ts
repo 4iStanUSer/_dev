@@ -22,7 +22,7 @@ export class SimulatorPageDataManagerService {
         if (id && +id) {
             data['entity_id'] = +id;
         }
-        let resp = this.req.get({
+        let resp = this.req.post({
             'url_id': 'forecast/get_dashboard_data',
             'data': data
         });

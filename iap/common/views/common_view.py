@@ -4,6 +4,7 @@ from pyramid.renderers import render_to_response
 from pyramid import threadlocal
 from pyramid.paster import get_appsettings
 from ...common.helper import send_success_response, send_error_response
+from ..security import get_user
 from ...common.tools_config import get_page_config
 from ...common.error_manager import ErrorManager
 from ...common import exceptions as ex
@@ -80,9 +81,10 @@ def get_page_configuration(req):
     :return:
     :rtype:
     """
+    print("Get page configuration", req)
     try:
-        user_id = req.user
-        page_name = req.json_body['page']
+        user_id = get_user(req).id
+        page_name = req.json_body['data']['page']
     except KeyError:
         msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
         return send_error_response(msg)
@@ -91,6 +93,7 @@ def get_page_configuration(req):
         tool_id = state.tool_id
         language = state.language
         config = get_page_config(tool_id, page_name, language)
+        print("Config", config)
         return send_success_response(config)
     except Exception as e:
         msg = ErrorManager.get_error_message(e)
@@ -99,9 +102,10 @@ def get_page_configuration(req):
 
 def set_language(req):
     # Get parameters from request.
+    print("Set languages", req)
     try:
-        user_id = req.user
-        lang = req.json_body['lang']
+        user_id = get_user(req).id
+        lang = req.json_body['data']['lang']
     except KeyError:
         msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
         return send_error_response(msg)
@@ -123,8 +127,10 @@ def get_tools_with_projects(req):
     :return:
     :rtype: None
     """
+    print("Get Tools With projects", req)
     try:
         user_id = get_user(req).id
+        print("User", user_id)
     except KeyError:
         msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
         return send_error_response(msg)
@@ -133,13 +139,14 @@ def get_tools_with_projects(req):
         if not user_id:
             data['tools'] = common_getter.get_tools_info(pt)
         else:
-            #lang = rt.get_state(user_id).language
-            #tools_ids, projects_ids = pt.get_user_tools_with_projects(user_id)
+            lang = rt.get_state(user_id).language
+            tools_ids, projects_ids = pt.get_user_tools_with_projects(user_id)
             #data['tools'] = common_getter.get_tools_info(req, pt, tools_ids, lang)
 
             data['tools'] = common_getter.get_tools_info(req)
             #data['projects'] = common_getter.get_projects_info(req, pt, projects_ids, lang)
             data['projects'] = common_getter.get_projects_info(req)
+            print("Data", data)
         return send_success_response(data)
     except Exception as e:
         msg = ErrorManager.get_error_message(e)
@@ -147,8 +154,9 @@ def get_tools_with_projects(req):
 
 
 def get_data_for_header(req):
+    print("get_data_for_header", req)
     try:
-        user_id = req.user.id
+        user_id = get_user(req).id
     except KeyError:
         msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
         return send_error_response(msg)
@@ -159,6 +167,7 @@ def get_data_for_header(req):
         header_data['user'] = common_getter.get_user_info(pt, user_id, lang)
         header_data['client'] = common_getter.get_client_info(pt, user_id,
                                                               lang)
+        print("Header Data", header_data)
         return send_success_response(header_data)
     except Exception as e:
         msg = ErrorManager.get_error_message(e)
@@ -166,16 +175,18 @@ def get_data_for_header(req):
 
 
 def set_project_selection(req):
-
+    print("Set Poject Selection", req)
     try:
-        user_id = req.user
-        project_id = req.json_body['project_id']
+        user_id = get_user(req).id
+        project_id = req.json_body['data']['project_id']
     except KeyError:
         msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
         return send_error_response(msg)
     try:
+
         project = pt.get_project(id=project_id)
         rt.update_state(user_id, tool_id=project.tool_id, project_id=project.id)
+        print("Project", project)
         return send_success_response()
     except Exception as e:
         msg = ErrorManager.get_error_message(e)
@@ -191,6 +202,7 @@ def test_preparation(request):
     :return:
     :rtype:
     """
+
     from ...forecasting.views.scenarios import create_table, prepare_scenario_testing
     test_name = request.json_body['test_name']
     if test_name == "scenario":
