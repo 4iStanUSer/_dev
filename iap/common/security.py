@@ -35,8 +35,8 @@ def authorise(req):
     """
     users = req.dbsession.query(User).all()
     try:
-        username = req.json_body['username']
-        password = req.json_body['password']
+        username = req.json_body['data']['username']
+        password = req.json_body['data']['password']
         users = req.dbsession.query(User).all()
         user = req.dbsession.query(User).filter(User.email == username).one()
 

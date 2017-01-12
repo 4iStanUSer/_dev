@@ -22,7 +22,7 @@ export class ToolSelectorComponent implements OnInit {
         this.pptTool.id = "ppt";
         this.mmTool.id = "mm";
         this.req
-            .get({
+            .post({
                 'url_id': 'get_tools_with_projects',
                 'data': {}
             })
@@ -71,7 +71,7 @@ export class ToolSelectorComponent implements OnInit {
     }
 
     goToTool(toolId: string, projectId: string) {
-        this.req.get({ // TODO Make post query
+        this.req.post({ // TODO Make post query
             'url_id': 'select_project',
             'data': {
                 'tool_id': toolId,

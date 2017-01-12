@@ -26,7 +26,7 @@ export class ForecastComponent implements OnInit {
     ) {}
 
     ngOnInit() {
-        this.req.get({
+        this.req.post({
             url_id: 'get_page_configuration',
             data: {'page': 'common'}
         }).subscribe(
@@ -34,7 +34,7 @@ export class ForecastComponent implements OnInit {
                 this.proceedPageConfig(d);
             }
         );
-        this.req.get({
+        this.req.post({
             url_id: 'get_header_data',
             data: {}
         }).subscribe(
@@ -76,7 +76,7 @@ export class ForecastComponent implements OnInit {
     }
 
     languageChanged(newLangId: string) {
-        this.req.get({
+        this.req.post({
             url_id: 'set_language',
             data: { 'lang': newLangId }
         }).subscribe(
