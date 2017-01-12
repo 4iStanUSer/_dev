@@ -1,23 +1,32 @@
 from ...common.helper import send_success_response, send_error_response
 from ..workbench.services import data_management as data_service
-
+from ...common.security import *
 from ...common import exceptions as ex
 from ...common.error_manager import ErrorManager
 from ...common import runtime_storage as rt
 TOOL = 'forecast'
 
+
 def get_dashboard_data(req):
     # Get parameters from request.
+    print("Get Dashboard Data", req)
     try:
-        user_id = req.user
+        user_id = get_user(req).id
+        print("User Id", user_id)
     except KeyError:
         msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
         return send_error_response(msg)
     try:
         lang = rt.get_state(user_id).language
-        wb = rt.get_wb(user_id)
+        print("Lang", lang)
+        project_id = req.json_body['data']['project_id']
+        tool_id = req.json_body['data']['tool_id']
+        print("Pr Id", project_id, tool_id)
+        wb = rt._load_wb(user_id, tool_id, project_id)
+        print("WB", wb)
         data = data_service.get_entity_data(wb.container, wb.data_config,
                                             wb.selection, lang)
+        print("Data Loaded", data)
         return send_success_response(data)
     except Exception as e:
         msg = ErrorManager.get_error_message(e)
@@ -26,6 +35,7 @@ def get_dashboard_data(req):
 
 def get_cagrs_for_period(req):
     # Get parameters from request.
+    print("Get Carg for period", req)
     try:
         user_id = req.user
         entities_ids = req.json_body['entities_ids']

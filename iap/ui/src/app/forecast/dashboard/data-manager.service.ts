@@ -195,7 +195,9 @@ export class DataManagerService {
         this.req.post({
             'url_id': 'forecast/get_dashboard_data',
             'data': {
-                'entities_ids': [2] // TODO Replace
+                'entities_ids': [2],
+                'tool_id':1,
+                'project_id':1// TODO Replace
             }
         }).subscribe((data)=> {
                 this.isData['dynamic']['received'] = true;
@@ -394,7 +396,7 @@ export class DataManagerService {
      */
     loadChangesOverPeriod(timescale_id: string,
                           periods: Array<{start: string, end: string}>) {
-        return this.req.get({
+        return this.req.post({
             url_id: 'forecast/get_changes_for_period',
             data: {
                 'timescale': timescale_id,
@@ -436,7 +438,7 @@ export class DataManagerService {
         }
 
         if (periodsToLoad.length > 0) {
-            this.req.get({
+            this.req.post({
                 url_id: 'forecast/get_changes_for_period',
                 data: periodsToLoad
             }).subscribe(
@@ -576,7 +578,7 @@ export class DataManagerService {
         let subject = new Subject();
 
         if (!this.dataModel.hasDecomposition(timescale_id, start, end)) {
-            this.req.get({
+            this.req.post({
                 url_id: 'forecast/get_decomposition_for_period',
                 data: {
                     timescale: timescale_id,

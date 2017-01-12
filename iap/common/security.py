@@ -21,6 +21,7 @@ def forbidden_view(f):
     """
     def deco(request):
         user_id = get_user(request)
+        print("USER ID", user_id)
         if user_id != Exception and check_session(request) == True:
             return f(request)
         else:
@@ -33,11 +34,10 @@ def authorise(req):
         # user.check_password(password)
         # user = service.check_password(login, password)
     """
-    users = req.dbsession.query(User).all()
+    print(req)
     try:
         username = req.json_body['data']['username']
         password = req.json_body['data']['password']
-        users = req.dbsession.query(User).all()
         user = req.dbsession.query(User).filter(User.email == username).one()
 
         #TO DO add check password
@@ -58,10 +58,22 @@ def check_session(request):
     session = request.session
     if 'token' in session:
         if request.json_body['X-Token'] == session['token']:
+            print("Session Error")
             return True
         else:
             return False
     return False
+
+
+def get_user_id(token, request):
+
+    token_data = jwt.decode(token, 'secret', algorithms=['HS512'])
+    user_id = int(token_data['sub'])
+    login = token_data['login']
+
+    user = request.dbsession.query(User).filter(User.id == user_id and User.email == login).one()
+    # user = service.get_user_by_id(request,user_id, login)
+    return user.id
 
 
 def get_user(request):
@@ -74,17 +86,19 @@ def get_user(request):
     :rtype: int
     """
     #add exception on non existen  id,login in token
-    print(request.json_body['X-Token'])
+    print(request)
     try:
-        token = request.json_body['X-Token']
+        token = request.json['X-Token']
         token_data = jwt.decode(token, 'secret', algorithms=['HS512'])
-        user_id = token_data['sub']
+        user_id = int(token_data['sub'])
         login = token_data['login']
+
         user = request.dbsession.query(User).filter(User.id == user_id and User.email == login).one()
         # user = service.get_user_by_id(request,user_id, login)
-        return user
     except:
         return Exception
+    else:
+        return user
 
 
 def requires_roles(*roles):

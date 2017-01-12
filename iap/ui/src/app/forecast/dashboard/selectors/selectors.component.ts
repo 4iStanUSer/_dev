@@ -66,12 +66,22 @@ export class SelectorsComponent implements OnInit { //, OnChanges
     }
 
     ngOnInit() {
+
+        this.getProjects();
         this.getConfig();
         this.getData();
     }
-
+    getProjects(){
+        this.req.post({
+                'url_id': 'get_tools_with_projects',
+                'data': {}
+            })
+            .subscribe((d) => {
+                this.processInputs(d);
+            });
+    }
     getConfig() {
-        this.req.get({
+        this.req.post({
             url_id: 'forecast/get_entity_selectors_config',
             data: {}
         }).subscribe((data) => {
@@ -80,7 +90,7 @@ export class SelectorsComponent implements OnInit { //, OnChanges
     }
 
     getData(query: { [selector_id: string]: Array<string>} = null) {
-        this.req.get({
+        this.req.post({
             url_id: 'forecast/get_options_for_entity_selector',
             data: {
                 query: query
@@ -92,7 +102,7 @@ export class SelectorsComponent implements OnInit { //, OnChanges
     }
 
     setData(query: { [selector_id: string]: Array<string>} = null) {
-        this.req.get({
+        this.req.post({
             url_id: 'forecast/set_entity_selection',
             data: {
                 query: query

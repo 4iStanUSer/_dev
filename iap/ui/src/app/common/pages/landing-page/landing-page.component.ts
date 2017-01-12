@@ -29,9 +29,9 @@ export class LandingPageComponent implements OnInit {
 
     ngOnInit() {
         this.req
-            .get({
+            .post({
                 'url_id': 'landing',
-                'data': {'X-token':localStorage.getItem('currentUser')}
+                'data': {}
 }
             )
             .subscribe((tools: Object) => {
@@ -45,7 +45,7 @@ export class LandingPageComponent implements OnInit {
     }
 
     goToTool(toolKey: string, projectId: string) {
-        this.req.get({ // TODO Make post query
+        this.req.post({ // TODO Make post query
             'url_id': 'set_tool_selection',
             'data': {
                 'tool_id': toolKey,

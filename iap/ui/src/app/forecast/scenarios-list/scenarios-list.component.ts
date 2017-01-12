@@ -35,9 +35,9 @@ export class ScenariosListComponent implements OnInit {
     constructor(private req: AjaxService) { }
 
     ngOnInit() {
-        this.req.get({
+        this.req.post({
             url_id: 'forecast/get_scenarios_list',
-            data: {'X-Token':localStorage.getItem('currentUser')}
+            data: {}
 
 
         }).subscribe((d) => {

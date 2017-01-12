@@ -23,7 +23,7 @@ export class LoginFormComponent implements OnInit {
             username: this.model.username,
             password: this.model.password
         }
-        this.req.get({
+        this.req.post({
             url_id: 'login',
             data: userCredentials
         }).subscribe(
