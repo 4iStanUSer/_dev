@@ -192,7 +192,7 @@ export class DataManagerService {
         this.isData['dynamic']['sent'] = true;
         this.isData['dynamic']['received'] = false;
 
-        this.req.get({
+        this.req.post({
             'url_id': 'forecast/get_dashboard_data',
             'data': {
                 'entities_ids': [2] // TODO Replace
@@ -267,7 +267,7 @@ export class DataManagerService {
                 'state': defaultState,
                 'config': dashboardConfig
             };
-            this.req.get({
+            this.req.post({
                 'url_id': 'get_page_configuration',
                 'data': {
                     'page': this.pageName
