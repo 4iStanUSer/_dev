@@ -90,7 +90,9 @@ class RunTimeStorage:
 
     def _load_wb(self, user_id, tool_id, project_id):
         if tool_id is None or project_id is None:
-            return None
+            tool_id = 1
+            project_id=1
+
         # Load backup
         backup = persistent_storage.load_backup(user_id, tool_id, project_id, 'default')
         if backup is None:
