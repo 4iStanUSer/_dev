@@ -18,11 +18,7 @@ def get_dashboard_data(req):
         return send_error_response(msg)
     try:
         lang = rt.get_state(user_id).language
-        print("Lang", lang)
-        project_id = req.json_body['data']['project_id']
-        tool_id = req.json_body['data']['tool_id']
-        print("Pr Id", project_id, tool_id)
-        wb = rt._load_wb(user_id, tool_id, project_id)
+        wb = rt.get_wb(user_id)
         print("WB", wb)
         data = data_service.get_entity_data(wb.container, wb.data_config,
                                             wb.selection, lang)

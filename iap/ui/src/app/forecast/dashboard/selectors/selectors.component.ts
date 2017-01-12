@@ -67,19 +67,10 @@ export class SelectorsComponent implements OnInit { //, OnChanges
 
     ngOnInit() {
 
-        this.getProjects();
         this.getConfig();
         this.getData();
     }
-    getProjects(){
-        this.req.post({
-                'url_id': 'get_tools_with_projects',
-                'data': {}
-            })
-            .subscribe((d) => {
-                this.processInputs(d);
-            });
-    }
+
     getConfig() {
         this.req.post({
             url_id: 'forecast/get_entity_selectors_config',
