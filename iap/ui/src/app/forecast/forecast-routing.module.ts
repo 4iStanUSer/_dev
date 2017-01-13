@@ -25,7 +25,7 @@ import {LandingPageComponent} from "./landing-page/landing-page.component"
                 children: [
                     {
                         path: '',
-                        redirectTo: 'dashboard',
+                        redirectTo: 'landing',
                         pathMatch: 'full',
                     },
                     {

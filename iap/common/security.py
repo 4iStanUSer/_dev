@@ -96,7 +96,7 @@ def get_user(request):
         user = request.dbsession.query(User).filter(User.id == user_id and User.email == login).one()
         # user = service.get_user_by_id(request,user_id, login)
     except:
-        return Exception
+        return send_error_response("Unauthorised")
     else:
         return user
 

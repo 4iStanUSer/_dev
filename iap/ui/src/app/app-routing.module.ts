@@ -27,8 +27,13 @@ import {LoginComponent} from "./common/module/login/login/login.component";
                 redirectTo:'/login'
             },
             {
-                path: 'landing',
+                path: 'login',
                 component: LoginComponent,
+                canActivate: [AuthGuard],
+            },
+             {
+                path: 'landing',
+                component: LandingPageComponent,
                 canActivate: [AuthGuard],
             }
         ])
