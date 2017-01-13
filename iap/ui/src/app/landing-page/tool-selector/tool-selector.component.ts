@@ -51,6 +51,7 @@ export class ToolSelectorComponent implements OnInit {
             }
         }
         let projects_data = inputs['projects'];
+        console.log('Projects', projects_data)
         if (projects_data) {
             let l = projects_data.length;
             for (let i = 0; i < l; i++) {

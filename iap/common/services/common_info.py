@@ -34,7 +34,9 @@ def get_tools_info(req):
     tools_info =[]
     tools = req.dbsession.query(Pr_Tool).all()
     for tool in tools:
-        tools_info.append(dict(id=tool.id, name=tool.name, description=tool.description))
+        if tool.name == "Forecasting":
+            id = 'forecast'
+        tools_info.append(dict(id=id, name=tool.name, description=tool.description))
     return tools_info
 
 
@@ -43,7 +45,13 @@ def get_projects_info(req):
     projects = req.dbsession.query(Project).all()
     print(projects)
     for project in projects:
-        projects_info.append(dict(id=project.id, name=project.name, description=project.description))
+        for tool in project.pr_tools:
+            if tool.id == 1:
+                tool_id = 'forecast'
+            else:
+                tool_id = tool.id
+            projects_info.append(dict(id=project.id, name=project.name,
+                                      description=project.description, tool_id=tool_id))
     return projects_info
 
 

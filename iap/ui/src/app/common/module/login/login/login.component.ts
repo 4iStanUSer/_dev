@@ -28,13 +28,22 @@ export class LoginComponent implements OnInit {
             .subscribe(
                 () => {
                     if (this.auth.isLoggedIn) {
+                        if (this.auth.redirectUrl==null){
+                            let redirect = '/landing';
+                            console.log("Redirect URL", redirect)
+                            this.router.navigate([redirect]);
+                        }
+                        else{
+                            let redirect = this.auth.redirectUrl;
+                            console.log("Redirect URL", redirect)
+                            this.router.navigate([redirect]);
+                        }
                         // Get the redirect URL from our auth service
                         // If no redirect has been set, use the default
                         // let redirect = this.auth.redirectUrl
                         //     ? this.auth.redirectUrl : '/';
-                        let redirect = '/forecast'; // TODO Review ability to get this from outside
+
                         // Redirect the user
-                        this.router.navigate([redirect]);
                     }
                 },
                 (e)=>{

@@ -138,11 +138,11 @@ def get_tools_with_projects(req):
         data = dict()
         if not user_id:
             data['tools'] = common_getter.get_tools_info(pt)
+            print("Data", data)
         else:
-            lang = rt.get_state(user_id).language
-            tools_ids, projects_ids = pt.get_user_tools_with_projects(user_id)
+            #lang = rt.get_state(user_id).language
+            #tools_ids, projects_ids = pt.get_user_tools_with_projects(user_id)
             #data['tools'] = common_getter.get_tools_info(req, pt, tools_ids, lang)
-
             data['tools'] = common_getter.get_tools_info(req)
             #data['projects'] = common_getter.get_projects_info(req, pt, projects_ids, lang)
             data['projects'] = common_getter.get_projects_info(req)
@@ -183,7 +183,6 @@ def set_project_selection(req):
         msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
         return send_error_response(msg)
     try:
-
         project = pt.get_project(id=project_id)
         rt.update_state(user_id, tool_id=project.tool_id, project_id=project.id)
         print("Project", project)
