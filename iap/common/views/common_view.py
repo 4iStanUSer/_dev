@@ -179,13 +179,16 @@ def set_project_selection(req):
     try:
         user_id = get_user(req).id
         project_id = req.json_body['data']['project_id']
+        tool_name = req.json_body['data']['tool_id']
+        if tool_name == "forecast":
+            tool_id = 1
     except KeyError:
         msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
         return send_error_response(msg)
     try:
-        project = pt.get_project(id=project_id)
-        rt.update_state(user_id, tool_id=project.tool_id, project_id=project.id)
-        print("Project", project)
+        #project = pt.get_project(id=project_id)
+        project = req.dbsession.query(Project).filter(Project.id == project_id).one()
+        rt.update_state(user_id, tool_id=tool_id, project_id=project.id)
         return send_success_response()
     except Exception as e:
         msg = ErrorManager.get_error_message(e)

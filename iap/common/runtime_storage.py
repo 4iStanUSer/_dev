@@ -53,7 +53,7 @@ class RunTimeStorage:
         if 'language' in kwargs.keys():
             with self._lock:
                 user_box['state']._lang = kwargs['language']
-        elif 'tool_id' and 'project_id' in kwargs.keys():
+        elif 'tool_id' and 'project_id' in list(kwargs.keys()):
             new_tool = kwargs['tool_id']
             new_proj = kwargs['project_id']
             old_tool = user_box['state'].tool_id
@@ -64,6 +64,7 @@ class RunTimeStorage:
                         .save_backup(user_id, old_tool, old_proj,
                                      user_box['wb'].get_backup())
                 new_wb = self._load_wb(user_id, new_tool, new_proj)
+                print("New WB", new_wb)
                 with self._lock:
                     user_box['state']._tool_id = new_tool
                     user_box['state']._project_id = new_proj
@@ -92,13 +93,10 @@ class RunTimeStorage:
 
     def _load_wb(self, user_id, tool_id, project_id):
         if tool_id is None or project_id is None:
-            tool_id = 1
-            project_id=1
-
+            return None
         # Load backup
-        backup = persistent_storage.load_backup(user_id, tool_id, project_id,
-                                                'default')
-
+        print(user_id, tool_id, project_id)
+        backup = persistent_storage.load_backup(user_id, tool_id, project_id, 'default')
         print("Backup", backup)
         if backup is None:
             raise ex.BackupNotFoundError(user_id, tool_id, project_id)
@@ -115,5 +113,6 @@ class RunTimeStorage:
             return Workbench
         return None
 
+    ######
 
 

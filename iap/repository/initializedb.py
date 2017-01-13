@@ -169,8 +169,9 @@ def main(argv=sys.argv):
         ssn.add(project_1)
         ssn.add(project_2)
 
-        user_id = 2
-        tool_id = 'forecast'
+        user_id = 2#user.email
+        tool_id = 1#'forecast'
+        project_id = 1#'JJOralCare'
         #wb = Workbench(user_id)
         #wb.init_load(wh, dev_template_JJLean)
         #backup = wb.get_backup()
@@ -182,7 +183,7 @@ def main(argv=sys.argv):
                               "entities": template['user_data_access']}
         wb.initial_load(wh, template, dev_template_JJOralCare['calc_instructions'], user_access_rights)
         backup = wb.get_backup()
-        persistent_storage.save_backup(user_id, tool_id, 'JJOralCare', backup)
+        persistent_storage.save_backup(user_id, tool_id, project_id, backup)
 
 
 
