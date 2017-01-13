@@ -43,6 +43,7 @@ def set_entity_values(wb, entity_id, values):
 
 def get_entity_data(container, config, entities_ids, lang):
     # Initialize structure for output.
+    print("Entity")
     entity_data = dict(
         data=dict(
             timescales=None,
@@ -81,7 +82,6 @@ def get_entity_data(container, config, entities_ids, lang):
     ts_tree, ts_borders = container \
         .timeline.get_timeline_tree(top_ts, bottom_ts, top_ts_period)
     entity_data['data']['timelabels'] = ts_tree
-
     # Get timescales view settings.
     timescales_info = config.get_objects_properties('timescale', main_timescales, lang)
     timescales_view_info = []
@@ -224,6 +224,8 @@ def get_entity_data(container, config, entities_ids, lang):
 
     # Get Insights.
     entity_data['data']['insights'] = [dict(text=x) for x in ent.insights]
+
+    print("Entity Data", entity_data)
 
     return entity_data
 

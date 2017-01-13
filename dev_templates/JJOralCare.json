@@ -3878,7 +3878,23 @@
         {
             "path": [
                 "uk", 
+                "cars"
+            ], 
+            "dimension": "products", 
+            "level": "category"
+        }, 
+        {
+            "path": [
+                "uk", 
                 "mouthwash"
+            ], 
+            "dimension": "products", 
+            "level": "category"
+        }, 
+        {
+            "path": [
+                "uk", 
+                "food"
             ], 
             "dimension": "products", 
             "level": "category"
@@ -3889,7 +3905,7 @@
                 "mouthwash", 
                 "toothpaste"
             ], 
-            "dimension": "products2", 
+            "dimension": "products", 
             "level": "category"
         }, 
         {
@@ -3908,7 +3924,36 @@
                 "mouthwash"
             ], 
             "dimension": "products", 
-            "level": "category"
+            "level": "channel"
+        }, 
+        {
+            "path": [
+                "japan", 
+                "mouthwash", 
+                "toothpaste"
+            ], 
+            "dimension": "products", 
+            "level": "channel"
+        }, 
+        {
+            "path": [
+                "japan", 
+                "mouthwash", 
+                "toothpaste", 
+                "wallmart"
+            ], 
+            "dimension": "market", 
+            "level": "channel"
+        }, 
+        {
+            "path": [
+                "japan", 
+                "mouthwash", 
+                "toothpaste", 
+                "silpo"
+            ], 
+            "dimension": "market", 
+            "level": "channel"
         }, 
         {
             "path": [
@@ -6728,7 +6773,6 @@
             "value": [
                 "geography", 
                 "products", 
-                "products2", 
                 "market"
             ]
         }, 

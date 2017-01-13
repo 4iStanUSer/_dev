@@ -175,7 +175,6 @@ def get_data_for_header(req):
 
 
 def set_project_selection(req):
-    print("Set Poject Selection", req)
     try:
         user_id = get_user(req).id
         project_id = req.json_body['data']['project_id']
@@ -189,7 +188,7 @@ def set_project_selection(req):
         #project = pt.get_project(id=project_id)
         project = req.dbsession.query(Project).filter(Project.id == project_id).one()
         rt.update_state(user_id, tool_id=tool_id, project_id=project.id)
-        return send_success_response()
+        return send_success_response(project_id)
     except Exception as e:
         msg = ErrorManager.get_error_message(e)
         return send_error_response(msg)
