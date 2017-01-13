@@ -16,6 +16,7 @@ def load_backup(user_id, tool_id, project_id, backup_name):
                                        backup_name)
     print("File Path", file_path)
     saved_content = __load(file_path)
+    print("Saved Content")
     return saved_content['data']
 
 
