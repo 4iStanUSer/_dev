@@ -3,8 +3,9 @@ import copy
 from ...common.helper import Meta, Variable
 from .helper import SlotType
 
-LANGKEY = 'languages'
-
+#LANGKEY = 'languages'
+LANGKEY = ["lang-en-metric", "lang-ru-metric", "lang-en-short_name",
+            "lang-ru-full_name", "lang-ru-short_name", "lang-en-full_name"]
 
 class DataConfiguration:
     """Describe class here"""
@@ -27,6 +28,7 @@ class DataConfiguration:
         self._by_entity = copy.copy(backup['by_entity'])
 
     def init_load(self, config):
+        print("CONFIGURATION", config)
         # Fill project configuration.
         if 'project_properties' in config:
             self._general.load_properties(config['project_properties'])
@@ -39,7 +41,9 @@ class DataConfiguration:
             'selector_properties'
         ]
         for name in objects_names:
+            print("Obj Name", name)
             if name in config:
+                print("Conf name", name)
                 last_ind = name.find('properties') - 1
                 self._general.load_objects_properties(name[:last_ind],
                                                       config[name])
@@ -106,7 +110,11 @@ class DataConfiguration:
         #raise Exception
 
     def get_objects_properties(self, object_type, ids, lang, **kwargs):
+        print("Object Type", object_type)
         ent_options = self._get_entity_config(**kwargs)
+        print("Ent options", ent_options)
+        print("Ids", ids)
+        print("Lang", lang)
         result = ent_options.get_object_property(object_type, ids, lang)
         if result is not None:
             return result
@@ -130,15 +138,29 @@ class DataConfiguration:
 
 
 class Config:
-
+    """
+    Class configuration
+    """
     def __init__(self):
         self.properties = dict()
+        #dictionary of properies
         self.objects_properties = dict()
+        #dict of obj properies
         self.factors_drivers = dict()
+
         self.view_vars = dict()
         self.wh_inputs = []
 
     def load_properties(self, props):
+        """
+        Load Properties
+
+        :param props:
+        :type props:
+        :return:
+        :rtype:
+
+        """
         print("Load Properties")
         for item in props:
             print(item)
@@ -201,9 +223,13 @@ class Config:
 
     def get_object_property(self, object_type, ids, lang):
         obj_props = self.objects_properties.get(object_type)
+        print("Obj property", obj_props)
         if obj_props is None:
             return None
+
         result = [x.get_for_view(lang) for x in obj_props if x.id in ids]
+        print(result)
+        print("Result", result)
         if len(result) == 0:
             return None
         return result
@@ -212,23 +238,34 @@ class Config:
 class ItemConfig:
 
     def __init__(self, props):
+
+        print("Initialisaion By Props", props)
+        self.lang_specific_props ={}
         if 'id' not in props.keys():
             raise Exception
-        self.general_props = {x: y for x, y in props.items() if x != LANGKEY}
-        if LANGKEY in props:
-            self.lang_specific_props = copy.copy(props[LANGKEY])
+        self.general_props = {x: y for x, y in props.items() if x not in LANGKEY}
+        for lang_key in LANGKEY:
+            if lang_key in props:
+                self.lang_specific_props[lang_key]=copy.copy(props[lang_key])
 
     @property
     def id(self):
         return self.general_props['id']
 
+    @property
+    def lang(self):
+        return self.lang_specific_props
+
     def get_for_view(self, lang):
+        print('lang')
+        print("Lang_Spec_Prop", self.lang_specific_props)
+        print("Lang_Spec_Prop", self.lang_specific_props['lang-en-full_name'])
         return {
-            **copy.copy(self.general_props),
-            **copy.copy(self.lang_specific_props[lang])
-        }
+                copy.copy(self.general_props),
+                self.lang_specific_props['lang-en-full_name']}
 
     def get_for_save(self):
+
         result = copy.copy(self.general_props)
         result[LANGKEY] = copy.copy(self.lang_specific_props)
         return result

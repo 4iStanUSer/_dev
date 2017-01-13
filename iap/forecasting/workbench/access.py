@@ -10,7 +10,6 @@ class Access:
     entities = {}
     #sctructure = {"features":[], "entities":[{'path_e':[], "path_c":[], "name":[],"mask":[], "node_type":[]}]}
     def load(self, permissions: dict, container: Container):
-
         self._features = permissions['features']
         #get features
         permissions_data = permissions['entities']

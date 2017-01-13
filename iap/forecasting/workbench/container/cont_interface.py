@@ -117,7 +117,6 @@ class Container:
 
         return [self.get_entity_by_id(x.id) for x in self._root.children]
 
-
     def add_entity(self, path, metas):
         '''Add node by path to the root node, add new node to the _node_dict.
 

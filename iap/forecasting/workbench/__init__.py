@@ -46,8 +46,12 @@ class Workbench:
         self.container.load_from_backup(cont_backup)
         self.data_config.load_from_backup(config_backup)
         self.calc_kernel.load_from_backup(calc_instructions)
+        #
+        self.selection = self.container.top_entities
         # Init wb
-        self._init_wb(user_access)
+        print("Init WB")
+        print(self.data_config)
+        #self._init_wb(user_access)
 
     def initial_load(self, warehouse, dev_template, calc_instructions, user_access):
         self.data_config.init_load(dev_template)
@@ -67,12 +71,13 @@ class Workbench:
 
     def _init_wb(self, user_access_rights):
         # Build search index.
-
+        print("Dim Names")
         dim_names = self.data_config.get_property('dimensions')
         #Build Search Index
+        print("Direct Index")
         direct_index, reverse_index = \
             dim_service.build_search_index(self.container, dim_names)
-
+        print("Search Index")
         self.search_index['order'] = dim_names
         self.search_index['direct'] = direct_index
         self.search_index['reverse'] = reverse_index
@@ -83,8 +88,6 @@ class Workbench:
         empty_query = {'products': [], 'products2': [], 'geography': [],'market':["wallmart"]}
         opts, ents = \
             dim_service.search_by_query(self.search_index, empty_query)
-        print("Opts", opts)
-        print("Ents", ents)
 
         self.selection = ents
         """
@@ -100,4 +103,4 @@ Ents [20]
         #    ent = self.container.get_entity_by_path(item['path'])
         #    if ent is not None:
         #        item['entity_id'] = ent.id
-        self.access.load(user_access_rights,self.container)
+        self.access.load(user_access_rights, self.container)

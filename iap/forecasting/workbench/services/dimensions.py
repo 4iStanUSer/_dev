@@ -3,7 +3,7 @@ import copy
 JOIN_SYMBOL = '|-|-|'
 
 
-def get_selectors_config(config, lang):
+    def get_selectors_config(config, lang):
     """
     GET SELECTORS CONFIGURATION
 
@@ -14,6 +14,7 @@ def get_selectors_config(config, lang):
     :return:
     :rtype:
     """
+
     dimensions = config.get_property('dimensions')
     sel_props = config.get_objects_properties('selector', dimensions, lang)
 
@@ -141,13 +142,11 @@ def _add_entity_to_index(entity, curr_point, search_index, dim_names, points):
         sub_index = search_index
         for i in range(len(dim_names)):
             dim_path = curr_point['coords'][dim_names[i]]
-            print("Dimension  path", dim_path)
             if len(dim_path) == 0:
                 dim_path = ['total']
                 #continue
             key = tuple(dim_path)
             ############################
-            print("KEY", key)
             if i < len(dim_names) - 1:
                 if key not in sub_index:
                     sub_index[key] = dict()
@@ -157,7 +156,6 @@ def _add_entity_to_index(entity, curr_point, search_index, dim_names, points):
                     raise Exception
                 sub_index[key] = curr_point['node_id']
             ##############################
-            print("Sub index", sub_index)
         for child in entity.children:
             new_point = copy.deepcopy(curr_point)
             _add_entity_to_index(child, new_point, search_index, dim_names, points)
@@ -290,38 +288,28 @@ def search_by_query(search_index, query):
     :rtype:
     """
     order = search_index['order']# list of dimensions
-    print("1.Order", order)
     search_indexes = [search_index['direct']] #direct list of pathes
-    print("2.Search Indexes", search_indexes)
     options = dict()
     entities_ids = []
     query_internal = _transform(query)
-    print("Order", enumerate(order))
     for i, dim_id in enumerate(order):
         """
         Iterate by tuple(number, dimension)
         """
         # Collect available options.
         keys = []
-        print("3.Number", i)
-        print("3.Dimension ID", dim_id)
-        print("Search indexes", search_indexes)
         for item in search_indexes:
             #search_index -?
             keys.extend(item.keys())
 
         # Get current selection.
         dimension_selection = query_internal.get(dim_id)
-        print("Dimension KEYS", keys)
-        print("Dimension SELECTIONS", dimension_selection)
         # Verify current selection.
         # If selection is empty or not valid set default selection.
         dimension_selection = [x for x in dimension_selection if x in keys]
-        print("Dimension SELECTIONS", dimension_selection)
         if len(dimension_selection) == 0:
             dimension_selection = [sorted(keys)[0]]
 
-        print("OPTIONS", options)
         options[dim_id] = _fill_options(keys, dimension_selection)
         #fill options
         next_iter_indexes = []
@@ -369,8 +357,6 @@ def _fill_options(keys_list, selected_items):
         selected=[JOIN_SYMBOL.join(x) for x in selected_items]
     )
 
-    print("Key List", keys_list)
-    print("Selected Items", selected_items)
     for item in keys_list:
         if len(item) == 0:
             continue

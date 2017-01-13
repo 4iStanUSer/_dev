@@ -12,21 +12,25 @@ def get_dashboard_data(req):
     print("Get Dashboard Data", req)
     try:
         user_id = get_user(req).id
-        print("User Id", user_id)
+        print("Get Dashboard Data User Id", user_id)
     except KeyError:
         msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
         return send_error_response(msg)
-    try:
-        lang = rt.get_state(user_id).language
-        wb = rt.get_wb(user_id)
-        print("WB", wb)
-        data = data_service.get_entity_data(wb.container, wb.data_config,
-                                            wb.selection, lang)
-        print("Data Loaded", data)
-        return send_success_response(data)
-    except Exception as e:
-        msg = ErrorManager.get_error_message(e)
-        return send_error_response(msg)
+
+    #try
+
+    #check permission for specific data
+    #1.workbench
+    #2.enities
+    lang = rt.get_state(user_id).language
+    wb = rt.get_wb(user_id)
+    print("WB", wb.container.top_entities)
+    data = data_service.get_entity_data(wb.container, wb.data_config,
+                                        wb.selection, lang=lang)
+    return send_success_response(data)
+    #except Exception as e:
+    #    msg = ErrorManager.get_error_message(e)
+    #    return send_error_response(msg)
 
 
 def get_cagrs_for_period(req):

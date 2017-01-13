@@ -42,6 +42,7 @@ class RunTimeStorage:
         self._lock = Lock()
 
     def get_wb(self, user_id):
+        print("Get WB")
         return self._get_user_box(user_id)['wb']
 
     def get_state(self, user_id):
@@ -64,7 +65,6 @@ class RunTimeStorage:
                         .save_backup(user_id, old_tool, old_proj,
                                      user_box['wb'].get_backup())
                 new_wb = self._load_wb(user_id, new_tool, new_proj)
-                print("New WB", new_wb)
                 with self._lock:
                     user_box['state']._tool_id = new_tool
                     user_box['state']._project_id = new_proj
@@ -75,13 +75,10 @@ class RunTimeStorage:
 
     def _get_user_box(self, user_id):
         user_box = self._collection.get(user_id)
-        print("Collection", self._collection)
-        print("User box", user_box)
         if user_box is None and self._load_state(user_id) is None:
             pass
         if user_box is None:
             state = self._load_state(user_id)
-            print("Load state", state)
             wb = self._load_wb(state.user_id, state.tool_id, state.project_id)
             user_box = dict(state=state, wb=wb)
             with self._lock:
@@ -95,9 +92,7 @@ class RunTimeStorage:
         if tool_id is None or project_id is None:
             return None
         # Load backup
-        print(user_id, tool_id, project_id)
         backup = persistent_storage.load_backup(user_id, tool_id, project_id, 'default')
-        print("Backup", backup)
         if backup is None:
             raise ex.BackupNotFoundError(user_id, tool_id, project_id)
         wb_class = self._get_wb_class_by_tool(tool_id)
@@ -110,6 +105,8 @@ class RunTimeStorage:
     @staticmethod
     def _get_wb_class_by_tool(tool_id):
         if tool_id == 'forecast':
+            return Workbench
+        elif tool_id == 1:
             return Workbench
         return None
 
