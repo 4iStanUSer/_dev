@@ -6,7 +6,18 @@ CONF_CONST = 'config'
 
 
 def get_page_config(tool_id, page_name, language):
-
+    """
+    Get page configuration for particular tool
+    with language specification
+    :param tool_id:
+    :type tool_id:
+    :param page_name:
+    :type page_name:
+    :param language:
+    :type language:
+    :return:
+    :rtype:
+    """
     def _read_ini_file(path):
         """
             Get page configuration from ConfigParser

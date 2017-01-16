@@ -261,11 +261,5 @@ class Scenario(Base):
     children = relationship("Scenario",  remote_side=[id])
 
 
-class Driver(Base):
-    __tablename__="drivers"
-    id = Column(Integer, primary_key=True)
-    name = Column(String)
-    growth = Column(Float)
-    #scenario = relationship("Scenario",backref="drivers")
 
 

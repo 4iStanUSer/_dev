@@ -49,8 +49,6 @@ def main(argv=sys.argv):
     options = parse_vars(argv[2:])
     setup_logging(config_uri)
     settings = get_appsettings(config_uri, options=options)
-
-
     engine = get_engine(settings, prefix='sqlalchemy.')
 
     session_factory = get_session_factory(engine)
@@ -113,6 +111,7 @@ def main(argv=sys.argv):
         user_2.roles.append(role_forecast)
 
         #Add data permission:
+
         permission = Permission(name="Development Template")
 
         for data in perm_data["JJOralCare"]:
@@ -158,20 +157,20 @@ def main(argv=sys.argv):
         :return:
         :rtype:
         """
-        pr_tool = Pr_Tool(name='Forecasting', description='This is forecasting')
+        pr_tool = Pr_Tool(name='Forecasting', description='This is forecasting', id="forecast")
 
-        project_1 = Project(name='Oral Care Forecasting')
+        project_1 = Project(name='Oral Care Forecasting', id="JJOralCare")
         project_1.pr_tools.append(pr_tool)
 
-        project_2 = Project(name='Lean Forecasting')
+        project_2 = Project(name='Lean Forecasting', id="JJLean")
         project_2.pr_tools.append(pr_tool)
 
         ssn.add(project_1)
         ssn.add(project_2)
 
         user_id = 2#user.email
-        tool_id = 1#'forecast'
-        project_id = 1#'JJOralCare'
+        tool_id = 'forecast'
+        project_id = 'JJOralCare'
         #wb = Workbench(user_id)
         #wb.init_load(wh, dev_template_JJLean)
         #backup = wb.get_backup()
