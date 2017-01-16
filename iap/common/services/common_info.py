@@ -7,6 +7,10 @@ def get_client_info(storage, user_id, lang=None):
     )
     return info
 
+def _get_user_info(user_id, req):
+    #
+    pass
+
 
 
 def get_user_info(storage, user_id, lang=None):

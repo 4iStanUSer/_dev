@@ -247,6 +247,7 @@ def includeme(config):
     config.add_request_method(authorise, 'authorised', reify=True)
     config.set_session_factory(my_session_factory)
 
+#Remote add to Acccess Manager or IAcccess n
 
 def check_permission_for_tool_and_project(self, request, user_id, tool_id, project_id):
     """
@@ -334,3 +335,28 @@ def build_permission_tree(request, project_name):
 
 
 
+def check_permission_for_tool_and_project(self, request, user_id, tool_id, project_id):
+    """
+    Function will check permission to project and tool
+
+
+    :return:
+    :rtype:
+
+    """
+    access = {'tool': False, 'project': False}
+    user = request.dbsession.query(User).filter(User.id == user_id)
+    for role in user.roles:
+        if tool_id == role.tool_id:
+            access['tool': True]
+    for perm in user.perms:
+        for data_perm in perm:
+            if data_perm.project == project_id:
+                access['project': True]
+    if access == {'tool': True, 'project': True}:
+        return True
+    else:
+        return False
+
+def check_entities_permission(request, user_id, entities_ids):
+    return True
