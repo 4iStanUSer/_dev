@@ -58,22 +58,10 @@ def check_session(request):
     session = request.session
     if 'token' in session:
         if request.json_body['X-Token'] == session['token']:
-            print("Session Error")
             return True
         else:
             return False
     return False
-
-
-def get_user_id(token, request):
-
-    token_data = jwt.decode(token, 'secret', algorithms=['HS512'])
-    user_id = int(token_data['sub'])
-    login = token_data['login']
-
-    user = request.dbsession.query(User).filter(User.id == user_id and User.email == login).one()
-    # user = service.get_user_by_id(request,user_id, login)
-    return user.id
 
 
 def get_user(request):
@@ -92,7 +80,6 @@ def get_user(request):
         token_data = jwt.decode(token, 'secret', algorithms=['HS512'])
         user_id = int(token_data['sub'])
         login = token_data['login']
-
         user = request.dbsession.query(User).filter(User.id == user_id and User.email == login).one()
         # user = service.get_user_by_id(request,user_id, login)
     except:
@@ -171,29 +158,6 @@ class AccessManager:
         return entities
 
 
-    def check_data_permission(self, request, user_id, entity_id, mask):
-        """
-        Check data permission
-
-        :param request:
-        :type request:
-        :param user_id:
-        :type user_id:
-        :param group_id:
-        :type group_id:
-        :param entity_id:
-        :type entity_id:
-        :return:
-        :rtype:
-        """
-        user = request.dbsession.query(User).filter(User.id == user_id).one()
-        for permission in user.perms:
-            for data_perm in permission.data_perms:
-                if entity_id==data_perm.id and mask == data_perm.mask:
-                    return True
-        return False
-
-
     def check_feature_permission(self, request, user_id, tool_id, feature_id):
         """Boolean function that check whether user have specific
         right for tools  and features
@@ -209,6 +173,29 @@ class AccessManager:
             for feature in role.features:
                 features.append(feature.id)
         if tool_id in tools and feature_id in features:
+            return True
+        else:
+            return False
+
+    def check_permission_for_tool_and_project(self, request, user_id, tool_id, project_id):
+        """
+        Function will check permission to project and tool
+
+
+        :return:
+        :rtype:
+
+        """
+        access = {'tool':False, 'project':False}
+        user = request.dbsession.query(User).filter(User.id == user_id)
+        for role in user.roles:
+            if tool_id == role.tool_id:
+                access['tool': True]
+        for perm in user.perms:
+            for data_perm in perm:
+                if data_perm.project == project_id:
+                    access['project': True]
+        if access == {'tool':True, 'project':True}:
             return True
         else:
             return False
@@ -248,7 +235,6 @@ def set_manager(config):
     policy = AccessManager()
 
     def check_access(request, user_id, roles):
-        print("Check access")
         return policy._check_access(request, user_id, roles)
 
     config.set_authorization_policy(policy)
@@ -261,5 +247,31 @@ def includeme(config):
     config.add_request_method(authorise, 'authorised', reify=True)
     config.set_session_factory(my_session_factory)
 
+#Remote add to Acccess Manager or IAcccess n
 
 
+def check_permission_for_tool_and_project(self, request, user_id, tool_id, project_id):
+    """
+    Function will check permission to project and tool
+
+
+    :return:
+    :rtype:
+
+    """
+    access = {'tool': False, 'project': False}
+    user = request.dbsession.query(User).filter(User.id == user_id)
+    for role in user.roles:
+        if tool_id == role.tool_id:
+            access['tool': True]
+    for perm in user.perms:
+        for data_perm in perm:
+            if data_perm.project == project_id:
+                access['project': True]
+    if access == {'tool': True, 'project': True}:
+        return True
+    else:
+        return False
+
+def check_entities_permission(request, user_id, entities_ids):
+    return True

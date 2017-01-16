@@ -7,6 +7,10 @@ def get_client_info(storage, user_id, lang=None):
     )
     return info
 
+def _get_user_info(user_id, req):
+    #
+    pass
+
 
 def get_user_info(storage, user_id, lang=None):
     info = dict(
@@ -41,9 +45,17 @@ def get_tools_info(req):
 
 
 def get_projects_info(req):
+    """
+    Get projects info from db
+    ToDo - set check acccess for data
+    :param req:
+    :type req:
+    :return:
+    :rtype:
+    """
     projects_info = []
+    #request to db
     projects = req.dbsession.query(Project).all()
-    print(projects)
     for project in projects:
         for tool in project.pr_tools:
             if tool.id == 1:
@@ -56,6 +68,18 @@ def get_projects_info(req):
 
 
 def _get_tools_info(storage, tools_ids=None, lang=None):
+    """
+    Old function for _get tools info
+
+    :param storage:
+    :type storage:
+    :param tools_ids:
+    :type tools_ids:
+    :param lang:
+    :type lang:
+    :return:
+    :rtype:
+    """
     tools = [dict(
         id='forecast',
         name='Forecasting',
@@ -67,6 +91,9 @@ def _get_tools_info(storage, tools_ids=None, lang=None):
 
 
 def _get_projects_info(starage, projects_ids=None, lang=None):
+    """
+    Old function for get projects info
+        """
     projects = [
         dict(
             id='JJOralCare',

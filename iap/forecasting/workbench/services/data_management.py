@@ -43,7 +43,6 @@ def set_entity_values(wb, entity_id, values):
 
 def get_entity_data(container, config, entities_ids, lang):
     # Initialize structure for output.
-    print("Entity")
     entity_data = dict(
         data=dict(
             timescales=None,
@@ -61,6 +60,7 @@ def get_entity_data(container, config, entities_ids, lang):
     )
 
     # Get requested entities.
+    print("List of new entities", entities_ids)
     entity_id = entities_ids[0]
     ent = container.get_entity_by_id(entity_id)
 
@@ -78,12 +78,14 @@ def get_entity_data(container, config, entities_ids, lang):
         decomp_period=dict(timescale=top_ts, start=mid, end=top_ts_period[1])
     )
 
+
     # Get timelabels tree and time borders for every timescale.
     ts_tree, ts_borders = container \
         .timeline.get_timeline_tree(top_ts, bottom_ts, top_ts_period)
     entity_data['data']['timelabels'] = ts_tree
     # Get timescales view settings.
     timescales_info = config.get_objects_properties('timescale', main_timescales, lang)
+    print('Time Scale Info', timescales_info)
     timescales_view_info = []
     for ts_info in timescales_info:
         ts_view_props = dict(
@@ -93,8 +95,9 @@ def get_entity_data(container, config, entities_ids, lang):
             lag=None
         )
         dicts_left_join(ts_view_props, ts_info)
+        print('Ts Info',ts_info)
         ts_view_props['lag'] = \
-            container.timeline.get_growth_lag(ts_info['id'])
+            container.timeline.get_growth_lag(ts_info[0]['id'])
         timescales_view_info.append(ts_view_props)
     entity_data['data']['timescales'] = timescales_view_info
 
@@ -115,7 +118,7 @@ def get_entity_data(container, config, entities_ids, lang):
     vars_view_props = []
     time_series_data = dict([(x, dict()) for x in ts_borders.keys()])
     periods_data = dict([(x, dict()) for x in ts_borders.keys()])
-
+    print("Entities", ent.name, ent.meta, ent.path)
     items_view_props = config.get_vars_for_view(meta=ent.meta, path=ent.path)
     for item in items_view_props:
         # Get entity to get variables from.

@@ -12,13 +12,13 @@ from .meta import Base
 
 
 project_tool_tbl = Table("project_tool", Base.metadata,
-                                Column("projects_id", Integer, ForeignKey("projects.id"),primary_key=True),
-                                Column("tools_id", Integer, ForeignKey("tools.id"), primary_key=True)
+                                Column("projects_id", String, ForeignKey("projects.id"),primary_key=True),
+                                Column("tools_id", String, ForeignKey("tools.id"), primary_key=True)
                           )
 
 class Project(Base):
     __tablename__ = "projects"
-    id = Column(Integer, primary_key=True)
+    id = Column(String , primary_key=True)
     name = Column(String(length=255))
     description = Column(String(length=255))
     pr_tools = relationship("Pr_Tool", secondary=project_tool_tbl, back_populates="projects")
@@ -26,7 +26,7 @@ class Project(Base):
 
 class Pr_Tool(Base):
     __tablename__ = "tools"
-    id = Column(Integer, primary_key=True)
+    id = Column(String, primary_key=True)
     name = Column(String(length=255))
     description = Column(String(length=255))
     project_id = Column(Integer, ForeignKey('projects.id'))

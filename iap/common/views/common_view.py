@@ -74,14 +74,28 @@ def get_routing_config(req):
 
 def get_page_configuration(req):
     """
-    View for get_page_configuration
-    By givem user_id and page_name
+
+    View for url - get_page_configuration
+    By given (String) user_id and page_name
+    Return (Dictionary) with Widgets Names
+
+    Example:
+    View Page Configuration
+        {'top_menu***simulator': 'Simulator',
+        'top_menu***scenarios': 'Scenarios',
+        'top_menu***landing': 'Home',
+        'top_menu***help': 'Help',
+        'logout***label': 'Log Out',
+        'top_menu***comparison': 'Comparison',
+        'top_menu***dashboard': 'Dashboard'}
+
+
     :param req:
     :type req:
     :return:
     :rtype:
     """
-    print("Get page configuration", req)
+    print("Get page configuration")
     try:
         user_id = get_user(req).id
         page_name = req.json_body['data']['page']
@@ -92,8 +106,8 @@ def get_page_configuration(req):
         state = rt.get_state(user_id)
         tool_id = state.tool_id
         language = state.language
+        #get page confiduration by tool_id, page_name, language
         config = get_page_config(tool_id, page_name, language)
-        print("Config", config)
         return send_success_response(config)
     except Exception as e:
         msg = ErrorManager.get_error_message(e)
@@ -101,8 +115,16 @@ def get_page_configuration(req):
 
 
 def set_language(req):
+    """
+    View for set language in runtime storage
+    Call update state with new language
+    :param req:
+    :type req:
+    :return:
+    :rtype:
+    """
     # Get parameters from request.
-    print("Set languages", req)
+    print("Set languages")
     try:
         user_id = get_user(req).id
         lang = req.json_body['data']['lang']
@@ -120,17 +142,30 @@ def set_language(req):
 def get_tools_with_projects(req):
     """
     Return all projects and tool information
-    TODO remake to query from database
+
+    Args:
+        {'Data':{}, 'X-Token':""}
+
+    Get tool with projects
+    Example:
+        {
+        'tools': [
+                  {'name': 'Forecasting', 'description': 'This is forecasting', 'id': 'forecast'}
+                ],
+        'projects': [
+                     {'name': 'Oral Care Forecasting', 'description': None, 'id': 'JJOralCare', 'tool_id': 'forecast'},
+                     {'name': 'Lean Forecasting', 'description': None, 'id': 'JJLean', 'tool_id': 'forecast'}
+                    ]
+        }
+
 
     :param req:
     :type req: pyramid.util.Request
     :return:
     :rtype: None
     """
-    print("Get Tools With projects", req)
     try:
         user_id = get_user(req).id
-        print("User", user_id)
     except KeyError:
         msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
         return send_error_response(msg)
@@ -138,15 +173,16 @@ def get_tools_with_projects(req):
         data = dict()
         if not user_id:
             data['tools'] = common_getter.get_tools_info(pt)
-            print("Data", data)
         else:
+            #call acccess manager  - check permission to project_id, tool_id
+
             #lang = rt.get_state(user_id).language
             #tools_ids, projects_ids = pt.get_user_tools_with_projects(user_id)
             #data['tools'] = common_getter.get_tools_info(req, pt, tools_ids, lang)
             data['tools'] = common_getter.get_tools_info(req)
             #data['projects'] = common_getter.get_projects_info(req, pt, projects_ids, lang)
             data['projects'] = common_getter.get_projects_info(req)
-            print("Data", data)
+        print("Get tools with porjects", data)
         return send_success_response(data)
     except Exception as e:
         msg = ErrorManager.get_error_message(e)
@@ -154,7 +190,26 @@ def get_tools_with_projects(req):
 
 
 def get_data_for_header(req):
-    print("get_data_for_header", req)
+    """
+    View for url - get_data_for_header(request)
+    Args:
+        User_ID
+    Return (Dict) with
+        {'user', 'language', 'client'}
+    Example:
+        Header Data
+        {
+            'client': {'icon': 'logo.jpg', 'name': 'CompanyASD'},
+            'user': {'name': 'Nicolas'},
+            'languages': [{'id': 'en', 'selected': True, 'name': 'English'},
+                    {'id': 'ru', 'selected': False, 'name': 'Russian'}]
+        }
+
+    :param req:
+    :type req:
+    :return:
+    :rtype:
+    """
     try:
         user_id = get_user(req).id
     except KeyError:
@@ -163,11 +218,10 @@ def get_data_for_header(req):
     try:
         header_data = dict()
         lang = rt.get_state(user_id).language
+        #common_getter-?
         header_data['languages'] = common_getter.get_languages_list(pt, lang)
         header_data['user'] = common_getter.get_user_info(pt, user_id, lang)
-        header_data['client'] = common_getter.get_client_info(pt, user_id,
-                                                              lang)
-        print("Header Data", header_data)
+        header_data['client'] = common_getter.get_client_info(pt, user_id, lang)
         return send_success_response(header_data)
     except Exception as e:
         msg = ErrorManager.get_error_message(e)
@@ -175,23 +229,41 @@ def get_data_for_header(req):
 
 
 def set_project_selection(req):
+    """
+    Set project selection
+
+    Args:
+        project_id
+        tool_id
+
+    Return:
+        project_id with updated status in runtime storage
+
+    :param req:
+    :type req:
+    :return:
+    :rtype:
+    """
     try:
         user_id = get_user(req).id
         project_id = req.json_body['data']['project_id']
         tool_name = req.json_body['data']['tool_id']
-        if tool_name == "forecast":
-            tool_id = 1
     except KeyError:
         msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
         return send_error_response(msg)
-    try:
-        #project = pt.get_project(id=project_id)
-        project = req.dbsession.query(Project).filter(Project.id == project_id).one()
-        rt.update_state(user_id, tool_id=tool_id, project_id=project.id)
-        return send_success_response(project_id)
-    except Exception as e:
-        msg = ErrorManager.get_error_message(e)
-        return send_error_response(msg)
+    #try:
+    #Check project and tool selection
+
+    #Change accesss for project selection
+    project = req.dbsession.query(Project).filter(Project.id == project_id).one()
+    #update state of runtime storage
+    print("Update state")
+    rt.update_state(user_id, tool_id=tool_name, project_id=project.id)
+    print("State Updated")
+    return send_success_response(project_id)
+    #except Exception as e:
+    #    msg = ErrorManager.get_error_message(e)
+    #    return send_error_response(msg)
 
 
 def test_preparation(request):

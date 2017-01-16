@@ -31,6 +31,8 @@ class IManageAccess:
         feats = template['features']
         perms = template['permissions']
 
+
+
         # Get objects
         tool = wha.get_tool_by_id(self.ssn, tool_id)
         if tool is None:
@@ -331,6 +333,38 @@ class IManageAccess:
             raise ex.NotExistsError('UserGroup', 'id', group_id)
 
         return group.users
+
+    def check_permission_for_tool_and_project(self, user_id, tool_id, project_id):
+        """
+        Function will check permission to project and tool
+
+
+        :return:
+        :rtype:
+
+        """
+        access = {'tool':False, 'project':False}
+        user = wha.get_user_by_id(self.ssn, user_id)
+        for role in user.roles:
+            if tool_id == role.tool_id:
+                access['tool': True]
+        for perm in user.perms:
+            for data_perm in perm:
+                if data_perm.project == project_id:
+                    access['project': True]
+        if access == {'tool':True, 'project':True}:
+            return True
+        else:
+            return False
+        #get_user_by_id(ssn, user_id)
+        #from user get roles
+        #from every roles if tool is equal
+            #return True
+        #from user get permisssion
+            #for every perm in permission check aceess
+
+
+
 
     def get_group_data_permissions(self, group_id, tool_id):
         """

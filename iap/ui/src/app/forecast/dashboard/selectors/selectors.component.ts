@@ -166,7 +166,7 @@ export class SelectorsComponent implements OnInit { //, OnChanges
                         // TODO Maybe deselect all
                     }
                 } catch (e) {
-                    //TODO Fatal Error - Can't work
+                    //  TODO Fatal Error - Can't work
                     console.error('Fatal Error - ' + e.toString());
                 }
             }

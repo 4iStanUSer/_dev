@@ -6799,6 +6799,16 @@
     "selector_properties": [
         {
             "multiple": "1", 
+            "lang-ru-placeholder": "2Channel", 
+            "lang-ru-name": "2Channel", 
+            "type": "flat", 
+            "lang-en-placeholder": "Channel", 
+            "lang-en-name": "Channel", 
+            "id": "market", 
+            "icon": ""
+        }, 
+        {
+            "multiple": "1", 
             "lang-ru-placeholder": "2Country", 
             "lang-ru-name": "2Country", 
             "type": "flat", 

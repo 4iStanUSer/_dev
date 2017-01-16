@@ -16,6 +16,11 @@ class DataConfiguration:
         self._by_entity = dict()
 
     def get_backup(self):
+        """
+        Get Backup of DataConfiguration
+        :return:
+        :rtype:
+        """
         return dict(
             general=self._general,
             by_meta=self._by_meta,
@@ -23,12 +28,27 @@ class DataConfiguration:
         )
 
     def load_from_backup(self, backup):
+        """
+        Load from backup
+
+        :param backup:
+        :type backup:
+        :return:
+        :rtype:
+        """
         self._general = copy.copy(backup['general'])
         self._by_meta = copy.copy(backup['by_meta'])
         self._by_entity = copy.copy(backup['by_entity'])
 
     def init_load(self, config):
-        print("CONFIGURATION", config)
+        """
+        Initialise filling DataConfiguration
+
+        :param config:
+        :type config:
+        :return:
+        :rtype:
+        """
         # Fill project configuration.
         if 'project_properties' in config:
             self._general.load_properties(config['project_properties'])
@@ -41,9 +61,7 @@ class DataConfiguration:
             'selector_properties'
         ]
         for name in objects_names:
-            print("Obj Name", name)
             if name in config:
-                print("Conf name", name)
                 last_ind = name.find('properties') - 1
                 self._general.load_objects_properties(name[:last_ind],
                                                       config[name])
@@ -88,6 +106,7 @@ class DataConfiguration:
 
     def get_vars_for_view(self, **kwargs):
         ent_options = self._get_entity_config(**kwargs)
+        print("Ent Oprions", ent_options)
         result = ent_options.get_view_vars('variables')
         if result is not None:
             return result
@@ -110,12 +129,41 @@ class DataConfiguration:
         #raise Exception
 
     def get_objects_properties(self, object_type, ids, lang, **kwargs):
-        print("Object Type", object_type)
+        """
+        Get object Property
+         Args:
+            object_type
+            ids
+            lang
+            **kwarg
+        Example:
+            get_objects_properties('selector', dimensions, lang)
+
+            Get Entities Options {}
+            From Entities Option get object property
+
+        :param object_type:
+        :type object_type:
+        :param ids:
+        :type ids:
+        :param lang:
+        :type lang:
+        :param kwargs:
+        :type kwargs:
+        :return:
+        :rtype:
+        """
         ent_options = self._get_entity_config(**kwargs)
-        print("Ent options", ent_options)
-        print("Ids", ids)
-        print("Lang", lang)
+        print("Entities Options", ent_options)
         result = ent_options.get_object_property(object_type, ids, lang)
+        print("Get Object Property from entity config", result)
+        """
+        Result
+        [[
+          {'id': 'annual', 'lag': '1'},
+          {'lang-ru-full_name': '2Annual', 'lang-en-short_name': 'A', 'lang-en-full_name': 'Annual', 'lang-ru-short_name': '2A'}
+        ]]
+        """
         if result is not None:
             return result
         raise Exception
@@ -161,14 +209,28 @@ class Config:
         :rtype:
 
         """
-        print("Load Properties")
         for item in props:
             print(item)
             self.properties[item['name']] = copy.copy(item['value'])
 
     def load_objects_properties(self, object_type, props):
-        self.objects_properties[object_type] = \
-            [ItemConfig(x) for x in props]
+        """
+        Load Object Properties
+
+        Args: Object Type
+              Props
+
+        :param object_type:
+        :type object_type:
+        :param props:
+        :type props:
+        :return:
+        :rtype:
+        """
+        print("Load objects properties")
+        print("Obj type", object_type)
+        print("Prop", props)
+        self.objects_properties[object_type] = [ItemConfig(x) for x in props]
 
     def load_view_vars(self, item):
         key = tuple(item['nextfilter'])
@@ -198,6 +260,7 @@ class Config:
         return copy.copy(self.wh_inputs)
 
     def get_view_vars(self, view_type):
+        print("View vars item", self.view_vars.items())
         try:
             result = []
             for key, value in self.view_vars.items():
@@ -223,13 +286,12 @@ class Config:
 
     def get_object_property(self, object_type, ids, lang):
         obj_props = self.objects_properties.get(object_type)
-        print("Obj property", obj_props)
+        print("OBJ PROP", [i.id for i in obj_props])
         if obj_props is None:
             return None
-
         result = [x.get_for_view(lang) for x in obj_props if x.id in ids]
-        print(result)
-        print("Result", result)
+        print("Result of object property selection fro view", result)
+
         if len(result) == 0:
             return None
         return result
@@ -239,8 +301,7 @@ class ItemConfig:
 
     def __init__(self, props):
 
-        print("Initialisaion By Props", props)
-        self.lang_specific_props ={}
+        self.lang_specific_props = {}
         if 'id' not in props.keys():
             raise Exception
         self.general_props = {x: y for x, y in props.items() if x not in LANGKEY}
@@ -257,12 +318,12 @@ class ItemConfig:
         return self.lang_specific_props
 
     def get_for_view(self, lang):
-        print('lang')
-        print("Lang_Spec_Prop", self.lang_specific_props)
-        print("Lang_Spec_Prop", self.lang_specific_props['lang-en-full_name'])
-        return {
-                copy.copy(self.general_props),
-                self.lang_specific_props['lang-en-full_name']}
+
+        lang_spec_prop = self.lang_specific_props
+        if self.lang_specific_props == {}:
+            return [copy.copy(self.general_props)]
+
+        return [copy.copy(self.general_props),lang_spec_prop]
 
     def get_for_save(self):
 

@@ -17,6 +17,22 @@ from .services import calculate as calc_service
 class Workbench:
 
     def __init__(self, user_id):
+        """
+        Initialisation of workbench
+        Args:
+            user_id - user identification
+
+        container (Container)- Main Information
+        data_config (DataConfiguration)
+        calc_kernel (CalculationKernel)
+        toll_config (Dict) - dictionary with configuration about tool
+        search_index (Dict) - dictionary with parameters
+                        order, direct, reverse
+        selection (List) - list of selected id's
+
+        :param user_id:
+        :type user_id:
+        """
         self._user_id = user_id
         self.container = Container()
         self.data_config = DataConfiguration()
@@ -26,7 +42,20 @@ class Workbench:
         self.search_index = dict(order=None, direct=None, reverse=None)
         self.selection = []
 
+
     def get_backup(self):
+        """Get backup of workbench
+           in pickle format
+
+        Args:
+            Dictionary with
+                container_backup
+                data_config_backup
+                calc_instructions
+
+        :return:
+        :rtype:
+        """
         container_backup = self.container.get_backup()
         data_config_backup = self.data_config.get_backup()
         calc_instructions = self.calc_kernel.get_backup()
@@ -37,6 +66,16 @@ class Workbench:
         })
 
     def load_from_backup(self, backup_binary, user_access):
+        """Load from backup
+
+        :param backup_binary:
+        :type backup_binary:
+        :param user_access:
+        :type user_access:
+        :return:
+        :rtype:
+        """
+
         # Unpickle backup.
         backup = pickle.loads(backup_binary)
         cont_backup = backup.get('container', dict())
@@ -47,13 +86,26 @@ class Workbench:
         self.data_config.load_from_backup(config_backup)
         self.calc_kernel.load_from_backup(calc_instructions)
         #
-        self.selection = self.container.top_entities
+        #self.selection = [ent.id for ent in self.container.top_entities]
         # Init wb
-        print("Init WB")
-        print(self.data_config)
-        #self._init_wb(user_access)
+        self._init_wb()
+        print("Initial Selection", self.selection)
 
     def initial_load(self, warehouse, dev_template, calc_instructions, user_access):
+        """
+        Initial load
+
+        :param warehouse:
+        :type warehouse:
+        :param dev_template:
+        :type dev_template:
+        :param calc_instructions:
+        :type calc_instructions:
+        :param user_access:
+        :type user_access:
+        :return:
+        :rtype:
+        """
         self.data_config.init_load(dev_template)
         init_load_service.init_load_container(dev_template, warehouse,
                                                   self.container, self.data_config)
@@ -64,43 +116,55 @@ class Workbench:
         self.calc_kernel.load_instructions(calc_instructions)
         # Init wb
         #Init db with user access
-        self._init_wb(user_access)
+        self._init_wb()
         # Run initial calculations.
         calc_service.calculate(self.calc_kernel, self.container)
         return
 
-    def _init_wb(self, user_access_rights):
+    def _init_wb(self): #input user_access_rights
+        """
+        Initialise workbench
+
+        Get dimension list from data configuration
+        Build search index
+        Add selection to WB attr
+        :param user_access_rights:
+        :type user_access_rights:
+        :return:
+        :rtype:
+        """
+
         # Build search index.
-        print("Dim Names")
         dim_names = self.data_config.get_property('dimensions')
         #Build Search Index
-        print("Direct Index")
         direct_index, reverse_index = \
             dim_service.build_search_index(self.container, dim_names)
-        print("Search Index")
         self.search_index['order'] = dim_names
         self.search_index['direct'] = direct_index
         self.search_index['reverse'] = reverse_index
-        print("Search Index", self.search_index)
 
         # Set selection by default.
-        #empty_query = #dim_service.get_empty_query(self.search_index)
-        empty_query = {'products': [], 'products2': [], 'geography': [],'market':["wallmart"]}
+        empty_query = dim_service.get_empty_query(self.search_index)
+
+        #empty_query = {'products': [], 'products2': [], 'geography': [],'market':["wallmart"]}
         opts, ents = \
             dim_service.search_by_query(self.search_index, empty_query)
-
+        print("Init WB - Selection", ents)
         self.selection = ents
-        """
-        {'products': [], 'geography': []}
 
-        Opts {'products': {'data': [{'id': 'mouthwash', 'name': 'mouthwash', 'parent_id': None}, {'id': 'total', 'name': 'total', 'parent_id': None}], 'selected': ['mouthwash']}, 'geography': {'data': [{'id': 'mexico', 'name': 'mexico', 'parent_id': None}, {'id': 'italy', 'name': 'italy', 'parent_id': None}, {'id': 'germany', 'name': 'germany', 'parent_id': None}, {'id': 'brazil', 'name': 'brazil', 'parent_id': None}, {'id': 'japan', 'name': 'japan', 'parent_id': None}, {'id': 'uk', 'name': 'uk', 'parent_id': None}, {'id': 'canada', 'name': 'canada', 'parent_id': None}, {'id': 'us', 'name': 'us', 'parent_id': None}, {'id': 'spain', 'name': 'spain', 'parent_id': None}, {'id': 'australia', 'name': 'australia', 'parent_id': None}], 'selected': ['australia']}}
-Ents [20]
-        """
 
+    def _update_search_index(self,query):
+        """
+        Update search
+        :param query:
+        :type query:
+        :return:
+        :rtype:
+        """
 
         # Init local access manager.
         #for item in user_access_rights:
         #    ent = self.container.get_entity_by_path(item['path'])
         #    if ent is not None:
         #        item['entity_id'] = ent.id
-        self.access.load(user_access_rights, self.container)
+        #self.access.load(user_access_rights, self.container)

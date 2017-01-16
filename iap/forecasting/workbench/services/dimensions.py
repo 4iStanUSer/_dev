@@ -1,9 +1,8 @@
 import copy
-
 JOIN_SYMBOL = '|-|-|'
 
 
-    def get_selectors_config(config, lang):
+def get_selectors_config(config, lang):
     """
     GET SELECTORS CONFIGURATION
 
@@ -16,24 +15,23 @@ JOIN_SYMBOL = '|-|-|'
     """
 
     dimensions = config.get_property('dimensions')
+    print("Dimensions", dimensions)
     sel_props = config.get_objects_properties('selector', dimensions, lang)
-
+    print("Selector Property From Config", sel_props)#wrong
     selectors_for_view = dict()
-    for item in sel_props:
-
+    for i in sel_props:
+        item = i[0]
         sel_view_options = dict(
             multiple=item['multiple'],
             type=item['type'],
             icon=item['icon'],
             disabled=False,
-            name=item['name'],
-            placeholder=item['name']
+            name=item['id'],#item['name']
+            placeholder=item['id']#item['name']
         )
         selectors_for_view[item['id']] = sel_view_options
 
-    return dict(
-        selectors=selectors_for_view,
-        order=dimensions)
+    return dict(selectors=selectors_for_view, order=dimensions)
 
 
 def get_empty_query(search_index):
@@ -146,7 +144,6 @@ def _add_entity_to_index(entity, curr_point, search_index, dim_names, points):
                 dim_path = ['total']
                 #continue
             key = tuple(dim_path)
-            ############################
             if i < len(dim_names) - 1:
                 if key not in sub_index:
                     sub_index[key] = dict()
@@ -155,12 +152,12 @@ def _add_entity_to_index(entity, curr_point, search_index, dim_names, points):
                 if key in sub_index:
                     raise Exception
                 sub_index[key] = curr_point['node_id']
-            ##############################
         for child in entity.children:
             new_point = copy.deepcopy(curr_point)
             _add_entity_to_index(child, new_point, search_index, dim_names, points)
     else:
         pass
+
 
 def ents_by_options(options, container):
     """
@@ -193,16 +190,15 @@ def ents_by_options(options, container):
     dimensions = list(options.keys())
     for i in dimensions:
         path[i] = options[i]['selected']
-        #get_entity_by_path
 
 
-def get_options_by_ents(search_index, entities_ids):
+def get_options_by_ents(search_index, entities_ids, lang):
     """
-    GET OPTIONS BY ENTS
+    Return Options by input entities id's
 
     Attr:
 
-    Entities ids
+    Entities ids [20]
 
     Search Index {
         'order':['geography', 'products'],
@@ -252,22 +248,28 @@ def get_options_by_ents(search_index, entities_ids):
     """
     reverse_index = search_index['reverse']
 
-    # Filter entities by list from input.
+    # Get entities coordinates
     ents_coords = [coords for node_id, coords in reverse_index.items()
                    if node_id in entities_ids]
-    #ENTITIES COORDINATES - []
 
+    print("Entities coordinates", ents_coords)
     # Create entity based on coords.
-    #QUERY - GET EMPTY QUERY (SERCH INCEX)
     query = get_empty_query(search_index)
+    print("New Query", query)
     #for entities in ents-coords
     for ent in ents_coords:
         #for dim, coords om ent.items
         for dim, coords in ent.items():
             merged_coords = JOIN_SYMBOL.join(coords)
+            #if merged selected dimension == []
             if merged_coords not in query[dim]:
-                query[dim].append(merged_coords)
+                if query[dim]==[]:
+                    pass
+                else:
+                    query[dim].append(merged_coords)
+    print("Final Query", query)
     opts, ents = search_by_query(search_index, query)
+    print("Final OPTS", opts)
     return opts
 
 
@@ -292,6 +294,9 @@ def search_by_query(search_index, query):
     options = dict()
     entities_ids = []
     query_internal = _transform(query)
+    print("Query Internal", query_internal)
+    print("Order", order)
+    print("Search Indexes", search_indexes)
     for i, dim_id in enumerate(order):
         """
         Iterate by tuple(number, dimension)
@@ -301,15 +306,16 @@ def search_by_query(search_index, query):
         for item in search_indexes:
             #search_index -?
             keys.extend(item.keys())
-
+        print("Dimension id", dim_id)
         # Get current selection.
         dimension_selection = query_internal.get(dim_id)
+        print("Dimension Selection", dimension_selection)
         # Verify current selection.
         # If selection is empty or not valid set default selection.
         dimension_selection = [x for x in dimension_selection if x in keys]
         if len(dimension_selection) == 0:
-            dimension_selection = [sorted(keys)[0]]
-
+            dimension_selection = sorted(keys)
+        print("Dimension Selection", dimension_selection)
         options[dim_id] = _fill_options(keys, dimension_selection)
         #fill options
         next_iter_indexes = []
@@ -328,6 +334,7 @@ def search_by_query(search_index, query):
                     entities_ids.append(search_res)
         if len(next_iter_indexes) == 0 and i != len(order) - 1:
             raise Exception
+        #update status
         search_indexes = next_iter_indexes
     return options, entities_ids
 
@@ -389,6 +396,4 @@ def _transform(query):
             [tuple(x.split(JOIN_SYMBOL)) for x in dim_selection]
     return tuppled_query
 
-#QUERY  = {"DIMENSION NAME": DIMENSION SELECTION/[]}
-#_TRANSFORM => {'DIMENSION NAME': [([ ])]}
 
