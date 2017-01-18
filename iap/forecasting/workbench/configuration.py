@@ -106,7 +106,6 @@ class DataConfiguration:
 
     def get_vars_for_view(self, **kwargs):
         ent_options = self._get_entity_config(**kwargs)
-        print("Ent Oprions", ent_options)
         result = ent_options.get_view_vars('variables')
         if result is not None:
             return result
@@ -154,16 +153,8 @@ class DataConfiguration:
         :rtype:
         """
         ent_options = self._get_entity_config(**kwargs)
-        print("Entities Options", ent_options)
         result = ent_options.get_object_property(object_type, ids, lang)
-        print("Get Object Property from entity config", result)
-        """
-        Result
-        [[
-          {'id': 'annual', 'lag': '1'},
-          {'lang-ru-full_name': '2Annual', 'lang-en-short_name': 'A', 'lang-en-full_name': 'Annual', 'lang-ru-short_name': '2A'}
-        ]]
-        """
+
         if result is not None:
             return result
         raise Exception
@@ -227,9 +218,7 @@ class Config:
         :return:
         :rtype:
         """
-        print("Load objects properties")
-        print("Obj type", object_type)
-        print("Prop", props)
+
         self.objects_properties[object_type] = [ItemConfig(x) for x in props]
 
     def load_view_vars(self, item):
@@ -260,7 +249,6 @@ class Config:
         return copy.copy(self.wh_inputs)
 
     def get_view_vars(self, view_type):
-        print("View vars item", self.view_vars.items())
         try:
             result = []
             for key, value in self.view_vars.items():
@@ -286,12 +274,9 @@ class Config:
 
     def get_object_property(self, object_type, ids, lang):
         obj_props = self.objects_properties.get(object_type)
-        print("OBJ PROP", [i.id for i in obj_props])
         if obj_props is None:
             return None
         result = [x.get_for_view(lang) for x in obj_props if x.id in ids]
-        print("Result of object property selector fro view", result)
-
         if len(result) == 0:
             return None
         return result

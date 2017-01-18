@@ -1,5 +1,4 @@
 import json
-
 with open('json/timeline_manager/timeline_manager.json') as f:
     timeline = json.load(f)
 
