@@ -4,8 +4,7 @@ JOIN_SYMBOL = '|-|-|'
 
 
 def get_selectors_config(config, lang):
-    """
-    GET SELECTORS CONFIGURATION
+    """Get selector configuration from workbench configuration
 
     :param config:
     :type config:
@@ -48,18 +47,20 @@ def get_empty_query(search_index):
 
 def build_search_index(container, dim_names):
     """
-    BUILD SEARCH INDEX
+    Build search indexes:
+        Set of information's block about
+        the structure of container's entities with dimension coordinates
 
-    Get list of all pathes from container by dimension names
+    Arg's:
+        (Container): container
+        (List): dimension_name
 
-
-    Dim Name's  - ['geography', 'products']
 
     :param container:
     :type container:
-    :param dim_names:
-    :type dim_names:
-    :return:
+    :param dim_names: list with dimension name's
+    :type list:
+    :return (List, List): direct and reverse indexes
     :rtype:
 
     Iterate through the top entities
@@ -68,16 +69,16 @@ def build_search_index(container, dim_names):
     direct_index = dict()
     points = []
     for ent in container.top_entities:
-        #if ent.variable is not None:
-        #    informative = True
-        #else:
-        #    informative = False
-        point = dict(node_id=None, coords={x: [] for x in dim_names})
+        if ent.variables is not list():
+            informative = True
+        else:
+            informative = False
+        #check is it necessery to include into index
+        point = dict(node_id=None, coords={x: [] for x in dim_names}, informative=informative)
         _add_entity_to_index(ent, point, direct_index, dim_names, points)
 
     reverse_index = {x['node_id']: x['coords'] for x in points}
     return direct_index, reverse_index
-
 
 
 def _add_entity_to_index(entity, curr_point, search_index, dim_names, points):
@@ -159,8 +160,6 @@ def ents_by_options(options, container):
                          {'parent_id': None, 'name': 'total', 'id': 'total'}]},
 
     'products2': {'selected': ['total'], 'data': [{'parent_id': None, 'name': 'total', 'id': 'total'}]}}
-    :param opts:
-    :type opts:
     :return:
     :rtype:
     """
@@ -187,12 +186,8 @@ def get_options_by_ents(search_index, entities_ids, lang):
     :rtype:
 
     """
-
     reverse_index = search_index['reverse']
-
-    # Get entities coordinates
     #Entities coordinates
-
 
     ents_coords = [coords for node_id, coords in reverse_index.items()
                    if node_id in entities_ids]
@@ -210,17 +205,17 @@ def get_options_by_ents(search_index, entities_ids, lang):
                     query[dim].append(merged_coords)
                 else:
                     query[dim].append(merged_coords)
-    opts, ents = search_by_query(search_index, query)
+    opts, ents = _search_by_query(search_index, query)
     return opts
 
 
 def search_by_query(search_index, query):
-    """
-    SEARCH BY QUERY
+    """Search by query
+    Traverse over search_index in order to find
+    entities corresponds to query list, with specific dimension and values
 
-     excecute filter with search index to query
-     #Empty Query {'products': [], 'geography': []}
-     #Search indexes = list of all pathes in the tree
+    Problem - dublicate entities' name if section data of option (#result of fill_option(keys, selected))
+            - raise exception when deal several level in one dimension
 
     :param search_index:
     :type search_index:
@@ -276,17 +271,26 @@ def search_by_query(search_index, query):
 
 
 def _search_by_query(search_index, query):
+    """Alternative version for search_by_query function
 
+    Use reverse collection of entities in search index
+    Return entities id's and option's required by dimension selection
+
+    Use breath first search to retive neccessery data
+
+    :param search_index:
+    :type search_index:
+    :param query:
+    :type query:
+    :return:
+    :rtype:
+    """
     order = search_index['order']
-
-    reverse = [search_index['direct']]
 
     keys = [item[1] for item in search_index['reverse'].items()]
 
-
     options = {}
     search_index = [dict(data=item[1], num=item[0]) for item in search_index['reverse'].items()]
-
 
     selected = search_index
     #iteraction over dimension
@@ -299,11 +303,9 @@ def _search_by_query(search_index, query):
         # fill option for current dimension
         options[dim_name] = __fill_options(keys, [query[dim_name]], dim_name)
         #iteration over value
-        print("Options", options)
         for dim_value in query[dim_name]:
             #iteration over selection
             for entity in selected:#selection
-
                 if dim_value in entity['data'][dim_name]:
                     selection.append(entity)
                     next_iter_indexes.append(entity['data'])
@@ -317,13 +319,22 @@ def _search_by_query(search_index, query):
 
 
 def __fill_options(keys_list, selected_items, dim_name):
-    #selected item - selected dimension
+    """Alternative version for fill options
+
+    :param keys_list:
+    :type keys_list:
+    :param selected_items:
+    :type selected_items:
+    :param dim_name:
+    :type dim_name:
+    :return:
+    :rtype:
+    """
 
     options = dict(
         data=[],
         selected=[JOIN_SYMBOL.join(x) for x in selected_items]
     )
-
 
     for item_dict in keys_list:
         item = item_dict[dim_name]
@@ -337,24 +348,18 @@ def __fill_options(keys_list, selected_items, dim_name):
             item_id = JOIN_SYMBOL.join(item)
             name = item[-1]
             parent_id = JOIN_SYMBOL.join(item[:len(item)-1])
-        options['data'].append(dict(name=name, id=item_id,
+        if dict(name=name, id=item_id, parent_id=parent_id) not in options['data']:
+            options['data'].append(dict(name=name, id=item_id,
                                     parent_id=parent_id))
+
     return options
 
 
 def _fill_options(keys_list, selected_items):
     """
-    FILL OPTIONS
-
-    SELECTED ITEMS = [('us',), ('uk',)]
-        [('italy',), ('mexico',), ('australia',), ('brazil',), ('japan',), ('spain',), ('germany',), ('canada',),
-        ('us',), ('uk',)]
-
-    RETURN:
-        OPTIONS = {
-                    DATA:[NAME:, ID:, PARENT_ID:]
-                    SELECTED:[]
-                }
+    Fill option for list of option abd selected item of dimension
+    Return dictionary with section selected - selected items
+                      and section data - another options
 
     :param keys_list:
     :type keys_list:
@@ -387,9 +392,6 @@ def _fill_options(keys_list, selected_items):
 
 def _transform(query):
     """
-    #QUERY  = {"DIMENSION NAME": DIMENSION SELECTION/[]}
-
-    #_TRANSFORM => {'DIMENSION NAME': [([dimension_selection])]}
     :param query:
     :type query:
     :return:

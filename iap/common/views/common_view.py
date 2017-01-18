@@ -37,7 +37,7 @@ def check_logged_in(req):
 
 
 def login(req):
-    """View function for
+    """View function for login
 
     :param req:
     :type req: pyramid.util.Request
@@ -144,19 +144,18 @@ def get_tools_with_projects(req):
     Return all projects and tool information
 
     Args:
-        {'Data':{}, 'X-Token':""}
-
-    Get tool with projects
-    Example:
-        {
-        'tools': [
+        {'Data':{}, 'X-Token':''}
+    Return:
+        Example:
+            {
+                'tools': [
                   {'name': 'Forecasting', 'description': 'This is forecasting', 'id': 'forecast'}
-                ],
-        'projects': [
+                        ],
+                'projects': [
                      {'name': 'Oral Care Forecasting', 'description': None, 'id': 'JJOralCare', 'tool_id': 'forecast'},
                      {'name': 'Lean Forecasting', 'description': None, 'id': 'JJLean', 'tool_id': 'forecast'}
                     ]
-        }
+            }
 
 
     :param req:
@@ -175,14 +174,12 @@ def get_tools_with_projects(req):
             data['tools'] = common_getter.get_tools_info(pt)
         else:
             #call acccess manager  - check permission to project_id, tool_id
-
             #lang = rt.get_state(user_id).language
             #tools_ids, projects_ids = pt.get_user_tools_with_projects(user_id)
             #data['tools'] = common_getter.get_tools_info(req, pt, tools_ids, lang)
             data['tools'] = common_getter.get_tools_info(req)
             #data['projects'] = common_getter.get_projects_info(req, pt, projects_ids, lang)
             data['projects'] = common_getter.get_projects_info(req)
-        print("Get tools with porjects", data)
         return send_success_response(data)
     except Exception as e:
         msg = ErrorManager.get_error_message(e)
@@ -193,17 +190,16 @@ def get_data_for_header(req):
     """
     View for url - get_data_for_header(request)
     Args:
-        User_ID
-    Return (Dict) with
-        {'user', 'language', 'client'}
+        user_id
+    Return:
+        (Dict) {'user':{}, 'language':{}, 'client':{}}
     Example:
         Header Data
-        {
-            'client': {'icon': 'logo.jpg', 'name': 'CompanyASD'},
-            'user': {'name': 'Nicolas'},
-            'languages': [{'id': 'en', 'selected': True, 'name': 'English'},
-                    {'id': 'ru', 'selected': False, 'name': 'Russian'}]
-        }
+        {'client': {'icon': 'logo.jpg', 'name': 'CompanyASD'},
+         'user': {'name': 'Nicolas'},
+         'languages': [{'id': 'en', 'selected': True, 'name': 'English'},
+                      {'id': 'ru', 'selected': False, 'name': 'Russian'}]
+         }
 
     :param req:
     :type req:
@@ -229,13 +225,11 @@ def get_data_for_header(req):
 
 
 def set_project_selection(req):
-    """
-    Set project selector
+    """Set project selector
 
     Args:
-        project_id
-        tool_id
-
+        project_id:(String)
+        tool_id:(String)
     Return:
         project_id with updated status in runtime storage
 
@@ -251,19 +245,15 @@ def set_project_selection(req):
     except KeyError:
         msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
         return send_error_response(msg)
-    #try:
-    #Check project and tool selector
-
-    #Change accesss for project selector
-    project = req.dbsession.query(Project).filter(Project.id == project_id).one()
-    #update state of runtime storage
-    print("Update state")
-    rt.update_state(user_id, tool_id=tool_name, project_id=project.id)
-    print("State Updated")
-    return send_success_response(project_id)
-    #except Exception as e:
-    #    msg = ErrorManager.get_error_message(e)
-    #    return send_error_response(msg)
+    try:
+        #Change accesss for project selector
+        project = req.dbsession.query(Project).filter(Project.id == project_id).one()
+        #update state of runtime storage
+        rt.update_state(user_id, tool_id=tool_name, project_id=project.id)
+        return send_success_response(project_id)
+    except Exception as e:
+        msg = ErrorManager.get_error_message(e)
+        return send_error_response(msg)
 
 
 def test_preparation(request):
@@ -282,7 +272,6 @@ def test_preparation(request):
         create_table(request)
         prepare_scenario_testing(request)
         return send_success_response("Test Prepared")
-
     elif test_name == "authentification":
         prepare_scenario_testing(request)
         return send_success_response("Test Prepared")
