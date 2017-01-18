@@ -42,7 +42,6 @@ class RunTimeStorage:
         self._lock = Lock()
 
     def get_wb(self, user_id):
-        print("Get WB")
         return self._get_user_box(user_id)['wb']
 
     def get_state(self, user_id):
