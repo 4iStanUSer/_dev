@@ -153,7 +153,7 @@ export class DropdownComponent {
                 if (switched || force) {
                     this.toggleExpandedStatus(e);
                     // Generate event
-                    console.info('Dropdown changed selection');
+                    console.info('Dropdown changed selector');
                     let selection = null;
                     if (this.selected[0]) {
                         selection = this.selected[0].id;

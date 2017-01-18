@@ -290,7 +290,7 @@ class Config:
         if obj_props is None:
             return None
         result = [x.get_for_view(lang) for x in obj_props if x.id in ids]
-        print("Result of object property selection fro view", result)
+        print("Result of object property selector fro view", result)
 
         if len(result) == 0:
             return None

@@ -56,32 +56,6 @@ def build_search_index(container, dim_names):
 
     Dim Name's  - ['geography', 'products']
 
-    Return:
-        Direct Index {
-                        ('mexico',): {('mouthwash',): 13, ('total',): 3}, ('australia',): {('mouthwash',): 20, ('total',): 10},
-                        ('uk',): {('mouthwash',): 18, ('total',): 8}, ('us',): {('mouthwash',): 11, ('total',): 1},
-                        ('canada',): {('mouthwash',): 12, ('total',): 2}, ('brazil',): {('mouthwash',): 15, ('total',): 5},
-                        ('germany',): {('mouthwash',): 14, ('total',): 4}, ('spain',): {('mouthwash',): 16, ('total',): 6},
-                        ('japan',): {('mouthwash',): 19, ('total',): 9}, ('italy',): {('mouthwash',): 17, ('total',): 7}
-                        }
-
-        Reverse Index {
-                        1: {'products': [], 'geography': ['us']},
-                        2: {'products': [], 'geography': ['canada']},
-                        3: {'products': [], 'geography': ['mexico']},
-                        4: {'products': [], 'geography': ['germany']},
-                        5: {'products': [], 'geography': ['brazil']},
-                        6: {'products': [], 'geography': ['spain']},
-                        7: {'products': [], 'geography': ['italy']},
-                        8: {'products': [], 'geography': ['uk']},
-                        9: {'products': [], 'geography': ['japan']},
-                        10: {'products': [], 'geography': ['australia']},
-                        11: {'products': ['mouthwash'], 'geography': ['us']},
-                        12: {'products': ['mouthwash'], 'geography': ['canada']},
-                        13: {'products': ['mouthwash'], 'geography': ['mexico']},
-                        14: {'products': ['mouthwash'], 'geography': ['germany']}
-                     }
-
     :param container:
     :type container:
     :param dim_names:
@@ -95,11 +69,16 @@ def build_search_index(container, dim_names):
     direct_index = dict()
     points = []
     for ent in container.top_entities:
-        point = dict(node_id=None, coords={x: [] for x in dim_names})
+        if ent.variable is not None:
+            informative = True
+        else:
+            informative = False
+        point = dict(node_id=None, coords={x: [] for x in dim_names}, informative=informative)
         _add_entity_to_index(ent, point, direct_index, dim_names, points)
 
     reverse_index = {x['node_id']: x['coords'] for x in points}
     return direct_index, reverse_index
+
 
 
 def _add_entity_to_index(entity, curr_point, search_index, dim_names, points):
@@ -198,43 +177,6 @@ def get_options_by_ents(search_index, entities_ids, lang):
 
     Attr:
 
-    Entities ids [20]
-
-    Search Index {
-        'order':['geography', 'products'],
-
-        'direct': {('mexico',): {('mouthwash',): 13, ('total',): 3},
-                    ('australia',): {('mouthwash',): 20, ('total',): 10},
-                    ('uk',): {('mouthwash',): 18, ('total',): 8},
-                    ('us',): {('mouthwash',): 11, ('total',): 1},
-                    ('canada',): {('mouthwash',): 12, ('total',): 2},
-                    ('brazil',): {('mouthwash',): 15, ('total',): 5},
-                    ('germany',): {('mouthwash',): 14, ('total',): 4},
-                    ('spain',): {('mouthwash',): 16, ('total',): 6},
-                    ('japan',): {('mouthwash',): 19, ('total',): 9},
-                    ('italy',): {('mouthwash',): 17, ('total',): 7}},
-        'reverse': {
-                    1: {'products': [], 'geography': ['us']},
-                    2: {'products': [], 'geography': ['canada']},
-                    3: {'products': [], 'geography': ['mexico']},
-                    4: {'products': [], 'geography': ['germany']},
-                    5: {'products': [], 'geography': ['brazil']},
-                    6: {'products': [], 'geography': ['spain']},
-                    7: {'products': [], 'geography': ['italy']},
-                    8: {'products': [], 'geography': ['uk']},
-                    9: {'products': [], 'geography': ['japan']},
-                    10: {'products': [], 'geography': ['australia']},
-                    11: {'products': ['mouthwash'], 'geography': ['us']},
-                    12: {'products': ['mouthwash'], 'geography': ['canada']},
-                    13: {'products': ['mouthwash'], 'geography': ['mexico']},
-                    14: {'products': ['mouthwash'], 'geography': ['germany']},
-                    15: {'products': ['mouthwash'], 'geography': ['brazil']},
-                    16: {'products': ['mouthwash'], 'geography': ['spain']},
-                    17: {'products': ['mouthwash'], 'geography': ['italy']},
-                    18: {'products': ['mouthwash'], 'geography': ['uk']},
-                    19: {'products': ['mouthwash'], 'geography': ['japan']},
-                    20: {'products': ['mouthwash'], 'geography': ['australia']}}}
-
     SEARCH INDEX
     ENTITIES IDS
 
@@ -246,16 +188,18 @@ def get_options_by_ents(search_index, entities_ids, lang):
     :rtype:
 
     """
+
     reverse_index = search_index['reverse']
 
     # Get entities coordinates
+    #Entities coordinates
+
+
     ents_coords = [coords for node_id, coords in reverse_index.items()
                    if node_id in entities_ids]
 
-    print("Entities coordinates", ents_coords)
     # Create entity based on coords.
     query = get_empty_query(search_index)
-    print("New Query", query)
     #for entities in ents-coords
     for ent in ents_coords:
         #for dim, coords om ent.items
@@ -264,14 +208,11 @@ def get_options_by_ents(search_index, entities_ids, lang):
             #if merged selected dimension == []
             if merged_coords not in query[dim]:
                 if query[dim]==[]:
-                    pass
+                    query[dim].append(merged_coords)
                 else:
                     query[dim].append(merged_coords)
-    print("Final Query", query)
     opts, ents = search_by_query(search_index, query)
-    print("Final OPTS", opts)
     return opts
-
 
 
 def search_by_query(search_index, query):
@@ -294,28 +235,21 @@ def search_by_query(search_index, query):
     options = dict()
     entities_ids = []
     query_internal = _transform(query)
-    print("Query Internal", query_internal)
-    print("Order", order)
-    print("Search Indexes", search_indexes)
     for i, dim_id in enumerate(order):
-        """
-        Iterate by tuple(number, dimension)
-        """
+
         # Collect available options.
         keys = []
         for item in search_indexes:
-            #search_index -?
             keys.extend(item.keys())
-        print("Dimension id", dim_id)
-        # Get current selection.
+        # Get current selector.
         dimension_selection = query_internal.get(dim_id)
-        print("Dimension Selection", dimension_selection)
-        # Verify current selection.
-        # If selection is empty or not valid set default selection.
-        dimension_selection = [x for x in dimension_selection if x in keys]
+        # Verify current selector.
+        # If selector is empty or not valid set default selector.
         if len(dimension_selection) == 0:
             dimension_selection = sorted(keys)
-        print("Dimension Selection", dimension_selection)
+        else:
+            dimension_selection = [x for x in dimension_selection if x in keys]
+
         options[dim_id] = _fill_options(keys, dimension_selection)
         #fill options
         next_iter_indexes = []
@@ -331,7 +265,10 @@ def search_by_query(search_index, query):
                 else:
                     if isinstance(search_res, dict):
                         raise Exception
-                    entities_ids.append(search_res)
+                    if search_res in entities_ids:
+                        pass
+                    else:
+                        entities_ids.append(search_res)
         if len(next_iter_indexes) == 0 and i != len(order) - 1:
             raise Exception
         #update status
@@ -339,11 +276,75 @@ def search_by_query(search_index, query):
     return options, entities_ids
 
 
+def _search_by_query(search_index, query):
+
+    order = search_index['order']
+
+    reverse = [search_index['direct']]
+    keys = []
+    for item in reverse:
+        keys.extend(item.keys())
+
+    options = {}
+
+    search_index = [dict(data=item[1], num=item[0]) for item in search_index['reverse'].items()]
+
+
+    selected = search_index
+    #iteraction over dimension
+    for dim_name in order:
+        if query[dim_name] == []:
+            selection = selected
+        else:
+            selection = []
+        #fill option for current dimension
+        options[dim_name] = __fill_options(keys, [query[dim_name]])
+
+        #iteration over value
+        for dim_value in query[dim_name]:
+            #iteration over selection
+            for entity in selected:#selection
+                if dim_value in entity['data'][dim_name]:
+                    selection.append(entity)
+                else:
+                    pass
+        selected = selection
+
+    result = [x['num'] for x in selected]
+
+    return options, result
+
+
+def __fill_options(keys_list, selected_items):
+    #selected item - selected dimension
+
+    options = dict(
+        data=[],
+        selected=[JOIN_SYMBOL.join(x) for x in selected_items]
+    )
+
+    for item in keys_list:
+        if len(item) == 0:
+            continue
+        elif len(item) == 1:
+            item_id = item[-1]
+            name = item[-1]
+            parent_id = None
+        else:
+            item_id = JOIN_SYMBOL.join(item)
+            name = item[-1]
+            parent_id = JOIN_SYMBOL.join(item[:len(item)-1])
+        options['data'].append(dict(name=name, id=item_id,
+                                    parent_id=parent_id))
+    return options
+
 def _fill_options(keys_list, selected_items):
     """
     FILL OPTIONS
 
-    SELECTED ITEMS = []
+    SELECTED ITEMS = [('us',), ('uk',)]
+        [('italy',), ('mexico',), ('australia',), ('brazil',), ('japan',), ('spain',), ('germany',), ('canada',),
+        ('us',), ('uk',)]
 
     RETURN:
         OPTIONS = {

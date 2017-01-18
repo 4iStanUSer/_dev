@@ -2,14 +2,11 @@ from ...repository.db.models import Pr_Tool, Project
 
 def get_client_info(storage, user_id, lang=None):
     info = dict(
-        name='CompanyASD',
-        icon='logo.jpg'
+    name='CompanyASD',
+    icon='logo.jpg'
     )
     return info
 
-def _get_user_info(user_id, req):
-    #
-    pass
 
 
 def get_user_info(storage, user_id, lang=None):

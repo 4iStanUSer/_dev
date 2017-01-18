@@ -74,9 +74,9 @@ def get_user(request):
     :rtype: int
     """
     #add exception on non existen  id,login in token
-    print(request)
+    print(request.json_body['X-Token'])
     try:
-        token = request.json['X-Token']
+        token = request.json_body['X-Token']
         token_data = jwt.decode(token, 'secret', algorithms=['HS512'])
         user_id = int(token_data['sub'])
         login = token_data['login']

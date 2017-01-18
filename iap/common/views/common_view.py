@@ -230,7 +230,7 @@ def get_data_for_header(req):
 
 def set_project_selection(req):
     """
-    Set project selection
+    Set project selector
 
     Args:
         project_id
@@ -252,9 +252,9 @@ def set_project_selection(req):
         msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
         return send_error_response(msg)
     #try:
-    #Check project and tool selection
+    #Check project and tool selector
 
-    #Change accesss for project selection
+    #Change accesss for project selector
     project = req.dbsession.query(Project).filter(Project.id == project_id).one()
     #update state of runtime storage
     print("Update state")

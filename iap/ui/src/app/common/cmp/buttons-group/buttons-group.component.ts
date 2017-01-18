@@ -28,7 +28,7 @@ interface ButtonDataChangeOutput extends ButtonDataInput {
 /**
  * Simple component to show group of buttons.
  * It works as switcher - one time, one choice.
- * Generates event 'changed' when user changed selection inside.
+ * Generates event 'changed' when user changed selector inside.
  */
 export class ButtonsGroupComponent implements OnInit, OnChanges {
 

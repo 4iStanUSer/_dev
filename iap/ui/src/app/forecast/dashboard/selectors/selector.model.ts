@@ -198,7 +198,7 @@ export class SelectorModel {
     }
 
     /**
-     * Selects all passed items (match by id). Previous selection stays.
+     * Selects all passed items (match by id). Previous selector stays.
      * @param ids Array<string>
      */
     select(ids: Array<string>): void {
@@ -263,7 +263,7 @@ export class SelectorModel {
     }
 
     /**
-     * Removes from selection non-existed items
+     * Removes from selector non-existed items
      */
     private fixSelection() {
         this.selected = this.selected.filter((id) => {
