@@ -1,4 +1,5 @@
 import copy
+from collections import OrderedDict
 JOIN_SYMBOL = '|-|-|'
 
 
@@ -15,9 +16,7 @@ def get_selectors_config(config, lang):
     """
 
     dimensions = config.get_property('dimensions')
-    print("Dimensions", dimensions)
     sel_props = config.get_objects_properties('selector', dimensions, lang)
-    print("Selector Property From Config", sel_props)#wrong
     selectors_for_view = dict()
     for i in sel_props:
         item = i[0]
@@ -69,11 +68,11 @@ def build_search_index(container, dim_names):
     direct_index = dict()
     points = []
     for ent in container.top_entities:
-        if ent.variable is not None:
-            informative = True
-        else:
-            informative = False
-        point = dict(node_id=None, coords={x: [] for x in dim_names}, informative=informative)
+        #if ent.variable is not None:
+        #    informative = True
+        #else:
+        #    informative = False
+        point = dict(node_id=None, coords={x: [] for x in dim_names})
         _add_entity_to_index(ent, point, direct_index, dim_names, points)
 
     reverse_index = {x['node_id']: x['coords'] for x in points}
@@ -281,41 +280,43 @@ def _search_by_query(search_index, query):
     order = search_index['order']
 
     reverse = [search_index['direct']]
-    keys = []
-    for item in reverse:
-        keys.extend(item.keys())
+
+    keys = [item[1] for item in search_index['reverse'].items()]
+
 
     options = {}
-
     search_index = [dict(data=item[1], num=item[0]) for item in search_index['reverse'].items()]
 
 
     selected = search_index
     #iteraction over dimension
+    next_iter_indexes = []
     for dim_name in order:
         if query[dim_name] == []:
             selection = selected
         else:
             selection = []
-        #fill option for current dimension
-        options[dim_name] = __fill_options(keys, [query[dim_name]])
-
+        # fill option for current dimension
+        options[dim_name] = __fill_options(keys, [query[dim_name]], dim_name)
         #iteration over value
+        print("Options", options)
         for dim_value in query[dim_name]:
             #iteration over selection
             for entity in selected:#selection
+
                 if dim_value in entity['data'][dim_name]:
                     selection.append(entity)
+                    next_iter_indexes.append(entity['data'])
                 else:
                     pass
         selected = selection
+        keys = next_iter_indexes.copy()
 
     result = [x['num'] for x in selected]
-
     return options, result
 
 
-def __fill_options(keys_list, selected_items):
+def __fill_options(keys_list, selected_items, dim_name):
     #selected item - selected dimension
 
     options = dict(
@@ -323,7 +324,9 @@ def __fill_options(keys_list, selected_items):
         selected=[JOIN_SYMBOL.join(x) for x in selected_items]
     )
 
-    for item in keys_list:
+
+    for item_dict in keys_list:
+        item = item_dict[dim_name]
         if len(item) == 0:
             continue
         elif len(item) == 1:
@@ -337,6 +340,7 @@ def __fill_options(keys_list, selected_items):
         options['data'].append(dict(name=name, id=item_id,
                                     parent_id=parent_id))
     return options
+
 
 def _fill_options(keys_list, selected_items):
     """

@@ -40,7 +40,6 @@ def get_entity_selectors_config(req):
     wb = rt.get_wb(user_id)
     selectors_config = \
         dimensions.get_selectors_config(wb.data_config, lang)
-    print("Selector Config", selectors_config)
     return send_success_response(selectors_config)
     #except Exception as e:
     #    msg = ErrorManager.get_error_message(e)
@@ -75,7 +74,7 @@ def get_options_for_entity_selector(req):
     if query is None:
         options = dimensions.get_options_by_ents(wb.search_index, wb.selection, lang)
     else:
-        options, ents = dimensions.search_by_query(wb.search_index, query)
+        options, ents = dimensions._search_by_query(wb.search_index, query)
     print("Get options for entity selector", options)
     return send_success_response(options)
 #    except Exception as e:
@@ -105,15 +104,11 @@ def set_entity_selection(req):
     except KeyError:
         msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
         return send_error_response(msg)
-    #try:
-    print("Query",query)
-    wb = rt.get_wb(user_id)
-    print('WB', wb)
-    options, ents = dimensions.search_by_query(wb.search_index, query)
-    wb.selection = ents
-    print("Selected Opt", options)
-    print("Selected", ents)
-    return send_success_response()
-    #except Exception as e:
-    #    msg = ErrorManager.get_error_message(e)
-    #    return send_error_response(msg)
+    try:
+        wb = rt.get_wb(user_id)
+        options, ents = dimensions._search_by_query(wb.search_index, query)
+        wb.selection = ents
+        return send_success_response(options)
+    except Exception as e:
+        msg = ErrorManager.get_error_message(e)
+        return send_error_response(msg)
