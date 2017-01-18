@@ -113,7 +113,7 @@
 
 <!--?
 <div class="component-container">
-    <div class="full-current-selection">
+    <div class="full-current-selector">
         <div class="text">
             <span *ngIf="selectedPoints">
                 <span *ngIf="selectedPoints['start']">
@@ -143,7 +143,7 @@
         <div class="scales" *ngIf="scales">
             <span *ngFor="let scale of scales" [ngClass]="{'selected': (scale == currScale)}" (click)="changeScale(scale)"> {{ scale }}</span>
         </div>
-        <div class="pre-selection">
+        <div class="pre-selector">
             <span *ngIf="preSelectedPoints[currScale] && preSelectedPoints[currScale]['start']">{{ preSelectedPoints[currScale]['start'].getName() }}</span>
             -
             <span *ngIf="preSelectedPoints[currScale] && preSelectedPoints[currScale]['mid']">{{ preSelectedPoints[currScale]['mid'].getName() }}</span>

@@ -64,7 +64,7 @@ def get_entity_data(container, config, entities_ids, lang):
     entity_id = entities_ids[0]
     ent = container.get_entity_by_id(entity_id)
 
-    # Define default selection for time periods.
+    # Define default selector for time periods.
     main_timescales = config.get_property('dash_timescales')
     top_ts_period = config.get_property('dash_top_ts_period')
     dec_timescales = config.get_property('dash_decomposition_timescales')

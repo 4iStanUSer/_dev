@@ -14,7 +14,7 @@ def index_view(req):
 
 def get_entity_selectors_config(req):
     """
-    Get entity selection configuration
+    Get entity selector configuration
 
     Get Selector Config
 
@@ -76,7 +76,7 @@ def get_options_for_entity_selector(req):
         options = dimensions.get_options_by_ents(wb.search_index, wb.selection, lang)
     else:
         options, ents = dimensions.search_by_query(wb.search_index, query)
-    print("Get options for entity selection", options)
+    print("Get options for entity selector", options)
     return send_success_response(options)
 #    except Exception as e:
 #       msg = ErrorManager.get_error_message(e)
@@ -106,7 +106,7 @@ def set_entity_selection(req):
         msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
         return send_error_response(msg)
     #try:
-
+    print("Query",query)
     wb = rt.get_wb(user_id)
     print('WB', wb)
     options, ents = dimensions.search_by_query(wb.search_index, query)

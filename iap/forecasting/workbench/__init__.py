@@ -28,7 +28,7 @@ class Workbench:
         toll_config (Dict) - dictionary with configuration about tool
         search_index (Dict) - dictionary with parameters
                         order, direct, reverse
-        selection (List) - list of selected id's
+        selector (List) - list of selected id's
 
         :param user_id:
         :type user_id:
@@ -86,7 +86,7 @@ class Workbench:
         self.data_config.load_from_backup(config_backup)
         self.calc_kernel.load_from_backup(calc_instructions)
         #
-        #self.selection = [ent.id for ent in self.container.top_entities]
+        #self.selector = [ent.id for ent in self.container.top_entities]
         # Init wb
         self._init_wb()
         print("Initial Selection", self.selection)
@@ -127,7 +127,7 @@ class Workbench:
 
         Get dimension list from data configuration
         Build search index
-        Add selection to WB attr
+        Add selector to WB attr
         :param user_access_rights:
         :type user_access_rights:
         :return:
@@ -143,14 +143,14 @@ class Workbench:
         self.search_index['direct'] = direct_index
         self.search_index['reverse'] = reverse_index
 
-        # Set selection by default.
+        # Set selector by default.
         empty_query = dim_service.get_empty_query(self.search_index)
 
         #empty_query = {'products': [], 'products2': [], 'geography': [],'market':["wallmart"]}
         opts, ents = \
             dim_service.search_by_query(self.search_index, empty_query)
         print("Init WB - Selection", ents)
-        self.selection = ents
+        self.selection = ents[0:1]
 
 
     def _update_search_index(self,query):
