@@ -85,7 +85,7 @@ def get_user(request):
     except:
         return send_error_response("Unauthorised")
     else:
-        return user
+        return user.id
 
 
 def requires_roles(*roles):
