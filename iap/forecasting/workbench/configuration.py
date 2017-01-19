@@ -98,6 +98,7 @@ class DataConfiguration:
                 elif name == 'view_properties':
                     ent_config.load_view_vars(item)
 
+
     def get_property(self, prop_name, **kwargs):
         ent_options = self._get_entity_config(**kwargs)
         prop_val = ent_options.properties.get(prop_name)

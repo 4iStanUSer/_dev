@@ -358,5 +358,60 @@ def check_permission_for_tool_and_project(self, request, user_id, tool_id, proje
     else:
         return False
 
-def check_entities_permission(request, user_id, entities_ids):
-    return True
+
+def tree(dict, path, masks, order):
+    """
+    Fill tree
+
+    :param dict:
+    :type dict:
+    :param path:
+    :type path:
+    :param order:
+    :type order:
+    :return:
+    :rtype:
+    """
+    if order<len(path):
+        key = path[order]
+        if key not in dict.keys():
+            dict[key]={}
+            try:
+                dict['mask']=masks[order]
+            except:
+                raise IndexError
+        order+=1
+        tree(dict[key], path, masks, order)
+
+
+def build_permission_tree(project_name):
+    """
+    Build permission tree
+    :return:
+    :rtype:
+    """
+    #set user_id, tool_id, project_id
+    #set permission
+
+    access_rights = {}
+    from ..repository.access_rights_data import perm_data
+    nodes = perm_data[project_name]
+    for node in nodes:
+        ent = node['out_path']
+        if ent not in access_rights.keys():
+            access_rights[ent] = {}
+            print("Ent", node)
+            masks = node['mask'].split(",")
+            items = node['in_path'].split("-")
+            tree(access_rights[ent], items, masks, order=0)
+
+    return access_rights
+
+
+
+
+
+
+
+
+
