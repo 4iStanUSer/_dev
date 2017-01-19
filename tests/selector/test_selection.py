@@ -23,10 +23,10 @@ def prepare_wb():
 
 def test_search_by_query():
 
-    query = {'geography': ['us', 'uk'], 'products': ['cars'], 'market': []}
+    query = {'geography': ['uk'], 'products': [], 'market': []}
     actual = dimensions.search_by_query(Input, query)
     expected = [18]
-    print("Actual", actual[1])
+    print("Actual", actual)
     assert expected == actual[1]
 
 

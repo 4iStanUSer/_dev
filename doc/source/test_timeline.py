@@ -138,7 +138,6 @@ class Node:
             raise Exception
         self.parents[0].get_path(path, metas)
 
-
     def get_children_by_meta(self, meta_filter, nodes_ids):
         """Get all children of current node that require meta data filter,
             recursively filling node_ids argument.
@@ -157,7 +156,6 @@ class Node:
                 nodes_ids.append(child.id)
             child.get_children_by_meta(meta_filter, nodes_ids)
         return
-
 
     def get_parent_by_meta(self, meta_filter):
         """Get parent of current node that require meta data filter,

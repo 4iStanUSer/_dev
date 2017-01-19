@@ -4,71 +4,77 @@ perm_data = {
   {
     "out_path": "*-*us",
     "in_path": "cpi-annual",
-    "mask":24
+    "mask": "2,4"
   },
   {
     "out_path": "*-*canada",
     "in_path": "cpi-annual",
-    "mask":4
+    "mask": '4,0'
+  },
+  {
+    "out_path": "brazil*-*mouthwash",
+    "in_path": "population-annual-[2012:2016]",
+    "mask": "12,11,22"
+
   },
   {
     "out_path": "*-*mexico",
     "in_path": "cpi-annual-[2012:2016]",
-    "mask":10
+    "mask": "12,11,22"
 
   },
   {
     "out_path": "*-*germany",
     "in_path": "cpi-annual-[2014:2017]",
-    "mask":1
+    "mask": "1,12,12"
 
   },
   {
     "out_path": "*-*brazil",
     "in_path": "cpi-annual-[2011:2014]",
-    "mask":22
+    "mask": "2,2,1"
 
   },
   {
     "out_path": "*-*spain",
     "in_path": "cpi-annual",
-    "mask":11
+    "mask":"21,1"
 
   },
   {
     "out_path": "*-*italy",
     "in_path": "cpi-monthly",
-    "mask":12
+    "mask":'1,2'
 
   },
   {
     "out_path": "*-*uk",
     "in_path": "cpi-monthly",
-    "mask":15
+    "mask":'1,2'
 
   },
   {
     "out_path": "*-*japan",
     "in_path": "cpi-monthly",
-    "mask":17
+    "mask":'1,1'
 
   },
   {
     "out_path": "*-*australia",
     "in_path": "cpi-annual",
-    "mask":23
+    "mask":'1,0'
 
   },
   {
     "out_path": "us*-*mouthwash",
     "in_path": "unit_price-monthly",
-    "mask":11
+    "mask":'1,1,1'
 
   },
   {
     "out_path": "canada*-*mouthwash",
     "in_path":  "eq_price-monthly",
-    "mask":29
+    "mask":'1,1'
 
   }
 ],

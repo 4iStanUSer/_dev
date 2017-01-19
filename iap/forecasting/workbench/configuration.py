@@ -49,6 +49,7 @@ class DataConfiguration:
         :return:
         :rtype:
         """
+
         # Fill project configuration.
         if 'project_properties' in config:
             self._general.load_properties(config['project_properties'])
@@ -63,8 +64,7 @@ class DataConfiguration:
         for name in objects_names:
             if name in config:
                 last_ind = name.find('properties') - 1
-                self._general.load_objects_properties(name[:last_ind],
-                                                      config[name])
+                self._general.load_objects_properties(name[:last_ind], config[name])
 
         # Fill information about wh inputs.
         if 'wh_inputs' in config:
@@ -76,6 +76,7 @@ class DataConfiguration:
             if name not in config:
                 continue
             for item in config[name]:
+                print("View Properties", item)
                 if 'filter' in item:
                     meta_key = Meta(dimension=item['filter'][0],
                                     level=item['filter'][1])
@@ -97,6 +98,7 @@ class DataConfiguration:
                 elif name == 'view_properties':
                     ent_config.load_view_vars(item)
 
+
     def get_property(self, prop_name, **kwargs):
         ent_options = self._get_entity_config(**kwargs)
         prop_val = ent_options.properties.get(prop_name)
@@ -105,6 +107,8 @@ class DataConfiguration:
         raise Exception
 
     def get_vars_for_view(self, **kwargs):
+        #check is it possible
+        #path/meta
         ent_options = self._get_entity_config(**kwargs)
         result = ent_options.get_view_vars('variables')
         if result is not None:
@@ -251,12 +255,15 @@ class Config:
     def get_view_vars(self, view_type):
         try:
             result = []
+            print("View Vars Item", self.view_vars)
             for key, value in self.view_vars.items():
+
                 if len(value[view_type]) > 0:
                     if len(key) == 0:
                         filter = {'type': 0}
                     else:
                         filter = {'type': 3, 'meta_filter': key}
+
                     result.append(
                         dict(filter=filter,
                              variables=copy.copy(value[view_type]))

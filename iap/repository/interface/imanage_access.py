@@ -356,16 +356,24 @@ class IManageAccess:
             return True
         else:
             return False
-        #get_user_by_id(ssn, user_id)
-        #from user get roles
-        #from every roles if tool is equal
-            #return True
-        #from user get permisssion
-            #for every perm in permission check aceess
 
+    def get_entity_permission(self, user_id, project_id, entity_path):
+        """
 
-
-
+        :param user_id:
+        :type user_id:
+        :param project_id:
+        :type project_id:
+        :param entity_path:
+        :type entity_path:
+        :return:
+        :rtype:
+        """
+        user = wha.get_user_by_id(user_id)
+        perms = user.perms
+        for perm in perms:
+            pass
+        
     def get_group_data_permissions(self, group_id, tool_id):
         """
         TEMPRORARY DOESN'T WORK
