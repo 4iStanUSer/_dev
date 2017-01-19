@@ -35,8 +35,7 @@ def load_dev_templates(settings, project_name):
 
     """
     base_path = settings['path.dev_templates']
-    print("Base Path", base_path)
-    template_path = os.path.join(base_path,"{0}.json".format(project_name)).replace("\\", "/")
+    template_path = os.path.join(base_path, "{0}.json".format(project_name)).replace("\\", "/")
     file = open(template_path).read()
     data = json.loads(file)
     return data

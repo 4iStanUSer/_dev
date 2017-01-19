@@ -3564,52 +3564,72 @@
     ], 
     "entity_properties": [
         {
-            "path": "us", 
+            "path": [
+                "us"
+            ], 
             "lang-en-name": "US", 
             "lang-ru-name": "2US"
         }, 
         {
-            "path": "canada", 
+            "path": [
+                "canada"
+            ], 
             "lang-en-name": "Canada", 
             "lang-ru-name": "2Canada"
         }, 
         {
-            "path": "mexico", 
+            "path": [
+                "mexico"
+            ], 
             "lang-en-name": "Mexico", 
             "lang-ru-name": "2Mexico"
         }, 
         {
-            "path": "germany", 
+            "path": [
+                "germany"
+            ], 
             "lang-en-name": "Germany", 
             "lang-ru-name": "2Germany"
         }, 
         {
-            "path": "brazil", 
+            "path": [
+                "brazil"
+            ], 
             "lang-en-name": "Brazil", 
             "lang-ru-name": "2Brazil"
         }, 
         {
-            "path": "spain", 
+            "path": [
+                "spain"
+            ], 
             "lang-en-name": "Spain", 
             "lang-ru-name": "2Spain"
         }, 
         {
-            "path": "italy", 
+            "path": [
+                "italy"
+            ], 
             "lang-en-name": "Italy", 
             "lang-ru-name": "2Italy"
         }, 
         {
-            "path": "uk", 
+            "path": [
+                "uk"
+            ], 
             "lang-en-name": "UK", 
             "lang-ru-name": "2UK"
         }, 
         {
-            "path": "japan", 
+            "path": [
+                "japan"
+            ], 
             "lang-en-name": "Japan", 
             "lang-ru-name": "2Japan"
         }, 
         {
-            "path": "australia", 
+            "path": [
+                "australia"
+            ], 
             "lang-en-name": "Australia", 
             "lang-ru-name": "2Australia"
         }, 
@@ -3618,80 +3638,153 @@
                 "us", 
                 "mouthwash"
             ], 
-            "lang-en-name": "Mouthwash", 
-            "lang-ru-name": "2Mouthwash"
+            "lang-en-name": "mouthwash", 
+            "lang-ru-name": "mouthwash"
         }, 
         {
             "path": [
                 "canada", 
                 "mouthwash"
             ], 
-            "lang-en-name": "Mouthwash", 
-            "lang-ru-name": "2Mouthwash"
+            "lang-en-name": "mouthwash", 
+            "lang-ru-name": "mouthwash"
         }, 
         {
             "path": [
                 "mexico", 
                 "mouthwash"
             ], 
-            "lang-en-name": "Mouthwash", 
-            "lang-ru-name": "2Mouthwash"
+            "lang-en-name": "mouthwash", 
+            "lang-ru-name": "mouthwash"
         }, 
         {
             "path": [
                 "germany", 
                 "mouthwash"
             ], 
-            "lang-en-name": "Mouthwash", 
-            "lang-ru-name": "2Mouthwash"
+            "lang-en-name": "mouthwash", 
+            "lang-ru-name": "mouthwash"
         }, 
         {
             "path": [
                 "brazil", 
                 "mouthwash"
             ], 
-            "lang-en-name": "Mouthwash", 
-            "lang-ru-name": "2Mouthwash"
+            "lang-en-name": "mouthwash", 
+            "lang-ru-name": "mouthwash"
         }, 
         {
             "path": [
                 "spain", 
                 "mouthwash"
             ], 
-            "lang-en-name": "Mouthwash", 
-            "lang-ru-name": "2Mouthwash"
+            "lang-en-name": "mouthwash", 
+            "lang-ru-name": "mouthwash"
         }, 
         {
             "path": [
                 "italy", 
                 "mouthwash"
             ], 
-            "lang-en-name": "Mouthwash", 
-            "lang-ru-name": "2Mouthwash"
+            "lang-en-name": "mouthwash", 
+            "lang-ru-name": "mouthwash"
+        }, 
+        {
+            "path": [
+                "uk", 
+                "cars"
+            ], 
+            "lang-en-name": "cars", 
+            "lang-ru-name": "cars"
         }, 
         {
             "path": [
                 "uk", 
                 "mouthwash"
             ], 
-            "lang-en-name": "Mouthwash", 
-            "lang-ru-name": "2Mouthwash"
+            "lang-en-name": "mouthwash", 
+            "lang-ru-name": "mouthwash"
+        }, 
+        {
+            "path": [
+                "uk", 
+                "food"
+            ], 
+            "lang-en-name": "food", 
+            "lang-ru-name": "food"
+        }, 
+        {
+            "path": [
+                "uk", 
+                "mouthwash", 
+                "toothpaste"
+            ], 
+            "lang-en-name": "toothpaste", 
+            "lang-ru-name": "toothpaste"
+        }, 
+        {
+            "path": [
+                "uk", 
+                "mouthwash", 
+                "toothpaste", 
+                "wallmart"
+            ], 
+            "lang-en-name": "wallmart", 
+            "lang-ru-name": "wallmart"
         }, 
         {
             "path": [
                 "japan", 
                 "mouthwash"
             ], 
-            "lang-en-name": "Mouthwash", 
-            "lang-ru-name": "2Mouthwash"
+            "lang-en-name": "mouthwash", 
+            "lang-ru-name": "mouthwash"
+        }, 
+        {
+            "path": [
+                "japan", 
+                "mouthwash", 
+                "toothpaste"
+            ], 
+            "lang-en-name": "toothpaste", 
+            "lang-ru-name": "toothpaste"
+        }, 
+        {
+            "path": [
+                "japan", 
+                "mouthwash", 
+                "toothpaste", 
+                "wallmart"
+            ], 
+            "lang-en-name": "wallmart", 
+            "lang-ru-name": "wallmart"
+        }, 
+        {
+            "path": [
+                "japan", 
+                "mouthwash", 
+                "toothpaste", 
+                "silpo"
+            ], 
+            "lang-en-name": "silpo", 
+            "lang-ru-name": "silpo"
+        }, 
+        {
+            "path": [
+                "japan", 
+                "mouthwash", 
+                "wallmart"
+            ], 
+            "lang-en-name": "wallmart", 
+            "lang-ru-name": "wallmart"
         }, 
         {
             "path": [
                 "australia", 
                 "mouthwash"
             ], 
-            "lang-en-name": "Mouthwash", 
-            "lang-ru-name": "2Mouthwash"
+            "lang-en-name": "mouthwash", 
+            "lang-ru-name": "category"
         }
     ], 
     "user_data_access": [
@@ -3975,413 +4068,570 @@
     ], 
     "view_properties": [
         {
-            "filter": [
-                "products", 
-                "category"
-            ], 
             "dec_type": "", 
             "nextfilter": [
                 "geography", 
                 "country"
             ], 
-            "id": "population", 
-            "view_type": "driver"
-        }, 
-        {
             "filter": [
                 "products", 
                 "category"
             ], 
+            "view_type": "driver", 
+            "path": [
+                "us"
+            ], 
+            "id": "population"
+        }, 
+        {
             "dec_type": "", 
             "nextfilter": [
                 "geography", 
                 "country"
             ], 
-            "id": "cpi", 
-            "view_type": "driver"
-        }, 
-        {
             "filter": [
                 "products", 
                 "category"
             ], 
+            "view_type": "driver", 
+            "path": [
+                "canada"
+            ], 
+            "id": "cpi"
+        }, 
+        {
             "dec_type": "", 
             "nextfilter": [
                 "geography", 
                 "country"
             ], 
-            "id": "gdp", 
-            "view_type": "driver"
-        }, 
-        {
             "filter": [
                 "products", 
                 "category"
             ], 
+            "view_type": "driver", 
+            "path": [
+                "mexico"
+            ], 
+            "id": "gdp"
+        }, 
+        {
             "dec_type": "", 
             "nextfilter": "", 
-            "id": "value", 
-            "view_type": "output"
-        }, 
-        {
             "filter": [
                 "products", 
                 "category"
             ], 
+            "view_type": "output", 
+            "path": [
+                "us", 
+                "mouthwash"
+            ], 
+            "id": "value"
+        }, 
+        {
             "dec_type": "", 
             "nextfilter": "", 
-            "id": "eq_volume", 
-            "view_type": "output"
-        }, 
-        {
             "filter": [
                 "products", 
                 "category"
             ], 
+            "view_type": "output", 
+            "path": [
+                "canada", 
+                "mouthwash"
+            ], 
+            "id": "eq_volume"
+        }, 
+        {
             "dec_type": "", 
             "nextfilter": "", 
-            "id": "eq_price", 
-            "view_type": "output"
-        }, 
-        {
             "filter": [
                 "products", 
                 "category"
             ], 
+            "view_type": "output", 
+            "path": [
+                "mexico", 
+                "mouthwash"
+            ], 
+            "id": "eq_price"
+        }, 
+        {
             "dec_type": "", 
             "nextfilter": "", 
-            "id": "distribution", 
-            "view_type": "driver"
-        }, 
-        {
             "filter": [
                 "products", 
                 "category"
             ], 
+            "view_type": "driver", 
+            "path": [
+                "germany", 
+                "mouthwash"
+            ], 
+            "id": "distribution"
+        }, 
+        {
             "dec_type": "", 
             "nextfilter": "", 
-            "id": "innovations", 
-            "view_type": "driver"
-        }, 
-        {
             "filter": [
                 "products", 
                 "category"
             ], 
+            "view_type": "driver", 
+            "path": [
+                "brazil", 
+                "mouthwash"
+            ], 
+            "id": "innovations"
+        }, 
+        {
             "dec_type": "", 
             "nextfilter": "", 
-            "id": "unit_price", 
-            "view_type": "driver"
-        }, 
-        {
             "filter": [
                 "products", 
                 "category"
             ], 
+            "view_type": "driver", 
+            "path": [
+                "spain", 
+                "mouthwash"
+            ], 
+            "id": "unit_price"
+        }, 
+        {
             "dec_type": "", 
             "nextfilter": "", 
-            "id": "unit_size", 
-            "view_type": "driver"
-        }, 
-        {
             "filter": [
                 "products", 
                 "category"
             ], 
+            "view_type": "driver", 
+            "path": [
+                "italy", 
+                "mouthwash"
+            ], 
+            "id": "unit_size"
+        }, 
+        {
             "dec_type": "", 
             "nextfilter": "", 
-            "id": "premiumization", 
-            "view_type": "driver"
-        }, 
-        {
             "filter": [
                 "products", 
                 "category"
             ], 
+            "view_type": "driver", 
+            "path": [
+                "uk", 
+                "cars"
+            ], 
+            "id": "premiumization"
+        }, 
+        {
             "dec_type": "", 
             "nextfilter": "", 
-            "id": "media", 
-            "view_type": "driver"
-        }, 
-        {
             "filter": [
                 "products", 
                 "category"
             ], 
+            "view_type": "driver", 
+            "path": [
+                "uk", 
+                "mouthwash"
+            ], 
+            "id": "media"
+        }, 
+        {
             "dec_type": "", 
             "nextfilter": "", 
-            "id": "discount", 
-            "view_type": "driver"
-        }, 
-        {
             "filter": [
                 "products", 
                 "category"
             ], 
+            "view_type": "driver", 
+            "path": [
+                "uk", 
+                "food"
+            ], 
+            "id": "discount"
+        }, 
+        {
             "dec_type": "", 
             "nextfilter": "", 
-            "id": "support", 
-            "view_type": "driver"
-        }, 
-        {
             "filter": [
                 "products", 
                 "category"
             ], 
+            "view_type": "driver", 
+            "path": [
+                "us", 
+                "mouthwash"
+            ], 
+            "id": "support"
+        }, 
+        {
             "dec_type": "", 
             "nextfilter": "", 
-            "id": "ltt", 
-            "view_type": "driver"
-        }, 
-        {
             "filter": [
                 "products", 
                 "category"
             ], 
+            "view_type": "driver", 
+            "path": [
+                "canada", 
+                "mouthwash"
+            ], 
+            "id": "ltt"
+        }, 
+        {
             "dec_type": "value", 
             "nextfilter": "", 
-            "id": "dec_val_demo", 
-            "view_type": "decomposition"
-        }, 
-        {
             "filter": [
                 "products", 
                 "category"
             ], 
+            "view_type": "decomposition", 
+            "path": [
+                "mexico", 
+                "mouthwash"
+            ], 
+            "id": "dec_val_demo"
+        }, 
+        {
             "dec_type": "value", 
             "nextfilter": "", 
-            "id": "dec_val_economy", 
-            "view_type": "decomposition"
-        }, 
-        {
             "filter": [
                 "products", 
                 "category"
             ], 
+            "view_type": "decomposition", 
+            "path": [
+                "germany", 
+                "mouthwash"
+            ], 
+            "id": "dec_val_economy"
+        }, 
+        {
             "dec_type": "value", 
             "nextfilter": "", 
-            "id": "dec_val_distribution", 
-            "view_type": "decomposition"
-        }, 
-        {
             "filter": [
                 "products", 
                 "category"
             ], 
+            "view_type": "decomposition", 
+            "path": [
+                "brazil", 
+                "mouthwash"
+            ], 
+            "id": "dec_val_distribution"
+        }, 
+        {
             "dec_type": "value", 
             "nextfilter": "", 
-            "id": "dec_val_innovations", 
-            "view_type": "decomposition"
-        }, 
-        {
             "filter": [
                 "products", 
                 "category"
             ], 
+            "view_type": "decomposition", 
+            "path": [
+                "spain", 
+                "mouthwash"
+            ], 
+            "id": "dec_val_innovations"
+        }, 
+        {
             "dec_type": "value", 
             "nextfilter": "", 
-            "id": "dec_val_advertising", 
-            "view_type": "decomposition"
-        }, 
-        {
             "filter": [
                 "products", 
                 "category"
             ], 
+            "view_type": "decomposition", 
+            "path": [
+                "italy", 
+                "mouthwash"
+            ], 
+            "id": "dec_val_advertising"
+        }, 
+        {
             "dec_type": "value", 
             "nextfilter": "", 
-            "id": "dec_val_trade_promo_on_vol", 
-            "view_type": "decomposition"
-        }, 
-        {
             "filter": [
                 "products", 
                 "category"
             ], 
+            "view_type": "decomposition", 
+            "path": [
+                "uk", 
+                "cars"
+            ], 
+            "id": "dec_val_trade_promo_on_vol"
+        }, 
+        {
             "dec_type": "value", 
             "nextfilter": "", 
-            "id": "dec_val_price_on_vol", 
-            "view_type": "decomposition"
-        }, 
-        {
             "filter": [
                 "products", 
                 "category"
             ], 
+            "view_type": "decomposition", 
+            "path": [
+                "uk", 
+                "mouthwash"
+            ], 
+            "id": "dec_val_price_on_vol"
+        }, 
+        {
             "dec_type": "value", 
             "nextfilter": "", 
-            "id": "dec_val_unit_size_on_vol", 
-            "view_type": "decomposition"
-        }, 
-        {
             "filter": [
                 "products", 
                 "category"
             ], 
+            "view_type": "decomposition", 
+            "path": [
+                "uk", 
+                "food"
+            ], 
+            "id": "dec_val_unit_size_on_vol"
+        }, 
+        {
             "dec_type": "value", 
             "nextfilter": "", 
-            "id": "dec_val_inflation", 
-            "view_type": "decomposition"
-        }, 
-        {
             "filter": [
                 "products", 
                 "category"
             ], 
+            "view_type": "decomposition", 
+            "path": [
+                "us", 
+                "mouthwash"
+            ], 
+            "id": "dec_val_inflation"
+        }, 
+        {
             "dec_type": "value", 
             "nextfilter": "", 
-            "id": "dec_val_man_pricing", 
-            "view_type": "decomposition"
-        }, 
-        {
             "filter": [
                 "products", 
                 "category"
             ], 
+            "view_type": "decomposition", 
+            "path": [
+                "canada", 
+                "mouthwash"
+            ], 
+            "id": "dec_val_man_pricing"
+        }, 
+        {
             "dec_type": "value", 
             "nextfilter": "", 
-            "id": "dec_val_premiumization", 
-            "view_type": "decomposition"
-        }, 
-        {
             "filter": [
                 "products", 
                 "category"
             ], 
+            "view_type": "decomposition", 
+            "path": [
+                "mexico", 
+                "mouthwash"
+            ], 
+            "id": "dec_val_premiumization"
+        }, 
+        {
             "dec_type": "value", 
             "nextfilter": "", 
-            "id": "dec_val_trade", 
-            "view_type": "decomposition"
-        }, 
-        {
             "filter": [
                 "products", 
                 "category"
             ], 
+            "view_type": "decomposition", 
+            "path": [
+                "germany", 
+                "mouthwash"
+            ], 
+            "id": "dec_val_trade"
+        }, 
+        {
             "dec_type": "value", 
             "nextfilter": "", 
-            "id": "dec_val_promo", 
-            "view_type": "decomposition"
-        }, 
-        {
             "filter": [
                 "products", 
                 "category"
             ], 
+            "view_type": "decomposition", 
+            "path": [
+                "brazil", 
+                "mouthwash"
+            ], 
+            "id": "dec_val_promo"
+        }, 
+        {
             "dec_type": "value", 
             "nextfilter": "", 
-            "id": "dec_val_trade_promo", 
-            "view_type": "decomposition"
-        }, 
-        {
             "filter": [
                 "products", 
                 "category"
             ], 
+            "view_type": "decomposition", 
+            "path": [
+                "spain", 
+                "mouthwash"
+            ], 
+            "id": "dec_val_trade_promo"
+        }, 
+        {
             "dec_type": "value", 
             "nextfilter": "", 
-            "id": "dec_val_unit_size", 
-            "view_type": "decomposition"
-        }, 
-        {
             "filter": [
                 "products", 
                 "category"
             ], 
+            "view_type": "decomposition", 
+            "path": [
+                "italy", 
+                "mouthwash"
+            ], 
+            "id": "dec_val_unit_size"
+        }, 
+        {
             "dec_type": "value", 
             "nextfilter": "", 
-            "id": "dec_val_other", 
-            "view_type": "decomposition"
-        }, 
-        {
             "filter": [
                 "products", 
                 "category"
             ], 
+            "view_type": "decomposition", 
+            "path": [
+                "uk", 
+                "cars"
+            ], 
+            "id": "dec_val_other"
+        }, 
+        {
             "dec_type": "volume", 
             "nextfilter": "", 
-            "id": "dec_vol_demo", 
-            "view_type": "decomposition"
-        }, 
-        {
             "filter": [
                 "products", 
                 "category"
             ], 
-            "dec_type": "volume", 
-            "nextfilter": "", 
-            "id": "dec_vol_economy", 
-            "view_type": "decomposition"
+            "view_type": "decomposition", 
+            "path": [
+                "uk", 
+                "mouthwash"
+            ], 
+            "id": "dec_vol_demo"
         }, 
         {
+            "dec_type": "volume", 
+            "nextfilter": "", 
             "filter": [
                 "products", 
                 "category"
             ], 
-            "dec_type": "volume", 
-            "nextfilter": "", 
-            "id": "dec_vol_distribution", 
-            "view_type": "decomposition"
+            "view_type": "decomposition", 
+            "path": [
+                "uk", 
+                "food"
+            ], 
+            "id": "dec_vol_economy"
         }, 
         {
+            "dec_type": "volume", 
+            "nextfilter": "", 
             "filter": [
                 "products", 
                 "category"
             ], 
-            "dec_type": "volume", 
-            "nextfilter": "", 
-            "id": "dec_vol_innovations", 
-            "view_type": "decomposition"
+            "view_type": "decomposition", 
+            "path": [
+                "brazil", 
+                "mouthwash"
+            ], 
+            "id": "dec_vol_distribution"
         }, 
         {
+            "dec_type": "volume", 
+            "nextfilter": "", 
             "filter": [
                 "products", 
                 "category"
             ], 
-            "dec_type": "volume", 
-            "nextfilter": "", 
-            "id": "dec_vol_advertising", 
-            "view_type": "decomposition"
+            "view_type": "decomposition", 
+            "path": [
+                "spain", 
+                "mouthwash"
+            ], 
+            "id": "dec_vol_innovations"
         }, 
         {
+            "dec_type": "volume", 
+            "nextfilter": "", 
             "filter": [
                 "products", 
                 "category"
             ], 
-            "dec_type": "volume", 
-            "nextfilter": "", 
-            "id": "dec_vol_trade_promo_on_vol", 
-            "view_type": "decomposition"
+            "view_type": "decomposition", 
+            "path": [
+                "italy", 
+                "mouthwash"
+            ], 
+            "id": "dec_vol_advertising"
         }, 
         {
+            "dec_type": "volume", 
+            "nextfilter": "", 
             "filter": [
                 "products", 
                 "category"
             ], 
-            "dec_type": "volume", 
-            "nextfilter": "", 
-            "id": "dec_vol_price_on_vol", 
-            "view_type": "decomposition"
+            "view_type": "decomposition", 
+            "path": [
+                "uk", 
+                "cars"
+            ], 
+            "id": "dec_vol_trade_promo_on_vol"
         }, 
         {
+            "dec_type": "volume", 
+            "nextfilter": "", 
             "filter": [
                 "products", 
                 "category"
             ], 
-            "dec_type": "volume", 
-            "nextfilter": "", 
-            "id": "dec_vol_unit_size_on_vol", 
-            "view_type": "decomposition"
+            "view_type": "decomposition", 
+            "path": [
+                "uk", 
+                "mouthwash"
+            ], 
+            "id": "dec_vol_price_on_vol"
         }, 
         {
+            "dec_type": "volume", 
+            "nextfilter": "", 
             "filter": [
                 "products", 
                 "category"
             ], 
+            "view_type": "decomposition", 
+            "path": [
+                "uk", 
+                "food"
+            ], 
+            "id": "dec_vol_unit_size_on_vol"
+        }, 
+        {
             "dec_type": "volume", 
             "nextfilter": "", 
-            "id": "dec_vol_ltt", 
-            "view_type": "decomposition"
+            "filter": [
+                "products", 
+                "category"
+            ], 
+            "view_type": "decomposition", 
+            "path": [
+                "uk", 
+                "food"
+            ], 
+            "id": "dec_vol_ltt"
         }
     ], 
     "decomposition_properties": [
@@ -6890,7 +7140,7 @@
             "lang-ru-metric": "2Local currency", 
             "lang-en-metric": "Local currency", 
             "lang-ru-short_name": "2Price", 
-            "multiplier": "1", 
+            "multiplier": "", 
             "lang-ru-full_name": "2Price", 
             "id": "eq_price", 
             "lang-en-short_name": "Price"

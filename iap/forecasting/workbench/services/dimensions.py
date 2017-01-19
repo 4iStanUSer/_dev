@@ -83,8 +83,7 @@ def build_search_index(container, dim_names):
 
 def _add_entity_to_index(entity, curr_point, search_index, dim_names, points):
     """
-    ADD ENTITY BY INDEX
-
+    Add entity to search index
     Recursivelly call
 
     fill curr_point information - dict(node_id: entity.id, coords={x: [entity.name] for x in dim_names})
@@ -112,8 +111,6 @@ def _add_entity_to_index(entity, curr_point, search_index, dim_names, points):
         #curr_point['coords'][entity.meta.dimension].append(entity.name)
         curr_point['node_id'] = entity.id
 
-
-
         points.append(curr_point)
 
         sub_index = search_index
@@ -139,34 +136,21 @@ def _add_entity_to_index(entity, curr_point, search_index, dim_names, points):
 
 
 def ents_by_options(options, container):
-    """
-    {'geography': {'selected': ['australia'],
-                    'data': [
-                            {'parent_id': None, 'name': 'mexico', 'id': 'mexico'},
-                            {'parent_id': None, 'name': 'brazil', 'id': 'brazil'},
-                            {'parent_id': None, 'name': 'italy', 'id': 'italy'},
-                            {'parent_id': None, 'name': 'australia', 'id': 'australia'},
-                            {'parent_id': None, 'name': 'uk', 'id': 'uk'},
-                            {'parent_id': None, 'name': 'japan', 'id': 'japan'},
-                            {'parent_id': None, 'name': 'spain', 'id': 'spain'},
-                            {'parent_id': None, 'name': 'germany', 'id': 'germany'},
-                            {'parent_id': None, 'name': 'us', 'id': 'us'},
-                            {'parent_id': None, 'name': 'canada', 'id': 'canada'}]},
-    'market': {'selected': ['total'],
-                'data': [
-                        {'parent_id': None, 'name': 'total', 'id': 'total'}]},
-    'products': {'selected': ['mouthwash'],
-                'data': [{'parent_id': None, 'name': 'mouthwash', 'id': 'mouthwash'},
-                         {'parent_id': None, 'name': 'total', 'id': 'total'}]},
 
-    'products2': {'selected': ['total'], 'data': [{'parent_id': None, 'name': 'total', 'id': 'total'}]}}
+    """
     :return:
     :rtype:
     """
-    path = {}
+    #Build selection list
     dimensions = list(options.keys())
-    for i in dimensions:
-        path[i] = options[i]['selected']
+    selected_prop = {}
+    for dim_name in dimensions:
+        selected_prop[dim_name] = options[i]['selected']
+
+    top_entities = container.top_entities
+    fr
+
+
 
 
 def get_options_by_ents(search_index, entities_ids, lang):
@@ -188,10 +172,7 @@ def get_options_by_ents(search_index, entities_ids, lang):
     """
     reverse_index = search_index['reverse']
     #Entities coordinates
-
-    ents_coords = [coords for node_id, coords in reverse_index.items()
-                   if node_id in entities_ids]
-
+    ents_coords = [coords for node_id, coords in reverse_index.items() if node_id in entities_ids]
     # Create entity based on coords.
     query = get_empty_query(search_index)
     #for entities in ents-coords

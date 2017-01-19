@@ -150,7 +150,7 @@ class Workbench:
         opts, ents = \
             dim_service.search_by_query(self.search_index, empty_query)
         print("Init WB - Selection", ents)
-        self.selection = ents[0:1]
+        self.selection = ents[4:6]
 
 
     def _update_search_index(self,query):
