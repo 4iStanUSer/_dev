@@ -246,8 +246,6 @@ def includeme(config):
     config.add_request_method(authorise, 'authorised', reify=True)
     config.set_session_factory(my_session_factory)
 
-#Remote add to Acccess Manager or IAcccess n
-
 
 def check_permission_for_tool_and_project(self, request, user_id, tool_id, project_id):
     """
@@ -272,43 +270,6 @@ def check_permission_for_tool_and_project(self, request, user_id, tool_id, proje
     else:
         return False
 
-
-def Tree():
-
-    def __init__(self):
-        self.root = {}
-
-    def build_depth_tree(self, dict, path, order):
-        """
-        Fill tree in depth
-
-        :param self:
-        :type self:
-        :param dict:
-        :type dict:
-        :param path:
-        :type path:
-        :param order:
-        :type order:
-        :return:
-        :rtype:
-        """
-
-    def build_tree_in_breath(self, dict, path, order):
-        """
-        Fill tree in breath
-
-        :param self:
-        :type self:
-        :param dict:
-        :type dict:
-        :param path:
-        :type path:
-        :param order:
-        :type order:
-        :return:
-        :rtype:
-        """
 
 
 def tree(dict, path, masks, order):

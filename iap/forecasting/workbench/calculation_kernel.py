@@ -180,6 +180,15 @@ class CalculationKernel:
             raise Exception
         return res_entity
 
+    def aggregate(self, entities_id):
+        """
+        Aggregate entities
+        :param entities_id:
+        :type entities_id:
+        :return:
+        :rtype:
+        """
+        return entities_id[0]
 
 class Queue:
     # TODO add description

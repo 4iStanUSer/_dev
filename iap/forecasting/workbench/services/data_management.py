@@ -1,6 +1,7 @@
 import copy
 from ....common.helper import dicts_left_join
 from ..helper import VariableType, SlotType, AccessMask
+from ..calculation_kernel import CalculationKernel
 from ....common.security import build_permission_tree
 PERMISSION_STATUS = False
 
@@ -63,11 +64,13 @@ def get_entity_data(request, project, container, config, entities_ids, lang):
     )
 
     # Get requested entities.
-    entity_id = entities_ids[0]
+    calc_kernel = CalculationKernel()
+    entity_id = calc_kernel.aggregate(entities_ids)
     #TODO realise for all entities
 
     #Check permitted enities from container
     ent = container.get_entity_by_id(entity_id)
+    
     if '*-*'.join(ent.path) in list(permission_tree.keys()):
         vars = permission_tree['*-*'.join(ent.path)]
         if vars == {}:
@@ -153,8 +156,12 @@ def get_entity_data(request, project, container, config, entities_ids, lang):
         for var_info in item['variables']:
 
             #check accces for variable
-            if vars is not None and var_info['id'] in vars.keys() or PERMISSION_STATUS==True:
-                if vars[var_info['id']] == {}:
+            if vars is not None and var_info['id'] in vars.keys():
+                if PERMISSION_STATUS==True:
+                    _ts = {}
+                    PERMISSION_STATUS = True
+                elif vars[var_info['id']] == {}:
+                    _ts = {}
                     PERMISSION_STATUS = True
                 else:
                     _ts = vars[var_info['id']]
@@ -164,7 +171,7 @@ def get_entity_data(request, project, container, config, entities_ids, lang):
                 PERMISSION_STATUS=False
                 continue
             print("Var Info", var_info['id'])
-            
+
             var = curr_ent.get_variable(var_info['id'])
             if var is None:
                 absent_vars_ids.append(var_info['id'])
@@ -173,8 +180,9 @@ def get_entity_data(request, project, container, config, entities_ids, lang):
                 ts = var.get_time_series(ts_name)
 
                 #check timeseries permission
-                if ts is not None and ts_name in list(_ts.keys()) or PERMISSION_STATUS==True:
-                    if _ts[ts_name] == {}:
+                if ts is not None or PERMISSION_STATUS==True:
+                    if PERMISSION_STATUS==True or _ts[ts_name] == {}:
+                        _ts_periods = {}
                         PERMISSION_STATUS=True
                     else:
                         PERMISSION_STATUS=False
@@ -189,21 +197,21 @@ def get_entity_data(request, project, container, config, entities_ids, lang):
                 #check timeperiod
 
                 for _ts_period in ts_period:
-                    if _ts_periods is not None and _ts_period not in _ts_periods or PERMISSION_STATUS==True:
+                    if _ts_periods is not None or PERMISSION_STATUS==True:
                         pass
                     elif _ts_period not in _ts_periods:
                         print("No Permission")
                         continue
 
-                values = ts.get_values_for_period(ts_period)
-                ps = var.get_periods_series(ts_name)
-                #check ps
-                time_series_data[ts_name][var_info['id']] = \
-                    {time_labels[ts_name][i]: values[i]
-                     for i in range(len(values))}
-                periods_data[ts_name][var_info['id']] = \
-                    [dict(abs=0, rate=ps.get_value(p), start=p[0], end=p[1])
-                     for p in gr_periods[ts_name]]
+                    values = ts.get_values_for_period(ts_period)
+                    ps = var.get_periods_series(ts_name)
+                    #check ps
+                    time_series_data[ts_name][var_info['id']] = \
+                        {time_labels[ts_name][i]: values[i]
+                         for i in range(len(values))}
+                    periods_data[ts_name][var_info['id']] = \
+                        [dict(abs=0, rate=ps.get_value(p), start=p[0], end=p[1])
+                         for p in gr_periods[ts_name]]
 
         # Get variables properties.
         vars_ids = [var_info['id']
