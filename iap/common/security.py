@@ -428,12 +428,10 @@ def build_permission_tree(request, project_name):
     :return:
     :rtype:
     """
-    #set user_id, tool_id, project_id
-    #set permission
+
     list_of_access = []
     user_id = request.user
     user = request.dbsession.query(User).filter(User.id == user_id).one()
-    print("User", user_id)
     for perm in user.perms:
         for data_perm in perm.data_perms:
             if project_name==data_perm.project:
@@ -443,12 +441,12 @@ def build_permission_tree(request, project_name):
     access_rights = {}
     for node in list_of_access:
         ent = node['out_path']
-        print("Ent", ent)
         if ent not in access_rights.keys():
             access_rights[ent] = {}
-            masks = node['mask'].split(",")
-            items = node['in_path'].split("-")
-            tree(access_rights[ent], items, masks, order=0)
+        else:
+        masks = node['mask'].split(",")
+        items = node['in_path'].split("-")
+        tree(access_rights[ent], items, masks, order=0)
 
     return access_rights
 
