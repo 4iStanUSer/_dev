@@ -45,7 +45,7 @@ def set_entity_values(wb, entity_id, values):
 def get_entity_data(request, project, container, config, entities_ids, lang):
 
     permission_tree = build_permission_tree(request, project_name=project)
-
+    print("Permission tree", permission_tree)
     # Initialize structure for output.
     entity_data = dict(
         data=dict(
@@ -70,7 +70,7 @@ def get_entity_data(request, project, container, config, entities_ids, lang):
 
     #Check permitted enities from container
     ent = container.get_entity_by_id(entity_id)
-    
+
     if '*-*'.join(ent.path) in list(permission_tree.keys()):
         vars = permission_tree['*-*'.join(ent.path)]
         if vars == {}:
@@ -152,9 +152,10 @@ def get_entity_data(request, project, container, config, entities_ids, lang):
 
         absent_vars_ids = []
 
+        print("Item", item['variables'])
+        print("Vars", vars)
         # Collect variables data
         for var_info in item['variables']:
-
             #check accces for variable
             if vars is not None and var_info['id'] in vars.keys():
                 if PERMISSION_STATUS==True:
@@ -170,7 +171,6 @@ def get_entity_data(request, project, container, config, entities_ids, lang):
                 _ts = None
                 PERMISSION_STATUS=False
                 continue
-            print("Var Info", var_info['id'])
 
             var = curr_ent.get_variable(var_info['id'])
             if var is None:
