@@ -7,7 +7,7 @@ perm_data = {
     "mask": "2,4"
   },
   {
-    "out_path": "*-*canada",
+    "out_path": "brazil*-*mouthwash",
     "in_path": "cpi-annual",
     "mask": '4,0'
   },
@@ -15,6 +15,12 @@ perm_data = {
     "out_path": "brazil*-*mouthwash",
     "in_path": "population",
     "mask": ",12"
+
+  },
+ {
+    "out_path": "brazil*-*mouthwash",
+    "in_path": "cpi-annual",
+    "mask": "11,12"
 
   },
   {
