@@ -13,25 +13,25 @@ perm_data = {
   },
   {
     "out_path": "brazil*-*mouthwash",
-    "in_path": "population-annual-[2012:2016]",
+    "in_path": "population-annual-forecast",
     "mask": "12,11,22"
 
   },
   {
     "out_path": "*-*mexico",
-    "in_path": "cpi-annual-[2012:2016]",
+    "in_path": "cpi-annual-forecast",
     "mask": "12,11,22"
 
   },
   {
     "out_path": "*-*germany",
-    "in_path": "cpi-annual-[2014:2017]",
+    "in_path": "cpi-annual-forecast",
     "mask": "1,12,12"
 
   },
   {
     "out_path": "*-*brazil",
-    "in_path": "cpi-annual-[2011:2014]",
+    "in_path": "cpi-annual-forecast",
     "mask": "2,2,1"
 
   },
@@ -94,13 +94,13 @@ perm_data = {
       },
       {
       "out_path": "us*-*band-aid*-*decorated",
-      "in_path": "value-annual-[2011:2013]",
+      "in_path": "value-annual-forecast",
       "mask":3
 
       },
       {
       "out_path": "us*-*band-aid*-*decorated*-*walmart",
-      "in_path": "units-monthly-[Jan11:Apr22]",
+      "in_path": "units-monthly-forecast",
       "mask":4
 
       },
@@ -117,7 +117,7 @@ perm_data = {
       },
       {
       "out_path": "us*-*band-aid*-*premium*-*walgreens",
-      "in_path": "price-monthly-[Jan11:Apr22]",
+      "in_path": "price-monthly-forecast",
       "mask":8
 
       },
@@ -128,7 +128,7 @@ perm_data = {
       },
       {
       "out_path": "us*-*band-aid*-*value",
-      "in_path": "value-monthly-[Jan29:Jun22]",
+      "in_path": "value-monthly-forecast",
       "mask":42
       },
       {
@@ -143,7 +143,7 @@ perm_data = {
       },
       {
       "out_path": "us*-*band-aid*-*value*-*cvs",
-      "in_path": "value-monthly-[Mar29:Jun22]",
+      "in_path": "value-monthly-forecast",
       "mask":7
       }
     ]

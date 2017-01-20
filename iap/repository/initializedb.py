@@ -113,14 +113,6 @@ def main(argv=sys.argv):
 
         permission = Permission(name="Development Template")
 
-        for data in perm_data["JJOralCare"]:
-            data_permission = DataPermission(project="JJOralCare", in_path=data['in_path'],
-                                             out_path=data['out_path'],mask=data['mask'])
-            permission.data_perms.append(data_permission)
-            ssn.add(data_permission)
-
-        #Set Permission for User #1
-        user_1.perms.append(permission)
 
         permission = Permission(name="Development Template")
 
@@ -130,6 +122,15 @@ def main(argv=sys.argv):
             permission.data_perms.append(data_permission)
             ssn.add(data_permission)
 
+        user_1.perms.append(permission)
+
+        for data in perm_data["JJOralCare"]:
+            data_permission = DataPermission(project="JJOralCare", in_path=data['in_path'],
+                                             out_path=data['out_path'],mask=data['mask'])
+            permission.data_perms.append(data_permission)
+            ssn.add(data_permission)
+
+        #Set Permission for User #1
         user_2.perms.append(permission)
 
         #Add Scenario

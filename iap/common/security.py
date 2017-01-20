@@ -273,6 +273,44 @@ def check_permission_for_tool_and_project(self, request, user_id, tool_id, proje
         return False
 
 
+def Tree():
+
+    def __init__(self):
+        self.root = {}
+
+    def build_depth_tree(self, dict, path, order):
+        """
+        Fill tree in depth
+
+        :param self:
+        :type self:
+        :param dict:
+        :type dict:
+        :param path:
+        :type path:
+        :param order:
+        :type order:
+        :return:
+        :rtype:
+        """
+
+    def build_tree_in_breath(self, dict, path, order):
+        """
+        Fill tree in breath
+
+        :param self:
+        :type self:
+        :param dict:
+        :type dict:
+        :param path:
+        :type path:
+        :param order:
+        :type order:
+        :return:
+        :rtype:
+        """
+
+
 def tree(dict, path, masks, order):
     """
     Fill tree
@@ -298,7 +336,7 @@ def tree(dict, path, masks, order):
         tree(dict[key], path, masks, order)
 
 
-def build_permission_tree(project_name):
+def build_permission_tree(request, project_name):
     """
     Build permission tree
     :return:
@@ -306,15 +344,22 @@ def build_permission_tree(project_name):
     """
     #set user_id, tool_id, project_id
     #set permission
+    list_of_access = []
+    user_id = request.user
+    user = request.dbsession.query(User).filter(User.id == user_id).one()
+    print("User", user_id)
+    for perm in user.perms:
+        for data_perm in perm.data_perms:
+            if project_name==data_perm.project:
+                perm_node = dict(out_path=data_perm.out_path, in_path=data_perm.in_path, mask=data_perm.mask)
+                list_of_access.append(perm_node)
 
     access_rights = {}
-    from ..repository.access_rights_data import perm_data
-    nodes = perm_data[project_name]
-    for node in nodes:
+    for node in list_of_access:
         ent = node['out_path']
+        print("Ent", ent)
         if ent not in access_rights.keys():
             access_rights[ent] = {}
-            print("Ent", node)
             masks = node['mask'].split(",")
             items = node['in_path'].split("-")
             tree(access_rights[ent], items, masks, order=0)
