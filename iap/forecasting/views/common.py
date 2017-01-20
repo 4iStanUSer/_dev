@@ -6,6 +6,7 @@ from ...common.security import get_user
 from ...common.helper import send_success_response, send_error_response
 from ...common import runtime_storage as rt
 
+
 def index_view(req):
     return render_to_response('iap.forecasting:templates/index.jinja2',
                               {'title': 'Forecast index'},

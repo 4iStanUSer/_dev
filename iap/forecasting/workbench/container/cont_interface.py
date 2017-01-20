@@ -385,7 +385,6 @@ class Variable:
     Class realise variable from entity data
 
     """
-
     def __init__(self, entity_data, var_name):
         """Initialise Variable
 
@@ -404,7 +403,6 @@ class Variable:
     @property
     def name(self):
         """
-
         Property save name of variable
 
         Return:
@@ -512,12 +510,6 @@ class Variable:
 
         if not self._data.is_exist(self._var_name, ts_name, SlotType.scalar):
             self._data.init_slot(self._var_name, ts_name, SlotType.scalar)
-        '''
-
-        :param ts_name:
-        :return:
-
-        '''
 
         if not self._data.is_exist(self._var_name, ts_name, SlotType.scalar):
             self._data.init_slot(self._var_name, ts_name, SlotType.scalar)
@@ -652,7 +644,6 @@ class Scalar:
         self._var_name = var_name
         self._ts_name = ts_name
 
-
     def get_value(self):
         """Get value of variable for current scalar
 
@@ -661,7 +652,6 @@ class Scalar:
         """
 
         return self._data.get_scalar_val(self._var_name, self._ts_name)
-
 
     def set_value(self, value):
         """Set specific value for variable for specific scalar
@@ -695,7 +685,6 @@ class PeriodSeries:
         self._var_name = var_name
         self._ts_name = ts_name
 
-
     def get_periods(self):
         """Get all periods
 
@@ -720,7 +709,6 @@ class PeriodSeries:
         """
 
         return self._data.get_period_val(self._var_name, self._ts_name, period)
-
 
     def set_value(self, period, value):
         """Set value of variable for period
