@@ -13,8 +13,8 @@ perm_data = {
   },
   {
     "out_path": "brazil*-*mouthwash",
-    "in_path": "population-annual-forecast",
-    "mask": "12,11,22"
+    "in_path": "population",
+    "mask": ",12"
 
   },
   {
