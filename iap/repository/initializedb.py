@@ -80,12 +80,14 @@ def main(argv=sys.argv):
 
         email = "user@mail.com"
         password = "qweasdZXC"
-        user_1 = User(email=email, password=password)
+        user_1 = User(email=email)
+        user_1.set_password(password)
 
         # Add default_user User for Project #2
         email = "default_user"
         password = "123456"
-        user_2 = User(email=email, password=password)
+        user_2 = User(email=email)
+        user_2.set_password(password)
 
         #Add Roles Forecaster
         features = ['Create a new scenario', 'View Scenario', 'Mark scenario as final', 'Modify Scenario',

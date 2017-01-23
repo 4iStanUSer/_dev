@@ -3,15 +3,26 @@ import copy
 from ...common.helper import Meta
 from .helper import FilterType, SlotType
 from . import modeling_library
-
+from .container import  cont_interface
 
 class CalculationKernel:
+    """
+    Claculation Kernel
+    """
     # TODO Add description.
     def __init__(self):
+        """
+        Queues
+
+        """
         # TODO Describe class structure
         self.queues = {}
 
     def get_backup(self):
+        """Get backup
+        :return:
+        :rtype:
+        """
         instructions = dict(
             top_queues=None,
             queues=[q.get_backup() for q in self.queues.values()]
@@ -19,10 +30,24 @@ class CalculationKernel:
         return instructions
 
     def load_from_backup(self, backup):
+        """Load from backup
+        :param backup:
+        :type backup:
+        :return:
+        :rtype:
+        """
         self.load_instructions(backup)
 
     def load_instructions(self, instructions):
-        # TODO Add description.
+        """Load instructions
+        load ques from template and
+        add list of queues into attribute
+
+        :param instructions:
+        :type instructions:
+        :return:
+        :rtype:
+        """
 
         # Load queues
         for q_template in instructions['queues']:
@@ -36,6 +61,30 @@ class CalculationKernel:
             self.queues[q_template['name']] = queue
 
     def calculate(self, cont, timeline, queue_name, period_ali=None, in_period=None, top_ent=None):
+        """Execute calculation for specific queue
+            Perform a calculation
+            Looping through necessary entities
+            Args:
+                (Container): containre
+                (Timeline)
+                (string) queue name
+                (Entity) - top entity
+
+        :param cont:
+        :type cont:
+        :param timeline:
+        :type timeline:
+        :param queue_name:
+        :type queue_name:
+        :param period_ali:
+        :type period_ali:
+        :param in_period:
+        :type in_period:
+        :param top_ent:
+        :type top_ent:
+        :return:
+        :rtype:
+        """
         # TODO Add description.
         # Get queue.
         try:
@@ -55,6 +104,8 @@ class CalculationKernel:
             timeline.get_timeline_by_period(queue.inp_ts_name, period)
         period_len = period_indexes[1] - period_indexes[0] + 1
         last_act, last_act_index = timeline.get_last_actual(queue.inp_ts_name)
+
+        #From queue load timeline parser
         queue.load_timeline_pars(dict(
             last_actual=last_act_index - period_indexes[0] + 1,
             runs_count=period_len))
@@ -97,8 +148,11 @@ class CalculationKernel:
 
             # Prepare queue.
             queue.clean()
+            #Clean Queue
             queue.set_constants()
+            #Set constant
             queue.load_coefficients(coefficients)
+            #Load coefficients
             queue.init_modules()
 
             # Calculation.
@@ -138,6 +192,18 @@ class CalculationKernel:
         return
 
     def _get_entities_to_run(self, container, input_item_info, top_ent):
+        """Get entities to run
+
+        :param container:
+        :type container:
+        :param input_item_info:
+        :type input_item_info:
+        :param top_ent:
+        :type top_ent:
+        :return:
+        :rtype:
+        """
+
         meta_type = input_item_info['type']
         # Exact path to entity. Just get entity.
         if meta_type == FilterType.path:
@@ -162,6 +228,17 @@ class CalculationKernel:
             return []
 
     def _get_entity_by_filter(self, container, main_ent, ent_filter):
+        """Get entities to filter
+
+        :param container:
+        :type container:
+        :param main_ent:
+        :type main_ent:
+        :param ent_filter:
+        :type ent_filter:
+        :return:
+        :rtype:
+        """
         meta_type = ent_filter['type']
         if meta_type == FilterType.empty:
             res_entity = main_ent
@@ -180,7 +257,7 @@ class CalculationKernel:
             raise Exception
         return res_entity
 
-    def aggregate(self, entities_id):
+    def aggregate(self, container, entities_id, project_name):
         """
         Aggregate entities
         :param entities_id:
@@ -188,13 +265,71 @@ class CalculationKernel:
         :return:
         :rtype:
         """
-        return entities_id[0]
+        dimensions = container.get_entity(entities_id[0]).meta()
+        queue = self.queues.get("CM_Aggregation_{0}".format(dimensions['dimension']))
+        queue.run()
+        backup = queue.get_output()
+        new_entity =
+
+    def calculate_growth_rate(self, container, project_name):
+        """
+        Function for calculation kernel
+        :param container:
+        :type container:
+        :param project_name:
+        :type project_name:
+        :return:
+        :rtype:
+        """
+        queue = self.queues.get("CM_Growth_Rate_{0}_{1}".format(project_name, ))
+        queue.run()
+        growth_rate = queue.get_output()
+        return growth_rate
+
+    def calculate_cagr(self, container, project_name):
+        """
+        Function for calculating frowth rate
+        :param container:
+        :type container:
+        :param project_name:
+        :type project_name:
+        :return:
+        :rtype:
+        """
+        #get growth rate from container
+        queue = self.queues.get("CM_Growth_Rate_{0}_{1}".format(project_name, ))
+        queue.run()
+        growth_rate = queue.get_output()
+        return growth_rate
+
 
 class Queue:
+    """
+    Queue
+        contains:
+            name - template name
+            inp_ts_name -  input timescale name
+            out_ts_name - name of output timeseries
+            coeff_requirements - input coefficient
+            inp_requirements - input data
+            timeline parameter
+            dependets - list of modules key's, input pins, output pins
+            outputs
+            out_pins - parameters that make easy to serialise
+            in_pins - parameter thet make it easy to serialise
+            calc_instruction
+            buffer
+            modules_indexes
+            constants
+            input_item_info - input items info
+            parameters
+
+    """
     # TODO add description
     def __init__(self):
         # TODO Describe class structure
         self.name = None
+
         self.input_item_info = None
         self.inp_ts_name = None
         self.out_ts_name = None
@@ -220,6 +355,11 @@ class Queue:
         self._runs_counter = 0
 
     def get_backup(self):
+        """Get backup
+        :return:
+        :rtype:
+        """
+
         input = self.inp_requirements
         for c_item in self.coeff_requirements:
             found_flag = False
@@ -248,15 +388,33 @@ class Queue:
         return backup
 
     def load_template(self, template):
+        """Load template
+
+        Fill template attribute
+        And initialise setup of calculation
+        instruction.
+
+
+        :param template:
+        :type template:
+        :return:
+        :rtype:
+        """
         # Read main parameters.
         self.name = template['name']
+        #name - template name
         self.input_item_info = copy.copy(template['input_item'])
+        #input item info
         self.inp_ts_name = template['input_timescale']
+        #inp_ts_name input timescale
         self.out_ts_name = template['output_timescale']
+        #out_ts_name -
+
         self.output = [x[0] for x in template['output']]
 
         # Read data and coefficients
         for item in template['input']:
+            #Read coeficient
             if 'coefficients' in item:
                 self.coeff_requirements.append(dict(
                     meta=item['meta'], data=item['coefficients']))
@@ -264,6 +422,7 @@ class Queue:
                     self._coeff_refs.append(dict(par_name=coeff_info[0],
                                                  refs=[]))
             if 'data' in item:
+                #Input timescale append
                 self.inp_requirements.append(dict(
                     meta=item['meta'], data=item['data']))
 
@@ -302,6 +461,21 @@ class Queue:
                           [x[1] for x in template['output']])
 
     def _load_scheme(self, modules, input_pins, output):
+        """Load calculation instructions
+        Collect modules output
+        initialise buffer
+        define calculation order
+        add module to queue
+
+        :param modules:
+        :type modules:
+        :param input_pins:
+        :type input_pins:
+        :param output:
+        :type output:
+        :return:
+        :rtype:
+        """
         # TODO add description
         # Instantiate modules.
         # Sum out buffer sizes of modules.
@@ -310,6 +484,7 @@ class Queue:
         #    new_mod = getattr(modeling_library, mod_type)()
         #    out_buffer_size += new_mod.out_size
         #    self._calc_modules[mod_id] = new_mod
+
 
         # Collect modules outputs.
         self.dependents = {x: list() for x in modules.keys()}
@@ -323,6 +498,7 @@ class Queue:
         # Initialize buffer.
         inputs_len = sum([len(x.get('data', [])) for x in self.inp_requirements])
         constants_len = len(self._constants)
+
         #buffer_size = out_buffer_size + inputs_len + constants_len
         #self._buffer = [0] * buffer_size
         #self._buffer = []
@@ -420,17 +596,35 @@ class Queue:
         return
 
     def set_inputs(self, tact_inputs):
-        # TODO add description
+        """
+        Set tact input in the bufffer
+        :param tact_inputs:
+        :type tact_inputs:
+        :return:
+        :rtype:
+        """
         inp_indexes = self._modules_indexes['inp']
         for i in range(len(inp_indexes)):
             self._buffer[inp_indexes[i]] = tact_inputs[i]
 
     def set_constants(self):
+        """
+        Set constant's
+
+        :return:
+        :rtype:
+        """
         const_indexes = self._modules_indexes['const']
         for i in range(len(const_indexes)):
             self._buffer[const_indexes[i]] = self._constants[i]
 
     def get_output(self):
+        """
+        Get output's
+
+        :return:
+        :rtype:
+        """
         # TODO add description
         #max_delay = max(self._calc_order[x] for x in self._out_modules)
         #s = sum([self._calc_order[x]['run_flag']
@@ -442,6 +636,12 @@ class Queue:
             return None
 
     def run(self):
+        """
+        Run calc kernel
+
+        :return:
+        :rtype:
+        """
         print('\n')
         print('\n')
         print('\n')
@@ -478,6 +678,18 @@ class Queue:
                     coefficients[i]
 
     def load_timeline_pars(self, params):
+        """
+        Load timeline parameter
+
+
+        Args:
+            (List) - parameters
+
+        :param params:
+        :type params:
+        :return:
+        :rtype:
+        """
         for item in self._tl_pars_refs:
             if item['par_name'] not in params:
                 continue
@@ -486,7 +698,11 @@ class Queue:
                     params[item['par_name']]
 
     def clean(self):
-        # Clean buffer.
+        """
+        Clean buffer from temprorary data
+        :return:
+        :rtype:
+        """
         if self._buffer is not None:
             for i in range(len(self._buffer)):
                 self._buffer[i] = 0
@@ -494,6 +710,11 @@ class Queue:
         self._runs_counter = 0
 
     def init_modules(self):
+        """
+        Initialise module
+        :return:
+        :rtype:
+        """
         for item in self._calc_instructions:
             item['module'].clean()
             mod_pars = self._parameters.get(item['id'])
