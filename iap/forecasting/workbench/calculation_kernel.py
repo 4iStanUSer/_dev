@@ -269,7 +269,8 @@ class CalculationKernel:
         queue = self.queues.get("CM_Aggregation_{0}".format(dimensions['dimension']))
         queue.run()
         backup = queue.get_output()
-        new_entity =
+        #new_entity = Entity()
+        #new_entity.load_backup(backup)
 
     def calculate_growth_rate(self, container, project_name):
         """
