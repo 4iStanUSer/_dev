@@ -45,6 +45,7 @@ def set_entity_values(wb, entity_id, values):
 def get_entity_data(request, project, container, config, entities_ids, lang):
 
     permission_tree = build_permission_tree(request, project_name=project)
+
     print("Permission tree", permission_tree)
     # Initialize structure for output.
     entity_data = dict(
@@ -65,7 +66,7 @@ def get_entity_data(request, project, container, config, entities_ids, lang):
 
     # Get requested entities.
     calc_kernel = CalculationKernel()
-    entity_id = calc_kernel.aggregate(entities_ids)
+    entity_id = calc_kernel.aggregate(entities_ids, project)
     #TODO realise for all entities
 
     #Check permitted enities from container
