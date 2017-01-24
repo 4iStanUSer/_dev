@@ -1,8 +1,18 @@
-import pymongo
+from pymongo import MongoClient
 
-#from pymongo import Connection
 
-#connnection = Connection()
+def connector():
+    """
+    Return
+
+    :return:
+    :rtype:
+    """
+    connnection = MongoClient('localhost', 27017)
+
+    forecast = connnection.forecast
+    return forecast
+
 
 #drop existing database
 
