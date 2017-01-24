@@ -1336,6 +1336,38 @@ dev_template_JJOralCare = {
         },
         'queues': [
             {
+                'name': 'CM_Aggregation_products',
+                'input_timescale': 'annual',
+                'output_timescale': 'annual',
+                'input_item': {'type': 2, 'meta_filter': ('Product', 'Channel')},
+                'input': [
+                    {
+                        'meta': {'type': 0},
+                        'data': [
+                            ('population', 1),
+                            ('cpi', 1),
+                        ]
+                    },
+                ],
+                'timeline_parameters': ['runs_count'],
+                'parameters': {
+                    '1': {'var_type': 'abs', 'period_length': ('timeline_parameters', 0)},
+                    '2': {'var_type': 'abs', 'period_length': ('timeline_parameters', 0)},
+                },
+                'modules': {
+                    '1': 'CM_Growth',
+                    '2': 'CM_Growth'
+                },
+                'input_pins': {
+                    '1': [('inp', 0, True)],
+                    '2': [('inp', 1, True)]
+                },
+                'output': [
+                    (('population', 4), ('1', 0)),
+                    (('cpi', 4), ('2', 0))
+                         ]
+            },
+            {
                 'name': 'country_growth',
                 'input_timescale': 'annual',
                 'output_timescale': 'annual',
