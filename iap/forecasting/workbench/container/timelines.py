@@ -108,8 +108,6 @@ class TimeLineManager:
 
         '''
         for ts in self._timescales:
-            print(ts)
-            print(ts_name)
             if ts['name'] == ts_name:
                 index = self._timescales.index(ts)
                 return ts, index

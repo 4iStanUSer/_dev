@@ -1,6 +1,7 @@
 import copy
 
 from ...common.helper import Meta
+from .container.cont_interface import Entity
 from .helper import FilterType, SlotType
 from . import modeling_library
 from .container import  cont_interface
@@ -257,7 +258,7 @@ class CalculationKernel:
             raise Exception
         return res_entity
 
-    def aggregate(self, container, entities_id, project_name):
+    def aggregate(self, container, entities_id):
         """
         Aggregate entities
         :param entities_id:
@@ -265,14 +266,21 @@ class CalculationKernel:
         :return:
         :rtype:
         """
-        dimensions = container.get_entity(entities_id[0]).meta()
-        queue = self.queues.get("CM_Aggregation_{0}".format(dimensions['dimension']))
-        queue.run()
-        backup = queue.get_output()
-        #new_entity = Entity()
-        #new_entity.load_backup(backup)
+        print("Start Aggregation")
+        ent = container.get_entity_by_id(entities_id[0])
 
-    def calculate_growth_rate(self, container, project_name):
+        dimension = ent.meta.dimension
+        #['dimension']
+        queue = self.queues.get("CM_Aggregation_{0}".format(dimension))
+        print(queue)
+        new_entity = Entity(container, None, None, None)
+        for entity_id in entities_id:
+            queue.set_inputs([new_entity, entity_id])
+            queue.run()
+        out_entity = queue.get_output()
+        return out_entity
+
+    def calculate_growth_rate(self, vars):
         """
         Function for calculation kernel
         :param container:
@@ -282,7 +290,10 @@ class CalculationKernel:
         :return:
         :rtype:
         """
-        queue = self.queues.get("CM_Growth_Rate_{0}_{1}".format(project_name, ))
+        print("Calc Growth Rate")
+        queue = self.queues.get("category_growth")
+        print(queue)
+        queue.set_inputs(vars)
         queue.run()
         growth_rate = queue.get_output()
         return growth_rate
@@ -298,7 +309,7 @@ class CalculationKernel:
         :rtype:
         """
         #get growth rate from container
-        queue = self.queues.get("CM_Growth_Rate_{0}_{1}".format(project_name, ))
+        queue = self.queues.get("CM_Growth_Cagr_{0}_{1}".format(project_name))
         queue.run()
         growth_rate = queue.get_output()
         return growth_rate

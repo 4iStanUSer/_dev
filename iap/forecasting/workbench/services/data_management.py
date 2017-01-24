@@ -65,8 +65,14 @@ def get_entity_data(request, project, container, config, entities_ids, lang):
     )
 
     # Get requested entities.
+    #Calculation Kernel
+
+    #Load backup
+    from ....common.dev_template import dev_template_JJOralCare
     calc_kernel = CalculationKernel()
-    entity_id = calc_kernel.aggregate(entities_ids, project)
+    calc_kernel.load_from_backup(dev_template_JJOralCare['calc_instructions'])
+    #entity_id = calc_kernel.aggregate(container, entities_ids)
+    entity_id = entities_ids[0]
     #TODO realise for all entities
 
     #Check permitted enities from container
