@@ -176,6 +176,7 @@ class Container:
         :return:
 
         """
+
         if self._root is None:
             return None
         node = self._root.get_node_by_path(path)

@@ -1,9 +1,13 @@
-import pymongo
+from pymongo import MongoClient
 
-#from pymongo import Connection
+def forecast_db():
 
-#connnection = Connection()
+    connnection = MongoClient('localhost', 27017)
+    forecast = connnection.forecast
+    return forecast
 
+def initialise_db():
+    pass
 #drop existing database
 
 #select from database
