@@ -16,84 +16,9 @@ class EntityData:
         """
         self.time_manager = time_manager
         self._variables = {}
-        self.id = 1
         self._time_series = {}
         self._scalars = {}
         self._periods_series = {}
-
-    def load_to_db(self):
-
-        # Variables.
-        forecast = forecast_db()
-        entity_data = forecast.entity.insert({"id":self.id})
-
-
-
-        var_names = list(self._variables.keys())
-
-        var_properties = []
-        for var_name, props in self._variables.items():
-            for prop_name, prop_value in props.items():
-                forecast.entity.update({"id": self.id}, {'$addToSet':
-                                                            {'variables':
-                                                                  {'var_name':var_name,
-                                                                    'properties':
-                                                                        {'prop_name': prop_name,
-                                                                        'prop_value':prop_value}}}})
-                var_properties.append((dict(var=var_name, prop=prop_name,
-                                            value=prop_value)))
-
-        # Time series.
-        time_series = [dict(var=var_ts[0], ts=var_ts[1], line=copy.copy(line))
-                       for var_ts, line in self._time_series.items()]
-
-        for var_ts, line in self._time_series.items():
-
-            forecast.entity.update({"id": self.id}, {'$addToSet':
-                                                        {'variables':
-                                                             {'var_name': var_ts[0],
-                                                              'timeseries':
-                                                                  {'ts_name': var_ts[1],
-                                                                  'line': copy.copy(line)}
-                                                              }}})
-
-
-        # Scalars.
-        scalars = [dict(var=var_ts[0], ts=var_ts[1], value=val)
-               for var_ts, val in self._scalars.items()]
-
-        for var_ts, line in self._scalars.items():
-
-            forecast.entity.update({"id": self.id}, {'$addToSet':
-                                                        {'variables':
-                                                             {'var_name': var_ts[0],
-                                                              'scalars':
-                                                                  {'ts_name': var_ts[1],
-                                                                  'line': copy.copy(line)
-                                                                  }}}})
-
-        # Period series.
-        period_series = []
-        for var_ts, periods in self._periods_series.items():
-            for period, value in periods.items():
-                period_series.append(dict(var=var_ts[0], ts=var_ts[1],
-                                          period=period, value=value))
-
-                forecast.entity.update({"id": self.id}, {'$addToSet':
-                                                            {'variables':
-                                                                 {'var_name': var_ts[0],
-                                                                  'period_series':
-                                                                      {
-                                                                      'ts_name': var_ts[1],
-                                                                       'period': period,
-                                                                       'value': value}}}})
-        # Collect backup.
-        backup = dict(var_names=var_names,
-                      var_properties=var_properties,
-                      time_series=time_series,
-                      scalars=scalars,
-                      periods_series=period_series)
-        return backup
 
     def get_backup(self):
         """Get back_up_method
@@ -180,8 +105,6 @@ class EntityData:
         Return:
             (list): names of variables
         """
-        #In Mongo DB style
-
         return self._variables.keys()
 
     def add_variable(self, var_name):
@@ -195,9 +118,6 @@ class EntityData:
         :return:
 
         """
-        #Initialise new variable and assign it to
-        #entity
-
 
         if var_name not in self._variables:
             self._variables[var_name] = dict()
@@ -216,8 +136,6 @@ class EntityData:
         :return:
 
         """
-
-        #return variable properties
 
         return copy.copy(self._variables[var_name])
 
@@ -250,8 +168,6 @@ class EntityData:
         :return:
 
         """
-
-        #assign for specific var propery
         if var_name not in self._variables:
             raise VariableNotFoundError
         self._variables[var_name][prop_name] = value
@@ -305,8 +221,6 @@ class EntityData:
         :return:
 
         """
-        #check if object exist in db
-
         if data_type == SlotType.time_series:
             return (var_name, ts_name) in self._time_series
         elif data_type == SlotType.scalar:
@@ -422,8 +336,6 @@ class EntityData:
 
         """
 
-        #guqey for scalar value
-
         scalar = self._scalars.get((var_name, ts_name))
         if scalar is None:
             raise ScalarNotFoundError
@@ -472,7 +384,6 @@ class EntityData:
         :return:
 
         """
-        #return period value form mongo db
         ps = self._periods_series.get((var_name, ts_name))
         if ps is None:
             raise PeriodSeiresNotFoundError
