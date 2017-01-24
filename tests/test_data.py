@@ -49,6 +49,19 @@ def entity_data(time_line_manager):
     _entity_data = EntityData(time_line_manager)
     return _entity_data
 
+def test_entity_data(entity_data, backup):
+    """
+    Test function for entity data
+
+    :param entity_date:
+    :type entity_date:
+    :param backup:
+    :type backup:
+    :return:
+    :rtype:
+    """
+    print(entity_data.load_to_db())
+
 
 def test_get_backup(entity_data, backup):
     """
@@ -59,6 +72,8 @@ def test_get_backup(entity_data, backup):
     :return:
 
     """
+    entity_data.load_backup(backup)
+    entity_data
 
     entity_data.load_backup(backup)
     expected = backup
@@ -315,7 +330,6 @@ def test_rename_variable(entity_data, backup):
     assert "Costs" not in [i[0] for i in list(entity_data._periods_series.keys())]
 
 
-
     entity_data.load_backup(backup)
     entity_data.rename_variable("Income", "Pre-sales")
     assert "Pre-sales" in list(entity_data._variables.keys())
@@ -342,7 +356,6 @@ def test_set_var_property(entity_data, backup):
     entity_data.load_backup(backup)
     entity_data.set_var_property("Sales", 'total', 10)
     assert entity_data._variables['Sales'] == {'total': 10}
-
 
     entity_data.load_backup(backup)
     entity_data.set_var_property("Costs", 'total', 100)
@@ -450,6 +463,7 @@ def test_add_variable(entity_data, backup):
     assert 5 in actual
     assert list(actual).count(5) == 1
 
+
 def test_add_variable(entity_data, backup):
     """Add new variable to backup
 
@@ -467,8 +481,6 @@ def test_add_variable(entity_data, backup):
 
     assert "New Sales" in actual
     assert list(actual).count("New Sales") == 1
-
-
 
 
 def test_get_scalar_val(entity_data, backup):
