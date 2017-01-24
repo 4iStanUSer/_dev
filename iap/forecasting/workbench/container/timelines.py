@@ -23,6 +23,7 @@ class TimeLineManager:
 
         """
 
+
         return dict(timescales=self._timescales, alias=self._period_alias)
 
     def load_backup(self, backup):
@@ -87,6 +88,8 @@ class TimeLineManager:
 
         """
 
+        #mongo - process specific node
+
         time_point = dict(depth=depth,
                           name_full=inp_node['name_full'],
                           name_short=inp_node['name_short'],
@@ -107,11 +110,13 @@ class TimeLineManager:
         :return:
 
         '''
+
         for ts in self._timescales:
             if ts['name'] == ts_name:
                 index = self._timescales.index(ts)
                 return ts, index
         #raise ex.TlmNonExistentName(ts_name)
+
         raise Exception
 
     def get_growth_lag(self, ts_name):
