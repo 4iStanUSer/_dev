@@ -18,7 +18,10 @@ def get_dashboard_data(req):
     lang = rt.get_state(user_id).language
     project = rt.get_state(user_id).project_id
     wb = rt.get_wb(user_id)
-    data = data_service.get_entity_data(req, project, wb.container, wb.data_config, wb.selection, lang=lang)
+    #data = {}
+    #for cont_type, container in wb.container.items():
+
+    data = data_service.get_entity_data(req, project, wb.container['default'], wb.data_config, wb.selection, lang=lang)
     return send_success_response(data)
     #except Exception as e:
     #    msg = ErrorManager.get_error_message(e)
