@@ -248,7 +248,10 @@ class Scenario(Base):
     name = Column(String(length=255))
     description = Column(String(length=255))
     date_of_last_modification = Column(String)
-    criteria = Column(String())
+
+    criteria = Column(String)
+    #entity_id = Column(Integer, ForeignKey('entity.id'))
+    #enity = relationship("Entity", back_populates="scenarios")
 
     status = Column(String(length=255))
     shared = Column(String(length=255), nullable=True)

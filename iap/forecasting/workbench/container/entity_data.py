@@ -1,6 +1,5 @@
 import copy
 from ..helper import SlotType
-from ....repository.nosql_storage import forecast_db
 from iap.common.exceptions import *
 
 class EntityData:
@@ -182,12 +181,8 @@ class EntityData:
             (list): names of variables
         """
         #In Mongo DB style
-        entity = forecast_db.entity.find({id: self.entity_id})
-        variables = entity.variables
-        return [var.name for var in variables]
 
-
-        #return self._variables.keys()
+        return self._variables.keys()
 
     def add_variable(self, var_name):
         """
@@ -202,22 +197,12 @@ class EntityData:
         """
         #Initialise new variable and assign it to
         #entity
-        try:
-            entity = forecast_db.entity.find({id: self.entity_id})
-            entity.update({"_id": self.entity_id},
-                         {"$addToSet": {"variable": {"var_name": var_name,
-                                                     "props":[
-                                                            {"prop_name":None, "prop_value":None}]
-                                                    }
-                                        }
-                         })
-        except:
-            raise VariableAlreadyExistdError
 
-        #if var_name not in self._variables:
-        #    self._variables[var_name] = dict()
-        #else:
-        #    return VariableAlreadyExistdError
+
+        if var_name not in self._variables:
+            self._variables[var_name] = dict()
+        else:
+            return VariableAlreadyExistdError
 
 
     def get_var_properties(self, var_name):
@@ -233,10 +218,8 @@ class EntityData:
         """
 
         #return variable properties
-        entity = forecast_db.entity.find({id: self.entity_id})
-        variable = entity.find({"var_name":var_name})
-        return variable.props
-        #return copy.copy(self._variables[var_name])
+
+        return copy.copy(self._variables[var_name])
 
 
     def get_var_property(self, var_name, prop_name):
@@ -249,16 +232,11 @@ class EntityData:
         :return:
 
         """
-        entity = forecast_db.entity.find({id: self.entity_id})
-        variable = entity.find({"var_name": var_name})
-        property = variable.find({'prop_name': prop_name})
-        return property
-
-        #var_props = self._variables.get(var_name)
-        #if var_props is not None:
-        #    return var_props.get(prop_name)
-        #else:
-        #    return None
+        var_props = self._variables.get(var_name)
+        if var_props is not None:
+            return var_props.get(prop_name)
+        else:
+            return None
 
     def set_var_property(self, var_name, prop_name, value):
         """Set specific value for variable propery
@@ -274,18 +252,10 @@ class EntityData:
         """
 
         #assign for specific var propery
-
-        entity = forecast_db.entity.find({id: self.entity_id})
-        variable = entity.find({"var_name": var_name})
-        property = variable.find({'prop_name': prop_name})
-
-        return property
-
-
-        #if var_name not in self._variables:
-        #    raise VariableNotFoundError
-        #self._variables[var_name][prop_name] = value
-        #return
+        if var_name not in self._variables:
+            raise VariableNotFoundError
+        self._variables[var_name][prop_name] = value
+        return
 
     def rename_variable(self, old_name, new_name):
         """Method that rename variable
