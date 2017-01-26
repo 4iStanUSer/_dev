@@ -21,6 +21,8 @@ requires = [
     'zope.sqlalchemy',
     'waitress',
     'psycopg2'
+    'PyJWT',
+    'bcrypt',
     ]
 
 tests_require = [
@@ -54,6 +56,6 @@ setup(name='IAP',
       [paste.app_factory]
       main = iap:main
       [console_scripts]
-      initialize_IAP_db = iap.repository.initializedb:main
+      initialize_IAP_db = iap.common.repository.initializedb:main
       """,
       )
