@@ -1,5 +1,5 @@
-from ...repository.db.models_access import Tool, User, Feature, UserGroup, Role
-from ...repository.db.models import Project,Pr_Tool
+from ...common.repository.db.models_access import Tool, User, Feature, UserGroup, Role
+from ...common.repository.db.models import Project,Pr_Tool
 from pyramid.renderers import render_to_response
 from pyramid import threadlocal
 from pyramid.paster import get_appsettings
@@ -29,11 +29,14 @@ def check_logged_in(req):
     :rtype: Dict[str, bool]
 
     """
-    if get_user(req) == Exception and check_session(req)==False:
-        return send_error_response('Unauthorised')
-    elif get_user(req)!= Exception and check_session(req)==True:
+    user_id = get_user(req)
+    session_flag = check_session(req)
+
+    if user_id != None and session_flag == True:
         new_token = req.session['token']
         return send_success_response(new_token)
+    else:
+        return send_error_response('Unauthorised')
 
 
 def login(req):
@@ -46,14 +49,15 @@ def login(req):
 
     """
     user = authorise(req)
-    if user == Exception:
-        return send_error_response('Unauthorised')
-    else:
+    if user != None:
         user_id = user.id
         login = user.email
         token = req.create_jwt_token(user_id, login=login)
         req.session['token'] = token
         return send_success_response(token)
+    else:
+        return send_error_response("Unauthorised")
+
 
 
 def logout(req):

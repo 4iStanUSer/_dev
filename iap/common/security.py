@@ -1,7 +1,9 @@
+from sqlalchemy.orm.exc import NoResultFound
+
 from pyramid.session import SignedCookieSessionFactory
 from ..common.helper import send_error_response
-from iap.repository.db.models_access import User, DataPermissionAccess
-from iap.repository.db.warehouse import Entity
+from .repository.db.models_access import User, DataPermissionAccess
+from .repository.db.warehouse import Entity
 from pyramid.interfaces import IAuthorizationPolicy
 from zope.interface import implementer
 from functools import wraps
@@ -21,8 +23,7 @@ def forbidden_view(f):
     """
     def deco(request):
         user_id = get_user(request)
-        print("USER ID", user_id)
-        if user_id != Exception and check_session(request) == True:
+        if user_id != None and check_session(request) == True:
             return f(request)
         else:
             return send_error_response('Unauthorised')
@@ -34,17 +35,17 @@ def authorise(req):
         # user.check_password(password)
         # user = service.check_password(login, password)
     """
-    print(req)
     try:
         username = req.json_body['data']['username']
         password = req.json_body['data']['password']
         user = req.dbsession.query(User).filter(User.email == username).one()
+    except NoResultFound:
+        return None
+    else:
         if user.check_password(password):
             return user
         else:
-            return Exception
-    except:
-        return Exception
+            return None
 
 
 def check_session(request):
@@ -82,8 +83,10 @@ def get_user(request):
         login = token_data['login']
         user = request.dbsession.query(User).filter(User.id == user_id and User.email == login).one()
         # user = service.get_user_by_id(request,user_id, login)
-    except:
-        return send_error_response("Unauthorised")
+    except NoResultFound:
+        return None
+    except jwt.exceptions.DecodeError:
+        return None
     else:
         return user.id
 
@@ -102,9 +105,10 @@ def requires_roles(*roles):
         @wraps(f)
         def wrapped(request):
             user_id = get_user(request)
-            if request.check_access(user_id, roles) == False:
+            if request.check_access(user_id, roles):
+                return f(request)
+            else:
                 return send_error_response("User {0} Unauthorised".format(user_id))
-            return f(request)
         return wrapped
     return wrapper
 
@@ -200,6 +204,7 @@ class AccessManager:
         else:
             return False
 
+
     def _check_access(self, request, user_id, in_features):
         """
         Verify if specific user has specific role
@@ -212,15 +217,19 @@ class AccessManager:
         :return:
         :rtype: bool
         """
-        user = request.dbsession.query(User).filter(User.id == user_id).one()
-        features = []
-        for role in user.roles:
-            for feature in role.features:
-                features.append(feature.name)
-        if list(set(in_features) & set(features)) != []:
-            return True
+        try:
+            user = request.dbsession.query(User).filter(User.id == user_id).one()
+            features = []
+            for role in user.roles:
+                for feature in role.features:
+                    features.append(feature.name)
+        except NoResultFound:
+            raise NoResultFound
         else:
-            return False
+            if list(set(in_features) & set(features)) != []:
+                return True
+            else:
+                return False
 
 
 def set_manager(config):
@@ -232,6 +241,7 @@ def set_manager(config):
     :return:
     :rtype:
     """
+
     policy = AccessManager()
 
     def check_access(request, user_id, roles):
@@ -242,6 +252,7 @@ def set_manager(config):
 
 
 def includeme(config):
+
     config.add_request_method(get_user, 'user', reify=True)
     config.add_request_method(check_session, 'has_session', reify=True)
     config.add_request_method(authorise, 'authorised', reify=True)
