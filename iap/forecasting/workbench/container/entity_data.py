@@ -1,5 +1,6 @@
 import copy
 from ..helper import SlotType
+from ....repository.nosql_storage import forecast_db
 from iap.common.exceptions import *
 
 class EntityData:
