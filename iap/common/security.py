@@ -445,7 +445,6 @@ def build_permission_tree(request, project_name):
         ent = node['out_path']
         if ent not in access_rights.keys():
             access_rights[ent] = {}
-        else:
         masks = node['mask'].split(",")
         items = node['in_path'].split("-")
         tree(access_rights[ent], items, masks, order=0)
