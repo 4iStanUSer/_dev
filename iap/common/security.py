@@ -101,9 +101,9 @@ def requires_roles(*roles):
     def wrapper(f):
         @wraps(f)
         def wrapped(request):
-            user = get_user(request)
-            if request.check_access(user.id, roles) == False:
-                return send_error_response("User {0} Unauthorised".format(user.email))
+            user_id = get_user(request)
+            if request.check_access(user_id, roles) == False:
+                return send_error_response("User {0} Unauthorised".format(user_id))
             return f(request)
         return wrapped
     return wrapper
