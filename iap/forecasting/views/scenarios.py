@@ -1,5 +1,6 @@
-from ...repository.db.models_access import Scenario, User, Feature, Role,Permission
-from ...repository.db.warehouse import Entity
+from ...common.repository.db.models_access import Scenario, User, Feature, Role,Permission
+from ...common.repository.db.warehouse import Entity
+from sqlalchemy.orm.exc import NoResultFound
 from ...common.helper import send_success_response, send_error_response
 from ...common.security import requires_roles, forbidden_view
 import datetime
@@ -13,7 +14,7 @@ def create_table(request):
     :return:
     :rtype:
     """
-    from iap.repository.db.meta import Base
+    from iap.common.repository.db.meta import Base
     _engine = request.dbsession.bind.engine
     # Create all tables
     Base.metadata.create_all(_engine)
@@ -27,21 +28,8 @@ def prepare_scenario_testing(request):
     :return:
     :rtype: None
     """
-
-    permissions = request.dbsession.query(Permission).all()
-    for permission in permissions:
-        print(permission.name)
-        print([i.in_path for i in permission.data_perms])
-    users = request.dbsession.query(User).all()
-
-    for user in users:
-        print(user.email)
-    features = request.dbsession.query(Feature).all()
-    for feature in features:
-        print(feature.name)
     scenarios = request.dbsession.query(Scenario).all()
     for scenario in scenarios:
-        print(scenario.id)
         request.dbsession.delete(scenario)
 
 
@@ -80,12 +68,14 @@ def create_scenario(request):
     :rtype:
     """
     try:
-        input_data = request.json_body
+        input_data = request.json_body['data']
         date_of_last_mod = str(datetime.datetime.now())
         scenario = Scenario(name=input_data['name'], description=input_data['description'],shared=input_data['shared'],
-                            date_of_last_modification=date_of_last_mod, status="New", criteria=input_data['description'])
+                        date_of_last_modification=date_of_last_mod, status="New", criteria=input_data['description'])
         request.dbsession.add(scenario)
-    except:
+    except NoResultFound:
+        return send_error_response("Failed to create scenario")
+    except KeyError:
         return send_error_response("Failed to create scenario")
     else:
         return send_success_response("Scenario created")
@@ -105,7 +95,7 @@ def search_and_view_scenario(request):
     :rtype:
     """
     try:
-        filters = request.json_body['filters']
+        filters = request.json_body['data']['filters']
         if all(filter == [] for filter in filters.values()):
             scenarios = request.dbsession.query(Scenario).all()
         else:
@@ -130,10 +120,12 @@ def get_scenario_description(request):
     :rtype:
     """
     try:
-        scenario_id = request.json_body['id']
+        scenario_id = request.json_body['data']['id']
         scenario = request.dbsession.query(Scenario).filter(Scenario.id==scenario_id).one()
         description = scenario.description
-    except:
+    except KeyError:
+        return send_error_response("Failed to get scenario description")
+    except NoResultFound:
         return send_error_response("Failed to get scenario description")
     else:
         return send_success_response(description)
@@ -151,11 +143,13 @@ def change_scenario_name(request):
     :rtype:
     """
     try:
-        scenario_id = request.json_body['id']
-        new_name = request.json_body['new_name']
+        scenario_id = request.json_body['data']['id']
+        new_name = request.json_body['data']['new_name']
         scenario = request.dbsession.query(Scenario).filter(Scenario.id == scenario_id).one()
         scenario.name = new_name
-    except:
+    except KeyError:
+        return send_error_response("Failed to change name")
+    except NoResultFound:
         return send_error_response("Failed to change name")
     else:
         return send_success_response("Name changed")
@@ -165,15 +159,18 @@ def change_scenario_name(request):
 @requires_roles('View Scenario')
 def check_scenario_name(request):
     try:
-        scenario_id = request.json_body['id']
-        name = request.json_body['name']
+        scenario_id = request.json_body['data']['id']
+        name = request.json_body['data']['name']
         scenario = request.dbsession.query(Scenario).filter(Scenario.id == scenario_id).one()
-        if scenario.name == name:
-            return send_success_response("Name changed")
-    except:
+    except KeyError:
+        return send_error_response("Failed to change name")
+    except NoResultFound:
         return send_error_response("Failed to change name")
     else:
-        return send_error_response("Failed to change name")
+        if scenario.name == name:
+            return send_success_response("Name changed")
+        else:
+            return send_error_response("Failed to change name")
 
 
 @forbidden_view
@@ -187,19 +184,21 @@ def modify(request):
     :rtype:
     """
     try:
-        new_values = request.json_body['modification_value']
-        scenario_id = request.json_body['scenario_id']
+        new_values = request.json_body['data']['modification_value']
+        scenario_id = request.json_body['data']['scenario_id']
         scenario = request.dbsession.query(Scenario).filter(Scenario.id == scenario_id).one()
         for parameter in new_values.keys():
             if parameter == "name":
-                scenario.name = new_values["name"]
+                scenario.name = new_values['data']["name"]
             elif parameter == "status":
-                scenario.name = new_values["status"]
+                scenario.name = new_values['data']["status"]
             elif parameter == "shared":
-                scenario.name = new_values["shared"]
+                scenario.name = new_values['data']["shared"]
             elif parameter == "description":
-                scenario.name = new_values["description"]
-    except:
+                scenario.name = new_values['data']["description"]
+    except KeyError:
+        return send_error_response("Failed to modify selected scenario")
+    except NoResultFound:
         return send_error_response("Failed to modify selected scenario")
     else:
         scenario_info_list = serialise_scenario(list(scenario))
@@ -217,10 +216,12 @@ def delete(request):
     :rtype:
     """
     try:
-        scenario_id = request.json_body['id']
+        scenario_id = request.json_body['data']['id']
         scenario = request.dbsession.query(Scenario).filter(Scenario.id == scenario_id).one()
         request.dbsession.delete(scenario)
-    except:
+    except KeyError:
+        return send_error_response("Failed to delete selected scenario")
+    except NoResultFound:
         return send_error_response("Failed to delete selected scenario")
     else:
         return send_success_response("Deleted selected scenario")
@@ -248,11 +249,15 @@ def mark_as_final(request):
     :return:
     :rtype:
     """
+    #ToDo - check is scenario already marked
+
     try:
-        scenario_id = request.json_body['id']
+        scenario_id = request.json_body['data']['id']
         scenario = request.dbsession.query(Scenario).filter(Scenario.id == scenario_id).one()
         scenario.status = "final"
-    except:
+    except KeyError:
+        return send_error_response("Marking as final failed")
+    except NoResultFound:
         return send_error_response("Marking as final failed")
     else:
         return send_success_response("Mark as final")
@@ -263,13 +268,15 @@ def mark_as_final(request):
 def include_scenario(request):
 
     try:
-        parent_scenario_id = request.json_body['parent_scenario_id']
-        scenario_id = request.json_body['scenario_id']
+        parent_scenario_id = request.json_body['data']['parent_scenario_id']
+        scenario_id = request.json_body['data']['scenario_id']
         parent_scenario = request.dbsession.query(Scenario).filter(Scenario.id == parent_scenario_id).one()
         current_scenario = request.dbsession.query(Scenario).filter(Scenario.id == scenario_id).one()
         parent_scenario.children.append(current_scenario)
         return send_success_response("Include finished successive")
-    except:
+    except KeyError:
+        return send_error_response("Failed to include")
+    except NoResultFound:
         return send_error_response("Failed to include")
 
 
