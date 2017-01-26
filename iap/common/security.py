@@ -56,13 +56,15 @@ def check_session(request):
     :rtype: int
     """
     #   add exception on non existen  id,login in token
-    session = request.session
-    if 'token' in session:
-        if request.json_body['X-Token'] == session['token']:
-            return True
-        else:
-            return False
-    return False
+    try:
+        session = request.session
+        if 'token' in session:
+            if request.json_body['X-Token'] == session['token']:
+                return True
+            else:
+                return False
+    except:
+        return False
 
 
 def get_user(request):
@@ -102,8 +104,8 @@ def requires_roles(*roles):
         @wraps(f)
         def wrapped(request):
             user = get_user(request)
-            if request.check_access(user.id, roles) == False:
-                return send_error_response("User {0} Unauthorised".format(user.email))
+            if request.check_access(user, roles) == False:
+                return send_error_response("User {0} Unauthorised".format(user))
             return f(request)
         return wrapped
     return wrapper
