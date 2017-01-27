@@ -1,7 +1,7 @@
 import copy
 
-from iap.common.repository.access_managers import layer_access as wha
-from iap.common.repository.access_managers.iaccess import IAccess as _IAccess
+from iap.common.repository.models_managers import layer_access as wha
+from iap.common.repository.models_managers.iaccess import IAccess as _IAccess
 from iap.common.repository.interface.service import (
     get_int_id_or_err as _get_id_or_err,
     get_str_or_err as _get_str_or_err
@@ -88,7 +88,7 @@ class IManageAccess:
         iaccess = _IAccess(ssn=self.ssn)
         u_perms = iaccess.get_permissions(tool_id, user_id)
 
-        # self.istorage.backup.save(user_id, tool_id, u_perms, 'access_managers')
+        # self.istorage.backup.save(user_id, tool_id, u_perms, 'models_managers')
 
         # # Make backup file
         # dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -381,7 +381,7 @@ class IManageAccess:
 
         TO DO Method don't return anything
         Ver.1 - Get data by group
-        Q:Why to put tool_id if data access_managers is fully defined by group_id?
+        Q:Why to put tool_id if data models_managers is fully defined by group_id?
 
         :param group_id:
         :type group_id:

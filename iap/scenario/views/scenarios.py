@@ -1,6 +1,7 @@
 import datetime
+from ..managers.scenario_manager import create_scenario, get_scenarios, update_scenario, check_scenario, delete_scenario
 
-from iap.common.repository.models.access import Scenario, User, Feature, Permission
+from iap.common.repository.models.scenarios import Scenario
 from ...common.helper import send_success_response, send_error_response
 from ...common.security import requires_roles, forbidden_view
 
@@ -28,20 +29,8 @@ def prepare_scenario_testing(request):
     :rtype: None
     """
 
-    permissions = request.dbsession.query(Permission).all()
-    for permission in permissions:
-        print(permission.name)
-        print([i.in_path for i in permission.data_perms])
-    users = request.dbsession.query(User).all()
-
-    for user in users:
-        print(user.email)
-    features = request.dbsession.query(Feature).all()
-    for feature in features:
-        print(feature.name)
     scenarios = request.dbsession.query(Scenario).all()
     for scenario in scenarios:
-        print(scenario.id)
         request.dbsession.delete(scenario)
 
 
@@ -81,11 +70,8 @@ def create_scenario(request):
     """
     try:
         input_data = request.json_body
-        date_of_last_mod = str(datetime.datetime.now())
-        scenario = Scenario(name=input_data['name'], description=input_data['description'],shared=input_data['shared'],
-                            date_of_last_modification=date_of_last_mod, status="New", criteria=input_data['description'])
-        request.dbsession.add(scenario)
-    except:
+        create_scenario(input_data)
+    except KeyError:
         return send_error_response("Failed to create scenario")
     else:
         return send_success_response("Scenario created")
@@ -106,13 +92,7 @@ def search_and_view_scenario(request):
     """
     try:
         filters = request.json_body['filters']
-        if all(filter == [] for filter in filters.values()):
-            scenarios = request.dbsession.query(Scenario).all()
-        else:
-            scenarios = request.dbsession.query(Scenario).\
-                filter(Scenario.name == filters['authors'] and Scenario.criteria.name == filters['criteria']).all()
-
-        scenario_info_list = serialise_scenario(scenarios)
+        scenario_info_list = get_scenarios(request, filters)
     except:
         return send_error_response("Error during searching")
     else:
@@ -153,8 +133,8 @@ def change_scenario_name(request):
     try:
         scenario_id = request.json_body['id']
         new_name = request.json_body['new_name']
-        scenario = request.dbsession.query(Scenario).filter(Scenario.id == scenario_id).one()
-        scenario.name = new_name
+        new_value = {"name": new_name}
+        update_scenario(request, scenario_id, new_value)
     except:
         return send_error_response("Failed to change name")
     else:
@@ -189,21 +169,11 @@ def modify(request):
     try:
         new_values = request.json_body['modification_value']
         scenario_id = request.json_body['scenario_id']
-        scenario = request.dbsession.query(Scenario).filter(Scenario.id == scenario_id).one()
-        for parameter in new_values.keys():
-            if parameter == "name":
-                scenario.name = new_values["name"]
-            elif parameter == "status":
-                scenario.name = new_values["status"]
-            elif parameter == "shared":
-                scenario.name = new_values["shared"]
-            elif parameter == "description":
-                scenario.name = new_values["description"]
+        update_scenario(request, scenario_id, new_values)
     except:
         return send_error_response("Failed to modify selected scenario")
     else:
-        scenario_info_list = serialise_scenario(list(scenario))
-        return send_success_response(scenario_info_list)
+        return send_success_response(update_scenario)
 
 
 @forbidden_view
@@ -218,8 +188,7 @@ def delete(request):
     """
     try:
         scenario_id = request.json_body['id']
-        scenario = request.dbsession.query(Scenario).filter(Scenario.id == scenario_id).one()
-        request.dbsession.delete(scenario)
+        delete_scenario(request, scenario_id)
     except:
         return send_error_response("Failed to delete selected scenario")
     else:
@@ -250,8 +219,8 @@ def mark_as_final(request):
     """
     try:
         scenario_id = request.json_body['id']
-        scenario = request.dbsession.query(Scenario).filter(Scenario.id == scenario_id).one()
-        scenario.status = "final"
+        new_value = {'status': 'final'}
+        update_scenario(request, scenario_id, new_value)
     except:
         return send_error_response("Marking as final failed")
     else:

@@ -6,9 +6,9 @@ import transaction
 from iap.common.repository.models.warehouse import Project, Pr_Tool
 from pyramid.paster import (get_appsettings, setup_logging)
 from pyramid.scripts.common import parse_vars
-
 from templates.access_rights_data import perm_data
-from iap.common.repository.access_managers.imanage_access import IManageAccess
+from templates.dev_template import dev_template_JJOralCare
+from iap.common.repository.models_managers.admin_manager import IManageAccess
 from iap.common.repository.models.scenarios import Scenario
 from iap.common.repository.models.access import User, Role, Feature, Tool, DataPermission, Permission
 from iap.common.repository.models.warehouse import Entity, Warehouse
@@ -40,11 +40,7 @@ def load_dev_templates(settings, project_name):
     file = open(template_path).read()
     template = json.loads(file)
 
-    #Load python file
-    sys.path.append(base_path)
-    from dev_template import dev_template_JJOralCare
-
-    return {'template': template, 'calc_instructions': dev_template_JJOralCare['calc_instructions']}
+    return template
 
 
 def main(argv=sys.argv):
@@ -176,10 +172,10 @@ def main(argv=sys.argv):
         #persistent_storage.save_backup(user_id, tool_id, 'JJLean', backup)
 
         wb = Workbench(user_id)
-        template = load_dev_templates(settings, "JJOralCare")['template']
+        template = load_dev_templates(settings, "JJOralCare")
         user_access_rights = {"features": template['features'],
                               "entities": template['user_data_access']}
-        calc_instructions = load_dev_templates(settings, "JJOralCare")['calc_instructions']
+        calc_instructions = dev_template_JJOralCare['calc_instructions']
         wb.initial_load(wh, template, calc_instructions, user_access_rights)
         backup = wb.get_backup()
         persistent_storage.save_backup(user_id, tool_id, project_id, backup)

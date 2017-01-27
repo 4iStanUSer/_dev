@@ -4,8 +4,8 @@ Describe package here.
 
 import pyramid
 
-from iap.common.repository.access_managers.iaccess import IAccess as __IAccess
-from iap.common.repository.access_managers.imanage_access import IManageAccess as __IManAcc
+from iap.common.repository.models_managers.iaccess import IAccess as __IAccess
+from iap.common.repository.models_managers.admin_manager import IManageAccess as __IManAcc
 from iap.common.repository.models.warehouse import Warehouse as __Warehouse
 
 

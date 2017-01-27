@@ -1,3 +1,0 @@
-"""
-Manager for scenario's
-"""

@@ -366,7 +366,7 @@ def get_data_permission_by_group(ssn, group_id):
 
 def get_data_permission_by_id(ssn, data_perm_id):
     """
-    Return data permissison access_managers by given id
+    Return data permissison models_managers by given id
     :param ssn:
     :type ssn:
     :param data_perm_id:
