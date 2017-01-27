@@ -6,7 +6,6 @@ from ...common.error_manager import ErrorManager
 from ...common import runtime_storage as rt
 TOOL = 'forecast'
 
-
 def get_dashboard_data(req):
     # Get parameters from request.
     try:
@@ -14,15 +13,15 @@ def get_dashboard_data(req):
     except KeyError:
         msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
         return send_error_response(msg)
-    #try:
-    lang = rt.get_state(user_id).language
-    project = rt.get_state(user_id).project_id
-    wb = rt.get_wb(user_id)
-    data = data_service.get_entity_data(req, project, wb.container, wb.data_config, wb.selection, lang=lang)
-    return send_success_response(data)
-    #except Exception as e:
-    #    msg = ErrorManager.get_error_message(e)
-    #    return send_error_response(msg)
+    try:
+        lang = rt.get_state(user_id).language
+        wb = rt.get_wb(user_id)
+        data = data_service.get_entity_data(wb.container, wb.data_config,
+                                            wb.selection, lang)
+        return send_success_response(data)
+    except Exception as e:
+        msg = ErrorManager.get_error_message(e)
+        return send_error_response(msg)
 
 
 def get_cagrs_for_period(req):
@@ -39,9 +38,8 @@ def get_cagrs_for_period(req):
     try:
         wb = rt.get_wb(user_id, TOOL)
         cagrs = data_service.get_cagrs(wb.container, wb.config, entities_ids,
-                                             (start, end))
+                                         (start, end))
         return send_success_response(cagrs)
-        #else return - permission error
     except Exception as e:
         msg = ErrorManager.get_error_message(e)
         return send_error_response(msg)
@@ -59,12 +57,10 @@ def get_decomposition_for_period(req):
         msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
         return send_error_response(msg)
     try:
-
         wb = rt.get_wb(user_id, TOOL)
         dec_data = data_service.get_decomposition(wb.container, wb.config,
-                                                entities_ids, (start, end))
+                                                    entities_ids, (start, end))
         return send_success_response(dec_data)
-    # else return - permission error
     except Exception as e:
         msg = ErrorManager.get_error_message(e)
         return send_error_response(msg)

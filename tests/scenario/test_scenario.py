@@ -36,6 +36,7 @@ def token(web_app):
     password = "123456"
     res = web_app.post_json('/login', {'data':{"username": login, 'password': password}})
     token = str(res.json_body['data'])
+
     return token
 
 

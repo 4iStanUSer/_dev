@@ -1,5 +1,3 @@
-#!/usr/bin/python
-# -*- coding: ascii -*-
 import os.path
 import xlrd
 import json
@@ -149,4 +147,3 @@ def _process_storage(sheet, section):
                 j += 1
             dev_storage.append(result_row)
     return dev_storage
-

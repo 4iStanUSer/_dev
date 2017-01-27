@@ -1,7 +1,6 @@
 import json
 import os
 import sys
-import importlib.machinery
 import transaction
 from iap.common.repository.models.warehouse import Project, Pr_Tool
 from pyramid.paster import (get_appsettings, setup_logging)
@@ -50,6 +49,7 @@ def main(argv=sys.argv):
     options = parse_vars(argv[2:])
     setup_logging(config_uri)
     settings = get_appsettings(config_uri, options=options)
+
     engine = get_engine(settings, prefix='sqlalchemy.')
 
     session_factory = get_session_factory(engine)
@@ -68,11 +68,13 @@ def main(argv=sys.argv):
 
         transaction.manager.commit()
 
+
         wh = Warehouse(session_factory)
         loader = Loader(wh)
         #loader.run_processing('JJLean')
         loader.run_processing('JJOralCare')
         transaction.manager.commit()
+
 
         #Create Tool Forecating
         tool = Tool(name="Forecasting")
@@ -112,6 +114,12 @@ def main(argv=sys.argv):
         user_2.roles.append(role_forecast)
 
         #Add data permission:
+
+        permission = Permission(name="Development Template")
+
+        for data in perm_data["JJLean"]:
+            data_permission = DataPermission(project="JJLean", in_path=data['in_path'],
+                                             out_path=data['out_path'], mask=data['mask'])
 
         permission = Permission(name="Development Template")
 
@@ -164,6 +172,7 @@ def main(argv=sys.argv):
         ssn.add(project_2)
 
         user_id = 2
+        user_id = 2#user.email
         tool_id = 'forecast'
         project_id = 'JJOralCare'
         #wb = Workbench(user_id)
@@ -175,8 +184,7 @@ def main(argv=sys.argv):
         template = load_dev_templates(settings, "JJOralCare")
         user_access_rights = {"features": template['features'],
                               "entities": template['user_data_access']}
-        calc_instructions = dev_template_JJOralCare['calc_instructions']
-        wb.initial_load(wh, template, calc_instructions, user_access_rights)
+        wb.initial_load(wh, template, dev_template_JJOralCare['calc_instructions'], user_access_rights)
         backup = wb.get_backup()
         persistent_storage.save_backup(user_id, tool_id, project_id, backup)
 

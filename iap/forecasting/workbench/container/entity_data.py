@@ -16,7 +16,6 @@ class EntityData:
         """
         self.time_manager = time_manager
         self._variables = {}
-        self.id = 1
         self._time_series = {}
         self._scalars = {}
         self._periods_series = {}
@@ -106,9 +105,6 @@ class EntityData:
         Return:
             (list): names of variables
         """
-        #In Mongo DB style
-
-
         return self._variables.keys()
 
     def add_variable(self, var_name):
@@ -122,8 +118,6 @@ class EntityData:
         :return:
 
         """
-        #Initialise new variable and assign it to
-        #entity
 
         if var_name not in self._variables:
             self._variables[var_name] = dict()
@@ -143,7 +137,6 @@ class EntityData:
 
         """
 
-        #return variable properties
         return copy.copy(self._variables[var_name])
 
 
@@ -157,7 +150,6 @@ class EntityData:
         :return:
 
         """
-
         var_props = self._variables.get(var_name)
         if var_props is not None:
             return var_props.get(prop_name)
@@ -176,9 +168,6 @@ class EntityData:
         :return:
 
         """
-
-        #assign for specific var propery
-
         if var_name not in self._variables:
             raise VariableNotFoundError
         self._variables[var_name][prop_name] = value
@@ -232,8 +221,6 @@ class EntityData:
         :return:
 
         """
-        #check if object exist in db
-
         if data_type == SlotType.time_series:
             return (var_name, ts_name) in self._time_series
         elif data_type == SlotType.scalar:
@@ -325,7 +312,7 @@ class EntityData:
         if ts is None:
             raise TimeSeriesNotFoundError
         # Define borders.
-        start_index=0
+        start_index = 0
         if stamp is not None:
             start_index = \
                 self.time_manager.get_index(ts_name, stamp)
@@ -348,8 +335,6 @@ class EntityData:
         :return:
 
         """
-
-        #guqey for scalar value
 
         scalar = self._scalars.get((var_name, ts_name))
         if scalar is None:
@@ -399,7 +384,6 @@ class EntityData:
         :return:
 
         """
-        #return period value form mongo db
         ps = self._periods_series.get((var_name, ts_name))
         if ps is None:
             raise PeriodSeiresNotFoundError

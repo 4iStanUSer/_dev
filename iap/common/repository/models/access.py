@@ -64,7 +64,6 @@ class User(Base):
     def check_password(self, password):
         return bcrypt.verify(password, self.password)
 
-
 role_features_tbl = Table(
     'role_feature', Base.metadata,
     Column('role_id', Integer, ForeignKey('roles.id')),

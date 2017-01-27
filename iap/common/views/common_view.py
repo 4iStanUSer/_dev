@@ -1,15 +1,16 @@
+from ...repository.db.models_access import Tool, User, Feature, UserGroup, Role
+from ...repository.db.models import Project,Pr_Tool
 from pyramid.renderers import render_to_response
-
-from iap.common.repository.models.warehouse import Project
-from ..security import *
-from ..services import common_info as common_getter
-from ...common import exceptions as ex
-from ...common import persistent_storage as pt
-from ...common import runtime_storage as rt
-from ...common.error_manager import ErrorManager
-from ...common.helper import send_success_response
+from pyramid import threadlocal
+from pyramid.paster import get_appsettings
+from ...common.helper import send_success_response, send_error_response
 from ...common.tools_config import get_page_config
-
+from ...common.error_manager import ErrorManager
+from ...common import exceptions as ex
+from ...common import runtime_storage as rt
+from ...common import persistent_storage as pt
+from ..services import common_info as common_getter
+from ..security import *
 
 def index_view(req):
     return render_to_response('iap.common:templates/index.jinja2',
@@ -26,15 +27,18 @@ def check_logged_in(req):
     :rtype: Dict[str, bool]
 
     """
-    if get_user(req) == Exception and check_session(req)==False:
-        return send_error_response('Unauthorised')
-    elif get_user(req)!= Exception and check_session(req)==True:
+    user_id = get_user(req)
+    session_flag = check_session(req)
+
+    if user_id != None and session_flag == True:
         new_token = req.session['token']
         return send_success_response(new_token)
+    else:
+        return send_error_response('Unauthorised')
 
 
 def login(req):
-    """View function for login
+    """View function for
 
     :param req:
     :type req: pyramid.util.Request
@@ -43,14 +47,15 @@ def login(req):
 
     """
     user = authorise(req)
-    if user == Exception:
-        return send_error_response('Unauthorised')
-    else:
+    if user != None:
         user_id = user.id
         login = user.email
         token = req.create_jwt_token(user_id, login=login)
         req.session['token'] = token
         return send_success_response(token)
+    else:
+        return send_error_response("Unauthorised")
+
 
 
 def logout(req):
@@ -92,6 +97,7 @@ def get_page_configuration(req):
     :return:
     :rtype:
     """
+    # Get parameters from request.
     try:
         user_id = req.user
         page_name = req.json_body['data']['page']
@@ -137,21 +143,7 @@ def set_language(req):
 def get_tools_with_projects(req):
     """
     Return all projects and tool information
-
-    Args:
-        {'Data':{}, 'X-Token':''}
-    Return:
-        Example:
-            {
-                'tools': [
-                  {'name': 'Forecasting', 'description': 'This is forecasting', 'id': 'forecast'}
-                        ],
-                'projects': [
-                     {'name': 'Oral Care Forecasting', 'description': None, 'id': 'JJOralCare', 'tool_id': 'forecast'},
-                     {'name': 'Lean Forecasting', 'description': None, 'id': 'JJLean', 'tool_id': 'forecast'}
-                    ]
-            }
-
+    TODO remake to query from database
 
     :param req:
     :type req: pyramid.util.Request
@@ -209,7 +201,6 @@ def get_data_for_header(req):
     try:
         header_data = dict()
         lang = rt.get_state(user_id).language
-        #common_getter-?
         header_data['languages'] = common_getter.get_languages_list(pt, lang)
         header_data['user'] = common_getter.get_user_info(pt, user_id, lang)
         header_data['client'] = common_getter.get_client_info(pt, user_id, lang)
@@ -220,19 +211,7 @@ def get_data_for_header(req):
 
 
 def set_project_selection(req):
-    """Set project selector
 
-    Args:
-        project_id:(String)
-        tool_id:(String)
-    Return:
-        project_id with updated status in runtime storage
-
-    :param req:
-    :type req:
-    :return:
-    :rtype:
-    """
     try:
         user_id = req.user
         project_id = req.json_body['data']['project_id']
@@ -251,6 +230,7 @@ def set_project_selection(req):
         return send_error_response(msg)
 
 
+
 def test_preparation(request):
     """
     Function called before each gunctional test executed
@@ -263,7 +243,6 @@ def test_preparation(request):
 
     from ...forecasting.views.scenarios import create_table, prepare_scenario_testing
     test_name = request.json_body['test_name']
-
     if test_name == "scenario":
         create_table(request)
         prepare_scenario_testing(request)
