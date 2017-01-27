@@ -40,7 +40,7 @@ def test_login(web_app):
     """"""
     login = "default_user"
     password = "123456"
-    res = web_app.post_json('/login', {"username": login, 'password': password})
+    res = web_app.post_json('/login', {'data':{"username": login, 'password': password}})
     print(res)
 
 

@@ -15,7 +15,9 @@ CONFIG_STORAGE_PATH = os.path.join(STORAGE_FOLDER_PATH, 'data_storage', 'for_con
 def load_backup(user_id, tool_id, project_id, backup_name):
     file_path = __get_backup_file_path(user_id, tool_id, project_id,
                                        backup_name)
+    print("Fiel Path", file_path)
     saved_content = __load(file_path)
+    print("Saves Content", saved_content)
     return saved_content['data']
 
 

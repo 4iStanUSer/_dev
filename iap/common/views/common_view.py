@@ -1,9 +1,10 @@
-from ...common.repository.models.access import Tool, User, Feature, UserGroup, Role
-from ...common.repository.models.warehouse import Project,Pr_Tool
+from ...repository.db.models_access import Tool, User, Feature, UserGroup, Role
+from ...repository.db.models import Project,Pr_Tool
 from pyramid.renderers import render_to_response
 from pyramid import threadlocal
 from pyramid.paster import get_appsettings
 from ...common.helper import send_success_response, send_error_response
+from ..security import get_user
 from ...common.tools_config import get_page_config
 from ...common.error_manager import ErrorManager
 from ...common import exceptions as ex
@@ -38,7 +39,7 @@ def check_logged_in(req):
 
 
 def login(req):
-    """View function for
+    """View function for login
 
     :param req:
     :type req: pyramid.util.Request
@@ -125,6 +126,7 @@ def set_language(req):
     :rtype:
     """
     # Get parameters from request.
+    print("Set languages")
     try:
         user_id = req.user
         lang = req.json_body['data']['lang']
@@ -200,6 +202,7 @@ def get_data_for_header(req):
     try:
         header_data = dict()
         lang = rt.get_state(user_id).language
+        #common_getter-?
         header_data['languages'] = common_getter.get_languages_list(pt, lang)
         header_data['user'] = common_getter.get_user_info(pt, user_id, lang)
         header_data['client'] = common_getter.get_client_info(pt, user_id, lang)
@@ -210,7 +213,19 @@ def get_data_for_header(req):
 
 
 def set_project_selection(req):
+    """Set project selector
 
+    Args:
+        project_id:(String)
+        tool_id:(String)
+    Return:
+        project_id with updated status in runtime storage
+
+    :param req:
+    :type req:
+    :return:
+    :rtype:
+    """
     try:
         user_id = req.user
         project_id = req.json_body['data']['project_id']

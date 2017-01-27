@@ -9,6 +9,7 @@ def get_client_info(storage, user_id, lang=None):
 
 
 
+
 def get_user_info(storage, user_id, lang=None):
     info = dict(
         name='Nicolas'
