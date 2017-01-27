@@ -4,9 +4,9 @@ Describe package here.
 
 import pyramid
 
-from iap.common.repository.models_managers.iaccess import IAccess as __IAccess
 from iap.common.repository.models_managers.admin_manager import IManageAccess as __IManAcc
-from iap.common.repository.models.warehouse import Warehouse as __Warehouse
+from iap.common.repository.models_managers.iaccess import IAccess as __IAccess
+from iap.common.repository.models_managers.warehouse.warehouse_manager import Warehouse as __Warehouse
 
 
 def get_wh_interface():

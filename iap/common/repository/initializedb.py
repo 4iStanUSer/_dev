@@ -10,7 +10,8 @@ from templates.dev_template import dev_template_JJOralCare
 from iap.common.repository.models_managers.admin_manager import IManageAccess
 from iap.common.repository.models.scenarios import Scenario
 from iap.common.repository.models.access import User, Role, Feature, Tool, DataPermission, Permission
-from iap.common.repository.models.warehouse import Entity, Warehouse
+from iap.common.repository.models.warehouse import Entity
+from iap.common.repository.models_managers.warehouse.warehouse_manager import Warehouse
 from iap.data_loading.data_loader import Loader
 from .db import (get_engine, get_session_factory, get_tm_session)
 from .db.meta import Base

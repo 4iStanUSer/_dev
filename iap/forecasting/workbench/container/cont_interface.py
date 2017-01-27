@@ -364,6 +364,7 @@ class Entity:
                 for x in self._data.var_names]
 
     def get_variable(self, name):
+        print()
         if name in self._data.var_names:
             return Variable(self._data, name)
         else:

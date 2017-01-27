@@ -43,11 +43,14 @@ def jj_oral_care_sales(table, config, warehouse):
             continue
         # Add data to DB
         entity = warehouse.get_entity([country, 'JJOralCare', 'Mouthwash'])
+        print("Entity", entity)
         if entity is None:
             entity = warehouse.add_entity([country, 'JJOralCare', 'Mouthwash'],
                                           [Meta('Geography', 'Country'),
                                            Meta('Project', 'Project'),
                                            Meta('Products', 'Category')])
+
+        print("Entity", entity)
         var = entity.get_variable(var_name)
         if var is None:
             var = entity.force_variable(var_name, 'float')
