@@ -9,8 +9,10 @@ def download_data_from_wh(warehouse, container, mapping):
     prev_cont_entity = None
     for row in mapping:
         # Get warehouse entity if necessary.
+        path = []
+        warehouse._get_ent_path(prev_wh_entity, path)
         if prev_wh_entity is None or \
-                not is_equal_path(prev_wh_entity.path, row['wh_path']):
+                not is_equal_path(path, row['wh_path']):
             wh_entity = warehouse.get_entity(row['wh_path'])
             prev_wh_entity = wh_entity
         # Get container entity if necessary.

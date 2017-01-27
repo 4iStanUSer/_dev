@@ -165,6 +165,29 @@ class Warehouse:
                     time_scale.timeline.append(tp)
         return time_scale
 
+    def _get_ent_root(self, ent):
+        if ent.name == 'root':
+            return self
+        for parent in self.parents:
+            return self._get_ent_root(parent)
+        raise ex.NotFoundError('Entity', 'root', 'root', '', '_get_root')
+
+    def _get_ent_path(self, ent, path):
+        if ent == None:
+            return list()
+        if ent.name == 'root':
+            return
+        path.insert(0, ent.name)
+        if ent.parent is not None:
+            self._get_ent_path(ent.parent, path)
+
+    def _get_ent_path_meta(self, ent, path_meta):
+        if ent.name == 'root':
+            return
+        path_meta.insert(0, self.meta)
+        if ent.parent is not None:
+            self._get_path_meta(ent.parent, path_meta)
+
     def commit(self):
         self._ssn.commit()
 
@@ -229,26 +252,7 @@ class TimeScale(Base):
                 'get_stamps_for_range')
         return timestamps
 
-    def _get_root(self):
-        if self.name == 'root':
-            return self
-        for parent in self.parents:
-            return parent._get_root()
-        raise ex.NotFoundError('Entity', 'root', 'root', '', '_get_root')
 
-    def _get_ent_path(self, ent, path):
-        if ent.name == 'root':
-            return
-        path.insert(0, ent.name)
-        if ent.parent is not None:
-            self._get_ent_path(ent.parent, path)
-
-    def _get_ent_path_meta(self, path_meta):
-        if self.name == 'root':
-            return
-        path_meta.insert(0, self.meta)
-        if self.parent is not None:
-            self.parent._get_path_meta(path_meta)
 
 
 class TimePoint(Base):
@@ -396,26 +400,26 @@ class Entity(Base):
     #    else:
     #        return node
 
-    def _get_root(self):
-        if self.name == 'root':
-            return self
-        for parent in self.parents:
-            return parent._get_root()
-        raise ex.NotFoundError('Entity', 'root', 'root', '', '_get_root')
+    #def _get_root(self):
+    #    if self.name == 'root':
+    #        return self
+    #    for parent in self.parents:
+    #        return parent._get_root()
+    #    raise ex.NotFoundError('Entity', 'root', 'root', '', '_get_root')
 
-    def _get_path(self, path):
-        if self.name == 'root':
-            return
-        path.insert(0, self.name)
-        if self.parent is not None:
-            self.parent._get_path(path)
+    #def _get_path(self, path):
+    #    if self.name == 'root':
+    #        return
+    #    path.insert(0, self.name)
+    #    if self.parent is not None:
+    #        self.parent._get_path(path)
 
-    def _get_path_meta(self, path_meta):
-        if self.name == 'root':
-            return
-        path_meta.insert(0, self.meta)
-        if self.parent is not None:
-            self.parent._get_path_meta(path_meta)
+    #def _get_path_meta(self, path_meta):
+    #    if self.name == 'root':
+    #        return
+    #    path_meta.insert(0, self.meta)
+    #    if self.parent is not None:
+    #        self.parent._get_path_meta(path_meta)
 
     def get_variables_names(self):
         return [x.name for x in self._variables]

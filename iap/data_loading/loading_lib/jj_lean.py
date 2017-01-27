@@ -56,10 +56,12 @@ def jj_lean_media_spend(book, config, warehouse):
         values = [float(empty_to_zero(row[x].value))
                   for x in range(col_data_start, len(row))]
         # Add data to DB
-        brand_entity = parent_entity.get_child(brand_name)
+        brand_entity = warehouse.get_child(parent_entity, brand_name)
         if brand_entity is None:
-            brand_entity = parent_entity.add_child(brand_name,
+            brand_entity = warehouse.add_child(parent_entity, brand_name,
                                                    Meta('Products', 'Brand'))
+            #brand_entity = parent_entity.add_child(brand_name,
+            #                                       Meta('Products', 'Brand'))
         var = brand_entity.get_variable(var_name)
         if var is None:
             var = brand_entity.force_variable(var_name, 'float')

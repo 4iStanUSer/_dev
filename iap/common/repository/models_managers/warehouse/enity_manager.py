@@ -69,8 +69,6 @@ def get_child(session, entity_id,  name):
 def _add_node_by_path(session, entity, path, meta, depth):
 
     #try:
-    print("Entity", entity)
-    print("Path", path)
     #entity = session.query(Entity).filter(Entity.id == entity_id).one_or_none()
     node = None
     for child in entity.children:
