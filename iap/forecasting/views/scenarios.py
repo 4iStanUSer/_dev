@@ -1,8 +1,9 @@
-from ...repository.db.models_access import Scenario, User, Feature, Role,Permission
-from ...repository.db.warehouse import Entity
+import datetime
+
+from iap.common.repository.models.scenarios import Scenario
+from iap.common.repository.models.access import User, Feature, Permission
 from ...common.helper import send_success_response, send_error_response
 from ...common.security import requires_roles, forbidden_view
-import datetime
 
 
 def create_table(request):
@@ -13,7 +14,7 @@ def create_table(request):
     :return:
     :rtype:
     """
-    from iap.repository.db.meta import Base
+    from iap.common.repository.db.meta import Base
     _engine = request.dbsession.bind.engine
     # Create all tables
     Base.metadata.create_all(_engine)

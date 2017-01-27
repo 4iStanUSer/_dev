@@ -1,4 +1,4 @@
-from iap.repository import exceptions as ex
+from iap.common.repository import exceptions as ex
 from iap.data_loading.loading_lib.common import get_last_col, \
     get_cell_range, mapping
 # from iap.repository.tmp_db_interface import *

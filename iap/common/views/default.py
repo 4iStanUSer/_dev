@@ -62,7 +62,7 @@ def index_view(req):
     #wb = Workbench(user_id)
     #warehouse = get_wh_interface()
 
-    #wb.init_load(warehouse, i_access, dev_templates)
+    #wb.init_load(warehouse, i_access, templates)
     #run_time_collection.add(user_id, wb)
 
     # Save into storage

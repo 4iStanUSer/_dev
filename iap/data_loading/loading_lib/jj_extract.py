@@ -1,4 +1,4 @@
-from iap.repository import exceptions as ex
+from iap.common.repository import exceptions as ex
 from iap.data_loading.loading_lib.common import date_func, get_cell_range,\
     get_last_col
 

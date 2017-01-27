@@ -4,7 +4,7 @@ from .container.cont_interface import Container
 
 #load_user_rights(user_access_rights)
 class Access:
-    """Class for checking user access"""
+    """Class for checking user access_managers"""
 
     _features = None
     entities = {}

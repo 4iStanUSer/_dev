@@ -36,15 +36,15 @@ def get_entity_selectors_config(req):
     except KeyError:
         msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
         return send_error_response(msg)
-    #try:
-    lang = rt.get_state(user_id).language
-    wb = rt.get_wb(user_id)
-    selectors_config = \
-        dimensions.get_selectors_config(wb.data_config, lang)
-    return send_success_response(selectors_config)
-    #except Exception as e:
-    #    msg = ErrorManager.get_error_message(e)
-    #    return send_error_response(msg)
+    try:
+        lang = rt.get_state(user_id).language
+        wb = rt.get_wb(user_id)
+        selectors_config = \
+            dimensions.get_selectors_config(wb.data_config, lang)
+        return send_success_response(selectors_config)
+    except Exception as e:
+        msg = ErrorManager.get_error_message(e)
+        return send_error_response(msg)
 
 
 def get_options_for_entity_selector(req):
@@ -68,19 +68,18 @@ def get_options_for_entity_selector(req):
     except KeyError:
         msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
         return send_error_response(msg)
-    #try:
-    lang = rt.get_state(user_id).language
-    wb = rt.get_wb(user_id)
+    try:
+        lang = rt.get_state(user_id).language
+        wb = rt.get_wb(user_id)
 
-    if query is None:
-        options = dimensions.get_options_by_ents(wb.search_index, wb.selection, lang)
-    else:
-        options, ents = dimensions._search_by_query(wb.search_index, query)
-    print("Get options for entity selector", options)
-    return send_success_response(options)
-#    except Exception as e:
-#       msg = ErrorManager.get_error_message(e)
-#      return send_error_response(msg)
+        if query is None:
+            options = dimensions.get_options_by_ents(wb.search_index, wb.selection, lang)
+        else:
+            options, ents = dimensions._search_by_query(wb.search_index, query)
+        return send_success_response(options)
+    except Exception as e:
+       msg = ErrorManager.get_error_message(e)
+       return send_error_response(msg)
 
 
 def set_entity_selection(req):

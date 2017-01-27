@@ -5,7 +5,7 @@ exclude *.pyc, .gitignore
 recursive-include iap/common *
 recursive-include iap/data_processing *
 recursive-include iap/forecasting *
-recursive-include iap/repository *
+recursive-include iap/common/repository *
 recursive-include iap/ui/dist *
 recursive-include iap/ui __init__.py
 

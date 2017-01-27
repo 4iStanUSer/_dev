@@ -6,7 +6,7 @@ import json
 from types import *
 
 def generate_templates(folder):
-    infile = os.path.join(folder, 'dev_templates.xlsx')
+    infile = os.path.join(folder, 'templates.xlsx')
     with open(infile, 'rb') as file:
         wb = xlrd.open_workbook(file_contents=file.read())
         for sheet in wb.sheets():
@@ -150,4 +150,3 @@ def _process_storage(sheet, section):
             dev_storage.append(result_row)
     return dev_storage
 
-generate_templates("C:/Users/Alex/Desktop/dev/iap/dev_templates")

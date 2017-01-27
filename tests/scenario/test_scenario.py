@@ -1,4 +1,5 @@
 from pyramid.paster import get_appsettings
+from sqlalchemy.orm.exc import NoResultFound
 import pytest
 import os
 import json
@@ -35,7 +36,6 @@ def token(web_app):
     password = "123456"
     res = web_app.post_json('/login', {'data':{"username": login, 'password': password}})
     token = str(res.json_body['data'])
-
     return token
 
 
@@ -48,7 +48,6 @@ def setup_module():
     """
     server = web_app()
     res = server.post_json("/test_preparation", {'test_name': "scenario"})
-    print(res)
 
 
 def test_scenario(web_app, token):
@@ -63,7 +62,6 @@ def test_scenario(web_app, token):
     """
     res = web_app.post_json("/forecast/get_scenarios_list", {'X-Token': token})
     actual = res.json
-    print("Actual", actual)
     assert actual['error'] == False
     assert type(actual['data']) == list
 
@@ -83,13 +81,11 @@ def test_create_scenario(web_app, token):
                 "status": "New",
                 "shared": "True",
                 "criteria": "USA-Main-Weapon",
-                "X-Token": token
                     }
 
-    res = web_app.post_json("/forecast/create_scenario", scenario_data)
+    res = web_app.post_json("/forecast/create_scenario", {'data':scenario_data, "X-Token": token})
     expected = {'data': 'Scenario created', 'error': False}
     actual = res.json
-    print("Actual", actual)
     assert expected == actual
 
 
@@ -119,7 +115,7 @@ def test_get_scenario_description(web_app, token):
     :rtype:
     """
 
-    res = web_app.post_json("/forecast/get_scenario_description", {'id': 1, 'X-Token': token})
+    res = web_app.post_json("/forecast/get_scenario_description", {'data': {'id': 12}, 'X-Token': token})
     expected = {"data": "New Scenario Description", "error": False}
     actual = res.json
     assert actual == expected
@@ -178,7 +174,7 @@ def test_include_scenario(web_app, token):
     """
 
     res = web_app.post_json("/forecast/include_scenario", {'parent_id': 1, "children_id": 3, 'X-Token': token})
-    expected = {"error": True, "data": "User default_user Unauthorised"}
+    expected = {"error": True, "data": "User 2 Unauthorised"}
     actual = res.json
     assert actual == expected
 

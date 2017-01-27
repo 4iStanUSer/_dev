@@ -1,4 +1,4 @@
-from iap.repository import exceptions as ex
+from iap.common.repository import exceptions as ex
 
 
 def data_aggr_processor(proc_data):

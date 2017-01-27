@@ -1,4 +1,4 @@
-from ...repository.db.models import Pr_Tool, Project
+from iap.common.repository.models.warehouse import Pr_Tool, Project
 
 def get_client_info(storage, user_id, lang=None):
     info = dict(

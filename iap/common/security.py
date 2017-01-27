@@ -1,11 +1,10 @@
-from pyramid.session import SignedCookieSessionFactory
-from ..common.helper import send_error_response
-from iap.repository.db.models_access import User, DataPermissionAccess
-from iap.repository.db.warehouse import Entity
-from pyramid.interfaces import IAuthorizationPolicy
-from zope.interface import implementer
 from functools import wraps
 import jwt
+from pyramid.interfaces import IAuthorizationPolicy
+from pyramid.session import SignedCookieSessionFactory
+from zope.interface import implementer
+from iap.common.repository.models.access import User
+from ..common.helper import send_error_response
 
 my_session_factory = SignedCookieSessionFactory('itsaseekreet')
 
@@ -34,7 +33,6 @@ def authorise(req):
         # user.check_password(password)
         # user = service.check_password(login, password)
     """
-    print(req)
     try:
         username = req.json_body['data']['username']
         password = req.json_body['data']['password']
@@ -91,7 +89,7 @@ def get_user(request):
 def requires_roles(*roles):
     """
     Decorator that wrap around view function
-    Check permission access for specific view function
+    Check permission access_managers for specific view function
 
     :param roles:
     :type roles:

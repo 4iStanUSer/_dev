@@ -110,7 +110,7 @@ def test_second_step_authentification(web_app):
 
     login = "default_user"
     password = "123456"
-    res = web_app.post_json('/login', {"username": login, 'password': password})
+    res = web_app.post_json('/login', {'data':{"username": login, 'password': password}})
     token = str(res.json_body['data'])
     res = web_app.post_json('/check_auth', {'X-Token': token})
 

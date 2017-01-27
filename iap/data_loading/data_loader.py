@@ -12,8 +12,9 @@ from ..data_loading import loading_lib
 class Loader:
     def __init__(self, warehouse):
         self._warehouse = warehouse
-        self._source = os.path.join(os.path.dirname(os.path.dirname(__file__)),
-                                    'repository', 'data_lake')
+
+        self._source = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
+                                    'data_storage', 'data_lake')
 
     def run_processing(self, proj_name):
         # Get project folder and config
@@ -56,10 +57,14 @@ class Loader:
     def _get_proj_info(self, proj_name):
         # Read main config
         main_config_path = os.path.join(self._source, 'config.ini')
+        print("Main Config Path", main_config_path)
         main_config = configparser.ConfigParser()
         main_config.read(main_config_path)
         proj_folder = main_config.get(section=proj_name, option='path',
                                       fallback=None)
+
+        print("Project Folder", proj_folder)
+
         if proj_folder is None:
             raise Exception
         # Read project config

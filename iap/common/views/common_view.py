@@ -1,17 +1,14 @@
-from ...repository.db.models_access import Tool, User, Feature, UserGroup, Role
-from ...repository.db.models import Project,Pr_Tool
 from pyramid.renderers import render_to_response
-from pyramid import threadlocal
-from pyramid.paster import get_appsettings
-from ...common.helper import send_success_response, send_error_response
-from ..security import get_user
-from ...common.tools_config import get_page_config
-from ...common.error_manager import ErrorManager
-from ...common import exceptions as ex
-from ...common import runtime_storage as rt
-from ...common import persistent_storage as pt
-from ..services import common_info as common_getter
+
+from iap.common.repository.models.warehouse import Project
 from ..security import *
+from ..services import common_info as common_getter
+from ...common import exceptions as ex
+from ...common import persistent_storage as pt
+from ...common import runtime_storage as rt
+from ...common.error_manager import ErrorManager
+from ...common.helper import send_success_response
+from ...common.tools_config import get_page_config
 
 
 def index_view(req):
@@ -95,7 +92,6 @@ def get_page_configuration(req):
     :return:
     :rtype:
     """
-    print("Get page configuration")
     try:
         user_id = req.user
         page_name = req.json_body['data']['page']
@@ -124,7 +120,6 @@ def set_language(req):
     :rtype:
     """
     # Get parameters from request.
-    print("Set languages")
     try:
         user_id = req.user
         lang = req.json_body['data']['lang']
@@ -268,6 +263,7 @@ def test_preparation(request):
 
     from ...forecasting.views.scenarios import create_table, prepare_scenario_testing
     test_name = request.json_body['test_name']
+
     if test_name == "scenario":
         create_table(request)
         prepare_scenario_testing(request)

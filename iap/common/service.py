@@ -1,9 +1,4 @@
 
-
-
-
-
-
 # def _get_ssn(req):
 #     return req.dbsession
 
