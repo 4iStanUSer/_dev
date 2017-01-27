@@ -21,7 +21,6 @@ def download_data_from_wh(warehouse, container, mapping):
             cont_entity = container.get_entity_by_path(row['cont_path'])
             prev_cont_entity = cont_entity
 
-        print(row['cont_ts'], row['time_period'])
         period = container.timeline.get_period_by_alias(row['cont_ts'], row['time_period'])[0]
         # Get data from warehouse.
         try:

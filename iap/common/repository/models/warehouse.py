@@ -188,6 +188,16 @@ class Warehouse:
         if ent.parent is not None:
             self._get_path_meta(ent.parent, path_meta)
 
+    def get_variables_names(self):
+        return [x.name for x in self._variables]
+
+    def get_variable(self, name):
+        for var in self._variables:
+            if var.name == name:
+                return var
+        return None
+
+
     def commit(self):
         self._ssn.commit()
 
