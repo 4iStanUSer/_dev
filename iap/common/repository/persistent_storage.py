@@ -5,11 +5,11 @@ from ...common import exceptions as ex
 from os import getcwd, getcwdb
 
 FILE_EXTENSION = '.pickle'
-STORAGE_FOLDER_PATH = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+STORAGE_FOLDER_PATH = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
-BACKUP_STORAGE_PATH = os.path.join(STORAGE_FOLDER_PATH, 'database', 'for_backup_storage')
-TPL_STORAGE_PATH = os.path.join(STORAGE_FOLDER_PATH, 'database', 'for_tpl_storage')
-CONFIG_STORAGE_PATH = os.path.join(STORAGE_FOLDER_PATH, 'database', 'for_config_storage')
+BACKUP_STORAGE_PATH = os.path.join(STORAGE_FOLDER_PATH, 'data_storage', 'for_backup_storage')
+TPL_STORAGE_PATH = os.path.join(STORAGE_FOLDER_PATH, 'data_storage', 'for_tpl_storage')
+CONFIG_STORAGE_PATH = os.path.join(STORAGE_FOLDER_PATH, 'data_storage', 'for_config_storage')
 
 
 def load_backup(user_id, tool_id, project_id, backup_name):

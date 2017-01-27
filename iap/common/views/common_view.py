@@ -57,7 +57,6 @@ def login(req):
         return send_error_response("Unauthorised")
 
 
-
 def logout(req):
     """
     Provide mechanism for session leaving
@@ -228,7 +227,6 @@ def set_project_selection(req):
     except Exception as e:
         msg = ErrorManager.get_error_message(e)
         return send_error_response(msg)
-
 
 
 def test_preparation(request):
