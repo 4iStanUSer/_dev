@@ -43,6 +43,9 @@ def cast_value(type_index, value):
         return str(value)
 
 
+
+
+
 class Warehouse:
 
     def __init__(self, ssn_factory):
@@ -54,13 +57,56 @@ class Warehouse:
         return self._root
 
     def add_entity(self, path, meta):
-        return self._root._add_node_by_path(path, meta, 0)
-
-    def get_entity(self, path):
-        return self._root._find_node_by_path(path, 0)
+        entity = self._root
+        return self._add_node_by_path(entity, path, meta, 0)
 
     def get_entity_by_id(self, entity_id):
+
         return self._ssn.query(Entity).get(entity_id)  # .one_or_none()
+
+    def _find_node_by_path(self, entity, path, depth):
+        node = None
+        for child in entity.children:
+            if child.name == path[depth]:
+                node = child
+                break
+        if node is None:
+            return None
+        if depth != len(path) - 1:
+            return self._find_node_by_path(node, path, depth + 1)
+        else:
+            return node
+
+    def get_entity(self, path):
+        entity = self._root
+        return self._find_node_by_path(entity, path, 0)
+
+    def _add_node_by_path(self, entity, path, meta, depth):
+        node = None
+        for child in entity.children:
+            if child.name == path[depth]:
+                node = child
+                break
+        if node is None:
+            node = self.add_child(entity, path[depth], meta[depth])
+        if depth != len(path) - 1:
+            return self._add_node_by_path(node, path, meta, depth + 1)
+        else:
+            return node
+
+    def get_child(self, entity, name):
+        for child in entity.children:
+            if child.name == name:
+                return child
+        return None
+
+    def add_child(self, entity, name, meta):
+        for child in entity.children:
+            if child.name == name:
+                return child
+        new_child = Entity(_name=name, _dimension_name=meta[0], _layer=meta[1])
+        entity.children.append(new_child)
+        return new_child
 
     def get_time_scale(self, ts_name):
         return self._ssn.query(TimeScale)\
@@ -183,6 +229,27 @@ class TimeScale(Base):
                 'get_stamps_for_range')
         return timestamps
 
+    def _get_root(self):
+        if self.name == 'root':
+            return self
+        for parent in self.parents:
+            return parent._get_root()
+        raise ex.NotFoundError('Entity', 'root', 'root', '', '_get_root')
+
+    def _get_ent_path(self, ent, path):
+        if ent.name == 'root':
+            return
+        path.insert(0, ent.name)
+        if ent.parent is not None:
+            self._get_ent_path(ent.parent, path)
+
+    def _get_ent_path_meta(self, path_meta):
+        if self.name == 'root':
+            return
+        path_meta.insert(0, self.meta)
+        if self.parent is not None:
+            self.parent._get_path_meta(path_meta)
+
 
 class TimePoint(Base):
     __tablename__ = 'time_lines'
@@ -289,45 +356,45 @@ class Entity(Base):
     #        self.parents.append(new_parent)
     #    return new_parent
 
-    def add_child(self, name, meta):
-        for child in self.children:
-            if child.name == name:
-                return child
-        new_child = Entity(_name=name, _dimension_name=meta[0], _layer=meta[1])
-        self.children.append(new_child)
-        return new_child
+    #def add_child(self, name, meta):
+    #    for child in self.children:
+    #        if child.name == name:
+    #            return child
+    #    new_child = Entity(_name=name, _dimension_name=meta[0], _layer=meta[1])
+    #    self.children.append(new_child)
+    #    return new_child
 
-    def get_child(self, name):
-        for child in self.children:
-            if child.name == name:
-                return child
-        return None
+    #def get_child(self, name):
+    #    for child in self.children:
+    #        if child.name == name:
+    #            return child
+    #    return None
 
-    def _add_node_by_path(self, path, meta, depth):
-        node = None
-        for child in self.children:
-            if child.name == path[depth]:
-                node = child
-                break
-        if node is None:
-            node = self.add_child(path[depth], meta[depth])
-        if depth != len(path) - 1:
-            return node._add_node_by_path(path, meta, depth + 1)
-        else:
-            return node
+    #def _add_node_by_path(self, path, meta, depth):
+    #    node = None
+    #    for child in self.children:
+    #        if child.name == path[depth]:
+    #            node = child
+    #            break
+    #    if node is None:
+    #        node = self.add_child(path[depth], meta[depth])
+    #    if depth != len(path) - 1:
+    #        return node._add_node_by_path(path, meta, depth + 1)
+    #    else:
+    #        return node
 
-    def _find_node_by_path(self, path, depth):
-        node = None
-        for child in self.children:
-            if child.name == path[depth]:
-                node = child
-                break
-        if node is None:
-            return None
-        if depth != len(path) - 1:
-            return node._find_node_by_path(path, depth + 1)
-        else:
-            return node
+    #def _find_node_by_path(self, path, depth):
+    #    node = None
+    #    for child in self.children:
+    #        if child.name == path[depth]:
+    #            node = child
+    #            break
+    #    if node is None:
+    #        return None
+    #    if depth != len(path) - 1:
+    #        return node._find_node_by_path(path, depth + 1)
+    #    else:
+    #        return node
 
     def _get_root(self):
         if self.name == 'root':
