@@ -1,7 +1,8 @@
 from pyramid.session import SignedCookieSessionFactory
+from sqlalchemy.orm.exc import NoResultFound
 from ..common.helper import send_error_response
-from iap.repository.db.models_access import User, DataPermissionAccess
-from iap.repository.db.warehouse import Entity
+from iap.common.repository.models.access import User, DataPermissionAccess
+from iap.common.repository.models.warehouse import Entity
 from pyramid.interfaces import IAuthorizationPolicy
 from zope.interface import implementer
 from functools import wraps
@@ -21,7 +22,7 @@ def forbidden_view(f):
     """
     def deco(request):
         user_id = get_user(request)
-        if user_id != None and check_session(request) == True:
+        if user_id!=None and check_session(request)==True:
             return f(request)
         else:
             return send_error_response('Unauthorised')
@@ -198,7 +199,7 @@ class AccessManager:
                 for feature in role.features:
                     features.append(feature.name)
         except NoResultFound:
-            raise NoResultFound
+            return False
         else:
             if list(set(in_features) & set(features)) != []:
                 return True
