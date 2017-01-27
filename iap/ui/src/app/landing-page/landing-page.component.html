@@ -29,4 +29,8 @@
 </div>
 
 </header>
+<language-selector
+        *ngIf="langsList.length>0"
+        [languages]="langsList"
+        (changed)="languageChanged($event)"></language-selector>
 <tool-selector></tool-selector>

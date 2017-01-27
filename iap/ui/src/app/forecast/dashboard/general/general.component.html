@@ -556,13 +556,13 @@
                <div class="c-graph">
                    <div class="c-graph__item c-graph__item--all c-graph__item--active" *ngIf="dTypeData" >
                        <!--?<div class="c-graph__diag"><img class="h-test-img" src="/static/assets/images/common/ic-high-charts.svg"></div>-->
-                        <div  *ngIf="dm.state.get('forecast_absolute_rate') == 'absolute'">
+                        <div class="c-graph__diag"  *ngIf="dm.state.get('forecast_absolute_rate') == 'absolute'">
                            <waterfall-chart
                                    *ngIf="dTypeData['abs']"
                                    [data]="dTypeData['abs']"
                            ></waterfall-chart>
                        </div>
-                       <div *ngIf="dm.state.get('forecast_absolute_rate') == 'rate'">
+                       <div class="c-graph__diag" *ngIf="dm.state.get('forecast_absolute_rate') == 'rate'">
                            <waterfall-chart
                                    *ngIf="dTypeData['rate']"
                                    [data]="dTypeData['rate']"

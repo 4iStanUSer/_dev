@@ -160,6 +160,42 @@
 }
 /*buttons end*/
 
+/*graph item start*/
+.c-graph__diag {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  height: calc(100% - 10px);
+  margin-bottom: 10px;
+  background: #ecf0f7;
+  -webkit-flex-grow: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+}
+.c-graph__item {
+  padding: 0 12px;
+  display: none;
+  height: 100%;
+  background-color: #fff;
+  border-radius: 4px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+.c-graph__item--decomposition .c-graph__diag {
+  width: 100%;
+}
+.c-graph__item--active {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-justify-content: space-between;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+/*graph item end*/
 
 .c-parts__item--details {
   height: 100%;

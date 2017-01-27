@@ -1,0 +1,8 @@
+<div class="wrapper">
+    <select [ngModel]="currLangId" (ngModelChange)="onChangedLang($event)">
+        <option *ngFor="let lang of languages" [value]="lang.id">
+            {{ lang.name }}
+        </option>
+    </select>
+
+</div>
