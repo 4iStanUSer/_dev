@@ -20,7 +20,6 @@ as
         if user["id"] == id:
             return user
     return None
-sdasd
 
 def check_password(login, password):
     users = [{"id": 1, "login": 'default_user', 'password': '123456'},
