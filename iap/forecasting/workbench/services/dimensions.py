@@ -349,7 +349,7 @@ def _fill_options(keys_list, selected_items):
     :return:
     :rtype:
     """
-
+    print("Selected", selected_items)
     options = dict(
         data=[],
         selected=[JOIN_SYMBOL.join(x) for x in selected_items]
@@ -366,8 +366,10 @@ def _fill_options(keys_list, selected_items):
             item_id = JOIN_SYMBOL.join(item)
             name = item[-1]
             parent_id = JOIN_SYMBOL.join(item[:len(item)-1])
-        options['data'].append(dict(name=name, id=item_id,
+        if dict(name=name, id=item_id, parent_id=parent_id) not in options['data']:
+            options['data'].append(dict(name=name, id=item_id,
                                     parent_id=parent_id))
+
     return options
 
 
