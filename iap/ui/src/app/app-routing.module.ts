@@ -8,19 +8,18 @@ import {LoginComponent} from "./common/module/login/login/login.component";
 @NgModule({
     imports: [
         RouterModule.forRoot([
-            /*
+
             {
                 path: '',
                 pathMatch: 'full',
                 redirectTo: '/landing',
             },
-
             {
                 path: 'landing',
                 component: LandingPageComponent,
                 canActivate: [AuthGuard],
             }
-            */
+            /*
             {
                 path:'',
                 pathMatch: 'full',
@@ -36,6 +35,7 @@ import {LoginComponent} from "./common/module/login/login/login.component";
                 component: LandingPageComponent,
                 canActivate: [AuthGuard],
             }
+            */
         ])
     ],
     exports: [

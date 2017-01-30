@@ -99,7 +99,7 @@ def get_page_configuration(req):
     """
     # Get parameters from request.
     try:
-        user_id = req.user
+        user_id = 2#req.user
         page_name = req.json_body['data']['page']
     except KeyError:
         msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
@@ -127,7 +127,7 @@ def set_language(req):
     """
     # Get parameters from request.
     try:
-        user_id = req.user
+        user_id = 2#req.user
         lang = req.json_body['data']['lang']
     except KeyError:
         msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
@@ -151,7 +151,7 @@ def get_tools_with_projects(req):
     :rtype: None
     """
     try:
-        user_id = req.user
+        user_id = 2#req.user
     except KeyError:
         msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
         return send_error_response(msg)
@@ -194,7 +194,7 @@ def get_data_for_header(req):
     :rtype:
     """
     try:
-        user_id = req.user
+        user_id = 2#req.user
     except KeyError:
         msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
         return send_error_response(msg)
@@ -226,7 +226,7 @@ def set_project_selection(req):
     :rtype:
     """
     try:
-        user_id = req.user
+        user_id = 2#req.user
         project_id = req.json_body['data']['project_id']
         tool_name = req.json_body['data']['tool_id']
     except KeyError:
