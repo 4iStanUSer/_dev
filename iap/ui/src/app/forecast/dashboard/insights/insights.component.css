@@ -136,3 +136,7 @@
   padding-left: 10px;
   background: url("/static/assets/images/icons/ic-readmore-less.svg") no-repeat left 4px;
 }
+.js-open-show {
+  opacity: 1;
+  visibility: visible;
+}

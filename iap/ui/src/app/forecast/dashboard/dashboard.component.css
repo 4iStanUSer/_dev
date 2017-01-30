@@ -216,5 +216,16 @@
   cursor: pointer;
 }
 
-
+/*collapse expanded start*/
+.js-right-collapsed {
+  -webkit-transform: translateX(256px);
+      -ms-transform: translateX(256px);
+          transform: translateX(256px);
+  box-shadow: none;
+  margin-left: -256px;
+}
+.js-left-fullwidth {
+  width: 100%;
+}
+/*collapse expanded end*/
 

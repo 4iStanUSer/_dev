@@ -45,20 +45,20 @@
   border-bottom-left-radius: 4px;
 }
 .c-changer__item--growth {
-  background-image: url("/static/assets/images/icons/ic-growth-choose.svg");
+  background-image: url("/static/assets/images/forecast/ic-growth-choose.svg");
 }
 .c-changer__item--value {
-  background-image: url("/static/assets/images/icons/ic-value-choose.svg");
+  background-image: url("/static/assets/images/forecast/ic-value-choose.svg");
   background-size: 21px;
 }
 .c-changer__item--volume {
-  background-image: url("/static/assets/images/icons/ic-volume-choose.svg");
+  background-image: url("/static/assets/images/forecast/ic-volume-choose.svg");
 }
 .c-changer__item--price {
-  background-image: url("/static/assets/images/icons/ic-price-choose.svg");
+  background-image: url("/static/assets/images/forecast/ic-price-choose.svg");
 }
 .c-changer__item--abs {
-  background-image: url("/static/assets/images/icons/ic-abs-choose.svg");
+  background-image: url("/static/assets/images/forecast/ic-abs-choose.svg");
   background-size: 20px;
 }
 .c-changer__item--active {
@@ -66,19 +66,19 @@
   color: #44b3c2;
 }
 .c-changer__item--active.c-changer__item--growth {
-  background-image: url("/static/assets/images/icons/ic-growth.svg");
+  background-image: url("/static/assets/images/forecast/ic-growth.svg");
 }
 .c-changer__item--active.c-changer__item--value {
-  background-image: url("/static/assets/images/icons/ic-value.svg");
+  background-image: url("/static/assets/images/forecast/ic-value.svg");
 }
 .c-changer__item--active.c-changer__item--volume {
-  background-image: url("/static/assets/images/icons/ic-volume.svg");
+  background-image: url("/static/assets/images/forecast/ic-volume.svg");
 }
 .c-changer__item--active.c-changer__item--price {
-  background-image: url("/static/assets/images/icons/ic-price.svg");
+  background-image: url("/static/assets/images/forecast/ic-price.svg");
 }
 .c-changer__item--active.c-changer__item--abs {
-  background-image: url("/static/assets/images/icons/ic-abs.svg");
+  background-image: url("/static/assets/images/forecast/ic-abs.svg");
 }
 .c-changer__item:hover {
   cursor: pointer;

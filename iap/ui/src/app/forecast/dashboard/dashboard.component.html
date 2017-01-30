@@ -1,6 +1,6 @@
 <section class="l-app__main">
     <div class="l-workflow l-workflow--dashboards">
-        <div class="l-workflow__left">
+        <div class="l-workflow__left js-left-fullwidth">
             <div class="l-dash-area">
                 <!--top pane-->
                 <div class="l-dash-area__top">
@@ -22,10 +22,6 @@
                 </div>
                 <!--breadcrumbs-->
                 <div class="l-dash-area__breadcrumbs">
-                  <ul>
-                    <li><a href="#">Home</a></li>
-                    <li><span>Dashboard</span></li>
-                  </ul>
                 </div>
                 <div class="l-dash-area__main">
                     <div class="c-board">
@@ -60,7 +56,8 @@
             </div>
         </div>
 
-        <div class="l-workflow__right">
+        <!--?TODO add state for insights and replace the following class setting -->
+        <div class="l-workflow__right js-right-collapsed">
             <insights [data]="dm.insights"></insights>
         </div>
 
