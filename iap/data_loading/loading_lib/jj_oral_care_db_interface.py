@@ -63,8 +63,8 @@ def jj_oral_care_rgm_sales(warehouse, wb, options_list):
             if var_name in map_names:
                 var_name = map_names[var_name]
         entity = warehouse.add_entity(meta)
-        variable = entity.force_variable(var_name, 'float')
-        time_series = variable.force_time_series(times_series)
+        variable = warehouse.force_variable(entity, var_name, 'float')
+        time_series = warehouse.force_time_series(variable, times_series)
         values = []
         for col_index in range(start_date_col, last_col):
             value = data[row_index][col_index].value
@@ -134,8 +134,8 @@ def jj_oral_care_media_spend(warehouse, wb, options_list):
             if var_name in map_names:
                 var_name = map_names[var_name]
         entity = warehouse.add_entity(meta)
-        variable = entity.force_variable(var_name, 'float')
-        time_series = variable.force_time_series(times_series)
+        variable = warehouse.force_variable(entity, var_name, 'float')
+        time_series = warehouse.force_time_series(variable, times_series)
         values = []
         for col_index in range(start_date_col, last_col):
             value = data[row_index][col_index].value
@@ -194,8 +194,8 @@ def jj_oral_care_sku(warehouse, wb, options_list):
         if var_name in map_names:
             var_name = map_names[var_name]
         entity = warehouse.add_entity(meta)
-        variable = entity.force_variable(var_name, 'float')
-        time_series = variable.force_time_series(times_series)
+        variable = warehouse.force_variable(entity, var_name, 'float')
+        time_series = warehouse.force_time_series(variable, times_series)
         values = []
         for col_index in range(start_date_col, last_col):
             value = data[row_index][col_index].value

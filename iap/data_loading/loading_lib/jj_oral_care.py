@@ -28,7 +28,7 @@ def jj_oral_care_sales(table, config, warehouse):
     text_date = header[col_data_start].strip()
     start_date = datetime.datetime.strptime(text_date, '%Y')
     timescale = warehouse.get_time_scale(timescale_name)
-    start_point = timescale.get_label_by_stamp(start_date)
+    start_point = warehouse.get_label_by_stamp(timescale, start_date)
     # Parse file
     for index, row in enumerate(table):
         if index + 1 < row_data_start:
@@ -43,21 +43,19 @@ def jj_oral_care_sales(table, config, warehouse):
             continue
         # Add data to DB
         entity = warehouse.get_entity([country, 'JJOralCare', 'Mouthwash'])
-        print("Entity", entity)
         if entity is None:
             entity = warehouse.add_entity([country, 'JJOralCare', 'Mouthwash'],
                                           [Meta('Geography', 'Country'),
                                            Meta('Project', 'Project'),
                                            Meta('Products', 'Category')])
 
-        print("Entity", entity)
-        var = entity.get_variable(var_name)
+        var = warehouse.get_ent_variable(entity, var_name)
         if var is None:
-            var = entity.force_variable(var_name, 'float')
-        time_series = var.get_time_series(timescale_name)
+            var = warehouse.force_ent_variable(entity, var_name, 'float')
+        time_series = warehouse.get_var_time_series(var, timescale_name)
         if time_series is None:
-            time_series = var.force_time_series(timescale)
-        time_series.set_values(start_point, values)
+            time_series = warehouse.force_var_time_series(var, timescale)
+        warehouse.set_ts_values(time_series, start_point, values)
     return
 
 
@@ -73,7 +71,7 @@ def jj_oral_care_trends(table, config, warehouse):
     text_date = header[col_data_start].strip()
     start_date = datetime.datetime.strptime(text_date, '%Y')
     timescale = warehouse.get_time_scale(timescale_name)
-    start_point = timescale.get_label_by_stamp(start_date)
+    start_point = warehouse.get_label_by_stamp(timescale, start_date)
     # Parse file
     for index, row in enumerate(table):
         if index + 1 < row_data_start:
@@ -87,11 +85,12 @@ def jj_oral_care_trends(table, config, warehouse):
         entity = warehouse.get_entity([country])
         if entity is None:
             entity = warehouse.add_entity([country], [Meta('Geography', 'Country')])
-        var = entity.get_variable(trend_name)
+        var = warehouse.get_ent_variable(entity, trend_name)
+        #var = entity.get_variable(trend_name)
         if var is None:
-            var = entity.force_variable(trend_name, 'float')
-        time_series = var.get_time_series(timescale_name)
+            var = warehouse.force_ent_variable(entity, trend_name, 'float')
+        time_series = warehouse.get_var_time_series(var, timescale_name)
         if time_series is None:
-            time_series = var.force_time_series(timescale)
-        time_series.set_values(start_point, values)
+            time_series = warehouse.force_var_time_series(var, timescale)
+        warehouse.set_ts_values(time_series, start_point, values)
     return

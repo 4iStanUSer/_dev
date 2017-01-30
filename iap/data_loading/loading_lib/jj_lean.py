@@ -46,7 +46,7 @@ def jj_lean_media_spend(book, config, warehouse):
     excel_date = sheet.cell_value(rowx=row_date, colx=col_data_start)
     start_date = t_lib.excel_to_date(excel_date, book.datemode)
     timescale = warehouse.get_time_scale(timescale_name)
-    start_point = timescale.get_label_by_stamp(start_date)
+    start_point = warehouse.get_label_by_stamp(timescale, start_date)
     # Parse file
     for row_index in range(row_data_start, sheet.nrows):
         # Read data from file
@@ -62,12 +62,12 @@ def jj_lean_media_spend(book, config, warehouse):
                                                    Meta('Products', 'Brand'))
             #brand_entity = parent_entity.add_child(brand_name,
             #                                       Meta('Products', 'Brand'))
-        var = brand_entity.get_variable(var_name)
+        var = warehouse.get_ent_variable(brand_entity, var_name)
         if var is None:
-            var = brand_entity.force_variable(var_name, 'float')
-        time_series = var.get_time_series(timescale_name)
+            var = warehouse.force_ent_variable(brand_entity, var_name, 'float')
+        time_series = warehouse.get_time_series(var, timescale_name)
         if time_series is None:
-            time_series = var.force_time_series(timescale)
+            time_series = warehouse.force_var_time_series(var, timescale)
         time_series.set_values(start_point, values)
     return
 
@@ -99,8 +99,8 @@ def jj_lean_nielsen(book, config, warehouse):
     start_date = datetime.datetime.strptime(text_start, '%m/%d/%y')
     end_date = datetime.datetime.strptime(text_end, '%m/%d/%y')
     timescale = warehouse.get_time_scale(timescale_name)
-    start_point = timescale.get_label_by_stamp(start_date)
-    end_point = timescale.get_label_by_stamp(end_date)
+    start_point = warehouse.get_label_by_stamp(timescale, start_date)
+    end_point = warehouse.get_label_by_stamp(timescale, end_date)
     # Parse file
     prev_meta = []
     curr_meta = []
@@ -151,9 +151,9 @@ def jj_lean_nielsen(book, config, warehouse):
             var = entity.get_variable(var_name)
             if var is None:
                 var = entity.force_variable(var_name, 'float')
-            time_series = var.get_time_series(timescale_name)
+            time_series = warehouse.get_time_series(var, timescale_name)
             if time_series is None:
-                time_series = var.force_time_series(timescale)
+                time_series = warehouse.force_var_time_series(var, timescale)
                 time_series.set_values(start_point, new_values)
             else:
                 old_values = time_series.get_values((start_point, end_point))
@@ -174,15 +174,15 @@ def jj_lean_aggr_weeks(config, warehouse):
                 aggregator = sum
             else:
                 aggregator = mean
-            time_series_weekly = var.get_time_series('weekly')
-            time_series_445 = var.get_time_series('4-4-5')
+            time_series_weekly = warehouse.get_var_time_series(var, 'weekly')
+            time_series_445 = warehouse.get_var_time_series(var, '4-4-5')
             if time_series_445 is None and time_series_weekly is not None:
                 values_weekly = time_series_weekly.get_values()
                 values_445 = dp_lib.weeks_to_445(values_weekly, aggregator)
 
-                time_series_445 = var.get_time_series('4-4-5')
+                time_series_445 = warehouse.get_var_time_series(var, '4-4-5')
                 if time_series_445 is None:
-                    time_series_445 = var.force_time_series(timescale)
+                    time_series_445 = warehouse.force_time_series(var, timescale)
                 time_series_445.set_values(start_point, values_445)
 
     timescale = warehouse.get_time_scale('4-4-5')

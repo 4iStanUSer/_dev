@@ -1,4 +1,4 @@
-from ...common.repository.models.scenarios import Scenario
+from ..models.scenarios import Scenario
 from sqlalchemy.orm.exc import NoResultFound
 import datetime
 

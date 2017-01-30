@@ -14,8 +14,6 @@ from iap.common.repository.db.meta import Base
 import datetime
 
 
-
-
 class Tool(Base):
     __tablename__ = 'tool'
     id = Column(Integer, primary_key=True)

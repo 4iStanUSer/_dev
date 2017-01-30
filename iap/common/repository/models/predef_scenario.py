@@ -10,6 +10,7 @@ from sqlalchemy import (
 )
 from ..db.meta import Base
 
+
 class PredefScenario(Base):
     __tablename__ = "predef_sceanrio"
 

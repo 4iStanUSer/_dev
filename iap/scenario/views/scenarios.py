@@ -1,6 +1,6 @@
 import datetime
-from ..managers.scenario_manager import create_scenario, get_scenarios, update_scenario, \
-    check_scenario, delete_scenario, search_and_get_scenarios
+from ...common.repository.models_managers.scenario import create_scenario, get_scenarios, \
+    update_scenario, check_scenario, delete_scenario, search_and_get_scenarios
 
 from iap.common.repository.models.scenarios import Scenario
 from ...common.helper import send_success_response, send_error_response

@@ -71,12 +71,12 @@ def jj_brand_media_spend(warehouse, wb, options_list):
         # ]
         # entity = warehouse.add_entity(meta2)
         fact_name = data[row_index][name_col_num].value
-        variable = entity.force_variable(fact_name, 'float')
+        variable = warehouse.force_ent_variable(entity, fact_name, 'float')
         values = []
         for col_index in range(start_dates_col, end_dates_col):
             value = convert_value(data[row_index][col_index].value, 'float')
             values.append(value)
-        time_series = variable.force_time_series(times_series)
+        time_series = warehouse.force_var_time_series(variable, times_series)
         history_values = time_series.get_values(first_label)
         if history_values:
             if len(history_values) != len(values):
@@ -150,8 +150,8 @@ def jj_brand_extract(warehouse, wb, options_list):
         for key, val in data_cols.items():
             value = data[row_index][key[0]].value
             value = convert_value(value, key[1])
-            variable = entity.force_variable(val, key[1])
-            time_series = variable.force_time_series(times_series)
+            variable = warehouse.force_ent_variable(entity, val, key[1])
+            time_series = warehouse.force_var_time_series(variable,times_series)
             history_value = time_series.get_value(start_label)
             if not history_value:
                 new_value = [value]
@@ -271,13 +271,13 @@ def jj_brand(warehouse, wb, options_list):
             entity = warehouse.add_entity(path, item_meta)
             for row_index in range(row_index+1, last_facts_row + 1):
                 fact_name = data[row_index][name_col_num].value
-                variable = entity.force_variable(fact_name, 'float')
+                variable = warehouse.force_ent_variable(entity, fact_name, 'float')
                 values = []
                 for col_index in range(start_dates_col, end_dates_col):
                     value = convert_value(data[row_index][col_index].value,
                                           'float')
                     values.append(value)
-                time_series = variable.force_time_series(times_series)
+                time_series = warehouse.force_var_time_series(variable, times_series)
                 history_values = time_series.get_values(first_label)
                 if history_values:
                     if len(history_values) != len(values):
