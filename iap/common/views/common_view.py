@@ -18,7 +18,7 @@ def index_view(req):
                               {'title': 'Home page'},
                               request=req)
 
-sda
+
 def check_logged_in(req):
     """Check user existed
 
