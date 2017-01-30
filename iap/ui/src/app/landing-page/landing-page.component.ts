@@ -22,7 +22,7 @@ export class LandingPageComponent implements OnInit {
 
     ngOnInit() {
 
-        this.req.get({
+        this.req.post({
             url_id: 'get_header_data',
             data: {}
         }).subscribe(

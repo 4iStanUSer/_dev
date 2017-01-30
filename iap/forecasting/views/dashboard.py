@@ -9,19 +9,19 @@ TOOL = 'forecast'
 def get_dashboard_data(req):
     # Get parameters from request.
     try:
-        user_id = req.user
+        user_id = 2#req.user
     except KeyError:
         msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
         return send_error_response(msg)
-    try:
-        lang = rt.get_state(user_id).language
-        project = rt.get_state(user_id)._project_id
-        wb = rt.get_wb(user_id)
-        data = data_service.get_entity_data(req, project, wb.container['default'], wb.data_config, wb.selection, lang)
-        return send_success_response(data)
-    except Exception as e:
-        msg = ErrorManager.get_error_message(e)
-        return send_error_response(msg)
+    #try:
+    lang = rt.get_state(user_id).language
+    project = rt.get_state(user_id)._project_id
+    wb = rt.get_wb(user_id)
+    data = data_service.get_entity_data(req, project, wb.container['default'], wb.data_config, wb.selection, lang)
+    return send_success_response(data)
+    #except Exception as e:
+    #    msg = ErrorManager.get_error_message(e)
+    #    return send_error_response(msg)
 
 
 def get_cagrs_for_period(req):

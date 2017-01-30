@@ -186,7 +186,7 @@ def get_options_by_ents(search_index, entities_ids, lang):
                     query[dim].append(merged_coords)
                 else:
                     query[dim].append(merged_coords)
-    opts, ents = _search_by_query(search_index, query)
+    opts, ents = search_by_query(search_index, query)
     return opts
 
 

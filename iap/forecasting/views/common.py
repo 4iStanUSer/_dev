@@ -64,22 +64,22 @@ def get_options_for_entity_selector(req):
     try:
         user_id = 2#req.user
         query = req.json_body['data']['query']
-        print("Query", query)
+
     except KeyError:
         msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
         return send_error_response(msg)
-    #try:
-    lang = rt.get_state(user_id).language
-    wb = rt.get_wb(user_id)
+    try:
+        lang = rt.get_state(user_id).language
+        wb = rt.get_wb(user_id)
 
-    if query is None:
-        options = dimensions.get_options_by_ents(wb.search_index, wb.selection, lang)
-    else:
-        options, ents = dimensions.search_by_query(wb.search_index, query)
-    return send_success_response(options)
-#    except Exception as e:
-#       msg = ErrorManager.get_error_message(e)
-#        return send_error_response(msg)
+        if query is None:
+            options = dimensions.get_options_by_ents(wb.search_index, wb.selection, lang)
+        else:
+            options, ents = dimensions.search_by_query(wb.search_index, query)
+        return send_success_response(options)
+    except Exception as e:
+        msg = ErrorManager.get_error_message(e)
+        return send_error_response(msg)
 
 
 def set_entity_selection(req):
@@ -108,7 +108,6 @@ def set_entity_selection(req):
         wb = rt.get_wb(user_id)
         options, ents = dimensions.search_by_query(wb.search_index, query)
         wb.selection = ents
-        print("Options", options)
         return send_success_response(options)
     except Exception as e:
         msg = ErrorManager.get_error_message(e)

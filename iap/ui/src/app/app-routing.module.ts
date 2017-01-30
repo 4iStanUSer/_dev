@@ -4,13 +4,12 @@ import {RouterModule} from '@angular/router';
 //import {LandingPageComponent} from "./common/pages/landing-page/landing-page.component";
 import {AuthGuard} from "./common/module/login/auth-guard";
 import {LandingPageComponent} from "./landing-page/landing-page.component";
-import {LoginComponent} from "./common/module/login/login/login.component";
 @NgModule({
     imports: [
         RouterModule.forRoot([
 
             {
-                path: '',
+                path: '/',
                 pathMatch: 'full',
                 redirectTo: '/landing',
             },
