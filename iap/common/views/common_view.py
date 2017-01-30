@@ -126,7 +126,6 @@ def set_language(req):
     :rtype:
     """
     # Get parameters from request.
-    print("Set languages")
     try:
         user_id = req.user
         lang = req.json_body['data']['lang']

@@ -84,7 +84,7 @@ def test_create_scenario(web_app, token):
                 "criteria": "USA-Main-Weapon",
                     }
 
-    res = web_app.post_json("/forecast/create_scenario", {'data':scenario_data, "X-Token": token})
+    res = web_app.post_json("/forecast/create_scenario", {'data': scenario_data, "X-Token": token})
     expected = {'data': 'Scenario created', 'error': False}
     actual = res.json
     assert expected == actual

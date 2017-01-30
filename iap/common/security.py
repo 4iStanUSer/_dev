@@ -1,8 +1,7 @@
 from pyramid.session import SignedCookieSessionFactory
 from sqlalchemy.orm.exc import NoResultFound
 from ..common.helper import send_error_response
-from iap.common.repository.models.access import User, DataPermissionAccess
-from iap.common.repository.models.warehouse import Entity
+from iap.common.repository.models.access import User
 from pyramid.interfaces import IAuthorizationPolicy
 from zope.interface import implementer
 from functools import wraps
@@ -75,6 +74,7 @@ def get_user(request):
     :rtype: int
     """
     #add exception on non existen  id,login in token
+    print(request)
     try:
         token = request.json_body['X-Token']
         token_data = jwt.decode(token, 'secret', algorithms=['HS512'])
