@@ -8,7 +8,9 @@
             <span *ngIf="sel['selected'] && sel['selected'].length > 0">
                 <span *ngFor="let s of sel['selected']">
                     {{ s.name }}
+                    <span>,&nbsp;</span>
                 </span>
+
             </span>
             <span *ngIf="!sel['selected'] || sel['selected'].length == 0">
                 {{ sel['model']['placeholder'] }}

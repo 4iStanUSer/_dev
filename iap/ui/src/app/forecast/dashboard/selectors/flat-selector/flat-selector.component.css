@@ -1,3 +1,4 @@
+/*
 .items ul {
     list-style: none;
 }
@@ -33,3 +34,310 @@
 .clear-button {
     cursor: pointer;
 }
+*/
+.items ul {
+    list-style: none;
+    width: 200px;
+}
+.items ul li {
+    display:block;
+    text-align: left;
+    border-bottom: 1px solid #5e5e5e;
+    color: #000;
+    cursor: pointer;
+}
+.items ul li.active {
+    background: #2e6da4;
+    color: #fff;
+}
+
+.selected ul {
+    list-style: none;
+}
+.selected ul li {
+    display:inline-block;
+    margin:5px;
+    padding: 0 5px;
+    text-align: center;
+    border: 1px solid #5e5e5e;
+    color: #000;
+}
+.selected ul li span {
+    cursor: pointer;
+}
+.clear-button {
+    cursor: pointer;
+}
+
+/*added*/
+
+.l-cat-popup__main {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  width: 100%;
+  height: 430px;
+  display: none;
+}
+.l-cat-popup__main--active {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+.l-cat-popup__main--orange .c-cat-block__pane {
+  background-color: #f1a94e;
+}
+.l-cat-popup__main--red .c-cat-block__pane {
+  background-color: #e45641;
+}
+.l-cat-popup__main--blue .c-cat-block__pane {
+  background-color: #44b3c2;
+}
+.l-cat-popup__sidebar {
+  width: 316px;
+  height: 100%;
+  margin-right: 6px;
+}
+.l-cat-popup__right {
+  width: calc(100% - 322px);
+  height: 100%;
+}
+.c-cat-block {
+  border-radius: 4px;
+  margin-bottom: 6px;
+  overflow: hidden;
+}
+.c-cat-block:last-child {
+  margin-bottom: 0;
+}
+.c-cat-block--selected {
+  height: 174px;
+}
+.c-cat-block--selected-large {
+  height: 100%;
+}
+.c-cat-block--results {
+  height: calc(100% - 66px);
+}
+.c-cat-block--results-region {
+  height: 212px;
+}
+.c-cat-block--map {
+  height: 100%;
+}
+.c-cat-block--top-cat {
+  /*height: 212px; vira*/
+  height: 363px;
+}
+.c-cat-block--items {
+  height: 173px;
+}
+.c-cat-block__pane {
+  height: 28px;
+  padding: 0 12px;
+  background-color: #f1a94e;
+  font-family: 'open_sanssemibold';
+  font-size: 11px;
+  line-height: 28px;
+  font-style: normal;
+  font-stretch: normal;
+  text-align: left;
+  color: #fff;
+}
+.c-cat-block__pane--red {
+  border-color: #e45641;
+}
+.c-cat-block__area {
+  width: 100%;
+  height: calc(100% - 28px);
+  background-color: #fff;
+  overflow: auto;
+}
+
+/*search input start*/
+
+.c-search {
+  width: 100%;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+.c-search input[type="submit"] {
+  width: 32px;
+  height: 32px;
+  background: #fff url("/static/assets/images/icons/ic-search.svg") no-repeat center;
+  background-size: 15px;
+  border: none;
+  outline: none;
+}
+.c-search input[type="submit"]:hover {
+  cursor: pointer;
+}
+.c-search input[type="search"] {
+  width: calc(100% - 36px);
+  height: 32px;
+  font-family: 'open_sanssemibold';
+  font-size: 13px;
+  line-height: 32px;
+  color: #2e3438;
+  border: none;
+  outline: none;
+  border-radius: 4px;
+}
+.c-search input[type="search"]:focus {
+  outline: none;
+}
+.c-search input[type="search"]::-webkit-input-placeholder {
+  font-family: 'open_sansbold';
+  font-size: 11px;
+  text-align: left;
+  color: rgba(46,52,56,0.5);
+}
+.c-search input[type="search"]::-moz-placeholder {
+  font-family: 'open_sansbold';
+  font-size: 11px;
+  text-align: left;
+  color: rgba(46,52,56,0.5);
+}
+.c-search input[type="search"]:-ms-input-placeholder {
+  font-family: 'open_sansbold';
+  font-size: 11px;
+  text-align: left;
+  color: rgba(46,52,56,0.5);
+}
+.c-search input[type="search"]:-moz-placeholder {
+  font-family: 'open_sansbold';
+  font-size: 11px;
+  text-align: left;
+  color: rgba(46,52,56,0.5);
+}
+
+/*search input end*/
+
+/*selected items start*/
+.c-select-list {
+  padding: 3px;
+}
+.c-select-list__item {
+  display: block;
+  float: left;
+  margin: 3px;
+  position: relative;
+  padding: 0 30px 0 6px;
+  background-color: #fff;
+  border: solid 1px #ecf0f7;
+  border-radius: 4px;
+  font-family: 'open_sanssemibold';
+  font-size: 13px;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 26px;
+  text-align: left;
+  color: #2e3438;
+}
+.c-select-list__close {
+  position: absolute;
+  right: 6px;
+  top: 0;
+  width: 9px;
+  height: 100%;
+  background: url("/static/assets/images/icons/ic-close-red.svg") no-repeat center;
+  background-size: 100%;
+}
+.c-select-list__close:hover {
+  cursor: pointer;
+}
+/*selected items end*/
+
+/*hierarchy checkboxes block start*/
+.c-results-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.c-results-list__res {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  padding: 7px 10px 7px 22px;
+  font-family: 'open_sanssemibold';
+  font-size: 13px;
+  color: #2e3438;
+  border-bottom: 1px solid #ecf0f7;
+}
+
+.c-checkbox:after {
+  content: '';
+  display: table;
+  clear: both;
+}
+.c-checkbox__label {
+  position: relative;
+  top: 1px;
+  display: block;
+  width: 12px;
+  height: 12px;
+  margin-right: 12px;
+  border-radius: 2px;
+  background-color: #fff;
+  border: solid 1px #626970;
+}
+.c-checkbox__label:hover {
+  cursor: pointer;
+}
+.c-checkbox input {
+  display: none;
+}
+.c-checkbox input:checked+label {
+  border: 1px solid #44b3c2;
+  background: #44b3c2 url("/static/assets/images/icons/ic-checked.svg") no-repeat center;
+  background-size: 10px;
+}
+
+/*hierarchy checkboxes block end*/
+
+/*block with images start*/
+.c-top-list {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-wrap: wrap;
+      -ms-flex-wrap: wrap;
+          flex-wrap: wrap;
+  padding: 3px 8px 0 9px;
+}
+.c-top-list__wrapper {
+  width: 100%;
+  height: 100%;
+  border: 1px solid #bfc5d1;
+  margin-top: -1px;
+  margin-left: -1px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.c-top-list__item {
+  width: 79px;
+  height: 79px;
+  border: 3px solid transparent;
+  border-radius: 4px;
+  margin: 2px 1.6%;
+}
+.c-top-list__item img {
+  min-width: 100%;
+  min-height: 100%;
+  width: 100%;
+  height: auto;
+}
+.c-top-list__item--active {
+  border: 3px solid #f1a94e;
+}
+.c-top-list__item--active .c-top-list__wrapper {
+  border: 1px solid #f1a94e;
+}
+.c-top-list__item:hover {
+  cursor: pointer;
+}
+/*block with images end*/

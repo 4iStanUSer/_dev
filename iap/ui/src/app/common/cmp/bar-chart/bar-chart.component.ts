@@ -25,7 +25,8 @@ export class BarChartComponent implements OnInit {
 
     private chartConfig: Object = {
         chart: {
-            type: 'column'
+            type: 'column',
+            backgroundColor: "#ecf0f7"
         },
         title: {
             text: null

@@ -29,7 +29,8 @@ export class WaterfallChartComponent implements OnInit {
 
     private chartConfig: Object = {
         chart: {
-            type: 'waterfall'
+            type: 'waterfall',
+            backgroundColor: "#ecf0f7"
         },
         title: {
             text: null
