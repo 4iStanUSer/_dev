@@ -291,7 +291,7 @@ def build_permission_tree(request, project_name):
     """
 
     list_of_access = []
-    user_id = request.user
+    user_id = 2#request.user
     user = request.dbsession.query(User).filter(User.id == user_id).one()
     for perm in user.perms:
         for data_perm in perm.data_perms:
