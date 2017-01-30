@@ -1,5 +1,6 @@
 import datetime
-from ..managers.scenario_manager import create_scenario, get_scenarios, update_scenario, check_scenario, delete_scenario
+from ...common.repository.models_managers.scenario import create_scenario, get_scenarios, \
+    update_scenario, check_scenario, delete_scenario, search_and_get_scenarios
 
 from iap.common.repository.models.scenarios import Scenario
 from ...common.helper import send_success_response, send_error_response
@@ -93,7 +94,7 @@ def search_and_view_scenario(request):
     try:
         filters = request.json_body['filters']
         scenario_info_list = get_scenarios(request, filters)
-    except:
+    except KeyError:
         return send_error_response("Error during searching")
     else:
         return send_success_response(scenario_info_list)
@@ -111,12 +112,11 @@ def get_scenario_description(request):
     """
     try:
         scenario_id = request.json_body['id']
-        scenario = request.dbsession.query(Scenario).filter(Scenario.id==scenario_id).one()
-        description = scenario.description
-    except:
+        output = search_and_get_scenarios(scenario_id, 'description')
+    except KeyError:
         return send_error_response("Failed to get scenario description")
     else:
-        return send_success_response(description)
+        return send_success_response(output)
 
 
 @forbidden_view
@@ -135,7 +135,7 @@ def change_scenario_name(request):
         new_name = request.json_body['new_name']
         new_value = {"name": new_name}
         update_scenario(request, scenario_id, new_value)
-    except:
+    except KeyError:
         return send_error_response("Failed to change name")
     else:
         return send_success_response("Name changed")
@@ -147,13 +147,14 @@ def check_scenario_name(request):
     try:
         scenario_id = request.json_body['id']
         name = request.json_body['name']
-        scenario = request.dbsession.query(Scenario).filter(Scenario.id == scenario_id).one()
-        if scenario.name == name:
-            return send_success_response("Name changed")
-    except:
-        return send_error_response("Failed to change name")
+        value_to_check = {'name': name}
+        result = check_scenario(scenario_id, value_to_check)
+        if result:
+            return send_success_response("Name checked")
+    except KeyError:
+        return send_error_response("Failed to check name")
     else:
-        return send_error_response("Failed to change name")
+        return send_error_response("Failed to check name")
 
 
 @forbidden_view
@@ -170,7 +171,7 @@ def modify(request):
         new_values = request.json_body['modification_value']
         scenario_id = request.json_body['scenario_id']
         update_scenario(request, scenario_id, new_values)
-    except:
+    except KeyError:
         return send_error_response("Failed to modify selected scenario")
     else:
         return send_success_response(update_scenario)
@@ -189,7 +190,7 @@ def delete(request):
     try:
         scenario_id = request.json_body['id']
         delete_scenario(request, scenario_id)
-    except:
+    except KeyError:
         return send_error_response("Failed to delete selected scenario")
     else:
         return send_success_response("Deleted selected scenario")
@@ -234,12 +235,11 @@ def include_scenario(request):
     try:
         parent_scenario_id = request.json_body['parent_scenario_id']
         scenario_id = request.json_body['scenario_id']
-        parent_scenario = request.dbsession.query(Scenario).filter(Scenario.id == parent_scenario_id).one()
-        current_scenario = request.dbsession.query(Scenario).filter(Scenario.id == scenario_id).one()
-        parent_scenario.children.append(current_scenario)
-        return send_success_response("Include finished successive")
-    except:
-        return send_error_response("Failed to include")
+        msg = include_scenario(parent_scenario_id, scenario_id)
+    except KeyError:
+        return send_error_response(msg)
+    else:
+        send_success_response(msg)
 
 
 @forbidden_view
