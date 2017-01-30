@@ -20,7 +20,7 @@ import {AjaxService} from "../../service/ajax.service";
 export class AuthGuard implements CanActivate, CanActivateChild {
 
     constructor(private req: AjaxService,
-                //private auth: AuthService,
+                private auth: AuthService,
                 private router: Router) {
     }
 
