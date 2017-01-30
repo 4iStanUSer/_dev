@@ -19,6 +19,7 @@ def index_view(req):
                               request=req)
 
 
+
 def check_logged_in(req):
     """Check user existed
 
