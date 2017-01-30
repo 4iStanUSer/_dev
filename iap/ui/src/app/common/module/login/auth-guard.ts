@@ -19,7 +19,6 @@ import {AjaxService} from "../../service/ajax.service";
  */
 export class AuthGuard implements CanActivate, CanActivateChild {
 
-
     constructor(private req: AjaxService,
                 private auth: AuthService,
                 private router: Router) {
@@ -36,14 +35,16 @@ export class AuthGuard implements CanActivate, CanActivateChild {
                 state: RouterStateSnapshot): Observable<boolean> {
         console.log('AuthGuard#canActivate called');
         let url: string = state.url;
-
+        console.log(state.url);
         return this.auth.isLoggedIn().map(e => {
                 if (e) {
                     return true;
-                } else {
-                    this.auth.redirectUrl = url;
-                    this.router.navigate(['/login']);
-                    return Observable.of(false);
+                }
+                else {
+                 this.auth.redirectUrl = url;
+                 console.log('url');
+                 this.router.navigate(['/login']);
+                 return Observable.of(false);
                 }
             });
             // .catch(() => {

@@ -17,6 +17,9 @@ class UserModel {
  * - request for initial status
  * Main method - .isLoggedIn() - is used for checking status
  */
+
+
+
 export class AuthService {
 
     /**
@@ -79,6 +82,7 @@ export class AuthService {
      */
     init(): Observable<boolean> {
         //this.req = req;
+        console.log("Intialisation of Auth");
         this.initObs = this.req.post({
             url_id: 'check_auth',
             sync: true,
@@ -86,12 +90,16 @@ export class AuthService {
         });
         this.initObs.subscribe(
             (d) => {
+                console.log(d);
                 this.initialized = true;
                 this.setLoggedStatus(d);
             },
             (e) => {
+                console.log(e);
+                console.log("Set False")
                 this.initialized = true;
-                this.setLoggedStatus(false);
+                this.setLoggedStatus(true);
+                //FALSE
             },
             () => {
                 console.log('complete  init()');
@@ -119,7 +127,7 @@ export class AuthService {
             (d) => {
                 // TODO Improve response handling
                 //if (d && d['user']) {
-                    this.token = d
+                    this.token = d;
                     this.setLoggedStatus(true, d);
                 //} else {
                 //    this.setLoggedStatus(false);
@@ -173,6 +181,7 @@ export class AuthService {
             localStorage.setItem('currentUser',this.token);
             console.log("LocalStorage",localStorage.getItem('currentUser'))
         } else {
+            console.log(status);
             this.is_logged_in = status;
             this.user = null;
             localStorage.removeItem('currentUser');

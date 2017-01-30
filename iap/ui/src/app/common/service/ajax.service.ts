@@ -410,13 +410,16 @@ export class AjaxService {
     private handleSiteError(res: ServerResponse, blackBox: Subject<any>) {
         // TODO Show error at view
         console.log(res)
-        console.log("App data:" + res.getData());
-        console.error('App Error message: ' + res.getError());
+
         if (res.isAuthError() && this.auth) {
+            console.log("App data:" + res.getData());
             this.auth.logoutByBackend();
+            console.error('App Error message: ' + res.getError());
             // TODO Implement procedure of route reload when ajax request has auth error
         }
-        blackBox.error(res.getError());
+        else {
+            blackBox.error(res.getError());
+        }
     }
 
     /**
@@ -443,7 +446,7 @@ export class AjaxService {
      * @returns {String}
      */
     private getUrl(url_id: string) {
-        return url_id
+        return url_id;
         //return (url_id && this.urlsMapper && this.urlsMapper[url_id])
         //    ? this.urlsMapper[url_id].url : null;
     }
