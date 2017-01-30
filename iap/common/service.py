@@ -10,7 +10,7 @@ def get_user_by_id(id):
     :type id:
     :return:
     :rtype:
-
+as
     """
     users = [{"id": 1, "login": 'default_user', 'password': '123456'},
     {"id": 2, "login": 'user_1', 'password':'12345'},
@@ -20,7 +20,7 @@ def get_user_by_id(id):
         if user["id"] == id:
             return user
     return None
-
+sdasd
 
 def check_password(login, password):
     users = [{"id": 1, "login": 'default_user', 'password': '123456'},

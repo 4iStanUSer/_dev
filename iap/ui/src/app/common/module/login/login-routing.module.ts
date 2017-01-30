@@ -7,6 +7,7 @@ import {AuthService} from "../../service/auth.service";
 const loginRoutes: Routes = [
     {path: 'login', component: LoginComponent}
 ];
+
 @NgModule({
     imports: [
         RouterModule.forChild(loginRoutes)

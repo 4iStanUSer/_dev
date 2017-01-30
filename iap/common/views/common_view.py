@@ -18,7 +18,7 @@ def index_view(req):
                               {'title': 'Home page'},
                               request=req)
 
-
+sda
 def check_logged_in(req):
     """Check user existed
 
@@ -28,8 +28,8 @@ def check_logged_in(req):
     :rtype: Dict[str, bool]
 
     """
-    user_id = get_user(req)
-    session_flag = check_session(req)
+    user_id = 2#get_user(req)
+    session_flag = True#check_session(req)
 
     if user_id != None and session_flag == True:
         new_token = req.session['token']
