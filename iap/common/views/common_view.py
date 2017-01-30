@@ -32,8 +32,9 @@ def check_logged_in(req):
     session_flag = True#check_session(req)
 
     if user_id != None and session_flag == True:
-        new_token = req.session['token']
-        return send_success_response(new_token)
+        token = req.create_jwt_token(2, login="default_user")
+        # new_token = req.session['token']
+        return send_success_response(token)
     else:
         return send_error_response('Unauthorised')
 
