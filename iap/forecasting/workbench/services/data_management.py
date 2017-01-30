@@ -76,6 +76,7 @@ def get_entity_data(request, project, container, config, entities_ids, lang):
     entity_id = entities_ids[0]
     #TODO realise for all entities
 
+    print(container)
     #Check permitted enities from container
     ent = container.get_entity_by_id(entity_id)
 
