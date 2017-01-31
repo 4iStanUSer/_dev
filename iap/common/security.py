@@ -42,7 +42,7 @@ def authorise(req):
         return None
     else:
         if user.check_password(password):
-            return user
+            return None
         else:
             return None
 
@@ -208,6 +208,7 @@ class AccessManager:
                 return False
 
 
+
 def set_manager(config):
     """
     Durective set manager
@@ -224,6 +225,9 @@ def set_manager(config):
 
     config.set_authorization_policy(policy)
     config.add_request_method(check_access, 'check_access')
+
+
+
 
 
 def includeme(config):

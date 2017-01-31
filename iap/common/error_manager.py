@@ -9,18 +9,18 @@ import os
 # TODO Add implementation (DR)
 class ErrorManager:
 
-    def __init__(self):
+    def __init__(self, settings):
 
         self.config = {}
         self.client = memcache.Client(['127.0.0.1:11211'], debug=0)
-        self.load()
+        self.load(settings)
         self.fill_mem_cached()
 
-    def load(self):
+    def load(self, settings):
         # get active registry
-        registry = threadlocal.get_current_registry()
+        #registry = threadlocal.get_current_registry()
         # get config folder
-        config_folder = registry.settings['path.config']
+        config_folder = settings['path.config']
         conf_file = os.path.join(config_folder, "error_manager" + ".ini")
         if os.path.isfile(conf_file):
             parser = ConfigParser()
@@ -30,6 +30,7 @@ class ErrorManager:
                 data[section] = {}
                 for element in parser.items(section):
                     data[section][element[0]] = element[1]
+                    print("Data", data)
             self.config = data
 
     def fill_mem_cached(self):
@@ -43,7 +44,6 @@ class ErrorManager:
             for lang in self.config[error_name].keys():
                 key = "".join([error_name, lang])
                 val = self.config[error_name][lang]
-                print(key, val)
                 self.client.set(key, val)
 
     def set(self, key, value):
@@ -92,3 +92,14 @@ def json_deserializer(key, value, flags):
     if flags == 2:
         return json.loads(value)
     raise Exception("Unknown serialization format")
+
+
+def create_error_manager(config):
+
+    settings = config.get_settings()
+    em = ErrorManager(settings)
+
+    def get_error_msg(request, lang, error):
+        return em.get_error_message(lang, error)
+
+    config.add_request_method(get_error_msg, 'get_error_msg')

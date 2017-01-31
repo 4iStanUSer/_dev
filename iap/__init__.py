@@ -5,6 +5,7 @@ from pyramid.response import Response
 
 from .common import security
 from .common.security import set_manager
+from .common.error_manager import create_error_manager
 from .common.views import common_view as common_views
 
 from .forecasting.views import dashboard as f_dashboard
@@ -167,6 +168,10 @@ def main(global_config, **settings):
     config.include('iap.common.repository.db')
     config.include(common_routing)
     config.include(forecast_routing, route_prefix='/forecast')
+
     # Add routing for another tools
+
+    config.add_directive('create_error_manager', create_error_manager)
+    config.create_error_manager()
 
     return config.make_wsgi_app()
