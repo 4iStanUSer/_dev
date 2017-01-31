@@ -42,7 +42,13 @@ perm_data = {
 
   },
   {
-    "out_path": "*-*spain",
+    "out_path": "*-*uk",
+    "in_path": "cpi-annual",
+    "mask":"21,1"
+
+  },
+  {
+    "out_path": "*-*us",
     "in_path": "cpi-annual",
     "mask":"21,1"
 

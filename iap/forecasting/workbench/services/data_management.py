@@ -45,6 +45,7 @@ def set_entity_values(wb, entity_id, values):
 
 def get_entity_data(request, project, container, config, entities_ids, lang):
 
+
     permission_tree = build_permission_tree(request, project_name=project)
 
     # Initialize structure for output.
@@ -80,6 +81,7 @@ def get_entity_data(request, project, container, config, entities_ids, lang):
     #Check permitted enities from container
     ent = container.get_entity_by_id(entity_id)
 
+    print("Permision Tree", )
     if '*-*'.join(ent.path) in list(permission_tree.keys()):
         vars = permission_tree['*-*'.join(ent.path)]
         if vars == {}:
@@ -158,22 +160,6 @@ def get_entity_data(request, project, container, config, entities_ids, lang):
         # Collect variables data.
         absent_vars_ids = []
         for var_info in item['variables']:
-            #check accces for variable
-            if vars is not None and var_info['id'] in vars.keys():
-                if PERMISSION_STATUS==True:
-                    _ts = {}
-                    PERMISSION_STATUS = True
-                elif vars[var_info['id']] == {}:
-                    _ts = {}
-                    PERMISSION_STATUS = True
-                else:
-                    _ts = vars[var_info['id']]
-                    PERMISSION_STATUS=False
-            else:
-                _ts = None
-                PERMISSION_STATUS=False
-                continue
-
             var = curr_ent.get_variable(var_info['id'])
             if var is None:
                 absent_vars_ids.append(var_info['id'])
@@ -181,27 +167,7 @@ def get_entity_data(request, project, container, config, entities_ids, lang):
             for ts_name, ts_period in ts_borders.items():
                 ts = var.get_time_series(ts_name)
 
-                #check timeseries permission
-                if ts is not None or PERMISSION_STATUS==True:
-                    if PERMISSION_STATUS==True or _ts[ts_name] == {}:
-                        _ts_periods = {}
-                        PERMISSION_STATUS=True
-                    else:
-                        PERMISSION_STATUS=False
-                        _ts_periods = [timeperiod for timeperiod in list(_ts[ts_name].keys()) if timeperiod!='mask']
-                else:
-                    PERMISSION_STATUS = False
-                    _ts_periods = None
-                    continue
-
-                #check timeperiod
-
                 for _ts_period in ts_period:
-                    if _ts_periods is not None or PERMISSION_STATUS==True:
-                        pass
-                    elif _ts_period not in _ts_periods:
-                        print("No Permission")
-                        continue
 
                     values = ts.get_values_for_period(ts_period)
                     ps = var.get_periods_series(ts_name)

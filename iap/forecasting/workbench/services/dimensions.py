@@ -1,5 +1,6 @@
 import copy
 from collections import OrderedDict
+from collections import OrderedDict
 JOIN_SYMBOL = '|-|-|'
 
 
@@ -135,24 +136,6 @@ def _add_entity_to_index(entity, curr_point, search_index, dim_names, points):
         pass
 
 
-def ents_by_options(options, container):
-
-    """
-    :return:
-    :rtype:
-    """
-    #Build selection list
-    dimensions = list(options.keys())
-    selected_prop = {}
-    for dim_name in dimensions:
-        selected_prop[dim_name] = options[i]['selected']
-
-    top_entities = container.top_entities
-    fr
-
-
-
-
 def get_options_by_ents(search_index, entities_ids, lang):
     """
     Return Options by input entities id's
@@ -221,11 +204,14 @@ def search_by_query(search_index, query):
         # Verify current selector.
         # If selector is empty or not valid set default selector.
         if len(dimension_selection) == 0:
-            dimension_selection = sorted(keys)
+            dimension_selection = list(OrderedDict.fromkeys(sorted(keys)))
         else:
-            dimension_selection = [x for x in dimension_selection if x in keys]
-
-        options[dim_id] = _fill_options(keys, dimension_selection)
+            _dimension_selection = []
+            for x in dimension_selection:
+                if x not in _dimension_selection and x in keys:
+                    _dimension_selection.append(x)
+            dimension_selection = _dimension_selection
+        options[dim_id] = fill_options(keys, dimension_selection)
         #fill options
         next_iter_indexes = []
         for selected in dimension_selection:
@@ -299,7 +285,7 @@ def _search_by_query(search_index, query):
     return options, result
 
 
-def __fill_options(keys_list, selected_items, dim_name):
+def _fill_options(keys_list, selected_items, dim_name):
     """Alternative version for fill options
 
     :param keys_list:
@@ -336,7 +322,7 @@ def __fill_options(keys_list, selected_items, dim_name):
     return options
 
 
-def _fill_options(keys_list, selected_items):
+def fill_options(keys_list, selected_items):
     """
     Fill option for list of option abd selected item of dimension
     Return dictionary with section selected - selected items

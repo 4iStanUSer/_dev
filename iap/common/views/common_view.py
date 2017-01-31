@@ -234,15 +234,15 @@ def set_project_selection(req):
     except KeyError:
         msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
         return send_error_response(msg)
-    try:
-        #Change accesss for project selector
-        project = req.dbsession.query(Project).filter(Project.id == project_id).one()
-        #update state of runtime storage
-        rt.update_state(user_id, tool_id=tool_name, project_id=project.id)
-        return send_success_response(project_id)
-    except Exception as e:
-        msg = ErrorManager.get_error_message(e)
-        return send_error_response(msg)
+    #try:
+    #Change accesss for project selector
+    project = req.dbsession.query(Project).filter(Project.id == project_id).one()
+    #update state of runtime storage
+    rt.update_state(user_id, tool_id=tool_name, project_id=project.id)
+    return send_success_response(project_id)
+    #except Exception as e:
+    #    msg = ErrorManager.get_error_message(e)
+    #    return send_error_response(msg)
 
 
 def test_preparation(request):
