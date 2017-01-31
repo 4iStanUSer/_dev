@@ -271,7 +271,7 @@ def fill_options(keys_list, selected_items):
             item_id = JOIN_SYMBOL.join(item)
             name = item[-1]
             parent_id = JOIN_SYMBOL.join(item[:len(item)-1])
-        if dict(name=name, id=item_id, parent_id=parent_id) not in options['data']:
+        if dict(name=name, id=item_id, parent_id=parent_id, enabled =True) not in options['data']:
             options['data'].append(dict(name=name, id=item_id, enabled =True,
                                     parent_id=parent_id))
 
