@@ -3,7 +3,7 @@ import {
     SelectorModel,
     SelectorItemModel
 } from "./../selector.model";
-import {Helper} from "../../../../common/helper";
+import {Helper} from "../../../common/helper";
 
 @Component({
     selector: 'hierarchical-selector',
