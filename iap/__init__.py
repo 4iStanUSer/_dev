@@ -131,8 +131,7 @@ def forecast_routing(config):
     config.add_view(f_scenarios.get_scenarios_list,
                     route_name='forecast.get_scenarios_list', renderer='json')
 
-    config.add_route('forecast.get_dashboard_data',
-                     '/get_dashboard_data')
+    config.add_route('forecast.get_dashboard_data','/get_dashboard_data')
     config.add_view(f_dashboard.get_dashboard_data,
                     route_name='forecast.get_dashboard_data', renderer='json')
 

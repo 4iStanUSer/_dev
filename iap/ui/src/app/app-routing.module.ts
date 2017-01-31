@@ -28,11 +28,6 @@ import {LandingPageComponent} from "./landing-page/landing-page.component";
                 path: 'login',
                 component: LoginComponent,
                 canActivate: [AuthGuard],
-            },
-             {
-                path: 'landing',
-                component: LandingPageComponent,
-                canActivate: [AuthGuard],
             }
             */
         ])
