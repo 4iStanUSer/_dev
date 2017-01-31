@@ -237,89 +237,8 @@ def search_by_query(search_index, query):
     return options, entities_ids
 
 
-def _search_by_query(search_index, query):
-    """Alternative version for search_by_query function
-
-    Use reverse collection of entities in search index
-    Return entities id's and option's required by dimension selection
-
-    Use breath first search to retive neccessery data
-
-    :param search_index:
-    :type search_index:
-    :param query:
-    :type query:
-    :return:
-    :rtype:
-    """
-    order = search_index['order']
-
-    keys = [item[1] for item in search_index['reverse'].items()]
-
-    options = {}
-    search_index = [dict(data=item[1], num=item[0]) for item in search_index['reverse'].items()]
-
-    selected = search_index
-    #iteraction over dimension
-    next_iter_indexes = []
-    for dim_name in order:
-        if query[dim_name] == []:
-            selection = selected
-        else:
-            selection = []
-        # fill option for current dimension
-        options[dim_name] = __fill_options(keys, [query[dim_name]], dim_name)
-        #iteration over value
-        for dim_value in query[dim_name]:
-            #iteration over selection
-            for entity in selected:#selection
-                if dim_value in entity['data'][dim_name]:
-                    selection.append(entity)
-                    next_iter_indexes.append(entity['data'])
-                else:
-                    pass
-        selected = selection
-        keys = next_iter_indexes.copy()
-
-    result = [x['num'] for x in selected]
-    return options, result
 
 
-def _fill_options(keys_list, selected_items, dim_name):
-    """Alternative version for fill options
-
-    :param keys_list:
-    :type keys_list:
-    :param selected_items:
-    :type selected_items:
-    :param dim_name:
-    :type dim_name:
-    :return:
-    :rtype:
-    """
-
-    options = dict(
-        data=[],
-        selected=[JOIN_SYMBOL.join(x) for x in selected_items]
-    )
-
-    for item_dict in keys_list:
-        item = item_dict[dim_name]
-        if len(item) == 0:
-            continue
-        elif len(item) == 1:
-            item_id = item[-1]
-            name = item[-1]
-            parent_id = None
-        else:
-            item_id = JOIN_SYMBOL.join(item)
-            name = item[-1]
-            parent_id = JOIN_SYMBOL.join(item[:len(item)-1])
-        if dict(name=name, id=item_id, parent_id=parent_id) not in options['data']:
-            options['data'].append(dict(name=name, id=item_id,if_enabled =True,
-                                    parent_id=parent_id))
-
-    return options
 
 
 def fill_options(keys_list, selected_items):
@@ -353,7 +272,7 @@ def fill_options(keys_list, selected_items):
             name = item[-1]
             parent_id = JOIN_SYMBOL.join(item[:len(item)-1])
         if dict(name=name, id=item_id, parent_id=parent_id) not in options['data']:
-            options['data'].append(dict(name=name, id=item_id,
+            options['data'].append(dict(name=name, id=item_id, enabled =True,
                                     parent_id=parent_id))
 
     return options
