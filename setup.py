@@ -23,7 +23,7 @@ requires = [
     'psycopg2',
     'PyJWT',
     'bcrypt',
-    'passlib'
+    'pymemcache'
     ]
 
 tests_require = [

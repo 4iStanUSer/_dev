@@ -57,7 +57,9 @@ def login(req):
         req.session['token'] = token
         return send_success_response(token)
     else:
-        return send_error_response("Unauthorised")
+        err_manager = ErrorManager()
+        msg = err_manager.get_error_message('default', "NotFound")
+        return send_error_response("Unauthorised_{0}".format(msg))
 
 
 def logout(req):

@@ -3,6 +3,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from ..common.helper import send_error_response
 from iap.common.repository.models.access import User
 from pyramid.interfaces import IAuthorizationPolicy
+from .error_manager import ErrorManager
 from zope.interface import implementer
 from functools import wraps
 import jwt
