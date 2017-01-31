@@ -34,7 +34,6 @@ def create_scenario(request, input_data):
     else:
         pass
 
-
 def get_scenarios(request, filters):
     """
     Get scenario by specific filters
@@ -61,7 +60,7 @@ def get_scenarios(request, filters):
         return scenario_info_list
 
 
-def update_scenario(request,scenario_id, parameter, value):
+def update_scenatio(request,scenario_id, parameter, value):
     """
     Update scenario by specific parameters
 
