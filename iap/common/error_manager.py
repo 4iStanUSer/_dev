@@ -1,4 +1,4 @@
-from pymemcache.client.base import Client
+import memcache
 from configparser import ConfigParser
 from pyramid import threadlocal
 import json
@@ -12,8 +12,7 @@ class ErrorManager:
     def __init__(self):
 
         self.config = {}
-        self.client = Client(('localhost', 11211), serializer=json_serializer,
-                deserializer=json_deserializer)
+        self.client = memcache.Client(['127.0.0.1:11211'], debug=0)
         self.load()
         self.fill_mem_cached()
 
@@ -41,7 +40,11 @@ class ErrorManager:
 
         """
         for error_name in self.config.keys():
-            self.client.set(error_name, self.config[error_name])
+            for lang in self.config[error_name].keys():
+                key = "".join([error_name, lang])
+                val = self.config[error_name][lang]
+                print(key, val)
+                self.client.set(key, val)
 
     def set(self, key, value):
         """
@@ -68,8 +71,8 @@ class ErrorManager:
         return self.client.get(ex)[lang]
 
     def get_error_message(self, lang, ex):
-        print(ex)
-        error = self.client.get(ex)[lang]
+        key = "".join([ex, lang])
+        error = self.client.get(key)
         return error
 
 
