@@ -54,6 +54,21 @@ def serialise_scenario(scenarios):
     return scenario_info_list
 
 
+
+
+def get_scenario_page_data():
+    pass
+
+
+def get_sceanrio_details(sceanrio_id):
+    pass
+
+
+def set_scenario_location(location_id):
+    pass
+
+def set_scenario_sta
+
 @forbidden_view
 @requires_roles('Create a new scenario')
 def create_scenario(request):
