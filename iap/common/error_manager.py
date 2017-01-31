@@ -6,7 +6,7 @@ import json
 from pyramid.events import ApplicationCreated
 
 import os
-# TODO Add implementation (DR)
+
 class ErrorManager:
 
     def __init__(self, settings):

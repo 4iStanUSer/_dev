@@ -37,8 +37,14 @@ def check_logged_in(req):
         # new_token = req.session['token']
         return send_success_response(token)
     else:
+<<<<<<< Updated upstream
         msg = req.get_error_msg('default', "NotFound")
         return send_error_response('Unauthorised_{0}'.format(msg))
+=======
+        #TODO send_error_responce
+
+        return send_error_response('Unauthorised')
+>>>>>>> Stashed changes
 
 
 def login(req):
