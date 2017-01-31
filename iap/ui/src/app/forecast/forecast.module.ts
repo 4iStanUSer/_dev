@@ -21,15 +21,16 @@ import {SimulatorPageDataManagerService} from "./simulator-page/simulator-page-d
 import {ForecastComponent} from "./forecast.component";
 import {ScenariosListComponent} from "./scenarios-list/scenarios-list.component";
 
-import {SelectorsComponent} from './dashboard/selectors/selectors.component';
-import {FlatSelectorComponent} from './dashboard/selectors/flat-selector/flat-selector.component';
-import {HierarchicalSelectorComponent} from './dashboard/selectors/hierarchical-selector/hierarchical-selector.component';
+// import {SelectorsComponent} from './dashboard/selectors/selectors.component';
+// import {FlatSelectorComponent} from './dashboard/selectors/flat-selector/flat-selector.component';
+// import {HierarchicalSelectorComponent} from './dashboard/selectors/hierarchical-selector/hierarchical-selector.component';
+// import {RegionSelectorComponent} from './dashboard/selectors/region-selector/region-selector.component';
 
 import {GeneralComponent} from './dashboard/general/general.component';
 import {DriverDetailComponent} from './dashboard/driver-detail/driver-detail.component';
 import {DriverSummaryComponent} from './dashboard/driver-summary/driver-summary.component';
 import {InsightsComponent} from './dashboard/insights/insights.component';
-import {RegionSelectorComponent} from './dashboard/selectors/region-selector/region-selector.component';
+
 import {ButtonsGroupComponent} from './../common/cmp/buttons-group/buttons-group.component';
 import {TableWidgetComponent} from "../common/cmp/table-widget/table-widget.component";
 import { MenuWidgetComponent } from './menu-widget/menu-widget.component';
@@ -37,6 +38,16 @@ import { LanguageSelectorComponent } from './language-selector/language-selector
 
 import { LandingPageComponent } from './landing-page/landing-page.component';
 import { LandingPageService } from './landing-page/landing-page.service';
+
+import {SelectorsComponent} from "./selectors/selectors.component";
+import {FlatSelectorComponent} from "./selectors/flat-selector/flat-selector.component";
+import {HierarchicalSelectorComponent} from "./selectors/hierarchical-selector/hierarchical-selector.component";
+import {RegionSelectorComponent} from "./selectors/region-selector/region-selector.component";
+
+// import {SelectorsComponent} from "../common/cmp/selectors/selectors.component";
+// import {FlatSelectorComponent} from "../common/cmp/selectors/flat-selector/flat-selector.component";
+// import {HierarchicalSelectorComponent} from "../common/cmp/selectors/hierarchical-selector/hierarchical-selector.component";
+// import {RegionSelectorComponent} from "../common/cmp/selectors/region-selector/region-selector.component";
 
 
 @NgModule({
