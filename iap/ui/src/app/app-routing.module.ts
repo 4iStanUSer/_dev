@@ -9,7 +9,7 @@ import {LandingPageComponent} from "./landing-page/landing-page.component";
         RouterModule.forRoot([
 
             {
-                path: '/',
+                path: '',
                 pathMatch: 'full',
                 redirectTo: '/landing',
             },

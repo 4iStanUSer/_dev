@@ -7,7 +7,7 @@ import {
 import {
     SelectorItemInput, SelectorModel, SelectorConfigInput, SelectorItemModel
 } from "./selector.model";
-import {AjaxService} from "../../../common/service/ajax.service";
+import {AjaxService} from "../../common/service/ajax.service";
 
 /*
  * Notice-Requirements:*
