@@ -90,7 +90,6 @@ class Workbench:
         #self.selector = [ent.id for ent in self.container.top_entities]
         # Init wb
         self._init_wb()
-        print("Initial Selection", self.selection)
 
     def initial_load(self, warehouse, dev_template, calc_instructions, user_access):
         """
@@ -153,8 +152,7 @@ class Workbench:
         #empty_query = {'products': [], 'products2': [], 'geography': [],'market':["wallmart"]}
         opts, ents = \
             dim_service.search_by_query(self.search_index, empty_query)
-        print("Init WB - Selection", ents)
-        self.selection = ents[4:6]
+        self.selection = ents[0:1]
 
 
     def _update_search_index(self, query):
@@ -172,3 +170,6 @@ class Workbench:
         #    if ent is not None:
         #        item['entity_id'] = ent.id
         #self.access.load(user_access_rights, self.container)
+
+    def set_scenario_selection(self, scenario_id, scenario_dependency):
+        pass

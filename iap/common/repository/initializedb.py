@@ -1,5 +1,6 @@
 import json
 import os
+import datetime
 import sys
 import transaction
 from iap.common.repository.models.warehouse import Project, Pr_Tool
@@ -110,6 +111,14 @@ def main(argv=sys.argv):
         for feature in features:
             role_superviser.features.append(Feature(name=feature))
 
+        features = ['Create a new scenario', 'View Scenario', 'Publish Scenario', 'Mark scenario as final',
+                    'Modify Scenario', 'Include Scenario']
+        role_superviser = Role(name="superviser")
+        tool.roles.append(role_superviser)
+        for feature in features:
+            role_superviser.features.append(Feature(name=feature))
+
+
         #Add Roles
         user_1.roles.append(role_superviser)
         user_1.roles.append(role_forecast)
@@ -145,12 +154,14 @@ def main(argv=sys.argv):
 
         #Add Scenario
         scenario_1 = Scenario(name="Price Growth Dynamics JJOralCare", description="Dynamics of Price Growth in Brazil",
-                            status="New", shared="No", criteria="Brazil-Nike-Main")
+                              date_of_last_modification=str(datetime.datetime.now()), author = user_1.email,
+                              status="New", shared="No", criteria="Brazil-Nike-Main")
 
         scenario_1.users.append(user_1)
 
         # Add Scenario
         scenario_2 = Scenario(name="Price Growth Dynamics JJLean", description="Dynamics of Price Growth in USA",
+                              date_of_last_modification = str(datetime.datetime.now()), author = user_2.email,
                               status="New", shared="No", criteria="USA-iPhone-Main")
         scenario_2.users.append(user_2)
         scenario_2.users.append(user_1)

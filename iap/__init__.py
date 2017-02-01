@@ -92,20 +92,25 @@ def forecast_routing(config):
     config.add_view(f_scenarios.get_scenario_page,
                     route_name='forecast.get_scenario_page', renderer='json')
 
+    config.add_route('forecast.get_scenario_details',
+                     '/get_scenario_details')
+    config.add_view(f_scenarios.get_scenario_details,
+                    route_name='forecast.get_scenario_details', renderer='json')
+
     config.add_route('forecast.create_scenario',
                      '/create_scenario')
     config.add_view(f_scenarios.create_scenario,
                     route_name='forecast.create_scenario', renderer='json')
 
-    config.add_route('forecast.get_scenario_description',
-                     '/get_scenario_description')
-    config.add_view(f_scenarios.get_scenario_description,
-                    route_name='forecast.get_scenario_description', renderer='json')
-
     config.add_route('forecast.search_and_view_scenario',
                      '/search_and_view_scenario')
     config.add_view(f_scenarios.search_and_view_scenario,
                     route_name='forecast.search_and_view_scenario', renderer='json')
+
+    config.add_route('forecast.set_scenario_selection',
+                     '/set_scenario_selection')
+    config.add_view(f_scenarios.set_scenario_selection,
+                    route_name='forecast.set_scenario_selection', renderer='json')
 
     config.add_route('forecast.change_scenario_name',
                      '/change_scenario_name')
@@ -116,11 +121,6 @@ def forecast_routing(config):
                      '/delete_scenario')
     config.add_view(f_scenarios.delete,
                     route_name='forecast.delete', renderer='json')
-
-    config.add_route('forecast.publish_scenario',
-                     '/publish_scenario')
-    config.add_view(f_scenarios.publish_scenario,
-                    route_name='forecast.publish_scenario', renderer='json')
 
     config.add_route('forecast.mark_as_final',
                      '/mark_as_final')
@@ -136,7 +136,9 @@ def forecast_routing(config):
     config.add_view(f_scenarios.get_scenarios_list,
                     route_name='forecast.get_scenarios_list', renderer='json')
 
-    config.add_route('forecast.get_dashboard_data','/get_dashboard_data')
+
+    config.add_route('forecast.get_dashboard_data',
+                     '/get_dashboard_data')
     config.add_view(f_dashboard.get_dashboard_data,
                     route_name='forecast.get_dashboard_data', renderer='json')
 

@@ -18,22 +18,63 @@ def serialise_scenario(scenarios):
         scenario_info['id'] = scenario.id
         scenario_info['name'] = scenario.name
         scenario_info['status'] = scenario.status
+        scenario_info['description'] = scenario.description
         scenario_info['shared'] = scenario.shared
+        scenario_info['author'] = scenario.author
+        scenario_info['location'] = scenario.status
+        scenario_info['modify_date'] = scenario.date_of_last_modification
         scenario_info_list.append(scenario_info)
     return scenario_info_list
 
+
+def deserialise_scenario(scenario_info):
+    """
+    Serialise scenario into dictionary
+    :param scenarios:
+    :type scenarios:
+    :return:
+    :rtype:
+    """
+    scenario = Scenario(name = scenario_info['name'],
+                        description = scenario_info['description'])
+    #TODO entity selection
+    #TODO predifinde driver
+
+    return scenario
 
 def create_scenario(request, input_data):
 
     try:
         date_of_last_mod = str(datetime.now())
         scenario = Scenario(name=input_data['name'], description=input_data['description'], shared=input_data['shared'],
-                        date_of_last_modification=date_of_last_mod, status="New", criteria=input_data['description'])
+                        date_of_last_modification = date_of_last_mod, status="New", criteria=input_data['description'])
         request.dbsession.add(scenario)
     except NoResultFound:
         return None
     else:
         pass
+
+
+#check permission
+def copy_scenario(request, scenario_id):
+    """
+        Get scenario by specific filters
+
+        :param request:
+        :type request:
+        :param filters - List of filters:
+        :type filters: List
+        :return:
+        :rtype:
+        """
+    try:
+        scenarios = request.dbsession.query(Scenario). \
+            filter(Scenario.id == scenario_id).all()
+        scenario_info_list = serialise_scenario(scenarios)
+    except NoResultFound:
+        return scenario_info_list
+    else:
+        return scenario_info_list
 
 
 def get_scenarios(request, filters, author):
@@ -82,6 +123,7 @@ def update_scenatio(request,scenario_id, parameter, value):
         return None
     else:
         return True
+
 
 def check_scenario(request, scenario_id, new_values):
     """
@@ -139,7 +181,7 @@ def include_scenario(request):
     pass
 
 
-def search_and_get_scenarios(request):
+def search_and_get_scenarios(request, scenario_id):
     """
     Search and get scenario's
     :param request:
@@ -147,8 +189,12 @@ def search_and_get_scenarios(request):
     :return:
     :rtype:
     """
-    pass
+    try:
+        scenario = request.dbsession.query(Scenario).filter(Scenario.id == scenario_id).one()
+    except NoResultFound:
+        return None
+    else:
+        return serialise_scenario([scenario])
 
 
-def include_scenarions(request):
-    pass
+

@@ -1,7 +1,8 @@
 from pyramid.session import SignedCookieSessionFactory
 from sqlalchemy.orm.exc import NoResultFound
 from ..common.helper import send_error_response
-from iap.common.repository.models.access import User, DataPermissionAccess
+from iap.common.repository.models.access import User, DataPermissionAccess, Role, Feature
+
 from iap.common.repository.models.warehouse import Entity
 from pyramid.interfaces import IAuthorizationPolicy
 from .error_manager import ErrorManager
@@ -316,6 +317,71 @@ def build_permission_tree(request, project_name):
 
     return access_rights
 
+
+def get_feature_permission(request, user_id, tool_id):
+    """Boolean function that check whether user have specific
+    right for tools  and features
+
+    :return:
+    :rtype:
+    """
+
+
+    feature = request.dbsession.query(Feature.name).join(Role.features).join(User.roles)\
+        .filter(Feature.tool_id==1).all()
+    #features = request.dbsession.query(Feature.name).filter(Feature.tool_id == tool_id).all()
+        #join(Role, Role.tool_id == Feature.tool_id).filter()
+
+    return feature
+
+
+def check_feature_permission(self, request, user_id, tool_id, feature_id):
+    """Boolean function that check whether user have specific
+    right for tools  and features
+
+    :return:
+    :rtype:
+    """
+    user = request.dbsession.query(User).filter(User.id == user_id).one()
+    tools = []
+    features = []
+    for role in user.roles:
+        tools.append(role.tool_id)
+        for feature in role.features:
+            features.append(feature.id)
+    if tool_id in tools and feature_id in features:
+        return True
+    else:
+        return False
+
+
+def get_entity_data_access(self, request, user_id):
+    """
+    Return entitie's mask
+    :return:
+    :rtype:
+    """
+    mask = []
+    user = request.dbsession.query(User).filter(User.id == user_id).one()
+    for permission in user.perms:
+        for dataperm in permission.data_perms:
+            mask.append(dataperm.mask)
+    return mask
+
+
+def get_user_entities(self, request, user_id):
+    """Retunr list of dictionary - with keys
+    in_path, out_path, mask
+
+    :return:
+    :rtype:
+    """
+    entities = []
+    user = request.dbsession.query(User).filter(User.id == user_id).one()
+    for permission in user.perms:
+        for data_perm in permission.data_perms:
+            entities.append({'in_path': data_perm.in_path, 'out_path': data_perm.out_path, 'mask': data_perm.mask})
+    return entities
 
 
 

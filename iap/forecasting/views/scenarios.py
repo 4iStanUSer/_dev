@@ -1,59 +1,14 @@
 import datetime
 from ...common.repository.models_managers.scenario import create_scenario, get_scenarios, \
-    update_scenario, check_scenario, delete_scenario, search_and_get_scenarios
-
+    update_scenario, check_scenario, delete_scenario, search_and_get_scenarios, serialise_scenario
 from ...common.repository.models_managers import scenario as scenario_manager
 from ...common.security import get_feature_permission
 from iap.common.repository.models.scenarios import Scenario
 from ...common.helper import send_success_response, send_error_response
 from ...common.security import requires_roles, forbidden_view
+from ...common import runtime_storage as rt
 
 
-def create_table(request):
-    """
-    Create Scenario Table
-    :param request:
-    :type request:
-    :return:
-    :rtype:
-    """
-    from iap.common.repository.db.meta import Base
-    _engine = request.dbsession.bind.engine
-    # Create all tables
-    Base.metadata.create_all(_engine)
-
-
-def prepare_scenario_testing(request):
-    """
-    Prepare db for testing
-    :param request:
-    :type request: pyramid.util.Request
-    :return:
-    :rtype: None
-    """
-
-    scenarios = request.dbsession.query(Scenario).all()
-    for scenario in scenarios:
-        request.dbsession.delete(scenario)
-
-
-def serialise_scenario(scenarios):
-    """
-    Serialise scenario into dictionary
-    :param scenarios:
-    :type scenarios:
-    :return:
-    :rtype:
-    """
-    scenario_info_list = []
-    scenario_info = {}
-    for scenario in scenarios:
-        scenario_info['id'] = scenario.id
-        scenario_info['name'] = scenario.name
-        scenario_info['status'] = scenario.status
-        scenario_info['shared'] = scenario.shared
-        scenario_info_list.append(scenario_info)
-    return scenario_info_list
 
 
 #@forbidden_view
@@ -72,15 +27,27 @@ def get_scenario_page(req):
         filters = req.json_body['data']['filter']
         author = 2#req.get_user
         data = scenario_manager.get_scenarios(req, filters, author)
-        user_permission = get_feature_permission(req, 2, "forecast")
-        print("User Permission", user_permission)
+        user_permission = get_feature_permission(req, author, "forecast")
     except KeyError:
         return send_error_response(data)
     else:
-        return send_success_response(data)
+        result = {'user_permission': user_permission, "data": data}
+        return send_success_response(result)
 
-@forbidden_view
-@requires_roles('Create a new scenario')
+
+def set_sceanario_selection(req):
+    """
+    Read Scenario form local storage and set new container
+    :param req:
+    :type req:
+    :return:
+    :rtype:
+    """
+    pass
+
+
+#@forbidden_view
+#@requires_roles('Create a new scenario')
 def create_scenario(request):
     """Function for creating new scenario
     args:
@@ -95,7 +62,7 @@ def create_scenario(request):
     :rtype:
     """
     try:
-        input_data = request.json_body
+        input_data = request.json_body['data']
         create_scenario(input_data)
     except KeyError:
         return send_error_response("Failed to create scenario")
@@ -103,8 +70,8 @@ def create_scenario(request):
         return send_success_response("Scenario created")
 
 
-@forbidden_view
-@requires_roles('View Scenario')
+#@forbidden_view
+#@requires_roles('View Scenario')
 def search_and_view_scenario(request):
     """
     Return list of scenario by given filters
@@ -117,7 +84,7 @@ def search_and_view_scenario(request):
     :rtype:
     """
     try:
-        filters = request.json_body['filters']
+        filters = request.json_body['data']['filters']
         scenario_info_list = get_scenarios(request, filters)
     except KeyError:
         return send_error_response("Error during searching")
@@ -125,9 +92,9 @@ def search_and_view_scenario(request):
         return send_success_response(scenario_info_list)
 
 
-@forbidden_view
-@requires_roles('View Scenario')
-def get_scenario_description(request):
+#@forbidden_view
+#@requires_roles('View Scenario')
+def get_scenario_details(request):
     """
     Return scenario description by given scenario id
     :param request:
@@ -135,17 +102,18 @@ def get_scenario_description(request):
     :return:
     :rtype:
     """
+
     try:
-        scenario_id = request.json_body['id']
-        output = search_and_get_scenarios(scenario_id, 'description')
+        scenario_id = request.json_body['data']['id']
+        output = search_and_get_scenarios(request, scenario_id)
     except KeyError:
         return send_error_response("Failed to get scenario description")
     else:
         return send_success_response(output)
 
 
-@forbidden_view
-@requires_roles('View Scenario')
+#@forbidden_view
+#@requires_roles('View Scenario')
 def change_scenario_name(request):
     """
     Change scenario name
@@ -156,8 +124,8 @@ def change_scenario_name(request):
     :rtype:
     """
     try:
-        scenario_id = request.json_body['id']
-        new_name = request.json_body['new_name']
+        scenario_id = request.json_body['data']['id']
+        new_name = request.json_body['data']['new_name']
         new_value = {"name": new_name}
         update_scenario(request, scenario_id, new_value)
     except KeyError:
@@ -177,12 +145,12 @@ def set_scenario_selection(request):
 
     pass
 
-@forbidden_view
-@requires_roles('View Scenario')
+#@forbidden_view
+#@requires_roles('View Scenario')
 def check_scenario_name(request):
     try:
-        scenario_id = request.json_body['id']
-        name = request.json_body['name']
+        scenario_id = request.json_body['data']['id']
+        name = request.json_body['data']['name']
         value_to_check = {'name': name}
         result = check_scenario(scenario_id, value_to_check)
         if result:
@@ -193,8 +161,9 @@ def check_scenario_name(request):
         return send_error_response("Failed to check name")
 
 
-@forbidden_view
-@requires_roles('Modify Scenario')
+
+#@forbidden_view
+#@requires_roles('Modify Scenario')
 def modify(request):
     """
     Modify scenario
@@ -213,8 +182,8 @@ def modify(request):
         return send_success_response(update_scenario)
 
 
-@forbidden_view
-@requires_roles('Delete Scenario')
+#@forbidden_view
+#@requires_roles('Delete Scenario')
 def delete(request):
     """
     Delete selected scenario
@@ -232,20 +201,8 @@ def delete(request):
         return send_success_response("Deleted selected scenario")
 
 
-@forbidden_view
-@requires_roles('Publish Scenario')
-def publish_scenario(request):
-    """Publish selected scenario to central repository
-    :param request:
-    :type request:
-    :return:
-    :rtype:
-    """
-    pass
-
-
-@forbidden_view
-@requires_roles('View Scenario')
+#@forbidden_view
+#@requires_roles('View Scenario')
 def mark_as_final(request):
     """Marks selected scenario
 

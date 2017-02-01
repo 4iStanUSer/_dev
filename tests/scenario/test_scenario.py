@@ -180,14 +180,22 @@ def test_include_scenario(web_app, token):
     assert actual == expected
 
 
+def test_get_scenario_details(web_app, token):
+
+    res = web_app.post_json("/forecast/get_scenario_details", {'data': {'id': 1},'X-Token': token})
+    expected = [{'id': 1, 'author': 'user@mail.com', 'modify_date': '2017-02-01 17:07:01.306234',
+                 'shared': 'No', 'status': 'New', 'name': 'Price Growth Dynamics JJOralCare', 'location': 'New'}]
+    actual = res.json
+    assert expected == actual['data']
+
 
 def test_get_scenario_page(web_app, token):
 
     res = web_app.post_json("/forecast/get_scenario_page", {'data': {'filter': {}},'X-Token': token})
-    expected = {'data': 'Deleted selected scenario', 'error': False}
+    expected = [{'id': 1, 'author': 'user@mail.com', 'modify_date': '2017-02-01 17:07:01.306234',
+                 'shared': 'No', 'status': 'New', 'name': 'Price Growth Dynamics JJOralCare', 'location': 'New'}]
     actual = res.json
-    print(actual)
-    assert expected == actual
+    assert expected == actual['data']
 
 
 

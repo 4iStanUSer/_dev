@@ -38,6 +38,7 @@ class Scenario(Base):
     start_date = Column(DateTime,  nullable=True)
     end_date = Column(DateTime, nullable=True)
 
+    author = Column(String(length=255))
     users = relationship("User", secondary=user_scenario_table, back_populates="scenarios")
 
     children = relationship("Scenario",  remote_side=[id])
