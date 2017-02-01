@@ -3,7 +3,7 @@ from ...common.repository.models_managers.scenario import create_scenario, get_s
     update_scenario, check_scenario, delete_scenario, search_and_get_scenarios
 
 from ...common.repository.models_managers import scenario as scenario_manager
-
+from ...common.security import get_feature_permission
 from iap.common.repository.models.scenarios import Scenario
 from ...common.helper import send_success_response, send_error_response
 from ...common.security import requires_roles, forbidden_view
@@ -68,15 +68,16 @@ def get_scenario_page(req):
     :return:
     :rtype:
     """
-    print(req)
-    #try:
-    filters = req.json_body['data']['filter']
-    author = 2#req.get_user
-    data = scenario_manager.get_scenarios(req, filters, author)
-    #except KeyError:
-    return send_error_response(data)
-    #else:
-    #return send_success_response(data)
+    try:
+        filters = req.json_body['data']['filter']
+        author = 2#req.get_user
+        data = scenario_manager.get_scenarios(req, filters, author)
+        user_permission = get_feature_permission(req, 2, "forecast")
+        print("User Permission", user_permission)
+    except KeyError:
+        return send_error_response(data)
+    else:
+        return send_success_response(data)
 
 @forbidden_view
 @requires_roles('Create a new scenario')

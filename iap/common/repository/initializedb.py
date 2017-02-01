@@ -98,7 +98,9 @@ def main(argv=sys.argv):
         role_forecast = Role(name="forecaster")
         tool.roles.append(role_forecast)
         for feature in features:
-            role_forecast.features.append(Feature(name=feature))
+            feature = Feature(name=feature)
+            tool.features.append(feature)
+            role_forecast.features.append(feature)
 
         # Add Roles Superviser
         features = ['Create a new scenario', 'View Scenario', 'Publish Scenario', 'Mark scenario as final',
