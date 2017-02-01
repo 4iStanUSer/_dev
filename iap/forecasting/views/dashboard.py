@@ -9,7 +9,7 @@ TOOL = 'forecast'
 def get_dashboard_data(req):
     # Get parameters from request.
     try:
-        user_id = req.user
+        user_id = 2#req.user
     except KeyError:
         msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
         return send_error_response(msg)

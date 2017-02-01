@@ -21,7 +21,7 @@ def forbidden_view(f):
 
     """
     def deco(request):
-        user_id = get_user(request)
+        user_id = 2#get_user(request)
         if user_id!=None and check_session(request)==True:
             return f(request)
         else:
@@ -42,7 +42,7 @@ def authorise(req):
         return None
     else:
         if user.check_password(password):
-            return None
+            return user
         else:
             return None
 
