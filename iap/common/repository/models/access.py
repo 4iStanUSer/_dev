@@ -11,6 +11,7 @@ from sqlalchemy import (
 from sqlalchemy.orm import relationship, backref
 from passlib.hash import bcrypt
 from iap.common.repository.db.meta import Base
+from .scenarios import user_scenario_table
 import datetime
 
 
@@ -40,6 +41,7 @@ user_ugroup_tbl = Table(
 
 class User(Base):
     __tablename__ = 'users'
+
     id = Column(Integer, primary_key=True)
     email = Column(String(length=255))
     password = Column(String(length=255))
@@ -51,7 +53,11 @@ class User(Base):
     groups = relationship('UserGroup', secondary=user_ugroup_tbl,
                           back_populates='users')
 
-    scenarios = relationship("Scenario", back_populates="user")
+    scenarios = relationship(
+        "Scenario",
+        secondary=user_scenario_table,
+        back_populates="users")
+
     perms = relationship("Permission", back_populates="user")
 
     foreacst_perm_values = relationship("FrcastPermValue")

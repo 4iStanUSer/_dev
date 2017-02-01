@@ -2,6 +2,8 @@ import datetime
 from ...common.repository.models_managers.scenario import create_scenario, get_scenarios, \
     update_scenario, check_scenario, delete_scenario, search_and_get_scenarios
 
+from ...common.repository.models_managers import scenario as scenario_manager
+
 from iap.common.repository.models.scenarios import Scenario
 from ...common.helper import send_success_response, send_error_response
 from ...common.security import requires_roles, forbidden_view
@@ -53,6 +55,28 @@ def serialise_scenario(scenarios):
         scenario_info_list.append(scenario_info)
     return scenario_info_list
 
+
+#@forbidden_view
+#@requires_roles('Create a new scenario')
+def get_scenario_page(req):
+    """
+    View for url - get scenario page
+
+
+    :param req:
+    :type req:
+    :return:
+    :rtype:
+    """
+    print(req)
+    #try:
+    filters = req.json_body['data']['filter']
+    author = 2#req.get_user
+    data = scenario_manager.get_scenarios(req, filters, author)
+    #except KeyError:
+    return send_error_response(data)
+    #else:
+    #return send_success_response(data)
 
 @forbidden_view
 @requires_roles('Create a new scenario')
@@ -239,8 +263,8 @@ def mark_as_final(request):
         return send_success_response("Mark as final")
 
 
-@forbidden_view
-@requires_roles('Include_scenario')
+#@forbidden_view
+#@requires_roles('Include_scenario')
 def include_scenario(request):
 
     try:
@@ -253,8 +277,8 @@ def include_scenario(request):
         send_success_response(msg)
 
 
-@forbidden_view
-@requires_roles('View Scenario')
+#@forbidden_view
+#@requires_roles('View Scenario')
 def get_scenarios_list(request):
     scenarios = [
         {

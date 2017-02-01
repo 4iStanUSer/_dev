@@ -85,7 +85,7 @@ def create_scenario(request):
     :rtype:
     """
     try:
-        input_data = request.json_body['data']
+        input_data = request.json_body
         create_scenario(input_data)
     except KeyError:
         return send_error_response("Failed to create scenario")
@@ -107,7 +107,7 @@ def search_and_view_scenario(request):
     :rtype:
     """
     try:
-        filters = request.json_body['data']['filters']
+        filters = request.json_body['filters']
         scenario_info_list = get_scenarios(request, filters)
     except KeyError:
         return send_error_response("Error during searching")
@@ -126,7 +126,7 @@ def get_scenario_description(request):
     :rtype:
     """
     try:
-        scenario_id = request.json_body['data']['id']
+        scenario_id = request.json_body['id']
         output = search_and_get_scenarios(scenario_id, 'description')
     except KeyError:
         return send_error_response("Failed to get scenario description")
@@ -146,8 +146,8 @@ def change_scenario_name(request):
     :rtype:
     """
     try:
-        scenario_id = request.json_body['data']['id']
-        new_name = request.json_body['data']['new_name']
+        scenario_id = request.json_body['id']
+        new_name = request.json_body['new_name']
         new_value = {"name": new_name}
         update_scenario(request, scenario_id, new_value)
     except KeyError:
@@ -160,8 +160,8 @@ def change_scenario_name(request):
 @requires_roles('View Scenario')
 def check_scenario_name(request):
     try:
-        scenario_id = request.json_body['data']['id']
-        name = request.json_body['data']['name']
+        scenario_id = request.json_body['id']
+        name = request.json_body['name']
         value_to_check = {'name': name}
         result = check_scenario(scenario_id, value_to_check)
         if result:
@@ -183,8 +183,8 @@ def modify(request):
     :rtype:
     """
     try:
-        new_values = request.json_body['data']['modification_value']
-        scenario_id = request.json_body['data']['scenario_id']
+        new_values = request.json_body['modification_value']
+        scenario_id = request.json_body['scenario_id']
         update_scenario(request, scenario_id, new_values)
     except KeyError:
         return send_error_response("Failed to modify selected scenario")
@@ -203,7 +203,7 @@ def delete(request):
     :rtype:
     """
     try:
-        scenario_id = request.json_body['data']['id']
+        scenario_id = request.json_body['id']
         delete_scenario(request, scenario_id)
     except KeyError:
         return send_error_response("Failed to delete selected scenario")
@@ -234,7 +234,7 @@ def mark_as_final(request):
     :rtype:
     """
     try:
-        scenario_id = request.json_body['data']['id']
+        scenario_id = request.json_body['id']
         new_value = {'status': 'final'}
         update_scenario(request, scenario_id, new_value)
     except:
@@ -248,8 +248,8 @@ def mark_as_final(request):
 def include_scenario(request):
 
     try:
-        parent_scenario_id = request.json_body['data']['parent_scenario_id']
-        scenario_id = request.json_body['data']['scenario_id']
+        parent_scenario_id = request.json_body['parent_scenario_id']
+        scenario_id = request.json_body['scenario_id']
         msg = include_scenario(parent_scenario_id, scenario_id)
     except KeyError:
         return send_error_response(msg)

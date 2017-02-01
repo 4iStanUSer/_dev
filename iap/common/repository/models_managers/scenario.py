@@ -1,4 +1,5 @@
 from ..models.scenarios import Scenario
+from ..models.access import User
 from sqlalchemy.orm.exc import NoResultFound
 import datetime
 
@@ -34,7 +35,8 @@ def create_scenario(request, input_data):
     else:
         pass
 
-def get_scenarios(request, filters):
+
+def get_scenarios(request, filters, author):
     """
     Get scenario by specific filters
 
@@ -46,9 +48,9 @@ def get_scenarios(request, filters):
     :rtype:
     """
     try:
-
-        if all(filter == [] for filter in filters.values()):
-            scenarios = request.dbsession.query(Scenario).all()
+        user = request.dbsession.query(User).filter(User.id == author).one()
+        if filters == {}:
+            scenarios = user.scenarios
         else:
             scenarios = request.dbsession.query(Scenario). \
                 filter(Scenario.name == filters['authors'] and Scenario.criteria.name == filters['criteria']).all()

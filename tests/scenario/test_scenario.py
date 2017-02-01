@@ -46,8 +46,9 @@ def setup_module():
     :return:
     :rtype: None
     """
-    server = web_app()
-    res = server.post_json("/test_preparation", {'test_name': "scenario"})
+    #server = web_app()
+    #res = server.post_json("/test_preparation", {'test_name': "scenario"})
+    pass
 
 
 def test_scenario(web_app, token):
@@ -191,4 +192,13 @@ def test_delete_scenario(web_app, token):
     res = web_app.post_json("/forecast/delete_scenario", {'id': 1,  'X-Token': token})
     expected = {'data': 'Deleted selected scenario', 'error': False}
     actual = res.json
+    assert expected == actual
+
+
+def test_get_scenario_page(web_app, token):
+
+    res = web_app.post_json("/forecast/get_scenario_page", {'data': {'filter': {}},'X-Token': token})
+    expected = {'data': 'Deleted selected scenario', 'error': False}
+    actual = res.json
+    print(actual)
     assert expected == actual
