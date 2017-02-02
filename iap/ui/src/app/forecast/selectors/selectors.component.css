@@ -225,34 +225,34 @@ ul.selectors-tabs li.active {
   opacity: 0.5;
   transition: all 0.1s ease-in-out;
 }
-.c-cat-tabs__item--region:after {
+.c-cat-tabs__item--location:after {
   background-image: url("/static/assets/images/icons/ic-location-white.svg");
 }
-.c-cat-tabs__item--channels:after {
+.c-cat-tabs__item--channel:after {
   background-image: url("/static/assets/images/icons/ic-channel-white.svg");
 }
-.c-cat-tabs__item--categories:after {
+.c-cat-tabs__item--type:after {
   background-image: url("/static/assets/images/icons/ic-type-white.svg");
 }
-.c-cat-tabs__item--brands:after {
+.c-cat-tabs__item--brand:after {
   background-image: url("/static/assets/images/icons/ic-brand-white.svg");
 }
 .c-cat-tabs__item--active {
   transition: all 0.1s ease-in-out;
 }
-.c-cat-tabs__item--active.c-cat-tabs__item--region {
+.c-cat-tabs__item--active.c-cat-tabs__item--location {
   background-color: #f1a94e;
   border: solid 1px #f1a94e;
 }
-.c-cat-tabs__item--active.c-cat-tabs__item--channels {
+.c-cat-tabs__item--active.c-cat-tabs__item--channel {
   background-color: #e45641;
   border: solid 1px #e45641;
 }
-.c-cat-tabs__item--active.c-cat-tabs__item--categories {
+.c-cat-tabs__item--active.c-cat-tabs__item--type {
   background-color: #44b3c2;
   border: solid 1px #44b3c2;
 }
-.c-cat-tabs__item--active.c-cat-tabs__item--brands {
+.c-cat-tabs__item--active.c-cat-tabs__item--brand {
   background-color: #f1a94e;
   border: solid 1px #f1a94e;
 }
