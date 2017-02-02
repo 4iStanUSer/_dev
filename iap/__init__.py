@@ -56,12 +56,6 @@ def common_routing(config):
     config.add_route('common_views.select_project', '/select_project')
     config.add_view(common_views.set_project_selection, route_name='common_views.select_project',renderer='json')
 
-    #this is test view to check the database
-    config.add_route('common_views.test_preparation', '/test_preparation')
-    config.add_view(common_views.test_preparation, route_name='common_views.test_preparation',renderer='json')
-
-
-
     #config.set_authorization_policy(ACLAuthorizationPolicy())
     #config.set_authorization_policy(AccessManager())
     config.add_directive('set_manager', set_manager)

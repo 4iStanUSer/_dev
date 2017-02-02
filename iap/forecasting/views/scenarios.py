@@ -69,6 +69,8 @@ def create_scenario(request):
     else:
         return send_success_response("Scenario created")
 
+def set_scenario_selection(req):
+    pass
 
 #@forbidden_view
 #@requires_roles('View Scenario')

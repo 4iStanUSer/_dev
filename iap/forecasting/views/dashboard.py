@@ -8,8 +8,6 @@ TOOL = 'forecast'
 
 def get_dashboard_data(req):
     # Get parameters from request.
-
-    print(req)
     try:
         user_id = 2#req.user
     except KeyError:

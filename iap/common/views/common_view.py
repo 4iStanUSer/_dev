@@ -240,46 +240,16 @@ def set_project_selection(req):
         user_id = 2#req.user
         project_id = req.json_body['data']['project_id']
         tool_name = req.json_body['data']['tool_id']
-        print(project_id)
-        print(tool_name)
     except KeyError:
         msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
         return send_error_response(msg)
-    #try:
+    try:
     #Change accesss for project selector
-    project = req.dbsession.query(Project).filter(Project.id == project_id).one()
+        project = req.dbsession.query(Project).filter(Project.id == project_id).one()
     #update state of runtime storage
-    rt.update_state(user_id, tool_id=tool_name, project_id=project.id)
-    return send_success_response(project_id)
-    #except Exception as e:
-    #    msg = ErrorManager.get_error_message(e)
-    #    return send_error_response(msg)
-
-
-def test_preparation(request):
-    """
-    Function called before each gunctional test executed
-    Create table if it needed fill database with neccessary data
-    :param request:
-    :type request:
-    :return:
-    :rtype:
-    """
-
-    from ...forecasting.views.scenarios import create_table, prepare_scenario_testing
-    test_name = request.json_body['test_name']
-    if test_name == "scenario":
-        create_table(request)
-        prepare_scenario_testing(request)
-        return send_success_response("Test Prepared")
-    elif test_name == "authentification":
-        prepare_scenario_testing(request)
-        return send_success_response("Test Prepared")
-    if test_name == "authorisation":
-        prepare_scenario_testing(request)
-
-    if test_name == "project_creation":
-        from ...forecasting.views.scenarios import create_table, prepare_scenario_testing
-        prepare_scenario_testing(request)
-    pass
+        rt.update_state(user_id, tool_id=tool_name, project_id=project.id)
+        return send_success_response(project_id)
+    except Exception as e:
+        msg = ErrorManager.get_error_message(e)
+        return send_error_response(msg)
 

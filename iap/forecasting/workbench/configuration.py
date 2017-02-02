@@ -109,7 +109,9 @@ class DataConfiguration:
         #check is it possible
         #path/meta
         ent_options = self._get_entity_config(**kwargs)
+        print("Ent options", ent_options)
         result = ent_options.get_view_vars('variables')
+        print("Result", result)
         if result is not None:
             return result
         raise Exception
@@ -225,6 +227,7 @@ class Config:
         self.objects_properties[object_type] = [ItemConfig(x) for x in props]
 
     def load_view_vars(self, item):
+        print("Items")
         key = tuple(item['nextfilter'])
         if key not in self.view_vars:
             self.view_vars[key] = dict(variables=[], decomposition=[])
