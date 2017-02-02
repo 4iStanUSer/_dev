@@ -231,6 +231,8 @@ def set_project_selection(req):
         user_id = 2#req.user
         project_id = req.json_body['data']['project_id']
         tool_name = req.json_body['data']['tool_id']
+        print(project_id)
+        print(tool_name)
     except KeyError:
         msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
         return send_error_response(msg)

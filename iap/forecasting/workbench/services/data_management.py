@@ -3,8 +3,7 @@ import copy
 from ....common.helper import dicts_left_join
 from ..helper import VariableType, SlotType, AccessMask
 from ..calculation_kernel import CalculationKernel
-from ....common.security import build_permission_tree
-PERMISSION_STATUS = False
+
 
 def set_entity_values(wb, entity_id, values):
 
@@ -46,7 +45,6 @@ def set_entity_values(wb, entity_id, values):
 def get_entity_data(request, project, container, config, entities_ids, lang):
 
 
-    permission_tree = build_permission_tree(request, project_name=project)
 
     # Initialize structure for output.
     entity_data = dict(
@@ -81,18 +79,7 @@ def get_entity_data(request, project, container, config, entities_ids, lang):
     #Check permitted enities from container
     ent = container.get_entity_by_id(entity_id)
 
-    print("Permision Tree", )
-    if '*-*'.join(ent.path) in list(permission_tree.keys()):
-        vars = permission_tree['*-*'.join(ent.path)]
-        if vars == {}:
-            PERMISSION_STATUS = True
-        else:
-            PERMISSION_STATUS = False
-    else:
-        vars = None
-        #continue
-        PERMISSION_STATUS = False
-        print("No permission to view ent")
+
 
     # Define default selector for time periods.
     main_timescales = config.get_property('dash_timescales')

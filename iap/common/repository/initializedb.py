@@ -6,7 +6,7 @@ from iap.common.repository.models.warehouse import Project, Pr_Tool
 from pyramid.paster import (get_appsettings, setup_logging)
 from pyramid.scripts.common import parse_vars
 from templates.access_rights_data import perm_data
-from templates.dev_template import dev_template_JJOralCare
+from templates.dev_template import dev_template_JJOralCare, dev_template_JJLean
 from iap.common.repository.models_managers.admin_manager import IManageAccess
 from iap.common.repository.models.scenarios import Scenario
 from iap.common.repository.models.access import User, Role, Feature, Tool, DataPermission, Permission
@@ -187,6 +187,18 @@ def main(argv=sys.argv):
                               "entities": template['user_data_access']}
         wb.initial_load(wh, template, dev_template_JJOralCare['calc_instructions'], user_access_rights)
         backup = wb.get_backup()
+
+        persistent_storage.save_backup(user_id, tool_id, project_id, backup)
+
+
+        project_id = "JJLean"
+        template = load_dev_templates(settings, "JJLean")
+        user_access_rights = {"features": template['features'],
+                              "entities": template['user_data_access']}
+
+        wb.initial_load(wh, template, dev_template_JJLean['calc_instructions'], user_access_rights)
+        backup = wb.get_backup()
+
         persistent_storage.save_backup(user_id, tool_id, project_id, backup)
 
 
