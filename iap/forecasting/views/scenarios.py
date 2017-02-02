@@ -140,6 +140,17 @@ def change_scenario_name(request):
     else:
         return send_success_response("Name changed")
 
+def set_scenario_selection(request):
+    """
+    Set selection function
+
+    :param request:
+    :type request:
+    :return:
+    :rtype:
+    """
+
+    pass
 
 @forbidden_view
 @requires_roles('View Scenario')

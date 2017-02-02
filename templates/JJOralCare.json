@@ -7051,31 +7051,31 @@
             "multiple": "1", 
             "lang-ru-placeholder": "2Channel", 
             "lang-ru-name": "2Channel", 
-            "type": "flat", 
+            "type": "hierarchical",
             "lang-en-placeholder": "Channel", 
             "lang-en-name": "Channel", 
             "id": "market", 
-            "icon": ""
+            "icon": "channel"
         }, 
         {
             "multiple": "1", 
             "lang-ru-placeholder": "2Country", 
             "lang-ru-name": "2Country", 
-            "type": "flat", 
+            "type": "hierarchical",
             "lang-en-placeholder": "Country", 
             "lang-en-name": "Country", 
             "id": "geography", 
-            "icon": ""
+            "icon": "location"
         }, 
         {
             "multiple": "1", 
             "lang-ru-placeholder": "2Category", 
             "lang-ru-name": "2Category", 
-            "type": "flat", 
+            "type": "hierarchical",
             "lang-en-placeholder": "Category", 
             "lang-en-name": "Category", 
             "id": "products", 
-            "icon": ""
+            "icon": "products"
         }
     ], 
     "variable_properties": [

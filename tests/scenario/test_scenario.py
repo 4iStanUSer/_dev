@@ -5,7 +5,6 @@ import os
 import json
 from iap import main
 ABS_PATH = os.path.abspath('../')
-print(os.curdir)
 
 @pytest.fixture
 def web_app():
