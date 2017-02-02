@@ -2,7 +2,7 @@
 
     <div class="c-top-info__item" *ngFor="let sel of selectorsOrder | iterateObjectByOrder: selectors; let i = index" >
         <div
-                class="c-top-info__inner c-top-info__inner--location"
+                class="c-top-info__inner c-top-info__inner--{{ sel['model']['icon'] }}"
                 (click)="onPreviewClick(selectorsOrder[i], $event)"
         >
             <span *ngIf="sel['selected'] && sel['selected'].length > 0">
@@ -60,7 +60,7 @@
                          *ngFor="let sel of selectorsOrder | iterateObjectByOrder: selectors; let i = index"
                          [class.c-cat-tabs__item--active]="selectorsOrder[i] == state['activeTab']"
                          (click)="setActiveTab(selectorsOrder[i])"
-                         class="c-cat-tabs__item c-cat-tabs__item--region">
+                         class="c-cat-tabs__item c-cat-tabs__item--{{ sel['model']['icon'] }}">
                      <a class="c-cat-tabs__inner" (click)="onPreviewClick(i, $event)">
                          <div class="c-cat-tabs__title">{{ sel['model']['name'] }}</div>
                          <ul class="c-cat-tabs__checked" *ngIf="sel['selected'] && sel['selected'].length > 0" >
