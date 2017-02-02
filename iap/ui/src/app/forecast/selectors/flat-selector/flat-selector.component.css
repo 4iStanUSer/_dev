@@ -342,6 +342,6 @@
 }
 
 .c-top-list__item--disabled {
-    border: 1px solid #f1a94e;
+    opacity: 0.5;
 }
 /*block with images end*/

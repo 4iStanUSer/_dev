@@ -26,6 +26,7 @@
                             *ngFor="let item of itemsToShow"
                             (click)="onItemClick(item)"
                             [class.c-top-list__item--active]="item.isSelected"
+                            [class.c-top-list__item--disabled]="item.disabled"
                     >
                         <div class="c-top-list__wrapper">
                             <img src="/static/assets/images/common/temp_holder.jpg" alt="{{ item.name }}">
