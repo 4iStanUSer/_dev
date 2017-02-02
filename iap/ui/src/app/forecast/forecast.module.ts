@@ -43,6 +43,8 @@ import {SelectorsComponent} from "./selectors/selectors.component";
 import {FlatSelectorComponent} from "./selectors/flat-selector/flat-selector.component";
 import {HierarchicalSelectorComponent} from "./selectors/hierarchical-selector/hierarchical-selector.component";
 import {RegionSelectorComponent} from "./selectors/region-selector/region-selector.component";
+//for now this page is used for development & minor components testing
+import {EditPageComponent} from "./edit-page/edit-page.component";
 
 // import {SelectorsComponent} from "../common/cmp/selectors/selectors.component";
 // import {FlatSelectorComponent} from "../common/cmp/selectors/flat-selector/flat-selector.component";
@@ -86,6 +88,8 @@ import {RegionSelectorComponent} from "./selectors/region-selector/region-select
         MenuWidgetComponent,
         LanguageSelectorComponent,
         LandingPageComponent,
+
+        EditPageComponent
     ],
     providers: [
         CommonServicesModule,

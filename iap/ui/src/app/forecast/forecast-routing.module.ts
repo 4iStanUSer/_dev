@@ -11,6 +11,8 @@ import {GeneralComponent} from "./dashboard/general/general.component";
 import {DriverSummaryComponent} from "./dashboard/driver-summary/driver-summary.component";
 import {DriverDetailComponent} from "./dashboard/driver-detail/driver-detail.component";
 import {LandingPageComponent} from "./landing-page/landing-page.component"
+//for now this page is used for development & minor components testing
+import {EditPageComponent} from "./edit-page/edit-page.component";
 
 
 @NgModule({
@@ -63,6 +65,10 @@ import {LandingPageComponent} from "./landing-page/landing-page.component"
                     {
                         path: 'simulator',
                         component: SimulatorPageComponent
+                    },
+                    {
+                        path: 'edit-page',
+                        component: EditPageComponent
                     }
                 ]
             }
