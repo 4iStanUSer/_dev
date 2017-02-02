@@ -21,20 +21,24 @@
             <div class="c-cat-block__area">
 
                 <ul class="c-results-list" *ngIf="itemsToShow.length > 0">
-                    <li class="c-results-list__item" *ngFor="let item of itemsToShow" [class.active]="item.isSelected" >
+                    <li class="c-results-list__item" *ngFor="let item of itemsToShow;let i = index;" [class.active]="item.isSelected" >
                         <div class="c-results-list__res">
+                            <span class="arrow-holder">
+                                <div *ngIf="!(searchText && searchText.length) && item.children.length > 0" (click)="changeExpandStatus(item)">
+                                    <div class="arrow-holder__down" *ngIf="item.isExpanded"></div>
+                                    <div class="arrow-holder__right" *ngIf="!item.isExpanded"></div>
+                                </div>
+                            </span>
+                            <span *ngFor="let i of range(item.depth)">&nbsp;&nbsp;&nbsp;&nbsp;</span>
                             <div class="c-checkbox">
-                                <input type="checkbox" [ngModel]="item.isSelected" (click)="onItemClick(item)"  id="result1">
-                                <label class="c-checkbox__label" for="result1"></label>
+                                <input type="checkbox" [ngModel]="item.isSelected" (click)="onItemClick(item)"  id="result{{i}}">
+                                <label class="c-checkbox__label" for="result{{i}}"></label>
                             </div>
-                            <span *ngFor="let i of range(item.depth)">&nbsp;&nbsp;</span>
+                            <!--?<span *ngFor="let i of range(item.depth)">&nbsp;&nbsp;</span>-->
                             <span>{{ item.name }}</span>
 
                             <!--?TODO replace the following when have hierarchical data-->
-                            <span *ngIf="!(searchText && searchText.length) && item.children.length > 0" (click)="changeExpandStatus(item)">
-                                <span *ngIf="item.isExpanded">-</span>
-                                <span *ngIf="!item.isExpanded">+</span>
-                            </span>
+
 
                         </div>
                     </li>

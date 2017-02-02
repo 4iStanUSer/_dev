@@ -224,7 +224,8 @@
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  padding: 7px 10px 7px 22px;
+  /*padding: 7px 10px 7px 22px;*/
+  padding: 7px 10px 7px 8px;
   font-family: 'open_sanssemibold';
   font-size: 13px;
   color: #2e3438;
@@ -260,3 +261,31 @@
 }
 
 /*hierarchy checkboxes block end*/
+.arrow-holder {
+    height: 14px;
+    width: 14px;
+    margin: 0 8px 0 0;
+}
+.arrow-holder div{
+    height: 14px;
+    width: 14px;
+}
+.arrow-holder div div{
+    height: 14px;
+    width: 14px;
+    cursor: pointer;
+}
+.arrow-holder__right{
+    background-image: url("/static/assets/images/icons/ic-arrowtree-right.svg");
+    background-repeat: no-repeat;
+    /*background-position: 7px 10px;*/
+    background-position: center center;
+    background-size: 7px;
+}
+.arrow-holder__down{
+    background-image: url("/static/assets/images/icons/ic-arrowtree-down.svg");
+    background-repeat: no-repeat;
+    /*background-position: 7px 10px;*/
+    background-position: center center;
+    background-size: 7px;
+}

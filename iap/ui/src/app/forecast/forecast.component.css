@@ -185,6 +185,13 @@ body {
 }
 
 
+.l-dash-area__top {
+  height: 50px;
+  margin-top: 6px;
+  background: #d8e0ee;
+  box-shadow: 0 0 4.8px 0.3px rgba(0,0,0,0.05);
+}
+
 
 
 
