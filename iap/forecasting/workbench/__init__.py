@@ -152,7 +152,7 @@ class Workbench:
         #empty_query = {'products': [], 'products2': [], 'geography': [],'market':["wallmart"]}
         opts, ents = \
             dim_service.search_by_query(self.search_index, empty_query)
-        self.selection = ents[0:1]
+        self.selection = ents[5:6]
 
 
     def _update_search_index(self, query):

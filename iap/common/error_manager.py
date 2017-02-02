@@ -70,7 +70,9 @@ class ErrorManager:
         """
         return self.client.get(ex)[lang]
 
-    def get_error_message(self, lang, ex):
+    def get_error_message(self, ex, lang):
+        print("ex", ex)
+        print("lang", lang)
         key = "".join([ex, lang])
         error = self.client.get(key)
         return error
@@ -99,7 +101,7 @@ def create_error_manager(config):
     settings = config.get_settings()
     em = ErrorManager(settings)
 
-    def get_error_msg(request, lang, error):
-        return em.get_error_message(lang, error)
+    def get_error_msg(request, error, lang):
+        return em.get_error_message(error, lang)
 
     config.add_request_method(get_error_msg, 'get_error_msg')

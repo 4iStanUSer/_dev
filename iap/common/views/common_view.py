@@ -112,8 +112,8 @@ def get_page_configuration(req):
     try:
         user_id = 2#req.user
         page_name = req.json_body['data']['page']
-    except KeyError:
-        msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
+    except KeyError as e:
+        msg = ErrorManager.get_error_msg(e, "default")
         return send_error_response(msg)
     try:
         state = rt.get_state(user_id)
@@ -123,7 +123,7 @@ def get_page_configuration(req):
         config = get_page_config(tool_id, page_name, language)
         return send_success_response(config)
     except Exception as e:
-        msg = ErrorManager.get_error_message(e)
+        msg = ErrorManager.get_error_msg(e, "default")
         return send_error_response(msg)
 
 
@@ -140,14 +140,14 @@ def set_language(req):
     try:
         user_id = 2#req.user
         lang = req.json_body['data']['lang']
-    except KeyError:
-        msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
+    except KeyError as e:
+        msg = ErrorManager.get_error_msg(e, "default")
         return send_error_response(msg)
     try:
         rt.update_state(user_id, language=lang)
         return send_success_response()
     except Exception as e:
-        msg = ErrorManager.get_error_message(e)
+        msg = ErrorManager.get_error_msg(e, "default")
         return send_error_response(msg)
 
 
@@ -163,8 +163,8 @@ def get_tools_with_projects(req):
     """
     try:
         user_id = 2#req.user
-    except KeyError:
-        msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
+    except KeyError as e:
+        msg = ErrorManager.get_error_msg(e, "default")
         return send_error_response(msg)
     try:
         data = dict()
@@ -180,7 +180,7 @@ def get_tools_with_projects(req):
             data['projects'] = common_getter.get_projects_info(req)
         return send_success_response(data)
     except Exception as e:
-        msg = ErrorManager.get_error_message(e)
+        msg = ErrorManager.get_error_msg(e, "default")
         return send_error_response(msg)
 
 
@@ -206,8 +206,8 @@ def get_data_for_header(req):
     """
     try:
         user_id = 2#req.user
-    except KeyError:
-        msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
+    except KeyError as e:
+        msg = ErrorManager.get_error_msg(e, "default")
         return send_error_response(msg)
     try:
         header_data = dict()
@@ -218,7 +218,7 @@ def get_data_for_header(req):
         header_data['client'] = common_getter.get_client_info(pt, user_id, lang)
         return send_success_response(header_data)
     except Exception as e:
-        msg = ErrorManager.get_error_message(e)
+        msg = ErrorManager.get_error_msg(e, "default")
         return send_error_response(msg)
 
 
@@ -240,8 +240,8 @@ def set_project_selection(req):
         user_id = 2#req.user
         project_id = req.json_body['data']['project_id']
         tool_name = req.json_body['data']['tool_id']
-    except KeyError:
-        msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
+    except KeyError as e:
+        msg = ErrorManager.get_error_msg(e, "default")
         return send_error_response(msg)
     try:
     #Change accesss for project selector
@@ -250,6 +250,6 @@ def set_project_selection(req):
         rt.update_state(user_id, tool_id=tool_name, project_id=project.id)
         return send_success_response(project_id)
     except Exception as e:
-        msg = ErrorManager.get_error_message(e)
+        msg = ErrorManager.get_error_msg(e,"default")
         return send_error_response(msg)
 

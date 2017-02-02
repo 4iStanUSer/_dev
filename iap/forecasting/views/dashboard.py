@@ -10,8 +10,8 @@ def get_dashboard_data(req):
     # Get parameters from request.
     try:
         user_id = 2#req.user
-    except KeyError:
-        msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
+    except KeyError as e:
+        msg = ErrorManager.get_error_msg(e, 'default')
         return send_error_response(msg)
     try:
         lang = rt.get_state(user_id).language
@@ -20,7 +20,7 @@ def get_dashboard_data(req):
                                             wb.selection, lang)
         return send_success_response(data)
     except Exception as e:
-        msg = ErrorManager.get_error_message(e)
+        msg = req.get_error_msg(e, lang)
         return send_error_response(msg)
 
 
@@ -32,8 +32,8 @@ def get_cagrs_for_period(req):
         ts = req.json_body['timescale']
         start = req.json_body['start']
         end = req.json_body['end']
-    except KeyError:
-        msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
+    except KeyError as e:
+        msg = req.get_error_msg(e, "default")
         return send_error_response(msg)
     try:
         wb = rt.get_wb(user_id, TOOL)
@@ -41,7 +41,7 @@ def get_cagrs_for_period(req):
                                          (start, end))
         return send_success_response(cagrs)
     except Exception as e:
-        msg = ErrorManager.get_error_message(e)
+        msg = req.get_error_msg(e, "default")
         return send_error_response(msg)
 
 
@@ -53,8 +53,8 @@ def get_decomposition_for_period(req):
         ts = req.json_body['timescale']
         start = req.json_body['start']
         end = req.json_body['end']
-    except KeyError:
-        msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
+    except KeyError as e:
+        msg = req.get_error_msg(e, "default")
         return send_error_response(msg)
     try:
         wb = rt.get_wb(user_id, TOOL)
@@ -62,7 +62,7 @@ def get_decomposition_for_period(req):
                                                     entities_ids, (start, end))
         return send_success_response(dec_data)
     except Exception as e:
-        msg = ErrorManager.get_error_message(e)
+        msg = req.get_error_msg(e, "default")
         return send_error_response(msg)
 
 
