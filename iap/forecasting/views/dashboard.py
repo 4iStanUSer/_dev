@@ -37,8 +37,7 @@ def get_cagrs_for_period(req):
         return send_error_response(msg)
     try:
         wb = rt.get_wb(user_id, TOOL)
-        cagrs = data_service.get_cagrs(wb.container, wb.config, entities_ids,
-                                         (start, end))
+        cagrs = data_service.get_cagrs(wb.container, wb.config, entities_ids, (start, end))
         return send_success_response(cagrs)
     except Exception as e:
         msg = req.get_error_msg(e, "default")

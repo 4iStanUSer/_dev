@@ -3,11 +3,11 @@ from ...common.repository.models_managers.scenario import create_scenario, get_s
     update_scenario, check_scenario, delete_scenario, search_and_get_scenarios, serialise_scenario
 from ...common.repository.models_managers import scenario as scenario_manager
 from ...common.security import get_feature_permission
+from ..workbench.services import data_management as data_service
 from iap.common.repository.models.scenarios import Scenario
 from ...common.helper import send_success_response, send_error_response
 from ...common.security import requires_roles, forbidden_view
 from ...common import runtime_storage as rt
-
 
 
 
@@ -135,6 +135,7 @@ def change_scenario_name(request):
     else:
         return send_success_response("Name changed")
 
+
 def set_scenario_selection(request):
     """
     Set selection function
@@ -144,8 +145,22 @@ def set_scenario_selection(request):
     :return:
     :rtype:
     """
+    try:
+        scenario_id = 2#request.json_body['data']['id']
+        user_id = request.json_body['data']['id']
+    except KeyError as e:
+        return send_error_response(e)
+    try:
+        lang = rt.get_state(user_id).language
+        project = rt.get_state(user_id)._project_id
 
-    pass
+        wb = rt.get_wb(user_id)
+        data = data_service.get_entity_data(request, project, wb.container['current'],
+                                            wb.data_config, wb.selection, lang)
+        return send_success_response(data)
+    except Exception as e:
+        msg = request.get_error_msg(e, lang)
+        return send_error_response(msg)
 
 #@forbidden_view
 #@requires_roles('View Scenario')

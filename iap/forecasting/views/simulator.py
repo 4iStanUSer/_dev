@@ -6,6 +6,7 @@ from ...common import runtime_storage as rt
 from ..workbench.services import data_management as data_service
 from ..workbench.helper import Feature
 from ...common import runtime_storage as rt
+from ...common.repository import persistent_storage
 
 
 def set_values(req):
@@ -63,26 +64,40 @@ def get_simulator_decomposition(req):
 
     pass
 
-def save_scenario(req):
-    """
-    Save scenario
 
-    :param req:
-    :type req:
-    :return:
-    :rtype:
-    """
+def load_scenario(request):
+    #Check The Permission for Load and Save Scenario
     try:
-        user_id = 2#req.get_user
-        scenario_id = req.json_body['data']['id']
+        user_id = 2
+        scenario_id = request.json_body['data']['scenario_id']
+        project_id = "JJOralCare" #rt.get_state(user_id)._project_id
+        tool_id = "forecast"
 
-        state = rt.get_state(user_id)
-        lang = state._lang
-        wb = rt.get_wb(user_id)
-
-
+        data = rt._load_scenario(user_id, tool_id, project_id, scenario_id)
     except KeyError:
-        return send_error_response("Key Error")
+        return send_error_response("Failed to load scenario")
+    else:
+        return send_success_response(data)
+
+
+def save_scenario(request):
+    # Check The Permission for Load and Save Scenario
+    try:
+        user_id = 2
+        scenario_id = request.json_body['data']['scenario_id']
+        project_id = "JJOralCare"#rt.get_state(user_id)._project_id
+        tool_id = "forecast"
+    #if scenario_id not in wb.scenario_selection:
+    #    pass
+    #else:
+        rt._save_scenario(user_id, tool_id, project_id, scenario_id)
+        return send_error_response("Failed to save scenario description")
+    except KeyError:
+        return send_error_response("Failed to save scenario description")
+    else:
+       return send_success_response(scenario_id)
+
+
 
 
 

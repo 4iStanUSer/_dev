@@ -241,15 +241,15 @@ def set_project_selection(req):
         project_id = req.json_body['data']['project_id']
         tool_name = req.json_body['data']['tool_id']
     except KeyError as e:
-        msg = ErrorManager.get_error_msg(e, "default")
+        msg = req.get_error_msg(e, "default")
         return send_error_response(msg)
-    try:
+    #try:
     #Change accesss for project selector
-        project = req.dbsession.query(Project).filter(Project.id == project_id).one()
+    project = req.dbsession.query(Project).filter(Project.id == project_id).one()
     #update state of runtime storage
-        rt.update_state(user_id, tool_id=tool_name, project_id=project.id)
-        return send_success_response(project_id)
-    except Exception as e:
-        msg = ErrorManager.get_error_msg(e,"default")
-        return send_error_response(msg)
+    rt.update_state(user_id, tool_id=tool_name, project_id=project.id)
+    return send_success_response(project_id)
+    #except Exception as e:
+    #msg = req.get_error_msg(e, "default")
+    #return send_error_response(msg)
 

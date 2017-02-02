@@ -36,13 +36,13 @@ class Workbench:
         """
         self._user_id = user_id
         self.container = {'default': Container(), 'current': Container()}
-        self.current_containers = Container()
         self.data_config = DataConfiguration()
         self.calc_kernel = CalculationKernel()
         self.access = Access()
         self.tool_config = {}
         self.search_index = dict(order=None, direct=None, reverse=None)
         self.selection = []
+        self.scenario_selection = []
 
     def get_backup(self):
         """Get backup of workbench
@@ -61,11 +61,11 @@ class Workbench:
         data_config_backup = self.data_config.get_backup()
         calc_instructions = self.calc_kernel.get_backup()
 
-        return pickle.dumps({'container': container_backup,
-                                                        'data_config': data_config_backup,
+        return pickle.dumps({'container': container_backup, 'data_config': data_config_backup,
                                                         'calc_instructions': calc_instructions})
 
-    def load_from_backup(self, backup_binary, user_access):
+
+    def load_from_backup(self, backup_binary, user_access, scenario_id = None):
         """Load from backup
 
         :param backup_binary:
@@ -82,8 +82,12 @@ class Workbench:
         config_backup = backup.get('data_config', dict())
         calc_instructions = backup.get('calc_instructions', dict())
         # Load workbench parts
-        for container_type in ['default', 'current']:
-            self.container[container_type].load_from_backup(cont_backup)
+        if scenario_id == None:
+            for container_type in ['default', 'current']:
+                self.container[container_type].load_from_backup(cont_backup)
+        else:
+            self.container["current"].load_from_backup(cont_backup)
+
         self.data_config.load_from_backup(config_backup)
         self.calc_kernel.load_from_backup(calc_instructions)
         #
@@ -171,5 +175,6 @@ class Workbench:
         #        item['entity_id'] = ent.id
         #self.access.load(user_access_rights, self.container)
 
-    def set_scenario_selection(self, scenario_id, scenario_dependency):
-        pass
+
+
+

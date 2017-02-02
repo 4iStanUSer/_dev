@@ -6,6 +6,7 @@ from ..calculation_kernel import CalculationKernel
 from ....common.security import build_permission_tree
 PERMISSION_STATUS = False
 
+
 def set_entity_values(wb, entity_id, values):
 
     # Get requested entity.
@@ -41,6 +42,7 @@ def set_entity_values(wb, entity_id, values):
         except KeyError:
             raise Exception
     return
+
 
 
 def get_entity_data(request, project, container, config, entities_ids, lang):

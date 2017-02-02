@@ -130,7 +130,6 @@ def forecast_routing(config):
     config.add_view(f_scenarios.get_scenarios_list,
                     route_name='forecast.get_scenarios_list', renderer='json')
 
-
     config.add_route('forecast.get_dashboard_data',
                      '/get_dashboard_data')
     config.add_view(f_dashboard.get_dashboard_data,
@@ -149,6 +148,12 @@ def forecast_routing(config):
 
     config.add_route('forecast.set_entity_selection', '/set_entity_selection')
     config.add_view(f_common.set_entity_selection, route_name='forecast.set_entity_selection', renderer='json')
+
+    config.add_route('forecast.load_scenario', '/load_scenario')
+    config.add_view(f_simulator.load_scenario, route_name='forecast.load_scenario', renderer='json')
+
+    config.add_route('forecast.save_scenario', '/save_scenario')
+    config.add_view(f_simulator.save_scenario, route_name='forecast.save_scenario', renderer='json')
 
     config.add_route('forecast.get_entity_selectors_config',
                      '/get_entity_selectors_config')
