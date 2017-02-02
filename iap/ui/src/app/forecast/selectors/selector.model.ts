@@ -5,6 +5,8 @@ export interface SelectorItemInput {
     name: string;
     id: number|string;
     parent_id: number|string;
+    disabled: boolean;
+    icon: string;
 }
 
 /**

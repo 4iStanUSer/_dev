@@ -340,4 +340,8 @@
 .c-top-list__item:hover {
   cursor: pointer;
 }
+
+.c-top-list__item--disabled {
+    opacity: 0.5;
+}
 /*block with images end*/
