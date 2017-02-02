@@ -155,6 +155,9 @@ def forecast_routing(config):
     config.add_route('forecast.save_scenario', '/save_scenario')
     config.add_view(f_simulator.save_scenario, route_name='forecast.save_scenario', renderer='json')
 
+    config.add_route('forecast.get_simulator_page_data', '/get_simulator_page_data')
+    config.add_view(f_simulator.get_simulator_page_data, route_name='forecast.get_simulator_page_data', renderer='json')
+
     config.add_route('forecast.get_entity_selectors_config',
                      '/get_entity_selectors_config')
     config.add_view(f_common.get_entity_selectors_config, route_name='forecast.get_entity_selectors_config', renderer='json')

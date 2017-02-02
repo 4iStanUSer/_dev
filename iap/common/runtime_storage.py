@@ -129,10 +129,12 @@ class RunTimeStorage:
         wb = self.get_wb(user_id)
         if scenario_id not in wb.scenario_selection:
         # Load backup
-            backup = persistent_storage.load_backup(user_id, tool_id, project_id, backup_name =scenario_id)
+            backup = persistent_storage.load_backup(user_id, tool_id, project_id, backup_name = scenario_id)
+            print(backup)
             if backup is None:
                 raise ex.BackupNotFoundError(user_id, tool_id, project_id)
-            wb.load_from_backup(backup, user_access=None, scenario_id =scenario_id)
+            print(backup)
+            wb.load_from_backup(backup, user_access=None, scenario_id=scenario_id)
         else:
             pass
 
@@ -151,12 +153,12 @@ class RunTimeStorage:
         :return:
         :rtype:
         """
-        try:
-            wb = self.get_wb(user_id)
-            # Load backup
-            backup = wb.get_backup
-            persistent_storage.save_backup(user_id, tool_id, project_id, backup, backup_name=scenario_id)
-        except backup is None:
-            raise ex.BackupNotFoundError(user_id, tool_id, project_id)
+        #try:
+        wb = self.get_wb(user_id)
+        # Load backup
+        backup = wb.get_backup()
+        persistent_storage.save_backup(user_id, tool_id, project_id, backup, backup_name=scenario_id)
+        #except backup is None:
+        #raise ex.BackupNotFoundError(user_id, tool_id, project_id)
 
 

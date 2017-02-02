@@ -30,7 +30,7 @@ def set_values(req):
     return send_error_response(msg)
 
 
-def get_simulator_page_data(req):
+def get_simulator_page_data(request):
     """Get data for simulator
 
     :param req:
@@ -38,7 +38,19 @@ def get_simulator_page_data(req):
     :return:
     :rtype:
     """
-    pass
+    try:
+        user_id = 2
+        tool_id = "forecast"
+        lang = rt.get_state(user_id).language
+        project = rt.get_state(user_id)._project_id
+        wb = rt.get_wb(user_id)
+        data = data_service.get_entity_data(request, project, wb.container['current'], wb.data_config, wb.selection, lang)
+        return send_success_response(data)
+        return send_error_response("Failed to save scenario description")
+    except KeyError:
+        return send_error_response("Failed to save scenario description")
+    else:
+       return send_success_response(scenario_id)
 
 
 def simulator_custom_data(req):
@@ -91,7 +103,7 @@ def save_scenario(request):
     #    pass
     #else:
         rt._save_scenario(user_id, tool_id, project_id, scenario_id)
-        return send_error_response("Failed to save scenario description")
+        return send_success_response(scenario_id)
     except KeyError:
         return send_error_response("Failed to save scenario description")
     else:

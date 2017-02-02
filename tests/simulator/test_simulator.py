@@ -65,8 +65,15 @@ def test_save_scenario(web_app, token):
     print(actual)
 
     scenario_id = "test_scenario"
-    res = web_app.post_json('/forecast/load_scenario', {"data": {"scenario_id": scenario_id, "tool_id": tool_id},
-                                                        'X-Token': token})
+    res = web_app.post_json('/forecast/load_scenario', {"data": {"scenario_id": scenario_id,
+                                                                 "tool_id": tool_id}, "X-Token": token})
+
+    actual = res.json
+    print(actual)
+
+    scenario_id = "test_scenario"
+    res = web_app.post_json('/forecast/get_simulator_page_data', {"data": {"project_id": project_id,
+                                                                  "tool_id": tool_id}, 'X-Token': token})
 
     actual = res.json
     print(actual)
