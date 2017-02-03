@@ -19,7 +19,6 @@ def index_view(req):
                               request=req)
 
 
-
 def check_logged_in(req):
     """Check user existed
 
@@ -37,15 +36,11 @@ def check_logged_in(req):
         # new_token = req.session['token']
         return send_success_response(token)
     else:
-
         #msg = req.get_error_msg('default', "NotFound")
-        #return send_error_response('Unauthorised_{0}'.format(msg))
+        #return send_error_response("Unauthorised_{0}".format(msg))
         #TODO send_error_responce
-
         token = req.create_jwt_token(2, login="default_user")
-        print("Token", token)
         return send_success_response(token)
-
 
 
 def login(req):
@@ -113,17 +108,16 @@ def get_page_configuration(req):
         user_id = 2#req.user
         page_name = req.json_body['data']['page']
     except KeyError as e:
-        msg = ErrorManager.get_error_msg(e, "default")
+        msg = req.get_error_msg(e, lang='default')
         return send_error_response(msg)
     try:
         state = rt.get_state(user_id)
         tool_id = state.tool_id
         language = state.language
-        #get page confiduration by tool_id, page_name, language
         config = get_page_config(tool_id, page_name, language)
         return send_success_response(config)
     except Exception as e:
-        msg = ErrorManager.get_error_msg(e, "default")
+        msg = ErrorManager.get_error_msg(e, lang='default')
         return send_error_response(msg)
 
 
@@ -136,18 +130,17 @@ def set_language(req):
     :return:
     :rtype:
     """
-    # Get parameters from request.
     try:
-        user_id = 2#req.user
+        user_id = 2#TODO change on req.user
         lang = req.json_body['data']['lang']
     except KeyError as e:
-        msg = ErrorManager.get_error_msg(e, "default")
+        msg = ErrorManager.get_error_msg(e, lang="default")
         return send_error_response(msg)
     try:
         rt.update_state(user_id, language=lang)
         return send_success_response()
     except Exception as e:
-        msg = ErrorManager.get_error_msg(e, "default")
+        msg = ErrorManager.get_error_msg(e, lang=lang)
         return send_error_response(msg)
 
 
@@ -162,22 +155,19 @@ def get_tools_with_projects(req):
     :rtype: None
     """
     try:
-        user_id = 2#req.user
+        user_id = 2#TODO change on req.user
     except KeyError as e:
-        msg = ErrorManager.get_error_msg(e, "default")
+        msg = ErrorManager.get_error_msg(e, lang="default")
         return send_error_response(msg)
     try:
         data = dict()
         if not user_id:
             data['tools'] = common_getter.get_tools_info(pt)
         else:
-            #call acccess manager  - check permission to project_id, tool_id
-            #lang = rt.get_state(user_id).language
-            #tools_ids, projects_ids = pt.get_user_tools_with_projects(user_id)
-            #data['tools'] = common_getter.get_tools_info(req, pt, tools_ids, lang)
-            data['tools'] = common_getter.get_tools_info(req)
-            #data['projects'] = common_getter.get_projects_info(req, pt, projects_ids, lang)
-            data['projects'] = common_getter.get_projects_info(req)
+        #TODO call acccess manager  - check permission to project_id, tool_id
+            lang = rt.get_state(user_id).language
+            data['tools'] = common_getter.get_tools_info(req, lang)
+            data['projects'] = common_getter.get_projects_info(req, lang)
         return send_success_response(data)
     except Exception as e:
         msg = ErrorManager.get_error_msg(e, "default")
@@ -205,20 +195,20 @@ def get_data_for_header(req):
     :rtype:
     """
     try:
-        user_id = 2#req.user
+        user_id = 2#TODO change on req.user
     except KeyError as e:
-        msg = ErrorManager.get_error_msg(e, "default")
+        msg = ErrorManager.get_error_msg(e, lang="default")
         return send_error_response(msg)
     try:
         header_data = dict()
         lang = rt.get_state(user_id).language
-        #common_getter-?
+        #TODO change on database access
         header_data['languages'] = common_getter.get_languages_list(pt, lang)
         header_data['user'] = common_getter.get_user_info(pt, user_id, lang)
         header_data['client'] = common_getter.get_client_info(pt, user_id, lang)
         return send_success_response(header_data)
     except Exception as e:
-        msg = ErrorManager.get_error_msg(e, "default")
+        msg = ErrorManager.get_error_msg(e, lang=lang)
         return send_error_response(msg)
 
 
@@ -237,19 +227,19 @@ def set_project_selection(req):
     :rtype:
     """
     try:
-        user_id = 2#req.user
+        user_id = 2#TODO change on req.user
         project_id = req.json_body['data']['project_id']
         tool_name = req.json_body['data']['tool_id']
     except KeyError as e:
         msg = req.get_error_msg(e, "default")
         return send_error_response(msg)
-    #try:
-    #Change accesss for project selector
-    project = req.dbsession.query(Project).filter(Project.id == project_id).one()
-    #update state of runtime storage
-    rt.update_state(user_id, tool_id=tool_name, project_id=project.id)
-    return send_success_response(project_id)
-    #except Exception as e:
-    #msg = req.get_error_msg(e, "default")
-    #return send_error_response(msg)
+    try:
+        #TODO Change accesss for project selector
+        #TODO Check That project existed
+        lang = rt.get_state(user_id).language
+        rt.update_state(user_id, tool_id=tool_name, project_id=project_id)
+        return send_success_response(project_id)
+    except Exception as e:
+        msg = req.get_error_msg(e, lang=lang)
+        return send_error_response(msg)
 
