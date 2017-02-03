@@ -180,10 +180,49 @@ export class SelectorsComponent implements OnInit { //, OnChanges
         e.preventDefault();
         this.setActiveTab(key);
         this.state['isExpanded'] = true;
+        this.changeTabDataUpdate();
     }
 
     private setActiveTab(key: string) {
         this.state['activeTab'] = key;
+    }
+
+    private changeTabDataUpdate(){
+        let changed = false;
+        let output = {};
+        for (let i = 0; i < this.selectorsOrder.length; i++) {
+            let selKey = this.selectorsOrder[i];
+            let changedThis = false;
+            let currSelected = this.selectors[selKey]['model']
+                .getSelectedItems();
+            if (currSelected.length !=
+                this.selectors[selKey]['selected'].length) {
+                changed = true;
+                changedThis = true;
+            } else {
+                let diff = currSelected.filter((item) => {
+                    return (this.selectors[selKey]['selected']
+                        .indexOf(item) == -1);
+                }, this);
+                if (diff.length > 0) {
+                    changed = true;
+                    changedThis = true;
+                }
+            }
+            if (changedThis) {
+                this.selectors[selKey]['selected'] = currSelected;
+            }
+
+            output[this.selectors[selKey].model.key] =
+                this.selectors[selKey]['selected'].map((item) => {
+                    return item['id'];
+                });
+        }
+        if (changed) {
+            console.log('-->SELECTORS changed', output);
+            //this.setData(output);
+            this.getData(output);
+        }
     }
 
     private onApplyClick() {
