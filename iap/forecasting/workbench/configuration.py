@@ -206,7 +206,6 @@ class Config:
 
         """
         for item in props:
-            print(item)
             self.properties[item['name']] = copy.copy(item['value'])
 
     def load_objects_properties(self, object_type, props):
@@ -227,7 +226,6 @@ class Config:
         self.objects_properties[object_type] = [ItemConfig(x) for x in props]
 
     def load_view_vars(self, item):
-        print("Items")
         key = tuple(item['nextfilter'])
         if key not in self.view_vars:
             self.view_vars[key] = dict(variables=[], decomposition=[])
@@ -257,7 +255,6 @@ class Config:
     def get_view_vars(self, view_type):
         try:
             result = []
-            print("View Vars Item", self.view_vars)
             for key, value in self.view_vars.items():
 
                 if len(value[view_type]) > 0:

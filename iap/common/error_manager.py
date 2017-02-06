@@ -71,8 +71,7 @@ class ErrorManager:
         return self.client.get(ex)[lang]
 
     def get_error_message(self, ex, lang):
-        print("ex", ex)
-        print("lang", lang)
+        print("Ex", ex)
         key = "".join([ex, lang])
         error = self.client.get(key)
         return error

@@ -4,7 +4,6 @@ Describe package here.
 
 import pickle
 import copy
-
 from .container import Container
 from .configuration import DataConfiguration
 from .calculation_kernel import CalculationKernel
@@ -152,10 +151,9 @@ class Workbench:
 
         # Set selector by default.
         empty_query = dim_service.get_empty_query(self.search_index)
-
-        #empty_query = {'products': [], 'products2': [], 'geography': [],'market':["wallmart"]}
         opts, ents = \
             dim_service.search_by_query(self.search_index, empty_query)
+        #TODO add Another default selection
         self.selection = ents[5:6]
 
 

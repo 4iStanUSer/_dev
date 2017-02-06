@@ -99,7 +99,7 @@ class RunTimeStorage:
         if wb_class is None:
             raise ex.UnknownToolError(tool_id)
         wb = wb_class(user_id)
-        wb.load_from_backup(backup, None)
+        wb.load_from_backup(backup, None, scenario_id=None)
         return wb
 
     @staticmethod

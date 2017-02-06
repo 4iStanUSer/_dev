@@ -241,6 +241,6 @@ def set_project_selection(req):
         rt.update_state(user_id, tool_id=tool_name, project_id=project_id)
         return send_success_response(project_id)
     except Exception as e:
-        msg = req.get_error_msg(e, lang=lang)
+        msg = req.get_error_msg(e, lang="default")
         return send_error_response(msg)
 

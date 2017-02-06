@@ -4,6 +4,7 @@ from ...common.repository.models_managers.scenario import create_scenario, get_s
 from ...common.repository.models_managers import scenario as scenario_manager
 from ...common.security import get_feature_permission
 from ..workbench.services import data_management as data_service
+from ...common import runtime_storage as rt
 from iap.common.repository.models.scenarios import Scenario
 from ...common.helper import send_success_response, send_error_response
 from ...common.security import requires_roles, forbidden_view
@@ -66,7 +67,20 @@ def create_scenario(request):
 
 
 def set_scenario_selection(req):
-    pass
+    try:
+        scenario_id = req.json_body['data']['scenario_id']
+        user_id = req.get_user
+    except KeyError as e:
+        msg = req.get_error_msg(e, lang="default")
+        return send_error_response(msg)
+    try:
+        #check permission for speific scenario
+        details = get_scenario_details(req, scenario_id)
+    except KeyError as e:
+        msg = req.get_error_msg(e, lang="default")
+        return send_error_response(msg)
+    else:
+        return send_success_response(details)
 
 
 #@forbidden_view

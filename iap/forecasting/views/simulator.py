@@ -1,19 +1,34 @@
 from ...common.helper import send_success_response, send_error_response
-from ..workbench.helper import TOOL
-from ...common import exceptions as ex
-from ...common.error_manager import ErrorManager
-from ...common import runtime_storage as rt
 from ..workbench.services import data_management as data_service
-from ..workbench.helper import Feature
 from ...common import runtime_storage as rt
 from ...common.repository import persistent_storage
 
 
-def get_simulattor_page(req):
-    pass
+def get_simulator_page_data(req):
+
+    #Authorise with user
+    try:
+        user_id = 2#req.user
+    except KeyError as e:
+        msg = req.get_error_message(e, lang="default")
+        return send_error_response(msg)
+    #try:
+        #check if there are selected scenario
+    wb = rt.get_wb(user_id)
+    lang = rt.get_state(user_id).language
+    project = rt.get_state(user_id)._project_id
+    data = data_service.get_simulator_data(req, project, wb.container['current'], wb.data_config, wb.selection,
+                                            lang)
+    #except Exception as e:
+    #    msg = req.get_error_msg(e, lang="default")
+    #    return send_error_response(msg)
+    #else:
+    return send_success_response(data)
+
 
 def get_simulator_custom_data(req):
     pass
+
 
 def get_simulator_decomposition(req):
     pass
@@ -30,17 +45,16 @@ def set_values(req):
         return send_error_response(msg)
     try:
         wb = rt.get_wb(user_id)
-        print("WB", wb.selection)
         # Check access to feature.
         # check access for data
-        data_service.set_entity_values(wb, entity_id, values)
+        data_service.set_entity_values(wb.container['current'], entity_id, values)
         return send_success_response()
     except Exception as e:
-        msg = req.get_error_message(e, lang="default")
+        msg = req.get_error_msg(e, lang="default")
         return send_error_response(msg)
 
 
-def get_simulator_page_data(request):
+def get_simulator_data(request):
     """Get data for simulator
 
     :param req:
@@ -53,9 +67,13 @@ def get_simulator_page_data(request):
         lang = rt.get_state(user_id).language
         project = rt.get_state(user_id)._project_id
         wb = rt.get_wb(user_id)
-        data = data_service.get_entity_data(request, project, wb.container['current'], wb.data_config, wb.selection, lang)
-    except KeyError:
-        return send_error_response("Failed to save scenario description")
+
+        data = data_service.get_entity_data(request, project, wb.container['current'], wb.data_config,
+                                            wb.selection, lang)
+        print("Data", data)
+    except KeyError as e:
+        msg = request.get_error_msg(e, lang="default")
+        return send_error_response(msg)
     else:
        return send_success_response(data)
 

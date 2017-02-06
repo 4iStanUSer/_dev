@@ -42,6 +42,7 @@ def deserialise_scenario(scenario_info):
 
     return scenario
 
+
 def create_scenario(request, input_data):
 
     try:
@@ -191,10 +192,17 @@ def search_and_get_scenarios(request, scenario_id):
     """
     try:
         scenario = request.dbsession.query(Scenario).filter(Scenario.id == scenario_id).one()
+        user_id = request.get_user
     except NoResultFound:
         return None
     else:
-        return serialise_scenario([scenario])
-
-
-
+        scenario_details = {}
+        scenario_details['id'] = scenario.id
+        scenario_details['meta'] = scenario.criteria
+        scenario_details['description'] = scenario.description
+        scenario_details['worklist'] = [{'id':scenario.id, 'name':scenario.name, 'date':str(datetime.datetime.now)}]
+        scenario_details['metrics'] = [{"name":None, "format":None, "value":None}]
+        scenario_details['growth_period'] = None
+        scenario_details['recent_actions'] = None
+        scenario_details['predefined'] = [{'action_id':None, 'action_name':None, 'entity_id':None,
+                                          'entity_name':None, 'date':None}]

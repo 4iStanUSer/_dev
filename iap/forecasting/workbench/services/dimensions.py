@@ -17,7 +17,6 @@ def get_selectors_config(config, lang):
 
     dimensions = config.get_property('dimensions')
     sel_props = config.get_objects_properties('selector', dimensions, lang)
-    print("Sel props", sel_props)
     selectors_for_view = dict()
     for i in sel_props:
         item = i[0]
@@ -43,7 +42,7 @@ def get_empty_query(search_index):
     :rtype:
     """
     order = search_index['order']
-    return {x: [] for x in order}
+    return {x: ["*"] for x in order}
 
 
 def build_search_index(container, dim_names):
@@ -73,13 +72,9 @@ def build_search_index(container, dim_names):
         else:
             informative = False
         point = dict(node_id=None, coords={x: [] for x in dim_names}, informative=informative)
-        print("Point", point)
-
         _add_entity_to_index(ent, point, direct_index, dim_names, points)
 
     reverse_index = {x['node_id']: x['coords'] for x in points}
-    print("Direct Index", direct_index)
-    print("Reverse index", reverse_index)
     return direct_index, reverse_index
 
 
@@ -166,7 +161,6 @@ def get_options_by_ents(search_index, entities_ids, lang):
                     query[dim].append(merged_coords)
 
     opts, ents = search_by_query(search_index, query)
-    print("Opt", opts)
     return opts
 
 
@@ -260,19 +254,19 @@ def fill_options(keys_list, selected_items):
     for item in keys_list:
         if item[0] == 'total':
             pass
-        elif len(item) == 0:
-            continue
+
         elif len(item) == 1:
             item_id = item[-1]
             name = item[-1]
             parent_id = None
+            if dict(name=name, id=item_id, parent_id=parent_id, disabled=False) not in options['data']:
+                options['data'].append(dict(name=name, id=item_id, disabled=False, parent_id=parent_id))
         else:
             item_id = JOIN_SYMBOL.join(item)
             name = item[-1]
             parent_id = JOIN_SYMBOL.join(item[:len(item)-1])
-
-        if dict(name=name, id=item_id, parent_id=parent_id, disabled=False) not in options['data']:
-            options['data'].append(dict(name=name, id=item_id, disabled=False, parent_id=parent_id))
+            if dict(name=name, id=item_id, parent_id=parent_id, disabled=False) not in options['data']:
+                options['data'].append(dict(name=name, id=item_id, disabled=False, parent_id=parent_id))
 
     options['data'].append(dict(name="*", id="*", disabled=False, parent_id=None))
     return options

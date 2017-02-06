@@ -22,9 +22,6 @@ def common_routing(config):
     config.add_static_view(name='images', path='iap.ui:images',
                            cache_max_age=3600)
 
-    #config.add_notfound_view(common.notfound_view)
-    #config.add_forbidden_view(common.forbidden_view)
-
     config.add_route('common_views.index', '/')
     config.add_view(common_views.index_view, route_name='common_views.index')
 
@@ -149,6 +146,9 @@ def forecast_routing(config):
     config.add_route('forecast.set_entity_selection', '/set_entity_selection')
     config.add_view(f_common.set_entity_selection, route_name='forecast.set_entity_selection', renderer='json')
 
+    config.add_route('forecast.set_values', '/set_values')
+    config.add_view(f_simulator.set_values, route_name='forecast.set_values', renderer='json')
+
     config.add_route('forecast.load_scenario', '/load_scenario')
     config.add_view(f_simulator.load_scenario, route_name='forecast.load_scenario', renderer='json')
 
@@ -157,6 +157,9 @@ def forecast_routing(config):
 
     config.add_route('forecast.get_simulator_page_data', '/get_simulator_page_data')
     config.add_view(f_simulator.get_simulator_page_data, route_name='forecast.get_simulator_page_data', renderer='json')
+
+    config.add_route('forecast.get_simulator_data', '/get_simulator_data')
+    config.add_view(f_simulator.get_simulator_data, route_name='forecast.get_simulator_data', renderer='json')
 
     config.add_route('forecast.get_entity_selectors_config',
                      '/get_entity_selectors_config')
