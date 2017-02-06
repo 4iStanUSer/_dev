@@ -11,9 +11,14 @@ def get_tools_info(req, lang):
     :rtype:
     """
     # TODO send tool info in required lang
-    tools = req.dbsession.query(Pr_Tool.id, Pr_Tool.name, Pr_Tool.description).all()
+    tools_info = []
     keys = ['id', 'name', 'description']
-    tools_info = dict(zip(keys, tools))
+    tools = req.dbsession.query(Pr_Tool.id, Pr_Tool.name, Pr_Tool.description).all()
+    for tool in tools:
+
+        tool_info = dict(zip(keys, tool))
+        tools_info.append(tool_info)
+
     return tools_info
 
 
