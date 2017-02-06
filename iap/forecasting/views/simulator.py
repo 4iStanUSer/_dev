@@ -9,25 +9,35 @@ from ...common import runtime_storage as rt
 from ...common.repository import persistent_storage
 
 
+def get_simulattor_page(req):
+    pass
+
+def get_simulator_custom_data(req):
+    pass
+
+def get_simulator_decomposition(req):
+    pass
+
+
 def set_values(req):
     # Get parameters from request.
     try:
         user_id = req.user
-        entity_id = req.json_body('entity_id')
-        values = req.json_body('values')
-    except KeyError:
-        msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
+        entity_id = req.json_body['data']['entity_id']
+        values = req.json_body['data']['values']
+    except KeyError as e:
+        msg = req.get_error_message(e, lang="default")
         return send_error_response(msg)
     try:
-        wb = rt.get_wb(user_id, TOOL)
+        wb = rt.get_wb(user_id)
+        print("WB", wb.selection)
         # Check access to feature.
-        if not wb.access.check_feature_access(Feature.edit_values):
-            raise Exception
+        # check access for data
         data_service.set_entity_values(wb, entity_id, values)
         return send_success_response()
     except Exception as e:
-        msg = ErrorManager.get_error_message(e)
-    return send_error_response(msg)
+        msg = req.get_error_message(e, lang="default")
+        return send_error_response(msg)
 
 
 def get_simulator_page_data(request):
@@ -40,17 +50,14 @@ def get_simulator_page_data(request):
     """
     try:
         user_id = 2
-        tool_id = "forecast"
         lang = rt.get_state(user_id).language
         project = rt.get_state(user_id)._project_id
         wb = rt.get_wb(user_id)
         data = data_service.get_entity_data(request, project, wb.container['current'], wb.data_config, wb.selection, lang)
-        return send_success_response(data)
-        return send_error_response("Failed to save scenario description")
     except KeyError:
         return send_error_response("Failed to save scenario description")
     else:
-       return send_success_response(scenario_id)
+       return send_success_response(data)
 
 
 def simulator_custom_data(req):
