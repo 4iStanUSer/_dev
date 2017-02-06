@@ -185,7 +185,7 @@ class Project(Base):
     __tablename__ = "projects"
     id = Column(String , primary_key=True)
     name = Column(String(length=255))
-    description = Column(String(length=255))
+    description = Column(String())
     pr_tools = relationship("Pr_Tool", secondary=project_tool_tbl, back_populates="projects")
 
 

@@ -121,6 +121,8 @@ def main(argv=sys.argv):
         for data in perm_data["JJLean"]:
             data_permission = DataPermission(project="JJLean", in_path=data['in_path'],
                                              out_path=data['out_path'], mask=data['mask'])
+            permission.data_perms.append(data_permission)
+            ssn.add(data_permission)
 
         permission = Permission(name="Development Template")
 
@@ -161,12 +163,12 @@ def main(argv=sys.argv):
         Create table for storing information about projects and tools
 
         """
-        pr_tool = Pr_Tool(name='Forecasting', description='This is forecasting', id="forecast")
+        pr_tool = Pr_Tool(id="forecast", name='Forecasting', description='This is forecasting')
 
-        project_1 = Project(name='Oral Care Forecasting', id="JJOralCare")
+        project_1 = Project(name='Oral Care Forecasting', id="JJOralCare", description="This is JJOralCare Project")
         project_1.pr_tools.append(pr_tool)
 
-        project_2 = Project(name='Lean Forecasting', id="JJLean")
+        project_2 = Project(name='Lean Forecasting', id="JJLean", description="This is JJLean Project")
         project_2.pr_tools.append(pr_tool)
 
         ssn.add(project_1)

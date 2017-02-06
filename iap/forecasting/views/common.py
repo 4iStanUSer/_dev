@@ -31,7 +31,7 @@ def get_entity_selectors_config(req):
     """
     print("Get entity selector config")
     try:
-        user_id = req.user
+        user_id = 2#req.user
     except KeyError:
         msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
         return send_error_response(msg)
@@ -42,7 +42,7 @@ def get_entity_selectors_config(req):
             dimensions.get_selectors_config(wb.data_config, lang)
         return send_success_response(selectors_config)
     except Exception as e:
-        msg = req.get_error_message("default", e)
+        msg = ErrorManager.get_error_message(e)
         return send_error_response(msg)
 
 
@@ -74,7 +74,7 @@ def get_options_for_entity_selector(req):
         if query is None:
             options = dimensions.get_options_by_ents(wb.search_index, wb.selection, lang)
         else:
-            options, ents = dimensions._search_by_query(wb.search_index, query)
+            options, ents = dimensions.search_by_query(wb.search_index, query)
         return send_success_response(options)
     except Exception as e:
        msg = ErrorManager.get_error_message(e)
@@ -104,6 +104,7 @@ def set_entity_selection(req):
         msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
         return send_error_response(msg)
     try:
+        lang = rt.get_state(user_id).language
         wb = rt.get_wb(user_id)
         options, ents = dimensions._search_by_query(wb.search_index, query)
         wb.selection = ents

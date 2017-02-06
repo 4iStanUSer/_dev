@@ -248,12 +248,12 @@ def mark_as_final(request):
     try:
         scenario_id = request.json_body['id']
         new_value = {'status': 'final'}
+    except KeyError as e:
+        msg = request.get_error_msg(e, lang="default")
+        return send_error_response(msg)
     try:
         update_scenario(request, scenario_id, new_value)
     except Exception as e:
-        msg = request.get_error_msg(e, lang="default")
-        return send_error_response(msg)
-    except KeyError as e:
         msg = request.get_error_msg(e, lang="default")
         return send_error_response(msg)
     else:
