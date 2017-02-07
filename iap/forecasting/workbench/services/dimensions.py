@@ -196,6 +196,8 @@ def search_by_query(search_index, query):
         # If selector is empty or not valid set default selector.
         if ("*",) in dimension_selection:
             dimension_selection = list(OrderedDict.fromkeys(sorted(keys)))
+        elif len(dimension_selection)==0:
+            dimension_selection = list(OrderedDict.fromkeys(sorted(keys)))
         else:
             _dimension_selection = []
             for x in dimension_selection:

@@ -18,8 +18,7 @@ def get_dashboard_data(req):
         lang = rt.get_state(user_id).language
         project = rt.get_state(user_id)._project_id
         wb = rt.get_wb(user_id)
-        data = data_service.get_entity_data(req, project, wb.container['default'], wb.data_config, wb.selection, lang)
-        print("Data", data)
+        data = data_service.get_entity_data(req, project, wb.default_container, wb.data_config, wb.selection, lang)
         return send_success_response(data)
     except Exception as e:
         msg = req.get_error_msg(e, lang)
@@ -39,7 +38,7 @@ def get_cagrs_for_period(req):
         return send_error_response(msg)
     try:
         wb = rt.get_wb(user_id)
-        cagrs = data_service.get_cagrs(wb.container, wb.config, entities_ids, (start, end))
+        cagrs = data_service.get_cagrs(wb.default_container, wb.config, entities_ids, (start, end))
         return send_success_response(cagrs)
     except Exception as e:
         msg = req.get_error_msg(e, "default")

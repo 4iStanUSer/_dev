@@ -190,7 +190,7 @@ def main(argv=sys.argv):
         wb.initial_load(wh, template, dev_template_JJOralCare['calc_instructions'], user_access_rights)
         backup = wb.get_backup()
 
-        persistent_storage.save_backup(user_id, tool_id, project_id, backup)
+        persistent_storage.save_backup(user_id, tool_id, project_id, backup, backup_name='default')
 
 
         project_id = "JJLean"
@@ -201,7 +201,7 @@ def main(argv=sys.argv):
         wb.initial_load(wh, template, dev_template_JJLean['calc_instructions'], user_access_rights)
         backup = wb.get_backup()
 
-        persistent_storage.save_backup(user_id, tool_id, project_id, backup)
+        persistent_storage.save_backup(user_id, tool_id, project_id, backup, backup_name='default')
 
 
 

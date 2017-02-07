@@ -7,6 +7,7 @@ from .helper import SlotType
 LANGKEY = ["lang-en-metric", "lang-ru-metric", "lang-en-short_name",
             "lang-ru-full_name", "lang-ru-short_name", "lang-en-full_name"]
 
+
 class DataConfiguration:
     """Describe class here"""
 
@@ -109,9 +110,7 @@ class DataConfiguration:
         #check is it possible
         #path/meta
         ent_options = self._get_entity_config(**kwargs)
-        print("Ent options", ent_options)
         result = ent_options.get_view_vars('variables')
-        print("Result", result)
         if result is not None:
             return result
         raise Exception

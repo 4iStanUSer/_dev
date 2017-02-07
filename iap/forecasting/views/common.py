@@ -31,9 +31,9 @@ def get_entity_selectors_config(req):
     """
     print("Get entity selector config")
     try:
-        user_id = 2#req.user
-    except KeyError:
-        msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
+        user_id = 2#TODO cnaneg on  req.user
+    except KeyError as e:
+        msg = req.get_error_msg(e, lang="default")
         return send_error_response(msg)
     try:
         lang = rt.get_state(user_id).language
@@ -42,7 +42,7 @@ def get_entity_selectors_config(req):
             dimensions.get_selectors_config(wb.data_config, lang)
         return send_success_response(selectors_config)
     except Exception as e:
-        msg = ErrorManager.get_error_message(e)
+        msg = req.get_error_message(e, lang)
         return send_error_response(msg)
 
 
@@ -77,8 +77,7 @@ def get_options_for_entity_selector(req):
             options, ents = dimensions.search_by_query(wb.search_index, query)
         return send_success_response(options)
     except Exception as e:
-       msg = ErrorManager.get_error_message(e)
-       return send_error_response(msg)
+        send_error_response(e)
 
 
 def set_entity_selection(req):
@@ -95,20 +94,18 @@ def set_entity_selection(req):
     :return:
     :rtype:
     """
-    print("Set Entity Selection")
     try:
         user_id = req.user
         query = req.json_body['data']['query']
-
-    except KeyError:
-        msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
+    except KeyError as e:
+        msg = req.get_error_msg(e, lang="default")
         return send_error_response(msg)
     try:
         lang = rt.get_state(user_id).language
         wb = rt.get_wb(user_id)
-        options, ents = dimensions._search_by_query(wb.search_index, query)
+        options, ents = dimensions.search_by_query(wb.search_index, query)
         wb.selection = ents
         return send_success_response(options)
     except Exception as e:
-        msg = ErrorManager.get_error_message(e)
+        msg = req.get_error_msg(e, lang)
         return send_error_response(msg)

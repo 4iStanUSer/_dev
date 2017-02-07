@@ -4,8 +4,6 @@ from ...common.repository.models_managers.scenario import create_scenario, get_s
 from ...common.repository.models_managers import scenario as scenario_manager
 from ...common.security import get_feature_permission
 from ..workbench.services import data_management as data_service
-from ...common import runtime_storage as rt
-from iap.common.repository.models.scenarios import Scenario
 from ...common.helper import send_success_response, send_error_response
 from ...common.security import requires_roles, forbidden_view
 from ...common import runtime_storage as rt
@@ -123,7 +121,6 @@ def get_scenario_details(request):
 
     try:
         scenario_id = request.json_body['data']['id']
-        output = search_and_get_scenarios(request, scenario_id)
     except KeyError as e:
         msg = request.get_error_msg(e, lang="default")
         return send_error_response(msg)

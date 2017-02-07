@@ -110,55 +110,6 @@ class RunTimeStorage:
             return Workbench
         return None
 
-    ######
 
-    def _load_scenario(self, user_id, tool_id, project_id, scenario_id):
-        """
-        Load Scenario from backup
-        :param user_id:
-        :type user_id:
-        :param tool_id:
-        :type tool_id:
-        :param project_id:
-        :type project_id:
-        :param scenario_id:
-        :type scenario_id:
-        :return:
-        :rtype:
-        """
-        wb = self.get_wb(user_id)
-        if scenario_id not in wb.scenario_selection:
-        # Load backup
-            backup = persistent_storage.load_backup(user_id, tool_id, project_id, backup_name = scenario_id)
-            print(backup)
-            if backup is None:
-                raise ex.BackupNotFoundError(user_id, tool_id, project_id)
-            print(backup)
-            wb.load_from_backup(backup, user_access=None, scenario_id=scenario_id)
-        else:
-            pass
-
-    def _save_scenario(self, user_id, tool_id, project_id, scenario_id):
-        """
-        Save Scenario from backup
-
-        :param user_id:
-        :type user_id:
-        :param tool_id:
-        :type tool_id:
-        :param project_id:
-        :type project_id:
-        :param scenario_id:
-        :type scenario_id:
-        :return:
-        :rtype:
-        """
-        #try:
-        wb = self.get_wb(user_id)
-        # Load backup
-        backup = wb.get_backup()
-        persistent_storage.save_backup(user_id, tool_id, project_id, backup, backup_name=scenario_id)
-        #except backup is None:
-        #raise ex.BackupNotFoundError(user_id, tool_id, project_id)
 
 
