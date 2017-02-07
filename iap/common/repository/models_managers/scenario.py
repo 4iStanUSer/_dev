@@ -46,9 +46,9 @@ def deserialise_scenario(scenario_info):
 def create_scenario(request, input_data):
 
     try:
-        date_of_last_mod = str(datetime.now())
+        date_of_last_mod = str(datetime.datetime.now())
         scenario = Scenario(name=input_data['name'], description=input_data['description'], shared=input_data['shared'],
-                        date_of_last_modification = date_of_last_mod, status="New", criteria=input_data['description'])
+                        date_of_last_modification=date_of_last_mod, status="New", criteria=input_data['description'])
         request.dbsession.add(scenario)
     except NoResultFound:
         return None
@@ -117,9 +117,10 @@ def update_scenatio(request,scenario_id, parameter, value):
         scenario = request.dbsession.query(Scenario).filter(Scenario.id == scenario_id).one()
         if parameter == "name":
             scenario.name = value
+        elif parameter == "status":
+            scenario.status = value
         else:
             pass
-
     except NoResultFound:
         return None
     else:
@@ -192,17 +193,24 @@ def search_and_get_scenarios(request, scenario_id):
     """
     try:
         scenario = request.dbsession.query(Scenario).filter(Scenario.id == scenario_id).one()
-        user_id = request.get_user
+        user_id = 2#TODO change on request.get_user
     except NoResultFound:
         return None
     else:
+        now = datetime.datetime.now()
+        present_time = "{0}_{1}_{2}_{3}_{4}".format(now.year, now.month, now.day, now.hour, now.minute)
         scenario_details = {}
+
         scenario_details['id'] = scenario.id
         scenario_details['meta'] = scenario.criteria
         scenario_details['description'] = scenario.description
-        scenario_details['worklist'] = [{'id':scenario.id, 'name':scenario.name, 'date':str(datetime.datetime.now)}]
-        scenario_details['metrics'] = [{"name":None, "format":None, "value":None}]
-        scenario_details['growth_period'] = None
-        scenario_details['recent_actions'] = None
-        scenario_details['predefined'] = [{'action_id':None, 'action_name':None, 'entity_id':None,
-                                          'entity_name':None, 'date':None}]
+        scenario_details['worklist'] = [{'id': scenario.id, 'name': scenario.name, 'date': present_time}]
+        scenario_details['metrics'] = [{"name": "", "format": "", "value": ""}]#TODO add metric
+        scenario_details['growth_period'] = ""#TODO add growth period
+        scenario_details['predefined_drivers'] = [{'id': "", 'value': ""}]
+        scenario_details['predefined_drivers'] = [{'id': "", 'value': ""}]
+        scenario_details['driver_change'] = [{'name': "", 'value': ""}]
+        scenario_details['driver_group'] = [{'name': "", 'value': ""}]
+        scenario_details['recent_actions'] = [{'action_id': "", 'action_name': "", 'entity_id': "",
+                                          'entity_name': "", 'date': ""}]
+        return scenario_details

@@ -30,7 +30,8 @@ def get_scenario_page(req):
         return send_error_response(msg)
     try:
         data = scenario_manager.get_scenarios(req, filters, author)
-        user_permission = get_feature_permission(req, author, "forecast")
+        user_permission = ""
+        #user_permission = get_feature_permission(req, author, "forecast")
     except Exception as e:
         msg = req.get_error_msg(e, lang="default")
         return send_error_response(msg)
@@ -54,32 +55,15 @@ def create_scenario(request):
     :return:
     :rtype:
     """
+
     try:
-        input_data = request.json_body['data']
-        create_scenario(input_data)
+        input_data = request.json['data']
+        scenario_manager.create_scenario(request, input_data)
     except KeyError as e:
         msg = request.get_error_msg(e, lang="default")
         return send_error_response(msg)
     else:
         return send_success_response("Scenario created")
-
-
-def set_scenario_selection(req):
-    try:
-        scenario_id = req.json_body['data']['scenario_id']
-        user_id = req.get_user
-    except KeyError as e:
-        msg = req.get_error_msg(e, lang="default")
-        return send_error_response(msg)
-    try:
-        #check permission for speific scenario
-        details = get_scenario_details(req, scenario_id)
-    except KeyError as e:
-        msg = req.get_error_msg(e, lang="default")
-        return send_error_response(msg)
-    else:
-        return send_success_response(details)
-
 
 #@forbidden_view
 #@requires_roles('View Scenario')
@@ -125,7 +109,7 @@ def get_scenario_details(request):
         msg = request.get_error_msg(e, lang="default")
         return send_error_response(msg)
     try:
-        output = search_and_get_scenarios(request, scenario_id)
+        output = scenario_manager.search_and_get_scenarios(request, scenario_id)
     except Exception as e:
         msg = request.get_error_msg(e, lang="default")
         return send_error_response(msg)
@@ -145,47 +129,18 @@ def change_scenario_name(request):
     :rtype:
     """
     try:
-        scenario_id = request.json_body['data']['id']
-        new_name = request.json_body['data']['new_name']
-        new_value = {"name": new_name}
-        update_scenario(request, scenario_id, new_value)
+        scenario_id = request.json_body['data']['scenario_id']
+        new_name = request.json_body['data']['name']
     except KeyError as e:
         msg = request.get_error_msg(e, lang="default")
         return send_error_response(msg)
     try:
-        update_scenario(request, scenario_id, new_value)
+        scenario_manager.update_scenario(request, scenario_id, parameter="name", value=new_name)
     except Exception as e:
         msg = request.get_error_msg(e, lang="default")
         return send_success_response(msg)
     else:
         return send_success_response("Name changed")
-
-
-def set_scenario_selection(request):
-    """
-    Set selection function
-
-    :param request:
-    :type request:
-    :return:
-    :rtype:
-    """
-    try:
-        user_id = 2#TODO request.get_user
-        scenario_id = request.json_body['data']['id']
-    except KeyError as e:
-        msg = request.get_error_msg(e, lang="default")
-        return send_error_response(msg)
-    try:
-        lang = rt.get_state(user_id).language
-        project = rt.get_state(user_id)._project_id
-        wb = rt.get_wb(user_id)
-        data = data_service.get_entity_data(request, project, wb.container['current'],
-                                            wb.data_config, wb.selection, lang)
-        return send_success_response(data)
-    except Exception as e:
-        msg = request.get_error_msg(e, lang)
-        return send_error_response(msg)
 
 
 #@forbidden_view
@@ -218,7 +173,9 @@ def modify(request):
         msg = request.get_error_msg(e, lang="default")
         return send_error_response(msg)
     try:
-        updated_scenario = update_scenario(request, scenario_id, new_values)
+
+        updated_scenario = update_scenario(request, scenario_id, parameter=new_values['parameter'],
+                                           value=new_values['value'])
     except Exception as e:
         msg = request.get_error_msg(e, lang="default")
         return send_error_response(msg)
@@ -258,12 +215,11 @@ def mark_as_final(request):
     """
     try:
         scenario_id = request.json_body['id']
-        new_value = {'status': 'final'}
     except KeyError as e:
         msg = request.get_error_msg(e, lang="default")
         return send_error_response(msg)
     try:
-        update_scenario(request, scenario_id, new_value)
+        scenario_manager.update_scenario(request, scenario_id, parameter='status', value="final")
     except Exception as e:
         msg = request.get_error_msg(e, lang="default")
         return send_error_response(msg)

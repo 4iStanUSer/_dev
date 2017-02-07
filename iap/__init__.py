@@ -75,21 +75,13 @@ def forecast_routing(config):
     config.add_route('forecast.index', '/')
     config.add_view(f_common.index_view, route_name='forecast.index')
 
-    config.add_route('forecast.get_index_page_data',
-                     '/get_index_page_data')
+    config.add_route('forecast.get_index_page_data', '/get_index_page_data')
 
-    config.add_route('forecast.get_scenario_page',
-                     '/get_scenario_page')
-    config.add_view(f_scenarios.get_scenario_page,
-                    route_name='forecast.get_scenario_page', renderer='json')
-
-    config.add_route('forecast.get_scenario_details',
-                     '/get_scenario_details')
+    config.add_route('forecast.get_scenario_details', '/get_scenario_details')
     config.add_view(f_scenarios.get_scenario_details,
                     route_name='forecast.get_scenario_details', renderer='json')
 
-    config.add_route('forecast.create_scenario',
-                     '/create_scenario')
+    config.add_route('forecast.create_scenario', '/create_scenario')
     config.add_view(f_scenarios.create_scenario,
                     route_name='forecast.create_scenario', renderer='json')
 
@@ -98,13 +90,7 @@ def forecast_routing(config):
     config.add_view(f_scenarios.search_and_view_scenario,
                     route_name='forecast.search_and_view_scenario', renderer='json')
 
-    config.add_route('forecast.set_scenario_selection',
-                     '/set_scenario_selection')
-    config.add_view(f_scenarios.set_scenario_selection,
-                    route_name='forecast.set_scenario_selection', renderer='json')
-
-    config.add_route('forecast.change_scenario_name',
-                     '/change_scenario_name')
+    config.add_route('forecast.change_scenario_name', '/change_scenario_name')
     config.add_view(f_scenarios.change_scenario_name,
                     route_name='forecast.change_scenario_name', renderer='json')
 
@@ -126,6 +112,10 @@ def forecast_routing(config):
                      '/get_scenarios_list')
     config.add_view(f_scenarios.get_scenarios_list,
                     route_name='forecast.get_scenarios_list', renderer='json')
+
+    config.add_route('forecast.get_scenario_page', '/get_scenario_page')
+    config.add_view(f_scenarios.get_scenario_page,
+                    route_name='forecast.get_scenario_page', renderer='json')
 
     config.add_route('forecast.get_dashboard_data',
                      '/get_dashboard_data')

@@ -145,12 +145,12 @@ def main(argv=sys.argv):
 
         #Add Scenario
         scenario_1 = Scenario(name="Price Growth Dynamics JJOralCare", description="Dynamics of Price Growth in Brazil",
-                            status="New", shared="No", criteria="Brazil-Nike-Main")
+                            status="New", shared="No", criteria="Brazil-Nike-Main", author=user_1.email)
         user_1.scenarios.append(scenario_1)
 
         # Add Scenario
         scenario_2 = Scenario(name="Price Growth Dynamics JJLean", description="Dynamics of Price Growth in USA",
-                              status="New", shared="No", criteria="USA-iPhone-Main")
+                              status="New", shared="No", criteria="USA-iPhone-Main", author=user_2.email)
         user_2.scenarios.append(scenario_2)
 
         ssn.add(user_1)
