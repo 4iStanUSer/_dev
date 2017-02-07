@@ -6,6 +6,7 @@ from ...common.error_manager import ErrorManager
 from ...common import runtime_storage as rt
 TOOL = 'forecast'
 
+
 def get_dashboard_data(req):
     # Get parameters from request.
     try:
@@ -29,10 +30,10 @@ def get_cagrs_for_period(req):
     # Get parameters from request.
     try:
         user_id = req.user
-        entities_ids = req.json_body['entities_ids']
-        ts = req.json_body['timescale']
-        start = req.json_body['start']
-        end = req.json_body['end']
+        entities_ids = req.json_body['data']['entities_ids']
+        ts = req.json_body['data']['timescale']
+        start = req.json_body['data']['start']
+        end = req.json_body['data']['end']
     except KeyError as e:
         msg = req.get_error_msg(e, "default")
         return send_error_response(msg)
@@ -46,19 +47,27 @@ def get_cagrs_for_period(req):
 
 
 def get_decomposition_for_period(req):
+    """
+    Return decomposition data for period
+
+    :param req:
+    :type req:
+    :return:
+    :rtype:
+    """
     # Get parameters from request.
     try:
-        user_id = req.user
-        entities_ids = req.json_body['entities_ids']
-        ts = req.json_body['timescale']
-        start = req.json_body['start']
-        end = req.json_body['end']
+        user_id = req.get_user
+        entities_ids = req.json_body['data']['entities_ids']
+        ts = req.json_body['data']['timescale']
+        start = req.json_body['data']['start']
+        end = req.json_body['data']['end']
     except KeyError as e:
-        msg = req.get_error_msg(e, "default")
+        msg = req.get_error_msg(e, lang="default")
         return send_error_response(msg)
     try:
-        wb = rt.get_wb(user_id, TOOL)
-        dec_data = data_service.get_decomposition(wb.container, wb.config,
+        wb = rt.get_wb(user_id)
+        dec_data = data_service.get_decomposition(wb.container['default'], wb.config,
                                                     entities_ids, (start, end))
         return send_success_response(dec_data)
     except Exception as e:
