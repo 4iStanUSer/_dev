@@ -91,6 +91,7 @@ def get_simulator_decomposition(req):
     try:
         user_id = 2#TODO change on req.get_user
         entities_ids = req.json_body['data']['entities_ids']
+        ts_name = req.json_body['data']['timescale']
         start = req.json_body['data']['start']
         end = req.json_body['data']['end']
     except KeyError as e:
@@ -98,8 +99,8 @@ def get_simulator_decomposition(req):
         return send_error_response(msg)
     try:
         wb = rt.get_wb(user_id)
-        dec_data = data_service.get_decomposition(wb.current_container, wb.config,
-                                                  entities_ids, (start, end))
+        dec_data = data_service.get_decomposition(wb.current_container, wb.data_config,
+                                                  entities_ids, {ts_name:(start, end)})
         return send_success_response(dec_data)
     except Exception as e:
         msg = req.get_error_msg(e, "default")

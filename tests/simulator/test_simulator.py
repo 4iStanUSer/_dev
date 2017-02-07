@@ -63,8 +63,23 @@ def test_simulator_functionally(web_app, token):
     print("Select Project")
     print(res.json_body)
 
+    res = web_app.post_json('/forecast/get_simulator_page_data', {"X-Token": token})
 
-    #2.Set value for specific scenario
+    print("Get Simulator Page Data")
+    print(res.json_body)
+
+    res = web_app.post_json('/forecast/get_custom_data', {"X-Token": token})
+    print("Get Simulator Custom Data")
+    print(res.json_body)
+
+
+    res = web_app.post_json('/forecast/get_simulator_decomposition',
+                                                                {'data': {'entities_ids': [12], 'timescale': "annual",
+                                                                              'start': "2012", 'end': "2015"},
+                                                                "X-Token": token})
+    print("Get Simulator Decomposition")
+    print(res.json_body)
+
     values = [dict(var_name="media", timescale="annual", slot_type=1, time_label=2012, value=0),
               dict(var_name="media", timescale="annual", slot_type=1, time_label=2013, value=0),
               dict(var_name="media", timescale="annual", slot_type=1, time_label=2014, value=1),
@@ -72,11 +87,19 @@ def test_simulator_functionally(web_app, token):
               ]
 
     res = web_app.post_json('/forecast/set_values', {"data": {"tool_id": tool_id,
-                                                              "entity_id": 12, "values": values},
+                                                              "entity_id": 12, "values": values,
+                                                              'timescale': "annual"},
                                                      "X-Token": token})
 
-    print("Set value for scenario - test_scenario_1")
+    print("Set value for scenario")
     print(res.json_body)
+
+    res = web_app.post_json('/forecast/get_simulator_decomposition', {'data': {'entities_ids': [12], 'timescale':"annual",
+                                                                               'start': "2012", 'end': "2015"},
+                                                                      "X-Token": token})
+    print("Get Simulator Decomposition")
+    print(res.json_body)
+
 
 
 

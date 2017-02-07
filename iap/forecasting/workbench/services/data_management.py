@@ -320,6 +320,7 @@ def get_decomposition(container, config, entities_ids, timescales_periods):
 
     # Collect all decomposition data to the flat list.
     decomp_data = []
+
     for item in entities_dec_vars:
         # Get entity to get variables from.
         curr_ent = container.get_entity_by_filter(ent, item['filter'])
@@ -327,6 +328,7 @@ def get_decomposition(container, config, entities_ids, timescales_periods):
             var = curr_ent.get_variable(var_info['id'])
             if var is None:
                 continue
+            print("TimeScale Periods", timescales_periods)
             for ts_name, periods in timescales_periods.items():
                 ps = var.get_periods_series(ts_name)
                 for p in periods:
