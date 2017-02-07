@@ -4,38 +4,14 @@ from ...common import runtime_storage as rt
 from ...common.repository import persistent_storage
 
 
-def get_simulator_page_data(req):
-
-    #Authorise with user
-    try:
-        user_id = 2#req.user
-    except KeyError as e:
-        msg = req.get_error_message(e, lang="default")
-        return send_error_response(msg)
-    #try:
-        #check if there are selected scenario
-    wb = rt.get_wb(user_id)
-    lang = rt.get_state(user_id).language
-    project = rt.get_state(user_id)._project_id
-    data = data_service.get_simulator_data(req, project, wb.container['current'], wb.data_config, wb.selection,
-                                            lang)
-    #except Exception as e:
-    #    msg = req.get_error_msg(e, lang="default")
-    #    return send_error_response(msg)
-    #else:
-    return send_success_response(data)
-
-
-def get_simulator_custom_data(req):
-    pass
-
-
-def get_simulator_decomposition(req):
-    pass
-
-
 def set_values(req):
-    # Get parameters from request.
+    """
+    Set value for specific variable
+    :param req:
+    :type req:
+    :return:
+    :rtype:
+    """
     try:
         user_id = req.user
         entity_id = req.json_body['data']['entity_id']
@@ -45,12 +21,89 @@ def set_values(req):
         return send_error_response(msg)
     try:
         wb = rt.get_wb(user_id)
-        # Check access to feature.
-        # check access for data
+        #TODO Check access to feature.
+        #TODO check access for data
         data_service.set_entity_values(wb.container['current'], entity_id, values)
         return send_success_response()
     except Exception as e:
         msg = req.get_error_msg(e, lang="default")
+        return send_error_response(msg)
+
+
+def get_simulator_page_data(req):
+    """
+    Get data for simulator page
+    :param req:
+    :type req:
+    :return:
+    :rtype:
+    """
+    try:
+        user_id = 2#TODO change on req.get_user
+    except KeyError as e:
+        msg = req.get_error_message(e, lang="default")
+        return send_error_response(msg)
+    try:
+        #TODO check if there are selected scenario
+        wb = rt.get_wb(user_id)
+        lang = rt.get_state(user_id).language
+        project = rt.get_state(user_id)._project_id
+        data = data_service.get_simulator_data(req,wb.container['current'], wb.data_config, wb.selection,
+                                            lang)
+    except Exception as e:
+        msg = req.get_error_msg(e, lang="default")
+        return send_error_response(msg)
+    else:
+        return send_success_response(data)
+
+
+def get_simulator_custom_data(req):
+    """
+    Refresh values of working scenario
+
+    :param req:
+    :type req:
+    :return:
+    :rtype:
+    """
+    try:
+        user_id = 2#TODO change on req.get_user
+    except KeyError as e:
+        msg = req.get_error_message(e, lang="default")
+        return send_error_response(msg)
+    try:
+        #TODO check if there are selected scenario
+        wb = rt.get_wb(user_id)
+        lang = rt.get_state(user_id).language
+        data = data_service.get_simulator_custom_data(wb.container['current'], wb.data_config, wb.selection,
+                                            lang)
+    except Exception as e:
+        msg = req.get_error_msg(e, lang="default")
+        return send_error_response(msg)
+    else:
+        return send_success_response(data)
+
+
+def get_simulator_decomposition(req):
+    """Return simulator decomposition
+    """
+    # Get parameters from request.
+    try:
+        user_id = req.user
+        entities_ids = req.json_body['data']['entities_ids']
+        ts = req.json_body['data']['timescale']
+        start = req.json_body['data']['start']
+        end = req.json_body['data']['end']
+    except KeyError as e:
+        msg = req.get_error_msg(e, "default")
+        return send_error_response(msg)
+    try:
+        wb = rt.get_wb(user_id)
+        dec_data = data_service.get_decomposition(wb.container['current'], wb.config,
+                                                  entities_ids, (start, end))
+        return send_success_response(dec_data)
+    except Exception as e:
+        msg = req.get_error_msg(e, "default")
         return send_error_response(msg)
 
 
@@ -67,49 +120,29 @@ def get_simulator_data(request):
         lang = rt.get_state(user_id).language
         project = rt.get_state(user_id)._project_id
         wb = rt.get_wb(user_id)
-
         data = data_service.get_entity_data(request, project, wb.container['current'], wb.data_config,
                                             wb.selection, lang)
-        print("Data", data)
     except KeyError as e:
         msg = request.get_error_msg(e, lang="default")
         return send_error_response(msg)
     else:
-       return send_success_response(data)
-
-
-def simulator_custom_data(req):
-    """Get simulator custom data
-
-    :param req:
-    :type req:
-    :return:
-    :rtype:
-    """
-
-    pass
-
-
-def get_simulator_decomposition(req):
-    """Get simulator decomposition
-
-    :param req:
-    :type req:
-    :return:
-    :rtype:
-    """
-
-    pass
+        return send_success_response(data)
 
 
 def load_scenario(request):
-    #Check The Permission for Load and Save Scenario
+    """
+    Load selected scenario
+    :param request:
+    :type request:
+    :return:
+    :rtype:
+    """
+    #TODO Check The Permission for Load and Save Scenario
     try:
         user_id = 2
         scenario_id = request.json_body['data']['scenario_id']
-        project_id = "JJOralCare" #rt.get_state(user_id)._project_id
+        project_id = rt.get_state(user_id)._project_id
         tool_id = "forecast"
-
         data = rt._load_scenario(user_id, tool_id, project_id, scenario_id)
     except KeyError:
         return send_error_response("Failed to load scenario")
@@ -118,17 +151,23 @@ def load_scenario(request):
 
 
 def save_scenario(request):
-    # Check The Permission for Load and Save Scenario
+    """
+    Save selected scenario
+
+    :param request:
+    :type request:
+    :return:
+    :rtype:
+    """
+    #TODO Check The Permission for Load and Save Scenario
     try:
         user_id = 2
         scenario_id = request.json_body['data']['scenario_id']
-        project_id = "JJOralCare"#rt.get_state(user_id)._project_id
+        project_id = rt.get_state(user_id)._project_id
         tool_id = "forecast"
-    #if scenario_id not in wb.scenario_selection:
-    #    pass
-    #else:
-        rt._save_scenario(user_id, tool_id, project_id, scenario_id)
-        return send_success_response(scenario_id)
+        wb = rt.get_wb(user_id)
+        if scenario_id in wb.scenario_selection:
+            rt._save_scenario(user_id, tool_id, project_id, scenario_id)
     except KeyError:
         return send_error_response("Failed to save scenario description")
     else:
