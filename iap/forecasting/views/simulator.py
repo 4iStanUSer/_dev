@@ -174,7 +174,7 @@ def save_scenario(request):
         scenario_id = request.json_body['data']['scenario_id']
         project_id = request.json_body['data']['project_id']
         tool_id = request.json_body['data']['tool_id']
-    except KeyError  as e:
+    except KeyError as e:
         msg = request.get_error_msg(e, lang="default")
         return send_error_response(msg)
     try:

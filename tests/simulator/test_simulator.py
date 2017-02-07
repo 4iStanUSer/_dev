@@ -71,8 +71,7 @@ def test_simulator_functionally(web_app, token):
               dict(var_name="media", timescale="annual", slot_type=1, time_label=2015, value=0)
               ]
 
-    scenario_id = "test_scenario_3"
-    res = web_app.post_json('/forecast/set_values', {"data": {"scenario_id": scenario_id, "tool_id": tool_id,
+    res = web_app.post_json('/forecast/set_values', {"data": {"tool_id": tool_id,
                                                               "entity_id": 12, "values": values},
                                                      "X-Token": token})
 
