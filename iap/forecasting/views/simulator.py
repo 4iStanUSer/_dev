@@ -13,7 +13,7 @@ def set_values(req):
     :rtype:
     """
     try:
-        user_id = req.user
+        user_id = 2#req.user
         entity_id = req.json_body['data']['entity_id']
         values = req.json_body['data']['values']
     except KeyError as e:
@@ -47,8 +47,7 @@ def get_simulator_page_data(req):
         #TODO check if there are selected scenario
         wb = rt.get_wb(user_id)
         lang = rt.get_state(user_id).language
-        project = rt.get_state(user_id)._project_id
-        data = data_service.get_simulator_data(req,wb.container['current'], wb.data_config, wb.selection,
+        data = data_service.get_simulator_data(req, wb.container['current'], wb.data_config, wb.selection,
                                             lang)
     except Exception as e:
         msg = req.get_error_msg(e, lang="default")
@@ -89,7 +88,7 @@ def get_simulator_decomposition(req):
     """
     # Get parameters from request.
     try:
-        user_id = req.user
+        user_id = 2#req.user
         entities_ids = req.json_body['data']['entities_ids']
         ts = req.json_body['data']['timescale']
         start = req.json_body['data']['start']
@@ -119,10 +118,14 @@ def get_simulator_data(request):
         user_id = 2
         lang = rt.get_state(user_id).language
         project = rt.get_state(user_id)._project_id
+    except KeyError as e:
+        msg = request.get_error_msg(e, lang="default")
+        return send_error_response(msg)
+    try:
         wb = rt.get_wb(user_id)
         data = data_service.get_entity_data(request, project, wb.container['current'], wb.data_config,
                                             wb.selection, lang)
-    except KeyError as e:
+    except Exception as e:
         msg = request.get_error_msg(e, lang="default")
         return send_error_response(msg)
     else:
@@ -141,13 +144,18 @@ def load_scenario(request):
     try:
         user_id = 2
         scenario_id = request.json_body['data']['scenario_id']
-        project_id = rt.get_state(user_id)._project_id
-        tool_id = "forecast"
-        data = rt._load_scenario(user_id, tool_id, project_id, scenario_id)
+        project_id = request.json_body['data']['project_id']
+        tool_id = request.json_body['data']['tool_id']
     except KeyError:
         return send_error_response("Failed to load scenario")
+    try:
+        wb = rt.get_wb(user_id)
+        rt._load_scenario(wb, user_id, tool_id, project_id, scenario_id)
+    except Exception as e:
+        msg = request.get_error_msg(e, lang="default")
+        return send_error_response(msg)
     else:
-        return send_success_response(data)
+        return send_success_response(scenario_id)
 
 
 def save_scenario(request):
@@ -159,19 +167,23 @@ def save_scenario(request):
     :return:
     :rtype:
     """
-    #TODO Check The Permission for Load and Save Scenario
+    # TODO Check The Permission for Load and Save Scenario
     try:
         user_id = 2
         scenario_id = request.json_body['data']['scenario_id']
-        project_id = rt.get_state(user_id)._project_id
-        tool_id = "forecast"
-        wb = rt.get_wb(user_id)
-        if scenario_id in wb.scenario_selection:
-            rt._save_scenario(user_id, tool_id, project_id, scenario_id)
+        project_id = request.json_body['data']['project_id']
+        tool_id = request.json_body['data']['tool_id']
     except KeyError:
         return send_error_response("Failed to save scenario description")
+    try:
+        wb = rt.get_wb(user_id)
+        # TODO check - if scenario_id in wb.scenario_selection:
+        rt._save_scenario(wb, user_id, tool_id, project_id, scenario_id)
+    except Exception as e:
+        msg = request.get_error_msg(e, lang="default")
+        return send_error_response(msg)
     else:
-       return send_success_response(scenario_id)
+        return send_success_response(scenario_id)
 
 
 
