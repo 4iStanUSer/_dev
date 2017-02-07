@@ -34,7 +34,8 @@ class Workbench:
         :type user_id:
         """
         self._user_id = user_id
-        self.container = {'default': Container(), 'current': Container()}
+        self.default_container = Container()
+        self.current_container = Container()
         self.data_config = DataConfiguration()
         self.calc_kernel = CalculationKernel()
         self.access = Access()
@@ -42,6 +43,7 @@ class Workbench:
         self.search_index = dict(order=None, direct=None, reverse=None)
         self.selection = []
         self.scenario_selection = []
+
 
     def get_backup(self):
         """Get backup of workbench
@@ -56,12 +58,13 @@ class Workbench:
         :return:
         :rtype:
         """
-        container_backup = self.container['current'].get_backup()
+        container_backup = self.current_container.get_backup()
         data_config_backup = self.data_config.get_backup()
         calc_instructions = self.calc_kernel.get_backup()
 
         return pickle.dumps({'container': container_backup, 'data_config': data_config_backup,
                                                         'calc_instructions': calc_instructions})
+
 
 
     def load_from_backup(self, backup_binary, user_access, scenario_id = None):
@@ -82,11 +85,10 @@ class Workbench:
         calc_instructions = backup.get('calc_instructions', dict())
         # Load workbench parts
         if scenario_id == None:
-            for container_type in ['default', 'current']:
-                self.container[container_type].load_from_backup(cont_backup)
+            self.current_container.load_from_backup(cont_backup)
+            self.default_container.load_from_backup(cont_backup)
         else:
-            self.container["current"].load_from_backup(cont_backup)
-
+            self.current_container.load_from_backup(cont_backup)
         self.data_config.load_from_backup(config_backup)
         self.calc_kernel.load_from_backup(calc_instructions)
         #
@@ -111,10 +113,10 @@ class Workbench:
         """
         self.data_config.init_load(dev_template)
 
-        for cont_type in ['default', 'current']:
+        for cont_type in ['default_container', 'default_container']:
             init_load_service.init_load_container(dev_template, warehouse,
-                                                  self.container[cont_type], self.data_config)
-            exchange_service.download_data_from_wh(warehouse, self.container[cont_type],
+                                                  getattr(self, cont_type), self.data_config)
+            exchange_service.download_data_from_wh(warehouse, getattr(self, cont_type),
                                                    self.data_config.wh_inputs)
 
             # Init Calculation kernel.
@@ -123,7 +125,7 @@ class Workbench:
             #Init db with user access
             self._init_wb()
             # Run initial calculations.
-            calc_service.calculate(self.calc_kernel, self.container[cont_type])
+            calc_service.calculate(self.calc_kernel, getattr(self, cont_type))
 
         return
 
@@ -144,7 +146,7 @@ class Workbench:
         dim_names = self.data_config.get_property('dimensions')
         #Build Search Index
         direct_index, reverse_index = \
-            dim_service.build_search_index(self.container['default'], dim_names)
+            dim_service.build_search_index(getattr(self, 'default_container'), dim_names)
         self.search_index['order'] = dim_names
         self.search_index['direct'] = direct_index
         self.search_index['reverse'] = reverse_index
