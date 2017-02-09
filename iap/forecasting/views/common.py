@@ -29,17 +29,17 @@ def get_entity_selectors_config(req):
     :return:
     :rtype:
     """
-    print("Get entity selector config")
     try:
-        user_id = 2#TODO cnaneg on  req.user
+        user_id = req.user
+        lang = rt.language(user_id)
     except KeyError as e:
-        msg = req.get_error_msg(e, lang="default")
+        msg = req.get_error_msg(e, lang)
         return send_error_response(msg)
     try:
         lang = rt.get_state(user_id).language
         wb = rt.get_wb(user_id)
         selectors_config = \
-            dimensions.get_selectors_config(wb.data_config, lang)
+        dimensions.get_selectors_config(wb.data_config, lang)
         return send_success_response(selectors_config)
     except Exception as e:
         msg = req.get_error_message(e, lang)
@@ -64,20 +64,19 @@ def get_options_for_entity_selector(req):
     try:
         user_id = req.user
         query = req.json_body['data']['query']
-    except KeyError:
-        msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
-        return send_error_response(msg)
+    except KeyError as e:
+        send_error_response(e)
     try:
         lang = rt.get_state(user_id).language
         wb = rt.get_wb(user_id)
-
         if query is None:
             options = dimensions.get_options_by_ents(wb.search_index, wb.selection, lang)
         else:
             options, ents = dimensions.search_by_query(wb.search_index, query)
         return send_success_response(options)
     except Exception as e:
-        send_error_response(e)
+        msg = req.get_error_msg(e, lang)
+        return send_error_response(msg)
 
 
 def set_entity_selection(req):
@@ -97,8 +96,9 @@ def set_entity_selection(req):
     try:
         user_id = req.user
         query = req.json_body['data']['query']
+        lang = rt.get_state(user_id).language
     except KeyError as e:
-        msg = req.get_error_msg(e, lang="default")
+        msg = req.get_error_msg(e, lang)
         return send_error_response(msg)
     try:
         lang = rt.get_state(user_id).language
