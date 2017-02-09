@@ -12,14 +12,6 @@ import pytest
 #get options for entity selections
 #set entity selector
 
-def prepare_wb():
-    """
-    WB preparation
-
-    :return:
-    :rtype:
-    """
-    pass
 
 def test_search_by_query():
 

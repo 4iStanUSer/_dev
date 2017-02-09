@@ -74,19 +74,19 @@ perm_data = {
   {
     "out_path": "*-*australia",
     "in_path": "cpi-annual",
-    "mask":'1,0'
+    "mask": '1,0'
 
   },
   {
     "out_path": "us*-*mouthwash",
     "in_path": "unit_price-monthly",
-    "mask":'1,1,1'
+    "mask": '1,1,1'
 
   },
   {
     "out_path": "canada*-*mouthwash",
-    "in_path":  "eq_price-monthly",
-    "mask":'1,1'
+    "in_path": "eq_price-monthly",
+    "mask": '1,1'
 
   }
 ],

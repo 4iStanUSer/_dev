@@ -1,6 +1,6 @@
 import datetime
-from ...common.repository.models_managers import scenario_manager as scenario_manager
-from ...common.repository.models_managers.access_manager import get_feature_permission
+from ...common.repository.models_managers import scenario_manager
+from ...forecasting.services import scenario_service
 from ...common.helper import send_success_response, send_error_response
 from ...common.security import requires_roles, forbidden_view
 from ...common import runtime_storage as rt
@@ -19,24 +19,21 @@ def get_scenario_page(request):
     :return:
     :rtype:
     """
-    try:
-        user_id = request.user
-        lang = rt.language(user_id)
-        filters = request.json_body['data']['filter']
-    except KeyError as e:
-        msg = request.get_error_msg(e, lang)
-        return send_error_response(msg)
-    try:
-        data = scenario_manager.get_scenarios(request, filters)
-        #TODO change field of tool_id in db.
-        user_permission = get_feature_permission(request, user_id, 1)
-        print(user_permission)
-    except Exception as e:
-        msg = request.get_error_msg(e, lang)
-        return send_error_response(msg)
-    else:
-        result = {'user_permission': user_permission, "data": data}
-        return send_success_response(result)
+    #try:
+    user_id = request.user
+    lang = rt.language(user_id)
+    filters = request.json_body['data']['filter']
+    #except KeyError as e:
+    #    msg = request.get_error_msg(e, lang)
+    #    return send_error_response(msg)
+    #try:
+    session = request.dbsession
+    scenarios_page = scenario_service.get_scenario_page(session, filters, user_id)
+    #except Exception as e:
+    #    msg = request.get_error_msg(e, lang)
+    #    return send_error_response(msg)
+    #else:
+    return send_success_response(scenarios_page)
 
 
 @forbidden_view
@@ -59,8 +56,14 @@ def create_scenario(request):
         user_id = request.user
         lang = rt.language(user_id)
         input_data = request.json['data']
-        scenario_manager.create_scenario(request, input_data)
     except KeyError as e:
+        msg = request.get_error_msg(e, lang)
+        return send_error_response(msg)
+    try:
+        session = request.dbsession
+        scenario_manager.create_scenario(session, user_id, input_data)
+        return send_success_response("Scenario created")
+    except Exception as e:
         msg = request.get_error_msg(e, lang)
         return send_error_response(msg)
     else:
@@ -87,7 +90,8 @@ def search_and_view_scenario(request):
         msg = request.get_error_msg(e, lang)
         return send_error_response(msg)
     try:
-        scenario_info_list = scenario_manager.get_scenarios(request, filters)
+        session = request.dbsession
+        scenario_info_list = scenario_service.get_scenarios(session, user_id, filters)
     except Exception as e:
         msg = request.get_error_msg(e, lang)
         return send_error_response(msg)
@@ -114,7 +118,9 @@ def get_scenario_details(request):
         msg = request.get_error_msg(e, lang)
         return send_error_response(msg)
     try:
-        output = scenario_manager.search_and_get_scenarios(request, scenario_id)
+    #TODO check_scenario_permission(user_id, scenario_id)
+        session = request.dbsession
+        output = scenario_service.get_scenario_details(session, user_id, scenario_id)
     except Exception as e:
         msg = request.get_error_msg(e)
         return send_error_response(msg)
@@ -142,7 +148,8 @@ def change_scenario_name(request):
         msg = request.get_error_msg(e, lang)
         return send_error_response(msg)
     try:
-        scenario_manager.update_scenario(request, scenario_id, parameter="name", value=new_name)
+        session = request.dbsession
+        scenario_service.update_scenario(session, scenario_id, user_id, parameter="name", value=new_name)
     except Exception as e:
         msg = request.get_error_msg(e, lang)
         return send_success_response(msg)
@@ -231,13 +238,14 @@ def mark_as_final(request):
     """
     try:
         user_id = request.user
-        scenario_id = request.json_body['id']
         lang = rt.language(user_id)
+        scenario_id = request.json_body['data']['id']
     except KeyError as e:
         msg = request.get_error_msg(e, lang)
         return send_error_response(msg)
     try:
-        scenario_manager.update_scenario(request, scenario_id, parameter='status', value="final")
+        session = request.dbsession
+        scenario_service.update_scenario(session, scenario_id, user_id, parameter='status', value="final")
     except Exception as e:
         msg = request.get_error_msg(e, lang)
         return send_error_response(msg)

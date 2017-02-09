@@ -1,6 +1,6 @@
 import copy
 
-from iap.common.repository.models_managers import layer_access as wha
+from iap.common.repository.models_managers import access_manager as wha
 from iap.common.repository.models_managers.iaccess import IAccess as _IAccess
 from iap.common.repository.interface.service import (
     get_int_id_or_err as _get_id_or_err,
@@ -60,8 +60,9 @@ class IManageAccess:
         return None
 
     def init_user_wb(self, user_id, tool_id):
-        #???
+
         # Validate inputs
+
         tool_id = _get_id_or_err(tool_id, 'tool_id')
         user_id = _get_id_or_err(user_id, 'user_id')
 

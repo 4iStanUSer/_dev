@@ -47,6 +47,10 @@ class RunTimeStorage:
     def get_state(self, user_id):
         return self._get_user_box(user_id)['state']
 
+    def language(self, user_id):
+        state = self.get_state(user_id)
+        lang = state.language
+        return lang
 
     def update_state(self, user_id, **kwargs):
         user_box = self._get_user_box(user_id)

@@ -42,7 +42,8 @@ def token(web_app):
     return token
 
 
-def test_simulator_functionally(web_app, token):
+def test_simulator(web_app, token):
+    #TODO finish test
     """
     Test save scenario
 

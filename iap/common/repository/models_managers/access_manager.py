@@ -4,7 +4,7 @@ Module for work with access
 from sqlalchemy import and_
 from sqlalchemy.orm import aliased
 from iap.common.repository.models import access as mdls
-
+from ..models.access import *
 # TODO Class implementation & ssn factory
 
 
@@ -407,3 +407,195 @@ def del_perm_data_from_group(ssn, group_id, to_add_perm_data):
     for perm_data_id in to_add_perm_data:
         perm = get_data_permission_by_id(ssn, perm_data_id)
         group.data_perm.remove(perm)
+
+
+
+#Rebase method's from security  to layer access
+def check_permission_for_tool_and_project(self, request, user_id, tool_id, project_id):
+    """
+    Function will check permission to project and tool
+
+
+    :return:
+    :rtype:
+
+    """
+    access = {'tool': False, 'project': False}
+    user = request.dbsession.query(User).filter(User.id == user_id)
+    for role in user.roles:
+        if tool_id == role.tool_id:
+            access['tool': True]
+    for perm in user.perms:
+        for data_perm in perm:
+            if data_perm.project == project_id:
+                access['project': True]
+    if access == {'tool': True, 'project': True}:
+        return True
+    else:
+        return False
+
+
+def tree(dict, path, masks, order):
+    """
+    Fill tree
+
+    :param dict:
+    :type dict:
+    :param path:
+    :type path:
+    :param order:
+    :type order:
+    :return:
+    :rtype:
+    """
+    if order<len(path):
+        key = path[order]
+        if key not in dict.keys():
+            dict[key]={}
+            try:
+                dict['mask']=masks[order]
+            except:
+                raise IndexError
+        order+=1
+        tree(dict[key], path, masks, order)
+
+
+def build_permission_tree(request, project_name):
+    """
+    Build permission tree
+    :return:
+    :rtype:
+    """
+
+    list_of_access = []
+    user_id = 2#request.user
+    user = request.dbsession.query(User).filter(User.id == user_id).one()
+    for perm in user.perms:
+        for data_perm in perm.data_perms:
+            if project_name==data_perm.project:
+                perm_node = dict(out_path=data_perm.out_path, in_path=data_perm.in_path, mask=data_perm.mask)
+                list_of_access.append(perm_node)
+
+    access_rights = {}
+    for node in list_of_access:
+        ent = node['out_path']
+        if ent not in access_rights.keys():
+            access_rights[ent] = {}
+
+        masks = node['mask'].split(",")
+        items = node['in_path'].split("-")
+        tree(access_rights[ent], items, masks, order=0)
+
+    return access_rights
+
+
+def get_feature_permission(session, user_id, tool_id):
+    """Boolean function that check whether user have specific
+    right for tools  and features
+
+    :return:
+    :rtype:
+    """
+
+    feature = session.query(Feature.name).distinct(Feature.name)
+    feature = feature.join(Role.users).join(Role.features)
+    feature = feature.filter((User.id == user_id)&(Feature.tool_id == tool_id)).all()
+    return feature
+
+
+def check_feature_permission(self, request, user_id, tool_id, feature_id):
+    """Boolean function that check whether user have specific
+    right for tools  and features
+
+    :return:
+    :rtype:
+    """
+    user = request.dbsession.query(User).filter(User.id == user_id).one()
+    tools = []
+    features = []
+    for role in user.roles:
+        tools.append(role.tool_id)
+        for feature in role.features:
+            features.append(feature.id)
+    if tool_id in tools and feature_id in features:
+        return True
+    else:
+        return False
+
+
+def get_entity_data_access(self, request, user_id):
+    """
+    Return entitie's mask
+    :return:
+    :rtype:
+    """
+    mask = []
+    user = request.dbsession.query(User).filter(User.id == user_id).one()
+    for permission in user.perms:
+        for dataperm in permission.data_perms:
+            mask.append(dataperm.mask)
+    return mask
+
+
+def get_user_entities(self, request, user_id):
+    """Retunr list of dictionary - with keys
+    in_path, out_path, mask
+
+    :return:
+    :rtype:
+    """
+    entities = []
+    user = request.dbsession.query(User).filter(User.id == user_id).one()
+    for permission in user.perms:
+        for data_perm in permission.data_perms:
+            entities.append({'in_path': data_perm.in_path, 'out_path': data_perm.out_path, 'mask': data_perm.mask})
+    return entities
+
+
+def get_entity_data_access(self, request, user_id):
+        """
+        Return entitie's mask
+        :return:
+        :rtype:
+        """
+        mask = []
+        user = request.dbsession.query(User).filter(User.id == user_id).one()
+        for permission in user.perms:
+            for dataperm in permission.data_perms:
+                mask.append(dataperm.mask)
+        return mask
+
+
+def get_user_entities(self, request, user_id):
+    """Retunr list of dictionary - with keys
+    in_path, out_path, mask
+
+    :return:
+    :rtype:
+    """
+    entities = []
+    user = request.dbsession.query(User).filter(User.id == user_id).one()
+    for permission in user.perms:
+        for data_perm in permission.data_perms:
+            entities.append({'in_path':data_perm.in_path, 'out_path':data_perm.out_path, 'mask':data_perm.mask})
+    return entities
+
+
+def check_feature_permission(self, request, user_id, tool_id, feature_id):
+    """Boolean function that check whether user have specific
+    right for tools  and features
+
+    :return:
+    :rtype:
+    """
+    user = request.dbsession.query(User).filter(User.id == user_id).one()
+    tools = []
+    features = []
+    for role in user.roles:
+        tools.append(role.tool_id)
+        for feature in role.features:
+            features.append(feature.id)
+    if tool_id in tools and feature_id in features:
+        return True
+    else:
+        return False

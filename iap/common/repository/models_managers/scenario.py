@@ -104,7 +104,7 @@ def get_scenarios(request, filters, author):
         return scenario_info_list
 
 
-def update_scenatio(request,scenario_id, parameter, value):
+def update_scenario(request, scenario_id, parameter, value):
     """
     Update scenario by specific parameters
 

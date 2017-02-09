@@ -13,23 +13,24 @@ from iap.common.repository.db.meta import Base
 
 
 
-user_scenario_table = Table('user_scenario', Base.metadata,
-    Column('scenario_id', Integer, ForeignKey('scenario.id')),
+user_scenario_table = Table('user_scenarios', Base.metadata,
+    Column('scenario_id', Integer, ForeignKey('scenarios.id')),
     Column('user_id', Integer, ForeignKey('users.id'))
 )
 
 class Scenario(Base):
 
-    __tablename__ = 'scenario'
+    __tablename__ = 'scenarios'
 
     id = Column(Integer, primary_key=True)
-    parent_id = Column(Integer, ForeignKey('scenario.id'), nullable=True)
+    parent_id = Column(Integer, ForeignKey('scenarios.id'), nullable=True)
 
     name = Column(String(length=255))
     description = Column(String(length=255))
     date_of_last_modification = Column(String)
 
     criteria = Column(String)
+    location = Column(String)
     #entity_id = Column(Integer, ForeignKey('entity.id'))
     #enity = relationship("Entity", back_populates="scenarios")
 

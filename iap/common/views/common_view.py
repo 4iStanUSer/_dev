@@ -28,7 +28,7 @@ def check_logged_in(req):
     :rtype: Dict[str, bool]
 
     """
-    user_id = 2#get_user(req)
+    user_id = get_user(req)
     session_flag = True#check_session(req)
 
     if user_id != None and session_flag == True:
@@ -60,7 +60,7 @@ def login(req):
         req.session['token'] = token
         return send_success_response(token)
     else:
-        msg = req.get_error_msg('default', "NotFound")
+        msg = req.get_error_msg("NotFound")
         return send_error_response("Unauthorised_{0}".format(msg))
 
 
@@ -105,10 +105,10 @@ def get_page_configuration(req):
     """
     # Get parameters from request.
     try:
-        user_id = 2#req.user
+        user_id = req.user
         page_name = req.json_body['data']['page']
     except KeyError as e:
-        msg = req.get_error_msg(e, lang='default')
+        msg = req.get_error_msg(e)
         return send_error_response(msg)
     try:
         state = rt.get_state(user_id)
@@ -117,7 +117,7 @@ def get_page_configuration(req):
         config = get_page_config(tool_id, page_name, language)
         return send_success_response(config)
     except Exception as e:
-        msg = ErrorManager.get_error_msg(e, lang='default')
+        msg = req.get_error_msg(e, language)
         return send_error_response(msg)
 
 
@@ -131,16 +131,16 @@ def set_language(req):
     :rtype:
     """
     try:
-        user_id = 2#TODO change on req.user
+        user_id = req.user
         lang = req.json_body['data']['lang']
     except KeyError as e:
-        msg = ErrorManager.get_error_msg(e, lang="default")
+        msg = req.get_error_msg(e)
         return send_error_response(msg)
     try:
         rt.update_state(user_id, language=lang)
         return send_success_response()
     except Exception as e:
-        msg = ErrorManager.get_error_msg(e, lang=lang)
+        msg = req.get_error_msg(e, lang)
         return send_error_response(msg)
 
 
@@ -155,24 +155,23 @@ def get_tools_with_projects(req):
     :rtype: None
     """
     try:
-        user_id = 2#TODO change on req.user
+        user_id = req.user
     except KeyError as e:
-        msg = ErrorManager.get_error_msg(e, lang="default")
+        msg = req.get_error_msg(e)
         return send_error_response(msg)
-    #try:
-    data = dict()
-    if not user_id:
-        data['tools'] = common_getter.get_tools_info(pt)
-    else:
-    #TODO call acccess manager  - check permission to project_id, tool_id
-        lang = rt.get_state(user_id).language
-        data['tools'] = common_getter.get_tools_info(req, lang)
-        data['projects'] = common_getter.get_projects_info(req, lang)
-    print(data)
-    return send_success_response(data)
-    #except Exception as e:
-    #    msg = ErrorManager.get_error_msg(e, "default")
-    #    return send_error_response(msg)
+    try:
+        data = dict()
+        if not user_id:
+            data['tools'] = common_getter.get_tools_info(pt)
+        else:
+        #TODO call acccess manager  - check permission to project_id, tool_id
+            lang = rt.get_state(user_id).language
+            data['tools'] = common_getter.get_tools_info(req, lang)
+            data['projects'] = common_getter.get_projects_info(req, lang)
+        return send_success_response(data)
+    except Exception as e:
+        msg = req.get_error_msg(e)
+        return send_error_response(msg)
 
 
 def get_data_for_header(req):
@@ -196,11 +195,12 @@ def get_data_for_header(req):
     :rtype:
     """
     try:
-        user_id = 2#TODO change on req.user
+        user_id = req.user
     except KeyError as e:
-        msg = ErrorManager.get_error_msg(e, lang="default")
+        msg = ErrorManager.get_error_msg(e)
         return send_error_response(msg)
     try:
+
         header_data = dict()
         lang = rt.get_state(user_id).language
         #TODO change on database access
@@ -228,11 +228,11 @@ def set_project_selection(req):
     :rtype:
     """
     try:
-        user_id = 2#TODO change on req.user
+        user_id = req.user
         project_id = req.json_body['data']['project_id']
         tool_name = req.json_body['data']['tool_id']
     except KeyError as e:
-        msg = req.get_error_msg(e, "default")
+        msg = req.get_error_msg(e)
         return send_error_response(msg)
     try:
         #TODO Change accesss for project selector
@@ -241,6 +241,6 @@ def set_project_selection(req):
         rt.update_state(user_id, tool_id=tool_name, project_id=project_id)
         return send_success_response(project_id)
     except Exception as e:
-        msg = req.get_error_msg(e, lang="default")
+        msg = req.get_error_msg(e, lang)
         return send_error_response(msg)
 

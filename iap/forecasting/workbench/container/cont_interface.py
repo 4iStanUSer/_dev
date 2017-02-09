@@ -220,7 +220,6 @@ class Container:
         meta_type = ent_filter['type']
         if meta_type == FilterType.empty:
             res_entity = main_ent
-            print("++++++++++++++++ ")
         elif meta_type == FilterType.path:
             res_entity = self.get_entity_by_path(ent_filter['path'])
         elif meta_type == FilterType.relative_path:

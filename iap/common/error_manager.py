@@ -71,10 +71,18 @@ class ErrorManager:
         return self.client.get(ex)[lang]
 
     def get_error_message(self, ex, lang):
-        print("Ex", ex)
-        key = "".join([ex, lang])
-        error = self.client.get(key)
+        if lang not in ['default', 'english', "russian"]:
+            lang = "default"
+        try:
+            key = "".join([ex, lang])
+            error = self.client.get(key)
+        except TypeError:
+            ex = "Exception"
+            key = "".join([ex, lang])
+            error = self.client.get(key)
+
         return error
+
 
 
     def reload(self):
@@ -100,7 +108,7 @@ def create_error_manager(config):
     settings = config.get_settings()
     em = ErrorManager(settings)
 
-    def get_error_msg(request, error, lang):
+    def get_error_msg(request, error, lang="default"):
         return em.get_error_message(error, lang)
 
     config.add_request_method(get_error_msg, 'get_error_msg')

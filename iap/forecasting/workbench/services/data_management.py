@@ -3,7 +3,8 @@ from ....common import security
 from ....common.helper import dicts_left_join
 from ..helper import VariableType, SlotType, AccessMask
 from ..calculation_kernel import CalculationKernel
-from ....common.security import build_permission_tree
+from ....common.repository.models_managers.access_manager\
+    import build_permission_tree
 PERMISSION_STATUS = False
 
 
@@ -31,10 +32,9 @@ def set_entity_values(container, entity_id, values):
     return
 
 
-def get_entity_data(request, project, container, config, entities_ids, lang):
+def get_entity_data(permission_tree, project, container, config, entities_ids, lang):
 
     #TODO renew permission tree
-    #permission_tree = build_permission_tree(request, project_name=project)
 
     # Initialize structure for output.
     entity_data = dict(
@@ -70,24 +70,26 @@ def get_entity_data(request, project, container, config, entities_ids, lang):
     ent = container.get_entity_by_id(entity_id)
 
     # TODO renew permission tree
+    print("Entity Path", ent.path)
+    print("Permision Tree", permission_tree)
+
+    """
+    Check permission vor view ent
     """
     if '*-*'.join(ent.path) in list(permission_tree.keys()):
         vars = permission_tree['*-*'.join(ent.path)]
         if vars == {}:
+            """
+            If vars is empty - allow permission
+            for all another.
+            """
             PERMISSION_STATUS = True
-        else:
-            PERMISSION_STATUS = False
     else:
-        vars = None
-        #continue
-        PERMISSION_STATUS = False
-        print("No permission to view ent")
+        return "No permission to view ent"
 
-    """
 
     # Define default selector for time periods.
     main_timescales = config.get_property('dash_timescales')
-
 
     top_ts_period = config.get_property('dash_top_ts_period')
     dec_timescales = config.get_property('dash_decomposition_timescales')
@@ -105,7 +107,6 @@ def get_entity_data(request, project, container, config, entities_ids, lang):
     # Get timelabels tree and time borders for every timescale.
     ts_tree, ts_borders = container \
         .timeline.get_timeline_tree(top_ts, bottom_ts, top_ts_period)
-
     alias = container.timeline._period_alias
 
     entity_data['data']['timelabels'] = ts_tree
@@ -126,6 +127,10 @@ def get_entity_data(request, project, container, config, entities_ids, lang):
         timescales_view_info.append(ts_view_props)
     entity_data['data']['timescales'] = timescales_view_info
 
+    """
+    Set permission for time label
+    """
+
     #set permisiion for time label
 
     # Get time labels for every timescale.
@@ -141,12 +146,10 @@ def get_entity_data(request, project, container, config, entities_ids, lang):
             container.timeline.get_carg_periods(ts_name, ts_period)
         )
 
-
     # Get variables to view. Values, growth rates, CAGRS.
     vars_view_props = []
     time_series_data = dict([(x, dict()) for x in ts_borders.keys()])
     periods_data = dict([(x, dict()) for x in ts_borders.keys()])
-
 
     items_view_props = config.get_vars_for_view(meta=ent.meta, path=ent.path)
     for item in items_view_props:
@@ -156,12 +159,14 @@ def get_entity_data(request, project, container, config, entities_ids, lang):
         # Collect variables data.
         absent_vars_ids = []
         for var_info in item['variables']:
-            #check accces for variable
+
             """
-            if vars is not None and var_info['id'] in vars.keys():
+            check accces for variable
+            """
+
+            if vars is not None and var_info['id'] in vars.keys() or vars:
                 if PERMISSION_STATUS==True:
                     _ts = {}
-                    PERMISSION_STATUS = True
                 elif vars[var_info['id']] == {}:
                     _ts = {}
                     PERMISSION_STATUS = True
@@ -172,7 +177,6 @@ def get_entity_data(request, project, container, config, entities_ids, lang):
                 _ts = None
                 PERMISSION_STATUS=False
                 continue
-            """
 
             var = curr_ent.get_variable(var_info['id'])
             if var is None:
@@ -181,12 +185,15 @@ def get_entity_data(request, project, container, config, entities_ids, lang):
             for ts_name, ts_period in ts_borders.items():
                 ts = var.get_time_series(ts_name)
 
-                #check timeseries permission
-                """
-                if ts is not None or PERMISSION_STATUS==True:
-                    if PERMISSION_STATUS==True or _ts[ts_name] == {}:
+                '''
+                check timeseries permission
+                '''
+                print(ts_borders.items())
+                if _ts is not None or PERMISSION_STATUS==True:
+                    print("ts", _ts, ts_name)
+                    if PERMISSION_STATUS==True or ts_name in _ts.keys():
                         _ts_periods = {}
-                        PERMISSION_STATUS=True
+                        PERMISSION_STATUS = True
                     else:
                         PERMISSION_STATUS=False
                         _ts_periods = [timeperiod for timeperiod in list(_ts[ts_name].keys()) if timeperiod!='mask']
@@ -195,17 +202,17 @@ def get_entity_data(request, project, container, config, entities_ids, lang):
                     _ts_periods = None
                     continue
 
-                """
+
                 #check timeperiod
 
 
-                """
+
                 if _ts_periods is not None or PERMISSION_STATUS==True:
                     pass
                 elif _ts_period not in _ts_periods:
                     print("No Permission")
                     continue
-                """
+
 
                 values = ts.get_values_for_period(ts_period)
                 ps = var.get_periods_series(ts_name)
@@ -328,7 +335,6 @@ def get_decomposition(container, config, entities_ids, timescales_periods):
             var = curr_ent.get_variable(var_info['id'])
             if var is None:
                 continue
-            print("TimeScale Periods", timescales_periods)
             for ts_name, periods in timescales_periods.items():
                 ps = var.get_periods_series(ts_name)
                 for p in periods:
