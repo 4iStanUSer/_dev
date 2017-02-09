@@ -1,0 +1,58 @@
+<div class="popup_background" [ngClass]="{'c-sim-popup--active': show_popup }"></div>
+<div class="c-sim-popup" name="sim-popup-small-details" [ngClass]="{'c-sim-popup--active': show_popup }"
+     [style.left]="leftPositon" [style.top]="topPositon">
+    <div class="c-sim-popup__title">{{ lang['modify_values'] }}</div>
+    <ul class="c-sim-popup__list">
+        <li class="c-sim-popup__item">
+            <div class="c-sim-popup__text">{{ lang['increase_decrease_amount'] }}</div>
+            <div class="c-sim-popup__content">
+                <div class="c-sim-popup__label">{{ lang['abs'] }}</div>
+                <input #absolute_value (keypress)="validKeypress($event.target)" (blur)="changeUserValue($event.target.value)" (focus)="clearUserValue($event.target.value)" [(ngModel)]="current_absolute_value_formated" class="c-sim-popup__input" type="text">
+                <div class="c-sim-popup__pl-minus">
+                    <div class="c-sim-popup__plus c-sim-popup__plus--minus c-sim-popup__plus--left" (click)="minusAbsoluteValue()"></div>
+                    <div class="c-sim-popup__plus c-sim-popup__plus--right" (click)="plusAbsoluteValue()"></div>
+                </div>
+            </div>
+        </li>
+        <li class="c-sim-popup__item">
+            <div class="c-sim-popup__text">{{ lang['increase_decrease_%'] }}</div>
+            <div class="c-sim-popup__content">
+                <div class="c-sim-popup__label">%</div>
+                <input #percent_value (keypress)="validKeypress($event.target)" (blur)="changeUserPercent($event.target.value)" (focus)="clearUserPercent($event.target.value)" [(ngModel)]="current_percent_value_formated" class="c-sim-popup__input" type="text">
+                <div class="c-sim-popup__pl-minus">
+                    <div class="c-sim-popup__plus c-sim-popup__plus--minus c-sim-popup__plus--left" (click)="minusPercentValue()"></div>
+                    <div class="c-sim-popup__plus c-sim-popup__plus--right" (click)="plusPercentValue()"></div>
+                </div>
+            </div>
+        </li>
+        <li class="c-sim-popup__item c-sidebar-block__content--hide" [ngClass]="{'sidebar-sim-sum--active': type_popup==='extended' ? true : false}">
+            <div class="c-sim-popup__text">Increase/Decrease proportionaly to get equal amount at the end of period</div>
+            <div class="c-sim-popup__content">
+                <div class="c-sim-popup__label">VAL</div>
+                <input class="c-sim-popup__input" type="text" value="20">
+                <div class="c-sim-popup__pl-minus">
+                    <div class="c-sim-popup__plus c-sim-popup__plus--minus c-sim-popup__plus--left"></div>
+                    <div class="c-sim-popup__plus c-sim-popup__plus--right">    </div>
+                </div>
+            </div>
+        </li>
+        <li class="c-sim-popup__item c-sidebar-block__content--hide" [ngClass]="{'sidebar-sim-sum--active': type_popup==='extended' ? true : false}">
+            <div class="c-sim-popup__text">Increase/Decrease proportionaly to get equal amount at the end of period</div>
+            <div class="c-sim-popup__content">
+                <div class="c-sim-popup__label">CAGR</div>
+                <input class="c-sim-popup__input" type="text" value="20%">
+                <div class="c-sim-popup__pl-minus">
+                    <div class="c-sim-popup__plus c-sim-popup__plus--minus c-sim-popup__plus--left"></div>
+                    <div class="c-sim-popup__plus c-sim-popup__plus--right">                      </div>
+                </div>
+            </div>
+        </li>
+        <div class="c-sim-popup__reset">
+            <button class="c-sim-popup__button c-sim-popup__button--reset" (click)="onReset()">{{ lang['reset'] }}</button>
+        </div>
+        <div class="c-sim-popup__buttons">
+            <button class="c-button c-button--green c-button--90" name="apply" (click)="onApply()">{{ lang['apply'] }}</button>
+            <button class="c-button c-button--grey c-button--80" name="cancel" (click)="onCansel()">{{ lang['cancel'] }}</button>
+        </div>
+    </ul>
+</div>

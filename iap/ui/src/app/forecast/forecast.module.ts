@@ -11,6 +11,7 @@ import {BarChartComponent} from "../common/cmp/bar-chart/bar-chart.component";
 import {WaterfallChartComponent} from "../common/cmp/waterfall-chart/waterfall-chart.component";
 import {TimeSelectorComponent} from '../common/cmp/time-selector/time-selector.component';
 import {RangeSliderComponent} from "../common/cmp/time-selector/range-slider/range-slider.component";
+import { ValueEditPopupComponent } from "../common/cmp/value-edit-popup/value-edit-popup.component";
 
 import {DashboardComponent} from "./dashboard/dashboard.component";
 import {DataManagerService} from "./dashboard/data-manager.service";
@@ -89,7 +90,8 @@ import {EditPageComponent} from "./edit-page/edit-page.component";
         LanguageSelectorComponent,
         LandingPageComponent,
 
-        EditPageComponent
+        EditPageComponent,
+        ValueEditPopupComponent
     ],
     providers: [
         CommonServicesModule,
