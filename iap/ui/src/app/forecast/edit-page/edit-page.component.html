@@ -1,3 +1,7 @@
 <p>
   edit-page works!
 </p>
+<div style="margin-top: 300px;">
+    <app-value-edit-popup [inputData]="curent_data" (popupRequest)="popupRequest($event)"></app-value-edit-popup>
+    <div class="element" *ngFor="let element of numbers" (click)="showPopup($event)">{{ element }}</div>
+</div>
