@@ -505,7 +505,7 @@ def get_feature_permission(session, user_id, tool_id):
                        'duplicate': False, 'edit': False, 'delete': False}
     for feature in features:
         if feature[0] in user_permission.keys():
-            user_permission[feature] = True
+            user_permission[feature[0]] = True
     return user_permission
 
 
