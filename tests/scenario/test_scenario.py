@@ -112,9 +112,9 @@ def test_create_scenario_check_updates(web_app, token):
     res = web_app.post_json("/forecast/search_and_view_scenario", {'data':{'filters': filters}, 'X-Token': token})
 
     expected = {'data': 'Scenario created', 'error': False}
-    actual = res.json
+    actual = [i['name'] for i in res.json['data']]
     print("Create Scenario", actual)
-    #assert expected == actual
+    assert "New Scenario" in actual
 
 
 def test_search_and_view(web_app, token):
@@ -194,7 +194,7 @@ def test_change_scenario_name(web_app, token):
     """
 
     res = web_app.post_json("/forecast/change_scenario_name", {"data":
-                                                               {'scenario_id': 4, 'name': "New name of Scenario"},
+                                                               {'scenario_id': 2, 'name': "New name of Scenario"},
                                                                 'X-Token': token})
 
     actual = res.json
@@ -212,12 +212,12 @@ def test_change_scenario_name_error_expected(web_app, token):
     """
 
     res = web_app.post_json("/forecast/change_scenario_name", {"data":
-                                                                    {'scenario_id': 4,
+                                                                    {'scenario_id': 114,
                                                                     'name': "New name of Scenario"},
                                                                 'X-Token': token})
 
     actual = res.json
-    expected = {"data": "Name changed", "error": False}
+    expected = {'error': False, 'data': 'Wrong request'}
     print("Name changed error expected", actual)
     assert actual == expected
 
@@ -232,7 +232,7 @@ def test_change_scenario_name_view_updates(web_app, token):
     """
 
     res = web_app.post_json("/forecast/change_scenario_name", {"data":
-                                                               {'scenario_id': 4, 'name': "New name of Scenario"},
+                                                               {'scenario_id': 2, 'name': "New name of Scenario"},
                                                                 'X-Token': token})
 
     actual = res.json
@@ -240,7 +240,7 @@ def test_change_scenario_name_view_updates(web_app, token):
     print("Change Name", actual)
 
 
-    res = web_app.post_json("/forecast/get_scenario_details", {'data': {'id': 4}, 'X-Token': token})
+    res = web_app.post_json("/forecast/get_scenario_details", {'data': {'id': 2}, 'X-Token': token})
     expected = {"data": "New Scenario Description", "error": False}
     #actual = res.json['data']['name']
     print("View description", actual)
@@ -269,7 +269,7 @@ def test_mark_as_final_scenario(web_app, token):
     res = web_app.post_json("/forecast/mark_as_final", {'data': {'id': 2}, 'X-Token': token})
     expected = {'data': 'Mark as final', 'error': False}
     actual = res.json
-    print(actual)
+    print("Mark as final", actual)
     assert expected == actual
 
 
@@ -296,10 +296,11 @@ def test_mark_as_final_scenario_view_updates(web_app, token):
     :return:
     :rtype:
     """
-    web_app.post_json("/forecast/mark_as_final", {'data': {'id': 11}, 'X-Token': token})
+    web_app.post_json("/forecast/mark_as_final", {'data': {'id': 2}, 'X-Token': token})
 
-    res = web_app.post_json("/forecast/get_scenario_details", {'data': {'id': 11}, 'X-Token': token})
+    res = web_app.post_json("/forecast/get_scenario_details", {'data': {'id': 2}, 'X-Token': token})
 
+    print("Mark as final Updated view", res.json)
     actual = res.json['data']['status']
     expected = "final"
     print("Mark as final Updated view", actual)
@@ -315,8 +316,10 @@ def test_include_scenario(web_app, token):
     :rtype:
     """
 
-    res = web_app.post_json("/forecast/include_scenario", {'parent_id': 1, "children_id": 3, 'X-Token': token})
+    res = web_app.post_json("/forecast/include_scenario", {'data': {'parent_id': 1, "children_id": 3},
+                                                           'X-Token': token})
     expected = {"error": True, "data": "User 2 Unauthorised"}
+    print("Include scenario", res.json)
     actual = res.json
     assert actual == expected
 
@@ -361,24 +364,6 @@ def test_get_scenario_page(web_app, token):
     assert expected[0]['description'] == actual[0]['description']
 
 
-def test_delete_scenario(web_app, token):
-    """Test for delete scenario
-
-    Temprorary disabled
-
-    :param web_app:
-    :type web_app:
-    :return:
-    :rtype:
-    """
-
-    res = web_app.post_json("/forecast/delete_scenario", {'id': 100,  'X-Token': token})
-    expected = {'error': True, 'data': 'Wrong request'}
-    actual = res.json
-    print("Delete Scenario", actual)
-    assert expected == actual
-
-
 def test_delete_scenario_error_expected(web_app, token):
     """Test for delete scenario
 
@@ -390,7 +375,7 @@ def test_delete_scenario_error_expected(web_app, token):
     :rtype:
     """
 
-    res = web_app.post_json("/forecast/delete_scenario", {'id': 100,  'X-Token': token})
+    res = web_app.post_json("/forecast/delete_scenario", {'data': {'id': 100},  'X-Token': token})
     expected = {'error': True, 'data': 'Wrong request'}
     actual = res.json
     print("Delete Scenario", actual)
@@ -408,8 +393,12 @@ def test_delete_scenario_view_updates(web_app, token):
     :rtype:
     """
 
-    res = web_app.post_json("/forecast/delete_scenario", {'id': 100,  'X-Token': token})
-    expected = {'error': True, 'data': 'Wrong request'}
+    res = web_app.post_json("/forecast/delete_scenario", {'data': {'id': 2},  'X-Token': token})
     actual = res.json
     print("Delete Scenario", actual)
+
+    res = web_app.post_json("/forecast/get_scenario_details", {'data': {'id': 2},'X-Token': token})
+    expected = {'error': True, 'data': 'Wrong request'}
+    actual = res.json
+    print("Delete Scenario View Updates", actual)
     assert expected == actual

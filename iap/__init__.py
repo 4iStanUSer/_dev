@@ -107,9 +107,18 @@ def forecast_routing(config):
     config.add_view(f_scenarios.mark_as_final,
                     route_name='forecast.mark_as_final', renderer='json')
 
+    config.add_route('forecast.set_scenario_location',
+                     '/set_scenario_location')
+    config.add_view(f_scenarios.mark_as_final,
+                    route_name='forecast.set_scenario_location', renderer='json')
+
     config.add_route('forecast.include_scenario', '/include_scenario')
     config.add_view(f_scenarios.include_scenario,
                     route_name='forecast.include_scenario', renderer='json')
+
+    config.add_route('forecast.copy_scenario', '/copy_scenario')
+    config.add_view(f_scenarios.copy_scenario,
+                    route_name='forecast.copy_scenario', renderer='json')
 
     config.add_route('forecast.get_scenarios_list',
                      '/get_scenarios_list')

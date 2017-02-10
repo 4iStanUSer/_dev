@@ -87,6 +87,14 @@ def get_own_scenarios(session, user_id, filters):
         return scenarios
 
 
+def include_scenario(session, user_id, scenario_id, parent_scenario_id):
+
+    scenario = get_scenario_by_id(session, user_id, scenario_id)
+    parent_scenario = get_scenario_by_id(session, user_id, parent_scenario_id)
+    parent_scenario.children.append(scenario)
+    return
+
+
 def delete_scenario(session, scenario_id, user_id):
     """
     Delete scenario's
@@ -101,6 +109,6 @@ def delete_scenario(session, scenario_id, user_id):
     """
     try:
         scenario = get_scenario_by_id(session, scenario_id, user_id)
-        session.dbsession.delete(scenario)
+        session.delete(scenario)
     except NoResultFound:
-        raise NoResultFound
+        raise Exception

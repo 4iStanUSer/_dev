@@ -1,7 +1,6 @@
 """
 Describe package here.
 """
-
 import pickle
 import copy
 from .container import Container

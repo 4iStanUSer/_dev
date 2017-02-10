@@ -28,7 +28,7 @@ def get_scenario_page(request):
     #    return send_error_response(msg)
     #try:
     session = request.dbsession
-    scenarios_page = scenario_service.get_scenario_page(session, filters, user_id)
+    scenarios_page = scenario_service.get_scenario_page(session, user_id=user_id)
     #except Exception as e:
     #    msg = request.get_error_msg(e, lang)
     #    return send_error_response(msg)
@@ -62,7 +62,6 @@ def create_scenario(request):
     try:
         session = request.dbsession
         scenario_manager.create_scenario(session, user_id, input_data)
-        return send_success_response("Scenario created")
     except Exception as e:
         msg = request.get_error_msg(e, lang)
         return send_error_response(msg)
@@ -212,13 +211,14 @@ def delete_scenario(request):
     """
     try:
         user_id = request.user
-        scenario_id = request.json_body['id']
+        scenario_id = request.json_body['data']['id']
         lang = rt.language(user_id)
     except KeyError as e:
         msg = request.get_error_msg(e, lang)
         return send_error_response(msg)
     try:
-        scenario_manager.delete_scenario(request, scenario_id)
+        session = request.dbsession
+        scenario_manager.delete_scenario(session, scenario_id, user_id)
     except Exception as e:
         msg = request.get_error_msg(e, lang)
         return send_error_response(msg)
@@ -258,19 +258,40 @@ def mark_as_final(request):
 def include_scenario(request):
     try:
         user_id = request.user
-        parent_scenario_id = request.json_body['parent_scenario_id']
-        scenario_id = request.json_body['scenario_id']
+        parent_scenario_id = request.json_body['data']['parent_scenario_id']
+        scenario_id = request.json_body['data']['scenario_id']
         lang = rt.language(user_id)
     except KeyError as e:
         msg = request.get_error_msg(e, lang)
         return send_error_response(msg)
     try:
-        msg = scenario_manager.include_scenario(parent_scenario_id, scenario_id)
+        session = request.dbsession
+        scenario_manager.include_scenario(session, user_id, parent_scenario_id, scenario_id)
     except Exception as e:
         msg = request.get_error_msg(e, lang)
         return send_error_response(msg)
     else:
-        send_success_response(msg)
+        send_success_response("Scenario Included")
+
+
+@forbidden_view
+@requires_roles('Copy Scenario')
+def copy_scenario(request):
+    try:
+        user_id = request.user
+        scenario_id = request.json_body['data']['scenario_id']
+        lang = rt.language(user_id)
+    except KeyError as e:
+        msg = request.get_error_msg(e, lang)
+        return send_error_response(msg)
+    try:
+        session = request.dbsession
+        scenario_service.copy_scenario(session, user_id, scenario_id)
+    except Exception as e:
+        msg = request.get_error_msg(e, lang)
+        return send_error_response(msg)
+    else:
+        send_success_response("Scenario copied")
 
 
 @forbidden_view

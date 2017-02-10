@@ -40,7 +40,7 @@ def deserialise_scenario(scenario_info):
     return scenario
 
 
-def get_scenario_page(session, filters, user_id):
+def get_scenario_page(session, user_id, filter=None):
     try:
         scenarios = scenario_manager.get_available_scenario(session, user_id)
     # TODO change field of tool_id in db.
@@ -49,7 +49,7 @@ def get_scenario_page(session, filters, user_id):
     except NoResultFound:
         raise Exception
     else:
-        result = {'data':scenario_list, 'user_permission': user_permission}
+        result = {'data': scenario_list, 'user_permission': user_permission}
         return result
 
 
@@ -57,15 +57,15 @@ def copy_scenario(session, user_id, scenario_id):
     """Get scenario by specific filters
     :param session:
     :type session:
-    :param filters - List of filters:
-    :type filters: List
+    :param user_id:
+    :type user_id:
     :return:
     :rtype:
     """
     try:
         scenario = scenario_manager.get_scenario_by_id(session, user_id, scenario_id)
         scenario_data = [scenario.id, scenario.name, scenario.description, scenario.criteria]
-        scenario_manager.create_scenario(session, scenario_data, user_id)
+        scenario_manager.create_scenario(session, scenario_id=scenario_data, user_id=user_id)
         #TODO provide scenario coppying
     except NoResultFound:
         raise NoResultFound
@@ -140,31 +140,29 @@ def search_and_get_scenarios(session, scenario_id, user_id):
     :return:
     :rtype:
     """
-    #try:
-    scenario = scenario_manager.get_scenario_by_id(session, scenario_id, user_id)
-    print("Scenario")
-    #except NoResultFound:
-    #return None
-    #else:
-    now = datetime.datetime.now()
-    present_time = "{0}_{1}_{2}_{3}_{4}".format(now.year, now.month, now.day, now.hour, now.minute)
-    scenario_details = {}
+    try:
+        scenario = scenario_manager.get_scenario_by_id(session, scenario_id, user_id)
+    except NoResultFound:
+        return None
+    else:
+        now = datetime.datetime.now()
+        present_time = "{0}_{1}_{2}_{3}_{4}".format(now.year, now.month, now.day, now.hour, now.minute)
+        scenario_details = {}
 
-    scenario_details['id'] = scenario.id
-    scenario_details['meta'] = None
-    scenario_details['criteria'] = scenario.criteria
-    scenario_details['description'] = scenario.description
-    scenario_details['worklist'] = [{'id': scenario.id, 'name': scenario.name, 'date': present_time}]
-    scenario_details['metrics'] = [{"name": "", "format": "", "value": ""}]#TODO add metric
-    scenario_details['growth_period'] = ""#TODO add growth period
-    scenario_details['predefined_drivers'] = [{'id': "", 'value': ""}]
-    scenario_details['predefined_drivers'] = [{'id': "", 'value': ""}]
-    scenario_details['driver_change'] = [{'name': "", 'value': ""}]
-    scenario_details['driver_group'] = [{'name': "", 'value': ""}]
-    scenario_details['recent_actions'] = [{'action_id': "", 'action_name': "", 'entity_id': "",
-                                      'entity_name': "", 'date': ""}]
-    print("scenario_details", scenario_details)
-    return scenario_details
+        scenario_details['id'] = scenario.id
+        scenario_details['meta'] = None
+        scenario_details['criteria'] = scenario.criteria
+        scenario_details['description'] = scenario.description
+        scenario_details['worklist'] = [{'id': scenario.id, 'name': scenario.name, 'date': present_time}]
+        scenario_details['metrics'] = [{"name": "", "format": "", "value": ""}]#TODO add metric
+        scenario_details['growth_period'] = ""#TODO add growth period
+        scenario_details['predefined_drivers'] = [{'id': "", 'value': ""}]
+        scenario_details['predefined_drivers'] = [{'id': "", 'value': ""}]
+        scenario_details['driver_change'] = [{'name': "", 'value': ""}]
+        scenario_details['driver_group'] = [{'name': "", 'value': ""}]
+        scenario_details['recent_actions'] = [{'action_id': "", 'action_name': "", 'entity_id': "",
+                                          'entity_name': "", 'date': ""}]
+        return scenario_details
 
 
 def get_scenario_details(session, user_id, scenario_id):
@@ -221,10 +219,13 @@ def update_scenario(session, scenario_id, user_id, parameter, value):
     """
     try:
         scenario = scenario_manager.get_scenario_by_id(session, scenario_id =scenario_id, user_id= user_id)
+        #TODO check if exist
         if parameter == "name":
             scenario.name = value
         elif parameter == "status":
             scenario.status = value
+        elif parameter == "location":
+            scenario.location = value
     except Exception:
         raise Exception
     else:

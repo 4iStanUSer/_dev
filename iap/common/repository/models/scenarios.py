@@ -31,6 +31,7 @@ class Scenario(Base):
 
     criteria = Column(String)
     location = Column(String)
+
     #entity_id = Column(Integer, ForeignKey('entity.id'))
     #enity = relationship("Entity", back_populates="scenarios")
 
@@ -43,3 +44,5 @@ class Scenario(Base):
     users = relationship("User", secondary=user_scenario_table, back_populates="scenarios")
 
     children = relationship("Scenario",  remote_side=[id])
+
+
