@@ -8,7 +8,7 @@ from ...common import runtime_storage as rt
 
 
 @forbidden_view
-@requires_roles('Create a new scenario')
+@requires_roles('view')
 def get_scenario_page(request):
     """
     View for url - get scenario page
@@ -19,25 +19,25 @@ def get_scenario_page(request):
     :return:
     :rtype:
     """
-    #try:
-    user_id = request.user
-    lang = rt.language(user_id)
-    filters = request.json_body['data']['filter']
-    #except KeyError as e:
-    #    msg = request.get_error_msg(e, lang)
-    #    return send_error_response(msg)
-    #try:
-    session = request.dbsession
-    scenarios_page = scenario_service.get_scenario_page(session, user_id=user_id)
-    #except Exception as e:
-    #    msg = request.get_error_msg(e, lang)
-    #    return send_error_response(msg)
-    #else:
-    return send_success_response(scenarios_page)
+    try:
+        user_id = request.user
+        lang = rt.language(user_id)
+        filters = request.json_body['data']['filter']
+    except KeyError as e:
+        msg = request.get_error_msg(e, lang)
+        return send_error_response(msg)
+    try:
+        session = request.dbsession
+        scenarios_page = scenario_service.get_scenario_page(session, user_id=user_id)
+    except Exception as e:
+        msg = request.get_error_msg(e, lang)
+        return send_error_response(msg)
+    else:
+        return send_success_response(scenarios_page)
 
 
 @forbidden_view
-@requires_roles('Create a new scenario')
+@requires_roles('create')
 def create_scenario(request):
     """Function for creating new scenario
     args:
@@ -61,7 +61,7 @@ def create_scenario(request):
         return send_error_response(msg)
     try:
         session = request.dbsession
-        scenario_manager.create_scenario(session, user_id, input_data)
+        scenario_manager.create_scenario(session, user_id=user_id, input_data=input_data)
     except Exception as e:
         msg = request.get_error_msg(e, lang)
         return send_error_response(msg)
@@ -69,7 +69,7 @@ def create_scenario(request):
         return send_success_response("Scenario created")
 
 @forbidden_view
-@requires_roles('View Scenario')
+@requires_roles('view')
 def search_and_view_scenario(request):
     """
     Return list of scenario by given filters
@@ -90,7 +90,7 @@ def search_and_view_scenario(request):
         return send_error_response(msg)
     try:
         session = request.dbsession
-        scenario_info_list = scenario_service.get_scenarios(session, user_id, filters)
+        scenario_info_list = scenario_service.get_scenarios(session, user_id=user_id, filters=filters)
     except Exception as e:
         msg = request.get_error_msg(e, lang)
         return send_error_response(msg)
@@ -99,7 +99,7 @@ def search_and_view_scenario(request):
 
 
 @forbidden_view
-@requires_roles('View Scenario')
+@requires_roles('view')
 def get_scenario_details(request):
     """
     Return scenario description by given scenario id
@@ -119,7 +119,7 @@ def get_scenario_details(request):
     try:
     #TODO check_scenario_permission(user_id, scenario_id)
         session = request.dbsession
-        output = scenario_service.get_scenario_details(session, user_id, scenario_id)
+        output = scenario_service.get_scenario_details(session, user_id=user_id, scenario_id=scenario_id)
     except Exception as e:
         msg = request.get_error_msg(e)
         return send_error_response(msg)
@@ -128,7 +128,7 @@ def get_scenario_details(request):
 
 
 @forbidden_view
-@requires_roles('View Scenario')
+@requires_roles('edit')
 def change_scenario_name(request):
     """
     Change scenario name
@@ -148,7 +148,7 @@ def change_scenario_name(request):
         return send_error_response(msg)
     try:
         session = request.dbsession
-        scenario_service.update_scenario(session, scenario_id, user_id, parameter="name", value=new_name)
+        scenario_service.update_scenario(session, scenario_id=scenario_id, user_id=user_id, parameter="name", value=new_name)
     except Exception as e:
         msg = request.get_error_msg(e, lang)
         return send_success_response(msg)
@@ -157,7 +157,7 @@ def change_scenario_name(request):
 
 
 @forbidden_view
-@requires_roles('View Scenario')
+@requires_roles('view')
 def check_scenario_name(request):
     try:
         user_id = request.user
@@ -165,7 +165,7 @@ def check_scenario_name(request):
         name = request.json_body['data']['name']
         value_to_check = {'name': name}
         lang = rt.language(user_id)
-        result = scenario_manager.check_scenario(scenario_id, value_to_check)
+        result = scenario_manager.check_scenario(scenario_id=scenario_id, value_to_check=value_to_check)
     except KeyError as e:
         msg = request.get_error_msg(e, lang)
         return send_error_response(msg)
@@ -173,7 +173,7 @@ def check_scenario_name(request):
         return send_success_response(result)
 
 @forbidden_view
-@requires_roles('Modify Scenario')
+@requires_roles('edit')
 def modify(request):
     """Modify scenario
     :param request:
@@ -191,7 +191,7 @@ def modify(request):
         return send_error_response(msg)
     try:
         updated_scenario = scenario_manager.update_scenario\
-            (request, scenario_id, parameter=new_values['parameter'], value=new_values['value'])
+            (request, scenario_id=scenario_id, parameter=new_values['parameter'], value=new_values['value'])
     except Exception as e:
         msg = request.get_error_msg(e, lang)
         return send_error_response(msg)
@@ -200,7 +200,7 @@ def modify(request):
 
 
 @forbidden_view
-@requires_roles('Delete Scenario')
+@requires_roles('delete')
 def delete_scenario(request):
     """
     Delete selected scenario
@@ -218,7 +218,7 @@ def delete_scenario(request):
         return send_error_response(msg)
     try:
         session = request.dbsession
-        scenario_manager.delete_scenario(session, scenario_id, user_id)
+        scenario_manager.delete_scenario(session, scenario_id=scenario_id, user_id=user_id)
     except Exception as e:
         msg = request.get_error_msg(e, lang)
         return send_error_response(msg)
@@ -227,7 +227,7 @@ def delete_scenario(request):
 
 
 @forbidden_view
-@requires_roles('View Scenario')
+@requires_roles('finalize')
 def mark_as_final(request):
     """Marks selected scenario
 
@@ -245,7 +245,7 @@ def mark_as_final(request):
         return send_error_response(msg)
     try:
         session = request.dbsession
-        scenario_service.update_scenario(session, scenario_id, user_id, parameter='status', value="final")
+        scenario_service.update_scenario(session, scenario_id=scenario_id, user_id=user_id, parameter='status', value="final")
     except Exception as e:
         msg = request.get_error_msg(e, lang)
         return send_error_response(msg)
@@ -254,7 +254,7 @@ def mark_as_final(request):
 
 
 @forbidden_view
-@requires_roles('Include_scenario')
+@requires_roles('modify')
 def include_scenario(request):
     try:
         user_id = request.user
@@ -266,7 +266,8 @@ def include_scenario(request):
         return send_error_response(msg)
     try:
         session = request.dbsession
-        scenario_manager.include_scenario(session, user_id, parent_scenario_id, scenario_id)
+        scenario_manager.include_scenario(session, user_id=user_id,
+                                          parent_scenario_id=parent_scenario_id, scenario_id=scenario_id)
     except Exception as e:
         msg = request.get_error_msg(e, lang)
         return send_error_response(msg)
@@ -275,7 +276,7 @@ def include_scenario(request):
 
 
 @forbidden_view
-@requires_roles('Copy Scenario')
+@requires_roles('view')
 def copy_scenario(request):
     try:
         user_id = request.user
@@ -286,16 +287,16 @@ def copy_scenario(request):
         return send_error_response(msg)
     try:
         session = request.dbsession
-        scenario_service.copy_scenario(session, user_id, scenario_id)
+        scenario_service.copy_scenario(session, user_id=user_id, scenario_id=scenario_id)
     except Exception as e:
         msg = request.get_error_msg(e, lang)
         return send_error_response(msg)
     else:
-        send_success_response("Scenario copied")
+        return send_success_response("Scenario copied")
 
 
 @forbidden_view
-@requires_roles('View Scenario')
+@requires_roles('view')
 def get_scenarios_list(request):
     scenarios = [
         {
