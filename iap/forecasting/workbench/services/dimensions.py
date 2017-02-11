@@ -147,7 +147,10 @@ def get_options_by_ents(search_index, entities_ids, lang):
     #Entities coordinates
     ents_coords = [coords for node_id, coords in reverse_index.items() if node_id in entities_ids]
     # Create entity based on coords.
+    print("Entities ids", entities_ids)
+    print("Ents coord", ents_coords)
     query = get_empty_query(search_index)
+    print("1 query", query)
     #for entities in ents-coords
     for ent in ents_coords:
         #for dim, coords om ent.items
@@ -155,10 +158,13 @@ def get_options_by_ents(search_index, entities_ids, lang):
             merged_coords = JOIN_SYMBOL.join(coords)
             #if merged selected dimension == []
             if merged_coords not in query[dim]:
-                if query[dim]==[]:
-                    query[dim].append(merged_coords)
+                if query[dim]==['*'] and merged_coords=='':
+                    pass
+                elif query[dim]==['*'] and merged_coords!='':
+                    query[dim] = [merged_coords]
                 else:
                     query[dim].append(merged_coords)
+
 
     opts, ents = search_by_query(search_index, query)
     return opts
@@ -181,9 +187,12 @@ def search_by_query(search_index, query):
     """
     order = search_index['order']# list of dimensions
     search_indexes = [search_index['direct']] #direct list of pathes
+    print("Search Index", search_index)
     options = dict()
     entities_ids = []
+    print("query", query)
     query_internal = _transform(query)
+    print("Query", query_internal)
     for i, dim_id in enumerate(order):
 
         # Collect available options.
@@ -196,6 +205,7 @@ def search_by_query(search_index, query):
         # If selector is empty or not valid set default selector.
         if ("*",) in dimension_selection:
             dimension_selection = list(OrderedDict.fromkeys(sorted(keys)))
+
         elif len(dimension_selection)==0:
             dimension_selection = list(OrderedDict.fromkeys(sorted(keys)))
         else:
@@ -205,6 +215,7 @@ def search_by_query(search_index, query):
                     _dimension_selection.append(x)
             dimension_selection = _dimension_selection
         options[dim_id] = fill_options(keys, dimension_selection)
+        print("Dimension Selection", dimension_selection)
         #fill options
         next_iter_indexes = []
         for selected in dimension_selection:
@@ -250,7 +261,7 @@ def fill_options(keys_list, selected_items):
     """
     options = dict(
         data=[],
-        selected=[JOIN_SYMBOL.join(x) for x in selected_items]
+        selected=[JOIN_SYMBOL.join(x) for x in selected_items if x!='total']
     )
 
     for item in keys_list:
