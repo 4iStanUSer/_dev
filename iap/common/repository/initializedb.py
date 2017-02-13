@@ -8,6 +8,7 @@ from pyramid.scripts.common import parse_vars
 from templates.access_rights_data import perm_data
 from templates.dev_template import dev_template_JJOralCare, dev_template_JJLean
 from iap.common.repository.models_managers.admin_manager import IManageAccess
+from iap.common.repository.models_managers import scenario_manager as scenario_manager
 from iap.common.repository.models.scenarios import Scenario
 from iap.common.repository.models.access import User, Role, Feature, Tool, DataPermission, Permission
 from iap.common.repository.models.warehouse import Entity
@@ -82,56 +83,55 @@ def main(argv=sys.argv):
         tool = imanage_access.add_tool(name='Forecasting', description='This is forecasting')
         tool.id = "forecast"
         
-        project_1 = imanage_access.add_project(name='Oral Care Forecasting')
+        project_1 = imanage_access.add_project(name='Oral Care Forecasting', description="This is JJOralCare Project")
         project_1.id = "JJOralCare"
-        project_1.description = "This is JJOralCare Project"
         project_1.tools.append(tool)
-    
-        #project_1 = Project(name='Oral Care Forecasting', id="JJOralCare", description="This is JJOralCare Project")
-        #project_1.tools.append(tool)
 
-        project_2 = Project(name='Lean Forecasting', id="JJLean", description="This is JJLean Project")
-        
+        project_2 = imanage_access.add_project(name='Lean Forecasting', description="This is JJLean Project")
+        project_2.id = "JJLean"
         project_2.tools.append(tool)
-
-        ssn.add(project_1)
-        ssn.add(project_2)
 
         #Create Tool Forecating
         #Add  user@mail.com User for Project #1
 
         email = "user@mail.com"
         password = "qweasdZXC"
-        user_1 = User(email=email)
-        user_1.set_password(password)
+        user_1 = imanage_access.add_user(email=email, password=password)
 
         # Add default_user User for Project #2
         email = "default_user"
         password = "123456"
-        user_2 = User(email=email)
-        user_2.set_password(password)
+        user_2 = imanage_access.add_user(email=email, password=password)
+
+        #Add roles and features
 
         #Add Roles Forecaster
-        features = ['Create a new scenario', 'View Scenario', 'Mark scenario as final', 'Modify Scenario',
-                    'Delete Scenario']
+        features = ['create', 'view', 'finalize', 'modify',
+                    'delete']
         role_forecast = Role(name="forecaster")
+
         tool.roles.append(role_forecast)
         for feature in features:
-            role_forecast.features.append(Feature(name=feature))
+            _feature = Feature(name=feature)
+            tool.features.append(_feature)
+            role_forecast.features.append(_feature)
 
         # Add Roles Superviser
-        features = ['Create a new scenario', 'View Scenario', 'Publish Scenario', 'Mark scenario as final',
-                    'Modify Scenario', 'Include Scenario']
+        features = ['create', 'view', 'publish', 'finalize',
+                    'modify', 'include']
         role_superviser = Role(name="superviser")
         tool.roles.append(role_superviser)
         for feature in features:
-            role_superviser.features.append(Feature(name=feature))
+            _feature = Feature(name=feature)
+            tool.features.append(_feature)
+            role_superviser.features.append(_feature)
 
         #Add Roles
         user_1.roles.append(role_superviser)
         user_1.roles.append(role_forecast)
 
         user_2.roles.append(role_forecast)
+
 
         #Add data permission:
 
@@ -163,17 +163,20 @@ def main(argv=sys.argv):
         user_2.perms.append(permission)
 
         #Add Scenario
-        scenario_1 = Scenario(name="Price Growth Dynamics JJOralCare", description="Dynamics of Price Growth in Brazil",
+        print("User_", user_1.email)
+        input_data = dict(name="Price Growth Dynamics JJOralCare", description="Dynamics of Price Growth in Brazil",
                             status="New", shared="No", criteria="Brazil-Nike-Main", author=user_1.email)
-        user_1.scenarios.append(scenario_1)
+        scenario_1 = scenario_manager.create_scenario(ssn, user_1,  input_data)
+        #scenario_1 = Scenario(name="Price Growth Dynamics JJOralCare", description="Dynamics of Price Growth in Brazil",
+        #                    status="New", shared="No", criteria="Brazil-Nike-Main", author=user_1.email)
+        #user_1.scenarios.append(scenario_1)
 
         # Add Scenario
-        scenario_2 = Scenario(name="Price Growth Dynamics JJLean", description="Dynamics of Price Growth in USA",
+        input_data = dict(name="Price Growth Dynamics JJLean", description="Dynamics of Price Growth in USA",
                               status="New", shared="No", criteria="USA-iPhone-Main", author=user_2.email)
-        user_2.scenarios.append(scenario_2)
+        scenario_2 = scenario_manager.create_scenario(ssn, user_2,  input_data)
 
-        ssn.add(user_1)
-        ssn.add(user_2)
+
         transaction.manager.commit()
 
         #Add Project and tool
