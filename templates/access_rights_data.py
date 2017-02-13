@@ -79,7 +79,7 @@ perm_data = {
   },
   {
     "out_path": "us*-*mouthwash",
-    "in_path": "unit_price-monthly",
+    "in_path": "unit_price",
     "mask": '1,1,1'
 
   },

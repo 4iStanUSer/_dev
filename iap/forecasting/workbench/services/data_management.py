@@ -3,8 +3,7 @@ from ....common import security
 from ....common.helper import dicts_left_join
 from ..helper import VariableType, SlotType, AccessMask
 from ..calculation_kernel import CalculationKernel
-from ....common.repository.models_managers.access_manager\
-    import build_permission_tree
+from ....common.repository.models_managers import access_manager
 PERMISSION_STATUS = False
 
 
@@ -54,43 +53,13 @@ def get_entity_data(permission_tree, project, container, config, entities_ids, l
     )
 
     # Get requested entities.
-    #Calculation Kernel
-
-    #Load backup
-    #from ....common.dev_template import dev_template_JJOralCare
-
-    #calc_kernel = CalculationKernel()
-    #calc_kernel.load_from_backup(dev_template_JJOralCare['calc_instructions'])
-    #entity_id = calc_kernel.aggregate(container, entities_ids)
     entity_id = entities_ids[0]
-
     #TODO realise for all entities
-
     #Check permitted enities from container
     ent = container.get_entity_by_id(entity_id)
 
-    # TODO renew permission tree
-    """
-    Check permission vor view ent
-    """
-    PERMISSION_STATUS = None
-    if '*-*'.join(ent.path) in list(permission_tree.keys()):
-        vars = permission_tree['*-*'.join(ent.path)]
-        if vars == {}:
-            """
-            If vars is empty - allow permission
-            for all another.
-            """
-            PERMISSION_STATUS = True
-        else:
-            PERMISSION_STATUS = None
-    else:
-        return "No permission to view ent"
-
-
     # Define default selector for time periods.
     main_timescales = config.get_property('dash_timescales')
-
     top_ts_period = config.get_property('dash_top_ts_period')
     dec_timescales = config.get_property('dash_decomposition_timescales')
     top_ts = str(main_timescales[0])
@@ -103,12 +72,9 @@ def get_entity_data(permission_tree, project, container, config, entities_ids, l
         decomp_period=dict(timescale=top_ts, start=mid, end=top_ts_period[1])
     )
 
-
     # Get timelabels tree and time borders for every timescale.
-
     ts_tree, ts_borders = container \
         .timeline.get_timeline_tree(top_ts, bottom_ts, top_ts_period)
-    alias = container.timeline._period_alias
     entity_data['data']['timelabels'] = ts_tree
 
     # Get timescales view settings.
@@ -126,8 +92,6 @@ def get_entity_data(permission_tree, project, container, config, entities_ids, l
             container.timeline.get_growth_lag(ts_info[0]['id'])
         timescales_view_info.append(ts_view_props)
     entity_data['data']['timescales'] = timescales_view_info
-
-    #set permisiion for time label
 
     # Get time labels for every timescale.
     # Get growth rates periods for every timescale.
@@ -147,91 +111,42 @@ def get_entity_data(permission_tree, project, container, config, entities_ids, l
     time_series_data = dict([(x, dict()) for x in ts_borders.keys()])
     periods_data = dict([(x, dict()) for x in ts_borders.keys()])
 
+    """
+        Check permission vor view ent
+    """
+    if '*-*'.join(ent.path) in list(permission_tree.keys()):
+        pass
+    else:
+        return "No permission to view ent"
+
     #Extract variables for view
     items_view_props = config.get_vars_for_view(meta=ent.meta, path=ent.path)
-    print("Path", ent.path)
-    for item in items_view_props:
+    view_vars = []
+    for item in iter(items_view_props):
         # Get entity to get variables from.
         curr_ent = container.get_entity_by_filter(ent, item['filter'])
 
         # Collect variables data.
         absent_vars_ids = []
-
-        for var_info in item['variables']:
-            """
-            Check Accces For Variables
-            """
-            try:
-                #Extracting available _ts
-                _ts = vars[var_info['id']]
-            except KeyError:
-                continue
-            else:
-                if _ts == {}:
-                    PERMISSION_STATUS = True
-                else:
-                    PERMISSION_STATUS = None
-
-            """
-            if vars is not None and var_info['id'] in vars.keys() or vars:
-                if PERMISSION_STATUS==True:
-                    _ts = {}
-                elif vars[var_info['id']] == {}:
-                    _ts = {}
-                    PERMISSION_STATUS = True
-                else:
-                    _ts = vars[var_info['id']]
-                    PERMISSION_STATUS=False
-            else:
-                _ts = None
-                PERMISSION_STATUS=False
-                continue
-            """
-
-            var = curr_ent.get_variable(var_info['id'])
-            print("Var", var_info['id'])
+        inner_path = []
+        var_items = iter(item['variables'])
+        for var_info in var_items:
+            var_id = var_info['id']
+            var = curr_ent.get_variable(var_id)
             if var is None:
                 absent_vars_ids.append(var_info['id'])
                 continue
             for ts_name, ts_period in ts_borders.items():
                 ts = var.get_time_series(ts_name)
-                """
-                Check Timeseries Permission
-                """
-                print("Time series name", ts_name)
-                print("Time Period", ts_period)
-                try:
-                    _ts_periods = [timeperiod.split(':') for timeperiod in list(_ts[ts_name].keys()) if timeperiod != 'mask']
-                except KeyError:
+
+                inner_path = ["*-*".join(ent.path), var_id, ts_name, ts_period]
+                mask = access_manager.check_permission(permission_tree, inner_path, pointer=0)
+                if mask == "Unavailable":
                     continue
                 else:
-                    if _ts_periods == {}:
-                        PERMISSION_STATUS = True
-                    else:
-                        PERMISSION_STATUS = None
-                """
-                if _ts is not None or PERMISSION_STATUS==True:
-                    print("ts", _ts, ts_name)
-                    if PERMISSION_STATUS==True or ts_name in _ts.keys():
-                        _ts_periods = {}
-                        PERMISSION_STATUS = True
-                    else:
-                        PERMISSION_STATUS=False
-                        _ts_periods = [timeperiod for timeperiod in list(_ts[ts_name].keys()) if timeperiod!='mask']
-                else:
-                    PERMISSION_STATUS = False
-                    _ts_periods = None
-                    continue
-                """
-
-
-                """
-                Check Timeperiod
-                """
-
-                if _ts_periods is not None or PERMISSION_STATUS:
-                    ts_period = check_period_perm(_ts_periods, ts_period)
+                    ts_period = check_period_perm(mask['item'], ts_period)
                     for period in ts_period:
+                        #ts_period = check_period_perm(_ts_periods, ts_period)
                         values = [ts.get_value(time_point)[0] for time_point in period]
                         #values = ts.get_values_for_period(period)
                         ps = var.get_periods_series(ts_name)
@@ -240,12 +155,7 @@ def get_entity_data(permission_tree, project, container, config, entities_ids, l
                             {time_labels[ts_name][i]: values[i]
                             for i in range(len(values))}
                         periods_data[ts_name][var_info['id']] = \
-                            [dict(abs=0, rate=ps.get_value(p), start=p[0], end=p[1])
-                            for p in gr_periods[ts_name]]
-
-                elif _ts_periods not in _ts_periods:
-                    print("No Permission")
-                    continue
+                            [dict(abs=0, rate=ps.get_value(p), start=p[0], end=p[1]) for p in gr_periods[ts_name]]
 
         # Get variables properties.
         vars_ids = [var_info['id']
@@ -793,11 +703,11 @@ def get_simulator_value_data(container, config, entity_id, lang):
 """
 Support function
 """
-def check_period_perm(_ts_periods, ts_period):
+def check_period_perm(_ts_period, ts_period):
 
     correct_ts_period = []
     ts_period = range(int(float(ts_period[0])), int(float(ts_period[1])+1), 1)
-    for _ts_period in _ts_periods:
-        _ts = range(int(float(_ts_period[0])), int(float(_ts_period[1])+1), 1)
-        correct_ts_period.append(list(set(ts_period) & set(_ts)))
+    #for _ts_period in _ts_periods:
+    _ts = range(int(float(_ts_period[0])), int(float(_ts_period[1])+1), 1)
+    correct_ts_period.append(list(set(ts_period) & set(_ts)))
     return correct_ts_period

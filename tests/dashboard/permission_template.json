@@ -1,8 +1,7 @@
 WB_Selecion = [12]
 Entity_Path = ['canada', 'mouthwash']
 Permision_Tree =
-{
-'canada*-*mouthwash': {'eq_price': {'monthly': {}, 'mask': '1'}, 'mask': '1'},
+{'canada*-*mouthwash': {'eq_price': {'monthly': {}, 'mask': '1'}, 'mask': '1'},
 'brazil*-*mouthwash': {'mask': '', 'cpi': {'annual': {}, 'mask': '0'}, 'population': {}},
 '*-*mexico': {'mask': '12', 'cpi': {'annual': {'forecast': {}, 'mask': '22'}, 'mask': '11'}},
 '*-*us': {'mask': '2', 'cpi': {'annual': {}, 'mask': '4'}},
@@ -13,6 +12,22 @@ Permision_Tree =
 '*-*germany': {'mask': '1', 'cpi': {'annual': {'forecast': {}, 'mask': '12'}, 'mask': '12'}},
 '*-*japan': {'mask': '1', 'cpi': {'monthly': {}, 'mask': '1'}},
 '*-*italy': {'mask': '1', 'cpi': {'monthly': {}, 'mask': '2'}}}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 data {'data': {'timelabels':

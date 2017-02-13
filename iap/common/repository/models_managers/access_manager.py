@@ -340,8 +340,22 @@ def build_permission_tree(session, project_name):
 
     return access_rights
 
-def build_perm_tree_for_entity(entity_id, entity_path):
-    pass
+
+def check_permission(permission_tree, inner_path, pointer):
+    try:
+        item = inner_path[pointer]
+        if type(item) is list:
+            return {'item': item, 'mask': permission_tree['mask']}
+        else:
+            tree = permission_tree[item]
+            mask = tree['mask']
+    except KeyError:
+        return "Unavailable"
+    else:
+        if tree == {}:
+            return {'period': item, 'mask': mask}
+        else:
+            return check_permission(tree, inner_path, pointer+1)
 
 
 def get_feature_permission(session, user_id, tool_id):

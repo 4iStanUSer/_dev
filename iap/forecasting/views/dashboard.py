@@ -9,27 +9,25 @@ TOOL = 'forecast'
 
 def get_dashboard_data(req):
     # Get parameters from request.
-    try:
-        user_id = req.user
-        lang = rt.language(user_id)
-    except KeyError as e:
-        msg = ErrorManager.get_error_msg(e, lang)
-        return send_error_response(msg)
-    try:
-        lang = rt.get_state(user_id).language
-        project = rt.get_state(user_id)._project_id
-        wb = rt.get_wb(user_id)
-        session = req.dbsession
-        permission_tree = build_permission_tree(session, project_name=project)
-        wb.selection = [11]
-        print("WB Selecion", wb.selection)
-        data = data_service.get_entity_data(permission_tree, project, wb.default_container, wb.data_config,
-                                    wb.selection, lang)
-        print('data', data)
-        return send_success_response(data)
-    except Exception as e:
-        msg = req.get_error_msg(e, lang)
-        return send_error_response(msg)
+    # try:
+    user_id = req.user
+    lang = rt.language(user_id)
+    #except KeyError as e:
+    #    msg = ErrorManager.get_error_msg(e, lang)
+    #    return send_error_response(msg)
+    #try:
+    lang = rt.get_state(user_id).language
+    project = rt.get_state(user_id)._project_id
+    wb = rt.get_wb(user_id)
+    session = req.dbsession
+    permission_tree = build_permission_tree(session, project_name=project)
+    wb.selection = [9]
+    data = data_service.get_entity_data(permission_tree, project, wb.default_container, wb.data_config,
+                                wb.selection, lang)
+    return send_success_response(data)
+    #except Exception as e:
+    #    msg = req.get_error_msg(e, lang)
+    #    return send_error_response(msg)
 
 
 def get_cagrs_for_period(req):
