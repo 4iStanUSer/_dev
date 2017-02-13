@@ -49,11 +49,16 @@ def get_simulator_page_data(req):
     try:
         #TODO check if there are selected scenario
         wb = rt.get_wb(user_id)
-        data = data_service.get_simulator_data(req, wb.current_container, wb.data_config, wb.selection,
-                                               lang)
+        session = req.dbsession
+        data = data_service.get_simulator_data(session, wb.current_container, wb.data_config,
+                                               wb.selection, lang)
+        print("data", data)
+        default_data = data_service.get_simulator_value_data(wb.default_container, wb.data_config,  wb.selection, lang)
+        print("default data", default_data)
+        data['data']['values']['default'] = default_data
     except Exception as e:
         msg = req.get_error_msg(e)
-        return send_error_response(msg, lang)
+        return send_error_response(msg)
     else:
         return send_success_response(data)
 
@@ -67,22 +72,22 @@ def get_simulator_custom_data(req):
     :return:
     :rtype:
     """
-    try:
-        user_id = req.user
-        lang = rt.language(user_id)
-    except KeyError as e:
-        msg = req.get_error_message(e, lang)
-        return send_error_response(msg)
-    try:
+    #try:
+    user_id = req.user
+    lang = rt.language(user_id)
+    #except KeyError as e:
+    #msg = req.get_error_message(e, lang)
+    #return send_error_response(msg)
+    #try:
         #TODO check if there are selected scenario
-        wb = rt.get_wb(user_id)
-        data = data_service.get_simulator_custom_data(wb.current_container, wb.data_config, wb.selection,
+    wb = rt.get_wb(user_id)
+    data = data_service.get_simulator_value_data(wb.current_container, wb.data_config, wb.selection,
                                                       lang)
-    except Exception as e:
-        msg = req.get_error_msg(e)
-        return send_error_response(msg, lang)
-    else:
-        return send_success_response(data)
+    #except Exception as e:
+    #msg = req.get_error_msg(e)
+    #return send_error_response(msg)
+    #else:
+    return send_success_response(data)
 
 
 def get_simulator_decomposition(req):
@@ -108,15 +113,16 @@ def get_simulator_decomposition(req):
         msg = req.get_error_msg(e, lang)
         return send_error_response(msg)
 
-
+"""
 def get_simulator_data(request):
-    """Get data for simulator
+    '''
+    Get data for simulator
 
     :param req:
     :type req:
     :return:
     :rtype:
-    """
+    '''
     try:
         user_id = request.user
         lang = rt.language(user_id)
@@ -133,7 +139,7 @@ def get_simulator_data(request):
         return send_error_response(msg, lang)
     else:
         return send_success_response(data)
-
+"""
 
 def load_scenario(request):
     """
@@ -175,7 +181,7 @@ def save_scenario(request):
     """
     # TODO Check The Permission for Load and Save Scenario
     try:
-        user_id = request.get_user
+        user_id = request.user
         scenario_id = request.json_body['data']['scenario_id']
         project_id = request.json_body['data']['project_id']
         tool_id = request.json_body['data']['tool_id']

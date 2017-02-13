@@ -52,7 +52,6 @@ def login(req):
 
     """
     user = authorise(req)
-    print("User auth")
     if user != None:
         user_id = user.id
         login = user.email
@@ -110,15 +109,15 @@ def get_page_configuration(req):
     except KeyError as e:
         msg = req.get_error_msg(e)
         return send_error_response(msg)
-    #try:
-    state = rt.get_state(user_id)
-    tool_id = state.tool_id
-    language = state.language
-    config = get_page_config(tool_id, page_name, language)
-    return send_success_response(config)
-    #except Exception as e:
-    #    msg = req.get_error_msg(e, language)
-    #    return send_error_response(msg)
+    try:
+        state = rt.get_state(user_id)
+        tool_id = state.tool_id
+        language = state.language
+        config = get_page_config(tool_id, page_name, language)
+        return send_success_response(config)
+    except Exception as e:
+        msg = req.get_error_msg(e, language)
+        return send_error_response(msg)
 
 
 def set_language(req):
@@ -130,18 +129,18 @@ def set_language(req):
     :return:
     :rtype:
     """
-    #try:
-    user_id = req.user
-    lang = req.json_body['data']['lang']
-    #except KeyError as e:
-    #    msg = req.get_error_msg(e)
-    #    return send_error_response(msg)
-    #try:
-    rt.update_state(user_id, language=lang)
-    return send_success_response()
-    #except Exception as e:
-    #msg = req.get_error_msg(e, lang)
-    #return send_error_response(msg)
+    try:
+        user_id = req.user
+        lang = req.json_body['data']['lang']
+    except KeyError as e:
+        msg = req.get_error_msg(e)
+        return send_error_response(msg)
+    try:
+        rt.update_state(user_id, language=lang)
+        return send_success_response()
+    except Exception as e:
+        msg = req.get_error_msg(e, lang)
+        return send_error_response(msg)
 
 
 def get_tools_with_projects(req):
@@ -154,24 +153,24 @@ def get_tools_with_projects(req):
     :return:
     :rtype: None
     """
-    #try:
-    user_id = req.user
-    #except KeyError as e:
-    #    msg = req.get_error_msg(e)
-    #    return send_error_response(msg)
-    #try:
-    data = dict()
-    if not user_id:
-        data['tools'] = common_getter.get_tools_info(pt)
-    else:
-    #TODO call acccess manager  - check permission to project_id, tool_id
-        lang = rt.get_state(user_id).language
-        data['tools'] = common_getter.get_tools_info(req, lang)
-        data['projects'] = common_getter.get_projects_info(req, lang)
-    return send_success_response(data)
-    #except Exception as e:
-    #    msg = req.get_error_msg(e)
-    #    return send_error_response(msg)
+    try:
+        user_id = req.user
+    except KeyError as e:
+        msg = req.get_error_msg(e)
+        return send_error_response(msg)
+    try:
+        data = dict()
+        if not user_id:
+            data['tools'] = common_getter.get_tools_info(pt)
+        else:
+        #TODO call acccess manager  - check permission to project_id, tool_id
+            lang = rt.get_state(user_id).language
+            data['tools'] = common_getter.get_tools_info(req, lang)
+            data['projects'] = common_getter.get_projects_info(req, lang)
+        return send_success_response(data)
+    except Exception as e:
+        msg = req.get_error_msg(e)
+        return send_error_response(msg)
 
 
 def get_data_for_header(req):

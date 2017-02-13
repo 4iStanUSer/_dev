@@ -399,7 +399,7 @@ def get_cagrs(container, config, entities_ids, timescales_periods):
     return growth_over_period
 
 
-def get_simulator_data(req, container, config, entity_id, lang):
+def get_simulator_data(session, container, config, entity_id, lang):
     """
     Get simulator data from workbench
 
@@ -434,7 +434,10 @@ def get_simulator_data(req, container, config, entity_id, lang):
             drivers=None
         ),
         data=dict(
-            values=None,
+            values=dict(
+                default="  ",
+                custom=None
+            ),
         ),
         permissions=dict(
             user_permissions=None,
@@ -585,7 +588,13 @@ def get_simulator_data(req, container, config, entity_id, lang):
                 ps = var.get_periods_series(ts_name)
                 # check ps
 
-                time_series_data[ts_name][var_info['id']] = values
+                time_series_data[ts_name][var_info['id']] = {}
+                time_series_data[ts_name][var_info['id']]['values'] = values
+                #TODO fill abs_growth, relative growth, cagrs
+                time_series_data[ts_name][var_info['id']]['abs_growth'] = [None]
+                time_series_data[ts_name][var_info['id']]['relative_growth'] = [None]
+                time_series_data[ts_name][var_info['id']]['cagrs'] = [None]
+
                 periods_data[ts_name][var_info['id']] = \
                     [dict(abs=0, rate=ps.get_value(p), start=p[0], end=p[1])
                      for p in gr_periods[ts_name]]
@@ -613,7 +622,7 @@ def get_simulator_data(req, container, config, entity_id, lang):
             dicts_left_join(view_props, v_props)
             view_props['type'] = vars_types[index]
             vars_view_props.append(view_props)
-    simulator_data['data']['values'] = time_series_data
+    simulator_data['data']['values']['custom'] = time_series_data
 
     #4.Load user pemission
     #user_permission = security.check_feature_permission(req, project_id="JJOralCare", tool_id="forecast",
@@ -626,12 +635,9 @@ def get_simulator_data(req, container, config, entity_id, lang):
     return simulator_data
 
 
-def get_simulator_custom_data(container, config, entity_id, lang):
+def get_simulator_value_data(container, config, entity_id, lang):
 
     custom_data = dict(
-        data=dict(
-            values=None,
-        ),
     )
 
     ent = container.get_entity_by_id(entity_id[0])
@@ -724,7 +730,12 @@ def get_simulator_custom_data(container, config, entity_id, lang):
                 ps = var.get_periods_series(ts_name)
                 # check ps
 
-                time_series_data[ts_name][var_info['id']] = values
+                time_series_data[ts_name][var_info['id']] = {}
+                time_series_data[ts_name][var_info['id']]['values'] = values
+                # TODO fill abs_growth, relative growth, cagrs
+                time_series_data[ts_name][var_info['id']]['abs_growth'] = None
+                time_series_data[ts_name][var_info['id']]['relative_growth'] = None
+                time_series_data[ts_name][var_info['id']]['cagrs'] = None
                 periods_data[ts_name][var_info['id']] = \
                     [dict(abs=0, rate=ps.get_value(p), start=p[0], end=p[1])
                      for p in gr_periods[ts_name]]
@@ -752,6 +763,6 @@ def get_simulator_custom_data(container, config, entity_id, lang):
             dicts_left_join(view_props, v_props)
             view_props['type'] = vars_types[index]
             vars_view_props.append(view_props)
-    custom_data['data']['values'] = time_series_data
+    custom_data = time_series_data
 
     return custom_data

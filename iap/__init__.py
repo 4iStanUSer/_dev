@@ -173,8 +173,6 @@ def forecast_routing(config):
     config.add_route('forecast.get_simulator_page_data', '/get_simulator_page_data')
     config.add_view(f_simulator.get_simulator_page_data, route_name='forecast.get_simulator_page_data', renderer='json')
 
-    config.add_route('forecast.get_simulator_data', '/get_simulator_data')
-    config.add_view(f_simulator.get_simulator_data, route_name='forecast.get_simulator_data', renderer='json')
 
     config.add_route('forecast.get_simulator_decomposition', '/get_simulator_decomposition')
     config.add_view(f_simulator.get_simulator_decomposition, route_name='forecast.get_simulator_decomposition',

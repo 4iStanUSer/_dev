@@ -62,10 +62,11 @@ def test_simulator_functionally(web_app, token):
 
     res = web_app.post_json('/select_project', {"data": {"project_id": project_id, "tool_id": tool_id},
                                           'X-Token': token})
+    print("Select Project")
     print(res.json_body)
 
 
-    #2.Set value for specific variables
+    #2.Set value for Specific Variables
 
     values = [dict(var_name="eq_price", timescale="annual", slot_type=1, time_label=2012, value=1123123123),
               dict(var_name="eq_price", timescale="annual", slot_type=1, time_label=2012, value=1123123123),
@@ -76,6 +77,8 @@ def test_simulator_functionally(web_app, token):
     res = web_app.post_json('/forecast/set_values', {"data": {"tool_id": tool_id,
                                                               "entity_id": 12, "values": values},
                                                      "X-Token": token})
+
+    print("Set Value for Specific Variables")
     print(res.json_body)
 
 
@@ -84,9 +87,9 @@ def test_simulator_functionally(web_app, token):
     res = web_app.post_json('/forecast/get_custom_data', {"data": {"project_id": project_id, "tool_id": tool_id},
                                                           'X-Token': token})
 
-    actual = res.json['data']['data']['values']['annual']['eq_price']
+    actual = res.json['data']['annual']['eq_price']['values']
     expected = [1123123123, 1123123123, 1, 1]
+    print("View changes")
     print(actual)
-
     assert actual == expected
 

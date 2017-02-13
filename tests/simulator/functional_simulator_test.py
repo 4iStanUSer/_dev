@@ -137,7 +137,7 @@ def test_simulator_functionally(web_app, token):
 
     print("View changes - test_scenario")
     print(res.json_body)
-    actual = res.json['data']['data']['values']['annual']['media']
+    actual = res.json['data']['annual']['media']['values']
     expected = [1110, 1101, 111, 1110]
     assert actual == expected
 
@@ -156,7 +156,7 @@ def test_simulator_functionally(web_app, token):
 
     print("View changes - test_scenario_1")
     print(res.json_body)
-    actual = res.json['data']['data']['values']['annual']['eq_price']
+    actual = res.json['data']['annual']['eq_price']['values']
     expected = [1, 12, 123, 1231]
     assert actual == expected
 
