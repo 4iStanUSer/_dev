@@ -131,109 +131,12 @@ def get_tool_by_name(ssn, name):
     return ssn.query(mdls.Tool).filter(mdls.Tool.name == name).one_or_none()
 
 
-def add_role(ssn, name):  # , client=None, tool=None
-    new_role = mdls.Role(name=name)
-    ssn.add(new_role)
-    return new_role
-
-
-# def add_role_to_tool(ssn, role, tool):
-#     return tool.roles.append(role)
-
-
-def add_user(ssn, email, password, roles=None):
-    """
-    Create new user
-
-    :param ssn:
-    :type ssn:
-    :param email:
-    :type email:
-    :param password:
-    :type password:
-    :param roles:
-    :type roles:
-    :return:
-    :rtype:
-    """
-    new_user = mdls.User(email=email, password=password)
-    if roles is None:
-        ssn.add(new_user)
-    else:
-        for role in roles:
-            role.users.append(new_user)
-    return new_user
-
-
-def add_role_to_user(ssn, user, role):
-    return user.roles.append(role)
-
-
-def add_tool(ssn, name):
-    new_tool = mdls.Tool(name=name)
-    ssn.add(new_tool)
-    return new_tool
-
-
-def add_role_to_tool(ssn, role, tool):
-    return tool.roles.append(role)
-
-
-def add_feature(ssn, name, tool=None, role=None):
-    new_feature = mdls.Feature(name=name)
-    added = False
-    if tool is not None:
-        tool.features.append(new_feature)
-        added = True
-    if role is not None:
-        role.features.append(new_feature)
-        added = True
-
-    if not added:
-        ssn.add(new_feature)
-
-    return new_feature
-
-
-def add_feature_to_tool(ssn, feature, tool):
-    return tool.features.append(feature)
-
-
-def add_feature_to_role(ssn, role, feature):
-    return role.features.append(feature)
-
-
-def add_perm_node(ssn, tool, node_type, name, parent=None):
-    node_model = _get_tool_model(tool.name, 'node')
-    new_node = node_model(node_type=node_type, name=name)
-    if parent is not None:
-        parent.children.append(new_node)
-    else:
-        ssn.add(new_node)
-
-    return new_node
-
 
 def get_perm_node_in_tool(ssn, node_id, tool):
     node_model = _get_tool_model(tool.name, 'node')
     return ssn.query(node_model).filter(node_model.id == node_id) \
         .one_or_none()
 
-
-def add_perm_value(ssn, tool, perm_node, value, user):
-    value_model = _get_tool_model(tool.name, 'value')
-
-    new_perm_value = value_model(value=value, user_id=user.id)
-    perm_node.perm_values.append(new_perm_value)
-    return new_perm_value
-
-
-def add_default_perm_value(ssn, tool, perm_node, value):
-    value_model = _get_tool_model(tool.name, 'value')
-
-    new_perm_value = value_model(value=value)
-    perm_node.perm_values.append(new_perm_value)
-    return new_perm_value
 
 
 # region Users methods
@@ -271,10 +174,6 @@ def get_user_role_in_tool(ssn, user, tool):
 
 # region Groups methods
 
-def add_user_group(ssn, name, tool):
-    new_group = mdls.UserGroup(name=name)
-    return tool.user_groups.append(new_group)
-
 def get_user_group_by_id(ssn, group_id):
     return ssn.query(mdls.UserGroup).get(group_id)
 
@@ -285,19 +184,6 @@ def get_user_group_by_id(ssn, group_id):
 
 def get_features_by_tool(ssn, tool):
     return tool.features
-
-
-def add_features_to_role(ssn, role, features):
-    for feature in features:
-        role.features.append(feature)
-
-
-def del_features_from_role(ssn, role, features_id):
-    return ssn.query(mdls.Feature) \
-        .join(mdls.Role, mdls.Feature.roles) \
-        .filter(and_(mdls.Role.id.in_(features_id),
-                     mdls.Role.id == role.id)) \
-        .delete()
 
 
 def get_feature_by_id(ssn, feature_id):
@@ -336,13 +222,6 @@ def get_nodes_by_name(ssn, tool, name):
     return ssn.query(_n).filter(and_(_n.name == name)).all()
 
 
-def del_perm_values_for_user(ssn, tool, user):
-    _v = _get_tool_model(tool.name, 'value')
-
-    results = ssn.query(_v).filter(and_(_v.user_id.is_(user.id))).all()
-    for res in results:
-        ssn.delete(res)
-# endregion
 
 
 def get_data_permission_by_group(ssn, group_id):
@@ -377,37 +256,6 @@ def get_data_permission_by_id(ssn, data_perm_id):
     data_perm = ssn.query(mdls.DataPermissionAccess).\
         filter(mdls.DataPermissionAccess.id == data_perm_id).one()
     return data_perm
-
-def add_perm_data_from_group(ssn, group_id, to_add_perm_data):
-    """
-    Add data permission by given id
-    :param ssn:
-    :type ssn:
-    :param data_perm_id:
-    :type data_perm_id:
-    :return:
-    :rtype:
-    """
-    group = ssn.query(mdls.Group).filter(mdls.Group.id == group_id).one()
-    for perm_data_id in to_add_perm_data:
-        perm = get_data_permission_by_id(ssn, perm_data_id)
-        group.data_perm.append(perm)
-
-def del_perm_data_from_group(ssn, group_id, to_add_perm_data):
-    """
-    Delete data permission by given id
-    :param ssn:
-    :type ssn:
-    :param data_perm_id:
-    :type data_perm_id:
-    :return:
-    :rtype:
-    """
-    group = ssn.query(mdls.Group).filter(mdls.Group.id == group_id).one()
-    for perm_data_id in to_add_perm_data:
-        perm = get_data_permission_by_id(ssn, perm_data_id)
-        group.data_perm.remove(perm)
-
 
 
 #Rebase method's from security  to layer access

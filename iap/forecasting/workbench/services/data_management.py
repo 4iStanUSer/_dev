@@ -77,6 +77,7 @@ def get_entity_data(permission_tree, project, container, config, entities_ids, l
     Check permission vor view ent
     """
     if '*-*'.join(ent.path) in list(permission_tree.keys()):
+        PERMISSION_STATUS = True
         vars = permission_tree['*-*'.join(ent.path)]
         if vars == {}:
             """

@@ -36,7 +36,6 @@ def get_entity_selectors_config(req):
         msg = req.get_error_msg(e, lang)
         return send_error_response(msg)
     try:
-        lang = rt.get_state(user_id).language
         wb = rt.get_wb(user_id)
         selectors_config = \
         dimensions.get_selectors_config(wb.data_config, lang)
@@ -61,22 +60,25 @@ def get_options_for_entity_selector(req):
     # Get parameters from request.
     #check permission for workbecnh -- for project and tool
 
-    try:
-        user_id = req.user
-        query = req.json_body['data']['query']
-    except KeyError as e:
-        send_error_response(e)
-    try:
-        lang = rt.get_state(user_id).language
-        wb = rt.get_wb(user_id)
-        if query is None:
-            options = dimensions.get_options_by_ents(wb.search_index, wb.selection, lang)
-        else:
-            options, ents = dimensions.search_by_query(wb.search_index, query)
-        return send_success_response(options)
-    except Exception as e:
-        msg = req.get_error_msg(e, lang)
-        return send_error_response(msg)
+    #try:
+    user_id = req.user
+    query = req.json_body['data']['query']
+    #except KeyError as e:
+    #send_error_response(e)
+    #try:
+    lang = rt.get_state(user_id).language
+    wb = rt.get_wb(user_id)
+    if query is None:
+        options = dimensions.get_options_by_ents(wb.search_index, wb.selection, lang)
+    else:
+        options, ents = dimensions.search_by_query(wb.search_index, query)
+        print("Get option selection config", ents)
+
+    print("Get option selection config", options)
+    return send_success_response(options)
+    #except Exception as e:
+    #msg = req.get_error_msg(e, lang)
+    #return send_error_response(msg)
 
 
 def set_entity_selection(req):
@@ -93,19 +95,22 @@ def set_entity_selection(req):
     :return:
     :rtype:
     """
-    try:
-        user_id = req.user
-        query = req.json_body['data']['query']
-        lang = rt.get_state(user_id).language
-    except KeyError as e:
-        msg = req.get_error_msg(e, lang)
-        return send_error_response(msg)
-    try:
-        lang = rt.get_state(user_id).language
-        wb = rt.get_wb(user_id)
-        options, ents = dimensions.search_by_query(wb.search_index, query)
-        wb.selection = ents
-        return send_success_response(options)
-    except Exception as e:
-        msg = req.get_error_msg(e, lang)
-        return send_error_response(msg)
+    #try:
+    user_id = req.user
+    query = req.json_body['data']['query']
+    print("Query", query)
+    lang = rt.language(user_id)
+    #except KeyError as e:
+    #msg = req.get_error_msg(e, lang)
+    #return send_error_response(msg)
+    #try:
+    wb = rt.get_wb(user_id)
+    print("WB Selection", wb.selection)
+    options, ents = dimensions.search_by_query(wb.search_index, query)
+    wb.selection = ents
+    print("Options", options)
+    print("Ent", ents)
+    return send_success_response(options)
+    #except Exception as e:
+    #msg = req.get_error_msg(e, lang)
+    #return send_error_response(msg)

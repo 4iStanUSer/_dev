@@ -1,5 +1,4 @@
-from iap.common.repository.models.access import Tool, User, Feature, UserGroup, Role
-from iap.common.repository.models.warehouse import Project, Pr_Tool
+from iap.common.repository.models.access import Tool, User, Feature, UserGroup, Role, Project
 from pyramid.renderers import render_to_response
 from pyramid import threadlocal
 from pyramid.paster import get_appsettings

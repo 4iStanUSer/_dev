@@ -1,4 +1,4 @@
-from iap.common.repository.models.warehouse import Pr_Tool, Project
+from iap.common.repository.models.access import Tool, Project
 
 
 def get_tools_info(req, lang):
@@ -13,7 +13,7 @@ def get_tools_info(req, lang):
     # TODO send tool info in required lang
     tools_info = []
     keys = ['id', 'name', 'description']
-    tools = req.dbsession.query(Pr_Tool.id, Pr_Tool.name, Pr_Tool.description).all()
+    tools = req.dbsession.query(Tool.id, Tool.name, Tool.description).all()
     for tool in tools:
 
         tool_info = dict(zip(keys, tool))
@@ -35,7 +35,7 @@ def get_projects_info(req, lang):
     projects_info = []
     keys = ['id', 'name', 'description', 'tool_id']
 
-    query = req.dbsession.query(Project.id, Project.name, Project.description, Pr_Tool.id)
+    query = req.dbsession.query(Project.id, Project.name, Project.description, Tool.id)
     query = query.join(Project.pr_tools).all()
 
     for sub_query in query:

@@ -2,7 +2,7 @@ import json
 import os
 import sys
 import transaction
-from iap.common.repository.models.warehouse import Project, Pr_Tool
+from iap.common.repository.models.access import Project, Tool
 from pyramid.paster import (get_appsettings, setup_logging)
 from pyramid.scripts.common import parse_vars
 from templates.access_rights_data import perm_data
@@ -76,9 +76,28 @@ def main(argv=sys.argv):
         loader.run_processing('JJOralCare')
         transaction.manager.commit()
 
+        imanage_access = IManageAccess(ssn=ssn)
+
+
+        tool = imanage_access.add_tool(name='Forecasting', description='This is forecasting')
+        tool.id = "forecast"
+        
+        project_1 = imanage_access.add_project(name='Oral Care Forecasting')
+        project_1.id = "JJOralCare"
+        project_1.description = "This is JJOralCare Project"
+        project_1.tools.append(tool)
+    
+        #project_1 = Project(name='Oral Care Forecasting', id="JJOralCare", description="This is JJOralCare Project")
+        #project_1.tools.append(tool)
+
+        project_2 = Project(name='Lean Forecasting', id="JJLean", description="This is JJLean Project")
+        
+        project_2.tools.append(tool)
+
+        ssn.add(project_1)
+        ssn.add(project_2)
 
         #Create Tool Forecating
-        tool = Tool(name="Forecasting")
         #Add  user@mail.com User for Project #1
 
         email = "user@mail.com"
@@ -157,24 +176,15 @@ def main(argv=sys.argv):
         ssn.add(user_2)
         transaction.manager.commit()
 
-        #Add Project and Pr_Tool
+        #Add Project and tool
 
         """
         Create table for storing information about projects and tools
 
         """
-        pr_tool = Pr_Tool(id="forecast", name='Forecasting', description='This is forecasting')
 
-        project_1 = Project(name='Oral Care Forecasting', id="JJOralCare", description="This is JJOralCare Project")
-        project_1.pr_tools.append(pr_tool)
 
-        project_2 = Project(name='Lean Forecasting', id="JJLean", description="This is JJLean Project")
-        project_2.pr_tools.append(pr_tool)
 
-        ssn.add(project_1)
-        ssn.add(project_2)
-
-        user_id = 2
         user_id = 2#user.email
         tool_id = 'forecast'
         project_id = 'JJOralCare'
@@ -205,22 +215,18 @@ def main(argv=sys.argv):
 
 
 
-        imanage_access = IManageAccess(ssn=ssn)
+
         # Add tools
-        tool_forecast = imanage_access.add_tool('Forecast')
-        tool_ppt = imanage_access.add_tool('PPT')
-        tool_mmm = imanage_access.add_tool('MMM')
 
         transaction.manager.commit()
 
-        tool_forecast = imanage_access.get_tool(name='Forecast')
+        tool_forecast = imanage_access.get_tool(name='Forecasting')
         f_tool_id = tool_forecast.id
 
         # Add roles
-        role_jj_admin = imanage_access.add_role('jj_role_admin',
-                                                f_tool_id)
-        role_jj_manager = imanage_access.add_role('jj_role_manager',
-                                                  f_tool_id)
+        print("Tool id", f_tool_id)
+        role_jj_admin = imanage_access.add_role(name='jj_role_admin', tool_id=f_tool_id)
+        role_jj_manager = imanage_access.add_role('jj_role_manager', f_tool_id)
 
         transaction.manager.commit()
 

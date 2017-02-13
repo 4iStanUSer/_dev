@@ -147,10 +147,7 @@ def get_options_by_ents(search_index, entities_ids, lang):
     #Entities coordinates
     ents_coords = [coords for node_id, coords in reverse_index.items() if node_id in entities_ids]
     # Create entity based on coords.
-    print("Entities ids", entities_ids)
-    print("Ents coord", ents_coords)
     query = get_empty_query(search_index)
-    print("1 query", query)
     #for entities in ents-coords
     for ent in ents_coords:
         #for dim, coords om ent.items

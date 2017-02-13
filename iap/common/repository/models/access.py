@@ -14,17 +14,48 @@ from iap.common.repository.db.meta import Base
 from .scenarios import user_scenario_table
 import datetime
 
+project_tool_tbl = Table("project_tool", Base.metadata,
+                                Column("projects_id", String, ForeignKey("projects.id"), primary_key=True),
+                                Column("tools_id", String, ForeignKey("tool.id"), primary_key=True)
+                          )
+
+class Project(Base):
+    __tablename__ = "projects"
+    id = Column(String , primary_key=True)
+    name = Column(String(length=255))
+    description = Column(String())
+    pr_tools = relationship("Tool", secondary=project_tool_tbl, back_populates="projects")
+
 
 class Tool(Base):
-    __tablename__ = 'tool'
-    id = Column(Integer, primary_key=True)
+    __tablename__ = "tool"
+
+    id = Column(String, primary_key=True)
     name = Column(String(length=255))
+    description = Column(String(length=255))
+
+    project_id = Column(Integer, ForeignKey('projects.id'))
+
+    projects = relationship("Project", secondary=project_tool_tbl, back_populates="pr_tools")
 
     roles = relationship("Role", backref="tool")
     # Maybe configure join  via...
     features = relationship("Feature", backref="tool")
     user_groups = relationship("UserGroup", backref="tool")
 
+"""
+class Tool(Base):
+    __tablename__ = 'tool'
+    id = Column(Integer, primary_key=True)
+    name = Column(String(length=255))
+
+
+
+    roles = relationship("Role", backref="tool")
+    # Maybe configure join  via...
+    features = relationship("Feature", backref="tool")
+    user_groups = relationship("UserGroup", backref="tool")
+"""
 
 user_role_tbl = Table(
     'user_roles', Base.metadata,
