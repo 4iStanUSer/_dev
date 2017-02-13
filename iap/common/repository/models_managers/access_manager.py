@@ -312,7 +312,7 @@ def tree(dict, path, masks, order):
         tree(dict[key], path, masks, order)
 
 
-def build_permission_tree(request, project_name):
+def build_permission_tree(session, project_name):
     """
     Build permission tree
     :return:
@@ -321,7 +321,7 @@ def build_permission_tree(request, project_name):
 
     list_of_access = []
     user_id = 2#request.user
-    user = request.dbsession.query(User).filter(User.id == user_id).one()
+    user = session.query(User).filter(User.id == user_id).one()
     for perm in user.perms:
         for data_perm in perm.data_perms:
             if project_name==data_perm.project:
@@ -330,7 +330,6 @@ def build_permission_tree(request, project_name):
 
     access_rights = {}
     for node in list_of_access:
-        print("List of Access", list_of_access)
         ent = node['out_path']
         if ent not in access_rights.keys():
             access_rights[ent] = {}
@@ -340,6 +339,9 @@ def build_permission_tree(request, project_name):
         tree(access_rights[ent], items, masks, order=0)
 
     return access_rights
+
+def build_perm_tree_for_entity(entity_id, entity_path):
+    pass
 
 
 def get_feature_permission(session, user_id, tool_id):

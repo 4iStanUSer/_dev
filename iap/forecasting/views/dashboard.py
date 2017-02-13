@@ -19,9 +19,12 @@ def get_dashboard_data(req):
         lang = rt.get_state(user_id).language
         project = rt.get_state(user_id)._project_id
         wb = rt.get_wb(user_id)
-        permission_tree = build_permission_tree(req, project_name=project)
+        session = req.dbsession
+        permission_tree = build_permission_tree(session, project_name=project)
+        print("WB Selecion", wb.selection)
         data = data_service.get_entity_data(permission_tree, project, wb.default_container, wb.data_config,
                                         wb.selection, lang)
+        print('data', data)
         return send_success_response(data)
     except Exception as e:
         msg = req.get_error_msg(e, lang)

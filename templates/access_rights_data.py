@@ -85,7 +85,7 @@ perm_data = {
   },
   {
     "out_path": "canada*-*mouthwash",
-    "in_path": "eq_price-monthly",
+    "in_path": "eq_price-annual",
     "mask": '1,1'
 
   }
