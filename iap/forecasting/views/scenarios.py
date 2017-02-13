@@ -148,7 +148,8 @@ def change_scenario_name(request):
         return send_error_response(msg)
     try:
         session = request.dbsession
-        scenario_service.update_scenario(session, scenario_id=scenario_id, user_id=user_id, parameter="name", value=new_name)
+        scenario_service.update_scenario(session, scenario_id=scenario_id, user_id=user_id, parameter="name",
+                                         value=new_name)
     except Exception as e:
         msg = request.get_error_msg(e, lang)
         return send_success_response(msg)

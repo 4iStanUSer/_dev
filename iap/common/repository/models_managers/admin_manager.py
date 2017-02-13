@@ -1,5 +1,6 @@
 import copy
 
+from iap.common.repository.models.access import DataPermission, Permission
 from iap.common.repository.models_managers import access_manager as a_m
 from iap.common.repository.models import access as mdls
 from iap.common.repository.models_managers.iaccess import IAccess as _IAccess
@@ -102,10 +103,35 @@ class IManageAccess:
 
         pass  # TODO Confirm This Realization
 
+    def create_data_permision(self, project, in_path, out_path, mask):
+        try:
+            data_permission = mdls.DataPermission(project=project, in_path=in_path,
+                                                  out_path=out_path, mask=mask)
+            self.ssn.add(data_permission)
+        except Exception:
+            raise Exception
+        else:
+            return data_permission
+
+    def create_permission(self, name):
+        try:
+            permission = mdls.Permission(name=name)
+            self.ssn.add(permission)
+        except Exception:
+            raise Exception
+        else:
+            return permission
+
+    def add_data_permission_to_permission(self, permission, data_permission):
+        return permission.data_perms.append(data_permission)
+
+    def add_permission_to_user(self, user, permission):
+        return user.perms.append(permission)
+
     def add_user(self, email, password, roles_id=None):
         # Validate inputs
-        email = _get_str_or_err(email, 'email')
-        password = _get_str_or_err(password, 'password')  # TODO Hashing Pass
+        #email = _get_str_or_err(email, 'email')
+        #password = _get_str_or_err(password, 'password')  # TODO Hashing Pass
 
         # Get Objects
         roles = []
@@ -124,17 +150,22 @@ class IManageAccess:
 
         return self._add_user(self.ssn, email, password, roles)
 
+    def add_role_to_user(self, user, role):
+        return user.roles.append(role)
+
     def add_project(self, name, description=None):
 
         #project_name = _get_str_or_err(name, 'project_name')
         #check if exist:
         try:
-            project = mdls.Project(name=name)
+            project = mdls.Project(name=name, description=description)
         except Exception:
             return None
         else:
             return project
 
+    def add_tool_to_project(self, tool, project):
+        return project.tools.append(tool)
 
     def add_role(self, name, tool_id):
         """
@@ -293,12 +324,12 @@ class IManageAccess:
         # Delete
         if len(old_f) > len(to_keep):
             delete_ids = set(old_f) - set(to_keep)
-            a_m.del_features_from_role(self.ssn, role, delete_ids)
+            self._del_features_from_role(self.ssn, role, delete_ids)
         # Add
         if len(new_f) > len(to_keep):
             add = set(new_f) - set(to_keep)
             to_add_features = [x for x in new_features if x.id in add]
-            a_m.add_features_to_role(self.ssn, role, to_add_features)
+            self._add_features_to_role(self.ssn, role, to_add_features)
 
         return role.features
 
@@ -788,6 +819,7 @@ class IManageAccess:
             ssn.add(new_user)
         else:
             for role in roles:
+                new_user.roles.append(role)
                 role.users.append(new_user)
         return new_user
 
@@ -812,11 +844,11 @@ class IManageAccess:
         new_group = mdls.UserGroup(name=name)
         return tool.user_groups.append(new_group)
 
-    def add_features_to_role(ssn, role, features):
+    def _add_features_to_role(self, ssn, role, features):
         for feature in features:
             role.features.append(feature)
 
-    def del_features_from_role(ssn, role, features_id):
+    def _del_features_from_role(self, ssn, role, features_id):
         return ssn.query(mdls.Feature) \
             .join(mdls.Role, mdls.Feature.roles) \
             .filter(and_(mdls.Role.id.in_(features_id),
@@ -868,7 +900,7 @@ class IManageAccess:
         ssn.add(new_tool)
         return new_tool
 
-    def add_role_to_tool(ssn, role, tool):
+    def add_role_to_tool(ssn, tool, role):
         return tool.roles.append(role)
 
     def add_feature(ssn, name, tool=None, role=None):

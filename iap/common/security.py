@@ -106,7 +106,7 @@ def requires_roles(*roles):
     def wrapper(f):
         @wraps(f)
         def wrapped(request):
-            user_id = get_user(request)
+            user_id = request.user
             if request.check_access(user_id, roles):
                 return f(request)
             else:
@@ -157,6 +157,7 @@ class AccessManager:
                     features.append(feature.name)
         except NoResultFound:
             return False
+
         else:
             if list(set(in_features) & set(features)) != []:
                 return True

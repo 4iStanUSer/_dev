@@ -146,8 +146,12 @@ def get_user_by_id(ssn, user_id):
 
 
 def get_user_by_email(ssn, email):
-    return ssn.query(mdls.User).filter(mdls.User.email == email).one_or_none()
-
+    try:
+        user = ssn.query(mdls.User).filter(mdls.User.email == email).one_or_none()
+    except Exception:
+        return None
+    else:
+        return user
 
 def get_users_by_tool(ssn, tool):
     return ssn.query(mdls.User) \

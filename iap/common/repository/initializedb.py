@@ -57,14 +57,15 @@ def main(argv=sys.argv):
     session_factory = get_session_factory(engine)
 
     with transaction.manager:
+
         ssn = get_tm_session(session_factory, transaction.manager)
 
-        # TODO remove procedure of removing all rows
         # Drop all tables
         Base.metadata.drop_all(engine)
         # Create all tables
         Base.metadata.create_all(engine)
         # Add root to entities tree.
+
         root = Entity(_name='root', _layer='root', _dimension_name='root')
         ssn.add(root)
 
@@ -75,118 +76,108 @@ def main(argv=sys.argv):
         loader = Loader(wh)
         #loader.run_processing('JJLean')
         loader.run_processing('JJOralCare')
+
         transaction.manager.commit()
 
         imanage_access = IManageAccess(ssn=ssn)
 
-
+        #Add Tool
         tool = imanage_access.add_tool(name='Forecasting', description='This is forecasting')
         tool.id = "forecast"
-        
+
+
+        #Add Projects
         project_1 = imanage_access.add_project(name='Oral Care Forecasting', description="This is JJOralCare Project")
         project_1.id = "JJOralCare"
-        project_1.tools.append(tool)
+        imanage_access.add_tool_to_project(tool, project_1)
 
         project_2 = imanage_access.add_project(name='Lean Forecasting', description="This is JJLean Project")
         project_2.id = "JJLean"
-        project_2.tools.append(tool)
+        imanage_access.add_tool_to_project(tool, project_2)
 
-        #Create Tool Forecating
-        #Add  user@mail.com User for Project #1
 
+
+        #Add role's and connect it to tools
+        role_forecast = Role(name="forecaster")
+        imanage_access.add_role_to_tool(role=role_forecast, tool=tool)
+
+        role_superviser = Role(name="superviser")
+        imanage_access.add_role_to_tool(role=role_superviser, tool=tool)
+
+
+        # Add  user@mail.com User for Project #1
         email = "user@mail.com"
         password = "qweasdZXC"
         user_1 = imanage_access.add_user(email=email, password=password)
+        imanage_access.add_role_to_user(user_1, role_forecast)
 
         # Add default_user User for Project #2
         email = "default_user"
         password = "123456"
         user_2 = imanage_access.add_user(email=email, password=password)
+        imanage_access.add_role_to_user(user_2, role_superviser)
 
-        #Add roles and features
 
-        #Add Roles Forecaster
-        features = ['create', 'view', 'finalize', 'modify',
-                    'delete', 'edit']
-        role_forecast = Role(name="forecaster")
-
-        tool.roles.append(role_forecast)
+        #Add roles Forecaster and set that feature
+        features = ['create', 'view', 'finalize', 'modify', 'delete', 'edit']
         for feature in features:
-            _feature = Feature(name=feature)
-            tool.features.append(_feature)
-            role_forecast.features.append(_feature)
+            imanage_access.add_feature(name=feature, tool=tool, role=role_forecast)
 
-        # Add Roles Superviser
-        features = ['create', 'view', 'publish', 'finalize',
-                    'modify', 'include', 'edit']
-        role_superviser = Role(name="superviser")
-        tool.roles.append(role_superviser)
+        # Add Roles Superviser and set that feature
+        features = ['create', 'view', 'publish', 'finalize', 'modify', 'include', 'edit']
         for feature in features:
-            _feature = Feature(name=feature)
-            tool.features.append(_feature)
-            role_superviser.features.append(_feature)
-
-        #Add Roles
-        user_1.roles.append(role_superviser)
-        user_1.roles.append(role_forecast)
-
-        user_2.roles.append(role_forecast)
+            imanage_access.add_feature(name=feature, tool=tool, role=role_superviser)
 
 
         #Add data permission:
-
-        permission = Permission(name="Development Template")
-
-        for data in perm_data["JJLean"]:
-            data_permission = DataPermission(project="JJLean", in_path=data['in_path'],
-                                             out_path=data['out_path'], mask=data['mask'])
-            permission.data_perms.append(data_permission)
-            ssn.add(data_permission)
-
-        permission = Permission(name="Development Template")
+        permission = imanage_access.create_permission(name="Development Template")
 
         for data in perm_data["JJLean"]:
-            data_permission = DataPermission(project="JJLean", in_path=data['in_path'],
-                                             out_path=data['out_path'], mask=data['mask'])
-            permission.data_perms.append(data_permission)
-            ssn.add(data_permission)
 
-        user_1.perms.append(permission)
+            data_permission = imanage_access.create_data_permision(project="JJLean",
+                                                                   in_path=data['in_path'],
+                                                                   out_path=data['out_path'],
+                                                                   mask=data['mask'])
+
+            imanage_access.add_data_permission_to_permission(permission, data_permission)
+
+        imanage_access.add_permission_to_user(user_1, permission)
+
 
         for data in perm_data["JJOralCare"]:
-            data_permission = DataPermission(project="JJOralCare", in_path=data['in_path'],
-                                             out_path=data['out_path'],mask=data['mask'])
-            permission.data_perms.append(data_permission)
-            ssn.add(data_permission)
+            data_permission = imanage_access.create_data_permision(project="JJOralCare",
+                                                                   in_path=data['in_path'],
+                                                                   out_path=data['out_path'],
+                                                                   mask=data['mask'])
+            imanage_access.add_data_permission_to_permission(permission, data_permission)
 
-        #Set Permission for User #1
-        user_2.perms.append(permission)
+        imanage_access.add_permission_to_user(user_2, permission)
+
 
         #Add Scenario
-        print("User_", user_1.email)
         input_data = dict(name="Price Growth Dynamics JJOralCare", description="Dynamics of Price Growth in Brazil",
                             status="New", shared="No", criteria="Brazil-Nike-Main", author=user_1.email)
-        scenario_1 = scenario_manager.create_scenario(ssn, user_1,  input_data)
-        #scenario_1 = Scenario(name="Price Growth Dynamics JJOralCare", description="Dynamics of Price Growth in Brazil",
-        #                    status="New", shared="No", criteria="Brazil-Nike-Main", author=user_1.email)
-        #user_1.scenarios.append(scenario_1)
 
-        # Add Scenario
+        scenario_manager.create_scenario(ssn, user_1,  input_data)
+
+
         input_data = dict(name="Price Growth Dynamics JJLean", description="Dynamics of Price Growth in USA",
                               status="New", shared="No", criteria="USA-iPhone-Main", author=user_2.email)
-        scenario_2 = scenario_manager.create_scenario(ssn, user_2,  input_data)
-
+        scenario_manager.create_scenario(ssn, user_2,  input_data)
 
         transaction.manager.commit()
+
+
+
 
         #Add Project and tool
 
         """
-        Create table for storing information about projects and tools
+        Fill Persistance storage
 
         """
 
-
+        #TODO admin manager add
 
         user_id = 2#user.email
         tool_id = 'forecast'
@@ -221,7 +212,7 @@ def main(argv=sys.argv):
 
         # Add tools
 
-        transaction.manager.commit()
+        #transaction.manager.commit()
 
         tool_forecast = imanage_access.get_tool(name='Forecasting')
         f_tool_id = tool_forecast.id
@@ -231,7 +222,7 @@ def main(argv=sys.argv):
         role_jj_admin = imanage_access.add_role(name='jj_role_admin', tool_id=f_tool_id)
         role_jj_manager = imanage_access.add_role('jj_role_manager', f_tool_id)
 
-        transaction.manager.commit()
+        #transaction.manager.commit()
 
         role_jj_admin = imanage_access.get_role(name='jj_role_admin')
         role_jj_manager = imanage_access.get_role(name='jj_role_manager')
@@ -245,7 +236,7 @@ def main(argv=sys.argv):
         user_jj_manager = imanage_access.add_user('jj_manager@gmail.com',
                                                   'pass', [role_manager_id])
 
-        transaction.manager.commit()
+        #transaction.manager.commit()
 
         user_jj_admin = imanage_access.get_user(email='jj_admin@gmail.com')
         user_admin_id = user_jj_admin.id
@@ -255,10 +246,10 @@ def main(argv=sys.argv):
         #imanage_access.init_user_wb(f_tool_id, user_admin_id)
         # imanage_access.update_user_data_permissions(1, 1, permissions)
 
-        transaction.manager.commit()
+        #transaction.manager.commit()
 
         features = imanage_access.get_features(f_tool_id)
         imanage_access.update_role_features(role_admin_id,
                                             [f.id for f in features])
 
-        transaction.manager.commit()
+        #transaction.manager.commit()

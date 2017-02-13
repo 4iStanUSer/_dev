@@ -20,10 +20,7 @@ def create_scenario(session, user, input_data):
                             shared=input_data['shared'], date_of_last_modification=date_of_last_mod,
                             status="New", criteria=input_data['criteria'], author=input_data['author'])
         session.add(scenario)
-        if user is not None:
-            session.add(scenario)
-        else:
-            user.scenarios.append(scenario)
+        user.scenarios.append(scenario)
     except NoResultFound:
         raise NoResultFound
 
