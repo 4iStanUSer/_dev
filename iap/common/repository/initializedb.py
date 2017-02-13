@@ -107,7 +107,7 @@ def main(argv=sys.argv):
 
         #Add Roles Forecaster
         features = ['create', 'view', 'finalize', 'modify',
-                    'delete']
+                    'delete', 'edit']
         role_forecast = Role(name="forecaster")
 
         tool.roles.append(role_forecast)
@@ -118,7 +118,7 @@ def main(argv=sys.argv):
 
         # Add Roles Superviser
         features = ['create', 'view', 'publish', 'finalize',
-                    'modify', 'include']
+                    'modify', 'include', 'edit']
         role_superviser = Role(name="superviser")
         tool.roles.append(role_superviser)
         for feature in features:

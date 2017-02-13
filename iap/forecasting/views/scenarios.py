@@ -61,7 +61,7 @@ def create_scenario(request):
         return send_error_response(msg)
     try:
         session = request.dbsession
-        scenario_manager.create_scenario(session, user_id=user_id, input_data=input_data)
+        scenario_service.create_scenario(session, user_id=user_id, input_data=input_data)
     except Exception as e:
         msg = request.get_error_msg(e, lang)
         return send_error_response(msg)

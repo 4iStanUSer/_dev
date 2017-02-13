@@ -36,7 +36,7 @@ def get_projects_info(req, lang):
     keys = ['id', 'name', 'description', 'tool_id']
 
     query = req.dbsession.query(Project.id, Project.name, Project.description, Tool.id)
-    query = query.join(Project.pr_tools).all()
+    query = query.join(Project.tools).all()
 
     for sub_query in query:
         project_info = dict(zip(keys, sub_query))

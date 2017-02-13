@@ -24,7 +24,7 @@ class Project(Base):
     id = Column(String , primary_key=True)
     name = Column(String(length=255))
     description = Column(String())
-    pr_tools = relationship("Tool", secondary=project_tool_tbl, back_populates="projects")
+    tools = relationship("Tool", secondary=project_tool_tbl, back_populates="projects")
 
 
 class Tool(Base):
@@ -36,7 +36,7 @@ class Tool(Base):
 
     project_id = Column(Integer, ForeignKey('projects.id'))
 
-    projects = relationship("Project", secondary=project_tool_tbl, back_populates="pr_tools")
+    projects = relationship("Project", secondary=project_tool_tbl, back_populates="tools")
 
     roles = relationship("Role", backref="tool")
     # Maybe configure join  via...
@@ -97,6 +97,7 @@ class User(Base):
         self.password = bcrypt.encrypt(password)
 
     def check_password(self, password):
+        print(bcrypt.verify(password, self.password))
         return bcrypt.verify(password, self.password)
 
 role_features_tbl = Table(

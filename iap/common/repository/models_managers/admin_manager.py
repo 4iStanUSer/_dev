@@ -124,12 +124,12 @@ class IManageAccess:
 
         return self._add_user(self.ssn, email, password, roles)
 
-    def add_project(self, project_name):
+    def add_project(self, name, description=None):
 
-        project_name = _get_str_or_err(project_name, 'project_name')
+        #project_name = _get_str_or_err(name, 'project_name')
         #check if exist:
         try:
-            project = mdls.Project(name=project_name)
+            project = mdls.Project(name=name)
         except Exception:
             return None
         else:
@@ -782,7 +782,8 @@ class IManageAccess:
         :return:
         :rtype:
         """
-        new_user = mdls.User(email=email, password=password)
+        new_user = mdls.User(email=email)
+        new_user.set_password(password)
         if roles is None:
             ssn.add(new_user)
         else:

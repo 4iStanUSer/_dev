@@ -81,8 +81,7 @@ def get_user(request):
         token_data = jwt.decode(token, 'secret', algorithms=['HS512'])
         user_id = int(token_data['sub'])
         login = token_data['login']
-        user = request.dbsession.query(User).filter(User.id == user_id and
-                                                    User.email == login).one()
+        user = request.dbsession.query(User).filter(User.id == user_id and User.email == login).one()
         # user = service.get_user_by_id(request,user_id, login)
     except NoResultFound:
         return 2#TODO change on None

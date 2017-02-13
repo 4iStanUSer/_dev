@@ -40,6 +40,27 @@ def deserialise_scenario(scenario_info):
     return scenario
 
 
+def create_scenario(session, user_id, input_data):
+    """Create scenario
+    :param request:
+    :type request:
+    :param input_data:
+    :type input_data:
+    :return:
+    :rtype:
+    """
+    try:
+    #TODO check existense
+        user = access_manager.get_user_by_id(session, user_id=user_id)
+        input_data['author'] = user.email
+
+        scenario = scenario_manager.create_scenario(session, user=user, input_data=input_data)
+        session.add(scenario)
+    except NoResultFound:
+        raise NoResultFound
+    return scenario
+
+
 def get_scenario_page(session, user_id, filter=None):
     try:
         scenarios = scenario_manager.get_available_scenario(session, user_id)
@@ -64,8 +85,10 @@ def copy_scenario(session, user_id, scenario_id):
     """
     try:
         scenario = scenario_manager.get_scenario_by_id(session, user_id, scenario_id)
-        scenario_data = [scenario.id, scenario.name, scenario.description, scenario.criteria]
-        scenario_manager.create_scenario(session, scenario_id=scenario_data, user_id=user_id)
+        user = access_manager.get_user_by_id(session, user_id)
+        scenario_data = dict(name=scenario.name, description=scenario.description,
+                             criteria=scenario.criteria, author=user.email, shared=None, status=None)
+        scenario_manager.create_scenario(session, input_data=scenario_data, user=user)
         #TODO provide scenario coppying
     except NoResultFound:
         raise NoResultFound

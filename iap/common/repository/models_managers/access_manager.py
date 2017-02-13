@@ -326,6 +326,7 @@ def build_permission_tree(request, project_name):
 
     access_rights = {}
     for node in list_of_access:
+        print("List of Access", list_of_access)
         ent = node['out_path']
         if ent not in access_rights.keys():
             access_rights[ent] = {}

@@ -4,7 +4,7 @@ from sqlalchemy.orm.exc import NoResultFound
 import datetime
 
 
-def create_scenario(session, user_id, input_data):
+def create_scenario(session, user, input_data):
     """Create scenario
     :param request:
     :type request:
@@ -18,13 +18,16 @@ def create_scenario(session, user_id, input_data):
         date_of_last_mod = str(datetime.datetime.now())
         scenario = Scenario(name=input_data['name'], description=input_data['description'],
                             shared=input_data['shared'], date_of_last_modification=date_of_last_mod,
-                            status="New", criteria=input_data['criteria'], author=user_id)
+                            status="New", criteria=input_data['criteria'], author=input_data['author'])
         session.add(scenario)
-
-        user = session.query(User).filter(User.id == user_id).one()
-        user.scenarios.append(scenario)
+        if user is not None:
+            session.add(scenario)
+        else:
+            user.scenarios.append(scenario)
     except NoResultFound:
         raise NoResultFound
+
+    return scenario
 
 
 def get_scenario_by_id(session,user_id, scenario_id):
