@@ -70,16 +70,12 @@ def get_entity_data(permission_tree, project, container, config, entities_ids, l
     ent = container.get_entity_by_id(entity_id)
 
     # TODO renew permission tree
-    print("Entity Path", ent.path)
-    print("Permision Tree", permission_tree)
-
     """
     Check permission vor view ent
     """
     PERMISSION_STATUS = None
     if '*-*'.join(ent.path) in list(permission_tree.keys()):
         vars = permission_tree['*-*'.join(ent.path)]
-        print("Vars", vars)
         if vars == {}:
             """
             If vars is empty - allow permission
@@ -153,6 +149,7 @@ def get_entity_data(permission_tree, project, container, config, entities_ids, l
 
     #Extract variables for view
     items_view_props = config.get_vars_for_view(meta=ent.meta, path=ent.path)
+    print("Path", ent.path)
     for item in items_view_props:
         # Get entity to get variables from.
         curr_ent = container.get_entity_by_filter(ent, item['filter'])
@@ -161,8 +158,6 @@ def get_entity_data(permission_tree, project, container, config, entities_ids, l
         absent_vars_ids = []
 
         for var_info in item['variables']:
-
-            print("Vars", vars)
             """
             Check Accces For Variables
             """
@@ -194,6 +189,7 @@ def get_entity_data(permission_tree, project, container, config, entities_ids, l
             """
 
             var = curr_ent.get_variable(var_info['id'])
+            print("Var", var_info['id'])
             if var is None:
                 absent_vars_ids.append(var_info['id'])
                 continue
@@ -203,8 +199,9 @@ def get_entity_data(permission_tree, project, container, config, entities_ids, l
                 Check Timeseries Permission
                 """
                 print("Time series name", ts_name)
+                print("Time Period", ts_period)
                 try:
-                    _ts_periods = [timeperiod for timeperiod in list(_ts[ts_name].keys()) if timeperiod != 'mask']
+                    _ts_periods = [timeperiod.split(':') for timeperiod in list(_ts[ts_name].keys()) if timeperiod != 'mask']
                 except KeyError:
                     continue
                 else:
@@ -233,15 +230,18 @@ def get_entity_data(permission_tree, project, container, config, entities_ids, l
                 """
 
                 if _ts_periods is not None or PERMISSION_STATUS:
-                    values = ts.get_values_for_period(ts_period)
-                    ps = var.get_periods_series(ts_name)
-                    #check ps
-                    time_series_data[ts_name][var_info['id']] = \
-                        {time_labels[ts_name][i]: values[i]
-                        for i in range(len(values))}
-                    periods_data[ts_name][var_info['id']] = \
-                        [dict(abs=0, rate=ps.get_value(p), start=p[0], end=p[1])
-                        for p in gr_periods[ts_name]]
+                    ts_period = check_period_perm(_ts_periods, ts_period)
+                    for period in ts_period:
+                        values = [ts.get_value(time_point)[0] for time_point in period]
+                        #values = ts.get_values_for_period(period)
+                        ps = var.get_periods_series(ts_name)
+                        #check ps
+                        time_series_data[ts_name][var_info['id']] = \
+                            {time_labels[ts_name][i]: values[i]
+                            for i in range(len(values))}
+                        periods_data[ts_name][var_info['id']] = \
+                            [dict(abs=0, rate=ps.get_value(p), start=p[0], end=p[1])
+                            for p in gr_periods[ts_name]]
 
                 elif _ts_periods not in _ts_periods:
                     print("No Permission")
@@ -577,7 +577,6 @@ def get_simulator_data(session, container, config, entity_id, lang):
                 absent_vars_ids.append(var_info['id'])
                 continue
             for ts_name, ts_period in ts_borders.items():
-
                 ts = var.get_time_series(ts_name)
 
                 # check timeseries permission
@@ -788,3 +787,17 @@ def get_simulator_value_data(container, config, entity_id, lang):
     custom_data = time_series_data
 
     return custom_data
+
+
+
+"""
+Support function
+"""
+def check_period_perm(_ts_periods, ts_period):
+
+    correct_ts_period = []
+    ts_period = range(int(float(ts_period[0])), int(float(ts_period[1])+1), 1)
+    for _ts_period in _ts_periods:
+        _ts = range(int(float(_ts_period[0])), int(float(_ts_period[1])+1), 1)
+        correct_ts_period.append(list(set(ts_period) & set(_ts)))
+    return correct_ts_period
