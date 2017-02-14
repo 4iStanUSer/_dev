@@ -111,25 +111,34 @@ def get_entity_data(permission_tree, project, container, config, entities_ids, l
     time_series_data = dict([(x, dict()) for x in ts_borders.keys()])
     periods_data = dict([(x, dict()) for x in ts_borders.keys()])
 
+
     """
-        Check permission vor view ent
+    Check permission vor view ent
     """
-    if '*-*'.join(ent.path) in list(permission_tree.keys()):
-        pass
-    else:
-        return "No permission to view ent"
+
+    #if '*-*'.join(ent.path) in list(permission_tree.keys()):
+    #    pass
+    #else:
+    #    return "No permission to view ent"
 
     #Extract variables for view
-    items_view_props = config.get_vars_for_view(meta=ent.meta, path=ent.path)
+    ent = container.get_entity_by_id(entity_id)
+    try:
+        items_view_props = config.get_vars_for_view(meta=ent.meta, path=ent.path)
+    except Exception:
+        return None
     view_vars = []
+    print('Permission Tree', permission_tree)
     for item in iter(items_view_props):
         # Get entity to get variables from.
         curr_ent = container.get_entity_by_filter(ent, item['filter'])
 
         # Collect variables data.
         absent_vars_ids = []
-        inner_path = []
-        var_items = iter(item['variables'])
+        var_ids = []
+
+        var_items = item['variables']
+        print("Var", var_items)
         for var_info in var_items:
             var_id = var_info['id']
             var = curr_ent.get_variable(var_id)
@@ -141,6 +150,7 @@ def get_entity_data(permission_tree, project, container, config, entities_ids, l
 
                 inner_path = ["*-*".join(ent.path), var_id, ts_name, ts_period]
                 mask = access_manager.check_permission(permission_tree, inner_path, pointer=0)
+                print("Mask", mask)
                 if mask == "Unavailable":
                     continue
                 else:
