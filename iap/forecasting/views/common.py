@@ -95,22 +95,21 @@ def set_entity_selection(req):
     :return:
     :rtype:
     """
-    #try:
-    user_id = req.user
-    query = req.json_body['data']['query']
-    print("Query", query)
-    lang = rt.language(user_id)
-    #except KeyError as e:
-    #msg = req.get_error_msg(e, lang)
-    #return send_error_response(msg)
-    #try:
-    wb = rt.get_wb(user_id)
-    print("WB Selection", wb.selection)
-    options, ents = dimensions.search_by_query(wb.search_index, query)
-    wb.selection = ents
-    print("Options", options)
-    print("Ent", ents)
-    return send_success_response(options)
-    #except Exception as e:
-    #msg = req.get_error_msg(e, lang)
-    #return send_error_response(msg)
+    try:
+        user_id = req.user
+        query = req.json_body['data']['query']
+        lang = rt.language(user_id)
+    except KeyError as e:
+        msg = req.get_error_msg(e, lang)
+        return send_error_response(msg)
+    try:
+        wb = rt.get_wb(user_id)
+        print("WB Selection", wb.selection)
+        options, ents = dimensions.search_by_query(wb.search_index, query)
+        wb.selection = ents
+        print("Options", options)
+        print("Ent", ents)
+        return send_success_response(options)
+    except Exception as e:
+        msg = req.get_error_msg(e, lang)
+        return send_error_response(msg)

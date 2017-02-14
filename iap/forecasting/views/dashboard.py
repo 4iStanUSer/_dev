@@ -21,6 +21,7 @@ def get_dashboard_data(req):
         wb = rt.get_wb(user_id)
         session = req.dbsession
         permission_tree = build_permission_tree(session, project_name=project)
+        print("Container", wb.selection)
         data = data_service.get_entity_data(permission_tree, project, wb.default_container, wb.data_config,
                                 wb.selection, lang)
         return send_success_response(data)

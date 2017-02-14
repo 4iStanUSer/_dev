@@ -345,7 +345,7 @@ def check_permission(permission_tree, inner_path, pointer):
     try:
         item = inner_path[pointer]
         if type(item) is list:
-            return {'item': item, 'mask': permission_tree['mask']}
+            return {'item': item, 'tree': permission_tree}
         else:
             tree = permission_tree[item]
             mask = tree['mask']

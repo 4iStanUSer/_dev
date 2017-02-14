@@ -154,7 +154,8 @@ def get_entity_data(permission_tree, project, container, config, entities_ids, l
                 if mask == "Unavailable":
                     continue
                 else:
-                    ts_period = check_period_perm(mask['item'], ts_period)
+                    ts_period = check_period_perm(mask['tree'], ts_period)
+                    print(ts_period)
                     for period in ts_period:
                         #ts_period = check_period_perm(_ts_periods, ts_period)
                         values = [ts.get_value(time_point)[0] for time_point in period]
@@ -713,11 +714,13 @@ def get_simulator_value_data(container, config, entity_id, lang):
 """
 Support function
 """
-def check_period_perm(_ts_period, ts_period):
+def check_period_perm(tree, ts_period):
 
     correct_ts_period = []
-    ts_period = range(int(float(ts_period[0])), int(float(ts_period[1])+1), 1)
-    #for _ts_period in _ts_periods:
-    _ts = range(int(float(_ts_period[0])), int(float(_ts_period[1])+1), 1)
-    correct_ts_period.append(list(set(ts_period) & set(_ts)))
+    ts_period = range(int(float(ts_period[0])), int(float(ts_period[1])), 1)
+    for _ts_period in [i for i in tree.keys() if i!='mask']:
+        _ts_period = _ts_period.split(":")
+        _ts = range(int(float(_ts_period[0])), int(float(_ts_period[1])), 1)
+        correct_ts_period.append(list(set(ts_period) & set(_ts)))
+    print("Correct Period", correct_ts_period)
     return correct_ts_period
