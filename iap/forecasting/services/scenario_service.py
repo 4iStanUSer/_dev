@@ -5,7 +5,7 @@ from sqlalchemy.orm.exc import NoResultFound
 import datetime
 
 
-def serialise_scenario(scenarios):
+def serialise_scenario(scenarios, user=None):
     """Serialise scenario into dictionary
     :param scenarios:
     :type scenarios:
@@ -13,13 +13,19 @@ def serialise_scenario(scenarios):
     :rtype:
     """
     scenario_info_list = []
-    scenario_info = {}
+
+    scenario_permission = ['share','change status','copy','delete','edit']
     for scenario in scenarios:
+        scenario_info = {}
         scenario_info['id'] = scenario.id
         scenario_info['name'] = scenario.name
         scenario_info['status'] = scenario.status
         scenario_info['description'] = scenario.description
         scenario_info['shared'] = scenario.shared
+        if user.email == scenario.author:
+            scenario_info['scenario_permission'] = scenario_permission
+        else:
+            scenario_info['scenario_permission'] = ['share', 'change status', 'copy']
         scenario_info['author'] = scenario.author
         scenario_info['location'] = scenario.status
         scenario_info['modify_date'] = scenario.date_of_last_modification
@@ -64,9 +70,10 @@ def create_scenario(session, user_id, input_data):
 def get_scenario_page(session, user_id, filter=None):
     try:
         scenarios = scenario_manager.get_available_scenario(session, user_id)
+        user = access_manager.get_user_by_id(session, user_id)
     # TODO change field of tool_id in db.
-        scenario_list = serialise_scenario(scenarios)
-        user_permission = access_manager.get_feature_permission(session, user_id, 1)
+        scenario_list = serialise_scenario(scenarios, user)
+        user_permission = access_manager.get_feature_permission(session, user_id, 'forecast')#TODO change 1 on forecast
     except NoResultFound:
         raise Exception
     else:
@@ -109,11 +116,12 @@ def get_scenarios(session, user_id, filters):
     """
     try:
         #TODO change on select all scenario
+        user = access_manager.get_user_by_id(session, user_id)
         scenarios = scenario_manager.get_available_scenario(session, user_id, filters)
     except NoResultFound:
         raise Exception
     else:
-        scenario_info_list = serialise_scenario(scenarios)
+        scenario_info_list = serialise_scenario(scenarios, user)
         return scenario_info_list
 
 

@@ -348,20 +348,12 @@ def test_get_scenario_page(web_app, token):
     now = datetime.datetime.now()
     present_time = "{0}_{1}_{2}_{3}_{4}".format(now.year, now.month, now.day, now.hour, now.minute)
     res = web_app.post_json("/forecast/get_scenario_page", {'data': {'filter': {}},'X-Token': token})
-    expected = [
-                {"name": "New Scenario",
-                 "author": '2', "shared": "No", "status": "New",
-                 "id": 2, "modify_date": present_time, "location": "New",
-                 "description": "Dynamics of Price Growth in USA"}
-                ]
-
-
-    print("Actual", res.json)
-    actual = res.json['data']['data']
-    assert expected[0]['name'] == actual[0]['name']
-    assert expected[0]['author'] == actual[0]['author']
-    assert expected[0]['id'] == actual[0]['id']
-    assert expected[0]['description'] == actual[0]['description']
+    keys = ['data', 'user_permission']
+    data_keys = ['author', 'id', 'location', 'modify_date', 'name', 'status', 'shared', 'scenario_permission']
+    print("Get sceanrio Page", res.json)
+    assert sorted(keys) == sorted(list(res.json['data'].keys()))
+    assert []
+    assert sorted(data_keys) == sorted(list(res.json['data']['data'][0].keys()))
 
 
 def test_delete_scenario_error_expected(web_app, token):
