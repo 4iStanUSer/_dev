@@ -250,7 +250,7 @@ def update_scenario(session, scenario_id, user_id, parameter, value):
     """
     try:
         scenario = scenario_manager.get_scenario_by_id(session, scenario_id =scenario_id,
-                                                       user_id= user_id)
+                                                       user_id = user_id)
         #TODO check if exist
         if parameter == "name":
             scenario.name = value

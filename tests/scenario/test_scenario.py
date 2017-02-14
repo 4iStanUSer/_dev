@@ -194,7 +194,7 @@ def test_change_scenario_name(web_app, token):
     """
 
     res = web_app.post_json("/forecast/change_scenario_name", {"data":
-                                                               {'scenario_id': 2, 'name': "New name of Scenario"},
+                                                               {'scenario_id': 3, 'name': "New name of Scenario"},
                                                                 'X-Token': token})
 
     actual = res.json
@@ -232,7 +232,7 @@ def test_change_scenario_name_view_updates(web_app, token):
     """
 
     res = web_app.post_json("/forecast/change_scenario_name", {"data":
-                                                               {'scenario_id': 2, 'name': "New name of Scenario"},
+                                                               {'scenario_id': 3, 'name': "New name of Scenario"},
                                                                 'X-Token': token})
 
     actual = res.json
@@ -266,7 +266,7 @@ def test_mark_as_final_scenario(web_app, token):
     :return:
     :rtype:
     """
-    res = web_app.post_json("/forecast/mark_as_final", {'data': {'id': 2}, 'X-Token': token})
+    res = web_app.post_json("/forecast/mark_as_final", {'data': {'id': 3}, 'X-Token': token})
     expected = {'data': 'Mark as final', 'error': False}
     actual = res.json
     print("Mark as final", actual)
@@ -281,7 +281,7 @@ def test_mark_as_final_scenario_error_expected(web_app, token):
     :return:
     :rtype:
     """
-    res = web_app.post_json("/forecast/mark_as_final", {'id': 1, 'X-Token': token})
+    res = web_app.post_json("/forecast/mark_as_final", {'id': 3, 'X-Token': token})
     expected = {'data': 'Wrong request', 'error': True}
     actual = res.json
     print("Mark as Final", actual)
@@ -296,7 +296,7 @@ def test_mark_as_final_scenario_view_updates(web_app, token):
     :return:
     :rtype:
     """
-    web_app.post_json("/forecast/mark_as_final", {'data': {'id': 2}, 'X-Token': token})
+    web_app.post_json("/forecast/mark_as_final", {'data': {'id': 3}, 'X-Token': token})
 
     res = web_app.post_json("/forecast/get_scenario_details", {'data': {'id': 2}, 'X-Token': token})
 
@@ -316,7 +316,7 @@ def test_include_scenario(web_app, token):
     :rtype:
     """
 
-    res = web_app.post_json("/forecast/include_scenario", {'data': {'parent_id': 1, "children_id": 3},
+    res = web_app.post_json("/forecast/include_scenario", {'data': {'parent_scenario_id': 1, "scenario_id": 3},
                                                            'X-Token': token})
     expected = {"error": True, "data": "User 2 Unauthorised"}
     print("Include scenario", res.json)
@@ -327,14 +327,12 @@ def test_include_scenario(web_app, token):
 def test_get_scenario_details(web_app, token):
 
     res = web_app.post_json("/forecast/get_scenario_details", {'data': {'id': 2},'X-Token': token})
-    expected =\
-    {'data': {'description': 'Dynamics of Price Growth in Brazil', 'id': 1, 'growth_period': '',
-              'meta': 'Brazil-Nike-Main',
-              'recent_actions': [{'action_name': '', 'entity_id': '', 'action_id': '', 'entity_name': '', 'date': ''}],
-              'metrics': [{'name': '', 'value': '', 'format': ''}], 'driver_change': [{'name': '', 'value': ''}],
-              'driver_group': [{'name': '', 'value': ''}],
-              'worklist': [{'name': 'Price Growth Dynamics JJOralCare', 'id': 2, 'date': '2017_2_7_18_4'}],
-              'predefined_drivers': [{'value': '', 'id': ''}]}, 'error': False}
+    expected = \
+        {'recent_actions': [{'date': '', 'entity_id': '', 'action_name': '', 'action_id': '', 'entity_name': ''}],
+         'driver_change': [{'value': '', 'name': ''}], 'id': 2, 'driver_group': [{'value': '', 'name': ''}],
+         'description': 'Dynamics of Price Growth in USA', 'metrics': [{'format': '', 'value': '', 'name': ''}],
+         'status': 'final', 'meta': None, 'growth_period': '',
+         'worklist': [{'date': '2017_2_14_15_6', 'name': 'New name of Scenario', 'id': 2}]}
 
     actual = res.json['data']
     print("Actual", actual)
@@ -352,7 +350,7 @@ def test_get_scenario_page(web_app, token):
     data_keys = ['author', 'id', 'location', 'modify_date', 'name', 'status', 'shared', 'scenario_permission']
     print("Get sceanrio Page", res.json)
     assert sorted(keys) == sorted(list(res.json['data'].keys()))
-    assert []
+    assert 'scenario_permission' in sorted(list(res.json['data']['data'][0].keys()))
     assert sorted(data_keys) == sorted(list(res.json['data']['data'][0].keys()))
 
 

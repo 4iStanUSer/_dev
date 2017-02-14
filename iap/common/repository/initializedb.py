@@ -124,7 +124,7 @@ def main(argv=sys.argv):
             imanage_access.add_feature(name=feature, tool=tool, role=role_forecast)
 
         # Add Roles Superviser and set that feature
-        features = ['create', 'view', 'publish', 'finalize', 'modify', 'include', 'edit']
+        features = ['create', 'view', 'publish', 'finalize', 'modify', 'include', 'edit', 'delete']
         for feature in features:
             imanage_access.add_feature(name=feature, tool=tool, role=role_superviser)
 
