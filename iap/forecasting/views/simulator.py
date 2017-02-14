@@ -72,22 +72,22 @@ def get_simulator_custom_data(req):
     :return:
     :rtype:
     """
-    #try:
-    user_id = req.user
-    lang = rt.language(user_id)
-    #except KeyError as e:
-    #msg = req.get_error_message(e, lang)
-    #return send_error_response(msg)
-    #try:
+    try:
+        user_id = req.user
+        lang = rt.language(user_id)
+    except KeyError as e:
+        msg = req.get_error_message(e, lang)
+        return send_error_response(msg)
+    try:
         #TODO check if there are selected scenario
-    wb = rt.get_wb(user_id)
-    data = data_service.get_simulator_value_data(wb.current_container, wb.data_config, wb.selection,
+        wb = rt.get_wb(user_id)
+        data = data_service.get_simulator_value_data(wb.current_container, wb.data_config, wb.selection,
                                                       lang)
-    #except Exception as e:
-    #msg = req.get_error_msg(e)
-    #return send_error_response(msg)
-    #else:
-    return send_success_response(data)
+    except Exception as e:
+        msg = req.get_error_msg(e)
+        return send_error_response(msg)
+    else:
+        return send_success_response(data)
 
 
 def get_simulator_decomposition(req):
