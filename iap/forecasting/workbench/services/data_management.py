@@ -55,7 +55,6 @@ def get_entity_data(permission_tree, project, container, config, entities_ids, l
     # Get requested entities.
     entity_id = entities_ids[0]
     #TODO realise for all entities
-    #Check permitted enities from container
     ent = container.get_entity_by_id(entity_id)
 
     # Define default selector for time periods.
@@ -122,11 +121,10 @@ def get_entity_data(permission_tree, project, container, config, entities_ids, l
     #    return "No permission to view ent"
 
     #Extract variables for view
-    ent = container.get_entity_by_id(entity_id)
     try:
         items_view_props = config.get_vars_for_view(meta=ent.meta, path=ent.path)
     except Exception:
-        return None
+        raise Exception#TODO change on no var for view
     view_vars = []
     print('Permission Tree', permission_tree)
     for item in iter(items_view_props):

@@ -69,6 +69,7 @@ def get_options_for_entity_selector(req):
     lang = rt.get_state(user_id).language
     wb = rt.get_wb(user_id)
     if query is None:
+        print("WB Selection", wb.selection)
         options = dimensions.get_options_by_ents(wb.search_index, wb.selection, lang)
     else:
         options, ents = dimensions.search_by_query(wb.search_index, query)

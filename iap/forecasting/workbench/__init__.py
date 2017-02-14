@@ -158,8 +158,8 @@ class Workbench:
         opts, ents = \
             dim_service.search_by_query(self.search_index, empty_query)
         #TODO add Another default selection
-        self.selection = ents[5:6]
-
+        self.selection = ents[0:1]
+        print("Selection", self.selection)
 
     def _update_search_index(self, query):
         """

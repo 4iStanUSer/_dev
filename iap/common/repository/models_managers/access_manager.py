@@ -378,14 +378,14 @@ def get_feature_permission(session, user_id, tool_id):
     return user_permission
 
 
-def check_feature_permission(self, request, user_id, tool_id, feature_id):
+def check_feature_permission(session, user_id, tool_id, feature_id):
     """Boolean function that check whether user have specific
     right for tools  and features
 
     :return:
     :rtype:
     """
-    user = request.dbsession.query(User).filter(User.id == user_id).one()
+    user = session.query(User).filter(User.id == user_id).one()
     tools = []
     features = []
     for role in user.roles:
@@ -398,21 +398,21 @@ def check_feature_permission(self, request, user_id, tool_id, feature_id):
         return False
 
 
-def get_entity_data_access(self, request, user_id):
+def get_entity_data_access(session, user_id):
     """
     Return entitie's mask
     :return:
     :rtype:
     """
     mask = []
-    user = request.dbsession.query(User).filter(User.id == user_id).one()
+    user = session.query(User).filter(User.id == user_id).one()
     for permission in user.perms:
         for dataperm in permission.data_perms:
             mask.append(dataperm.mask)
     return mask
 
 
-def get_user_entities(self, request, user_id):
+def get_user_entities(session, user_id):
     """Retunr list of dictionary - with keys
     in_path, out_path, mask
 
@@ -420,28 +420,28 @@ def get_user_entities(self, request, user_id):
     :rtype:
     """
     entities = []
-    user = request.dbsession.query(User).filter(User.id == user_id).one()
+    user = session.query(User).filter(User.id == user_id).one()
     for permission in user.perms:
         for data_perm in permission.data_perms:
             entities.append({'in_path': data_perm.in_path, 'out_path': data_perm.out_path, 'mask': data_perm.mask})
     return entities
 
 
-def get_entity_data_access(self, request, user_id):
+def get_entity_data_access(session, user_id):
         """
         Return entitie's mask
         :return:
         :rtype:
         """
         mask = []
-        user = request.dbsession.query(User).filter(User.id == user_id).one()
+        user = session.query(User).filter(User.id == user_id).one()
         for permission in user.perms:
             for dataperm in permission.data_perms:
                 mask.append(dataperm.mask)
         return mask
 
 
-def get_user_entities(self, request, user_id):
+def get_user_entities(session, user_id):
     """Retunr list of dictionary - with keys
     in_path, out_path, mask
 
@@ -449,21 +449,21 @@ def get_user_entities(self, request, user_id):
     :rtype:
     """
     entities = []
-    user = request.dbsession.query(User).filter(User.id == user_id).one()
+    user = session.query(User).filter(User.id == user_id).one()
     for permission in user.perms:
         for data_perm in permission.data_perms:
-            entities.append({'in_path':data_perm.in_path, 'out_path':data_perm.out_path, 'mask':data_perm.mask})
+            entities.append({'in_path': data_perm.in_path, 'out_path': data_perm.out_path, 'mask': data_perm.mask})
     return entities
 
 
-def check_feature_permission(self, request, user_id, tool_id, feature_id):
+def check_feature_permission(session, user_id, tool_id, feature_id):
     """Boolean function that check whether user have specific
     right for tools  and features
 
     :return:
     :rtype:
     """
-    user = request.dbsession.query(User).filter(User.id == user_id).one()
+    user = session.query(User).filter(User.id == user_id).one()
     tools = []
     features = []
     for role in user.roles:

@@ -1,4 +1,5 @@
 import copy
+import copy
 from collections import OrderedDict
 from collections import OrderedDict
 JOIN_SYMBOL = '|-|-|'
@@ -17,6 +18,7 @@ def get_selectors_config(config, lang):
 
     dimensions = config.get_property('dimensions')
     sel_props = config.get_objects_properties('selector', dimensions, lang)
+
     selectors_for_view = dict()
     for i in sel_props:
         item = i[0]
@@ -67,6 +69,7 @@ def build_search_index(container, dim_names):
     direct_index = dict()
     points = []
     for ent in container.top_entities:
+
         if ent.variables is not list():
             informative = True
         else:
@@ -145,11 +148,13 @@ def get_options_by_ents(search_index, entities_ids, lang):
     """
     reverse_index = search_index['reverse']
     #Entities coordinates
+    print("Entities Ids", entities_ids)
     ents_coords = [coords for node_id, coords in reverse_index.items() if node_id in entities_ids]
     # Create entity based on coords.
     query = get_empty_query(search_index)
     #for entities in ents-coords
     for ent in ents_coords:
+
         #for dim, coords om ent.items
         for dim, coords in ent.items():
             merged_coords = JOIN_SYMBOL.join(coords)
@@ -184,12 +189,9 @@ def search_by_query(search_index, query):
     """
     order = search_index['order']# list of dimensions
     search_indexes = [search_index['direct']] #direct list of pathes
-    print("Search Index", search_index)
     options = dict()
     entities_ids = []
-    print("query", query)
     query_internal = _transform(query)
-    print("Query", query_internal)
     for i, dim_id in enumerate(order):
 
         # Collect available options.
@@ -201,18 +203,19 @@ def search_by_query(search_index, query):
         # Verify current selector.
         # If selector is empty or not valid set default selector.
         if ("*",) in dimension_selection:
-            dimension_selection = list(OrderedDict.fromkeys(sorted(keys)))
-
+            dimension_selection = list(OrderedDict.fromkeys(sorted(keys, key=lambda k: k!=('total',))))
         elif len(dimension_selection)==0:
-            dimension_selection = list(OrderedDict.fromkeys(sorted(keys)))
+            dimension_selection = list(OrderedDict.fromkeys(sorted(keys, key=lambda k: k!=('total',))))
         else:
             _dimension_selection = []
             for x in dimension_selection:
                 if x not in _dimension_selection and x in keys:
                     _dimension_selection.append(x)
             dimension_selection = _dimension_selection
+        if ('total',) in dimension_selection:
+            pass
+            #dimension_selection.remove(('total',))
         options[dim_id] = fill_options(keys, dimension_selection)
-        print("Dimension Selection", dimension_selection)
         #fill options
         next_iter_indexes = []
         for selected in dimension_selection:
@@ -258,7 +261,7 @@ def fill_options(keys_list, selected_items):
     """
     options = dict(
         data=[],
-        selected=[JOIN_SYMBOL.join(x) for x in selected_items if x!='total']
+        selected=[JOIN_SYMBOL.join(x) for x in selected_items if x!=('total',)]
     )
 
     for item in keys_list:
