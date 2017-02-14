@@ -173,6 +173,7 @@ def check_scenario_name(request):
     else:
         return send_success_response(result)
 
+
 @forbidden_view
 @requires_roles('edit')
 def modify(request):

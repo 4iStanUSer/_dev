@@ -219,6 +219,7 @@ def get_scenario_details(session, user_id, scenario_id):
         scenario_details['id'] = scenario.id
         scenario_details['meta'] = None
         scenario_details['status'] = scenario.status
+        scenario_details['name'] = scenario.name
         scenario_details['description'] = scenario.description
         scenario_details['worklist'] = [{'id': scenario.id, 'name': scenario.name, 'date': present_time}]
         scenario_details['metrics'] = [{"name": "", "format": "", "value": ""}]#TODO add metric

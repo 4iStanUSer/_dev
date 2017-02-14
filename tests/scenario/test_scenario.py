@@ -240,10 +240,13 @@ def test_change_scenario_name_view_updates(web_app, token):
     print("Change Name", actual)
 
 
-    res = web_app.post_json("/forecast/get_scenario_details", {'data': {'id': 2}, 'X-Token': token})
+    res = web_app.post_json("/forecast/get_scenario_details", {'data': {'id': 3}, 'X-Token': token})
+    print("View description", res.json)
+
     expected = {"data": "New Scenario Description", "error": False}
-    #actual = res.json['data']['name']
-    print("View description", actual)
+    actual = res.json['data']['name']
+    assert actual == "New name of Scenario"
+
 
 
 def test_publish_scenario(web_app, token):
@@ -298,7 +301,7 @@ def test_mark_as_final_scenario_view_updates(web_app, token):
     """
     web_app.post_json("/forecast/mark_as_final", {'data': {'id': 3}, 'X-Token': token})
 
-    res = web_app.post_json("/forecast/get_scenario_details", {'data': {'id': 2}, 'X-Token': token})
+    res = web_app.post_json("/forecast/get_scenario_details", {'data': {'id': 3}, 'X-Token': token})
 
     print("Mark as final Updated view", res.json)
     actual = res.json['data']['status']
@@ -316,7 +319,7 @@ def test_include_scenario(web_app, token):
     :rtype:
     """
 
-    res = web_app.post_json("/forecast/include_scenario", {'data': {'parent_scenario_id': 1, "scenario_id": 3},
+    res = web_app.post_json("/forecast/include_scenario", {'data': {'parent_scenario_id': 3, "scenario_id": 4},
                                                            'X-Token': token})
     expected = {"error": True, "data": "User 2 Unauthorised"}
     print("Include scenario", res.json)
@@ -326,19 +329,19 @@ def test_include_scenario(web_app, token):
 
 def test_get_scenario_details(web_app, token):
 
-    res = web_app.post_json("/forecast/get_scenario_details", {'data': {'id': 2},'X-Token': token})
+    res = web_app.post_json("/forecast/get_scenario_details", {'data': {'id': 3},'X-Token': token})
     expected = \
         {'recent_actions': [{'date': '', 'entity_id': '', 'action_name': '', 'action_id': '', 'entity_name': ''}],
-         'driver_change': [{'value': '', 'name': ''}], 'id': 2, 'driver_group': [{'value': '', 'name': ''}],
+         'driver_change': [{'value': '', 'name': ''}], 'id': 3, 'driver_group': [{'value': '', 'name': ''}],
          'description': 'Dynamics of Price Growth in USA', 'metrics': [{'format': '', 'value': '', 'name': ''}],
          'status': 'final', 'meta': None, 'growth_period': '',
-         'worklist': [{'date': '2017_2_14_15_6', 'name': 'New name of Scenario', 'id': 2}]}
+         'worklist': [{'date': '2017_2_14_15_6', 'name': 'New name of Scenario', 'id': 3}]}
 
     actual = res.json['data']
     print("Actual", actual)
-    assert expected['data']['description'] == actual['description']
-    assert expected['data']['meta'] == actual['meta']
-    assert expected['data']['id'] == actual['id']
+    assert expected['description'] == actual['description']
+    assert expected['meta'] == actual['meta']
+    assert expected['id'] == actual['id']
 
 
 def test_get_scenario_page(web_app, token):
