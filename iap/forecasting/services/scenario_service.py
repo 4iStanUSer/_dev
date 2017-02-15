@@ -249,19 +249,17 @@ def update_scenario(session, scenario_id, user_id, parameter, value):
     :rtype:
     """
     try:
-        scenario = scenario_manager.get_scenario_by_id(session, scenario_id =scenario_id,
+        scenario = scenario_manager.get_scenario_by_id(session,
+                                                       scenario_id =scenario_id,
                                                        user_id = user_id)
-        #TODO check if exist
-        if parameter == "name":
-            scenario.name = value
-        elif parameter == "status":
-            scenario.status = value
-        elif parameter == "shared":
-            scenario.location = value
-        elif parameter == "favorite":
-            scenario.location = value
+        #TODO change on tool_id, feature_id
+        if access_manager.check_feature_permission(session, user_id, 'forecast', 'edit'):
+            #TODO add scenario_manager_update scenario
+            scenario_manager.update_scenario(scenario, parameter, value)
         else:
-            raise Exception
+            pass
+            #TODO check if exist
+            #TODO change on getattr()
     except Exception:
         raise Exception
     else:

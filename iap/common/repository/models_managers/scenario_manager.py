@@ -104,6 +104,15 @@ def include_scenario(session, user_id, scenario_id, parent_scenario_id):
     return
 
 
+def update_scenario(scenario, parmeter, value):
+
+    if  getattr(scenario, parmeter) == value:
+        pass
+    else:
+        setattr(scenario, parmeter, value)
+    return
+
+
 def delete_scenario(session, scenario_id, user_id):
     """
     Delete scenario's

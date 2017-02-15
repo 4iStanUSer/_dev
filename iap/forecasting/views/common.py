@@ -60,26 +60,23 @@ def get_options_for_entity_selector(req):
     # Get parameters from request.
     #check permission for workbecnh -- for project and tool
 
-    #try:
-    user_id = req.user
-    query = req.json_body['data']['query']
-    #except KeyError as e:
-    #send_error_response(e)
-    #try:
-    lang = rt.get_state(user_id).language
-    wb = rt.get_wb(user_id)
-    if query is None:
-        print("WB Selection", wb.selection)
-        options = dimensions.get_options_by_ents(wb.search_index, wb.selection, lang)
-    else:
-        options, ents = dimensions.search_by_query(wb.search_index, query)
-        print("Get option selection config", ents)
+    try:
+        user_id = req.user
+        query = req.json_body['data']['query']
+    except KeyError as e:
+        send_error_response(e)
+    try:
+        lang = rt.get_state(user_id).language
+        wb = rt.get_wb(user_id)
+        if query is None:
+            options = dimensions.get_options_by_ents(wb.search_index, wb.selection, lang)
+        else:
+            options, ents = dimensions.search_by_query(wb.search_index, query)
 
-    print("Get option selection config", options)
-    return send_success_response(options)
-    #except Exception as e:
-    #msg = req.get_error_msg(e, lang)
-    #return send_error_response(msg)
+        return send_success_response(options)
+    except Exception as e:
+        msg = req.get_error_msg(e, lang)
+        return send_error_response(msg)
 
 
 def set_entity_selection(req):
@@ -105,11 +102,8 @@ def set_entity_selection(req):
         return send_error_response(msg)
     try:
         wb = rt.get_wb(user_id)
-        print("WB Selection", wb.selection)
         options, ents = dimensions.search_by_query(wb.search_index, query)
         wb.selection = ents
-        print("Options", options)
-        print("Ent", ents)
         return send_success_response(options)
     except Exception as e:
         msg = req.get_error_msg(e, lang)

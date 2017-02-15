@@ -469,7 +469,7 @@ def check_feature_permission(session, user_id, tool_id, feature_id):
     for role in user.roles:
         tools.append(role.tool_id)
         for feature in role.features:
-            features.append(feature.id)
+            features.append(feature.name)
     if tool_id in tools and feature_id in features:
         return True
     else:

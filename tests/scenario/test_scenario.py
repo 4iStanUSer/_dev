@@ -232,7 +232,11 @@ def test_change_scenario_name_view_updates(web_app, token):
     """
 
     res = web_app.post_json("/forecast/edit_scenario", {"data":
-                                                               {'id': 3, 'parameter':'name', 'value': "New name of Scenario"},
+                                                               [{'id': 3, 'modify':[{'parameter': 'name',
+                                                                                     'value': "New name of Scenario"},
+                                                                                    {'parameter': 'status',
+                                                                                     'value': "Final"}]
+                                                                 }],
                                                                 'X-Token': token})
 
     actual = res.json
