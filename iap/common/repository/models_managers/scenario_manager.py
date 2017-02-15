@@ -1,10 +1,11 @@
 from ..models.scenarios import Scenario
 from ..models.access import User
 from sqlalchemy.orm.exc import NoResultFound
+import transaction
 import datetime
 
 
-def create_scenario(session, user, input_data):
+def create_scenario(session, input_data, user=None):
     """Create scenario
     :param request:
     :type request:
@@ -20,7 +21,8 @@ def create_scenario(session, user, input_data):
                             shared=input_data['shared'], date_of_last_modification=date_of_last_mod,
                             status="New", criteria=input_data['criteria'], author=input_data['author'])
         session.add(scenario)
-        user.scenarios.append(scenario)
+        if user:
+            user.scenarios.append(scenario)
     except NoResultFound:
         raise NoResultFound
 
@@ -58,6 +60,13 @@ def get_available_scenario(session, user_id, filters=None):
         scenarios = scenarios.join(Scenario.users)
         scenarios = scenarios.filter(User.id == user_id).all()
     except NoResultFound:
+        raise Exception
+    try:
+        if filters:
+            pass
+        else:
+            pass
+    except Exception:
         raise Exception
     else:
         return scenarios

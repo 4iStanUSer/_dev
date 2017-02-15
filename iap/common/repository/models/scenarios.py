@@ -30,6 +30,7 @@ class Scenario(Base):
     date_of_last_modification = Column(String)
 
     criteria = Column(String)
+    favorite = Column(String)
     location = Column(String)
 
     #entity_id = Column(Integer, ForeignKey('entity.id'))
