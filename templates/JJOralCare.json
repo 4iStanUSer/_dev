@@ -4152,7 +4152,7 @@
             ],
             "view_type": "output",
             "path": [
-                "mexico",
+                "canada",
                 "mouthwash"
             ],
             "id": "eq_price"
@@ -4677,7 +4677,7 @@
             "name": "View"
         }
     ],
-    "timescale_properties": [
+        "timescale_properties": [
         {
             "lang-en-full_name": "Annual",
             "lag": "1",
@@ -7041,8 +7041,8 @@
         {
             "name": "dash_top_ts_period",
             "value": [
-                "2013",
-                "2016"
+                "2012",
+                "2015"
             ]
         }
     ],

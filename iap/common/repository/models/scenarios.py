@@ -12,6 +12,12 @@ from sqlalchemy.orm import relationship
 from iap.common.repository.db.meta import Base
 
 
+
+user_scenario_table = Table('user_scenarios', Base.metadata,
+    Column('scenario_id', Integer, ForeignKey('scenarios.id')),
+    Column('user_id', Integer, ForeignKey('users.id'))
+)
+
 class Scenario(Base):
 
     __tablename__ = 'scenarios'
@@ -24,6 +30,8 @@ class Scenario(Base):
     date_of_last_modification = Column(String)
 
     criteria = Column(String)
+    location = Column(String)
+
     #entity_id = Column(Integer, ForeignKey('entity.id'))
     #enity = relationship("Entity", back_populates="scenarios")
 
@@ -32,7 +40,9 @@ class Scenario(Base):
     start_date = Column(DateTime,  nullable=True)
     end_date = Column(DateTime, nullable=True)
 
-    user_id = Column(Integer, ForeignKey('users.id'))
-    user = relationship("User", back_populates="scenarios")
+    author = Column(String(length=255))
+    users = relationship("User", secondary=user_scenario_table, back_populates="scenarios")
 
     children = relationship("Scenario",  remote_side=[id])
+
+

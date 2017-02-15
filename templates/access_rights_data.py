@@ -74,19 +74,31 @@ perm_data = {
   {
     "out_path": "*-*australia",
     "in_path": "cpi-annual",
-    "mask":'1,0'
+    "mask": '1,0'
 
   },
   {
     "out_path": "us*-*mouthwash",
-    "in_path": "unit_price-monthly",
-    "mask":'1,1,1'
+    "in_path": "unit_price",
+    "mask": '1,1,1'
 
   },
   {
     "out_path": "canada*-*mouthwash",
-    "in_path":  "eq_price-monthly",
-    "mask":'1,1'
+    "in_path": "population-annual-2012:2016",
+    "mask": '1,1,1'
+
+  },
+  {
+    "out_path": "canada*-*mouthwash",
+    "in_path": "eq_price-annual-2012:2013",
+    "mask": '1,1,1'
+
+  },
+  {
+    "out_path": "canada*-*mouthwash",
+    "in_path": "eq_price-annual-2015:2016",
+    "mask": '1,1,1'
 
   }
 ],
@@ -95,68 +107,68 @@ perm_data = {
       {
       "out_path": "us*-*band-aid",
       "in_path": "media-tv-monthly",
-      "mask":14
+      "mask":'14,11'
 
       },
       {
       "out_path": "us*-*band-aid",
       "in_path": "media-digital-monthly",
-      "mask":2
+      "mask":'14,11'
 
       },
       {
       "out_path": "us*-*band-aid*-*decorated",
       "in_path": "value-annual-forecast",
-      "mask":3
+      "mask":'14,11,3'
 
       },
       {
       "out_path": "us*-*band-aid*-*decorated*-*walmart",
       "in_path": "units-monthly-forecast",
-      "mask":4
+      "mask":'14,11,3,4'
 
       },
       {
       "out_path": "us*-*band-aid*-*premium",
       "in_path": "value",
-      "mask":5
+      "mask":'14,11,3'
       },
       {
       "out_path": "us*-*band-aid*-*premium*-*walmart",
       "in_path": "units-monthly",
-      "mask":6
+      "mask":'14,11,3,4'
 
       },
       {
       "out_path": "us*-*band-aid*-*premium*-*walgreens",
       "in_path": "price-monthly-forecast",
-      "mask":8
+      "mask":'14,11,3,4'
 
       },
       {
       "out_path": "us*-*band-aid*-*premium*-*target",
       "in_path": "units-monthly",
-      "mask":4
+      "mask":'14,11,3,4'
       },
       {
       "out_path": "us*-*band-aid*-*value",
       "in_path": "value-monthly-forecast",
-      "mask":42
+      "mask":'14,11,3'
       },
       {
       "out_path": "us*-*band-aid*-*value*-*walmart",
       "in_path": "value-monthly",
-      "mask":22
+      "mask":'14,11,3,4'
       },
       {
       "out_path": "us*-*band-aid*-*value*-*walgreens",
       "in_path": "units-monthly",
-      "mask":6
+      "mask":'14,11,3,4'
       },
       {
       "out_path": "us*-*band-aid*-*value*-*cvs",
       "in_path": "value-monthly-forecast",
-      "mask":7
+      "mask":'14,11,3,4'
       }
     ]
 }

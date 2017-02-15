@@ -1,8 +1,10 @@
 from pyramid.session import SignedCookieSessionFactory
 from sqlalchemy.orm.exc import NoResultFound
 from ..common.helper import send_error_response
-from iap.common.repository.models.access import User
+from iap.common.repository.models.access import User, DataPermissionAccess, Role, Feature
+from iap.common.repository.models.warehouse import Entity
 from pyramid.interfaces import IAuthorizationPolicy
+from .error_manager import ErrorManager
 from zope.interface import implementer
 from functools import wraps
 import jwt
@@ -74,7 +76,6 @@ def get_user(request):
     :rtype: int
     """
     #add exception on non existen  id,login in token
-    print(request)
     try:
         token = request.json_body['X-Token']
         token_data = jwt.decode(token, 'secret', algorithms=['HS512'])
@@ -83,11 +84,13 @@ def get_user(request):
         user = request.dbsession.query(User).filter(User.id == user_id and User.email == login).one()
         # user = service.get_user_by_id(request,user_id, login)
     except NoResultFound:
-        return None
+        return 2#TODO change on None
     except jwt.exceptions.DecodeError:
+        return 2#TODO change on None
+    except KeyError:
         return None
     else:
-        return user.id
+        return 2#TODO change on None user.id
 
 
 def requires_roles(*roles):
@@ -103,7 +106,7 @@ def requires_roles(*roles):
     def wrapper(f):
         @wraps(f)
         def wrapped(request):
-            user_id = get_user(request)
+            user_id = request.user
             if request.check_access(user_id, roles):
                 return f(request)
             else:
@@ -133,52 +136,6 @@ class AccessManager:
                   or 'None' if no user exists related to the identity """
         pass
 
-    def get_entity_data_access(self, request, user_id):
-        """
-        Return entitie's mask
-        :return:
-        :rtype:
-        """
-        mask = []
-        user = request.dbsession.query(User).filter(User.id == user_id).one()
-        for permission in user.perms:
-            for dataperm in permission.data_perms:
-                mask.append(dataperm.mask)
-        return mask
-
-    def get_user_entities(self, request, user_id):
-        """Retunr list of dictionary - with keys
-        in_path, out_path, mask
-
-        :return:
-        :rtype:
-        """
-        entities = []
-        user = request.dbsession.query(User).filter(User.id == user_id).one()
-        for permission in user.perms:
-            for data_perm in permission.data_perms:
-                entities.append({'in_path':data_perm.in_path, 'out_path':data_perm.out_path, 'mask':data_perm.mask})
-        return entities
-
-
-    def check_feature_permission(self, request, user_id, tool_id, feature_id):
-        """Boolean function that check whether user have specific
-        right for tools  and features
-
-        :return:
-        :rtype:
-        """
-        user = request.dbsession.query(User).filter(User.id == user_id).one()
-        tools = []
-        features = []
-        for role in user.roles:
-            tools.append(role.tool_id)
-            for feature in role.features:
-                features.append(feature.id)
-        if tool_id in tools and feature_id in features:
-            return True
-        else:
-            return False
 
     def _check_access(self, request, user_id, in_features):
         """
@@ -200,6 +157,7 @@ class AccessManager:
                     features.append(feature.name)
         except NoResultFound:
             return False
+
         else:
             if list(set(in_features) & set(features)) != []:
                 return True
@@ -232,84 +190,6 @@ def includeme(config):
     config.add_request_method(authorise, 'authorised', reify=True)
     config.set_session_factory(my_session_factory)
 
-
-def check_permission_for_tool_and_project(self, request, user_id, tool_id, project_id):
-    """
-    Function will check permission to project and tool
-
-
-    :return:
-    :rtype:
-
-    """
-    access = {'tool': False, 'project': False}
-    user = request.dbsession.query(User).filter(User.id == user_id)
-    for role in user.roles:
-        if tool_id == role.tool_id:
-            access['tool': True]
-    for perm in user.perms:
-        for data_perm in perm:
-            if data_perm.project == project_id:
-                access['project': True]
-    if access == {'tool': True, 'project': True}:
-        return True
-    else:
-        return False
-
-
-
-def tree(dict, path, masks, order):
-    """
-    Fill tree
-
-    :param dict:
-    :type dict:
-    :param path:
-    :type path:
-    :param order:
-    :type order:
-    :return:
-    :rtype:
-    """
-    if order<len(path):
-        key = path[order]
-        if key not in dict.keys():
-            dict[key]={}
-            try:
-                dict['mask']=masks[order]
-            except:
-                raise IndexError
-        order+=1
-        tree(dict[key], path, masks, order)
-
-
-def build_permission_tree(request, project_name):
-    """
-    Build permission tree
-    :return:
-    :rtype:
-    """
-
-    list_of_access = []
-    user_id = 2#request.user
-    user = request.dbsession.query(User).filter(User.id == user_id).one()
-    for perm in user.perms:
-        for data_perm in perm.data_perms:
-            if project_name==data_perm.project:
-                perm_node = dict(out_path=data_perm.out_path, in_path=data_perm.in_path, mask=data_perm.mask)
-                list_of_access.append(perm_node)
-
-    access_rights = {}
-    for node in list_of_access:
-        ent = node['out_path']
-        if ent not in access_rights.keys():
-            access_rights[ent] = {}
-
-        masks = node['mask'].split(",")
-        items = node['in_path'].split("-")
-        tree(access_rights[ent], items, masks, order=0)
-
-    return access_rights
 
 
 

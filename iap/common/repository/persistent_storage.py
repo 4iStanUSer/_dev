@@ -15,14 +15,11 @@ CONFIG_STORAGE_PATH = os.path.join(STORAGE_FOLDER_PATH, 'data_storage', 'for_con
 def load_backup(user_id, tool_id, project_id, backup_name):
     file_path = __get_backup_file_path(user_id, tool_id, project_id,
                                        backup_name)
-    print("Fiel Path", file_path)
     saved_content = __load(file_path)
-    print("Saves Content", saved_content)
     return saved_content['data']
 
 
-def save_backup(user_id, tool_id, project_id, data_to_save,
-                backup_name='default'):
+def save_backup(user_id, tool_id, project_id, data_to_save, backup_name):
     folder = __get_user_backup_dir_path(user_id, tool_id, project_id)
     if not os.path.exists(folder):
         os.makedirs(folder)

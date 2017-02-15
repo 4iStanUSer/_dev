@@ -4,7 +4,7 @@ Module for work with access
 from sqlalchemy import and_
 from sqlalchemy.orm import aliased
 from iap.common.repository.models import access as mdls
-
+from ..models.access import *
 # TODO Class implementation & ssn factory
 
 
@@ -131,109 +131,12 @@ def get_tool_by_name(ssn, name):
     return ssn.query(mdls.Tool).filter(mdls.Tool.name == name).one_or_none()
 
 
-def add_role(ssn, name):  # , client=None, tool=None
-    new_role = mdls.Role(name=name)
-    ssn.add(new_role)
-    return new_role
-
-
-# def add_role_to_tool(ssn, role, tool):
-#     return tool.roles.append(role)
-
-
-def add_user(ssn, email, password, roles=None):
-    """
-    Create new user
-
-    :param ssn:
-    :type ssn:
-    :param email:
-    :type email:
-    :param password:
-    :type password:
-    :param roles:
-    :type roles:
-    :return:
-    :rtype:
-    """
-    new_user = mdls.User(email=email, password=password)
-    if roles is None:
-        ssn.add(new_user)
-    else:
-        for role in roles:
-            role.users.append(new_user)
-    return new_user
-
-
-def add_role_to_user(ssn, user, role):
-    return user.roles.append(role)
-
-
-def add_tool(ssn, name):
-    new_tool = mdls.Tool(name=name)
-    ssn.add(new_tool)
-    return new_tool
-
-
-def add_role_to_tool(ssn, role, tool):
-    return tool.roles.append(role)
-
-
-def add_feature(ssn, name, tool=None, role=None):
-    new_feature = mdls.Feature(name=name)
-    added = False
-    if tool is not None:
-        tool.features.append(new_feature)
-        added = True
-    if role is not None:
-        role.features.append(new_feature)
-        added = True
-
-    if not added:
-        ssn.add(new_feature)
-
-    return new_feature
-
-
-def add_feature_to_tool(ssn, feature, tool):
-    return tool.features.append(feature)
-
-
-def add_feature_to_role(ssn, role, feature):
-    return role.features.append(feature)
-
-
-def add_perm_node(ssn, tool, node_type, name, parent=None):
-    node_model = _get_tool_model(tool.name, 'node')
-    new_node = node_model(node_type=node_type, name=name)
-    if parent is not None:
-        parent.children.append(new_node)
-    else:
-        ssn.add(new_node)
-
-    return new_node
-
 
 def get_perm_node_in_tool(ssn, node_id, tool):
     node_model = _get_tool_model(tool.name, 'node')
     return ssn.query(node_model).filter(node_model.id == node_id) \
         .one_or_none()
 
-
-def add_perm_value(ssn, tool, perm_node, value, user):
-    value_model = _get_tool_model(tool.name, 'value')
-
-    new_perm_value = value_model(value=value, user_id=user.id)
-    perm_node.perm_values.append(new_perm_value)
-    return new_perm_value
-
-
-def add_default_perm_value(ssn, tool, perm_node, value):
-    value_model = _get_tool_model(tool.name, 'value')
-
-    new_perm_value = value_model(value=value)
-    perm_node.perm_values.append(new_perm_value)
-    return new_perm_value
 
 
 # region Users methods
@@ -243,8 +146,12 @@ def get_user_by_id(ssn, user_id):
 
 
 def get_user_by_email(ssn, email):
-    return ssn.query(mdls.User).filter(mdls.User.email == email).one_or_none()
-
+    try:
+        user = ssn.query(mdls.User).filter(mdls.User.email == email).one_or_none()
+    except Exception:
+        return None
+    else:
+        return user
 
 def get_users_by_tool(ssn, tool):
     return ssn.query(mdls.User) \
@@ -271,10 +178,6 @@ def get_user_role_in_tool(ssn, user, tool):
 
 # region Groups methods
 
-def add_user_group(ssn, name, tool):
-    new_group = mdls.UserGroup(name=name)
-    return tool.user_groups.append(new_group)
-
 def get_user_group_by_id(ssn, group_id):
     return ssn.query(mdls.UserGroup).get(group_id)
 
@@ -285,19 +188,6 @@ def get_user_group_by_id(ssn, group_id):
 
 def get_features_by_tool(ssn, tool):
     return tool.features
-
-
-def add_features_to_role(ssn, role, features):
-    for feature in features:
-        role.features.append(feature)
-
-
-def del_features_from_role(ssn, role, features_id):
-    return ssn.query(mdls.Feature) \
-        .join(mdls.Role, mdls.Feature.roles) \
-        .filter(and_(mdls.Role.id.in_(features_id),
-                     mdls.Role.id == role.id)) \
-        .delete()
 
 
 def get_feature_by_id(ssn, feature_id):
@@ -336,13 +226,6 @@ def get_nodes_by_name(ssn, tool, name):
     return ssn.query(_n).filter(and_(_n.name == name)).all()
 
 
-def del_perm_values_for_user(ssn, tool, user):
-    _v = _get_tool_model(tool.name, 'value')
-
-    results = ssn.query(_v).filter(and_(_v.user_id.is_(user.id))).all()
-    for res in results:
-        ssn.delete(res)
-# endregion
 
 
 def get_data_permission_by_group(ssn, group_id):
@@ -378,32 +261,216 @@ def get_data_permission_by_id(ssn, data_perm_id):
         filter(mdls.DataPermissionAccess.id == data_perm_id).one()
     return data_perm
 
-def add_perm_data_from_group(ssn, group_id, to_add_perm_data):
-    """
-    Add data permission by given id
-    :param ssn:
-    :type ssn:
-    :param data_perm_id:
-    :type data_perm_id:
-    :return:
-    :rtype:
-    """
-    group = ssn.query(mdls.Group).filter(mdls.Group.id == group_id).one()
-    for perm_data_id in to_add_perm_data:
-        perm = get_data_permission_by_id(ssn, perm_data_id)
-        group.data_perm.append(perm)
 
-def del_perm_data_from_group(ssn, group_id, to_add_perm_data):
+#Rebase method's from security  to layer access
+def check_permission_for_tool_and_project(self, request, user_id, tool_id, project_id):
     """
-    Delete data permission by given id
-    :param ssn:
-    :type ssn:
-    :param data_perm_id:
-    :type data_perm_id:
+    Function will check permission to project and tool
+
+
+    :return:
+    :rtype:
+
+    """
+    access = {'tool': False, 'project': False}
+    user = request.dbsession.query(User).filter(User.id == user_id)
+    for role in user.roles:
+        if tool_id == role.tool_id:
+            access['tool': True]
+    for perm in user.perms:
+        for data_perm in perm:
+            if data_perm.project == project_id:
+                access['project': True]
+    if access == {'tool': True, 'project': True}:
+        return True
+    else:
+        return False
+
+
+def tree(dict, path, masks, order):
+    """
+    Fill tree
+
+    :param dict:
+    :type dict:
+    :param path:
+    :type path:
+    :param order:
+    :type order:
     :return:
     :rtype:
     """
-    group = ssn.query(mdls.Group).filter(mdls.Group.id == group_id).one()
-    for perm_data_id in to_add_perm_data:
-        perm = get_data_permission_by_id(ssn, perm_data_id)
-        group.data_perm.remove(perm)
+    if order<len(path):
+        key = path[order]
+        if key not in dict.keys():
+            dict[key]={}
+            try:
+                dict['mask']=masks[order]
+            except:
+                raise IndexError
+        order+=1
+        tree(dict[key], path, masks, order)
+
+
+def build_permission_tree(session, project_name):
+    """
+    Build permission tree
+    :return:
+    :rtype:
+    """
+
+    list_of_access = []
+    user_id = 2#request.user
+    user = session.query(User).filter(User.id == user_id).one()
+    for perm in user.perms:
+        for data_perm in perm.data_perms:
+            if project_name==data_perm.project:
+                perm_node = dict(out_path=data_perm.out_path, in_path=data_perm.in_path, mask=data_perm.mask)
+                list_of_access.append(perm_node)
+
+    access_rights = {}
+    for node in list_of_access:
+        ent = node['out_path']
+        if ent not in access_rights.keys():
+            access_rights[ent] = {}
+
+        masks = node['mask'].split(",")
+        items = node['in_path'].split("-")
+        tree(access_rights[ent], items, masks, order=0)
+
+    return access_rights
+
+
+def check_permission(permission_tree, inner_path, pointer):
+    try:
+        item = inner_path[pointer]
+        if type(item) is list:
+            return {'item': item, 'tree': permission_tree}
+        else:
+            tree = permission_tree[item]
+            mask = tree['mask']
+    except KeyError:
+        return "Unavailable"
+    else:
+        if tree == {}:
+            return {'period': item, 'mask': mask}
+        else:
+            return check_permission(tree, inner_path, pointer+1)
+
+
+def get_feature_permission(session, user_id, tool_id):
+    """Boolean function that check whether user have specific
+    right for tools  and features
+
+    :return:
+    :rtype:
+    """
+
+    feature = session.query(Feature.name).distinct(Feature.name)
+    feature = feature.join(Role.users).join(Role.features)
+    features = feature.filter((User.id == user_id) & (Feature.tool_id == tool_id)).all()
+
+    user_permission = {'create': False, 'finalize': False, 'share': False,
+                       'duplicate': False, 'edit': False, 'delete': False}
+    for feature in features:
+        if feature[0] in user_permission.keys():
+            user_permission[feature[0]] = True
+    return user_permission
+
+
+def check_feature_permission(session, user_id, tool_id, feature_id):
+    """Boolean function that check whether user have specific
+    right for tools  and features
+
+    :return:
+    :rtype:
+    """
+    user = session.query(User).filter(User.id == user_id).one()
+    tools = []
+    features = []
+    for role in user.roles:
+        tools.append(role.tool_id)
+        for feature in role.features:
+            features.append(feature.id)
+    if tool_id in tools and feature_id in features:
+        return True
+    else:
+        return False
+
+
+def get_entity_data_access(session, user_id):
+    """
+    Return entitie's mask
+    :return:
+    :rtype:
+    """
+    mask = []
+    user = session.query(User).filter(User.id == user_id).one()
+    for permission in user.perms:
+        for dataperm in permission.data_perms:
+            mask.append(dataperm.mask)
+    return mask
+
+
+def get_user_entities(session, user_id):
+    """Retunr list of dictionary - with keys
+    in_path, out_path, mask
+
+    :return:
+    :rtype:
+    """
+    entities = []
+    user = session.query(User).filter(User.id == user_id).one()
+    for permission in user.perms:
+        for data_perm in permission.data_perms:
+            entities.append({'in_path': data_perm.in_path, 'out_path': data_perm.out_path, 'mask': data_perm.mask})
+    return entities
+
+
+def get_entity_data_access(session, user_id):
+        """
+        Return entitie's mask
+        :return:
+        :rtype:
+        """
+        mask = []
+        user = session.query(User).filter(User.id == user_id).one()
+        for permission in user.perms:
+            for dataperm in permission.data_perms:
+                mask.append(dataperm.mask)
+        return mask
+
+
+def get_user_entities(session, user_id):
+    """Retunr list of dictionary - with keys
+    in_path, out_path, mask
+
+    :return:
+    :rtype:
+    """
+    entities = []
+    user = session.query(User).filter(User.id == user_id).one()
+    for permission in user.perms:
+        for data_perm in permission.data_perms:
+            entities.append({'in_path': data_perm.in_path, 'out_path': data_perm.out_path, 'mask': data_perm.mask})
+    return entities
+
+
+def check_feature_permission(session, user_id, tool_id, feature_id):
+    """Boolean function that check whether user have specific
+    right for tools  and features
+
+    :return:
+    :rtype:
+    """
+    user = session.query(User).filter(User.id == user_id).one()
+    tools = []
+    features = []
+    for role in user.roles:
+        tools.append(role.tool_id)
+        for feature in role.features:
+            features.append(feature.id)
+    if tool_id in tools and feature_id in features:
+        return True
+    else:
+        return False

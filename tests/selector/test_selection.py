@@ -12,21 +12,14 @@ import pytest
 #get options for entity selections
 #set entity selector
 
-def prepare_wb():
-    """
-    WB preparation
-
-    :return:
-    :rtype:
-    """
-    pass
 
 def test_search_by_query():
 
-    query = {'geography': ['uk'], 'products': [], 'market': []}
+    query = {'geography': ['uk'], 'products': ['*'], 'market': ['*']}
     actual = dimensions.search_by_query(Input, query)
-    expected = [18]
+    expected = [18, 20, 19, 21, 8, 22]
     print("Actual", actual)
+
     assert expected == actual[1]
 
 

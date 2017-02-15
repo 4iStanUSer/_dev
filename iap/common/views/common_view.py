@@ -1,5 +1,4 @@
-from iap.common.repository.models.access import Tool, User, Feature, UserGroup, Role
-from iap.common.repository.models.warehouse import Project, Pr_Tool
+from iap.common.repository.models.access import Tool, User, Feature, UserGroup, Role, Project
 from pyramid.renderers import render_to_response
 from pyramid import threadlocal
 from pyramid.paster import get_appsettings
@@ -19,7 +18,6 @@ def index_view(req):
                               request=req)
 
 
-
 def check_logged_in(req):
     """Check user existed
 
@@ -29,7 +27,7 @@ def check_logged_in(req):
     :rtype: Dict[str, bool]
 
     """
-    user_id = 2#get_user(req)
+    user_id = get_user(req)
     session_flag = True#check_session(req)
 
     if user_id != None and session_flag == True:
@@ -37,7 +35,11 @@ def check_logged_in(req):
         # new_token = req.session['token']
         return send_success_response(token)
     else:
-        return send_error_response('Unauthorised')
+        #msg = req.get_error_msg('default', "NotFound")
+        #return send_error_response("Unauthorised_{0}".format(msg))
+        #TODO send_error_responce
+        token = req.create_jwt_token(2, login="default_user")
+        return send_success_response(token)
 
 
 def login(req):
@@ -57,7 +59,8 @@ def login(req):
         req.session['token'] = token
         return send_success_response(token)
     else:
-        return send_error_response("Unauthorised")
+        msg = req.get_error_msg("NotFound")
+        return send_error_response("Unauthorised_{0}".format(msg))
 
 
 def logout(req):
@@ -101,20 +104,19 @@ def get_page_configuration(req):
     """
     # Get parameters from request.
     try:
-        user_id = 2#req.user
+        user_id = req.user
         page_name = req.json_body['data']['page']
-    except KeyError:
-        msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
+    except KeyError as e:
+        msg = req.get_error_msg(e)
         return send_error_response(msg)
     try:
         state = rt.get_state(user_id)
         tool_id = state.tool_id
         language = state.language
-        #get page confiduration by tool_id, page_name, language
         config = get_page_config(tool_id, page_name, language)
         return send_success_response(config)
     except Exception as e:
-        msg = ErrorManager.get_error_message(e)
+        msg = req.get_error_msg(e, language)
         return send_error_response(msg)
 
 
@@ -127,18 +129,17 @@ def set_language(req):
     :return:
     :rtype:
     """
-    # Get parameters from request.
     try:
-        user_id = 2#req.user
+        user_id = req.user
         lang = req.json_body['data']['lang']
-    except KeyError:
-        msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
+    except KeyError as e:
+        msg = req.get_error_msg(e)
         return send_error_response(msg)
     try:
         rt.update_state(user_id, language=lang)
         return send_success_response()
     except Exception as e:
-        msg = ErrorManager.get_error_message(e)
+        msg = req.get_error_msg(e, lang)
         return send_error_response(msg)
 
 
@@ -153,25 +154,22 @@ def get_tools_with_projects(req):
     :rtype: None
     """
     try:
-        user_id = 2#req.user
-    except KeyError:
-        msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
+        user_id = req.user
+    except KeyError as e:
+        msg = req.get_error_msg(e)
         return send_error_response(msg)
     try:
         data = dict()
         if not user_id:
             data['tools'] = common_getter.get_tools_info(pt)
         else:
-            #call acccess manager  - check permission to project_id, tool_id
-            #lang = rt.get_state(user_id).language
-            #tools_ids, projects_ids = pt.get_user_tools_with_projects(user_id)
-            #data['tools'] = common_getter.get_tools_info(req, pt, tools_ids, lang)
-            data['tools'] = common_getter.get_tools_info(req)
-            #data['projects'] = common_getter.get_projects_info(req, pt, projects_ids, lang)
-            data['projects'] = common_getter.get_projects_info(req)
+        #TODO call acccess manager  - check permission to project_id, tool_id
+            lang = rt.get_state(user_id).language
+            data['tools'] = common_getter.get_tools_info(req, lang)
+            data['projects'] = common_getter.get_projects_info(req, lang)
         return send_success_response(data)
     except Exception as e:
-        msg = ErrorManager.get_error_message(e)
+        msg = req.get_error_msg(e)
         return send_error_response(msg)
 
 
@@ -196,20 +194,21 @@ def get_data_for_header(req):
     :rtype:
     """
     try:
-        user_id = 2#req.user
-    except KeyError:
-        msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
+        user_id = req.user
+    except KeyError as e:
+        msg = ErrorManager.get_error_msg(e)
         return send_error_response(msg)
     try:
+
         header_data = dict()
         lang = rt.get_state(user_id).language
-        #common_getter-?
+        #TODO change on database access
         header_data['languages'] = common_getter.get_languages_list(pt, lang)
         header_data['user'] = common_getter.get_user_info(pt, user_id, lang)
         header_data['client'] = common_getter.get_client_info(pt, user_id, lang)
         return send_success_response(header_data)
     except Exception as e:
-        msg = ErrorManager.get_error_message(e)
+        msg = ErrorManager.get_error_msg(e, lang=lang)
         return send_error_response(msg)
 
 
@@ -228,49 +227,19 @@ def set_project_selection(req):
     :rtype:
     """
     try:
-        user_id = 2#req.user
+        user_id = req.user
         project_id = req.json_body['data']['project_id']
         tool_name = req.json_body['data']['tool_id']
-        print(project_id)
-        print(tool_name)
-    except KeyError:
-        msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
+    except KeyError as e:
+        msg = req.get_error_msg(e)
         return send_error_response(msg)
-    #try:
-    #Change accesss for project selector
-    project = req.dbsession.query(Project).filter(Project.id == project_id).one()
-    #update state of runtime storage
-    rt.update_state(user_id, tool_id=tool_name, project_id=project.id)
-    return send_success_response(project_id)
-    #except Exception as e:
-    #    msg = ErrorManager.get_error_message(e)
-    #    return send_error_response(msg)
-
-
-def test_preparation(request):
-    """
-    Function called before each gunctional test executed
-    Create table if it needed fill database with neccessary data
-    :param request:
-    :type request:
-    :return:
-    :rtype:
-    """
-
-    from ...forecasting.views.scenarios import create_table, prepare_scenario_testing
-    test_name = request.json_body['test_name']
-    if test_name == "scenario":
-        create_table(request)
-        prepare_scenario_testing(request)
-        return send_success_response("Test Prepared")
-    elif test_name == "authentification":
-        prepare_scenario_testing(request)
-        return send_success_response("Test Prepared")
-    if test_name == "authorisation":
-        prepare_scenario_testing(request)
-
-    if test_name == "project_creation":
-        from ...forecasting.views.scenarios import create_table, prepare_scenario_testing
-        prepare_scenario_testing(request)
-    pass
+    try:
+        #TODO Change accesss for project selector
+        #TODO Check That project existed
+        lang = rt.get_state(user_id).language
+        rt.update_state(user_id, tool_id=tool_name, project_id=project_id)
+        return send_success_response(project_id)
+    except Exception as e:
+        msg = req.get_error_msg(e, lang)
+        return send_error_response(msg)
 

@@ -1,61 +1,43 @@
 import datetime
-from ...common.repository.models_managers.scenario import create_scenario, get_scenarios, \
-    update_scenario, check_scenario, delete_scenario, search_and_get_scenarios
-
-from iap.common.repository.models.scenarios import Scenario
+from ...common.repository.models_managers import scenario_manager
+from ...forecasting.services import scenario_service
 from ...common.helper import send_success_response, send_error_response
 from ...common.security import requires_roles, forbidden_view
+from ...common import runtime_storage as rt
 
-
-def create_table(request):
-    """
-    Create Scenario Table
-    :param request:
-    :type request:
-    :return:
-    :rtype:
-    """
-    from iap.common.repository.db.meta import Base
-    _engine = request.dbsession.bind.engine
-    # Create all tables
-    Base.metadata.create_all(_engine)
-
-
-def prepare_scenario_testing(request):
-    """
-    Prepare db for testing
-    :param request:
-    :type request: pyramid.util.Request
-    :return:
-    :rtype: None
-    """
-
-    scenarios = request.dbsession.query(Scenario).all()
-    for scenario in scenarios:
-        request.dbsession.delete(scenario)
-
-
-def serialise_scenario(scenarios):
-    """
-    Serialise scenario into dictionary
-    :param scenarios:
-    :type scenarios:
-    :return:
-    :rtype:
-    """
-    scenario_info_list = []
-    scenario_info = {}
-    for scenario in scenarios:
-        scenario_info['id'] = scenario.id
-        scenario_info['name'] = scenario.name
-        scenario_info['status'] = scenario.status
-        scenario_info['shared'] = scenario.shared
-        scenario_info_list.append(scenario_info)
-    return scenario_info_list
 
 
 @forbidden_view
-@requires_roles('Create a new scenario')
+@requires_roles('view')
+def get_scenario_page(request):
+    """
+    View for url - get scenario page
+
+
+    :param req:
+    :type req:
+    :return:
+    :rtype:
+    """
+    try:
+        user_id = request.user
+        lang = rt.language(user_id)
+        filters = request.json_body['data']['filter']
+    except KeyError as e:
+        msg = request.get_error_msg(e, lang)
+        return send_error_response(msg)
+    try:
+        session = request.dbsession
+        scenarios_page = scenario_service.get_scenario_page(session, user_id=user_id)
+    except Exception as e:
+        msg = request.get_error_msg(e, lang)
+        return send_error_response(msg)
+    else:
+        return send_success_response(scenarios_page)
+
+
+@forbidden_view
+@requires_roles('create')
 def create_scenario(request):
     """Function for creating new scenario
     args:
@@ -69,17 +51,25 @@ def create_scenario(request):
     :return:
     :rtype:
     """
+
     try:
-        input_data = request.json_body
-        create_scenario(input_data)
-    except KeyError:
-        return send_error_response("Failed to create scenario")
+        user_id = request.user
+        lang = rt.language(user_id)
+        input_data = request.json['data']
+    except KeyError as e:
+        msg = request.get_error_msg(e, lang)
+        return send_error_response(msg)
+    try:
+        session = request.dbsession
+        scenario_service.create_scenario(session, user_id=user_id, input_data=input_data)
+    except Exception as e:
+        msg = request.get_error_msg(e, lang)
+        return send_error_response(msg)
     else:
         return send_success_response("Scenario created")
 
-
 @forbidden_view
-@requires_roles('View Scenario')
+@requires_roles('view')
 def search_and_view_scenario(request):
     """
     Return list of scenario by given filters
@@ -92,17 +82,25 @@ def search_and_view_scenario(request):
     :rtype:
     """
     try:
-        filters = request.json_body['filters']
-        scenario_info_list = get_scenarios(request, filters)
-    except KeyError:
-        return send_error_response("Error during searching")
+        user_id = request.user
+        lang = rt.language(user_id)
+        filters = request.json_body['data']['filters']
+    except KeyError as e:
+        msg = request.get_error_msg(e, lang)
+        return send_error_response(msg)
+    try:
+        session = request.dbsession
+        scenario_info_list = scenario_service.get_scenarios(session, user_id=user_id, filters=filters)
+    except Exception as e:
+        msg = request.get_error_msg(e, lang)
+        return send_error_response(msg)
     else:
         return send_success_response(scenario_info_list)
 
 
 @forbidden_view
-@requires_roles('View Scenario')
-def get_scenario_description(request):
+@requires_roles('view')
+def get_scenario_details(request):
     """
     Return scenario description by given scenario id
     :param request:
@@ -110,17 +108,27 @@ def get_scenario_description(request):
     :return:
     :rtype:
     """
+
     try:
-        scenario_id = request.json_body['id']
-        output = search_and_get_scenarios(scenario_id, 'description')
-    except KeyError:
-        return send_error_response("Failed to get scenario description")
+        user_id = request.user
+        scenario_id = request.json_body['data']['id']
+        lang = rt.language(user_id)
+    except KeyError as e:
+        msg = request.get_error_msg(e, lang)
+        return send_error_response(msg)
+    try:
+    #TODO check_scenario_permission(user_id, scenario_id)
+        session = request.dbsession
+        output = scenario_service.get_scenario_details(session, user_id=user_id, scenario_id=scenario_id)
+    except Exception as e:
+        msg = request.get_error_msg(e)
+        return send_error_response(msg)
     else:
         return send_success_response(output)
 
 
 @forbidden_view
-@requires_roles('View Scenario')
+@requires_roles('edit')
 def change_scenario_name(request):
     """
     Change scenario name
@@ -131,66 +139,71 @@ def change_scenario_name(request):
     :rtype:
     """
     try:
-        scenario_id = request.json_body['id']
-        new_name = request.json_body['new_name']
-        new_value = {"name": new_name}
-        update_scenario(request, scenario_id, new_value)
-    except KeyError:
-        return send_error_response("Failed to change name")
+        user_id = request.user
+        scenario_id = request.json_body['data']['scenario_id']
+        new_name = request.json_body['data']['name']
+        lang = rt.language(user_id)
+    except KeyError as e:
+        msg = request.get_error_msg(e, lang)
+        return send_error_response(msg)
+    try:
+        session = request.dbsession
+        scenario_service.update_scenario(session, scenario_id=scenario_id, user_id=user_id, parameter="name",
+                                         value=new_name)
+    except Exception as e:
+        msg = request.get_error_msg(e, lang)
+        return send_success_response(msg)
     else:
         return send_success_response("Name changed")
 
-def set_scenario_selection(request):
-    """
-    Set selection function
-
-    :param request:
-    :type request:
-    :return:
-    :rtype:
-    """
-
-    pass
 
 @forbidden_view
-@requires_roles('View Scenario')
+@requires_roles('view')
 def check_scenario_name(request):
     try:
-        scenario_id = request.json_body['id']
-        name = request.json_body['name']
+        user_id = request.user
+        scenario_id = request.json_body['data']['id']
+        name = request.json_body['data']['name']
         value_to_check = {'name': name}
-        result = check_scenario(scenario_id, value_to_check)
-        if result:
-            return send_success_response("Name checked")
-    except KeyError:
-        return send_error_response("Failed to check name")
+        lang = rt.language(user_id)
+        result = scenario_manager.check_scenario(scenario_id=scenario_id, value_to_check=value_to_check)
+    except KeyError as e:
+        msg = request.get_error_msg(e, lang)
+        return send_error_response(msg)
     else:
-        return send_error_response("Failed to check name")
+        return send_success_response(result)
 
 
 @forbidden_view
-@requires_roles('Modify Scenario')
+@requires_roles('edit')
 def modify(request):
-    """
-    Modify scenario
+    """Modify scenario
     :param request:
     :type request:
     :return:
     :rtype:
     """
     try:
+        user_id = request.user
         new_values = request.json_body['modification_value']
         scenario_id = request.json_body['scenario_id']
-        update_scenario(request, scenario_id, new_values)
-    except KeyError:
-        return send_error_response("Failed to modify selected scenario")
+        lang = rt.language(user_id)
+    except KeyError as e:
+        msg = request.get_error_msg(e, lang)
+        return send_error_response(msg)
+    try:
+        updated_scenario = scenario_manager.update_scenario\
+            (request, scenario_id=scenario_id, parameter=new_values['parameter'], value=new_values['value'])
+    except Exception as e:
+        msg = request.get_error_msg(e, lang)
+        return send_error_response(msg)
     else:
-        return send_success_response(update_scenario)
+        return send_success_response(updated_scenario)
 
 
 @forbidden_view
-@requires_roles('Delete Scenario')
-def delete(request):
+@requires_roles('delete')
+def delete_scenario(request):
     """
     Delete selected scenario
     :param request:
@@ -199,28 +212,24 @@ def delete(request):
     :rtype:
     """
     try:
-        scenario_id = request.json_body['id']
-        delete_scenario(request, scenario_id)
-    except KeyError:
-        return send_error_response("Failed to delete selected scenario")
+        user_id = request.user
+        scenario_id = request.json_body['data']['id']
+        lang = rt.language(user_id)
+    except KeyError as e:
+        msg = request.get_error_msg(e, lang)
+        return send_error_response(msg)
+    try:
+        session = request.dbsession
+        scenario_manager.delete_scenario(session, scenario_id=scenario_id, user_id=user_id)
+    except Exception as e:
+        msg = request.get_error_msg(e, lang)
+        return send_error_response(msg)
     else:
         return send_success_response("Deleted selected scenario")
 
 
 @forbidden_view
-@requires_roles('Publish Scenario')
-def publish_scenario(request):
-    """Publish selected scenario to central repository
-    :param request:
-    :type request:
-    :return:
-    :rtype:
-    """
-    pass
-
-
-@forbidden_view
-@requires_roles('View Scenario')
+@requires_roles('finalize')
 def mark_as_final(request):
     """Marks selected scenario
 
@@ -230,31 +239,66 @@ def mark_as_final(request):
     :rtype:
     """
     try:
-        scenario_id = request.json_body['id']
-        new_value = {'status': 'final'}
-        update_scenario(request, scenario_id, new_value)
-    except:
-        return send_error_response("Marking as final failed")
+        user_id = request.user
+        lang = rt.language(user_id)
+        scenario_id = request.json_body['data']['id']
+    except KeyError as e:
+        msg = request.get_error_msg(e, lang)
+        return send_error_response(msg)
+    try:
+        session = request.dbsession
+        scenario_service.update_scenario(session, scenario_id=scenario_id, user_id=user_id, parameter='status', value="final")
+    except Exception as e:
+        msg = request.get_error_msg(e, lang)
+        return send_error_response(msg)
     else:
         return send_success_response("Mark as final")
 
 
 @forbidden_view
-@requires_roles('Include_scenario')
+@requires_roles('modify')
 def include_scenario(request):
-
     try:
-        parent_scenario_id = request.json_body['parent_scenario_id']
-        scenario_id = request.json_body['scenario_id']
-        msg = include_scenario(parent_scenario_id, scenario_id)
-    except KeyError:
+        user_id = request.user
+        parent_scenario_id = request.json_body['data']['parent_scenario_id']
+        scenario_id = request.json_body['data']['scenario_id']
+        lang = rt.language(user_id)
+    except KeyError as e:
+        msg = request.get_error_msg(e, lang)
+        return send_error_response(msg)
+    try:
+        session = request.dbsession
+        scenario_manager.include_scenario(session, user_id=user_id,
+                                          parent_scenario_id=parent_scenario_id, scenario_id=scenario_id)
+    except Exception as e:
+        msg = request.get_error_msg(e, lang)
         return send_error_response(msg)
     else:
-        send_success_response(msg)
+        send_success_response("Scenario Included")
 
 
 @forbidden_view
-@requires_roles('View Scenario')
+@requires_roles('view')
+def copy_scenario(request):
+    try:
+        user_id = request.user
+        scenario_id = request.json_body['data']['scenario_id']
+        lang = rt.language(user_id)
+    except KeyError as e:
+        msg = request.get_error_msg(e, lang)
+        return send_error_response(msg)
+    try:
+        session = request.dbsession
+        scenario_service.copy_scenario(session, user_id=user_id, scenario_id=scenario_id)
+    except Exception as e:
+        msg = request.get_error_msg(e, lang)
+        return send_error_response(msg)
+    else:
+        return send_success_response("Scenario copied")
+
+
+@forbidden_view
+@requires_roles('view')
 def get_scenarios_list(request):
     scenarios = [
         {

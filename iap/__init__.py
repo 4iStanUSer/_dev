@@ -5,6 +5,7 @@ from pyramid.response import Response
 
 from .common import security
 from .common.security import set_manager
+from .common.error_manager import create_error_manager
 from .common.views import common_view as common_views
 
 from .forecasting.views import dashboard as f_dashboard
@@ -20,9 +21,6 @@ def common_routing(config):
     config.add_static_view(name='static', path='iap.ui:dist')
     config.add_static_view(name='images', path='iap.ui:images',
                            cache_max_age=3600)
-
-    #config.add_notfound_view(common.notfound_view)
-    #config.add_forbidden_view(common.forbidden_view)
 
     config.add_route('common_views.index', '/')
     config.add_view(common_views.index_view, route_name='common_views.index')
@@ -55,12 +53,6 @@ def common_routing(config):
     config.add_route('common_views.select_project', '/select_project')
     config.add_view(common_views.set_project_selection, route_name='common_views.select_project',renderer='json')
 
-    #this is test view to check the database
-    config.add_route('common_views.test_preparation', '/test_preparation')
-    config.add_view(common_views.test_preparation, route_name='common_views.test_preparation',renderer='json')
-
-
-
     #config.set_authorization_policy(ACLAuthorizationPolicy())
     #config.set_authorization_policy(AccessManager())
     config.add_directive('set_manager', set_manager)
@@ -83,53 +75,64 @@ def forecast_routing(config):
     config.add_route('forecast.index', '/')
     config.add_view(f_common.index_view, route_name='forecast.index')
 
-    config.add_route('forecast.get_index_page_data',
-                     '/get_index_page_data')
+    config.add_route('forecast.get_index_page_data', '/get_index_page_data')
 
-    config.add_route('forecast.create_scenario',
-                     '/create_scenario')
+    """
+    Scenario Routing
+
+    """
+    config.add_route('forecast.create_scenario', '/create_scenario')
     config.add_view(f_scenarios.create_scenario,
                     route_name='forecast.create_scenario', renderer='json')
 
-    config.add_route('forecast.get_scenario_description',
-                     '/get_scenario_description')
-    config.add_view(f_scenarios.get_scenario_description,
-                    route_name='forecast.get_scenario_description', renderer='json')
+    config.add_route('forecast.get_scenario_page', '/get_scenario_page')
+    config.add_view(f_scenarios.get_scenario_page,
+                    route_name='forecast.get_scenario_page', renderer='json')
 
     config.add_route('forecast.search_and_view_scenario',
                      '/search_and_view_scenario')
     config.add_view(f_scenarios.search_and_view_scenario,
                     route_name='forecast.search_and_view_scenario', renderer='json')
 
-    config.add_route('forecast.change_scenario_name',
-                     '/change_scenario_name')
+    config.add_route('forecast.get_scenario_details', '/get_scenario_details')
+    config.add_view(f_scenarios.get_scenario_details,
+                    route_name='forecast.get_scenario_details', renderer='json')
+
+    config.add_route('forecast.change_scenario_name', '/change_scenario_name')
     config.add_view(f_scenarios.change_scenario_name,
                     route_name='forecast.change_scenario_name', renderer='json')
-
-    config.add_route('forecast.delete',
-                     '/delete_scenario')
-    config.add_view(f_scenarios.delete,
-                    route_name='forecast.delete', renderer='json')
-
-    config.add_route('forecast.publish_scenario',
-                     '/publish_scenario')
-    config.add_view(f_scenarios.publish_scenario,
-                    route_name='forecast.publish_scenario', renderer='json')
 
     config.add_route('forecast.mark_as_final',
                      '/mark_as_final')
     config.add_view(f_scenarios.mark_as_final,
                     route_name='forecast.mark_as_final', renderer='json')
 
+    config.add_route('forecast.set_scenario_location',
+                     '/set_scenario_location')
+    config.add_view(f_scenarios.mark_as_final,
+                    route_name='forecast.set_scenario_location', renderer='json')
+
     config.add_route('forecast.include_scenario', '/include_scenario')
     config.add_view(f_scenarios.include_scenario,
                     route_name='forecast.include_scenario', renderer='json')
+
+    config.add_route('forecast.copy_scenario', '/copy_scenario')
+    config.add_view(f_scenarios.copy_scenario,
+                    route_name='forecast.copy_scenario', renderer='json')
 
     config.add_route('forecast.get_scenarios_list',
                      '/get_scenarios_list')
     config.add_view(f_scenarios.get_scenarios_list,
                     route_name='forecast.get_scenarios_list', renderer='json')
 
+    config.add_route('forecast.delete_scenario',
+                     '/delete_scenario')
+    config.add_view(f_scenarios.delete_scenario,
+                    route_name='forecast.delete_scenario', renderer='json')
+
+    """
+    Dashboard routing
+    """
     config.add_route('forecast.get_dashboard_data',
                      '/get_dashboard_data')
     config.add_view(f_dashboard.get_dashboard_data,
@@ -142,6 +145,9 @@ def forecast_routing(config):
     config.add_view(f_dashboard.get_decomposition_for_period, route_name='forecast.get_decomposition_for_period',
                     renderer='json')
 
+    """
+    Common routing
+    """
     config.add_route('forecast.get_options_for_entity_selector', '/get_options_for_entity_selector')
     config.add_view(f_common.get_options_for_entity_selector, route_name='forecast.get_options_for_entity_selector',
                     renderer='json')
@@ -149,12 +155,34 @@ def forecast_routing(config):
     config.add_route('forecast.set_entity_selection', '/set_entity_selection')
     config.add_view(f_common.set_entity_selection, route_name='forecast.set_entity_selection', renderer='json')
 
-    config.add_route('forecast.get_entity_selectors_config',
-                     '/get_entity_selectors_config')
+    config.add_route('forecast.get_entity_selectors_config', '/get_entity_selectors_config')
     config.add_view(f_common.get_entity_selectors_config, route_name='forecast.get_entity_selectors_config', renderer='json')
 
+    """
+    Simulator routing
+    """
+    config.add_route('forecast.set_values', '/set_values')
+    config.add_view(f_simulator.set_values, route_name='forecast.set_values', renderer='json')
 
-# def wsgi_app(global_config, **settings):
+    config.add_route('forecast.load_scenario', '/load_scenario')
+    config.add_view(f_simulator.load_scenario, route_name='forecast.load_scenario', renderer='json')
+
+    config.add_route('forecast.save_scenario', '/save_scenario')
+    config.add_view(f_simulator.save_scenario, route_name='forecast.save_scenario', renderer='json')
+
+    config.add_route('forecast.get_simulator_page_data', '/get_simulator_page_data')
+    config.add_view(f_simulator.get_simulator_page_data, route_name='forecast.get_simulator_page_data', renderer='json')
+
+
+    config.add_route('forecast.get_simulator_decomposition', '/get_simulator_decomposition')
+    config.add_view(f_simulator.get_simulator_decomposition, route_name='forecast.get_simulator_decomposition',
+                    renderer='json')
+
+    config.add_route('forecast.get_simulator_custom_data', '/get_custom_data')
+    config.add_view(f_simulator.get_simulator_custom_data, route_name='forecast.get_simulator_custom_data',
+                                                            renderer='json')
+
+
 def main(global_config, **settings):
     """
     This function returns a Pyramid WSGI application.
@@ -167,6 +195,10 @@ def main(global_config, **settings):
     config.include('iap.common.repository.db')
     config.include(common_routing)
     config.include(forecast_routing, route_prefix='/forecast')
+
     # Add routing for another tools
+
+    config.add_directive('create_error_manager', create_error_manager)
+    config.create_error_manager()
 
     return config.make_wsgi_app()

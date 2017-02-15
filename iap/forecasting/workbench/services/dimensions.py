@@ -1,4 +1,5 @@
 import copy
+import copy
 from collections import OrderedDict
 from collections import OrderedDict
 JOIN_SYMBOL = '|-|-|'
@@ -17,6 +18,7 @@ def get_selectors_config(config, lang):
 
     dimensions = config.get_property('dimensions')
     sel_props = config.get_objects_properties('selector', dimensions, lang)
+
     selectors_for_view = dict()
     for i in sel_props:
         item = i[0]
@@ -34,8 +36,7 @@ def get_selectors_config(config, lang):
 
 
 def get_empty_query(search_index):
-    """
-    GET EMPTY QUERY
+    """Get empty query
 
     :param search_index:
     :type search_index:
@@ -43,19 +44,17 @@ def get_empty_query(search_index):
     :rtype:
     """
     order = search_index['order']
-    return {x: [] for x in order}
+    return {x: ["*"] for x in order}
 
 
 def build_search_index(container, dim_names):
-    """
-    Build search indexes:
+    """Build search indexes:
         Set of information's block about
         the structure of container's entities with dimension coordinates
 
     Arg's:
         (Container): container
         (List): dimension_name
-
 
     :param container:
     :type container:
@@ -70,11 +69,11 @@ def build_search_index(container, dim_names):
     direct_index = dict()
     points = []
     for ent in container.top_entities:
+
         if ent.variables is not list():
             informative = True
         else:
             informative = False
-        #check is it necessery to include into index
         point = dict(node_id=None, coords={x: [] for x in dim_names}, informative=informative)
         _add_entity_to_index(ent, point, direct_index, dim_names, points)
 
@@ -107,19 +106,13 @@ def _add_entity_to_index(entity, curr_point, search_index, dim_names, points):
     """
     if entity.meta.dimension in dim_names:
         curr_point['coords'][entity.meta.dimension].append(entity.name)
-
-        #curr_point['coords'][entity.meta.dimension] = []
-        #curr_point['coords'][entity.meta.dimension].append(entity.name)
         curr_point['node_id'] = entity.id
-
         points.append(curr_point)
-
         sub_index = search_index
         for i in range(len(dim_names)):
             dim_path = curr_point['coords'][dim_names[i]]
             if len(dim_path) == 0:
                 dim_path = ['total']
-                #continue
             key = tuple(dim_path)
             if i < len(dim_names) - 1:
                 if key not in sub_index:
@@ -155,20 +148,26 @@ def get_options_by_ents(search_index, entities_ids, lang):
     """
     reverse_index = search_index['reverse']
     #Entities coordinates
+    print("Entities Ids", entities_ids)
     ents_coords = [coords for node_id, coords in reverse_index.items() if node_id in entities_ids]
     # Create entity based on coords.
     query = get_empty_query(search_index)
     #for entities in ents-coords
     for ent in ents_coords:
+
         #for dim, coords om ent.items
         for dim, coords in ent.items():
             merged_coords = JOIN_SYMBOL.join(coords)
             #if merged selected dimension == []
             if merged_coords not in query[dim]:
-                if query[dim]==[]:
-                    query[dim].append(merged_coords)
+                if query[dim]==['*'] and merged_coords=='':
+                    pass
+                elif query[dim]==['*'] and merged_coords!='':
+                    query[dim] = [merged_coords]
                 else:
                     query[dim].append(merged_coords)
+
+
     opts, ents = search_by_query(search_index, query)
     return opts
 
@@ -203,14 +202,19 @@ def search_by_query(search_index, query):
         dimension_selection = query_internal.get(dim_id)
         # Verify current selector.
         # If selector is empty or not valid set default selector.
-        if len(dimension_selection) == 0:
-            dimension_selection = list(OrderedDict.fromkeys(sorted(keys)))
+        if ("*",) in dimension_selection:
+            dimension_selection = list(OrderedDict.fromkeys(sorted(keys, key=lambda k: k!=('total',))))
+        elif len(dimension_selection)==0:
+            dimension_selection = list(OrderedDict.fromkeys(sorted(keys, key=lambda k: k!=('total',))))
         else:
             _dimension_selection = []
             for x in dimension_selection:
                 if x not in _dimension_selection and x in keys:
                     _dimension_selection.append(x)
             dimension_selection = _dimension_selection
+        if ('total',) in dimension_selection:
+            pass
+            #dimension_selection.remove(('total',))
         options[dim_id] = fill_options(keys, dimension_selection)
         #fill options
         next_iter_indexes = []
@@ -231,7 +235,8 @@ def search_by_query(search_index, query):
                     else:
                         entities_ids.append(search_res)
         if len(next_iter_indexes) == 0 and i != len(order) - 1:
-            raise Exception
+            pass
+            #TODO Solve problem with empty selection
         #update status
         search_indexes = next_iter_indexes
     return options, entities_ids
@@ -254,27 +259,29 @@ def fill_options(keys_list, selected_items):
     :return:
     :rtype:
     """
-    print("Selected", selected_items)
     options = dict(
         data=[],
-        selected=[JOIN_SYMBOL.join(x) for x in selected_items]
+        selected=[JOIN_SYMBOL.join(x) for x in selected_items if x!=('total',)]
     )
 
     for item in keys_list:
-        if len(item) == 0:
-            continue
+        if item[0] == 'total':
+            pass
+
         elif len(item) == 1:
             item_id = item[-1]
             name = item[-1]
             parent_id = None
+            if dict(name=name, id=item_id, parent_id=parent_id, disabled=False) not in options['data']:
+                options['data'].append(dict(name=name, id=item_id, disabled=False, parent_id=parent_id))
         else:
             item_id = JOIN_SYMBOL.join(item)
             name = item[-1]
             parent_id = JOIN_SYMBOL.join(item[:len(item)-1])
-        if dict(name=name, id=item_id, parent_id=parent_id, disabled=False) not in options['data']:
-            options['data'].append(dict(name=name, id=item_id, disabled=False,
-                                    parent_id=parent_id))
+            if dict(name=name, id=item_id, parent_id=parent_id, disabled=False) not in options['data']:
+                options['data'].append(dict(name=name, id=item_id, disabled=False, parent_id=parent_id))
 
+    options['data'].append(dict(name="*", id="*", disabled=False, parent_id=None))
     return options
 
 

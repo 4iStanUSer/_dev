@@ -7,6 +7,7 @@ from .helper import SlotType
 LANGKEY = ["lang-en-metric", "lang-ru-metric", "lang-en-short_name",
             "lang-ru-full_name", "lang-ru-short_name", "lang-en-full_name"]
 
+
 class DataConfiguration:
     """Describe class here"""
 
@@ -204,7 +205,6 @@ class Config:
 
         """
         for item in props:
-            print(item)
             self.properties[item['name']] = copy.copy(item['value'])
 
     def load_objects_properties(self, object_type, props):
@@ -254,7 +254,6 @@ class Config:
     def get_view_vars(self, view_type):
         try:
             result = []
-            print("View Vars Item", self.view_vars)
             for key, value in self.view_vars.items():
 
                 if len(value[view_type]) > 0:

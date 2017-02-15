@@ -2,7 +2,7 @@ import pytest
 import json
 import unittest
 from iap.forecasting.workbench.container.timelines import TimeLineManager
-from conf_test import  tree
+from conf_test import tree
 
 @pytest.fixture
 def data():
@@ -65,7 +65,6 @@ def timeline_manager(data):
     ts_properties = data['properties']
     alias = data['alias']
     top_ts_points = data['top_ts_points']
-    print("PROPERTIES", ts_properties)
     _time_line_manager = TimeLineManager()
     _time_line_manager.load_timelines(ts_properties, alias, top_ts_points)
     return _time_line_manager

@@ -48,9 +48,10 @@ def test_login_exception_non_existend(web_app):
 
     login = "username"
     password = "123456"
-    res = web_app.post_json('/login', {"username": login, 'password': password})
-    expected = {'data': 'Unauthorised', 'error': True}
+    res = web_app.post_json('/login', {'data':{"username": login, 'password': password}})
+    expected = {'data': 'Unauthorised_Не найдено', 'error': True}
     actual = res
+    print("Actual", actual.json['data'])
     assert expected == actual.json
 
 

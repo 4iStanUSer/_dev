@@ -47,6 +47,10 @@ class RunTimeStorage:
     def get_state(self, user_id):
         return self._get_user_box(user_id)['state']
 
+    def language(self, user_id):
+        state = self.get_state(user_id)
+        lang = state.language
+        return lang
 
     def update_state(self, user_id, **kwargs):
         user_box = self._get_user_box(user_id)
@@ -90,8 +94,7 @@ class RunTimeStorage:
     def _load_wb(self, user_id, tool_id, project_id):
         if tool_id is None or project_id is None:
             tool_id = 1
-            project_id=1
-
+            project_id = 1
         # Load backup
         backup = persistent_storage.load_backup(user_id, tool_id, project_id, 'default')
         if backup is None:
@@ -100,7 +103,7 @@ class RunTimeStorage:
         if wb_class is None:
             raise ex.UnknownToolError(tool_id)
         wb = wb_class(user_id)
-        wb.load_from_backup(backup, None)
+        wb.load_from_backup(backup, None, scenario_id=None)
         return wb
 
     @staticmethod
@@ -111,6 +114,6 @@ class RunTimeStorage:
             return Workbench
         return None
 
-    ######
+
 
 

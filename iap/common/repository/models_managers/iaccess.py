@@ -1,4 +1,4 @@
-from iap.common.repository.models_managers import layer_access as wha
+from iap.common.repository.models_managers import access_manager as wha
 from iap.common.repository.interface.service import (
     get_int_id_or_err as _get_id_or_err
 )
