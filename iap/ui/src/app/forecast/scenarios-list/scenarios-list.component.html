@@ -280,8 +280,8 @@
                                     <div class="c-scenarios-table__cell c-scenarios-table__cell--name">{{scenario.name}}</div>
                                     <div class="c-scenarios-table__cell c-scenarios-table__cell--author">{{scenario.author}}</div>
                                     <div class="c-scenarios-table__cell c-scenarios-table__cell--shared">
-                                        <a [ngStyle]="{'opacity': in_array('share', scenario.scenario_permission) ? '' : '0.4'}" *ngIf="scenario.shared === 'True'" class="shared" href="#"></a>
-                                        <span [ngStyle]="{'color': in_array('share', scenario.scenario_permission) ? '' : 'rgba(148,161,181,0.5)'}" *ngIf="scenario.shared === 'False'">Local</span>
+                                        <a [ngStyle]="{'opacity': in_array('share', scenario.scenario_permission) ? '' : '0.4'}" *ngIf="scenario.shared.toLowerCase() === 'yes'" class="shared" href="#"></a>
+                                        <span [ngStyle]="{'color': in_array('share', scenario.scenario_permission) ? '' : 'rgba(148,161,181,0.5)'}" *ngIf="scenario.shared.toLowerCase() === 'no'">Local</span>
                                     </div>
                                     <div class="c-scenarios-table__cell c-scenarios-table__cell--description">{{scenario.description}}</div>
                                     <div class="c-scenarios-table__cell c-scenarios-table__cell--modified">{{dateParse(scenario.modify_date)}}</div>

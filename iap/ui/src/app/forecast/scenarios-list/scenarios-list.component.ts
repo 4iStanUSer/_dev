@@ -78,7 +78,7 @@ export class ScenariosListComponent implements OnInit {
         }
     }
 
-    // Get ScenariosList from Service
+    // Get scenarios list from server
     getScenariosList() {
         this.req.post({
             url_id: '/forecast/get_scenario_page',
@@ -87,12 +87,24 @@ export class ScenariosListComponent implements OnInit {
             this.scenariosList = data.data;
         });
     }
+
+    // Get user permissions from server
     getUserPermissions() {
         this.req.post({
             url_id: '/forecast/get_scenario_page',
             data: {'filter': {}},
         }).subscribe((data) => {
             this.user_permissions = data.user_permission;
+        });
+    }
+
+    // Get scenario from server
+    getScenarioDetails(scenario_id: number) {
+        this.req.post({
+            url_id: '/get_scenario_details',
+            data: {'id': scenario_id},
+        }).subscribe((data) => {
+            this.selectScenario = data;
         });
     }
 
@@ -124,7 +136,6 @@ export class ScenariosListComponent implements OnInit {
             return 0;
         }
     }
-
     getFavoriteList() {
         if (this.scenariosList !== undefined && this.scenariosList.length > 0) {
             this.favoriteList = [];
@@ -135,29 +146,26 @@ export class ScenariosListComponent implements OnInit {
             }
         }
     }
-
     getSharedCount() {
         if (this.scenariosList !== undefined && this.scenariosList.length > 0) {
             const sharedList = this.scenariosList.filter((item) => {
-                return item.shared == 'True'
+                return item.shared.toLowerCase() === 'yes';
             });
             return sharedList.length;
         } else {
             return 0;
         }
     }
-
     getLocalCount() {
         if (this.scenariosList !== undefined && this.scenariosList.length > 0) {
             const localList = this.scenariosList.filter((item) => {
-                return item.shared == 'False'
+                return item.shared.toLowerCase() === 'no';
             });
             return localList.length;
         } else {
             return 0;
         }
     }
-
     getFinalStatusCount() {
         if (this.scenariosList !== undefined && this.scenariosList.length > 0) {
             const finalStatusList = this.scenariosList.filter((item) => {
@@ -168,7 +176,6 @@ export class ScenariosListComponent implements OnInit {
             return 0;
         }
     }
-
     getDraftsStatusCount() {
         if (this.scenariosList !== undefined && this.scenariosList.length > 0) {
             const draftsStatusList = this.scenariosList.filter((item) => {
@@ -179,7 +186,6 @@ export class ScenariosListComponent implements OnInit {
             return 0;
         }
     }
-
     getAuthorsList() {
         let authorsList = [];
         if (this.scenariosList !== undefined && this.scenariosList.length > 0) {
@@ -204,7 +210,7 @@ export class ScenariosListComponent implements OnInit {
         if (this.selectedScenarios.length > 0) {
             for (const i in this.selectedScenarios) {
                 if (this.in_array('change status', this.__getScenario(this.selectedScenarios[i]).scenario_permission) && this.__getScenario(this.selectedScenarios[i]).status.toLowerCase() !== 'final') {
-                    if (this.user_permissions !== undefined && this.user_permissions.finalize === 'True') {
+                    if (this.user_permissions !== undefined && this.user_permissions.finalize) {
                         curentFinalizePermissionStatus ++;
                     }
                 }
@@ -236,12 +242,12 @@ export class ScenariosListComponent implements OnInit {
         if (this.selectedScenarios.length > 0) {
             for (const i in this.selectedScenarios) {
                 if (this.in_array('copy', this.__getScenario(this.selectedScenarios[i]).scenario_permission)) {
-                    if (this.user_permissions !== undefined && this.user_permissions.duplicate === 'True') {
+                    if (this.user_permissions !== undefined && this.user_permissions.duplicate) {
                         curentDuplicatePermissionStatus ++;
                     }
                 }
             }
-            if (curentDuplicatePermissionStatus === this.selectedScenarios.length) {
+            if (curentDuplicatePermissionStatus === this.selectedScenarios.length && this.selectedScenarios.length === 1) {
                 this.duplicatePermissionStatus = true;
             }
         }
@@ -252,7 +258,7 @@ export class ScenariosListComponent implements OnInit {
         if (this.selectedScenarios.length > 0) {
             for (const i in this.selectedScenarios) {
                 if (this.in_array('delete', this.__getScenario(this.selectedScenarios[i]).scenario_permission)) {
-                    if (this.user_permissions !== undefined && this.user_permissions.delete === 'True') {
+                    if (this.user_permissions !== undefined && this.user_permissions.delete) {
                         curentDeletePermissionStatus ++;
                     }
                 }
@@ -263,6 +269,33 @@ export class ScenariosListComponent implements OnInit {
         }
     }
     // -------------------------------  Check permissions  -------------------------------//
+
+    // --------------------------------  Scenario details  -------------------------------//
+    onSelectPreview(event: any) {
+        if (this.in_array('c-scenarios-table__row', event.target.classList) || this.in_array('c-scenarios-table__row', event.target.parentNode.classList)) {
+            if (this.in_array('c-scenarios-table__row', event.target.classList)) {
+                this.selectElement = event.target;
+            } else {
+                this.selectElement = event.target.parentNode;
+            }
+
+            if (this.in_array('c-scenarios-table__row--active', this.selectElement.classList)) {
+                this.selectElement.classList.remove("c-scenarios-table__row--active");
+                this.selectScenario = null;
+            } else {
+                this.__clearTableRowSelect();
+                this.selectElement.classList.add("c-scenarios-table__row--active");
+                let scenario_id = parseInt(this.selectElement.attributes['data-id'].value);
+
+                // Get scenario from server
+                this.getScenarioDetails(scenario_id);
+            }
+        } else {
+            event.stopPropagation();
+        }
+
+    }
+    // --------------------------------  Scenario details  -------------------------------//
 
     onToggleScenario(event: any) {
         let element = event.target;
@@ -329,32 +362,7 @@ export class ScenariosListComponent implements OnInit {
         }
     }
 
-    onSelectPreview(event: any) {
-        if (this.in_array('c-scenarios-table__row', event.target.classList) || this.in_array('c-scenarios-table__row', event.target.parentNode.classList)) {
-            if (this.in_array('c-scenarios-table__row', event.target.classList)) {
-                this.selectElement = event.target;
-            } else {
-                this.selectElement = event.target.parentNode;
-            }
 
-            if (this.in_array('c-scenarios-table__row--active', this.selectElement.classList)) {
-                this.selectElement.classList.remove("c-scenarios-table__row--active");
-                this.selectScenario = null;
-            } else {
-                this.__clearTableRowSelect();
-                this.selectElement.classList.add("c-scenarios-table__row--active");
-                let scenario_id = this.selectElement.attributes['data-id'].value;
-
-                //
-                console.log('---onSelectPreview', this.selectScenario);
-                this.selectScenario = this.scenariosListComponentService.getScenario(scenario_id);
-            }
-
-        } else {
-            event.stopPropagation();
-        }
-
-    }
 
     onCloseScenariosPreview(event: any) {
         this.selectScenario = null;
