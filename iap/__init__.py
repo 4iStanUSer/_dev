@@ -112,6 +112,11 @@ def forecast_routing(config):
     config.add_view(f_scenarios.mark_as_final,
                     route_name='forecast.set_scenario_location', renderer='json')
 
+    config.add_route('forecast.edit_scenario',
+                     '/edit_scenario')
+    config.add_view(f_scenarios.edit_scenario,
+                    route_name='forecast.edit_scenario', renderer='json')
+
     config.add_route('forecast.include_scenario', '/include_scenario')
     config.add_view(f_scenarios.include_scenario,
                     route_name='forecast.include_scenario', renderer='json')

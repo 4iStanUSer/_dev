@@ -156,14 +156,22 @@ def main(argv=sys.argv):
 
         #Add Scenario
         input_data = dict(name="Price Growth Dynamics JJOralCare", description="Dynamics of Price Growth in Brazil",
-                            status="New", shared="No", criteria="Brazil-Nike-Main", author=user_1.email)
+                            status="New", shared="Yes", criteria="Brazil-Nike-Main", author=user_1.email)
 
-        scenario_manager.create_scenario(ssn, user_1,  input_data)
-
+        scenario_1 = scenario_manager.create_scenario(ssn, user=None,  input_data=input_data)
 
         input_data = dict(name="Price Growth Dynamics JJLean", description="Dynamics of Price Growth in USA",
                               status="New", shared="No", criteria="USA-iPhone-Main", author=user_2.email)
-        scenario_manager.create_scenario(ssn, user_2,  input_data)
+        scenario_2 = scenario_manager.create_scenario(ssn, user=None,  input_data=input_data)
+
+        input_data = dict(name="Population Growth Dynamics JJLean", description="Dynamics of Population Growth in Brazil",
+                          status="New", shared="No", criteria="USA-iPhone-Main", author=user_2.email)
+        scenario_3 = scenario_manager.create_scenario(ssn, user=None, input_data=input_data)
+
+        scenario_2.users = [user_1, user_2]
+        scenario_3.users = [user_1, user_2]
+        #TODO realise add user to scenario
+        scenario_1.users = [user_1, user_2]
 
         transaction.manager.commit()
 

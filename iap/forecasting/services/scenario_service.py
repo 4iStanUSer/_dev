@@ -20,6 +20,7 @@ def serialise_scenario(scenarios, user=None):
         scenario_info['id'] = scenario.id
         scenario_info['name'] = scenario.name
         scenario_info['status'] = scenario.status
+        scenario_info['favorite'] = scenario.favorite
         scenario_info['description'] = scenario.description
         scenario_info['shared'] = scenario.shared
         if user.email == scenario.author:
@@ -27,7 +28,6 @@ def serialise_scenario(scenarios, user=None):
         else:
             scenario_info['scenario_permission'] = ['share', 'change status', 'copy']
         scenario_info['author'] = scenario.author
-        scenario_info['location'] = scenario.status
         scenario_info['modify_date'] = scenario.date_of_last_modification
         scenario_info_list.append(scenario_info)
     return scenario_info_list
@@ -61,7 +61,6 @@ def create_scenario(session, user_id, input_data):
         input_data['author'] = user.email
 
         scenario = scenario_manager.create_scenario(session, user=user, input_data=input_data)
-        session.add(scenario)
     except NoResultFound:
         raise NoResultFound
     return scenario
@@ -69,7 +68,7 @@ def create_scenario(session, user_id, input_data):
 
 def get_scenario_page(session, user_id, filter=None):
     try:
-        scenarios = scenario_manager.get_available_scenario(session, user_id)
+        scenarios = scenario_manager.get_available_scenario(session, user_id, filter)
         user = access_manager.get_user_by_id(session, user_id)
     # TODO change field of tool_id in db.
         scenario_list = serialise_scenario(scenarios, user)
@@ -257,8 +256,12 @@ def update_scenario(session, scenario_id, user_id, parameter, value):
             scenario.name = value
         elif parameter == "status":
             scenario.status = value
-        elif parameter == "location":
+        elif parameter == "shared":
             scenario.location = value
+        elif parameter == "favorite":
+            scenario.location = value
+        else:
+            raise Exception
     except Exception:
         raise Exception
     else:

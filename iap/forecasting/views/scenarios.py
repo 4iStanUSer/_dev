@@ -227,6 +227,34 @@ def delete_scenario(request):
     else:
         return send_success_response("Deleted selected scenario")
 
+@forbidden_view
+@requires_roles('edit')
+def edit_scenario(request):
+    """Marks selected scenario
+
+    :param request:
+    :type request:
+    :return:
+    :rtype:
+    """
+    try:
+        user_id = request.user
+        lang = rt.language(user_id)
+        scenario_id = request.json_body['data']['id']
+        value = request.json_body['data']['value']
+        parameter = request.json_body['data']['parameter']
+    except KeyError as e:
+        msg = request.get_error_msg(e, lang)
+        return send_error_response(msg)
+    try:
+        session = request.dbsession
+        scenario_service.update_scenario(session, scenario_id=scenario_id, user_id=user_id, parameter=parameter, value=value)
+    except Exception as e:
+        msg = request.get_error_msg(e, lang)
+        return send_error_response(msg)
+    else:
+        return send_success_response("Scenario Edited")
+
 
 @forbidden_view
 @requires_roles('finalize')
