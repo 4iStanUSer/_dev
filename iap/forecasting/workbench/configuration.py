@@ -77,7 +77,6 @@ class DataConfiguration:
             if name not in config:
                 continue
             for item in config[name]:
-                print("View Properties", item)
                 if 'filter' in item:
                     meta_key = Meta(dimension=item['filter'][0],
                                     level=item['filter'][1])
@@ -130,6 +129,13 @@ class DataConfiguration:
             return result
         return dict()
         #raise Exception
+
+    def get_duetons_tree(self, **kwargs):
+        ent_options = self._get_entity_config(**kwargs)
+        result = ent_options.get_dueton_tree()
+        if result is not None:
+            return result
+        return dict()
 
     def get_objects_properties(self, object_type, ids, lang, **kwargs):
         """
@@ -190,6 +196,7 @@ class Config:
         self.objects_properties = dict()
         #dict of obj properies
         self.factors_drivers = dict()
+        self.duetons = dict()
 
         self.view_vars = dict()
         self.wh_inputs = []
@@ -245,6 +252,12 @@ class Config:
             .append(tuple([item['factor'], item['driver']]))
         return
 
+    def load_dueton_tree(self, item):
+        if item['dueton'] not in self.duetons:
+            self.dueton[item['dueton']] = []
+        self.dueton[item['dueton']]\
+            .append(tuple([item['dueton'], item['parent_dueton']]))
+
     def load_wh_inputs(self, inputs):
         self.wh_inputs = copy.copy(inputs)
 
@@ -276,6 +289,11 @@ class Config:
         if len(self.factors_drivers) == 0:
             return None
         return copy.copy(self.factors_drivers)
+
+    def get_dueton_tree(self):
+        if len(self.duetons) == 0:
+            return None
+        return copy.copy(self.duetons)
 
     def get_object_property(self, object_type, ids, lang):
         obj_props = self.objects_properties.get(object_type)
