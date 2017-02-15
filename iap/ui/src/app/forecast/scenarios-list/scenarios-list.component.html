@@ -1,36 +1,485 @@
-<table *ngIf="shown_sce && shown_sce.length" class="table table-striped">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Author</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tr
-        *ngFor="let sce of shown_sce"
-        [class.disabled]="sce['status']['disabled']"
-        [class.selected]="sce['status']['selected']"
-    >
-        <td>{{ sce['id'] }}</td>
-        <td>{{ sce['name'] }}</td>
-        <td>{{ sce['author'] }}</td>
-        <td>
-            <span *ngIf="!sce['status']['disabled']">
-                <button *ngIf="sce['permissions']['view'] && !sce['status']['selected']" class="btn btn-success" (click)="clickView(sce['id'])">View</button>
-                <button *ngIf="sce['permissions']['edit']" class="btn btn-warning" (click)="clickEdit(sce['id'])">Edit</button>
-                <button *ngIf="sce['permissions']['delete']" class="btn btn-danger" (click)="clickDelete(sce['id'])">Delete</button>
-            </span>
-        </td>
-    </tr>
-</table>
-
-<ul class="pagination">
-    <li
-        *ngFor="let pageNo of pagesNo"
-        [class.active]="pageNo == currentPage"
-        (click)="showPage(pageNo)"
-    >
-        <a>{{ pageNo }}</a>
-    </li>
-</ul>
+<section class="l-app__main">
+<div class="c-eclipse"></div>
+<div class="scenarios">
+    <div class="scenarios__main">
+        <div class="scenarios__left">
+            <div class="c-left-sidebar c-left-sidebar--main c-left-sidebar--active">
+                <div class="c-left-sidebar__item c-left-sidebar__item--description">
+                    <div class="c-left-sidebar__pane">
+                        <h3>Global Nike Market</h3>
+                    </div>
+                    <div class="c-left-sidebar__content c-left-sidebar__content--description">
+                        <span>Some module description Some you description</span>
+                    </div>
+                </div>
+                <div class="c-left-sidebar__item c-left-sidebar__item--recent">
+                    <div class="c-left-sidebar__pane c-left-sidebar__pane--recent">
+                        <h3>Recent Actions</h3>
+                    </div>
+                    <div class="c-left-sidebar__content">
+                        <ul class="c-simple-list">
+                            <li class="c-simple-list__item"><span class="c-simple-list__text">Forecasting with Sports module</span><span class="c-simple-list__date">Sep 27, 2016</span></li>
+                            <li class="c-simple-list__item"> <span class="c-simple-list__text">Reporting Crosses module</span><span class="c-simple-list__date">Sep 27, 2016</span></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="c-left-sidebar__item c-left-sidebar__item--work">
+                    <div class="c-left-sidebar__pane c-left-sidebar__pane--work">
+                        <h3>Work List</h3>
+                    </div>
+                    <div class="c-left-sidebar__content">
+                        <ul class="c-simple-list">
+                            <li class="c-simple-list__item"> <span class="c-simple-list__text">Copy of Scenario Fav Scenario</span><a class="c-simple-list__date c-simple-list__date--empty c-tooltip" href="#">
+                                    <div class="c-tooltip__text c-tooltip__text--calendar c-tooltip__text--bottom">Calendar</div></a>
+                                <div class="c-datepicker">
+                                    <div class="c-datepicker__header"><a class="c-datepicker__nav c-datepicker__nav--prev"></a>
+                                      <div class="c-datepicker__title"><span class="c-datepicker__month">February, </span><span class="c-datepicker__year">2016</span></div><a class="c-datepicker__nav c-datepicker__nav--next"></a>
+                                    </div>
+                                    <table class="c-datepicker__calendar">
+                                      <thead>
+                                        <tr class="c-datepicker__row">
+                                          <th class="c-datepicker__day c-datepicker__day--week-day c-datepicker__week-end"><span title="Sunday">Sun</span></th>
+                                          <th class="c-datepicker__day c-datepicker__day--week-day"><span title="Monday">Mon</span></th>
+                                          <th class="c-datepicker__day c-datepicker__day--week-day"><span title="Tuesday">Tue</span></th>
+                                          <th class="c-datepicker__day c-datepicker__day--week-day"><span title="Wednesday">Wed</span></th>
+                                          <th class="c-datepicker__day c-datepicker__day--week-day"><span title="Thursday">Thu</span></th>
+                                          <th class="c-datepicker__day c-datepicker__day--week-day"><span title="Friday">Fri</span></th>
+                                          <th class="c-datepicker__day c-datepicker__day--week-day c-datepicker__week-end"><span title="Saturday">Sat</span></th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        <tr class="c-datepicker__row">
+                                          <td class="c-datepicker__day c-datepicker__week-end"><span>28</span></td>
+                                          <td class="c-datepicker__day"><span>29</span></td>
+                                          <td class="c-datepicker__day"><span>30</span></td>
+                                          <td class="c-datepicker__day"><span>31</span></td>
+                                          <td class="c-datepicker__day"><span>1</span></td>
+                                          <td class="c-datepicker__day"> <span>2</span></td>
+                                          <td class="c-datepicker__day c-datepicker__week-end"><span>3</span></td>
+                                        </tr>
+                                        <tr class="c-datepicker__row">
+                                          <td class="c-datepicker__day c-datepicker__week-end"><span>4</span></td>
+                                          <td class="c-datepicker__day"><span>5</span></td>
+                                          <td class="c-datepicker__day"><span>6</span></td>
+                                          <td class="c-datepicker__day"><span>7</span></td>
+                                          <td class="c-datepicker__day"><span>8</span></td>
+                                          <td class="c-datepicker__day"><span>9</span></td>
+                                          <td class="c-datepicker__day c-datepicker__week-end"><span>10 </span></td>
+                                        </tr>
+                                        <tr class="c-datepicker__row">
+                                          <td class="c-datepicker__day c-datepicker__week-end"><span>11</span></td>
+                                          <td class="c-datepicker__day"><span>12</span></td>
+                                          <td class="c-datepicker__day"><span>13</span></td>
+                                          <td class="c-datepicker__day"><span>14</span></td>
+                                          <td class="c-datepicker__day"><span>15</span></td>
+                                          <td class="c-datepicker__day"> <span>16</span></td>
+                                          <td class="c-datepicker__day c-datepicker__week-end"><span>17</span></td>
+                                        </tr>
+                                        <tr class="c-datepicker__row">
+                                          <td class="c-datepicker__day c-datepicker__week-end"><span>18</span></td>
+                                          <td class="c-datepicker__day"><span>19</span></td>
+                                          <td class="c-datepicker__day"><span>20</span></td>
+                                          <td class="c-datepicker__day"><span>21</span></td>
+                                          <td class="c-datepicker__day"><span>22</span></td>
+                                          <td class="c-datepicker__day"> <span>23</span></td>
+                                          <td class="c-datepicker__day c-datepicker__week-end"><span>24  </span></td>
+                                        </tr>
+                                        <tr class="c-datepicker__row">
+                                          <td class="c-datepicker__day c-datepicker__week-end"><span>25</span></td>
+                                          <td class="c-datepicker__day"><span>26</span></td>
+                                          <td class="c-datepicker__day"><span>27</span></td>
+                                          <td class="c-datepicker__day"><span>28</span></td>
+                                          <td class="c-datepicker__day"><span>1</span></td>
+                                          <td class="c-datepicker__day"> <span>2</span></td>
+                                          <td class="c-datepicker__day c-datepicker__week-end"><span>3  </span></td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                    <div class="c-datepicker__bottom">
+                                      <div class="c-datepicker__button c-button c-button--blue">OK</div>
+                                      <div class="c-datepicker__button c-datepicker__button--cancel c-button c-button--white">Cancel</div>
+                                    </div>
+                                  </div>
+                            </li>
+                            <li class="c-simple-list__item"><span class="c-simple-list__text">Forecasting with Sports module</span><span class="c-simple-list__date">Sep 27, 2016</span></li>
+                            <li class="c-simple-list__item"> <span class="c-simple-list__text">Reporting Crosses module</span><span class="c-simple-list__date">Sep 27, 2016</span></li>
+                            <li class="c-simple-list__item"> <span class="c-simple-list__text">SGA Comparisson with Nike Ki</span><span class="c-simple-list__date c-simple-list__date--red">Sep 27, 2016</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div><!---------------- c-left-sidebar c-left-sidebar--main ---------------->
+            <div class="c-left-sidebar c-left-sidebar--edit">
+                c-left-sidebar--edit
+            </div><!---------------- c-left-sidebar c-left-sidebar--edit ---------------->
+            <div class="c-left-sidebar c-left-sidebar--create">
+                c-left-sidebar--create
+            </div><!---------------- c-left-sidebar c-left-sidebar--create ---------------->
+        </div><!---------------- scenarios__left ---------------->
+        <div class="scenarios__right">
+            <div class="m-scenarios-page m-scenarios-page--active">
+                <div class="m-scenarios-page__filter c-top-filter">
+                            <div class="c-top-filter__item c-top-filter__item--title">
+                              <h3 class="c-top-filter__title">Filters</h3>
+                            </div>
+                            <div class="c-top-filter__item c-top-filter__item--favor">
+                              <div class="c-checkbox-filter">
+                                <input class="c-checkbox-filter__input" type="checkbox" id="scenarios-favorites">
+                                <label class="c-checkbox-filter__label" for="scenarios-favorites"><span>Favorites ({{getFavoriteListLength()}})</span></label>
+                              </div>
+                              <select (change)="onChangeAuthor($event.target.value)" class="c-select c-top-filter__author">
+                                    <option *ngFor="let author of getAuthorsList()">{{author}}</option>
+                              </select>
+                            </div>
+                            <div class="c-top-filter__item c-top-filter__item--checks">
+                              <div class="c-checkbox-filter c-top-filter__checks">
+                                <input class="c-checkbox-filter__input" type="checkbox" id="scenarios-shared">
+                                <label class="c-checkbox-filter__label" for="scenarios-shared"><span>Shared ({{getSharedCount()}})</span></label>
+                              </div>
+                              <div class="c-checkbox-filter c-top-filter__checks">
+                                <input class="c-checkbox-filter__input" type="checkbox" id="scenarios-local">
+                                <label class="c-checkbox-filter__label" for="scenarios-local"><span>Local ({{getLocalCount()}})</span></label>
+                              </div>
+                              <div class="c-checkbox-filter c-top-filter__checks">
+                                <input class="c-checkbox-filter__input" type="checkbox" id="scenarios-drafts">
+                                <label class="c-checkbox-filter__label" for="scenarios-drafts"><span>Drafts ({{getDraftsStatusCount()}})</span></label>
+                              </div>
+                              <div class="c-checkbox-filter c-top-filter__checks">
+                                <input class="c-checkbox-filter__input" type="checkbox" id="scenarios-final">
+                                <label class="c-checkbox-filter__label" for="scenarios-final"><span>Final ({{getFinalStatusCount()}})</span></label>
+                              </div>
+                            </div>
+                            <div class="c-top-filter__item c-top-filter__item--search">
+                              <div class="c-checkbox-filter">
+                                <input class="c-checkbox-filter__input" type="checkbox" id="scenarios-date">
+                                <label class="c-checkbox-filter__label" for="scenarios-date"><span>Favorites ({{getFavoriteListLength()}})</span></label>
+                              </div>
+                              <div class="c-select c-top-filter__date" id="scenariosDateSelect">(Q1, 2015 - Q3, 2016)
+                                <!--popup-->
+                                <div class="c-popup c-popup--date">
+                                  <div class="c-popup__changer">
+                                    <div class="c-triple-changer">
+                                      <div class="c-triple-changer__item">monthly</div>
+                                      <div class="c-triple-changer__item c-triple-changer__item--active">quaterly</div>
+                                      <div class="c-triple-changer__item">annual</div>
+                                    </div>
+                                  </div>
+                                  <div class="c-popup__slider">
+                                    <div class="c-range-slider">
+                                      <div class="c-range-slider__inputs">
+                                        <input class="c-range-slider__input" id="rangeDateFirst" value="Q1, 2015"><span>- </span>
+                                        <input class="c-range-slider__input c-range-slider__input--active" id="rangeDateSecond" value="Q3, 2016"><span>- </span>
+                                        <input class="c-range-slider__input" id="rangeDateThird" value="Q4, 2017">
+                                      </div>
+                                      <div class="c-range-slider__center">
+                                        <div class="c-range-slider__line">
+                                          <div class="c-range-slider__item">
+                                            <div class="c-range-slider__marker c-range-slider__marker--start"></div>
+                                            <div class="c-range-slider__label c-range-slider__label--start">Q1, 2015</div>
+                                          </div>
+                                          <div class="c-range-slider__item c-range-slider__item--active">
+                                            <div class="c-range-slider__marker c-range-slider__marker--middle"></div>
+                                            <div class="c-range-slider__label c-range-slider__label--middle">Q3, 2016</div>
+                                          </div>
+                                          <div class="c-range-slider__item">
+                                            <div class="c-range-slider__marker c-range-slider__marker--end"></div>
+                                            <div class="c-range-slider__label c-range-slider__label--end">Q4, 2017</div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="c-range-slider__buttons">
+                                        <button class="c-button c-button--green c-button--90">Apply</button>
+                                        <button class="c-button c-button--white c-button--90">Cancel</button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <form class="c-search c-top-filter__search">
+                                <input type="submit" value="">
+                                <input type="search" name="search" placeholder="Search" [(ngModel)]="search">
+                              </form>
+                            </div>
+                          </div>
+                <div class="m-scenarios-page__service c-service-pane">
+                    <a [ngStyle]="{'opacity': createNewPermissionStatus ? '' : '0.4', 'cursor': createNewPermissionStatus ? 'pointer' : 'default'}" class="c-service-pane__item c-service-pane__item--create" href="#">
+                        <span class="c-service-pane__border">Create New</span>
+                    </a>
+                    <a [ngStyle]="{'opacity': finalizePermissionStatus ? '' : '0.4', 'cursor': finalizePermissionStatus ? 'pointer' : 'default'}" class="c-service-pane__item c-service-pane__item--finalize" href="#">
+                        <span class="c-service-pane__border">Finalize</span>
+                    </a>
+                    <a [ngStyle]="{'opacity': sharePermissionStatus ? '' : '0.4', 'cursor': sharePermissionStatus ? 'pointer' : 'default'}" class="c-service-pane__item c-service-pane__item--share" href="#">
+                        <span class="c-service-pane__border">Share</span>
+                    </a>
+                    <a [ngStyle]="{'opacity': duplicatePermissionStatus ? '' : '0.4', 'cursor': duplicatePermissionStatus ? 'pointer' : 'default'}" class="c-service-pane__item c-service-pane__item--duplicate" href="#">
+                        <span class="c-service-pane__border">Duplicate</span>
+                    </a>
+                    <a [ngStyle]="{'opacity': deletePermissionStatus ? '' : '0.4', 'cursor': deletePermissionStatus ? 'pointer' : 'default'}" class="c-service-pane__item c-service-pane__item--delete" href="#">
+                        <span class="c-service-pane__border">Delete</span>
+                    </a>
+                </div>
+                <div class="m-scenarios-page__table" [ngClass]="{'m-scenarios-page__table--preview': selectScenario}">
+                    <div class="m-scenarios-page__scroll">
+                        <div class="c-scenarios-table">
+                            <div class="c-scenarios-table__thead">
+                                  <div class="c-scenarios-table__row">
+                                    <div class="c-scenarios-table__cell c-scenarios-table__cell--header c-scenarios-table__cell--checks">
+                                      <div class="c-scenarios-table__head-cell c-scenarios-table__head-cell--checks">
+                                        <div class="c-check-actions">
+                                          <div class="c-check-actions__item c-checkbox">
+                                            <input type="checkbox" id="sc-table-all" (change)="onToggleAllScenarios($event)">
+                                            <label class="c-checkbox__label c-checkbox__label--transparent" for="sc-table-all"></label>
+                                          </div>
+                                          <div class="c-check-actions__item favorit favorit--header c-tooltip">
+                                            <div class="c-tooltip__text c-tooltip__text--worklist">Worklist</div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="c-scenarios-table__cell c-scenarios-table__cell--header c-scenarios-table__cell--name">
+                                      <div class="c-scenarios-table__head-cell c-scenarios-table__head-cell--name">
+                                         Name<a class="c-scenarios-table__sort sort" href="#"></a></div>
+                                    </div>
+                                    <div class="c-scenarios-table__cell c-scenarios-table__cell--header c-scenarios-table__cell--author">
+                                      <div class="c-scenarios-table__head-cell c-scenarios-table__head-cell--author">
+                                         Author</div>
+                                    </div>
+                                    <div class="c-scenarios-table__cell c-scenarios-table__cell--header c-scenarios-table__cell--shared">
+                                      <div class="c-scenarios-table__head-cell c-scenarios-table__head-cell--shared">Shared</div>
+                                    </div>
+                                    <div class="c-scenarios-table__cell c-scenarios-table__cell--header c-scenarios-table__cell--description">
+                                      <div class="c-scenarios-table__head-cell c-scenarios-table__head-cell--description">Description</div>
+                                    </div>
+                                    <div class="c-scenarios-table__cell c-scenarios-table__cell--header c-scenarios-table__cell--modified">
+                                      <div class="c-scenarios-table__head-cell c-scenarios-table__head-cell--modified">Modified</div>
+                                    </div>
+                                    <div class="c-scenarios-table__cell c-scenarios-table__cell--header c-scenarios-table__cell--status">
+                                      <div class="c-scenarios-table__head-cell c-scenarios-table__head-cell--status">Status</div>
+                                    </div>
+                                    <div class="c-scenarios-table__cell c-scenarios-table__cell--header c-scenarios-table__cell--actions">
+                                      <div class="c-scenarios-table__head-cell c-scenarios-table__head-cell--actions"></div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="c-scenarios-table__tbody">
+                                  <div [attr.data-id]="scenario.id" *ngFor="let scenario of scenariosList" (click)="onSelectPreview($event)" class="c-scenarios-table__row">
+                                    <div class="c-scenarios-table__cell c-scenarios-table__cell--checks">
+                                      <div class="c-check-actions">
+                                        <div class="c-check-actions__item c-checkbox">
+                                          <input (change)="onToggleScenario($event)" type="checkbox" id="sc-table-check-{{scenario.id}}" [attr.data-id]="scenario.id">
+                                          <label class="c-checkbox__label c-checkbox__label--transparent" for="sc-table-check-{{scenario.id}}"></label>
+                                        </div>
+                                        <div class="c-check-actions__item c-checkbox-star c-tooltip">
+                                          <div class="c-tooltip__text c-tooltip__text--favorites c-tooltip__text--bottom" [ngStyle]="{'left': scenario.isFavorite === false ? '' : '-48px'}">
+                                              {{scenario.isFavorite === false ? 'Add to Favorites' : 'Remove from Favorites'}}
+                                          </div>
+                                          <input [attr.data-id]="scenario.id" [(ngModel)]="scenario.isFavorite" (change)="onToggleFavoritScenario($event)" id="sc-table-star-{{scenario.id}}" type="checkbox">
+                                          <label class="c-checkbox-star__label" for="sc-table-star-{{scenario.id}}"></label>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="c-scenarios-table__cell c-scenarios-table__cell--name">{{scenario.name}}</div>
+                                    <div class="c-scenarios-table__cell c-scenarios-table__cell--author">{{scenario.author}}</div>
+                                    <div class="c-scenarios-table__cell c-scenarios-table__cell--shared">
+                                        <a [ngStyle]="{'opacity': in_array('share', scenario.scenario_permission) ? '' : '0.4'}" *ngIf="scenario.shared === 'True'" class="shared" href="#"></a>
+                                        <span [ngStyle]="{'color': in_array('share', scenario.scenario_permission) ? '' : 'rgba(148,161,181,0.5)'}" *ngIf="scenario.shared === 'False'">Local</span>
+                                    </div>
+                                    <div class="c-scenarios-table__cell c-scenarios-table__cell--description">{{scenario.description}}</div>
+                                    <div class="c-scenarios-table__cell c-scenarios-table__cell--modified">{{dateParse(scenario.modify_date)}}</div>
+                                    <div class="c-scenarios-table__cell c-scenarios-table__cell--status">
+                                        <div [ngStyle]="{'color': scenario.scenario_permission.indexOf('change status') !== -1 ? '' : 'rgba(148,161,181,0.5)'}" *ngIf="scenario.status.toLowerCase() !== 'final'" class="status">{{scenario.status}}</div>
+                                        <div [ngStyle]="{'background-color': scenario.scenario_permission.indexOf('change status') !== -1 ? '' : '#c4c6c9'}" *ngIf="scenario.status.toLowerCase() === 'final'" class="status status--final">{{scenario.status}}</div>
+                                    </div>
+                                    <div class="c-scenarios-table__cell c-scenarios-table__cell--actions">
+                                        <div class="c-actions">
+                                            <a (click)="onCopyScenario($event)" [ngStyle]="{'opacity': scenario.scenario_permission.indexOf('copy') !== -1 ? '' : '0.4'}" class="c-tooltip c-tooltip c-actions__item c-actions__item--copy" href="#">
+                                                <div *ngIf="scenario.scenario_permission.indexOf('copy') !== -1" class="c-tooltip__text c-tooltip__text--bottom">Copy</div>
+                                            </a>
+                                            <a [ngStyle]="{'opacity': scenario.scenario_permission.indexOf('edit') !== -1 ? '' : '0.4'}" class="c-tooltip c-actions__item c-actions__item--edit" href="#">
+                                                <div *ngIf="scenario.scenario_permission.indexOf('edit') !== -1" class="c-tooltip__text c-tooltip__text--bottom">Edit</div>
+                                            </a>
+                                            <a class="c-tooltip c-actions__item c-actions__item--play" href="#">
+                                                <div class="c-tooltip__text c-tooltip__text--go c-tooltip__text--bottom">Go Scenario</div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                  </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!---------------- m-scenarios-page__table ---------------->
+                <div class="m-scenarios-page__preview" [ngClass]="{'m-scenarios-page__preview--active': selectScenario}">
+                            <div class="m-scenarios-page__close" (click)="onCloseScenariosPreview()"></div>
+                            <div class="c-scenarios-preview">
+                              <ul class="c-scenarios-preview__item c-preview-list">
+                                <li class="c-preview-list__item c-preview-list__item--region"><span class="c-preview-list__text">United States, Texas, Dallas</span></li>
+                                <li class="c-preview-list__item c-preview-list__item--channel"><span class="c-preview-list__text">United States, Texas, Dallas</span></li>
+                                <li class="c-preview-list__item c-preview-list__item--type"><span class="c-preview-list__text">United States, Texas, Dallas</span></li>
+                                <li class="c-preview-list__item c-preview-list__item--brand"><span class="c-preview-list__text">United States, Texas, Dallas</span></li>
+                              </ul>
+                              <div class="c-scenarios-preview__item c-preview-table">
+                                <div class="c-preview-table__scroll">
+                                  <table class="c-preview-table__main">
+                                    <thead class="c-preview-table__thead">
+                                      <tr class="c-preview-table__row">
+                                        <th class="c-preview-table__cell c-preview-table__cell--th">
+                                          <div class="c-preview-table__head-cell">Drivers</div>
+                                        </th>
+                                        <th class="c-preview-table__cell c-preview-table__cell--th">
+                                          <div class="c-preview-table__head-cell">Growth, 2015-22</div>
+                                        </th>
+                                        <th class="c-preview-table__cell c-preview-table__cell--th">
+                                          <div class="c-preview-table__head-cell">Drivers</div>
+                                        </th>
+                                        <th class="c-preview-table__cell c-preview-table__cell--th">
+                                          <div class="c-preview-table__head-cell">Growth, 2015-22</div>
+                                        </th>
+                                      </tr>
+                                    </thead>
+                                    <tbody class="c-preview-table__tbody">
+                                      <tr class="c-preview-table__row">
+                                        <td class="c-preview-table__cell">
+                                          <div class="c-preview-table__inner">Macroeconomic </div>
+                                        </td>
+                                        <td class="c-preview-table__cell c-preview-table__cell--drivers">
+                                          <div class="c-preview-table__inner">Optimistic</div>
+                                        </td>
+                                        <td class="c-preview-table__cell">
+                                          <div class="c-preview-table__inner">Media Activity</div>
+                                        </td>
+                                        <td class="c-preview-table__cell c-preview-table__cell--drivers">
+                                          <div class="c-preview-table__inner">-0.7%</div>
+                                        </td>
+                                      </tr>
+                                      <tr class="c-preview-table__row">
+                                        <td class="c-preview-table__cell">
+                                          <div class="c-preview-table__inner">Coverage</div>
+                                        </td>
+                                        <td class="c-preview-table__cell c-preview-table__cell--drivers">
+                                          <div class="c-preview-table__inner">0.0%</div>
+                                        </td>
+                                        <td class="c-preview-table__cell">
+                                          <div class="c-preview-table__inner">Price-on-Volume</div>
+                                        </td>
+                                        <td class="c-preview-table__cell c-preview-table__cell--drivers">
+                                          <div class="c-preview-table__inner">-2.0%</div>
+                                        </td>
+                                      </tr>
+                                      <tr class="c-preview-table__row">
+                                        <td class="c-preview-table__cell">
+                                          <div class="c-preview-table__inner">Distribution</div>
+                                        </td>
+                                        <td class="c-preview-table__cell c-preview-table__cell--drivers">
+                                          <div class="c-preview-table__inner">-2.5%</div>
+                                        </td>
+                                        <td class="c-preview-table__cell">
+                                          <div class="c-preview-table__inner">Retail Price</div>
+                                        </td>
+                                        <td class="c-preview-table__cell c-preview-table__cell--drivers">
+                                          <div class="c-preview-table__inner">-1.1%</div>
+                                        </td>
+                                      </tr>
+                                      <tr class="c-preview-table__row">
+                                        <td class="c-preview-table__cell">
+                                          <div class="c-preview-table__inner">Product Launch</div>
+                                        </td>
+                                        <td class="c-preview-table__cell c-preview-table__cell--drivers">
+                                          <div class="c-preview-table__inner">0.5%</div>
+                                        </td>
+                                        <td class="c-preview-table__cell">
+                                          <div class="c-preview-table__inner">Additional</div>
+                                        </td>
+                                        <td class="c-preview-table__cell c-preview-table__cell--drivers">
+                                          <div class="c-preview-table__inner">0.0%</div>
+                                        </td>
+                                      </tr>
+                                      <tr class="c-preview-table__row">
+                                        <td class="c-preview-table__cell">
+                                          <div class="c-preview-table__inner">Macroeconomic </div>
+                                        </td>
+                                        <td class="c-preview-table__cell c-preview-table__cell--drivers">
+                                          <div class="c-preview-table__inner">Optimistic</div>
+                                        </td>
+                                        <td class="c-preview-table__cell">
+                                          <div class="c-preview-table__inner">Media Activity</div>
+                                        </td>
+                                        <td class="c-preview-table__cell c-preview-table__cell--drivers">
+                                          <div class="c-preview-table__inner">-0.7%</div>
+                                        </td>
+                                      </tr>
+                                      <tr class="c-preview-table__row">
+                                        <td class="c-preview-table__cell">
+                                          <div class="c-preview-table__inner">Coverage</div>
+                                        </td>
+                                        <td class="c-preview-table__cell c-preview-table__cell--drivers">
+                                          <div class="c-preview-table__inner">0.0%</div>
+                                        </td>
+                                        <td class="c-preview-table__cell">
+                                          <div class="c-preview-table__inner">Price-on-Volume</div>
+                                        </td>
+                                        <td class="c-preview-table__cell c-preview-table__cell--drivers">
+                                          <div class="c-preview-table__inner">-2.0%</div>
+                                        </td>
+                                      </tr>
+                                      <tr class="c-preview-table__row">
+                                        <td class="c-preview-table__cell">
+                                          <div class="c-preview-table__inner">Distribution</div>
+                                        </td>
+                                        <td class="c-preview-table__cell c-preview-table__cell--drivers">
+                                          <div class="c-preview-table__inner">-2.5%</div>
+                                        </td>
+                                        <td class="c-preview-table__cell">
+                                          <div class="c-preview-table__inner">Retail Price</div>
+                                        </td>
+                                        <td class="c-preview-table__cell c-preview-table__cell--drivers">
+                                          <div class="c-preview-table__inner">-1.1%</div>
+                                        </td>
+                                      </tr>
+                                      <tr class="c-preview-table__row">
+                                        <td class="c-preview-table__cell">
+                                          <div class="c-preview-table__inner">Product Launch</div>
+                                        </td>
+                                        <td class="c-preview-table__cell c-preview-table__cell--drivers">
+                                          <div class="c-preview-table__inner">0.5%</div>
+                                        </td>
+                                        <td class="c-preview-table__cell">
+                                          <div class="c-preview-table__inner">Additional</div>
+                                        </td>
+                                        <td class="c-preview-table__cell c-preview-table__cell--drivers">
+                                          <div class="c-preview-table__inner">0.0%</div>
+                                        </td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                </div>
+                              </div>
+                              <ul class="c-scenarios-preview__item c-preview-info">
+                                <li class="c-preview-info__item">
+                                  <div class="c-preview-info__title">Growth Rate</div>
+                                  <div class="c-preview-info__value c-preview-info__value--green">+1.3%</div>
+                                </li>
+                                <li class="c-preview-info__item">
+                                  <div class="c-preview-info__title">Sales Value</div>
+                                  <div class="c-preview-info__value">3345</div>
+                                </li>
+                                <li class="c-preview-info__item">
+                                  <div class="c-preview-info__title">Long-Term</div>
+                                  <div class="c-preview-info__value c-preview-info__value--red">-2.3%</div>
+                                </li>
+                              </ul>
+                            </div>
+                          </div><!---------------- m-scenarios-page__preview ---------------->
+                <div class="m-scenarios-page__delete c-popup-alert">
+                            <div class="c-popup-alert__container">
+                              <div class="c-popup-alert__pane">Delete selected scenario?</div>
+                              <div class="c-popup-alert__text"><span>Are you shure you want to delete "Fav Scenario 2016 Spec"?</span></div>
+                              <div class="c-popup-alert__buttons">
+                                <div class="c-popup-alert__btn c-button c-button--blue">Yes</div>
+                                <div class="c-popup-alert__btn c-button c-button--grey js-alert-no">No</div>
+                              </div>
+                            </div>
+                          </div><!---------------- m-scenarios-page__delete ---------------->
+            </div><!---------------- m-scenarios-page ---------------->
+        </div><!---------------- scenarios__right ---------------->
+    </div><!---------------- scenarios__main ---------------->
+</div><!---------------- scenarios ---------------->
+</section>
