@@ -148,11 +148,10 @@ def get_entity_data(permission_tree, project, container, config, entities_ids, l
                     ts_period = check_period_perm(mask['tree'], ts_period)
                     print(ts_period)
                     for period in ts_period:
-                        try:
-                            #ts_period = check_period_perm(_ts_periods, ts_period)
-                            values = [ts.get_value(time_point)[0] for time_point in period]
-                            #values = ts.get_values_for_period(period)
-                            ps = var.get_periods_series(ts_name)
+                        #ts_period = check_period_perm(_ts_periods, ts_period)
+                        values = [ts.get_value(time_point)[0] for time_point in period]
+                        #values = ts.get_values_for_period(period)
+                        ps = var.get_periods_series(ts_name)
 
                             #check ps
                         time_series_data[ts_name][var_info['id']] = \
