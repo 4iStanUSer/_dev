@@ -93,7 +93,7 @@ def copy_scenario(session, user_id, scenario_id):
         scenario = scenario_manager.get_scenario_by_id(session, user_id, scenario_id)
         user = access_manager.get_user_by_id(session, user_id)
         scenario_data = dict(name=scenario.name, description=scenario.description,
-                             criteria=scenario.criteria, author=user.email, shared=None, status=None)
+                             criteria=scenario.criteria, author=user.email, shared="No", status="Copy")
         scenario_manager.create_scenario(session, input_data=scenario_data, user=user)
         #TODO provide scenario coppying
     except NoResultFound:

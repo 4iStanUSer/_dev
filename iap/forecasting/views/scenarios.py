@@ -224,8 +224,9 @@ def delete_scenario(request):
         for scenario_id in scenarios_id:
             status = scenario_manager.delete_scenario(session, scenario_id=scenario_id, user_id=user_id)
             statuses[scenario_id]=status
-    except Exception:
-        return send_error_response()
+    except TypeError as e:
+        msg = request.get_error_msg(e, lang)
+        return send_error_response(msg)
     else:
         return send_success_response(statuses)
 
@@ -322,7 +323,8 @@ def copy_scenario(request):
         return send_error_response(msg)
     try:
         session = request.dbsession
-        scenario_service.copy_scenario(session, user_id=user_id, scenario_id=scenario_id)
+        scenario = scenario_service.copy_scenario(session, user_id=user_id, scenario_id=scenario_id)
+        scenario.status = "Copy"
     except Exception as e:
         msg = request.get_error_msg(e, lang)
         return send_error_response(msg)

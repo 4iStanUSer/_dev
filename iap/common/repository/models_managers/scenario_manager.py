@@ -20,7 +20,8 @@ def create_scenario(session, input_data, user=None):
         date_of_last_mod = str(datetime.datetime.now())
         scenario = Scenario(name=input_data['name'], description=input_data['description'],
                             shared=input_data['shared'], date_of_last_modification=date_of_last_mod,
-                            status="New", criteria=input_data['criteria'], author=input_data['author'])
+                            status=input_data['status'], criteria=input_data['criteria'], author=input_data['author'],
+                            )
         session.add(scenario)
         if user:
             user.scenarios.append(scenario)

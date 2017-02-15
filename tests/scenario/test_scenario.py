@@ -361,6 +361,8 @@ def test_get_scenario_page(web_app, token):
     assert sorted(data_keys) == sorted(list(res.json['data']['data'][0].keys()))
 
 
+
+
 def test_delete_scenario_error_expected(web_app, token):
     """Test for delete scenario
 
@@ -377,6 +379,29 @@ def test_delete_scenario_error_expected(web_app, token):
     actual = res.json
     print("Delete Scenario", actual)
     assert expected == actual
+
+
+def test_copy_scenario_view_updates(web_app, token):
+    """Test for delete scenario
+
+    Temprorary disabled
+
+    :param web_app:
+    :type web_app:
+    :return:
+    :rtype:
+    """
+
+    res = web_app.post_json("/forecast/copy_scenario", {'data': {'id': 24},  'X-Token': token})
+    actual = res.json
+    print("Copy Scenario", actual)
+
+    res = web_app.post_json("/forecast/get_scenario_page", {'data': {'filter': []},'X-Token': token})
+    expected = {'error': True, 'data': 'Wrong request'}
+    actual = res.json
+    print("copy Scenario View Updates", actual)
+    assert expected == actual
+
 
 
 def test_delete_scenario_view_updates(web_app, token):
