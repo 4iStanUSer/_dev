@@ -213,14 +213,15 @@ def delete_scenario(request):
     """
     try:
         user_id = request.user
-        scenario_id = request.json_body['data']['id']
+        scenarios_id = request.json_body['data']['id']
         lang = rt.language(user_id)
     except KeyError as e:
         msg = request.get_error_msg(e, lang)
         return send_error_response(msg)
     try:
         session = request.dbsession
-        scenario_manager.delete_scenario(session, scenario_id=scenario_id, user_id=user_id)
+        for scenario_id in scenarios_id:
+            scenario_manager.delete_scenario(session, scenario_id=scenario_id, user_id=user_id)
     except Exception as e:
         msg = request.get_error_msg(e, lang)
         return send_error_response(msg)

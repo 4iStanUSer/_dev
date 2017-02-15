@@ -1,6 +1,7 @@
 from ..models.scenarios import Scenario
 from ..models.access import User
 from sqlalchemy.orm.exc import NoResultFound
+from ..models_managers import access_manager
 import transaction
 import datetime
 
@@ -29,16 +30,13 @@ def create_scenario(session, input_data, user=None):
     return scenario
 
 
-def get_scenario_by_id(session,user_id, scenario_id):
+def get_scenario_by_id(session, user_id, scenario_id):
 
     query = session.query(Scenario)
     query = query.join(User.scenarios)
     query = query.filter(Scenario.id == scenario_id)
     query = query.filter(User.id == user_id)
     scenario = query.one()
-    #scenario = query.filter(User.id == user_id).one()
-    #else:
-        # TODO join with user_id
     return scenario
 
 
@@ -106,7 +104,7 @@ def include_scenario(session, user_id, scenario_id, parent_scenario_id):
 
 def update_scenario(scenario, parmeter, value):
 
-    if  getattr(scenario, parmeter) == value:
+    if getattr(scenario, parmeter) == value:
         pass
     else:
         setattr(scenario, parmeter, value)
@@ -126,7 +124,13 @@ def delete_scenario(session, scenario_id, user_id):
     :rtype:
     """
     try:
-        scenario = get_scenario_by_id(session, scenario_id, user_id)
-        session.delete(scenario)
+        user = access_manager.get_user_by_id(session, user_id)
+        scenario = get_scenario_by_id(session, scenario_id=scenario_id, user_id=user_id)
+        if scenario.author == user.email:
+            session.delete(scenario)
+        else:
+            raise Exception
     except NoResultFound:
         raise Exception
+    else:
+        return
