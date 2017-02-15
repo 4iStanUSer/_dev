@@ -140,7 +140,7 @@ def change_scenario_name(request):
     """
     try:
         user_id = request.user
-        scenario_id = request.json_body['data']['scenario_id']
+        scenario_id = request.json_body['data']['id']
         new_name = request.json_body['data']['name']
         lang = rt.language(user_id)
     except KeyError as e:
@@ -186,7 +186,7 @@ def modify(request):
     try:
         user_id = request.user
         new_values = request.json_body['modification_value']
-        scenario_id = request.json_body['scenario_id']
+        scenario_id = request.json_body['id']
         lang = rt.language(user_id)
     except KeyError as e:
         msg = request.get_error_msg(e, lang)
@@ -289,7 +289,7 @@ def include_scenario(request):
     try:
         user_id = request.user
         parent_scenario_id = request.json_body['data']['parent_scenario_id']
-        scenario_id = request.json_body['data']['scenario_id']
+        scenario_id = request.json_body['data']['id']
         lang = rt.language(user_id)
     except KeyError as e:
         msg = request.get_error_msg(e, lang)
@@ -310,7 +310,7 @@ def include_scenario(request):
 def copy_scenario(request):
     try:
         user_id = request.user
-        scenario_id = request.json_body['data']['scenario_id']
+        scenario_id = request.json_body['data']['id']
         lang = rt.language(user_id)
     except KeyError as e:
         msg = request.get_error_msg(e, lang)

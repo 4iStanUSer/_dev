@@ -194,7 +194,7 @@ def test_change_scenario_name(web_app, token):
     """
 
     res = web_app.post_json("/forecast/change_scenario_name", {"data":
-                                                               {'scenario_id': 3, 'name': "New name of Scenario"},
+                                                               {'id': 3, 'name': "New name of Scenario"},
                                                                 'X-Token': None})
 
     actual = res.json
@@ -212,7 +212,7 @@ def test_change_scenario_name_error_expected(web_app, token):
     """
 
     res = web_app.post_json("/forecast/change_scenario_name", {"data":
-                                                                    {'scenario_id': 114,
+                                                                    {'id': 114,
                                                                     'name': "New name of Scenario"},
                                                                 'X-Token': token})
 
@@ -231,8 +231,8 @@ def test_change_scenario_name_view_updates(web_app, token):
     :rtype:
     """
 
-    res = web_app.post_json("/forecast/change_scenario_name", {"data":
-                                                               {'scenario_id': 3, 'name': "New name of Scenario"},
+    res = web_app.post_json("/forecast/edit_scenario", {"data":
+                                                               {'id': 3, 'parameter':'name', 'value': "New name of Scenario"},
                                                                 'X-Token': token})
 
     actual = res.json
