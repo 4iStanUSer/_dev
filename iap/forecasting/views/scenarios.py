@@ -219,14 +219,15 @@ def delete_scenario(request):
         msg = request.get_error_msg(e, lang)
         return send_error_response(msg)
     try:
+        statuses = {}
         session = request.dbsession
         for scenario_id in scenarios_id:
-            scenario_manager.delete_scenario(session, scenario_id=scenario_id, user_id=user_id)
-    except Exception as e:
-        msg = request.get_error_msg(e, lang)
-        return send_error_response(msg)
+            status = scenario_manager.delete_scenario(session, scenario_id=scenario_id, user_id=user_id)
+            statuses[scenario_id]=status
+    except Exception:
+        return send_error_response()
     else:
-        return send_success_response("Deleted selected scenario")
+        return send_success_response(statuses)
 
 @forbidden_view
 @requires_roles('edit')

@@ -390,7 +390,7 @@ def test_delete_scenario_view_updates(web_app, token):
     :rtype:
     """
 
-    res = web_app.post_json("/forecast/delete_scenario", {'data': {'id': [3]},  'X-Token': token})
+    res = web_app.post_json("/forecast/delete_scenario", {'data': {'id': [1, 2, 3, 4, 5, 6, 3]},  'X-Token': token})
     actual = res.json
     print("Delete Scenario", actual)
 

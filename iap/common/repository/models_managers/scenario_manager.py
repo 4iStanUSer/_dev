@@ -124,13 +124,14 @@ def delete_scenario(session, scenario_id, user_id):
     :rtype:
     """
     try:
-        user = access_manager.get_user_by_id(session, user_id)
+        user = access_manager.get_user_by_id(session, user_id=user_id)
         scenario = get_scenario_by_id(session, scenario_id=scenario_id, user_id=user_id)
         if scenario.author == user.email:
             session.delete(scenario)
+            status = "Deleted"
         else:
-            raise Exception
+            status = "Unauthorised"
     except NoResultFound:
-        raise Exception
+        return "No item"
     else:
-        return
+        return status
