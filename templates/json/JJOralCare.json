@@ -377,7 +377,236 @@
       ],
       "factor": "dec_vol_unit_size",
       "main_factor": "dec_vol_unit_size"
+    }
+  ],
+
+  "dueton": [
+    {
+      "dueton": "premiumization",
+      "filter": [
+        "products",
+        "category"
+      ],
+      "factor": "dec_val_premiumization",
+      "main_factor": "dec_val_premiumization"
     },
+    {
+      "driver": "distribution",
+      "filter": [
+        "products",
+        "category"
+      ],
+      "factor": "dec_vol_distribution",
+      "main_factor": "dec_vol_distribution"
+    },
+    {
+      "driver": "discount",
+      "filter": [
+        "products",
+        "category"
+      ],
+      "factor": "dec_vol_trade",
+      "main_factor": "dec_vol_trade_promo"
+    },
+    {
+      "driver": "support",
+      "filter": [
+        "products",
+        "category"
+      ],
+      "factor": "dec_vol_promo",
+      "main_factor": "dec_vol_trade_promo"
+    },
+    {
+      "driver": "population",
+      "filter": [
+        "products",
+        "category"
+      ],
+      "factor": "dec_vol_demo",
+      "main_factor": "dec_vol_demo"
+    },
+    {
+      "driver": "gdp",
+      "filter": [
+        "products",
+        "category"
+      ],
+      "factor": "dec_vol_economy",
+      "main_factor": "dec_vol_economy"
+    },
+    {
+      "driver": "media",
+      "filter": [
+        "products",
+        "category"
+      ],
+      "factor": "dec_val_advertising",
+      "main_factor": "dec_val_advertising"
+    },
+    {
+      "driver": "discount",
+      "filter": [
+        "products",
+        "category"
+      ],
+      "factor": "dec_val_trade_promo",
+      "main_factor": "dec_val_trade_promo"
+    },
+    {
+      "driver": "ltt",
+      "filter": [
+        "products",
+        "category"
+      ],
+      "factor": "dec_vol_ltt",
+      "main_factor": "dec_vol_ltt"
+    },
+    {
+      "driver": "innovations",
+      "filter": [
+        "products",
+        "category"
+      ],
+      "factor": "dec_vol_innovations",
+      "main_factor": "dec_vol_innovations"
+    },
+    {
+      "driver": "media",
+      "filter": [
+        "products",
+        "category"
+      ],
+      "factor": "dec_vol_advertising",
+      "main_factor": "dec_vol_advertising"
+    },
+    {
+      "driver": "population",
+      "filter": [
+        "products",
+        "category"
+      ],
+      "factor": "dec_val_demo",
+      "main_factor": "dec_val_demo"
+    },
+    {
+      "driver": "cpi",
+      "filter": [
+        "products",
+        "category"
+      ],
+      "factor": "dec_val_man_pricing",
+      "main_factor": "dec_val_man_pricing"
+    },
+    {
+      "driver": "unit_size",
+      "filter": [
+        "products",
+        "category"
+      ],
+      "factor": "dec_vol_unit_size",
+      "main_factor": "dec_vol_unit_size"
+    },
+    {
+      "driver": "gdp",
+      "filter": [
+        "products",
+        "category"
+      ],
+      "factor": "dec_val_economy",
+      "main_factor": "dec_val_economy"
+    },
+    {
+      "driver": "discount",
+      "filter": [
+        "products",
+        "category"
+      ],
+      "factor": "dec_val_trade_on_vol",
+      "main_factor": "dec_val_trade_promo_on_vol"
+    },
+    {
+      "driver": "support",
+      "filter": [
+        "products",
+        "category"
+      ],
+      "factor": "dec_val_promo_on_vol",
+      "main_factor": "dec_val_trade_promo_on_vol"
+    },
+    {
+      "driver": "unit_price",
+      "filter": [
+        "products",
+        "category"
+      ],
+      "factor": "dec_val_price_on_vol",
+      "main_factor": "dec_val_price_on_vol"
+    },
+    {
+      "driver": "unit_size",
+      "filter": [
+        "products",
+        "category"
+      ],
+      "factor": "dec_val_unit_size_on_vol",
+      "main_factor": "dec_val_unit_size_on_vol"
+    },
+    {
+      "driver": "cpi",
+      "filter": [
+        "products",
+        "category"
+      ],
+      "factor": "dec_val_inflation",
+      "main_factor": "dec_val_inflation"
+    },
+    {
+      "driver": "innovations",
+      "filter": [
+        "products",
+        "category"
+      ],
+      "factor": "dec_val_innovations",
+      "main_factor": "dec_val_innovations"
+    },
+    {
+      "driver": "cpi",
+      "filter": [
+        "products",
+        "category"
+      ],
+      "factor": "dec_val_other",
+      "main_factor": "dec_val_other"
+    },
+    {
+      "driver": "distribution",
+      "filter": [
+        "products",
+        "category"
+      ],
+      "factor": "dec_val_distribution",
+      "main_factor": "dec_val_distribution"
+    },
+    {
+      "driver": "unit_size",
+      "filter": [
+        "products",
+        "category"
+      ],
+      "factor": "dec_val_unit_size",
+      "main_factor": "dec_val_unit_size"
+    },
+    {
+      "driver": "unit_price",
+      "filter": [
+        "products",
+        "category"
+      ],
+      "factor": "dec_vol_price",
+      "main_factor": "dec_vol_price"
+    }
+  ],
     {
       "driver": "gdp",
       "filter": [

@@ -125,18 +125,12 @@ def get_entity_data(permission_tree, project, container, config, entities_ids, l
         items_view_props = config.get_vars_for_view(meta=ent.meta, path=ent.path)
     except Exception:
         raise Exception#TODO change on no var for view
-    view_vars = []
-    print('Permission Tree', permission_tree)
     for item in iter(items_view_props):
         # Get entity to get variables from.
         curr_ent = container.get_entity_by_filter(ent, item['filter'])
-
         # Collect variables data.
         absent_vars_ids = []
-        var_ids = []
-
         var_items = item['variables']
-        print("Var", var_items)
         for var_info in var_items:
             var_id = var_info['id']
             var = curr_ent.get_variable(var_id)
@@ -148,18 +142,19 @@ def get_entity_data(permission_tree, project, container, config, entities_ids, l
 
                 inner_path = ["*-*".join(ent.path), var_id, ts_name, ts_period]
                 mask = access_manager.check_permission(permission_tree, inner_path, pointer=0)
-                print("Mask", mask)
                 if mask == "Unavailable":
                     continue
                 else:
                     ts_period = check_period_perm(mask['tree'], ts_period)
                     print(ts_period)
                     for period in ts_period:
-                        #ts_period = check_period_perm(_ts_periods, ts_period)
-                        values = [ts.get_value(time_point)[0] for time_point in period]
-                        #values = ts.get_values_for_period(period)
-                        ps = var.get_periods_series(ts_name)
-                        #check ps
+                        try:
+                            #ts_period = check_period_perm(_ts_periods, ts_period)
+                            values = [ts.get_value(time_point)[0] for time_point in period]
+                            #values = ts.get_values_for_period(period)
+                            ps = var.get_periods_series(ts_name)
+
+                            #check ps
                         time_series_data[ts_name][var_info['id']] = \
                             {time_labels[ts_name][i]: values[i]
                             for i in range(len(values))}
