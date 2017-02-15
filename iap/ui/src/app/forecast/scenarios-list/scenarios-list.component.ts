@@ -1,8 +1,8 @@
 import { Component, OnInit, DoCheck } from '@angular/core';
-
+import {AjaxService} from "../../common/service/ajax.service";
 
 import { ScenariosListComponentService } from './scenarios-list.service';
-import lowerCase = require("lower-case");
+// import lowerCase = require("lower-case");
 const moment = require('moment/moment');
 const DATEFORMAT = 'MM.DD.YY';
 
@@ -28,7 +28,7 @@ export class ScenariosListComponent implements OnInit {
     duplicatePermissionStatus:boolean = false;
     deletePermissionStatus:boolean = false;
 
-    constructor(private scenariosListComponentService: ScenariosListComponentService) { }
+    constructor(private req: AjaxService) { }
 
     // Parse date 2017-02-10 14:00:13.990018 to DATEFORMAT
     dateParse(dateString: string) {
@@ -79,13 +79,21 @@ export class ScenariosListComponent implements OnInit {
     }
 
     // Get ScenariosList from Service
-    getScenariosList(): void {
-        this.scenariosListComponentService.getScenariosList().then(list => this.scenariosList = list);
+    getScenariosList() {
+        this.req.post({
+            url_id: '/forecast/get_scenario_page',
+            data: {'filter': {}},
+        }).subscribe((data) => {
+            this.scenariosList = data.data;
+        });
     }
-
-    // Get User Permissions from Service
-    getUserPermissions(): void {
-        this.scenariosListComponentService.getUserPermissions().then(obj => this.user_permissions = obj);
+    getUserPermissions() {
+        this.req.post({
+            url_id: '/forecast/get_scenario_page',
+            data: {'filter': {}},
+        }).subscribe((data) => {
+            this.user_permissions = data.user_permission;
+        });
     }
 
     ngOnInit(): void {
@@ -186,7 +194,7 @@ export class ScenariosListComponent implements OnInit {
     // -------------------------------  Check permissions  -------------------------------//
     checkCreateNewPermissionStatus() {
         this.createNewPermissionStatus = false;
-        if (this.user_permissions !== undefined && this.user_permissions.create == 'True') {
+        if (this.user_permissions !== undefined && this.user_permissions.create) {
             this.createNewPermissionStatus = true;
         }
     }
@@ -211,8 +219,8 @@ export class ScenariosListComponent implements OnInit {
         let curentSharePermissionStatus = 0;
         if (this.selectedScenarios.length > 0) {
             for (const i in this.selectedScenarios) {
-                if (this.in_array('share', this.__getScenario(this.selectedScenarios[i]).scenario_permission) && this.__getScenario(this.selectedScenarios[i]).shared === 'False') {
-                    if (this.user_permissions !== undefined && this.user_permissions.share === 'True') {
+                if (this.in_array('share', this.__getScenario(this.selectedScenarios[i]).scenario_permission) && !this.__getScenario(this.selectedScenarios[i]).shared) {
+                    if (this.user_permissions !== undefined && this.user_permissions.share) {
                         curentSharePermissionStatus ++;
                     }
                 }

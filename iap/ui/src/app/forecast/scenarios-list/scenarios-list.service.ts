@@ -1,31 +1,26 @@
-import { Injectable } from '@angular/core';
+import { Injectable }    from '@angular/core';
+import 'rxjs/add/operator/toPromise';
+import {AjaxService} from "../../common/service/ajax.service";
 
-const  SCENARIOS = [
-    {id: 11, isFavorite: true, name: 'Mr. Nice', author: 'Mr. Nice', shared: 'True',
-        description: 'Mr. Nice', modify_date: '2017-02-10 14:00:13.990018', status: 'Draft',
-        scenario_permission: ['share','copy','delete']
-    },
-    {id: 12, isFavorite: false, name: 'Mr. Nice', author: 'Mr. Nice2', shared: 'False',
-        description: 'Mr. Nice2', modify_date: '2017-02-10 14:00:13.990018', status: 'draft',
-        scenario_permission: ['share','change status','delete','edit']
-    },
-    {id: 13, isFavorite: false, name: 'Mr. Nice', author: 'Mr. Nice2', shared: 'True',
-        description: 'Mr. Nice2', modify_date: '2017-02-10 14:00:13.990018', status: 'Final',
-        scenario_permission: ['change status','copy']
-    },
-    {id: 14, isFavorite: true, name: 'Mr. Nice', author: 'Mr. Nice', shared: 'False',
-        description: 'Mr. Nice', modify_date: '2017-02-10 14:00:13.990018', status: 'Final',
-        scenario_permission: ['delete','edit']
-    },
-];
 
 const  USER_PERMISSION = {finalize: 'True', duplicate: 'True', delete: 'True', edit: 'True',
     create: 'True', share: 'True'};
 
 @Injectable()
 export class ScenariosListComponentService {
-    getScenariosList(): Promise<any[]> {
-      return Promise.resolve(SCENARIOS);
+
+    private getScenarioPage = '/forecast/get_scenario_page';
+
+    constructor(private req: AjaxService) { }
+
+    getScenariosList() {
+        this.req.post({
+            url_id: this.getScenarioPage,
+            data: {'filter': {}},
+        }).subscribe((data) => {
+            console.log('*****getScenariosList', data.data);
+            return data.data;
+        });
     }
 
     getUserPermissions(): Promise<any> {
@@ -33,7 +28,8 @@ export class ScenariosListComponentService {
     }
 
     getScenario(scenario_id: number) {
-        return this.getScenariosList().then(list => list.find(item => item.id == scenario_id));
+        return null;
+        //return this.getScenariosList().then(list => list.find(item => item.id == scenario_id));
     }
 
     modifyFavorit(scenario_id: number) {
