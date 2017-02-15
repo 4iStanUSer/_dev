@@ -24,7 +24,7 @@ requires = [
     'PyJWT',
     'bcrypt',
     'pymemcache',
-    'python3-memcached'
+    'python-memcached'
     ]
 
 tests_require = [
