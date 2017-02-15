@@ -1059,7 +1059,7 @@
 }
 .m-scenarios-page__table {
   position: relative;
-  height: calc(100% - 163px);
+  height: calc(100% - 120px);
   width: calc(100% - 40px);
   margin: 0 20px 20px;
   background-color: #fff;
@@ -1067,8 +1067,8 @@
   overflow: hidden;
 }
 .m-scenarios-page__table--preview {
-  height: calc(100% - 385px);
-  margin-bottom: 12px;
+  height: calc(100% - 345px);
+  margin-bottom: 20px;
 }
 .m-scenarios-page__close {
   display: block;
