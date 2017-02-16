@@ -65,7 +65,7 @@ def test_simulator_functionally(web_app, token):
 
 
     #2.Set value for specific scenario
-    values = [dict(var_name="media", timescale="annual", slot_type=1, time_label=2012, value=1110),
+    values = [dict(var_name="eq_price", timescale="annual", slot_type=1, time_label=[2012, 2013], value=1110),
               dict(var_name="media", timescale="annual", slot_type=1, time_label=2013, value=1101),
               dict(var_name="media", timescale="annual", slot_type=1, time_label=2014, value=111),
               dict(var_name="media", timescale="annual", slot_type=1, time_label=2015, value=1110)
