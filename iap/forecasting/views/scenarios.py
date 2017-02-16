@@ -213,19 +213,22 @@ def delete_scenario(request):
     """
     try:
         user_id = request.user
-        scenario_id = request.json_body['data']['id']
+        scenarios_id = request.json_body['data']['id']
         lang = rt.language(user_id)
     except KeyError as e:
         msg = request.get_error_msg(e, lang)
         return send_error_response(msg)
     try:
+        statuses = {}
         session = request.dbsession
-        scenario_manager.delete_scenario(session, scenario_id=scenario_id, user_id=user_id)
-    except Exception as e:
+        for scenario_id in scenarios_id:
+            status = scenario_manager.delete_scenario(session, scenario_id=scenario_id, user_id=user_id)
+            statuses[scenario_id]=status
+    except TypeError as e:
         msg = request.get_error_msg(e, lang)
         return send_error_response(msg)
     else:
-        return send_success_response("Deleted selected scenario")
+        return send_success_response(statuses)
 
 @forbidden_view
 @requires_roles('edit')
@@ -240,15 +243,18 @@ def edit_scenario(request):
     try:
         user_id = request.user
         lang = rt.language(user_id)
-        scenario_id = request.json_body['data']['id']
-        value = request.json_body['data']['value']
-        parameter = request.json_body['data']['parameter']
+        scenarios = request.json_body['data']
     except KeyError as e:
         msg = request.get_error_msg(e, lang)
         return send_error_response(msg)
     try:
         session = request.dbsession
-        scenario_service.update_scenario(session, scenario_id=scenario_id, user_id=user_id, parameter=parameter, value=value)
+        for scenario in scenarios:
+            scenario_id = scenario['id']
+            for modify_item in scenario['modify']:
+                parameter = modify_item['parameter']
+                value = modify_item['value']
+                scenario_service.update_scenario(session, scenario_id=scenario_id, user_id=user_id, parameter=parameter, value=value)
     except Exception as e:
         msg = request.get_error_msg(e, lang)
         return send_error_response(msg)
@@ -317,7 +323,8 @@ def copy_scenario(request):
         return send_error_response(msg)
     try:
         session = request.dbsession
-        scenario_service.copy_scenario(session, user_id=user_id, scenario_id=scenario_id)
+        scenario = scenario_service.copy_scenario(session, user_id=user_id, scenario_id=scenario_id)
+        scenario.status = "Copy"
     except Exception as e:
         msg = request.get_error_msg(e, lang)
         return send_error_response(msg)

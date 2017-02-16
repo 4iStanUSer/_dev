@@ -2,7 +2,7 @@ from ...common.helper import send_success_response, send_error_response
 from ..workbench.services import data_management as data_service
 from ...common import runtime_storage as rt
 from ...common.repository import persistent_storage
-
+from ...common.repository.models_managers import access_manager
 
 def set_values(req):
     """
@@ -50,12 +50,12 @@ def get_simulator_page_data(req):
         #TODO check if there are selected scenario
         wb = rt.get_wb(user_id)
         session = req.dbsession
+        permission_tree = access_manager.build_permission_tree(session, project_name="JJOral")
         data = data_service.get_simulator_data(session, wb.current_container, wb.data_config,
                                                wb.selection, lang)
-        print("data", data)
         default_data = data_service.get_simulator_value_data(wb.default_container, wb.data_config,  wb.selection, lang)
-        print("default data", default_data)
         data['data']['values']['default'] = default_data
+        #TODO change setter of custom data
     except Exception as e:
         msg = req.get_error_msg(e)
         return send_error_response(msg)
@@ -113,33 +113,6 @@ def get_simulator_decomposition(req):
         msg = req.get_error_msg(e, lang)
         return send_error_response(msg)
 
-"""
-def get_simulator_data(request):
-    '''
-    Get data for simulator
-
-    :param req:
-    :type req:
-    :return:
-    :rtype:
-    '''
-    try:
-        user_id = request.user
-        lang = rt.language(user_id)
-        project = rt.get_state(user_id)._project_id
-    except KeyError as e:
-        msg = request.get_error_msg(e, lang)
-        return send_error_response(msg)
-    try:
-        wb = rt.get_wb(user_id)
-        data = data_service.get_entity_data(request, project, wb.current_container, wb.data_config,
-                                            wb.selection, lang)
-    except Exception as e:
-        msg = request.get_error_msg(e)
-        return send_error_response(msg, lang)
-    else:
-        return send_success_response(data)
-"""
 
 def load_scenario(request):
     """

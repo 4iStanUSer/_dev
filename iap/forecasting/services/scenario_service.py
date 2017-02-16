@@ -93,7 +93,7 @@ def copy_scenario(session, user_id, scenario_id):
         scenario = scenario_manager.get_scenario_by_id(session, user_id, scenario_id)
         user = access_manager.get_user_by_id(session, user_id)
         scenario_data = dict(name=scenario.name, description=scenario.description,
-                             criteria=scenario.criteria, author=user.email, shared=None, status=None)
+                             criteria=scenario.criteria, author=user.email, shared="No", status="Copy")
         scenario_manager.create_scenario(session, input_data=scenario_data, user=user)
         #TODO provide scenario coppying
     except NoResultFound:
@@ -249,19 +249,20 @@ def update_scenario(session, scenario_id, user_id, parameter, value):
     :rtype:
     """
     try:
-        scenario = scenario_manager.get_scenario_by_id(session, scenario_id =scenario_id,
-                                                       user_id = user_id)
-        #TODO check if exist
-        if parameter == "name":
-            scenario.name = value
-        elif parameter == "status":
-            scenario.status = value
-        elif parameter == "shared":
-            scenario.location = value
-        elif parameter == "favorite":
-            scenario.location = value
+        scenario = scenario_manager.\
+            get_scenario_by_id(session, scenario_id=scenario_id, user_id=user_id)
+
+        tool_id = 'forecast'
+        if parameter == 'status' and value == 'final':
+            feature_id = 'finalize'
+        elif parameter == 'shared':
+            feature_id = 'shared'
         else:
-            raise Exception
+            feature_id = 'edit'
+
+        if access_manager.check_feature_permission(session, user_id, tool_id, feature_id):
+            #TODO add scenario_manager_update scenario
+            scenario_manager.update_scenario(scenario, parameter, value)
     except Exception:
         raise Exception
     else:

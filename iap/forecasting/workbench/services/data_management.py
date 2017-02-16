@@ -569,11 +569,9 @@ def get_simulator_data(session, container, config, entity_id, lang):
     return simulator_data
 
 
-def get_simulator_value_data(container, config, entity_id, lang):
+def get_simulator_value_data(permission_tree, container, config, entity_id, lang):
 
-    custom_data = dict(
-    )
-
+    custom_data = dict()
     ent = container.get_entity_by_id(entity_id[0])
 
 
@@ -610,24 +608,6 @@ def get_simulator_value_data(container, config, entity_id, lang):
         # Collect variables data.
         absent_vars_ids = []
         for var_info in item['variables']:
-            # check accces for variable
-            """
-            if vars is not None and var_info['id'] in vars.keys():
-                if PERMISSION_STATUS==True:
-                    _ts = {}
-                    PERMISSION_STATUS = True
-                elif vars[var_info['id']] == {}:
-                    _ts = {}
-                    PERMISSION_STATUS = True
-                else:
-                    _ts = vars[var_info['id']]
-                    PERMISSION_STATUS=False
-            else:
-                _ts = None
-                PERMISSION_STATUS=False
-                continue
-            """
-
             var = curr_ent.get_variable(var_info['id'])
             if var is None:
                 absent_vars_ids.append(var_info['id'])
@@ -635,35 +615,12 @@ def get_simulator_value_data(container, config, entity_id, lang):
             for ts_name, ts_period in ts_borders.items():
                 ts = var.get_time_series(ts_name)
                 # check timeseries permission
-                """
-                if ts is not None or PERMISSION_STATUS==True:
-                    if PERMISSION_STATUS==True or _ts[ts_name] == {}:
-                        _ts_periods = {}
-                        PERMISSION_STATUS=True
-                    else:
-                        PERMISSION_STATUS=False
-                        _ts_periods = [timeperiod for timeperiod in list(_ts[ts_name].keys()) if timeperiod!='mask']
-                else:
-                    PERMISSION_STATUS = False
-                    _ts_periods = None
-                    continue
-
-                """
-                # check timeperiod
 
 
-                """
-                if _ts_periods is not None or PERMISSION_STATUS==True:
-                    pass
-                elif _ts_period not in _ts_periods:
-                    print("No Permission")
-                    continue
-                """
 
                 values = ts.get_values_for_period(ts_period)
                 ps = var.get_periods_series(ts_name)
                 # check ps
-
                 time_series_data[ts_name][var_info['id']] = {}
                 time_series_data[ts_name][var_info['id']]['values'] = values
                 # TODO fill abs_growth, relative growth, cagrs
@@ -702,10 +659,6 @@ def get_simulator_value_data(container, config, entity_id, lang):
     return custom_data
 
 
-
-"""
-Support function
-"""
 def check_period_perm(tree, ts_period):
 
     correct_ts_period = []
@@ -714,5 +667,4 @@ def check_period_perm(tree, ts_period):
         _ts_period = _ts_period.split(":")
         _ts = range(int(float(_ts_period[0])), int(float(_ts_period[1])), 1)
         correct_ts_period.append(list(set(ts_period) & set(_ts)))
-    print("Correct Period", correct_ts_period)
     return correct_ts_period
