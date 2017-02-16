@@ -20,7 +20,9 @@ def create_scenario(session, input_data, user=None):
         date_of_last_mod = str(datetime.datetime.now())
         scenario = Scenario(name=input_data['name'], description=input_data['description'],
                             shared=input_data.get('shared', None), date_of_last_modification=date_of_last_mod,
-                            status=input_data.get('status', None), criteria=input_data['criteria'], author=input_data['author'],
+                            status=input_data.get('status', None),
+                            criteria=input_data['criteria'],
+                            author=input_data['author'],
                             )
         session.add(scenario)
         if user:
@@ -106,10 +108,10 @@ def include_scenario(session, user_id, scenario_id, parent_scenario_id):
 
 def update_scenario(scenario, parmeter, value):
 
-    if getattr(scenario, parmeter) == value:
+    if getattr(scenario, parmeter) == str(value):
         pass
     else:
-        setattr(scenario, parmeter, value)
+        setattr(scenario, parmeter, str(value))
     return
 
 

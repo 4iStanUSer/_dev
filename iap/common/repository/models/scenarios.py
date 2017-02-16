@@ -30,7 +30,7 @@ class Scenario(Base):
     date_of_last_modification = Column(String)
 
     criteria = Column(String)
-    favorite = Column(Boolean, default=False)
+    favorite = Column(String, default="False")
 
     #entity_id = Column(Integer, ForeignKey('entity.id'))
     #enity = relationship("Entity", back_populates="scenarios")
