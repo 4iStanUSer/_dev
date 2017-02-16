@@ -397,7 +397,7 @@ export class ScenariosListComponent implements OnInit {
         const edit_scenarios = [];
         const scenario_id = event.target.attributes['data-id'].value;
         let scenario = this.__getScenario(scenario_id);
-        edit_scenarios.push({id: scenario_id, modify:[{value: !scenario.isFavorite, parameter: 'isFavorite'}]})
+        edit_scenarios.push({id: scenario_id, modify:[{value: scenario.favorite, parameter: 'favorite'}]})
         this.__editScenario(edit_scenarios);
     }
 
