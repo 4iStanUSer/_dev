@@ -113,7 +113,11 @@ export class ScenariosListComponent implements OnInit {
             url_id: '/forecast/create_scenario',
             data: new_scenario,
         }).subscribe((data) => {
-            console.log(data);
+            if(!data.error) {
+                this.scenariosList = [];
+                this.selectedScenarios = [];
+                this.getScenariosList();
+            }
         });
     }
 
@@ -122,7 +126,11 @@ export class ScenariosListComponent implements OnInit {
             url_id: '/forecast/edit_scenario',
             data: edit_scenarios,
         }).subscribe((data) => {
-            console.log(data);
+            if(!data.error) {
+                this.scenariosList = [];
+                this.selectedScenarios = [];
+                this.getScenariosList();
+            }
         });
     }
 
@@ -394,13 +402,25 @@ export class ScenariosListComponent implements OnInit {
 
     // -------------------------------------  Actions  -----------------------------------//
     onToggleSharedScenario(event: any) {
+        event.preventDefault();
         let edit_scenarios = [];
         const scenario_id = event.target.attributes['data-id'].value;
         let scenario = this.__getScenario(scenario_id);
-
         if(this.in_array("share", scenario.scenario_permission)) {
             let new_shared = scenario.shared == 'No' ? 'Yes' : 'No';
-            edit_scenarios.push({id: scenario.id, modify:[{value: new_shared, parameter: 'shared'}]})
+            edit_scenarios.push({id: scenario.id, modify:[{value: new_shared, parameter: 'shared'}]});
+            this.__editScenario(edit_scenarios);
+        }
+    }
+
+    onToggleStatusScenario(event: any) {
+        event.preventDefault();
+        let edit_scenarios = [];
+        const scenario_id = event.target.attributes['data-id'].value;
+        let scenario = this.__getScenario(scenario_id);
+        if(this.in_array("change status", scenario.scenario_permission)) {
+            let new_status = scenario.status == 'Final' ? 'Draft' : 'Final';
+            edit_scenarios.push({id: scenario.id, modify:[{value: new_status, parameter: 'status'}]});
             this.__editScenario(edit_scenarios);
         }
     }
@@ -409,7 +429,8 @@ export class ScenariosListComponent implements OnInit {
         const edit_scenarios = [];
         const scenario_id = event.target.attributes['data-id'].value;
         let scenario = this.__getScenario(scenario_id);
-        edit_scenarios.push({id: scenario.id, modify:[{value: scenario.favorite, parameter: 'favorite'}]})
+        let new_favorit = scenario.favorite == 'Yes' ? 'No' : 'Yes';
+        edit_scenarios.push({id: scenario.id, modify:[{value: new_favorit, parameter: 'favorite'}]});
         this.__editScenario(edit_scenarios);
     }
 

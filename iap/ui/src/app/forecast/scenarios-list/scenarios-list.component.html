@@ -273,10 +273,10 @@
                                           <label class="c-checkbox__label c-checkbox__label--transparent" for="sc-table-check-{{scenario.id}}"></label>
                                         </div>
                                         <div class="c-check-actions__item c-checkbox-star c-tooltip">
-                                          <div class="c-tooltip__text c-tooltip__text--favorites c-tooltip__text--bottom" [ngStyle]="{'left': scenario.favorite === false ? '' : '-48px'}">
-                                              {{scenario.favorite === false ? 'Add to Favorites' : 'Remove from Favorites'}}
+                                          <div class="c-tooltip__text c-tooltip__text--favorites c-tooltip__text--bottom" [ngStyle]="{'left': scenario.favorite === 'No' ? '' : '-48px'}">
+                                              {{scenario.favorite === "No" ? 'Add to Favorites' : 'Remove from Favorites'}}
                                           </div>
-                                          <input [attr.data-id]="scenario.id" [(ngModel)]="scenario.favorite" (change)="onToggleFavoritScenario($event)" id="sc-table-star-{{scenario.id}}" type="checkbox">
+                                          <input [attr.checked]="scenario.favorite === 'Yes' ? true : null" [attr.data-id]="scenario.id" (change)="onToggleFavoritScenario($event)" id="sc-table-star-{{scenario.id}}" type="checkbox">
                                           <label class="c-checkbox-star__label" for="sc-table-star-{{scenario.id}}"></label>
                                         </div>
                                       </div>
@@ -284,14 +284,14 @@
                                     <div class="c-scenarios-table__cell c-scenarios-table__cell--name">{{scenario.name}}</div>
                                     <div class="c-scenarios-table__cell c-scenarios-table__cell--author">{{scenario.author}}</div>
                                     <div class="c-scenarios-table__cell c-scenarios-table__cell--shared">
-                                        <a (click)="onToggleSharedScenario($event)" [attr.data-id]="scenario.id" [ngStyle]="{'opacity': in_array('share', scenario.scenario_permission) ? '' : '0.4'}" *ngIf="scenario.shared.toLowerCase() === 'yes'" class="shared" href="#"></a>
-                                        <span (click)="onToggleSharedScenario($event)" [attr.data-id]="scenario.id" [ngStyle]="{'color': in_array('share', scenario.scenario_permission) ? '' : 'rgba(148,161,181,0.5)'}" *ngIf="scenario.shared.toLowerCase() === 'no'">Local</span>
+                                        <a (click)="onToggleSharedScenario($event)" [attr.data-id]="scenario.id" [ngStyle]="{'opacity': in_array('share', scenario.scenario_permission) ? '' : '0.4'}" *ngIf="scenario.shared === 'Yes'" class="shared" href="#"></a>
+                                        <span (click)="onToggleSharedScenario($event)" [attr.data-id]="scenario.id" [ngStyle]="{'color': in_array('share', scenario.scenario_permission) ? '' : 'rgba(148,161,181,0.5)'}" *ngIf="scenario.shared === 'No'">Local</span>
                                     </div>
                                     <div class="c-scenarios-table__cell c-scenarios-table__cell--description">{{scenario.description}}</div>
                                     <div class="c-scenarios-table__cell c-scenarios-table__cell--modified">{{dateParse(scenario.modify_date)}}</div>
                                     <div class="c-scenarios-table__cell c-scenarios-table__cell--status">
-                                        <div [ngStyle]="{'color': scenario.scenario_permission.indexOf('change status') !== -1 ? '' : 'rgba(148,161,181,0.5)'}" *ngIf="scenario.status.toLowerCase() !== 'final'" class="status">{{scenario.status}}</div>
-                                        <div [ngStyle]="{'background-color': scenario.scenario_permission.indexOf('change status') !== -1 ? '' : '#c4c6c9'}" *ngIf="scenario.status.toLowerCase() === 'final'" class="status status--final">{{scenario.status}}</div>
+                                        <div (click)="onToggleStatusScenario($event)" [attr.data-id]="scenario.id" [ngStyle]="{'color': scenario.scenario_permission.indexOf('change status') !== -1 ? '' : 'rgba(148,161,181,0.5)'}" *ngIf="scenario.status.toLowerCase() !== 'final'" class="status">{{scenario.status}}</div>
+                                        <div (click)="onToggleStatusScenario($event)" [attr.data-id]="scenario.id" [ngStyle]="{'background-color': scenario.scenario_permission.indexOf('change status') !== -1 ? '' : '#c4c6c9'}" *ngIf="scenario.status.toLowerCase() === 'final'" class="status status--final">{{scenario.status}}</div>
                                     </div>
                                     <div class="c-scenarios-table__cell c-scenarios-table__cell--actions">
                                         <div class="c-actions">
