@@ -295,7 +295,7 @@
                                     </div>
                                     <div class="c-scenarios-table__cell c-scenarios-table__cell--actions">
                                         <div class="c-actions">
-                                            <a (click)="onCopyScenario($event)" [ngStyle]="{'opacity': scenario.scenario_permission.indexOf('copy') !== -1 ? '' : '0.4'}" class="c-tooltip c-tooltip c-actions__item c-actions__item--copy" href="#">
+                                            <a (click)="onCopyScenario($event)" [attr.data-id]="scenario.id" [ngStyle]="{'opacity': scenario.scenario_permission.indexOf('copy') !== -1 ? '' : '0.4'}" class="c-tooltip c-tooltip c-actions__item c-actions__item--copy" href="#">
                                                 <div *ngIf="scenario.scenario_permission.indexOf('copy') !== -1" class="c-tooltip__text c-tooltip__text--bottom">Copy</div>
                                             </a>
                                             <a [ngStyle]="{'opacity': scenario.scenario_permission.indexOf('edit') !== -1 ? '' : '0.4'}" class="c-tooltip c-actions__item c-actions__item--edit" href="#">

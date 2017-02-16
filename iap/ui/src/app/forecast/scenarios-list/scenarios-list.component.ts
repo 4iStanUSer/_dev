@@ -108,10 +108,10 @@ export class ScenariosListComponent implements OnInit {
         });
     }
 
-    __deleteScenario(scenario_id: number) {
+    __deleteScenario(scenario_ids: number[]) {
         this.req.post({
             url_id: '/forecast/delete_scenario',
-            data: {'id': scenario_id},
+            data: {'id': scenario_ids},
         }).subscribe((data) => {
             console.log('----------------------__deleteScenario', data);
             if(!data.error) {
@@ -320,7 +320,6 @@ export class ScenariosListComponent implements OnInit {
 
     }
     // --------------------------------  Scenario details  -------------------------------//
-
     onToggleScenario(event: any) {
         let element = event.target;
         if (element.checked === true) {
@@ -375,26 +374,29 @@ export class ScenariosListComponent implements OnInit {
         console.log('---onChangeAuthor', name);
     }
 
+
+
+
+
+    // -------------------------------------  Actions  -----------------------------------//
     onCopyScenario(event: any) {
         event.preventDefault();
-        let scenario_id = event.target.attributes['data-id'].value;
-        let curent_scenario = this.scenariosListComponentService.getScenario(scenario_id);
-        console.log('---onCopyScenario', curent_scenario);
-        if (this.in_array('copy', curent_scenario.scenario_permission)) {
-            console.log(curent_scenario);
+        if(this.deletePermissionStatus === true) { // TODO: check permissions
+            let scenario_id = event.target.attributes['data-id'].value;
+            console.log('---onCopyScenario', scenario_id);
         }
     }
 
-    onCloseScenariosPreview(event: any) {
+    onCloseScenariosPreview() {
         this.selectScenario = null;
         this.__clearTableRowSelect();
     }
 
     onDeleteScenario() {
-        if(this.deletePermissionStatus === true && this.selectedScenarios.length === 1) {
-            const scenario_id = this.selectedScenarios[0];
-            this.__deleteScenario(scenario_id);
+        if(this.deletePermissionStatus === true) {
+            this.__deleteScenario(this.selectedScenarios);
         }
         return false;
     }
+    // -------------------------------------  Actions  -----------------------------------//
 }
