@@ -22,7 +22,7 @@ def send_error_response(data):
     :return:
     :rtype: Dict[str, str]
     """
-    return {'error': True,'data': data}
+    return {'error': True, 'data': data}
 
 
 def is_equal_path(path1, path2):

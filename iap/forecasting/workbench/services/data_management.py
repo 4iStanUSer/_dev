@@ -7,7 +7,7 @@ from ....common.repository.models_managers import access_manager
 PERMISSION_STATUS = False
 
 
-def set_entity_values(container, entity_id, values):
+def set_entity_values(permission_tree, container, entity_id, values):
 
     # Get requested entity.
     entity = container.get_entity_by_id(entity_id)
@@ -17,13 +17,35 @@ def set_entity_values(container, entity_id, values):
             var = entity.get_variable(item['var_name'])
             if item['slot_type'] & SlotType.time_series:
                 ts = var.get_time_series(item['timescale'])
-                ts.set_value(item['time_label'], item['value'])
+
+                print("PS", ts)
+                # TODO finish permission
+                item_path = ["*-*".join(entity.path), item['var_name'], item['timescale'],
+                             item['time_label']]
+                mask = access_manager.check_permission(permission_tree, item_path, pointer=0)
+                if mask == "Unavailable":
+                    continue
+                else:
+                #TODO check permission for setting value
+                    ts.set_value(item['time_label'], item['value'])
+
             elif item['slot_type'] & SlotType.scalar:
                 scalar = var.get_scalar(item['timescale'])
                 scalar.set_value()
             elif item['slot_type'] & SlotType.period_series:
                 ps = var.get_periods_series(item['timescale'])
-                ps.set_value(item['time_label'], item['value'])
+                print("PS", ps)
+                #TODO finish permission
+                item_path = ["*-*".join(entity.path), item['var_name'], item['timescale'],
+                             item['time_label']]
+                mask = access_manager.check_permission(permission_tree, item_path, pointer=0)
+                if mask == "Unavailable":
+                    continue
+                else:
+                    #ts_period = check_period_perm(mask['tree'], ts)
+                    ps.set_value(item['time_label'], item['value'])
+
+
             else:
                 raise Exception
         except KeyError:
@@ -31,7 +53,7 @@ def set_entity_values(container, entity_id, values):
     return
 
 
-def get_entity_data(permission_tree, project, container, config, entities_ids, lang):
+def get_entity_data(permission_tree, container, config, entities_ids, lang):
 
     #TODO renew permission tree
 
@@ -114,13 +136,6 @@ def get_entity_data(permission_tree, project, container, config, entities_ids, l
     """
     Check permission vor view ent
     """
-
-    #if '*-*'.join(ent.path) in list(permission_tree.keys()):
-    #    pass
-    #else:
-    #    return "No permission to view ent"
-
-    #Extract variables for view
     try:
         items_view_props = config.get_vars_for_view(meta=ent.meta, path=ent.path)
     except Exception:

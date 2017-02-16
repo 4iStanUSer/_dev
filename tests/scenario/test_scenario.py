@@ -52,8 +52,6 @@ def test_create_scenario(web_app, token):
     scenario_data = {
                 "name": "New Scenario",
                 "description": "New Scenario Description",
-                "status": "New",
-                "shared": "True",
                 "criteria": "USA-Main-Weapon"
                     }
 
@@ -76,8 +74,6 @@ def test_create_scenario_error_expected(web_app, token):
     scenario_data = {
                 "name": "New Scenario",
                 "description": "New Scenario Description",
-                "status": "New",
-                "shared": "True",
                 "criteria": "USA-Main-Weapon"
                     }
 
@@ -419,7 +415,7 @@ def test_delete_scenario_view_updates(web_app, token):
     actual = res.json
     print("Delete Scenario", actual)
 
-    res = web_app.post_json("/forecast/get_scenario_details", {'data': {'id': [3]},'X-Token': token})
+    res = web_app.post_json("/forecast/get_scenario_details", {'data': {'id': [3]}, 'X-Token': token})
     expected = {'error': True, 'data': 'Wrong request'}
     actual = res.json
     print("Delete Scenario View Updates", actual)
