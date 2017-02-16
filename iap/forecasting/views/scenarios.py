@@ -65,7 +65,7 @@ def create_scenario(request):
         msg = request.get_error_msg(e, lang)
         return send_error_response(msg)
     else:
-        return send_success_response(scenario)
+        return send_success_response(scenario[0])
 
 @forbidden_view
 @requires_roles('view')
