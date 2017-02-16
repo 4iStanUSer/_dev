@@ -157,11 +157,11 @@ def main(argv=sys.argv):
 
         #Add Scenario
         input_data_1 = dict(name="Price Growth Dynamics JJOralCare", description="Dynamics of Price Growth in Brazil",
-                            status="New", shared="Yes", criteria="Brazil-Nike-Main", author=user_1.email,
+                            status="Final", shared="Yes", criteria="Brazil-Nike-Main", author=user_1.email,
                           )
 
         input_data_2 = dict(name="Price Growth Dynamics JJLean", description="Dynamics of Price Growth in USA",
-                              status="New", shared="No", criteria="USA-iPhone-Main", author=user_2.email,
+                              status="Draft", shared="No", criteria="USA-iPhone-Main", author=user_2.email,
                             )
 
         for i in range(11):
