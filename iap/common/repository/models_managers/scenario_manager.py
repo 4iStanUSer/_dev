@@ -28,8 +28,8 @@ def create_scenario(session, input_data, user=None):
 
     except NoResultFound:
         raise NoResultFound
-
-    return scenario
+    else:
+        return scenario
 
 
 def get_scenario_by_id(session, user_id, scenario_id):

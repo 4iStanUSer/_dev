@@ -324,7 +324,6 @@ def copy_scenario(request):
     try:
         session = request.dbsession
         scenario = scenario_service.copy_scenario(session, user_id=user_id, scenario_id=scenario_id)
-        scenario.status = "Copy"
     except Exception as e:
         msg = request.get_error_msg(e, lang)
         return send_error_response(msg)

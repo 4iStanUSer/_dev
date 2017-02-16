@@ -194,6 +194,7 @@ def test_change_scenario_name(web_app, token):
                                                                 'X-Token': None})
 
     actual = res.json
+
     expected = {"data": "Name changed", "error": False}
     assert actual == expected
 
@@ -388,7 +389,7 @@ def test_copy_scenario_view_updates(web_app, token):
     :rtype:
     """
 
-    res = web_app.post_json("/forecast/copy_scenario", {'data': {'id': 24},  'X-Token': token})
+    res = web_app.post_json("/forecast/copy_scenario", {'data': {'id': 1},  'X-Token': token})
     actual = res.json
     print("Copy Scenario", actual)
 

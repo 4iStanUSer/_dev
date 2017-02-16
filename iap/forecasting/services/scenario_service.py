@@ -22,6 +22,7 @@ def serialise_scenario(scenarios, user=None):
         scenario_info['status'] = scenario.status
         scenario_info['favorite'] = scenario.favorite
         scenario_info['description'] = scenario.description
+        scenario_info['criteria'] = scenario.criteria
         scenario_info['shared'] = scenario.shared
         if user.email == scenario.author:
             scenario_info['scenario_permission'] = scenario_permission
@@ -63,7 +64,8 @@ def create_scenario(session, user_id, input_data):
         scenario = scenario_manager.create_scenario(session, user=user, input_data=input_data)
     except NoResultFound:
         raise NoResultFound
-    return scenario
+    else:
+        return scenario
 
 
 def get_scenario_page(session, user_id, filter=None):
@@ -94,11 +96,12 @@ def copy_scenario(session, user_id, scenario_id):
         user = access_manager.get_user_by_id(session, user_id)
         scenario_data = dict(name=scenario.name, description=scenario.description,
                              criteria=scenario.criteria, author=user.email, shared="No", status="Copy")
-        scenario_manager.create_scenario(session, input_data=scenario_data, user=user)
+        scenario = scenario_manager.create_scenario(session, input_data=scenario_data, user=user)
         #TODO provide scenario coppying
     except NoResultFound:
         raise NoResultFound
-
+    else:
+        return scenario
 
 def get_scenarios(session, user_id, filters):
     """
