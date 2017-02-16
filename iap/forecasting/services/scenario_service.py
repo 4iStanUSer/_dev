@@ -57,15 +57,15 @@ def create_scenario(session, user_id, input_data):
     :rtype:
     """
     try:
-    #TODO check existense
+        #TODO check existense
         user = access_manager.get_user_by_id(session, user_id=user_id)
         input_data['author'] = user.email
-
-        scenario = scenario_manager.create_scenario(session, user=user, input_data=input_data)
+        scenario = scenario_manager.create_scenario(session, input_data=input_data, user=user)
+        serialised_scenario = serialise_scenario([scenario], user)
     except NoResultFound:
         raise NoResultFound
     else:
-        return scenario
+        return serialised_scenario
 
 
 def get_scenario_page(session, user_id, filter=None):
@@ -97,11 +97,12 @@ def copy_scenario(session, user_id, scenario_id):
         scenario_data = dict(name=scenario.name, description=scenario.description,
                              criteria=scenario.criteria, author=user.email, shared="No", status="Draft")
         scenario = scenario_manager.create_scenario(session, input_data=scenario_data, user=user)
+        serialised_scenario = serialise_scenario([scenario])
         #TODO provide scenario coppying
     except NoResultFound:
         raise NoResultFound
     else:
-        return scenario
+        return serialised_scenario
 
 def get_scenarios(session, user_id, filters):
     """
