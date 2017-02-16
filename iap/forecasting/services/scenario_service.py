@@ -14,20 +14,20 @@ def serialise_scenario(scenarios, user=None):
     """
     scenario_info_list = []
 
-    scenario_permission = ['share','change status','copy','delete','edit']
+    scenario_permission = ['share', 'change status', 'copy', 'delete', 'edit']
     for scenario in scenarios:
         scenario_info = {}
         scenario_info['id'] = scenario.id
         scenario_info['name'] = scenario.name
         scenario_info['status'] = scenario.status
-        scenario_info['favorite'] = eval(scenario.favorite)
+        scenario_info['favorite'] = scenario.favorite
         scenario_info['description'] = scenario.description
         scenario_info['criteria'] = scenario.criteria
         scenario_info['shared'] = scenario.shared
         if user.email == scenario.author:
             scenario_info['scenario_permission'] = scenario_permission
         else:
-            scenario_info['scenario_permission'] = ['share', 'change status', 'copy']
+            scenario_info['scenario_permission'] = ['change status', 'copy']
         scenario_info['author'] = scenario.author
         scenario_info['modify_date'] = scenario.date_of_last_modification
         scenario_info_list.append(scenario_info)
