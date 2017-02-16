@@ -172,7 +172,7 @@ export class ScenariosListComponent implements OnInit {
         if (this.scenariosList !== undefined && this.scenariosList.length > 0) {
             this.favoriteList = [];
             for (let i = 0; i < this.scenariosList.length; i++) {
-                if (this.scenariosList[i].isFavorite === true) {
+                if (this.scenariosList[i].favorite === true) {
                     this.favoriteList.push(this.scenariosList[i].id);
                 }
             }
@@ -393,11 +393,23 @@ export class ScenariosListComponent implements OnInit {
 
 
     // -------------------------------------  Actions  -----------------------------------//
+    onToggleSharedScenario(event: any) {
+        let edit_scenarios = [];
+        const scenario_id = event.target.attributes['data-id'].value;
+        let scenario = this.__getScenario(scenario_id);
+
+        if(this.in_array("share", scenario.scenario_permission)) {
+            let new_shared = scenario.shared == 'No' ? 'Yes' : 'No';
+            edit_scenarios.push({id: scenario.id, modify:[{value: new_shared, parameter: 'shared'}]})
+            this.__editScenario(edit_scenarios);
+        }
+    }
+
     onToggleFavoritScenario(event: any) {
         const edit_scenarios = [];
         const scenario_id = event.target.attributes['data-id'].value;
         let scenario = this.__getScenario(scenario_id);
-        edit_scenarios.push({id: scenario_id, modify:[{value: scenario.favorite, parameter: 'favorite'}]})
+        edit_scenarios.push({id: scenario.id, modify:[{value: scenario.favorite, parameter: 'favorite'}]})
         this.__editScenario(edit_scenarios);
     }
 
@@ -409,7 +421,7 @@ export class ScenariosListComponent implements OnInit {
             const copyScenario = {
                 name: 'Copy ' + scenario.name,
                 description: scenario.description,
-                criteria: 'USA-Main-Weapon'
+                criteria: scenario.criteria
             };
             this.__createScenario(copyScenario);
         }
