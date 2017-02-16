@@ -30,12 +30,13 @@ class Scenario(Base):
     date_of_last_modification = Column(String)
 
     criteria = Column(String)
-    favorite = Column(String, default="No")
+    #favorite = Column(String, default="No")
+    favorite = Column(String(length=255), nullable=True, default="No")
 
     #entity_id = Column(Integer, ForeignKey('entity.id'))
     #enity = relationship("Entity", back_populates="scenarios")
 
-    status = Column(String(length=255), default="New")
+    status = Column(String(length=255), default="Draft")
     shared = Column(String(length=255), nullable=True, default="No")
     start_date = Column(DateTime,  nullable=True)
     end_date = Column(DateTime, nullable=True)

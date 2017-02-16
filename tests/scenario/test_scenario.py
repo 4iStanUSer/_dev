@@ -39,6 +39,44 @@ def token(web_app):
 
     return token
 
+def test_change_scenario_name_view_updates(web_app, token):
+    """Test for change sceanrio name
+
+    :param web_app:
+    :type web_app:
+    :return:
+    :rtype:
+    """
+
+    res = web_app.post_json("/forecast/edit_scenario", {"data":
+                                                               [{'id': 3, 'modify':[{'parameter': 'name',
+                                                                                     'value': "Old name of Scenario"},
+                                                                                    {'parameter': 'favorite',
+                                                                                     'value': "New Value"},
+                                                                                    {'parameter': 'shared',
+                                                                                     'value': "New Value"},
+                                                                                    {'parameter': 'status',
+                                                                                     'value': "New Value"}
+                                                                                    ]
+                                                                 }],
+                                                                'X-Token': token})
+
+    actual = res.json
+    expected = {"data": "Name changed", "error": False}
+    print("Change Name", actual)
+
+    res = web_app.post_json("/forecast/get_scenario_page",
+                            {'data': {'filter': {'name': 'status', 'value': 'New'}}, 'X-Token': token})
+    keys = ['data', 'user_permission']
+    data_keys = ['author', 'id', 'location', 'modify_date', 'name', 'status', 'shared', 'scenario_permission']
+    print("Get scenario Page", res.json)
+
+    res = web_app.post_json("/forecast/get_scenario_details", {'data': {'id': 3}, 'X-Token': token})
+    print("View description", res.json)
+
+    expected = {"data": "New Scenario Description", "error": False}
+    actual = res.json['data']['name']
+    assert actual == "New name of Scenario"
 
 def test_create_scenario(web_app, token):
     """Test for create scenario
@@ -219,34 +257,7 @@ def test_change_scenario_name_error_expected(web_app, token):
     assert actual == expected
 
 
-def test_change_scenario_name_view_updates(web_app, token):
-    """Test for change sceanrio name
 
-    :param web_app:
-    :type web_app:
-    :return:
-    :rtype:
-    """
-
-    res = web_app.post_json("/forecast/edit_scenario", {"data":
-                                                               [{'id': 3, 'modify':[{'parameter': 'name',
-                                                                                     'value': "New name of Scenario"},
-                                                                                    {'parameter': 'favorite',
-                                                                                     'value': "Yes"}]
-                                                                 }],
-                                                                'X-Token': token})
-
-    actual = res.json
-    expected = {"data": "Name changed", "error": False}
-    print("Change Name", actual)
-
-
-    res = web_app.post_json("/forecast/get_scenario_details", {'data': {'id': 3}, 'X-Token': token})
-    print("View description", res.json)
-
-    expected = {"data": "New Scenario Description", "error": False}
-    actual = res.json['data']['name']
-    assert actual == "New name of Scenario"
 
 
 
