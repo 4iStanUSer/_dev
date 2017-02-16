@@ -42,17 +42,6 @@ export class ScenariosListComponent implements OnInit {
         return false;
     }
 
-    __getScenario(id: any) {
-        let scenario = null;
-        for (const i in this.scenariosList) {
-            if (this.scenariosList[i].id === parseInt(id)) {
-                scenario = this.scenariosList[i];
-                break;
-            }
-        }
-        return scenario;
-    }
-
     __clearTableRowSelect() {
         let rows = document.getElementsByClassName('c-scenarios-table__row');
         for (let i = 0; i < rows.length; i++) {
@@ -108,13 +97,43 @@ export class ScenariosListComponent implements OnInit {
         });
     }
 
+    __getScenario(scenario_id: number) {
+        let scenario = {};
+        for (const i in this.scenariosList) {
+            if (this.scenariosList[i].id == scenario_id) {
+                scenario = this.scenariosList[i];
+                break;
+            }
+        }
+        return scenario;
+    }
+
+    __createScenario(new_scenario: any) {
+        this.req.post({
+            url_id: '/forecast/create_scenario',
+            data: new_scenario,
+        }).subscribe((data) => {
+            console.log(data);
+        });
+    }
+
+    __editScenario(edit_scenarios: any[]) {
+        this.req.post({
+            url_id: '/forecast/edit_scenario',
+            data: edit_scenarios,
+        }).subscribe((data) => {
+            console.log(data);
+        });
+    }
+
     __deleteScenario(scenario_ids: number[]) {
         this.req.post({
             url_id: '/forecast/delete_scenario',
             data: {'id': scenario_ids},
         }).subscribe((data) => {
-            console.log('----------------------__deleteScenario', data);
             if(!data.error) {
+                this.scenariosList = [];
+                this.selectedScenarios = [];
                 this.getScenariosList();
             }
         });
@@ -364,11 +383,6 @@ export class ScenariosListComponent implements OnInit {
         this.checkDeletePermission();
     }
 
-    onToggleFavoritScenario(event: any) {
-        let scenario_id = event.target.attributes['data-id'].value;
-        console.log('---onToggleFavoritScenario', scenario_id);
-        this.scenariosListComponentService.modifyFavorit(scenario_id);
-    }
 
     onChangeAuthor(name: string) {
         console.log('---onChangeAuthor', name);
@@ -379,11 +393,25 @@ export class ScenariosListComponent implements OnInit {
 
 
     // -------------------------------------  Actions  -----------------------------------//
+    onToggleFavoritScenario(event: any) {
+        const edit_scenarios = [];
+        const scenario_id = event.target.attributes['data-id'].value;
+        let scenario = this.__getScenario(scenario_id);
+        edit_scenarios.push({id: scenario_id, modify:[{value: !scenario.isFavorite, parameter: 'isFavorite'}]})
+        this.__editScenario(edit_scenarios);
+    }
+
     onCopyScenario(event: any) {
         event.preventDefault();
-        if(this.deletePermissionStatus === true) { // TODO: check permissions
-            let scenario_id = event.target.attributes['data-id'].value;
-            console.log('---onCopyScenario', scenario_id);
+        const scenario_id = event.target.attributes['data-id'].value;
+        let scenario = this.__getScenario(scenario_id);
+        if(this.in_array("copy", scenario.scenario_permission)) {
+            const copyScenario = {
+                name: 'Copy ' + scenario.name,
+                description: scenario.description,
+                criteria: 'USA-Main-Weapon'
+            };
+            this.__createScenario(copyScenario);
         }
     }
 
