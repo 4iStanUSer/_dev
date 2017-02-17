@@ -476,7 +476,7 @@ def check_feature_permission(session, user_id, tool_id, feature_id):
         return False
 
 
-def check_period_perm(tree, ts_period, ts_point):
+def check_period_perm(tree, ts_period=None, ts_point=None):
 
     correct_ts_period = []
     if ts_period:
@@ -485,6 +485,6 @@ def check_period_perm(tree, ts_period, ts_point):
         ts_period = [int(ts_point)]
     for _ts_period in [i for i in tree.keys() if i!='mask']:
         _ts_period = _ts_period.split(":")
-        _ts = range(int(float(_ts_period[0])), int(float(_ts_period[1])), 1)
-        correct_ts_period.append(list(set(ts_period) & set(_ts)))
+        _ts = range(int(float(_ts_period[0])), int(float(_ts_period[1]))+1, 1)
+        correct_ts_period.extend(list(set(ts_period) & set(_ts)))
     return correct_ts_period

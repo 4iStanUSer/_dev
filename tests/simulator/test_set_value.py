@@ -65,7 +65,6 @@ def test_simulator(web_app, token):
     print(res.json_body)
 
 
-
     values = [dict(var_name="eq_price", timescale="annual", slot_type=1, time_label='1', value=1),
               dict(var_name="eq_price", timescale="annual", slot_type=1, time_label='2', value=12),
               dict(var_name="eq_price", timescale="annual", slot_type=1, time_label='3', value=123),

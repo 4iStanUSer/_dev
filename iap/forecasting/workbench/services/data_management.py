@@ -29,7 +29,7 @@ def set_entity_values(permission_tree, container, entity_id, values):
                     time_indexes = access_manager.check_period_perm(mask['tree'], ts_point=item['time_label'])
                     for time_index in time_indexes:
                         ts.set_value_by_index(ts_name=item['timescale'], index=time_index, value = item['value'])
-
+                        print("TS", ts.get_values_for_period(['2012','2016']))
             elif item['slot_type'] & SlotType.scalar:
                 scalar = var.get_scalar(item['timescale'])
                 scalar.set_value()
