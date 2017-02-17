@@ -200,7 +200,7 @@ export class ScenariosListComponent implements OnInit {
         const selectedScenariosList = this.__getSelectedScenariosList();
         const permParamMap = {change_status: 'status', delete: 'delete', copy: 'copy', share: 'share'};
         for (const i in selectedScenariosList) {
-            console.log(perm, this.userPermissions[perm], selectedScenariosList, this.__getKey('scenario_permission', this.__getScenario(selectedScenariosList[i]), {}));
+            // console.log(perm, this.userPermissions, selectedScenariosList, this.__getKey('scenario_permission', this.__getScenario(selectedScenariosList[i]), {}));
             if (this.in_array(perm, this.__getKey('scenario_permission', this.__getScenario(selectedScenariosList[i]), {}))) {
                 if (this.userPermissionsData[perm]) {
                     if (check_item) {
@@ -288,7 +288,7 @@ export class ScenariosListComponent implements OnInit {
         }
 
         // Check permissions
-        this.__initUserPermissions();
+        // this.__initUserPermissions();
     }
 
     onToggleAllScenarios(event: any) {
@@ -308,7 +308,7 @@ export class ScenariosListComponent implements OnInit {
         }
 
         // Check permissions
-        this.__initUserPermissions();
+        //this.__initUserPermissions();
     }
 
     onChangeAuthor(name: string) {
