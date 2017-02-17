@@ -248,17 +248,25 @@ def edit_scenario(request):
         return send_error_response(msg)
     try:
         session = request.dbsession
+        scenarios_info = []
         for scenario in scenarios:
             scenario_id = scenario['id']
+
+            scenario_info = dict(id = scenario_id)
+            scenario_info['modified'] = []
+
             for modify_item in scenario['modify']:
                 parameter = modify_item['parameter']
                 value = modify_item['value']
-                scenario_service.update_scenario(session, scenario_id=scenario_id, user_id=user_id, parameter=parameter, value=value)
+                status = scenario_service.update_scenario(session, scenario_id=scenario_id, user_id=user_id,
+                                                              parameter=parameter, value=value)
+                scenario_info['modified'].append(dict(parameter=parameter, status=status))
+            scenarios_info.append(scenario_info)
     except Exception as e:
         msg = request.get_error_msg(e, lang)
         return send_error_response(msg)
     else:
-        return send_success_response("Scenario Edited")
+        return send_success_response(scenarios_info)
 
 
 @forbidden_view
