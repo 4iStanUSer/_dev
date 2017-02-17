@@ -26,16 +26,15 @@ def set_entity_values(permission_tree, container, entity_id, values):
                     continue
                 else:
                 #TODO check permission for setting value
-                    time_labels = access_manager.check_period_perm(mask['tree'], item['time_label'])
-                    for time_label in time_labels:
-                        ts.set_value(time_label, item['value'])
+                    time_indexes = access_manager.check_period_perm(mask['tree'], ts_point=item['time_label'])
+                    for time_index in time_indexes:
+                        ts.set_value_by_index(ts_name=item['timescale'], index=time_index, value = item['value'])
 
             elif item['slot_type'] & SlotType.scalar:
                 scalar = var.get_scalar(item['timescale'])
                 scalar.set_value()
             elif item['slot_type'] & SlotType.period_series:
                 ps = var.get_periods_series(item['timescale'])
-                print("PS", ps)
                 #TODO finish permission
                 item_path = ["*-*".join(entity.path), item['var_name'], item['timescale'],
                              item['time_label']]
