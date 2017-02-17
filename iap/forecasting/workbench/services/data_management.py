@@ -18,7 +18,6 @@ def set_entity_values(permission_tree, container, entity_id, values):
             if item['slot_type'] & SlotType.time_series:
                 ts = var.get_time_series(item['timescale'])
 
-                print("PS", ts)
                 # TODO finish permission
                 item_path = ["*-*".join(entity.path), item['var_name'], item['timescale'],
                              item['time_label']]
@@ -27,7 +26,9 @@ def set_entity_values(permission_tree, container, entity_id, values):
                     continue
                 else:
                 #TODO check permission for setting value
-                    ts.set_value(item['time_label'], item['value'])
+                    time_labels = access_manager.check_period_perm(mask['tree'], item['time_label'])
+                    for time_label in time_labels:
+                        ts.set_value(time_label, item['value'])
 
             elif item['slot_type'] & SlotType.scalar:
                 scalar = var.get_scalar(item['timescale'])
@@ -160,7 +161,7 @@ def get_entity_data(permission_tree, container, config, entities_ids, lang):
                 if mask == "Unavailable":
                     continue
                 else:
-                    ts_period = check_period_perm(mask['tree'], ts_period)
+                    ts_period = access_manager.check_period_perm(mask['tree'], ts_period)
                     print(ts_period)
                     for period in ts_period:
                         #ts_period = check_period_perm(_ts_periods, ts_period)
@@ -674,12 +675,3 @@ def get_simulator_value_data(permission_tree, container, config, entity_id, lang
     return custom_data
 
 
-def check_period_perm(tree, ts_period):
-
-    correct_ts_period = []
-    ts_period = range(int(float(ts_period[0])), int(float(ts_period[1])), 1)
-    for _ts_period in [i for i in tree.keys() if i!='mask']:
-        _ts_period = _ts_period.split(":")
-        _ts = range(int(float(_ts_period[0])), int(float(_ts_period[1])), 1)
-        correct_ts_period.append(list(set(ts_period) & set(_ts)))
-    return correct_ts_period

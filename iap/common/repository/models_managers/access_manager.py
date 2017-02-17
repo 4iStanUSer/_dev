@@ -344,7 +344,7 @@ def build_permission_tree(session, project_name):
 def check_permission(permission_tree, inner_path, pointer):
     try:
         item = inner_path[pointer]
-        if type(item) is list:
+        if type(item) is list or item.isdigit():
             return {'item': item, 'tree': permission_tree}
         else:
             tree = permission_tree[item]
@@ -474,3 +474,17 @@ def check_feature_permission(session, user_id, tool_id, feature_id):
         return True
     else:
         return False
+
+
+def check_period_perm(tree, ts_period, ts_point):
+
+    correct_ts_period = []
+    if ts_period:
+        ts_period = range(int(float(ts_period[0])), int(float(ts_period[1])), 1)
+    else:
+        ts_period = [int(ts_point)]
+    for _ts_period in [i for i in tree.keys() if i!='mask']:
+        _ts_period = _ts_period.split(":")
+        _ts = range(int(float(_ts_period[0])), int(float(_ts_period[1])), 1)
+        correct_ts_period.append(list(set(ts_period) & set(_ts)))
+    return correct_ts_period
