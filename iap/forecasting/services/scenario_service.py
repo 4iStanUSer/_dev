@@ -5,7 +5,7 @@ from sqlalchemy.orm.exc import NoResultFound
 import datetime
 
 
-def serialise_scenario(scenarios, user=None):
+def serialise_scenario(scenarios, user):
     """Serialise scenario into dictionary
     :param scenarios:
     :type scenarios:
@@ -32,6 +32,7 @@ def serialise_scenario(scenarios, user=None):
         scenario_info['modify_date'] = scenario.date_of_last_modification
         scenario_info_list.append(scenario_info)
     return scenario_info_list
+
 
 
 def deserialise_scenario(scenario_info):
@@ -74,7 +75,7 @@ def get_scenario_page(session, user_id, filter=None):
         user = access_manager.get_user_by_id(session, user_id)
     # TODO change field of tool_id in db.
         scenario_list = serialise_scenario(scenarios, user)
-        user_permission = access_manager.get_feature_permission(session, user_id, 'forecast')#TODO change 1 on forecast
+        user_permission = access_manager.get_feature_permission(session, user_id, 'forecast')#TODO change 1 on forecast)
     except NoResultFound:
         raise Exception
     else:
@@ -97,7 +98,7 @@ def copy_scenario(session, user_id, scenario_id):
         scenario_data = dict(name=scenario.name, description=scenario.description,
                              criteria=scenario.criteria, author=user.email, shared="No", status="Draft")
         scenario = scenario_manager.create_scenario(session, input_data=scenario_data, user=user)
-        serialised_scenario = serialise_scenario([scenario])
+        serialised_scenario = serialise_scenario([scenario], user)
         #TODO provide scenario coppying
     except NoResultFound:
         raise NoResultFound

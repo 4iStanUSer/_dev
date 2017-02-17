@@ -92,6 +92,9 @@ def test_create_scenario(web_app, token):
     :return:
     :rtype:
     """
+    name = "New Scenario"
+    description = "New Scenario Description"
+    criteria = "USA-Main-Weapon"
 
     scenario_data = {
                 "name": "New Scenario",
@@ -100,10 +103,18 @@ def test_create_scenario(web_app, token):
                     }
 
     res = web_app.post_json("/forecast/create_scenario", {"data": scenario_data, "X-Token": token})
-    expected = {'error': False, 'data': 'Scenario created'}
-    actual = res.json
-    print("Result of  Scenario Creation", actual)
-    assert expected == actual
+    expected_error = False
+    assert res.json['error'] == expected_error
+    actual = res.json['data']
+
+    assert actual['author'] == 'default_user'
+    print("Result of  Scenario Creation ", actual['author'])
+    assert actual['criteria'] == criteria
+    print("Result of  Scenario Creation", actual['criteria'])
+    assert actual['description'] == description
+    print("Result of  Scenario Creation", actual['description'])
+    assert actual['favorite'] == "No"
+    print("Result of  Scenario Creation", actual['favorite'])
 
 
 def test_create_scenario_error_expected(web_app, token):
@@ -404,19 +415,35 @@ def test_copy_scenario_view_updates(web_app, token):
     :return:
     :rtype:
     """
-    res = web_app.post_json("/forecast/get_scenario_page", {'data': {'filter': []}, 'X-Token': token})
-    actual = res.json
+    res = web_app.post_json("/forecast/get_scenario_page", {'data': {}, 'X-Token': token})
+    actual = res.json['data']['data']
     print("Get Scenario Page", actual)
+    current_length = len(actual)
+    scenario = [i for i in actual if i['id']==1][0]
+    criteria = scenario['criteria']
+    description = scenario['description']
+    favorite = scenario['favorite']
 
     res = web_app.post_json("/forecast/copy_scenario", {'data': {'id': 1},  'X-Token': token})
-    actual = res.json
+    actual = res.json['data']
     print("Copied Scenario", actual)
 
+    #assert actual['author'] == 'default_user'
+    print("Result of  Scenario Creation ", actual['author'])
+    assert actual['criteria'] == criteria
+    print("Result of  Scenario Creation", actual['criteria'])
+    assert actual['description'] == description
+    print("Result of  Scenario Creation", actual['description'])
+    assert actual['favorite'] == favorite
+    print("Result of  Scenario Creation", actual['favorite'])
+
+
     res = web_app.post_json("/forecast/get_scenario_page", {'data': {'filter': []},'X-Token': token})
-    expected = {'error': True, 'data': 'Wrong request'}
-    actual = res.json
+    expected_error =  False
+    actual = res.json['data']['data']
     print("copy Scenario View Updates", actual)
-    assert expected == actual
+    assert expected_error == False
+    assert len(actual)==current_length+1
 
 
 

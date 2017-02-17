@@ -21,7 +21,6 @@ def get_scenario_page(request):
     try:
         user_id = request.user
         lang = rt.language(user_id)
-        filters = request.json_body['data']['filter']
     except KeyError as e:
         msg = request.get_error_msg(e, lang)
         return send_error_response(msg)
@@ -323,7 +322,7 @@ def copy_scenario(request):
         return send_error_response(msg)
     try:
         session = request.dbsession
-        scenario = scenario_service.copy_scenario(session, user_id=user_id, scenario_id=scenario_id)
+        scenario = scenario_service.copy_scenario(session, user_id=user_id, scenario_id=scenario_id)[0]
     except Exception as e:
         msg = request.get_error_msg(e, lang)
         return send_error_response(msg)
