@@ -5,7 +5,7 @@ from sqlalchemy.orm.exc import NoResultFound
 import datetime
 
 
-def serialise_scenario(scenarios, user=None):
+def serialise_scenario(scenarios, user):
     """Serialise scenario into dictionary
     :param scenarios:
     :type scenarios:
@@ -14,7 +14,7 @@ def serialise_scenario(scenarios, user=None):
     """
     scenario_info_list = []
 
-    scenario_permission = ['share', 'change status', 'copy', 'delete', 'edit']
+    scenario_permission = ['share', 'change_status', 'copy', 'delete', 'edit']
     for scenario in scenarios:
         scenario_info = {}
         scenario_info['id'] = scenario.id
@@ -27,11 +27,12 @@ def serialise_scenario(scenarios, user=None):
         if user.email == scenario.author:
             scenario_info['scenario_permission'] = scenario_permission
         else:
-            scenario_info['scenario_permission'] = ['change status', 'copy']
+            scenario_info['scenario_permission'] = ['change_status', 'copy']
         scenario_info['author'] = scenario.author
         scenario_info['modify_date'] = scenario.date_of_last_modification
         scenario_info_list.append(scenario_info)
     return scenario_info_list
+
 
 
 def deserialise_scenario(scenario_info):
@@ -57,15 +58,15 @@ def create_scenario(session, user_id, input_data):
     :rtype:
     """
     try:
-    #TODO check existense
+        #TODO check existense
         user = access_manager.get_user_by_id(session, user_id=user_id)
         input_data['author'] = user.email
-
-        scenario = scenario_manager.create_scenario(session, user=user, input_data=input_data)
+        scenario = scenario_manager.create_scenario(session, input_data=input_data, user=user)
+        serialised_scenario = serialise_scenario([scenario], user)
     except NoResultFound:
         raise NoResultFound
     else:
-        return scenario
+        return serialised_scenario
 
 
 def get_scenario_page(session, user_id, filter=None):
@@ -74,7 +75,7 @@ def get_scenario_page(session, user_id, filter=None):
         user = access_manager.get_user_by_id(session, user_id)
     # TODO change field of tool_id in db.
         scenario_list = serialise_scenario(scenarios, user)
-        user_permission = access_manager.get_feature_permission(session, user_id, 'forecast')#TODO change 1 on forecast
+        user_permission = access_manager.get_feature_permission(session, user_id, 'forecast')#TODO change 1 on forecast)
     except NoResultFound:
         raise Exception
     else:
@@ -97,11 +98,12 @@ def copy_scenario(session, user_id, scenario_id):
         scenario_data = dict(name=scenario.name, description=scenario.description,
                              criteria=scenario.criteria, author=user.email, shared="No", status="Draft")
         scenario = scenario_manager.create_scenario(session, input_data=scenario_data, user=user)
+        serialised_scenario = serialise_scenario([scenario], user)
         #TODO provide scenario coppying
     except NoResultFound:
         raise NoResultFound
     else:
-        return scenario
+        return serialised_scenario
 
 def get_scenarios(session, user_id, filters):
     """
@@ -233,7 +235,7 @@ def get_scenario_details(session, user_id, scenario_id):
         print()
     return scenario_details
 
-
+#TODO add decorator
 def update_scenario(session, scenario_id, user_id, parameter, value):
     """
     Update scenario by specific parameters

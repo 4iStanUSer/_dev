@@ -6,7 +6,6 @@ from ...common.security import requires_roles, forbidden_view
 from ...common import runtime_storage as rt
 
 
-
 @forbidden_view
 @requires_roles('view')
 def get_scenario_page(request):
@@ -22,7 +21,6 @@ def get_scenario_page(request):
     try:
         user_id = request.user
         lang = rt.language(user_id)
-        filters = request.json_body['data']['filter']
     except KeyError as e:
         msg = request.get_error_msg(e, lang)
         return send_error_response(msg)
@@ -61,12 +59,12 @@ def create_scenario(request):
         return send_error_response(msg)
     try:
         session = request.dbsession
-        scenario_service.create_scenario(session, user_id=user_id, input_data=input_data)
+        scenario = scenario_service.create_scenario(session, user_id=user_id, input_data=input_data)
     except Exception as e:
         msg = request.get_error_msg(e, lang)
         return send_error_response(msg)
     else:
-        return send_success_response("Scenario created")
+        return send_success_response(scenario[0])
 
 @forbidden_view
 @requires_roles('view')
@@ -230,6 +228,7 @@ def delete_scenario(request):
     else:
         return send_success_response(statuses)
 
+
 @forbidden_view
 @requires_roles('edit')
 def edit_scenario(request):
@@ -323,12 +322,12 @@ def copy_scenario(request):
         return send_error_response(msg)
     try:
         session = request.dbsession
-        scenario = scenario_service.copy_scenario(session, user_id=user_id, scenario_id=scenario_id)
+        scenario = scenario_service.copy_scenario(session, user_id=user_id, scenario_id=scenario_id)[0]
     except Exception as e:
         msg = request.get_error_msg(e, lang)
         return send_error_response(msg)
     else:
-        return send_success_response("Scenario copied")
+        return send_success_response(scenario)
 
 
 @forbidden_view
