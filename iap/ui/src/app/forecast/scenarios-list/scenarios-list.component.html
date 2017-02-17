@@ -205,21 +205,21 @@
                             </div>
                           </div>
                 <div class="m-scenarios-page__service c-service-pane">
-                    <a [ngStyle]="{'opacity': createNewPermissionStatus ? '' : '0.4', 'cursor': createNewPermissionStatus ? 'pointer' : 'default'}" class="c-service-pane__item c-service-pane__item--create" href="#">
+                    <a [ngStyle]="{'opacity': userPermissions.create ? '' : '0.4', 'cursor': userPermissions.create ? 'pointer' : 'default'}" class="c-service-pane__item c-service-pane__item--create" href="#">
                         <span class="c-service-pane__border">Create New</span>
                     </a>
                     <a [ngStyle]="{'opacity': finalizePermissionStatus ? '' : '0.4', 'cursor': finalizePermissionStatus ? 'pointer' : 'default'}" class="c-service-pane__item c-service-pane__item--finalize" href="#">
                         <span class="c-service-pane__border">Finalize</span>
                     </a>
-                    <a [ngStyle]="{'opacity': sharePermissionStatus ? '' : '0.4', 'cursor': sharePermissionStatus ? 'pointer' : 'default'}" class="c-service-pane__item c-service-pane__item--share" href="#">
+                    <a [ngStyle]="{'opacity': userPermissions.share ? '' : '0.4', 'cursor': userPermissions.share ? 'pointer' : 'default'}" class="c-service-pane__item c-service-pane__item--share" href="#">
                         <span class="c-service-pane__border">Share</span>
                     </a>
-                    <a [ngStyle]="{'opacity': duplicatePermissionStatus ? '' : '0.4', 'cursor': duplicatePermissionStatus ? 'pointer' : 'default'}" class="c-service-pane__item c-service-pane__item--duplicate" href="#">
+                    <a [ngStyle]="{'opacity': userPermissions.copy ? '' : '0.4', 'cursor': userPermissions.copy ? 'pointer' : 'default'}" class="c-service-pane__item c-service-pane__item--duplicate" href="#">
                         <span class="c-service-pane__border">Duplicate</span>
                     </a>
-                    <a (click)="onDeleteScenario()" [ngStyle]="{'opacity': deletePermissionStatus ? '' : '0.4', 'cursor': deletePermissionStatus ? 'pointer' : 'default'}" class="c-service-pane__item c-service-pane__item--delete" href="#">
+                    <a (click)="onDeleteScenario()" [ngStyle]="{'opacity': userPermissions.delete ? '' : '0.4', 'cursor': userPermissions.delete ? 'pointer' : 'default'}" class="c-service-pane__item c-service-pane__item--delete" href="#">
                         <span class="c-service-pane__border">Delete</span>
-                    </a>
+                    </a>{{selectedScenarios}}
                 </div>
                 <div class="m-scenarios-page__table" [ngClass]="{'m-scenarios-page__table--preview': selectScenario}">
                     <div class="m-scenarios-page__scroll">
