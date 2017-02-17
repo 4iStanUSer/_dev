@@ -371,7 +371,7 @@ def get_feature_permission(session, user_id, tool_id):
     features = feature.filter((User.id == user_id) & (Feature.tool_id == tool_id)).all()
 
     user_permission = {'create': False, 'finalize': False, 'share': False,
-                       'duplicate': False, 'edit': False, 'delete': False}
+                       'copy': False, 'edit': False, 'delete': False}
     for feature in features:
         if feature[0] in user_permission.keys():
             user_permission[feature[0]] = True
