@@ -14,7 +14,7 @@ def serialise_scenario(scenarios, user=None):
     """
     scenario_info_list = []
 
-    scenario_permission = ['share', 'change status', 'copy', 'delete', 'edit']
+    scenario_permission = ['share', 'change_status', 'copy', 'delete', 'edit']
     for scenario in scenarios:
         scenario_info = {}
         scenario_info['id'] = scenario.id
@@ -27,7 +27,7 @@ def serialise_scenario(scenarios, user=None):
         if user.email == scenario.author:
             scenario_info['scenario_permission'] = scenario_permission
         else:
-            scenario_info['scenario_permission'] = ['change status', 'copy']
+            scenario_info['scenario_permission'] = ['change_status', 'copy']
         scenario_info['author'] = scenario.author
         scenario_info['modify_date'] = scenario.date_of_last_modification
         scenario_info_list.append(scenario_info)
@@ -234,7 +234,7 @@ def get_scenario_details(session, user_id, scenario_id):
         print()
     return scenario_details
 
-
+#TODO add decorator
 def update_scenario(session, scenario_id, user_id, parameter, value):
     """
     Update scenario by specific parameters
