@@ -12,28 +12,28 @@ def set_values(req):
     :return:
     :rtype:
     """
-    #try:
-    user_id = req.user
-    entity_id = req.json_body['data']['entity_id']
-    values = req.json_body['data']['values']
-    lang = rt.language(user_id)
-    #except KeyError as e:
-    #msg = req.get_error_message(e, lang)
-    #return send_error_response(msg)
-    #try:
-    wb = rt.get_wb(user_id)
-    session = req.dbsession
-    project_name = "JJOralCare"
-    #TODO Check access to feature.
-    #TODO check access for data
-    permission_tree = access_manager.build_permission_tree(session=session,project_name=project_name)
-    data_service.set_entity_values(permission_tree=permission_tree, container=wb.current_container,
+    try:
+        user_id = req.user
+        entity_id = req.json_body['data']['entity_id']
+        values = req.json_body['data']['values']
+        lang = rt.language(user_id)
+    except KeyError as e:
+        msg = req.get_error_message(e, lang)
+        return send_error_response(msg)
+    try:
+        wb = rt.get_wb(user_id)
+        session = req.dbsession
+        project_name = "JJOralCare"
+        #TODO Check access to feature.
+        #TODO check access for data
+        permission_tree = access_manager.build_permission_tree(session=session,project_name=project_name)
+        data_service.set_entity_values(permission_tree=permission_tree, container=wb.current_container,
                                    entity_id=entity_id, values=values)
-    #except Exception as e:
-    #msg = req.get_error_msg(e, lang)
-    #return send_error_response(msg)
-    #else:
-    return send_success_response()
+    except Exception as e:
+        msg = req.get_error_msg(e, lang)
+        return send_error_response(msg)
+    else:
+        return send_success_response()
 
 
 def get_simulator_page_data(req):

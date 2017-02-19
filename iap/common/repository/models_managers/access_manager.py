@@ -359,7 +359,7 @@ def check_permission(permission_tree, inner_path, pointer):
         return "Unavailable"
     else:
         if tree == {}:
-            return {'item': item, 'tree': mask}
+            return {'item': item, 'tree': {inner_path[-1]: mask[item]}}
         else:
             return check_permission(tree, inner_path, pointer+1)
 
@@ -491,6 +491,9 @@ def check_period_perm(tree, ts_period=None, ts_point=None):
         ts_period = [int(ts_point)]
     for _ts_period in [i for i in tree.keys() if i!='mask']:
         _ts_period = _ts_period.split(":")
-        _ts = range(int(float(_ts_period[0])), int(float(_ts_period[1]))+1, 1)
+        try:
+            _ts = range(int(float(_ts_period[0])), int(float(_ts_period[1]))+1, 1)
+        except IndexError:
+            _ts = range(int(float(_ts_period[0])), int(float(_ts_period[0])) + 1, 1)
         correct_ts_period.extend(list(set(ts_period) & set(_ts)))
     return correct_ts_period

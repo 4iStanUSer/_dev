@@ -27,6 +27,7 @@ def set_entity_values(permission_tree, container, entity_id, values):
                 else:
                 #TODO check permission for setting value
                     time_indexes = access_manager.check_period_perm(mask['tree'], ts_point=item['time_label'])
+
                     for time_index in time_indexes:
                         ts.set_value_by_index(ts_name=item['timescale'], index=time_index, value = item['value'])
             elif item['slot_type'] & SlotType.scalar:
