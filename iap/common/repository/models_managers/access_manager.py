@@ -305,7 +305,10 @@ def tree(dict, path, masks, order):
         if key not in dict.keys():
             dict[key]={}
             try:
-                dict['mask']=masks[order]
+                dict['mask'][key] = masks[order]
+            except KeyError:
+                dict['mask'] = {}
+                dict['mask'][key] = masks[order]
             except:
                 raise IndexError
         order+=1
@@ -348,12 +351,15 @@ def check_permission(permission_tree, inner_path, pointer):
             return {'item': item, 'tree': permission_tree}
         else:
             tree = permission_tree[item]
-            mask = tree['mask']
+            if pointer==0:
+                mask=1
+            else:
+                mask = permission_tree['mask']
     except KeyError:
         return "Unavailable"
     else:
         if tree == {}:
-            return {'period': item, 'mask': mask}
+            return {'item': item, 'tree': mask}
         else:
             return check_permission(tree, inner_path, pointer+1)
 

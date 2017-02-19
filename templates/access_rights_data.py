@@ -83,6 +83,11 @@ perm_data = {
     "mask": '1,1,1'
 
   },
+ {
+    "out_path": "canada*-*mouthwash",
+    "in_path": "unit_price",
+    "mask": '1,1'
+  },
   {
     "out_path": "canada*-*mouthwash",
     "in_path": "population-annual-2:3",
