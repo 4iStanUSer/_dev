@@ -271,7 +271,9 @@ def update_scenario(session, scenario_id, user_id, parameter, value):
         else:
             status = False
 
+        value = scenario_manager.get_value(scenario, parameter)
     except Exception:
-        return False
+        return False, value
     else:
-        return status
+
+        return status, value
