@@ -6,6 +6,7 @@ class Warehouse:
 
     def __init__(self, ssn_factory):
         self._ssn = ssn_factory()
+
         self._root = self._ssn.query(Entity)\
             .filter(Entity.name == 'root').one_or_none()
 
@@ -18,8 +19,8 @@ class Warehouse:
         entity = self._root
         return self._add_node_by_path(entity, path, meta, 0)
 
-    def get_entity_by_id(self, entity_id):
 
+    def get_entity_by_id(self, entity_id):
         return self._ssn.query(Entity).get(entity_id)  # .one_or_none()
 
     def _find_node_by_path(self, entity, path, depth):
@@ -184,6 +185,17 @@ class Warehouse:
                            _default_value=default_value)
         ent._variables.append(new_var)
         return new_var
+
+
+    def get_project_data(self, project_name):
+        pass
+
+
+    def set_entity_data(self, entity_data):
+        #TODO realise c_entity
+        pass
+
+
 
     #Timescale methods
 
@@ -375,6 +387,12 @@ class Warehouse:
     def get_var_values(self):
         pass
 
+    def get_all_entities(self):
+        pass
+
+
+    def bulk_insert(self):
+        pass
 
     def commit(self):
         self._ssn.commit()
