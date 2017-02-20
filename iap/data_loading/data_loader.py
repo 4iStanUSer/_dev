@@ -93,10 +93,10 @@ class Loader:
         if os.path.exists(file_path):
             file_name = os.path.basename(file_path)
             base_name, extension = os.path.splitext(file_name)
-            #with open(file_path, 'rb') as file:
-            #    data = self._read_file(extension, file)
-            data=self._read_file_pd(file_path=file_path,extension=extension)
-            loader(data, file_config, self._warehouse)
+            with open(file_path, 'rb') as file:
+                data = self._read_file(extension, file)
+            #data=self._read_file_pd(file_path=file_path,extension=extension)
+                loader(data, file_config, self._warehouse)
         else:
             raise CorruptedDataSet
 
