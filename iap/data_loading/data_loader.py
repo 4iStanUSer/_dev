@@ -7,6 +7,7 @@ import csv
 import pandas as pd
 
 from .config import config as c
+from .exceptions import NonExistedConfig, NonExistedDataSet, CorruptedDataSet, NonExistedProject
 from ..data_loading import loading_lib
 
 
@@ -39,7 +40,7 @@ class Loader:
                     file_config = config[sect_name]
                     break
             if file_config is None:
-                raise Exception
+                raise NonExistedConfig
             if file_config.getboolean('ignore', fallback=False):
                 continue
 
@@ -48,20 +49,18 @@ class Loader:
 
             # Open file and run loading function.
             try:
-                print(file_config)
                 file_name = file_config['file_name']
                 abs_path = file_config['abs_path']
             except KeyError:
-                raise Exception#TODO change on no data set
+                raise NonExistedDataSet
             else:
                 self._load_data_set(abs_path=abs_path, file_name=file_name,
                                     loader=loader, file_config=file_config, proj_path=proj_path)
-            #TODO change on path to dataset
 
         # Run post loading function if it is defined
         postloader_name = config.get('DEFAULT', 'postloading_function',
                                      fallback=None)
-        if postloader_name  is not None:
+        if postloader_name is not None:
             postloader = getattr(loading_lib, postloader_name)
             postloader(config['DEFAULT'], self._warehouse)
         # Commit changes
@@ -77,7 +76,7 @@ class Loader:
                                       fallback=None)
 
         if proj_folder is None:
-            raise Exception
+            raise NonExistedProject
         # Read project config
         proj_config_path = os.path.join(self._source, proj_folder,
                                         proj_name + '_config.ini')
@@ -86,7 +85,6 @@ class Loader:
         return proj_folder, proj_config
 
     def _load_data_set(self, abs_path, file_name, loader, file_config, proj_path=None):
-        print(abs_path)
         if abs_path == "/":
             file_path = os.path.join(proj_path, file_name)
         else:
@@ -95,14 +93,12 @@ class Loader:
         if os.path.exists(file_path):
             file_name = os.path.basename(file_path)
             base_name, extension = os.path.splitext(file_name)
-            with open(file_path, 'rb') as file:
-                data = self._read_file(extension, file)
-                loader(data, file_config, self._warehouse)
-
+            #with open(file_path, 'rb') as file:
+            #    data = self._read_file(extension, file)
+            data=self._read_file_pd(file_path=file_path,extension=extension)
+            loader(data, file_config, self._warehouse)
         else:
-            print("file path", file_path)
-            raise Exception
-            #TODO change on corrupted data
+            raise CorruptedDataSet
 
         return data
 
@@ -120,6 +116,20 @@ class Loader:
             return wb
         elif extension=="json":
             pass
+        return None
+
+    @staticmethod
+    def _read_file_pd(extension, file_path):
+        if extension == '.csv':
+            # reader = InsDictReader(io.TextIOWrapper(file))
+            df = pd.read_csv(file_path)
+            return df
+        elif extension == '.xlsx':
+            df = pd.read_excel(file_path)
+            return df
+        elif extension=="json":
+            df = pd.read_json(file_path)
+            return df
         return None
 
 
