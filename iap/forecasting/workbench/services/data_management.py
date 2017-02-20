@@ -415,11 +415,6 @@ def get_simulator_data(permission_tree, container, config, entity_id, lang):
 
     simulator_data['properties']['timelable'] = time_labels
 
-    #1.4 Load timeline properties
-
-    #2.load hierarchy and relationship
-
-    #2.1 Load tree
 
     top_ts_period = config.get_property('dash_top_ts_period')
     top_ts = str(main_timescales[0])
@@ -427,18 +422,10 @@ def get_simulator_data(permission_tree, container, config, entity_id, lang):
     ts_tree, ts_borders = container \
         .timeline.get_timeline_tree(top_ts, bottom_ts, top_ts_period)
 
-    time_labels = dict()
-    gr_periods = dict()
-    for ts_name, ts_period in ts_borders.items():
-        time_labels[ts_name] = \
-            container.timeline.get_names(ts_name, ts_period)
-        gr_periods[ts_name] = \
-            container.timeline.get_growth_periods(ts_name, ts_period)
-        gr_periods[ts_name].extend(
-            container.timeline.get_carg_periods(ts_name, ts_period)
-        )
-
     simulator_data['hierarchy']['timelable_tree'] = ts_tree
+
+
+    time_labels, gr_periods = get_growth_period_and_time_label(ts_borders, container)
     #2.2 Load drivers tree
 
     #3.Load Data

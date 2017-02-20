@@ -19,7 +19,6 @@ class Warehouse:
         return self._add_node_by_path(entity, path, meta, 0)
 
     def get_entity_by_id(self, entity_id):
-
         return self._ssn.query(Entity).get(entity_id)  # .one_or_none()
 
     def _find_node_by_path(self, entity, path, depth):
@@ -371,9 +370,12 @@ class Warehouse:
             val.text_value = value
             return
 
+
     #Native methods of Warehouse
-    def get_var_values(self):
-        pass
+
+    def bulk_inser(self, obj_list, obj_type):
+        if obj_type=="entity":
+            self._ssn.bulk_insert_mappings(Entity, obj_list)
 
 
     def commit(self):
