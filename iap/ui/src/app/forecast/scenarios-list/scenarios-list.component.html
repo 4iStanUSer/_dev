@@ -207,7 +207,7 @@
                     <a [ngStyle]="{'opacity': finalizePermissionStatus ? '' : '0.4', 'cursor': finalizePermissionStatus ? 'pointer' : 'default'}" class="c-service-pane__item c-service-pane__item--finalize" href="#">
                         <span class="c-service-pane__border">Finalize</span>
                     </a>
-                    <a [ngStyle]="{'opacity': userPermissions.share ? '' : '0.4', 'cursor': userPermissions.share ? 'pointer' : 'default'}" class="c-service-pane__item c-service-pane__item--share" href="#">
+                    <a (click)="onToggleSharedScenario($event)" [ngStyle]="{'opacity': userPermissions.share ? '' : '0.4', 'cursor': userPermissions.share ? 'pointer' : 'default'}" class="c-service-pane__item c-service-pane__item--share" href="#">
                         <span class="c-service-pane__border">Share</span>
                     </a>
                     <a (click)="onCopyScenario($event)" [ngStyle]="{'opacity': userPermissions.copy ? '' : '0.4', 'cursor': userPermissions.copy ? 'pointer' : 'default'}" class="c-service-pane__item c-service-pane__item--duplicate" href="#">
@@ -286,16 +286,16 @@
                                     <div class="c-scenarios-table__cell c-scenarios-table__cell--description">{{scenario.description}}</div>
                                     <div class="c-scenarios-table__cell c-scenarios-table__cell--modified">{{dateParse(scenario.modify_date)}}</div>
                                     <div class="c-scenarios-table__cell c-scenarios-table__cell--status">
-                                        <div (click)="onToggleStatusScenario($event)" [attr.data-id]="scenario.id" [ngStyle]="{'color': scenario.scenario_permission.indexOf('change status') !== -1 ? '' : 'rgba(148,161,181,0.5)'}" *ngIf="scenario.status.toLowerCase() !== 'final'" class="status">{{scenario.status}}</div>
-                                        <div (click)="onToggleStatusScenario($event)" [attr.data-id]="scenario.id" [ngStyle]="{'background-color': scenario.scenario_permission.indexOf('change status') !== -1 ? '' : '#c4c6c9'}" *ngIf="scenario.status.toLowerCase() === 'final'" class="status status--final">{{scenario.status}}</div>
+                                        <div (click)="onToggleStatusScenario($event)" [attr.data-id]="scenario.id" [ngStyle]="{'color': in_array('change_status', scenario.scenario_permission) ? '' : 'rgba(148,161,181,0.5)'}" *ngIf="scenario.status !== 'Final'" class="status">{{scenario.status}}</div>
+                                        <div (click)="onToggleStatusScenario($event)" [attr.data-id]="scenario.id" [ngStyle]="{'background-color': in_array('change_status', scenario.scenario_permission) ? '' : '#c4c6c9'}" *ngIf="scenario.status === 'Final'" class="status status--final">{{scenario.status}}</div>
                                     </div>
                                     <div class="c-scenarios-table__cell c-scenarios-table__cell--actions">
                                         <div class="c-actions">
-                                            <a (click)="onCopyScenario($event)" [attr.data-id]="scenario.id" [ngStyle]="{'opacity': scenario.scenario_permission.indexOf('copy') !== -1 ? '' : '0.4'}" class="c-tooltip c-tooltip c-actions__item c-actions__item--copy" href="#">
-                                                <div *ngIf="scenario.scenario_permission.indexOf('copy') !== -1" class="c-tooltip__text c-tooltip__text--bottom">Copy</div>
+                                            <a (click)="onCopyScenario($event)" [attr.data-id]="scenario.id" [ngStyle]="{'opacity': in_array('copy', scenario.scenario_permission) ? '' : '0.4'}" class="c-tooltip c-tooltip c-actions__item c-actions__item--copy" href="#">
+                                                <div *ngIf="in_array('copy', scenario.scenario_permission)" class="c-tooltip__text c-tooltip__text--bottom">Copy</div>
                                             </a>
-                                            <a [ngStyle]="{'opacity': scenario.scenario_permission.indexOf('edit') !== -1 ? '' : '0.4'}" class="c-tooltip c-actions__item c-actions__item--edit" href="#">
-                                                <div *ngIf="scenario.scenario_permission.indexOf('edit') !== -1" class="c-tooltip__text c-tooltip__text--bottom">Edit</div>
+                                            <a [ngStyle]="{'opacity': in_array('edit', scenario.scenario_permission) ? '' : '0.4'}" class="c-tooltip c-actions__item c-actions__item--edit" href="#">
+                                                <div *ngIf="in_array('edit', scenario.scenario_permission)" class="c-tooltip__text c-tooltip__text--bottom">Edit</div>
                                             </a>
                                             <a class="c-tooltip c-actions__item c-actions__item--play" href="#">
                                                 <div class="c-tooltip__text c-tooltip__text--go c-tooltip__text--bottom">Go Scenario</div>

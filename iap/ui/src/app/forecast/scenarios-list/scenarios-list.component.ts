@@ -336,12 +336,14 @@ export class ScenariosListComponent implements OnInit {
             url_id: '/forecast/edit_scenario',
             data: edit_scenarios,
         }).subscribe((data) => {
-            if(!data.error) {
-                console.log(edit_scenarios, data);
-                for (let i = 0; i < data.length; i++) {
-                    for(let j = 0; data[i].modify.length; j++) {
-                        if ( data[i].modify[j].status === true) {
-                            this.__getScenario(data[i]['id']).data[i].modify[j].parameter = data[i].modify[j].value;
+            for (let i = 0; i < data.length; i++) {
+                for(let j = 0; j < data[i].modified.length; j++) {
+                    if ( data[i].modified[j].status === true) {
+                        for (const k in this.scenariosList) {
+                            if (this.scenariosList[k].id == data[i].id) {
+                                this.scenariosList[k][data[i].modified[j].parameter] = data[i].modified[j].value;
+                                break;
+                            }
                         }
                     }
                 }
@@ -429,12 +431,12 @@ export class ScenariosListComponent implements OnInit {
     onToggleSharedScenario(event: any) {
         event.preventDefault();
         let edit_scenarios = [];
-        const scenario_id = event.target.attributes['data-id'].value;
         let e_scenarios = [];
 
-        if (scenario_id) {
+        try {
+            const scenario_id = event.target.attributes['data-id'].value;
             e_scenarios.push(scenario_id);
-        } else {
+        } catch(e) {
             e_scenarios = this.selectedScenarios;
         }
 
@@ -444,9 +446,9 @@ export class ScenariosListComponent implements OnInit {
                 if(this.in_array("share", this.__getKey('scenario_permission', scenario))) {
                     let new_shared = this.__getKey('shared', scenario) === 'No' ? 'Yes' : 'No';
                     edit_scenarios.push({id: this.__getKey('id', scenario), modify:[{value: new_shared, parameter: 'shared'}]});
-                    this.__editScenario(edit_scenarios);
                 }
             }
+            this.__editScenario(edit_scenarios);
         }
     }
 
