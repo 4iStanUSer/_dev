@@ -373,10 +373,17 @@ class Warehouse:
 
     #Native methods of Warehouse
 
-    def bulk_inser(self, obj_list, obj_type):
-        if obj_type=="entity":
-            self._ssn.bulk_insert_mappings(Entity, obj_list)
+    def bulk_inser_entity(self, obj_list):
+        self._ssn.bulk_insert_mappings(Entity, obj_list)
 
+    def bulk_inser_variable(self, obj_list):
+        self._ssn.bulk_insert_mappings(Variable, obj_list)
+
+    def bulk_inser_timeseries(self, obj_list):
+        self._ssn.bulk_insert_mappings(TimeSeries, obj_list)
+
+    def bulk_inser_values(self, obj_list):
+        self._ssn.bulk_insert_mappings(Value, obj_list)
 
     def commit(self):
         self._ssn.commit()
