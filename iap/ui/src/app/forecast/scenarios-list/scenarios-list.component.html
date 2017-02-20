@@ -147,10 +147,6 @@
                                 <input class="c-checkbox-filter__input" type="checkbox" id="scenarios-final">
                                 <label class="c-checkbox-filter__label" for="scenarios-final"><span>Final ({{getFinalStatusCount()}})</span></label>
                               </div>
-                              <div class="c-checkbox-filter c-top-filter__checks">
-                                <input class="c-checkbox-filter__input" type="checkbox" id="scenarios-new">
-                                <label class="c-checkbox-filter__label" for="scenarios-new"><span>New ({{getNewStatusCount()}})</span></label>
-                              </div>
                             </div>
                             <div class="c-top-filter__item c-top-filter__item--search">
                               <div class="c-checkbox-filter">
@@ -214,12 +210,12 @@
                     <a [ngStyle]="{'opacity': userPermissions.share ? '' : '0.4', 'cursor': userPermissions.share ? 'pointer' : 'default'}" class="c-service-pane__item c-service-pane__item--share" href="#">
                         <span class="c-service-pane__border">Share</span>
                     </a>
-                    <a [ngStyle]="{'opacity': userPermissions.copy ? '' : '0.4', 'cursor': userPermissions.copy ? 'pointer' : 'default'}" class="c-service-pane__item c-service-pane__item--duplicate" href="#">
+                    <a (click)="onCopyScenario($event)" [ngStyle]="{'opacity': userPermissions.copy ? '' : '0.4', 'cursor': userPermissions.copy ? 'pointer' : 'default'}" class="c-service-pane__item c-service-pane__item--duplicate" href="#">
                         <span class="c-service-pane__border">Duplicate</span>
                     </a>
                     <a (click)="onDeleteScenario()" [ngStyle]="{'opacity': userPermissions.delete ? '' : '0.4', 'cursor': userPermissions.delete ? 'pointer' : 'default'}" class="c-service-pane__item c-service-pane__item--delete" href="#">
                         <span class="c-service-pane__border">Delete</span>
-                    </a>{{selectedScenarios}}
+                    </a>
                 </div>
                 <div class="m-scenarios-page__table" [ngClass]="{'m-scenarios-page__table--preview': selectScenario}">
                     <div class="m-scenarios-page__scroll">

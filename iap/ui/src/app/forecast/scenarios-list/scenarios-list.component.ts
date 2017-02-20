@@ -179,7 +179,7 @@ export class ScenariosListComponent implements OnInit {
                 // Check "Create New" permission
                 this.__checkScenariosPermission('share', true);
                 // Check "Create New" permission
-                this.__checkScenariosPermission('duplicate', false, true);
+                this.__checkScenariosPermission('copy', false, true);
                 // Check "Delete" permission
                 this.__checkScenariosPermission('delete');
             }
@@ -236,6 +236,16 @@ export class ScenariosListComponent implements OnInit {
         }
     }
 
+    // Get scenario from server
+    __getScenarioDetails(scenario_id: number) {
+        this.req.post({
+            url_id: '/forecast/get_scenario_details',
+            data: {'id': scenario_id},
+        }).subscribe((data) => {
+            this.selectScenario = data;
+        });
+    }
+
     onSelectPreview(event: any) {
         if (this.in_array('c-scenarios-table__row', event.target.classList) || this.in_array('c-scenarios-table__row', event.target.parentNode.classList)) {
             if (this.in_array('c-scenarios-table__row', event.target.classList)) {
@@ -253,8 +263,37 @@ export class ScenariosListComponent implements OnInit {
                 let scenario_id = parseInt(this.selectElement.attributes['data-id'].value);
 
                 // Get scenario from server
-                this.getScenarioDetails(scenario_id);
-                console.log('---selectScenario', this.selectScenario);
+                this.__getScenarioDetails(scenario_id);
+
+                // Scroll to active scenario
+                const selectElementHeight = this.selectElement.clientHeight;
+                const selectElementPosition = this.selectElement.offsetTop;
+                let tableWindowsHeight = document.getElementsByClassName('m-scenarios-page__scroll')[0].clientHeight;
+                let scenariosPreview = document.getElementsByClassName('c-scenarios-preview')[0].clientHeight;
+                let tableScroll = document.getElementsByClassName('m-scenarios-page__scroll')[0].scrollTop;
+                tableWindowsHeight = scenariosPreview === 0 ? tableWindowsHeight - 224 : tableWindowsHeight;
+
+                if (tableScroll > selectElementPosition - selectElementHeight) {
+                    document.getElementsByClassName('m-scenarios-page__scroll')[0].scrollTop = tableScroll - selectElementHeight;
+                }
+
+                if (selectElementPosition + selectElementHeight - tableScroll > tableWindowsHeight) {
+                    if (selectElementPosition > tableWindowsHeight + tableScroll) {
+                        document.getElementsByClassName('m-scenarios-page__scroll')[0].scrollTop = tableScroll + 224;
+                    } else {
+                    document.getElementsByClassName('m-scenarios-page__scroll')[0].scrollTop = tableScroll + (selectElementPosition + selectElementHeight - tableScroll - tableWindowsHeight);
+                    }
+                }
+
+                /*
+                console.log(
+                    'selectElementHeight', selectElementHeight,
+                    'selectElementPosition', selectElementPosition,
+                    'tableWindowsHeight', tableWindowsHeight,
+                    'scenariosPreview', scenariosPreview,
+                    'tableScroll', tableScroll
+                );
+                */
             }
         } else {
             event.stopPropagation();
@@ -262,16 +301,6 @@ export class ScenariosListComponent implements OnInit {
 
     }
     // --------------------------------  Scenario details  -------------------------------//
-    // Get scenario from server
-    getScenarioDetails(scenario_id: number) {
-        this.req.post({
-            url_id: '/forecast/get_scenario_details',
-            data: {'id': scenario_id},
-        }).subscribe((data) => {
-            this.selectScenario = data;
-        });
-    }
-
     onToggleScenario(event: any) {
         let element = event.target;
         if (element.checked === true) {
@@ -326,15 +355,15 @@ export class ScenariosListComponent implements OnInit {
         return scenario;
     }
 
-    __createScenario(new_scenario: any) {
+    __createScenario(new_scenario: any, parent_id=null) {
         this.req.post({
             url_id: '/forecast/create_scenario',
             data: new_scenario,
         }).subscribe((data) => {
             if(!data.error) {
-                this.scenariosList = [];
-                this.selectedScenarios = [];
-                this.getScenariosList();
+                let index = this.scenariosList.findIndex(x => x.id==parent_id);
+                index === -1 ? index = 0 : index++;
+                this.scenariosList.splice(index, 0, data);
             }
         });
     }
@@ -357,10 +386,11 @@ export class ScenariosListComponent implements OnInit {
             url_id: '/forecast/delete_scenario',
             data: {'id': scenario_ids},
         }).subscribe((data) => {
-            if(!data.error) {
-                this.scenariosList = [];
-                this.selectedScenarios = [];
-                this.getScenariosList();
+            const listStatus = new Set(Object.keys(data));
+            const newScenariosList = this.scenariosList.filter(obj => !(listStatus.has(String(obj.id)) && data[String(obj.id)] === "Deleted"));
+            this.scenariosList = newScenariosList;
+            if (listStatus.has(String(this.selectScenario.id))) {
+                this.selectScenario = null;
             }
         });
     }
@@ -432,15 +462,21 @@ export class ScenariosListComponent implements OnInit {
 
     onCopyScenario(event: any) {
         event.preventDefault();
-        const scenario_id = event.target.attributes['data-id'].value;
+        let scenario_id: number;
+        try {
+            scenario_id = event.target.attributes['data-id'].value;
+        } catch (e) {
+            scenario_id = this.selectedScenarios[0];
+        }
+
         let scenario = this.__getScenario(scenario_id);
-        if(this.in_array("copy", scenario.scenario_permission)) {
+        if(this.in_array("copy", this.__getKey('scenario_permission', scenario))) {
             const copyScenario = {
-                name: 'Copy ' + scenario.name,
-                description: scenario.description,
-                criteria: scenario.criteria
+                name: 'Copy ' + this.__getKey('name', scenario),
+                description: this.__getKey('description', scenario),
+                criteria: this.__getKey('criteriathis', scenario)
             };
-            this.__createScenario(copyScenario);
+            this.__createScenario(copyScenario, this.__getKey('id', scenario));
         }
     }
 
@@ -450,14 +486,12 @@ export class ScenariosListComponent implements OnInit {
     }
 
     onDeleteScenario() {
+        event.preventDefault();
         if(this.userPermissions.delete === true) {
             this.__deleteScenario(this.selectedScenarios);
         }
-
         // Check permissions
         this.__initUserPermissions();
-
-        return false;
     }
     // ------------------------- ------  Scenario Actions  -------------------------------//
 }
