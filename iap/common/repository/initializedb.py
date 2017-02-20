@@ -105,6 +105,7 @@ def main(argv=sys.argv):
         imanage_access.add_role_to_tool(role=role_superviser, tool=tool)
 
 
+
         # Add  user@mail.com User for Project #1
         email = "user@mail.com"
         password = "qweasdZXC"
@@ -117,9 +118,14 @@ def main(argv=sys.argv):
         user_2 = imanage_access.add_user(email=email, password=password)
         imanage_access.add_role_to_user(user_2, role_superviser)
 
+        email = "user_2"
+        password = "123456"
+        user_3 = imanage_access.add_user(email=email, password=password)
+        imanage_access.add_role_to_user(user_3, role_forecast)
+
 
         #Add roles Forecaster and set that feature
-        features = ['create', 'view', 'finalize', 'modify', 'delete', 'edit', 'share','copy']
+        features = ['create', 'view', 'finalize', 'edit', 'delete', 'edit', 'share']
         for feature in features:
             imanage_access.add_feature(name=feature, tool=tool, role=role_forecast)
 
@@ -167,7 +173,7 @@ def main(argv=sys.argv):
 
         for i in range(11):
             scenario = scenario_manager.create_scenario(ssn, user=None, input_data=input_data_1)
-            scenario.users = [user_1, user_2]
+            scenario.users = [user_1, user_2, user_3]
             scenario = scenario_manager.create_scenario(ssn, user=None, input_data=input_data_2)
             scenario.users = [user_1, user_2]
         #TODO realise add user to scenario

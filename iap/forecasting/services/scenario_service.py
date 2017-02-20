@@ -27,7 +27,7 @@ def serialise_scenario(scenarios, user):
         if user.email == scenario.author:
             scenario_info['scenario_permission'] = scenario_permission
         else:
-            scenario_info['scenario_permission'] = ['change_status', 'copy']
+            scenario_info['scenario_permission'] = ['copy']
         scenario_info['author'] = scenario.author
         scenario_info['modify_date'] = scenario.date_of_last_modification
         scenario_info_list.append(scenario_info)
@@ -57,16 +57,16 @@ def create_scenario(session, user_id, input_data):
     :return:
     :rtype:
     """
-    #try:
+    try:
         #TODO check existense
-    user = access_manager.get_user_by_id(session, user_id=user_id)
-    input_data['author'] = user.email
-    scenario = scenario_manager.create_scenario(session, input_data=input_data, user=user)
-    serialised_scenario = serialise_scenario([scenario], user)
-    #except NoResultFound:
-    #raise NoResultFound
-    #else:
-    return serialised_scenario
+        user = access_manager.get_user_by_id(session, user_id=user_id)
+        input_data['author'] = user.email
+        scenario = scenario_manager.create_scenario(session, input_data=input_data, user=user)
+        serialised_scenario = serialise_scenario([scenario], user)
+    except NoResultFound:
+        raise NoResultFound
+    else:
+        return serialised_scenario
 
 
 def get_scenario_page(session, user_id, filter=None):
