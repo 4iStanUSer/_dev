@@ -73,7 +73,7 @@ def main(argv=sys.argv):
 
 
         wh = Warehouse(session_factory)
-        loader = Loader(wh)
+        loader = Loader(wh, config=settings)
         #loader.run_processing('JJLean')
         loader.run_processing('JJOralCare')
 
