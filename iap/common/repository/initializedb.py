@@ -173,17 +173,7 @@ def main(argv=sys.argv):
         #TODO realise add user to scenario
 
         transaction.manager.commit()
-
-
-
-
         #Add Project and tool
-
-        """
-        Fill Persistance storage
-
-        """
-
         #TODO admin manager add
 
         user_id = 2#user.email
@@ -203,7 +193,6 @@ def main(argv=sys.argv):
 
         persistent_storage.save_backup(user_id, tool_id, project_id, backup, backup_name='default')
 
-
         project_id = "JJLean"
         template = load_dev_templates(settings, "JJLean")
         user_access_rights = {"features": template['features'],
@@ -214,21 +203,16 @@ def main(argv=sys.argv):
 
         persistent_storage.save_backup(user_id, tool_id, project_id, backup, backup_name='default')
 
-
-
-
         # Add tools
-
         #transaction.manager.commit()
 
         tool_forecast = imanage_access.get_tool(name='Forecasting')
         f_tool_id = tool_forecast.id
 
         # Add roles
-        print("Tool id", f_tool_id)
+
         role_jj_admin = imanage_access.add_role(name='jj_role_admin', tool_id=f_tool_id)
         role_jj_manager = imanage_access.add_role('jj_role_manager', f_tool_id)
-
         #transaction.manager.commit()
 
         role_jj_admin = imanage_access.get_role(name='jj_role_admin')
@@ -242,7 +226,6 @@ def main(argv=sys.argv):
                                                 'pass', [role_admin_id])
         user_jj_manager = imanage_access.add_user('jj_manager@gmail.com',
                                                   'pass', [role_manager_id])
-
         #transaction.manager.commit()
 
         user_jj_admin = imanage_access.get_user(email='jj_admin@gmail.com')

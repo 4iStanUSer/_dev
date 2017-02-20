@@ -13,6 +13,7 @@ class Loader:
     def __init__(self, warehouse):
         self._warehouse = warehouse
 
+        #TODO set path from configuration
         self._source = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
                                     'data_storage', 'data_lake')
 
