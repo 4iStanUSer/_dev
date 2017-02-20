@@ -258,9 +258,9 @@ def edit_scenario(request):
             for modify_item in scenario['modify']:
                 parameter = modify_item['parameter']
                 value = modify_item['value']
-                status = scenario_service.update_scenario(session, scenario_id=scenario_id, user_id=user_id,
+                status, value = scenario_service.update_scenario(session, scenario_id=scenario_id, user_id=user_id,
                                                               parameter=parameter, value=value)
-                scenario_info['modified'].append(dict(parameter=parameter, status=status))
+                scenario_info['modified'].append(dict(parameter=parameter, status=status, value=value))
             scenarios_info.append(scenario_info)
     except Exception as e:
         msg = request.get_error_msg(e, lang)

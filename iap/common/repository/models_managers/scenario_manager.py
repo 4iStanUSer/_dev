@@ -106,13 +106,17 @@ def include_scenario(session, user_id, scenario_id, parent_scenario_id):
     return
 
 
-def update_scenario(scenario, parmeter, value):
+def update_scenario(scenario, parameter, value):
 
-    if getattr(scenario, parmeter) == str(value):
+    if getattr(scenario, parameter) == str(value):
         pass
     else:
-        setattr(scenario, parmeter, str(value))
+        setattr(scenario, parameter, str(value))
     return
+
+
+def get_value(scenario, parameter):
+    return getattr(scenario, parameter)
 
 
 def delete_scenario(session, scenario_id, user_id):
