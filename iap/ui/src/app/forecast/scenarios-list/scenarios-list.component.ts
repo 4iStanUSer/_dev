@@ -301,44 +301,7 @@ export class ScenariosListComponent implements OnInit {
 
     }
     // --------------------------------  Scenario details  -------------------------------//
-    onToggleScenario(event: any) {
-        let element = event.target;
-        if (element.checked === true) {
-            this.__checkScenario(parseInt(element.attributes['data-id'].value));
-        } else {
-            this.__uncheckScenario(parseInt(element.attributes['data-id'].value));
-        }
 
-        let allCheckScenario = document.getElementById('sc-table-all');
-        if (this.selectedScenarios.length === this.scenariosList.length) {
-            allCheckScenario.checked = true;
-        } else {
-            allCheckScenario.checked = false;
-        }
-
-        // Check permissions
-        // this.__initUserPermissions();
-    }
-
-    onToggleAllScenarios(event: any) {
-        let element = event.target;
-        let checked = false;
-        this.selectedScenarios = [];
-        if (element.checked === true) {
-            checked = true;
-        }
-
-        let allElements = document.querySelectorAll('*[id^="sc-table-check-"]');
-        for (let i = 0; i < allElements.length; i++) {
-            allElements[i].checked = checked;
-            if (checked === true) {
-                this.selectedScenarios.push(allElements[i].attributes['data-id'].value);
-            }
-        }
-
-        // Check permissions
-        //this.__initUserPermissions();
-    }
 
     onChangeAuthor(name: string) {
         console.log('---onChangeAuthor', name);
@@ -374,9 +337,14 @@ export class ScenariosListComponent implements OnInit {
             data: edit_scenarios,
         }).subscribe((data) => {
             if(!data.error) {
-                this.scenariosList = [];
-                this.selectedScenarios = [];
-                this.getScenariosList();
+                console.log(edit_scenarios, data);
+                for (let i = 0; i < data.length; i++) {
+                    for(let j = 0; data[i].modify.length; j++) {
+                        if ( data[i].modify[j].status === true) {
+                            this.__getScenario(data[i]['id']).data[i].modify[j].parameter = data[i].modify[j].value;
+                        }
+                    }
+                }
             }
         });
     }
@@ -408,7 +376,10 @@ export class ScenariosListComponent implements OnInit {
 
     __checkScenario(id: number) {
         try {
-            this.selectedScenarios.push(id);
+            const index = this.selectedScenarios.indexOf(id);
+            if (index === -1) {
+                this.selectedScenarios.push(id);
+            }
         } catch(e) {
             console.log(e);
         }
@@ -416,9 +387,42 @@ export class ScenariosListComponent implements OnInit {
     }
 
     __uncheckScenario(id: number) {
-        let index = this.selectedScenarios.indexOf(id);
+        const index = this.selectedScenarios.indexOf(id);
         if (index !== -1) {
             this.selectedScenarios.splice(index, 1);
+        }
+    }
+
+    onToggleScenario(event: any) {
+        let element = event.target;
+        if (element.checked === true) {
+            this.__checkScenario(parseInt(element.attributes['data-id'].value));
+        } else {
+            this.__uncheckScenario(parseInt(element.attributes['data-id'].value));
+        }
+
+        let allCheckScenario = document.getElementById('sc-table-all');
+        if (this.selectedScenarios.length === this.scenariosList.length) {
+            allCheckScenario.checked = true;
+        } else {
+            allCheckScenario.checked = false;
+        }
+    }
+
+    onToggleAllScenarios(event: any) {
+        let element = event.target;
+        let checked = false;
+        this.selectedScenarios = [];
+        if (element.checked === true) {
+            checked = true;
+        }
+
+        let allElements = document.querySelectorAll('*[id^="sc-table-check-"]');
+        for (let i = 0; i < allElements.length; i++) {
+            allElements[i].checked = checked;
+            if (checked === true) {
+                this.selectedScenarios.push(parseInt(allElements[i].attributes['data-id'].value));
+            }
         }
     }
 
@@ -426,17 +430,24 @@ export class ScenariosListComponent implements OnInit {
         event.preventDefault();
         let edit_scenarios = [];
         const scenario_id = event.target.attributes['data-id'].value;
-        let scenario = this.__getScenario(scenario_id);
+        let e_scenarios = [];
 
-        scenario.shared = 'Yes';
-
-        /*
-        if(this.in_array("share", scenario.scenario_permission)) {
-            let new_shared = scenario.shared == 'No' ? 'Yes' : 'No';
-            edit_scenarios.push({id: scenario.id, modify:[{value: new_shared, parameter: 'shared'}]});
-            this.__editScenario(edit_scenarios);
+        if (scenario_id) {
+            e_scenarios.push(scenario_id);
+        } else {
+            e_scenarios = this.selectedScenarios;
         }
-        */
+
+        if (e_scenarios.length > 0) {
+            for (let i = 0; i < e_scenarios.length; i++) {
+                const scenario = this.__getScenario(e_scenarios[i]);
+                if(this.in_array("share", this.__getKey('scenario_permission', scenario))) {
+                    let new_shared = this.__getKey('shared', scenario) === 'No' ? 'Yes' : 'No';
+                    edit_scenarios.push({id: this.__getKey('id', scenario), modify:[{value: new_shared, parameter: 'shared'}]});
+                    this.__editScenario(edit_scenarios);
+                }
+            }
+        }
     }
 
     onToggleStatusScenario(event: any) {
