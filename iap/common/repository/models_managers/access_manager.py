@@ -474,3 +474,19 @@ def check_feature_permission(session, user_id, tool_id, feature_id):
         return True
     else:
         return False
+
+
+def check_scenario_permission(user, scenario, parameter):
+    """Boolean function that check whether user have specific
+    right for tools  and features
+
+    :return:
+    :rtype:
+    """
+    if parameter in ["status", "shared", "name"]:
+        if scenario.author == user.email:
+            return True
+    elif parameter=="favorite":
+        return True
+    else:
+        return False

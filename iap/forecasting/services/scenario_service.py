@@ -57,16 +57,16 @@ def create_scenario(session, user_id, input_data):
     :return:
     :rtype:
     """
-    try:
+    #try:
         #TODO check existense
-        user = access_manager.get_user_by_id(session, user_id=user_id)
-        input_data['author'] = user.email
-        scenario = scenario_manager.create_scenario(session, input_data=input_data, user=user)
-        serialised_scenario = serialise_scenario([scenario], user)
-    except NoResultFound:
-        raise NoResultFound
-    else:
-        return serialised_scenario
+    user = access_manager.get_user_by_id(session, user_id=user_id)
+    input_data['author'] = user.email
+    scenario = scenario_manager.create_scenario(session, input_data=input_data, user=user)
+    serialised_scenario = serialise_scenario([scenario], user)
+    #except NoResultFound:
+    #raise NoResultFound
+    #else:
+    return serialised_scenario
 
 
 def get_scenario_page(session, user_id, filter=None):
@@ -254,20 +254,24 @@ def update_scenario(session, scenario_id, user_id, parameter, value):
     :rtype:
     """
     try:
-        scenario = scenario_manager.\
-            get_scenario_by_id(session, scenario_id=scenario_id, user_id=user_id)
+        scenario = scenario_manager.get_scenario_by_id(session, scenario_id=scenario_id, user_id=user_id)
+        user = access_manager.get_user_by_id(session, user_id)
 
         tool_id = 'forecast'
+        #TODO add decorator
         if parameter == 'status' and value == 'final':
             feature_id = 'finalize'
         else:
             feature_id = 'edit'
 
-        if access_manager.check_feature_permission(session, user_id, tool_id, feature_id):
-            #TODO add scenario_manager_update scenario
+        if access_manager.check_feature_permission(session, user_id, tool_id, feature_id) and \
+                access_manager.check_scenario_permission(parameter=parameter, scenario=scenario, user=user):
             scenario_manager.update_scenario(scenario, parameter, value)
-    except Exception:
-        raise Exception
-    else:
-        return
+            status = True
+        else:
+            status = False
 
+    except Exception:
+        return False
+    else:
+        return status
