@@ -96,6 +96,11 @@ perm_data = {
   },
   {
     "out_path": "canada*-*mouthwash",
+    "in_path": "media",
+    "mask": ',1'
+  },
+  {
+    "out_path": "canada*-*mouthwash",
     "in_path": "eq_price-annual-4:5",
     "mask": '1,1,1'
 

@@ -55,7 +55,7 @@ def get_simulator_page_data(req):
         wb = rt.get_wb(user_id)
         session = req.dbsession
         permission_tree = access_manager.build_permission_tree(session, project_name="JJOral")
-        data = data_service.get_simulator_data(session, wb.current_container, wb.data_config,
+        data = data_service.get_simulator_data(session, permission_tree, wb.current_container, wb.data_config,
                                                wb.selection, lang)
         default_data = data_service.get_simulator_value_data(wb.default_container, wb.data_config,  wb.selection, lang)
         data['data']['values']['default'] = default_data
@@ -76,23 +76,23 @@ def get_simulator_custom_data(req):
     :return:
     :rtype:
     """
-    #try:
-    user_id = req.user
-    lang = rt.language(user_id)
-    #except KeyError as e:
-    #msg = req.get_error_message(e, lang)
-    #return send_error_response(msg)
-    #try:
+    try:
+        user_id = req.user
+        lang = rt.language(user_id)
+    except KeyError as e:
+        msg = req.get_error_message(e, lang)
+        return send_error_response(msg)
+    try:
     #TODO check if there are selected scenario
-    wb = rt.get_wb(user_id)
-    session = req.dbsession
-    permission_tree = access_manager.build_permission_tree(session, project_name="JJOral")
-    data = data_service.get_simulator_value_data(permission_tree, wb.current_container, wb.data_config, wb.selection, lang=lang)
-    #except Exception as e:
-    #msg = req.get_error_msg(e)
-    #return send_error_response(msg)
-    #else:
-    return send_success_response(data)
+        wb = rt.get_wb(user_id)
+        session = req.dbsession
+        permission_tree = access_manager.build_permission_tree(session, project_name="JJOral")
+        data = data_service.get_simulator_value_data(permission_tree, wb.current_container, wb.data_config, wb.selection, lang=lang)
+    except Exception as e:
+        msg = req.get_error_msg(e)
+        return send_error_response(msg)
+    else:
+        return send_success_response(data)
 
 
 def get_simulator_decomposition(req):

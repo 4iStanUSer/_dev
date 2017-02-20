@@ -68,11 +68,11 @@ def test_simulator_functionally(web_app, token):
 
     #2.Set value for Specific Variables
 
-    values = [dict(var_name="eq_price", timescale="annual", slot_type=1, time_label=2012, value=1123123123),
-              dict(var_name="eq_price", timescale="annual", slot_type=1, time_label=2012, value=1123123123),
-              dict(var_name="eq_price", timescale="annual", slot_type=1, time_label=2013, value=1123123123),
-              dict(var_name="eq_price", timescale="annual", slot_type=1, time_label=2014, value=1),
-              dict(var_name="eq_price", timescale="annual", slot_type=1, time_label=2015, value=1)]
+    values = [dict(var_name="eq_price", timescale="annual", slot_type=1, time_label='0', value=1123123123),
+              dict(var_name="eq_price", timescale="annual", slot_type=1, time_label='1', value=1123123123),
+              dict(var_name="eq_price", timescale="annual", slot_type=1, time_label='2', value=1123123123),
+              dict(var_name="eq_price", timescale="annual", slot_type=1, time_label='3', value=1),
+              dict(var_name="eq_price", timescale="annual", slot_type=1, time_label='4', value=1)]
 
     res = web_app.post_json('/forecast/set_values', {"data": {"tool_id": tool_id,
                                                               "entity_id": 12, "values": values},
@@ -88,7 +88,8 @@ def test_simulator_functionally(web_app, token):
                                                           'X-Token': token})
 
     actual = res.json['data']['annual']['eq_price']['values']
-    expected = [1123123123, 1123123123, 1, 1]
+
+    expected = [5.5514496352576765, 1123123123, 1123123123, 5.762558868192696]
     print("View changes")
     print(actual)
     assert actual == expected

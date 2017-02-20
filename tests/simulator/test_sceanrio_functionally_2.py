@@ -65,10 +65,10 @@ def test_simulator_functionally(web_app, token):
 
 
     #2.Set value for specific scenario
-    values = [dict(var_name="media", timescale="annual", slot_type=1, time_label=2012, value=0),
-              dict(var_name="media", timescale="annual", slot_type=1, time_label=2013, value=0),
-              dict(var_name="media", timescale="annual", slot_type=1, time_label=2014, value=1),
-              dict(var_name="media", timescale="annual", slot_type=1, time_label=2015, value=0)
+    values = [dict(var_name="media", timescale="annual", slot_type=1, time_label='1', value=0),
+              dict(var_name="media", timescale="annual", slot_type=1, time_label='2', value=0),
+              dict(var_name="media", timescale="annual", slot_type=1, time_label='3', value=1),
+              dict(var_name="media", timescale="annual", slot_type=1, time_label='4', value=0)
               ]
 
     scenario_id = "test_scenario_3"
@@ -102,7 +102,7 @@ def test_simulator_functionally(web_app, token):
     print("View changes - test_scenario")
     print(res.json_body)
     actual = res.json['data']['annual']['media']['values']
-    expected = [0, 0, 1, 0]
+    expected = [0, 0, 0, 1]
     assert actual == expected
 
 
