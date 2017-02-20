@@ -72,7 +72,7 @@ class DataConfiguration:
             self._general.load_wh_inputs(config['wh_inputs'])
 
         # Fill factors drivers and view properties.
-        names = ['factor_drivers', 'view_properties']
+        names = ['factor_drivers', 'view_properties', 'duetons']
         for name in names:
             if name not in config:
                 continue
@@ -97,6 +97,8 @@ class DataConfiguration:
                     ent_config.load_factors_drivers(item)
                 elif name == 'view_properties':
                     ent_config.load_view_vars(item)
+                elif name == 'duetons':
+                    ent_config.load_dueton_tree(item)
 
     def get_property(self, prop_name, **kwargs):
         ent_options = self._get_entity_config(**kwargs)
@@ -253,10 +255,10 @@ class Config:
         return
 
     def load_dueton_tree(self, item):
-        if item['dueton'] not in self.duetons:
-            self.dueton[item['dueton']] = []
-        self.dueton[item['dueton']]\
-            .append(tuple([item['dueton'], item['parent_dueton']]))
+        if item['id'] not in self.duetons.keys():
+            self.duetons[item['id']] = []
+        self.duetons[item['id']]\
+            .append(tuple([item['id'], item['parent_id']]))
 
     def load_wh_inputs(self, inputs):
         self.wh_inputs = copy.copy(inputs)
