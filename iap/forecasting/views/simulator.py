@@ -22,12 +22,15 @@ def set_values(req):
         return send_error_response(msg)
     try:
         wb = rt.get_wb(user_id)
-        #TODO Check access to feature.
-        #TODO check access for data
-        data_service.set_entity_values(wb.current_container, entity_id, values)
+        session = req.dbsession
+        project_name = "JJOralCare"
+
+        permission_tree = access_manager.build_permission_tree(session=session,project_name=project_name)
+        data_service.set_entity_values(permission_tree=permission_tree, container=wb.current_container,
+                                   entity_id=entity_id, values=values)
     except Exception as e:
-        msg = req.get_error_msg(e)
-        return send_error_response(msg, lang)
+        msg = req.get_error_msg(e, lang)
+        return send_error_response(msg)
     else:
         return send_success_response()
 
@@ -50,12 +53,14 @@ def get_simulator_page_data(req):
         #TODO check if there are selected scenario
         wb = rt.get_wb(user_id)
         session = req.dbsession
-        permission_tree = access_manager.build_permission_tree(session, project_name="JJOral")
-        data = data_service.get_simulator_data(session, wb.current_container, wb.data_config,
-                                               wb.selection, lang)
-        default_data = data_service.get_simulator_value_data(wb.default_container, wb.data_config,  wb.selection, lang)
+        permission_tree = access_manager.build_permission_tree(session, project_name="JJOralCare")
+        data = data_service.get_simulator_data(permission_tree=permission_tree, container=wb.current_container,
+                                               config=wb.data_config, entity_id=wb.selection, lang=lang)
+        default_data = data_service.get_simulator_value_data(permission_tree=permission_tree, container=wb.default_container,
+                                                             config=wb.data_config, entity_id=wb.selection,
+                                                             lang=lang)
         data['data']['values']['default'] = default_data
-        #TODO change setter of custom data
+    #TODO change setter of custom data
     except Exception as e:
         msg = req.get_error_msg(e)
         return send_error_response(msg)
@@ -72,22 +77,24 @@ def get_simulator_custom_data(req):
     :return:
     :rtype:
     """
-    try:
-        user_id = req.user
-        lang = rt.language(user_id)
-    except KeyError as e:
-        msg = req.get_error_message(e, lang)
-        return send_error_response(msg)
-    try:
+    #try:
+    user_id = req.user
+    lang = rt.language(user_id)
+    #except KeyError as e:
+    #msg = req.get_error_message(e, lang)
+    #return send_error_response(msg)
+    #try:
         #TODO check if there are selected scenario
-        wb = rt.get_wb(user_id)
-        data = data_service.get_simulator_value_data(wb.current_container, wb.data_config, wb.selection,
-                                                      lang)
-    except Exception as e:
-        msg = req.get_error_msg(e)
-        return send_error_response(msg)
-    else:
-        return send_success_response(data)
+    wb = rt.get_wb(user_id)
+    session = req.dbsession
+    permission_tree = access_manager.build_permission_tree(session, project_name="JJOralCare")
+    data = data_service.get_simulator_value_data(permission_tree=permission_tree, container=wb.current_container,
+                                             config=wb.data_config, entity_id=wb.selection, lang=lang)
+    #except Exception as e:
+    #msg = req.get_error_msg(e)
+    #    return send_error_response(msg)
+    #else:
+    return send_success_response(data)
 
 
 def get_simulator_decomposition(req):

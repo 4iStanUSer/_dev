@@ -22,7 +22,9 @@ requires = [
     'waitress',
     'psycopg2',
     'PyJWT',
+    'pyramid_jwt',
     'bcrypt',
+    'passlib',
     'pymemcache',
     'python-memcached'
     ]

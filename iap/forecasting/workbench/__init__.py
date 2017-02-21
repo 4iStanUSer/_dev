@@ -68,7 +68,6 @@ class Workbench:
                                                         'calc_instructions': calc_instructions})
 
 
-
     def load_from_backup(self, backup_binary, user_access, scenario_id = None):
         """Load from backup
 

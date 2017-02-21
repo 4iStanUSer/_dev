@@ -1,10 +1,9 @@
 import copy
-from ....common import security
 from ....common.helper import dicts_left_join
 from ..helper import VariableType, SlotType, AccessMask
+from ..services import help_data_manager as data__service
 from ..calculation_kernel import CalculationKernel
 from ....common.repository.models_managers import access_manager
-PERMISSION_STATUS = False
 
 
 def set_entity_values(permission_tree, container, entity_id, values):
@@ -14,38 +13,34 @@ def set_entity_values(permission_tree, container, entity_id, values):
     # Check access.
     for item in values:
         try:
+
             var = entity.get_variable(item['var_name'])
             if item['slot_type'] & SlotType.time_series:
                 ts = var.get_time_series(item['timescale'])
 
-                print("PS", ts)
-                # TODO finish permission
-                item_path = ["*-*".join(entity.path), item['var_name'], item['timescale'],
-                             item['time_label']]
+                item_path = ["*-*".join(entity.path), item['var_name'], item['timescale'], item['time_label']]
                 mask = access_manager.check_permission(permission_tree, item_path, pointer=0)
                 if mask == "Unavailable":
                     continue
                 else:
-                #TODO check permission for setting value
-                    ts.set_value(item['time_label'], item['value'])
-
+                    time_indexes = access_manager.check_period_perm(mask['tree'], ts_point=item['time_label'])
+                    for time_index in time_indexes:
+                        ts.set_value_by_index(ts_name=item['timescale'], index=time_index, value = item['value'])
             elif item['slot_type'] & SlotType.scalar:
                 scalar = var.get_scalar(item['timescale'])
                 scalar.set_value()
             elif item['slot_type'] & SlotType.period_series:
+
                 ps = var.get_periods_series(item['timescale'])
-                print("PS", ps)
-                #TODO finish permission
                 item_path = ["*-*".join(entity.path), item['var_name'], item['timescale'],
                              item['time_label']]
                 mask = access_manager.check_permission(permission_tree, item_path, pointer=0)
                 if mask == "Unavailable":
                     continue
                 else:
-                    #ts_period = check_period_perm(mask['tree'], ts)
-                    ps.set_value(item['time_label'], item['value'])
-
-
+                    time_indexes = access_manager.check_period_perm(mask['tree'], ts_period=item['time_label'])
+                    for time_index in time_indexes:
+                        ps.set_value(time_index, item['value'])
             else:
                 raise Exception
         except KeyError:
@@ -54,9 +49,6 @@ def set_entity_values(permission_tree, container, entity_id, values):
 
 
 def get_entity_data(permission_tree, container, config, entities_ids, lang):
-
-    #TODO renew permission tree
-
     # Initialize structure for output.
     entity_data = dict(
         data=dict(
@@ -73,7 +65,6 @@ def get_entity_data(permission_tree, container, config, entities_ids, lang):
         ),
         config=None
     )
-
     # Get requested entities.
     entity_id = entities_ids[0]
     #TODO realise for all entities
@@ -96,11 +87,14 @@ def get_entity_data(permission_tree, container, config, entities_ids, lang):
     # Get timelabels tree and time borders for every timescale.
     ts_tree, ts_borders = container \
         .timeline.get_timeline_tree(top_ts, bottom_ts, top_ts_period)
+
     entity_data['data']['timelabels'] = ts_tree
 
     # Get timescales view settings.
     timescales_info = config.get_objects_properties('timescale', main_timescales, lang)
     timescales_view_info = []
+
+
     for ts_info in timescales_info:
         ts_view_props = dict(
             id=None,
@@ -132,15 +126,13 @@ def get_entity_data(permission_tree, container, config, entities_ids, lang):
     time_series_data = dict([(x, dict()) for x in ts_borders.keys()])
     periods_data = dict([(x, dict()) for x in ts_borders.keys()])
 
-
-    """
-    Check permission vor view ent
-    """
     try:
         items_view_props = config.get_vars_for_view(meta=ent.meta, path=ent.path)
     except Exception:
         raise Exception#TODO change on no var for view
-    for item in iter(items_view_props):
+
+
+    for item in items_view_props:
         # Get entity to get variables from.
         curr_ent = container.get_entity_by_filter(ent, item['filter'])
         # Collect variables data.
@@ -152,28 +144,10 @@ def get_entity_data(permission_tree, container, config, entities_ids, lang):
             if var is None:
                 absent_vars_ids.append(var_info['id'])
                 continue
-            for ts_name, ts_period in ts_borders.items():
-                ts = var.get_time_series(ts_name)
 
-                inner_path = ["*-*".join(ent.path), var_id, ts_name, ts_period]
-                mask = access_manager.check_permission(permission_tree, inner_path, pointer=0)
-                if mask == "Unavailable":
-                    continue
-                else:
-                    ts_period = check_period_perm(mask['tree'], ts_period)
-                    print(ts_period)
-                    for period in ts_period:
-                        #ts_period = check_period_perm(_ts_periods, ts_period)
-                        values = [ts.get_value(time_point)[0] for time_point in period]
-                        #values = ts.get_values_for_period(period)
-                        ps = var.get_periods_series(ts_name)
-
-                            #check ps
-                        time_series_data[ts_name][var_info['id']] = \
-                            {time_labels[ts_name][i]: values[i]
-                            for i in range(len(values))}
-                        periods_data[ts_name][var_info['id']] = \
-                            [dict(abs=0, rate=ps.get_value(p), start=p[0], end=p[1]) for p in gr_periods[ts_name]]
+            data__service.get_time_series_values(permission_tree=permission_tree, ent=ent, ts_borders=ts_borders,
+                                                 var=var, periods_data=periods_data, time_series_data=time_series_data,
+                                                 var_info=var_info, gr_periods=gr_periods)
 
         # Get variables properties.
         vars_ids = [var_info['id']
@@ -201,22 +175,15 @@ def get_entity_data(permission_tree, container, config, entities_ids, lang):
     entity_data['data']['variable_values'] = time_series_data
 
     # Get decomposition types properties.
-    decs_types_view_props = []
-    dec_types_props = config.get_objects_properties('decomposition', ['value', 'volume'], lang)
-    for dec_type in dec_types_props:
-        dec_type_view_props = dict(id=None, full_name=None, short_name=None)
-        dicts_left_join(dec_type_view_props, dec_type)
-        decs_types_view_props.append(dec_type_view_props)
+    decs_types_view_props = data__service.get_decs_types_view_props(config, lang)
     entity_data['data']['decomp_types'] = decs_types_view_props
 
     # Get decomposition.
-
     dec_periods = {key: value for key, value in gr_periods.items()
                    if key in dec_timescales}
 
     decomp_data = \
         get_decomposition(container, config, entities_ids, dec_periods)
-
 
     decomp_data_for_view = transform_decomp_for_view(decomp_data)
 
@@ -234,11 +201,9 @@ def get_entity_data(permission_tree, container, config, entities_ids, lang):
     entity_data['data']['change_over_period'] = periods_data
 
     # Fill factors for dec type.
-    dec_type_factors = dict()
-    if len(decomp_data_for_view) > 0:
-        for dec_type, values in next(iter(decomp_data_for_view.values())).items():
-            dec_type_factors[dec_type] = [x['var_id'] for x in values[0]['factors']]
-        entity_data['data']['decomp_type_factors'] = dec_type_factors
+    dec_type_factors = data__service.get_factors_for_dec_type(decomp_data_for_view=decomp_data_for_view)
+    entity_data['data']['decomp_type_factors'] = dec_type_factors
+
 
     # Extend variables properties.
     for item in config.get_decomp_vars_for_view(meta=ent.meta, path=ent.path):
@@ -349,7 +314,7 @@ def get_cagrs(container, config, entities_ids, timescales_periods):
     return growth_over_period
 
 
-def get_simulator_data(session, container, config, entity_id, lang):
+def get_simulator_data(permission_tree, container, config, entity_id, lang):
     """
     Get simulator data from workbench
 
@@ -400,34 +365,21 @@ def get_simulator_data(session, container, config, entity_id, lang):
     #1.load_properties
 
     #1.1 Load variable properties
-    vars_view_props = []
-    # Extend variables properties.
-    for item in config.get_decomp_vars_for_view(meta=ent.meta, path=ent.path):
-        vars_ids = [var_info['id'] for var_info in item['variables']]
-        vars_props = \
-            config.get_objects_properties('variable', vars_ids, lang)
-        for index, v_props in enumerate(vars_props):
-            view_props = dict(id=None, full_name=None, short_name=None,
-                              type=None, metric=None, format=None, hint='')
-            dicts_left_join(view_props, v_props)
-            view_props['type'] = 'impact'
-            vars_view_props.append(view_props)
 
+    ##Start of get_var_view_prop
+    vars_view_props = data__service._get_var_view_prop(config, ent, lang=lang)
     simulator_data['properties']['variables'] = vars_view_props
 
     #1.2 Load decomposition properties
     dec_types_props = config.get_objects_properties('decomposition', ['value', 'volume'], lang)
-
     simulator_data['properties']['decomposition'] = dec_types_props
 
-    #1.3 Load label properties
-    main_timescales = config.get_property('dash_timescales')
-    top_ts_period = config.get_property('dash_top_ts_period')
 
-    top_ts = str(main_timescales[0])
-    bottom_ts = str(main_timescales[-1])
-    ts_tree, ts_borders = container \
-        .timeline.get_timeline_tree(top_ts, bottom_ts, top_ts_period)
+    #1.3 Load label properties
+
+    ts_tree, ts_borders = data__service.get_ts_tree_and_ts_border(config, container)
+    simulator_data['hierarchy']['timelable_tree'] = ts_tree
+
 
     time_labels = []
     for ts_name, ts_period in ts_borders.items():
@@ -438,36 +390,11 @@ def get_simulator_data(session, container, config, entity_id, lang):
 
     simulator_data['properties']['timelable'] = time_labels
 
-    #1.4 Load timeline properties
 
-    #2.load hierarchy and relationship
-
-    #2.1 Load tree
-
-    top_ts_period = config.get_property('dash_top_ts_period')
-    top_ts = str(main_timescales[0])
-    bottom_ts = str(main_timescales[-1])
-    ts_tree, ts_borders = container \
-        .timeline.get_timeline_tree(top_ts, bottom_ts, top_ts_period)
-
-    time_labels = dict()
-    gr_periods = dict()
-    for ts_name, ts_period in ts_borders.items():
-        time_labels[ts_name] = \
-            container.timeline.get_names(ts_name, ts_period)
-        gr_periods[ts_name] = \
-            container.timeline.get_growth_periods(ts_name, ts_period)
-        gr_periods[ts_name].extend(
-            container.timeline.get_carg_periods(ts_name, ts_period)
-        )
-
-    simulator_data['hierarchy']['timelable_tree'] = ts_tree
-    #2.2 Load drivers tree
-
-    #3.Load Data
+    time_labels, gr_periods = data__service.\
+        get_growth_period_and_time_label(ts_borders, container)
 
     # Get growth rates periods for every timescale.
-
 
     vars_view_props = []
 
@@ -482,71 +409,13 @@ def get_simulator_data(session, container, config, entity_id, lang):
         # Collect variables data.
         absent_vars_ids = []
         for var_info in item['variables']:
-            # check accces for variable
-            """
-            if vars is not None and var_info['id'] in vars.keys():
-                if PERMISSION_STATUS==True:
-                    _ts = {}
-                    PERMISSION_STATUS = True
-                elif vars[var_info['id']] == {}:
-                    _ts = {}
-                    PERMISSION_STATUS = True
-                else:
-                    _ts = vars[var_info['id']]
-                    PERMISSION_STATUS=False
-            else:
-                _ts = None
-                PERMISSION_STATUS=False
-                continue
-            """
-
             var = curr_ent.get_variable(var_info['id'])
             if var is None:
                 absent_vars_ids.append(var_info['id'])
                 continue
-            for ts_name, ts_period in ts_borders.items():
-                ts = var.get_time_series(ts_name)
-
-                # check timeseries permission
-                """
-                if ts is not None or PERMISSION_STATUS==True:
-                    if PERMISSION_STATUS==True or _ts[ts_name] == {}:
-                        _ts_periods = {}
-                        PERMISSION_STATUS=True
-                    else:
-                        PERMISSION_STATUS=False
-                        _ts_periods = [timeperiod for timeperiod in list(_ts[ts_name].keys()) if timeperiod!='mask']
-                else:
-                    PERMISSION_STATUS = False
-                    _ts_periods = None
-                    continue
-
-                """
-                # check timeperiod
-
-
-                """
-                if _ts_periods is not None or PERMISSION_STATUS==True:
-                    pass
-                elif _ts_period not in _ts_periods:
-                    print("No Permission")
-                    continue
-                """
-
-                values = ts.get_values_for_period(ts_period)
-                ps = var.get_periods_series(ts_name)
-                # check ps
-
-                time_series_data[ts_name][var_info['id']] = {}
-                time_series_data[ts_name][var_info['id']]['values'] = values
-                #TODO fill abs_growth, relative growth, cagrs
-                time_series_data[ts_name][var_info['id']]['abs_growth'] = [None]
-                time_series_data[ts_name][var_info['id']]['relative_growth'] = [None]
-                time_series_data[ts_name][var_info['id']]['cagrs'] = [None]
-
-                periods_data[ts_name][var_info['id']] = \
-                    [dict(abs=0, rate=ps.get_value(p), start=p[0], end=p[1])
-                     for p in gr_periods[ts_name]]
+            data__service.\
+                get_time_series_values(permission_tree=permission_tree,  ent=ent, ts_borders=ts_borders, var=var, periods_data=periods_data,
+                                   time_series_data=time_series_data, var_info=var_info, gr_periods=gr_periods)
 
         # Get variables properties.
         vars_ids = [var_info['id']
@@ -556,21 +425,9 @@ def get_simulator_data(session, container, config, entity_id, lang):
                       for var_info in item['variables']
                       if var_info['id'] not in absent_vars_ids]
 
-        vars_props = config \
-            .get_objects_properties('variable', vars_ids, lang)
-        for index, v_props in enumerate(vars_props):
-            view_props = dict(
-                id=None,
-                full_name=None,
-                short_name=None,
-                type=None,
-                metric=None,
-                format=None,
-                hint=''
-            )
-            dicts_left_join(view_props, v_props)
-            view_props['type'] = vars_types[index]
-            vars_view_props.append(view_props)
+        data__service.\
+            get_var_view_prop(config, vars_ids, lang, vars_types, vars_view_props)
+
     simulator_data['data']['values']['custom'] = time_series_data
 
     #4.Load user pemission
@@ -579,107 +436,45 @@ def get_simulator_data(session, container, config, entity_id, lang):
 
     #TODO add for data permission
 
-    #simulator_data['permissions'] = user_permission
+    #TODO add load user permission
 
     return simulator_data
 
 
 def get_simulator_value_data(permission_tree, container, config, entity_id, lang):
 
-    custom_data = dict()
     ent = container.get_entity_by_id(entity_id[0])
 
-
-    main_timescales = config.get_property('dash_timescales')
-    top_ts_period = config.get_property('dash_top_ts_period')
-
-    top_ts = str(main_timescales[0])
-    bottom_ts = str(main_timescales[-1])
-    ts_tree, ts_borders = container \
-        .timeline.get_timeline_tree(top_ts, bottom_ts, top_ts_period)
+    ts_tree, ts_borders = data__service.get_ts_tree_and_ts_border(config=config, container=container)
 
     # Get variables to view. Values, growth rates, CAGRS.
-    vars_view_props = []
     time_series_data = dict([(x, dict()) for x in ts_borders.keys()])
     periods_data = dict([(x, dict()) for x in ts_borders.keys()])
 
-    time_labels = dict()
-    gr_periods = dict()
-    for ts_name, ts_period in ts_borders.items():
-        time_labels[ts_name] = \
-            container.timeline.get_names(ts_name, ts_period)
-        gr_periods[ts_name] = \
-            container.timeline.get_growth_periods(ts_name, ts_period)
-        gr_periods[ts_name].extend(
-            container.timeline.get_carg_periods(ts_name, ts_period)
-        )
+    time_labels, gr_periods = data__service.get_growth_period_and_time_label(ts_borders=ts_borders, container=container)
 
-    items_view_props = config.get_vars_for_view(meta=ent.meta, path=ent.path)
+    try:
+        items_view_props = config.get_vars_for_view(meta=ent.meta, path=ent.path)
+    except Exception:
+        return None
+    else:
+        for item in items_view_props:
+            # Get entity to get variables from.
+            curr_ent = container.get_entity_by_filter(ent, item['filter'])
 
-    for item in items_view_props:
-        # Get entity to get variables from.
-        curr_ent = container.get_entity_by_filter(ent, item['filter'])
+            # Collect variables data.
+            absent_vars_ids = []
+            for var_info in item['variables']:
+                var = curr_ent.get_variable(var_info['id'])
+                if var is None:
+                    absent_vars_ids.append(var_info['id'])
+                    continue
 
-        # Collect variables data.
-        absent_vars_ids = []
-        for var_info in item['variables']:
-            var = curr_ent.get_variable(var_info['id'])
-            if var is None:
-                absent_vars_ids.append(var_info['id'])
-                continue
-            for ts_name, ts_period in ts_borders.items():
-                ts = var.get_time_series(ts_name)
-                # check timeseries permission
+                data__service.get_time_series_values(permission_tree=permission_tree, ent=ent,ts_borders=ts_borders,
+                                                     var=var, periods_data=periods_data, time_series_data=time_series_data,
+                                                     var_info=var_info, gr_periods=gr_periods)
 
+        custom_data = time_series_data
 
+        return custom_data
 
-                values = ts.get_values_for_period(ts_period)
-                ps = var.get_periods_series(ts_name)
-                # check ps
-                time_series_data[ts_name][var_info['id']] = {}
-                time_series_data[ts_name][var_info['id']]['values'] = values
-                # TODO fill abs_growth, relative growth, cagrs
-                time_series_data[ts_name][var_info['id']]['abs_growth'] = None
-                time_series_data[ts_name][var_info['id']]['relative_growth'] = None
-                time_series_data[ts_name][var_info['id']]['cagrs'] = None
-                periods_data[ts_name][var_info['id']] = \
-                    [dict(abs=0, rate=ps.get_value(p), start=p[0], end=p[1])
-                     for p in gr_periods[ts_name]]
-
-        # Get variables properties.
-        vars_ids = [var_info['id']
-                    for var_info in item['variables']
-                    if var_info['id'] not in absent_vars_ids]
-        vars_types = [var_info['type']
-                      for var_info in item['variables']
-                      if var_info['id'] not in absent_vars_ids]
-
-        vars_props = config \
-            .get_objects_properties('variable', vars_ids, lang)
-        for index, v_props in enumerate(vars_props):
-            view_props = dict(
-                id=None,
-                full_name=None,
-                short_name=None,
-                type=None,
-                metric=None,
-                format=None,
-                hint=''
-            )
-            dicts_left_join(view_props, v_props)
-            view_props['type'] = vars_types[index]
-            vars_view_props.append(view_props)
-    custom_data = time_series_data
-
-    return custom_data
-
-
-def check_period_perm(tree, ts_period):
-
-    correct_ts_period = []
-    ts_period = range(int(float(ts_period[0])), int(float(ts_period[1])), 1)
-    for _ts_period in [i for i in tree.keys() if i!='mask']:
-        _ts_period = _ts_period.split(":")
-        _ts = range(int(float(_ts_period[0])), int(float(_ts_period[1])), 1)
-        correct_ts_period.append(list(set(ts_period) & set(_ts)))
-    return correct_ts_period

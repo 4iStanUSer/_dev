@@ -2,22 +2,20 @@ import json
 import os
 import sys
 import transaction
-from iap.common.repository.models.access import Project, Tool
 from pyramid.paster import (get_appsettings, setup_logging)
 from pyramid.scripts.common import parse_vars
 from templates.access_rights_data import perm_data
 from templates.dev_template import dev_template_JJOralCare, dev_template_JJLean
 from iap.common.repository.models_managers.admin_manager import IManageAccess
 from iap.common.repository.models_managers import scenario_manager as scenario_manager
-from iap.common.repository.models.scenarios import Scenario
-from iap.common.repository.models.access import User, Role, Feature, Tool, DataPermission, Permission
+from iap.common.repository.models.access import Role
 from iap.common.repository.models.warehouse import Entity
 from iap.common.repository.models_managers.warehouse import Warehouse
 from iap.data_loading.data_loader import Loader
-from .db import (get_engine, get_session_factory, get_tm_session)
-from .db.meta import Base
-from ..repository import persistent_storage
-from ...forecasting.workbench import Workbench
+from iap.common.repository.db import (get_engine, get_session_factory, get_tm_session)
+from iap.common.repository.db.meta import Base
+from iap.common.repository import persistent_storage
+from iap.forecasting.workbench import Workbench
 
 
 def usage(argv):
@@ -73,7 +71,7 @@ def main(argv=sys.argv):
 
 
         wh = Warehouse(session_factory)
-        loader = Loader(wh)
+        loader = Loader(wh, config=settings)
         #loader.run_processing('JJLean')
         loader.run_processing('JJOralCare')
 
@@ -105,7 +103,6 @@ def main(argv=sys.argv):
         imanage_access.add_role_to_tool(role=role_superviser, tool=tool)
 
 
-
         # Add  user@mail.com User for Project #1
         email = "user@mail.com"
         password = "qweasdZXC"
@@ -125,7 +122,7 @@ def main(argv=sys.argv):
 
 
         #Add roles Forecaster and set that feature
-        features = ['create', 'view', 'finalize', 'edit', 'delete', 'edit', 'share']
+        features = ['create', 'view', 'finalize', 'modify', 'delete', 'edit', 'share','copy']
         for feature in features:
             imanage_access.add_feature(name=feature, tool=tool, role=role_forecast)
 
@@ -173,7 +170,7 @@ def main(argv=sys.argv):
 
         for i in range(11):
             scenario = scenario_manager.create_scenario(ssn, user=None, input_data=input_data_1)
-            scenario.users = [user_1, user_2, user_3]
+            scenario.users = [user_1, user_2]
             scenario = scenario_manager.create_scenario(ssn, user=None, input_data=input_data_2)
             scenario.users = [user_1, user_2]
         #TODO realise add user to scenario
@@ -231,10 +228,9 @@ def main(argv=sys.argv):
         f_tool_id = tool_forecast.id
 
         # Add roles
-        print("Tool id", f_tool_id)
+
         role_jj_admin = imanage_access.add_role(name='jj_role_admin', tool_id=f_tool_id)
         role_jj_manager = imanage_access.add_role('jj_role_manager', f_tool_id)
-
         #transaction.manager.commit()
 
         role_jj_admin = imanage_access.get_role(name='jj_role_admin')
@@ -248,7 +244,6 @@ def main(argv=sys.argv):
                                                 'pass', [role_admin_id])
         user_jj_manager = imanage_access.add_user('jj_manager@gmail.com',
                                                   'pass', [role_manager_id])
-
         #transaction.manager.commit()
 
         user_jj_admin = imanage_access.get_user(email='jj_admin@gmail.com')

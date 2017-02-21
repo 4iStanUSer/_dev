@@ -612,6 +612,11 @@ class TimeSeries:
 
         self._data.set_ts_vals(self._var_name, self._ts_name, [value], stamp)
 
+    def set_value_by_index(self, ts_name, index, value):
+
+        stamp = self._data.time_manager.get_label(ts_name=ts_name, index=index)
+        self._data.set_ts_vals(self._var_name, self._ts_name, [value], stamp)
+
     def set_values_from(self, values, stamp):
         """
 

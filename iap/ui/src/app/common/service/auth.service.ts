@@ -157,7 +157,7 @@ export class AuthService {
      */
     logoutByBackend() {
         this.setLoggedStatus(false);
-        localStorage.removeItem('currentUser');
+        //localStorage.removeItem('currentUser');
     }
 
     /**
@@ -175,7 +175,7 @@ export class AuthService {
         } else {
             this.is_logged_in = status;
             this.user = null;
-            localStorage.removeItem('currentUser');
+            //localStorage.removeItem('currentUser');
         }
     }
 }

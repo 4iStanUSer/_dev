@@ -42,7 +42,8 @@ def token(web_app):
     return token
 
 
-def test_simulator_functionally(web_app, token):
+def test_simulator(web_app, token):
+    #TODO finish test
     """
     Test save scenario
 
@@ -58,39 +59,30 @@ def test_simulator_functionally(web_app, token):
 
     project_id = 'JJOralCare'
     tool_id = 'forecast'
-    scenario_id = "test_scenario_2"
-
     res = web_app.post_json('/select_project', {"data": {"project_id": project_id, "tool_id": tool_id},
                                           'X-Token': token})
     print("Select Project")
     print(res.json_body)
 
 
-    #2.Set value for Specific Variables
-
-    values = [dict(var_name="eq_price", timescale="annual", slot_type=1, time_label='0', value=1123123123),
-              dict(var_name="eq_price", timescale="annual", slot_type=1, time_label='1', value=1123123123),
-              dict(var_name="eq_price", timescale="annual", slot_type=1, time_label='2', value=1123123123),
-              dict(var_name="eq_price", timescale="annual", slot_type=1, time_label='3', value=1),
-              dict(var_name="eq_price", timescale="annual", slot_type=1, time_label='4', value=1)]
+    values = [dict(var_name="unit_price", timescale="annual", slot_type=1, time_label='1', value=1231),
+              dict(var_name="eq_price", timescale="annual", slot_type=1, time_label='1', value=1),
+              dict(var_name="eq_price", timescale="annual", slot_type=1, time_label='2', value=12),
+              dict(var_name="eq_price", timescale="annual", slot_type=1, time_label='3', value=123)
+              ]
 
     res = web_app.post_json('/forecast/set_values', {"data": {"tool_id": tool_id,
                                                               "entity_id": 12, "values": values},
                                                      "X-Token": token})
 
-    print("Set Value for Specific Variables")
+    print("View changes - test_scenario_1")
     print(res.json_body)
 
 
-    #3.View changes
+    res = web_app.post_json('/forecast/get_custom_data', {"X-Token": token})
+    print("Get Simulator Custom Data")
+    print(res.json_body)
 
-    res = web_app.post_json('/forecast/get_custom_data', {"data": {"project_id": project_id, "tool_id": tool_id},
-                                                          'X-Token': token})
 
-    actual = res.json['data']['annual']['eq_price']['values']
 
-    expected = [5.5514496352576765, 1123123123, 1123123123, 5.762558868192696]
-    print("View changes")
-    print(actual)
-    assert actual == expected
 

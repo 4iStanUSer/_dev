@@ -323,6 +323,7 @@ class EntityData:
         # Set values.
         ts[start_index:end_index] = values
 
+
     def get_scalar_val(self, var_name, ts_name):
         """
         Return variable values in ts_name timeseries
