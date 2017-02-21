@@ -2,22 +2,20 @@ import json
 import os
 import sys
 import transaction
-from iap.common.repository.models.access import Project, Tool
 from pyramid.paster import (get_appsettings, setup_logging)
 from pyramid.scripts.common import parse_vars
 from templates.access_rights_data import perm_data
 from templates.dev_template import dev_template_JJOralCare, dev_template_JJLean
 from iap.common.repository.models_managers.admin_manager import IManageAccess
 from iap.common.repository.models_managers import scenario_manager as scenario_manager
-from iap.common.repository.models.scenarios import Scenario
-from iap.common.repository.models.access import User, Role, Feature, Tool, DataPermission, Permission
+from iap.common.repository.models.access import Role
 from iap.common.repository.models.warehouse import Entity
 from iap.common.repository.models_managers.warehouse import Warehouse
 from iap.data_loading.data_loader import Loader
-from .db import (get_engine, get_session_factory, get_tm_session)
-from .db.meta import Base
-from ..repository import persistent_storage
-from ...forecasting.workbench import Workbench
+from iap.common.repository.db import (get_engine, get_session_factory, get_tm_session)
+from iap.common.repository.db.meta import Base
+from iap.common.repository import persistent_storage
+from iap.forecasting.workbench import Workbench
 
 
 def usage(argv):
