@@ -87,6 +87,7 @@ def get_entity_data(permission_tree, container, config, entities_ids, lang):
     # Get timelabels tree and time borders for every timescale.
     ts_tree, ts_borders = container \
         .timeline.get_timeline_tree(top_ts, bottom_ts, top_ts_period)
+
     entity_data['data']['timelabels'] = ts_tree
 
     # Get timescales view settings.
@@ -144,28 +145,9 @@ def get_entity_data(permission_tree, container, config, entities_ids, lang):
                 absent_vars_ids.append(var_info['id'])
                 continue
 
-
-            for ts_name, ts_period in ts_borders.items():
-
-
-                ts = var.get_time_series(ts_name)
-
-                inner_path = ["*-*".join(ent.path), var_id, ts_name, ts_period]
-                mask = access_manager.check_permission(permission_tree, inner_path, pointer=0)
-                if mask == "Unavailable":
-                    continue
-                else:
-                    ts_period = access_manager.check_period_perm(mask['tree'], ts_period)
-                    for period in ts_period:
-                        values = [ts.get_value(time_point)[0] for time_point in period]
-                        ps = var.get_periods_series(ts_name)
-                        print("Period Series", ps)
-                            #check ps
-                        time_series_data[ts_name][var_info['id']] = \
-                            {time_labels[ts_name][i]: values[i]
-                            for i in range(len(values))}
-                        periods_data[ts_name][var_info['id']] = \
-                            [dict(abs=0, rate=ps.get_value(p), start=p[0], end=p[1]) for p in gr_periods[ts_name]]
+            data__service.get_time_series_values(permission_tree=permission_tree, ent=ent, ts_borders=ts_borders,
+                                                 var=var, periods_data=periods_data, time_series_data=time_series_data,
+                                                 var_info=var_info, gr_periods=gr_periods)
 
         # Get variables properties.
         vars_ids = [var_info['id']
@@ -454,7 +436,7 @@ def get_simulator_data(permission_tree, container, config, entity_id, lang):
 
     #TODO add for data permission
 
-    #simulator_data['permissions'] = user_permission
+    #TODO add load user permission
 
     return simulator_data
 

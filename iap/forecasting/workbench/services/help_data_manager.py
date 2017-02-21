@@ -17,7 +17,7 @@ def _get_var_view_prop(config, ent, lang):
     return vars_view_props
 
 
-def get_factors_for_dec_type(decomp_data_for_view, entity_data):
+def get_factors_for_dec_type(decomp_data_for_view):
     # Fill factors for dec type.
     dec_type_factors = dict()
     if len(decomp_data_for_view) > 0:
