@@ -394,6 +394,7 @@ class Warehouse:
                                    'get_label_by_stamp')
 
     def get_stamp_by_label(self, timescale, label):
+        #TODO fill stamp by label
         """
 
         :param timescale:
@@ -418,6 +419,18 @@ class Warehouse:
                                    'get_stamp_by_label')
 
     def get_stamps_by_start_label(self, timescale, start_label, length):
+        #TODO fill stamp by start label
+        """
+
+        :param timescale:
+        :type timescale:
+        :param start_label:
+        :type start_label:
+        :param length:
+        :type length:
+        :return:
+        :rtype:
+        """
         start_timestamp = self.get_stamp_by_label(timescale, start_label)
         timestamps = sorted([x.timestamp for x in timescale.timeline
                              if x.timestamp >= start_timestamp])
@@ -429,6 +442,18 @@ class Warehouse:
         return timestamps[:length]
 
     def get_stamps_for_range(self, timescale, start_point, end_point):
+        #TODO get stamp for range
+        """
+
+        :param timescale:
+        :type timescale:
+        :param start_point:
+        :type start_point:
+        :param end_point:
+        :type end_point:
+        :return:
+        :rtype:
+        """
         timestamps = sorted([x.timestamp for x in timescale.timeline
                              if start_point <= x.timestamp <= end_point])
         if timestamps[0] != start_point or timestamps[-1] != end_point:
@@ -441,15 +466,43 @@ class Warehouse:
 
     #Variable methods
     def get_var_time_series_names(self, var):
+        #TODO get var time series names
+        """
+
+        :param var:
+        :type var:
+        :return:
+        :rtype:
+        """
         return [x.name for x in var._time_series]
 
     def get_var_time_series(self, var, ts_name):
+        #TODO get var time series
+        """
+
+        :param var:
+        :type var:
+        :param ts_name:
+        :type ts_name:
+        :return:
+        :rtype:
+        """
         for ts in var._time_series:
             if ts.name == ts_name:
                 return ts
         return None
 
     def force_var_time_series(self, var, time_scale):
+        #TODO force var time seties
+        """
+
+        :param var:
+        :type var:
+        :param time_scale:
+        :type time_scale:
+        :return:
+        :rtype:
+        """
         if time_scale is None:
             raise ex.NotExistsValueError('TimeScale', 'time_scale', '',
                                          'force_time_series')
@@ -465,9 +518,31 @@ class Warehouse:
     #Timeseries methods
 
     def get_ts_timeline(self, ts):
+        """
+        Get timeline from given TimeSeries
+
+        :param ts:
+        :type ts:
+        :return:
+        :rtype:
+        """
         return ts._time_scale.timeline
 
     def set_ts_values(self, ts, start_label, values):
+        #TODO overview get ts values
+        """
+        Set timeseries value for input timeserie
+        with requirement to
+        :param ts:
+        :type ts:
+        :param start_label:
+        :type start_label:
+        :param values:
+        :type values:
+        :return:
+        :rtype:
+        """
+
         # Get timestamps for new values.
         new_stamps = self.get_stamps_by_start_label(ts._time_scale, start_label,
                                                                 len(values))
@@ -525,6 +600,18 @@ class Warehouse:
                 self.set_value(point_to_set, values[ind])
 
     def get_ts_values(self, ts, period=None):
+        """
+        Return timeseries values from given period
+
+
+        :param ts:
+        :type ts:
+        :param period:
+        :type period:
+        :return:
+        :rtype:
+        """
+
         if period is None:
             # Get all points
             return [x.get() for x in
@@ -540,17 +627,36 @@ class Warehouse:
 
             return [x.get() for x in points]
 
-    def get_ts_value(self, ts,time_label):
+    def get_ts_value(self, ts, time_label):
+        """
+        Return timelabale value from input TimeSeries
+
+        :param ts:
+        :type ts:
+        :param time_label:
+        :type time_label:
+        :return:
+        :rtype:
+        """
         timestamp = ts._time_scale.get_stamp_by_label(time_label)
         try:
             return next(x.get() for x in ts._values
                         if x.timestamp == timestamp)
         except StopIteration:
             return None
+
     """
     Value methods
     """
     def get_value(self, val):
+        """
+        Get value of
+        :param val:
+        :type val:
+        :return:
+        :rtype:
+        """
+
         if val.data_type == 0:
             return val.float_value
         if val.data_type == 1:
