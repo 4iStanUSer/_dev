@@ -3,23 +3,63 @@ from ..models.warehouse import *
 
 
 class Warehouse:
+    """
+    Warehouse class designed to
+    interact with data storage and provide
+    link between data structure. Such as
+    Entity, TimeSeries, Variable, Value etc.
 
+    """
     def __init__(self, ssn_factory):
+        """
+        Object initialise with session
+        And query Entity Root obj
+
+        :param ssn_factory:
+        :type ssn_factory:
+        """
+
+        #TODO add exception if there no root object
         self._ssn = ssn_factory()
         self._root = self._ssn.query(Entity)\
             .filter(Entity.name == 'root').one_or_none()
 
-    #common warehouse methods
-
+    """
+    Common WH methods
+    """
     def get_root(self):
+        """
+        Return root Entity
+        :return:
+        :rtype:
+        """
         return self._root
 
     def add_entity(self, path, meta):
+        """
+        Add Entity by path and meta
+        Set new Entiy object as child of root
+
+        :param path:
+        :type path:
+        :param meta:
+        :type meta:
+        :return:
+        :rtype:
+        """
         entity = self._root
         return self._add_node_by_path(entity, path, meta, 0)
 
     def get_entity_by_id(self, entity_id):
-        return self._ssn.query(Entity).get(entity_id)  # .one_or_none()
+        """
+        Query object from data storage by id
+
+        :param entity_id:
+        :type entity_id:
+        :return Entity:
+        :rtype:
+        """
+        return self._ssn.query(Entity).get(entity_id) #.one_or_none()
 
     def _find_node_by_path(self, entity, path, depth):
         node = None
@@ -39,6 +79,22 @@ class Warehouse:
         return self._find_node_by_path(entity, path, 0)
 
     def _add_node_by_path(self, entity, path, meta, depth):
+        """
+        Private method of WH
+
+        Add Entity to input parent node with path ans meta requirements
+
+        :param entity:
+        :type entity:
+        :param path:
+        :type path:
+        :param meta:
+        :type meta:
+        :param depth:
+        :type depth:
+        :return:
+        :rtype:
+        """
         node = None
         for child in entity.children:
             if child.name == path[depth]:
@@ -52,12 +108,37 @@ class Warehouse:
             return node
 
     def get_child(self, entity, name):
+        """
+        Get child by name from input entity
+
+        :param entity:
+        :type entity:
+        :param name:
+        :type name:
+        :return Entity:
+        :rtype:
+        """
+
         for child in entity.children:
             if child.name == name:
                 return child
         return None
 
     def add_child(self, entity, name, meta):
+        """
+        Add child to input entity
+        with  input name and meta
+
+        :param entity:
+        :type entity:
+        :param name:
+        :type name:
+        :param meta:
+        :type meta:
+        :return:
+        :rtype:
+        """
+
         for child in entity.children:
             if child.name == name:
                 return child
@@ -66,10 +147,38 @@ class Warehouse:
         return new_child
 
     def get_time_scale(self, ts_name):
+        """
+        Query TimeScale by given timescale name
+
+        :param ts_name:
+        :type ts_name:
+        :return TimeScale ORM obj:
+        :rtype:
+        """
         return self._ssn.query(TimeScale)\
             .filter(TimeScale.name == ts_name).one_or_none()
 
     def add_time_scale(self, name, time_line):
+        """
+        Add time scale by given name and fill
+        input time_line.
+
+        Query TimeScale from datastorage, and stamp by stamp
+        create TimePoint object and link it to TimeScale
+
+        Args:
+            TimeLine: dict - {'period_name':'period_stamp'}
+            Name: str
+
+        Return TimeScale
+
+        :param name:
+        :type name:
+        :param time_line:
+        :type time_line:
+        :return TimeScale:
+        :rtype:
+        """
         time_scale = self._ssn.query(TimeScale) \
             .filter(TimeScale.name == name).one_or_none()
         if time_scale is None:
@@ -122,16 +231,38 @@ class Warehouse:
                     time_scale.timeline.append(tp)
         return time_scale
 
-    #Entity methods
-
+    """
+    Entity methods
+    """
     def _get_ent_root(self, ent):
+        """
+        Return root node of given ent
+
+        Function move recursively until find root entity
+
+        :param ent:
+        :type ent:
+        :return Entity:
+        :rtype:
+        """
+
         if ent.name == 'root':
             return self
-        for parent in self.parents:
+        for parent in ent.parents:
             return self._get_ent_root(parent)
         raise ex.NotFoundError('Entity', 'root', 'root', '', '_get_root')
 
     def _get_ent_path(self, ent, path):
+        """
+        Return entity path by given entity
+
+        :param ent:
+        :type ent:
+        :param path:
+        :type path:
+        :return:
+        :rtype:
+        """
         if ent == None:
             return list()
         if ent.name == 'root':
@@ -141,6 +272,17 @@ class Warehouse:
             self._get_ent_path(ent.parent, path)
 
     def _get_ent_path_meta(self, ent, path_meta):
+        """
+        Get path of meta of gicen entity
+
+        :param ent:
+        :type ent:
+        :param path_meta:
+        :type path_meta:
+        :return:
+        :rtype:
+        """
+
         if ent.name == 'root':
             return
         path_meta.insert(0, self.meta)
@@ -148,15 +290,54 @@ class Warehouse:
             self._get_path_meta(ent.parent, path_meta)
 
     def get_ent_variables_names(self, ent):
+        """
+        Get ent variable name
+
+        :param ent:
+        :type ent:
+        :return:
+        :rtype:
+        """
+
         return [x.name for x in ent._variables]
 
     def get_ent_variable(self, ent, name):
+        """
+        Get variable by name of given entity
+        Inputs:
+            entity
+            name
+
+        :param ent:
+        :type ent:
+        :param name:
+        :type name:
+        :return Variable:
+        :rtype:
+        """
+        #TODO check if variable exist
         for var in ent._variables:
             if var.name == name:
                 return var
         return None
 
     def force_ent_variable(self, ent, name, data_type, default_value=None):
+        """
+
+        Create new variable for given entity,
+        assign name and default value
+
+        :param ent:
+        :type ent:
+        :param name:
+        :type name:
+        :param data_type:
+        :type data_type:
+        :param default_value:
+        :type default_value:
+        :return:
+        :rtype:
+        """
         # Check if variable with the name already exists.
         for var in ent._variables:
             if var.name == name:
@@ -184,9 +365,21 @@ class Warehouse:
         ent._variables.append(new_var)
         return new_var
 
-    #Timescale methods
-
+    """
+    Timescale methods
+    """
     def get_label_by_stamp(self, timescale, stamp):
+        """
+        Return label by stamp, for given timescale
+
+        :param timescale:
+        :type timescale:
+        :param stamp:
+        :type stamp:
+        :return:
+        :rtype:
+        """
+
         try:
             for x in timescale.timeline:
                 if x.timestamp == stamp:
@@ -201,6 +394,15 @@ class Warehouse:
                                    'get_label_by_stamp')
 
     def get_stamp_by_label(self, timescale, label):
+        """
+
+        :param timescale:
+        :type timescale:
+        :param label:
+        :type label:
+        :return:
+        :rtype:
+        """
         try:
             for x in timescale.timeline:
                 if x.name == str(label):
@@ -345,8 +547,9 @@ class Warehouse:
                         if x.timestamp == timestamp)
         except StopIteration:
             return None
-
-    #Value methods
+    """
+    Value methods
+    """
     def get_value(self, val):
         if val.data_type == 0:
             return val.float_value
@@ -370,9 +573,9 @@ class Warehouse:
             val.text_value = value
             return
 
-
-    #Native methods of Warehouse
-
+    """
+    Native methods of Warehouse
+    """
     def bulk_inser_entity(self, obj_list):
         self._ssn.bulk_insert_mappings(Entity, obj_list)
 

@@ -14,17 +14,41 @@ from ..data_loading import loading_lib
 class Loader:
     """
     Starting point of Load
+
+    Attr:
+        config - path to configuration file with all
+                neccessary settings
+
+        warehouse - interface for db interaction and data structure
+                    behavior
     """
     def __init__(self, warehouse, config):
 
         self._warehouse = warehouse
         self._source = config['path.data_lake']
 
+    def set_config(self, **kwargs):
+
+        pass
         #TODO set path from configuration
         #self._source = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
         #                            'data_storage', 'data_lake')
 
     def run_processing(self, proj_name):
+        """
+        The main method of Loader object
+
+        Read input name of project.
+        Get required configuration from config file
+        Read dataset, and process it by predefined
+        instruction
+
+        :param proj_name:
+        :type proj_name:
+
+        :return:
+        :rtype:
+        """
         # Get project folder and config
         folder, config = self._get_proj_info(proj_name)
         # Run pre loading function if it is defined
@@ -71,23 +95,55 @@ class Loader:
 
 
     def _get_proj_info(self, proj_name):
+        """
+        Private function that called in run_processing
+        Get config file, parse it and read it. Extract required
+        sections.
+
+        :param proj_name:
+        :type proj_name:
+        :return:
+        :rtype:
+        """
+
+
         # Read main config
+
         main_config_path = os.path.join(self._source, 'config.ini')
         main_config = configparser.ConfigParser()
         main_config.read(main_config_path)
-        proj_folder = main_config.get(section=proj_name, option='path',
+        try:
+            proj_folder = main_config.get(section=proj_name, option='path',
                                       fallback=None)
-
-        if proj_folder is None:
+        except Exception
             raise NonExistedProject
         # Read project config
-        proj_config_path = os.path.join(self._source, proj_folder,
+        else:
+            proj_config_path = os.path.join(self._source, proj_folder,
                                         proj_name + '_config.ini')
-        proj_config = configparser.ConfigParser()
-        proj_config.read(proj_config_path)
-        return proj_folder, proj_config
+            proj_config = configparser.ConfigParser()
+            proj_config.read(proj_config_path)
+            return proj_folder, proj_config
 
     def _load_data_set(self, abs_path, file_name, loader, file_config, proj_path=None):
+        """
+        Function read data set.
+        And call processing function.
+
+        :param abs_path:
+        :type abs_path:
+        :param file_name:
+        :type file_name:
+        :param loader:
+        :type loader:
+        :param file_config:
+        :type file_config:
+        :param proj_path:
+        :type proj_path:
+        :return:
+        :rtype:
+        """
+
         if abs_path == "/":
             file_path = os.path.join(proj_path, file_name)
         else:
@@ -98,7 +154,7 @@ class Loader:
             base_name, extension = os.path.splitext(file_name)
             with open(file_path, 'rb') as file:
                 data = self._read_file(extension, file)
-            #data=self._read_file_pd(file_path=file_path,extension=extension)
+                #data=self._read_file_pd(file_path=file_path,extension=extension)
                 loader(data, file_config, self._warehouse)
         else:
             raise CorruptedDataSet
@@ -110,6 +166,16 @@ class Loader:
 
     @staticmethod
     def _read_file(extension, file):
+        """
+        Read file and reaturn raw data
+
+        :param extension:
+        :type extension:
+        :param file:
+        :type file:
+        :return:
+        :rtype:
+        """
         if extension == '.csv':
             # reader = InsDictReader(io.TextIOWrapper(file))
             reader = csv.reader(io.TextIOWrapper(file))
@@ -123,6 +189,15 @@ class Loader:
 
     @staticmethod
     def _read_file_pd(extension, file_path):
+        """Read file and transform it into pandas DataFrame
+
+        :param extension:
+        :type extension:
+        :param file_path:
+        :type file_path:
+        :return:
+        :rtype:
+        """
         if extension == '.csv':
             # reader = InsDictReader(io.TextIOWrapper(file))
             df = pd.read_csv(file_path)

@@ -16,6 +16,7 @@ def _get_var_view_prop(config, ent, lang):
             vars_view_props.append(view_props)
     return vars_view_props
 
+
 def get_factors_for_dec_type(decomp_data_for_view, entity_data):
     # Fill factors for dec type.
     dec_type_factors = dict()
@@ -23,6 +24,7 @@ def get_factors_for_dec_type(decomp_data_for_view, entity_data):
         for dec_type, values in next(iter(decomp_data_for_view.values())).items():
             dec_type_factors[dec_type] = [x['var_id'] for x in values[0]['factors']]
     return dec_type_factors
+
 
 def get_decs_types_view_props(config, lang):
     decs_types_view_props = []
@@ -46,6 +48,7 @@ def get_time_series_values(permission_tree, ent,  ts_borders, var, periods_data,
         item_path = ["*-*".join(ent.path), var_info['id'], ts_name, index_ts_period]
         values = []
         stamps = []
+
         mask = access_manager.check_permission(permission_tree, item_path, pointer=0)
         if mask == "Unavailable":
             continue
@@ -53,7 +56,7 @@ def get_time_series_values(permission_tree, ent,  ts_borders, var, periods_data,
             time_indexes = access_manager.check_period_perm(mask['tree'], ts_period=index_ts_period)
             stamps = [ts_period[i] for i in time_indexes]
             for time_stamp in stamps:
-                values.append(ts.get_value(time_stamp))
+                values.append(ts.get_value(time_stamp)[0])
 
         ps = var.get_periods_series(ts_name)
         # check ps
