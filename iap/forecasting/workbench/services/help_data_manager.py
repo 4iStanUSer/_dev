@@ -1,5 +1,5 @@
 from ....common.helper import dicts_left_join
-
+from ....common.repository.models_managers import access_manager
 
 def _get_var_view_prop(config, ent, lang):
     vars_view_props = []
@@ -33,15 +33,33 @@ def get_decs_types_view_props(config, lang):
         decs_types_view_props.append(dec_type_view_props)
     return dec_type_view_props
 
-def get_time_series_values(ts_borders, var, periods_data, time_series_data, var_info, gr_periods):
+
+def get_time_series_values(permission_tree, ent,  ts_borders, var, periods_data, time_series_data, var_info, gr_periods):
 
     for ts_name, ts_period in ts_borders.items():
+
         ts = var.get_time_series(ts_name)
-        values = ts.get_values_for_period(ts_period)
+
+        ts_period = [str(i) for i in range(int(float(ts_period[0])), int(float(ts_period[1]))+1,1)]
+        index_ts_period = ['0', str(len(ts_period)-1)]
+
+        item_path = ["*-*".join(ent.path), var_info['id'], ts_name, index_ts_period]
+        values = []
+        stamps = []
+        mask = access_manager.check_permission(permission_tree, item_path, pointer=0)
+        if mask == "Unavailable":
+            continue
+        else:
+            time_indexes = access_manager.check_period_perm(mask['tree'], ts_period=index_ts_period)
+            stamps = [ts_period[i] for i in time_indexes]
+            for time_stamp in stamps:
+                values.append(ts.get_value(time_stamp))
+
         ps = var.get_periods_series(ts_name)
         # check ps
 
         time_series_data[ts_name][var_info['id']] = {}
+        time_series_data[ts_name][var_info['id']]['stamps'] = stamps
         time_series_data[ts_name][var_info['id']]['values'] = values
         # TODO fill abs_growth, relative growth, cagrs
         time_series_data[ts_name][var_info['id']]['abs_growth'] = [None]

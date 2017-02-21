@@ -12,6 +12,9 @@ from ..data_loading import loading_lib
 
 
 class Loader:
+    """
+    Starting point of Load
+    """
     def __init__(self, warehouse, config):
 
         self._warehouse = warehouse

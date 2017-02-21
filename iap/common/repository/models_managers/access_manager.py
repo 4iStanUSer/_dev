@@ -359,7 +359,7 @@ def check_permission(permission_tree, inner_path, pointer):
         return "Unavailable"
     else:
         if tree == {}:
-            return {'item': item, 'tree': {inner_path[-1]: mask[item]}}
+            return {'item': item, 'tree': {":".join(inner_path[-1]): mask[item]}}
         else:
             return check_permission(tree, inner_path, pointer+1)
 

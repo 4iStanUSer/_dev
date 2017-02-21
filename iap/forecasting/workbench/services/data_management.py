@@ -378,10 +378,6 @@ def get_simulator_data(permission_tree, container, config, entity_id, lang):
         )
     )
 
-    #TODO - user_permission
-    #TODO - data permission
-
-    #TODO Load Properties
     ent = container.get_entity_by_id(entity_id[0])
 
     #1.load_properties
@@ -436,7 +432,7 @@ def get_simulator_data(permission_tree, container, config, entity_id, lang):
                 absent_vars_ids.append(var_info['id'])
                 continue
             data__service.\
-                get_time_series_values(ts_borders=ts_borders, var=var, periods_data=periods_data,
+                get_time_series_values(permission_tree=permission_tree,  ent=ent, ts_borders=ts_borders, var=var, periods_data=periods_data,
                                    time_series_data=time_series_data, var_info=var_info, gr_periods=gr_periods)
 
         # Get variables properties.
@@ -492,7 +488,9 @@ def get_simulator_value_data(permission_tree, container, config, entity_id, lang
                     absent_vars_ids.append(var_info['id'])
                     continue
 
-                data__service.get_time_series_values(ts_borders, var, periods_data, time_series_data, var_info, gr_periods)
+                data__service.get_time_series_values(permission_tree=permission_tree, ent=ent,ts_borders=ts_borders,
+                                                     var=var, periods_data=periods_data, time_series_data=time_series_data,
+                                                     var_info=var_info, gr_periods=gr_periods)
 
         custom_data = time_series_data
 
