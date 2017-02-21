@@ -1,7 +1,7 @@
 from ....common.helper import dicts_left_join
 
 
-def get_var_view_prop(config, ent):
+def _get_var_view_prop(config, ent, lang):
     vars_view_props = []
     # Extend variables properties.
     for item in config.get_decomp_vars_for_view(meta=ent.meta, path=ent.path):
@@ -16,7 +16,6 @@ def get_var_view_prop(config, ent):
             vars_view_props.append(view_props)
     return vars_view_props
 
-
 def get_factors_for_dec_type(decomp_data_for_view, entity_data):
     # Fill factors for dec type.
     dec_type_factors = dict()
@@ -24,7 +23,6 @@ def get_factors_for_dec_type(decomp_data_for_view, entity_data):
         for dec_type, values in next(iter(decomp_data_for_view.values())).items():
             dec_type_factors[dec_type] = [x['var_id'] for x in values[0]['factors']]
     return dec_type_factors
-
 
 def get_decs_types_view_props(config, lang):
     decs_types_view_props = []
@@ -34,3 +32,69 @@ def get_decs_types_view_props(config, lang):
         dicts_left_join(dec_type_view_props, dec_type)
         decs_types_view_props.append(dec_type_view_props)
     return dec_type_view_props
+
+def get_time_series_values(ts_borders, var, periods_data, time_series_data, var_info, gr_periods):
+
+    for ts_name, ts_period in ts_borders.items():
+        ts = var.get_time_series(ts_name)
+        values = ts.get_values_for_period(ts_period)
+        ps = var.get_periods_series(ts_name)
+        # check ps
+
+        time_series_data[ts_name][var_info['id']] = {}
+        time_series_data[ts_name][var_info['id']]['values'] = values
+        # TODO fill abs_growth, relative growth, cagrs
+        time_series_data[ts_name][var_info['id']]['abs_growth'] = [None]
+        time_series_data[ts_name][var_info['id']]['relative_growth'] = [None]
+        time_series_data[ts_name][var_info['id']]['cagrs'] = [None]
+
+        periods_data[ts_name][var_info['id']] = \
+            [dict(abs=0, rate=ps.get_value(p), start=p[0], end=p[1])
+             for p in gr_periods[ts_name]]
+
+
+def get_var_view_prop(config, vars_ids, lang, vars_types, vars_view_props):
+
+    vars_props = config \
+        .get_objects_properties('variable', vars_ids, lang=lang)
+
+    for index, v_props in enumerate(vars_props):
+        view_props = dict(
+            id=None,
+            full_name=None,
+            short_name=None,
+            type=None,
+            metric=None,
+            format=None,
+            hint=''
+        )
+        dicts_left_join(view_props, v_props)
+        view_props['type'] = vars_types[index]
+        vars_view_props.append(view_props)
+
+def get_growth_period_and_time_label(ts_borders, container):
+
+    time_labels = dict()
+    gr_periods = dict()
+    for ts_name, ts_period in ts_borders.items():
+        time_labels[ts_name] = \
+            container.timeline.get_names(ts_name, ts_period)
+        gr_periods[ts_name] = \
+            container.timeline.get_growth_periods(ts_name, ts_period)
+        gr_periods[ts_name].extend(
+            container.timeline.get_carg_periods(ts_name, ts_period)
+        )
+
+    return time_labels, gr_periods
+
+def get_ts_tree_and_ts_border(config, container):
+
+    main_timescales = config.get_property('dash_timescales')
+    top_ts_period = config.get_property('dash_top_ts_period')
+
+    top_ts = str(main_timescales[0])
+    bottom_ts = str(main_timescales[-1])
+    ts_tree, ts_borders = container \
+        .timeline.get_timeline_tree(top_ts, bottom_ts, top_ts_period)
+
+    return  ts_tree, ts_borders

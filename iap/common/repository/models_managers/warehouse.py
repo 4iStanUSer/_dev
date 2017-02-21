@@ -355,7 +355,7 @@ class Warehouse:
         if val.data_type == 2:
             return val.text_value
 
-    def set_value(self,val, value):
+    def set_value(self, val, value):
 
         val.modified_date = datetime.now()
         if value == '':

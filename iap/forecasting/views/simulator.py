@@ -43,28 +43,28 @@ def get_simulator_page_data(req):
     :return:
     :rtype:
     """
-    try:
-        user_id = req.user
-        lang = rt.language(user_id)
-    except KeyError as e:
-        msg = req.get_error_message(e, lang)
-        return send_error_response(msg)
-    try:
+    #try:
+    user_id = req.user
+    lang = rt.language(user_id)
+    #except KeyError as e:
+    #    msg = req.get_error_message(e, lang)
+    #return send_error_response(msg)
+    #try:
         #TODO check if there are selected scenario
-        wb = rt.get_wb(user_id)
-        session = req.dbsession
-        permission_tree = access_manager.build_permission_tree(session, project_name="JJOral")
-        data = data_service.get_simulator_data(permission_tree=permission_tree, container=wb.current_container,
-                                               config=wb.data_config, entity_id=wb.selection, lang=lang)
-        default_data = data_service.get_simulator_value_data(container=wb.default_container, config=wb.data_config,
-                                                             entity_id=wb.selection, lang=lang)
-        data['data']['values']['default'] = default_data
-        #TODO change setter of custom data
-    except Exception as e:
-        msg = req.get_error_msg(e)
-        return send_error_response(msg)
-    else:
-        return send_success_response(data)
+    wb = rt.get_wb(user_id)
+    session = req.dbsession
+    permission_tree = access_manager.build_permission_tree(session, project_name="JJOral")
+    data = data_service.get_simulator_data(permission_tree=permission_tree, container=wb.current_container,
+                                           config=wb.data_config, entity_id=wb.selection, lang=lang)
+    default_data = data_service.get_simulator_value_data(container=wb.default_container, config=wb.data_config,
+                                                         entity_id=wb.selection, lang=lang)
+    data['data']['values']['default'] = default_data
+    #TODO change setter of custom data
+    #except Exception as e:
+    #msg = req.get_error_msg(e)
+    #return send_error_response(msg)
+    #else:
+    return send_success_response(data)
 
 
 def get_simulator_custom_data(req):
