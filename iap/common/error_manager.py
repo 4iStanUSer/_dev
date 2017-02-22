@@ -3,7 +3,6 @@ from configparser import ConfigParser
 from pyramid import threadlocal
 import json
 
-from pyramid.events import ApplicationCreated
 
 import os
 
@@ -17,9 +16,6 @@ class ErrorManager:
         self.fill_mem_cached()
 
     def load(self, settings):
-        # get active registry
-        #registry = threadlocal.get_current_registry()
-        # get config folder
         config_folder = settings['path.config']
         conf_file = os.path.join(config_folder, "error_manager" + ".ini")
         if os.path.isfile(conf_file):
@@ -30,7 +26,6 @@ class ErrorManager:
                 data[section] = {}
                 for element in parser.items(section):
                     data[section][element[0]] = element[1]
-                    print("Data", data)
             self.config = data
 
     def fill_mem_cached(self):
@@ -70,7 +65,7 @@ class ErrorManager:
         """
         return self.client.get(ex)[lang]
 
-    def get_error_message(self, ex, lang):
+    def get_error_message(self, ex, lang='default'):
         if lang not in ['default', 'english', "russian"]:
             lang = "default"
         try:
@@ -80,9 +75,9 @@ class ErrorManager:
             ex = "Exception"
             key = "".join([ex, lang])
             error = self.client.get(key)
-
-        return error
-
+            return error
+        else:
+            return error
 
 
     def reload(self):

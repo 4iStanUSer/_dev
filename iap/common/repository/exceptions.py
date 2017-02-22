@@ -1,3 +1,10 @@
+class IncorrectPassword(Exception):
+    """
+    Custom Exception for Incorrect Password
+    """
+
+
+
 class EmptyInputsError(Exception):
     """Custom Exception.
     Raised when input object is none.
@@ -8,7 +15,6 @@ class EmptyInputsError(Exception):
     def __init__(self, key):
         self.key = key
 
-
 class AlreadyExistsError(Exception):
     """Custom Exception.
     Raised when user tries to add new object,
@@ -16,13 +22,17 @@ class AlreadyExistsError(Exception):
 
     Attributes:
         par_name -- name of dublicated parameter
-        par_value -- duplicated value 
+        par_value -- duplicated value
     """
     def __init__(self, class_name, par_name, par_value, func_name=''):
         self.class_name = class_name
         self.par_name = par_name
         self.par_value = par_value
         self.func_name = func_name
+
+
+
+
 
 
 class NotExistsError(Exception):

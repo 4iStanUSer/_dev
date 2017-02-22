@@ -1,11 +1,27 @@
-
 class ProjectNotFoundError(Exception):
     pass
+
+
+class IncorrectPassword(Exception):
+
+    def __init__(self):
+        pass
+
+    def __repr__(self):
+        return "IncorrectPassword"
+
+    @property
+    def name(self):
+        return self.__repr__
+
 
 class UserNotFoundError(Exception):
 
     def __init__(self, user_id):
         self.user_id = user_id
+
+    def __repr__(self):
+        return "UserNotFoundError"
 
 
 class UnknownToolError(Exception):
@@ -24,7 +40,8 @@ class InvalidStateError(Exception):
     def __init__(self, invalid_state):
         self.invalid_state = invalid_state
 
-
+    def __repr__(self):
+        return "UserNotFoundError"
 
 class BackupNotFoundError(Exception):
     """Raised when backup for current user and specified tool not found in backups storage directory

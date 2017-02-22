@@ -115,7 +115,7 @@ class Loader:
         try:
             proj_folder = main_config.get(section=proj_name, option='path',
                                       fallback=None)
-        except Exception
+        except Exception:
             raise NonExistedProject
         # Read project config
         else:
