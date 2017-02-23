@@ -14,28 +14,29 @@ class Project(IProject, IAdmin):
 
     def __init__(self, name):
 
-        self.entities_ids = []
+        self.entities = {}
         self.project_name=name
 
 
     def get_entities(self):
         #return list of entities
-
-        self.entities_ids = self._get_entities(self.project_name)
-        ents = []
-        for entity_id in self.entities_ids:
-            ent = Entity(entity_id)
-            ents.append(ent)
-        return ents
+        return self.entities
 
     def add_entity(self, entity):
         #add entity to
-        pass
+        self.entities[entity.path] = entity
 
+    def get_entity_by_path(self, ent_path):
+        if ent_path in self.entities.keys():
+            return self.entities[ent_path]
+        else:
+            return None
 
-    def delete_entities(self, entity_id):
+    def delete_entities(self, entity_path):
         #delete entity from project entity
-        self.entities_ids.remove(entity_id)
+        if entity_path in self.entities.keys():
+            del self.entities[entity_path]
+
 
     def save(self):
         pass
@@ -46,14 +47,25 @@ class Entity(Project, IEntity):
     def __init__(self, path):
 
         self.path = path
+        self.childs = []
+        self.parents = []
+        self.vars = {}
+
         self._fill_attributes()
 
     def _fill_attributes(self):
 
-        self.childs = self._get_childs(ent_path=self.path)
-        self.parents = self._get_parents(ent_path=self.path)
-        self.vars = self._get_variables(ent_path=self.path)
+        for child_path in self._get_childs(ent_path=self.path):
+            ent = Entity(child_path)
+            self.childs.append(ent)
 
+        for parent_path in self._get_parents(ent_path=self.path):
+            ent = Entity(parent_path)
+            self.parents.append(ent)
+
+        for var_id in self._get_variables(ent_path=self.path):
+            var = Variable(var_id)
+            self.vars[var_id] = var
 
     def add_child(self, child):
         if child.path not in self.childs.append(child):
@@ -61,32 +73,24 @@ class Entity(Project, IEntity):
         return
 
     def get_childs(self):
-
-        ent_child = []
-        for child in self.childs:
-            ent_child.append(Entity(child))
-        return ent_child
+        return self.childs
 
     def get_parents(self):
-
-        ent_parent = []
-        for child in self.childs:
-            ent_parent.append(Entity(child))
-        return ent_parent
+        return self.parents
 
     def get_vars(self):
-
-        vars = []
-        for var in self.vars:
-            vars.append(Variable(var))
-        return vars
-
-
-    def get_var(self):
         return self.vars
 
-    def del_var(self, var_id):
-        pass
+    def get_var_by_name(self, var_name):
+        if var_name in self.vars.keys():
+            return self.vars[var_name]
+        else:
+            return None
+
+    def del_var(self, var_name):
+        if var_name in self.vars.keys():
+            del self.vars[var_name]
+
 
     def update_var(self):
         pass
@@ -137,8 +141,6 @@ class TimeSeries(Timescale, ITimeSeries):
         self.name
         self.timeserie = {}
 
-    def add_timeserie(self):
-        pass
 
     @property
     def timeserie(self):
@@ -153,7 +155,8 @@ class TimeSeries(Timescale, ITimeSeries):
         return list(self.timeserie.keys())
 
     def get_by_stamp(self, start_stamp=None, end_stamp=None, len=None, values=None):
-        pass
+        if start_stamp and end_stamp:
+
 
     def get_by_index(self, start_index=None, end_index=None, len=None, values=None):
         pass
