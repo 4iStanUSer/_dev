@@ -100,47 +100,55 @@ class Variable(Entity, IVariable):
 
     def __init__(self, var_name):
         self.var_name = var_name
-        self.ts = []
+        self.time_scale = {}
 
-    def add_time_scale(self):
-        pass
+    def add_time_scale(self, time_scale):
+        self.time_scale[time_scale.name] = time_scale
+        return
 
-    def get_time_scale(self):
-        return self.ts
+    def get_time_scales(self):
+        return self.time_scales
 
     def get_time_scale_by_name(self, ts_name):
         _ts = None
-        for ts in self.ts:
-            if ts.name == ts_name:
-                _ts = ts
-            return _ts
+        if ts_name in  self.get_time_scales().keys():
+            _ts = self[ts_name]
+        return _ts
 
+    def delete_time_scale(self, time_scale_name):
+        if time_scale_name in self.get_time_scales().keys():
+            del self[time_scale_name]
+        return
 
 class Timescale(Variable, ITimeScale):
 
     def __init__(self, time_scale_name):
         self.time_scale_name = time_scale_name
-        self.timeseries = []
+        self.timeseries = {}
 
-    def get_time_series(self):
-        return
+    def get_time_series(self, ts_name):
+        _ts = None
+        if ts_name in self.timeseries.keys():
+            _ts = self.timeseries[ts_name]
+        return _ts
 
-    def add_time_serie(self):
-        pass
+    def add_time_serie(self, timeserie):
+        self.timeseries[timeserie.name] = timeserie
 
     def update_time_serie(self):
         pass
 
-    def delete_update_time_serie(self):
-        pass
+    def delete_update_time_serie(self, ts_name):
+        if ts_name in self.timeseries.keys():
+            del self.timeseries[ts_name]
 
 
 class TimeSeries(Timescale, ITimeSeries):
 
     def __init__(self, name):
         self.name
-        self.timeserie = {}
-
+        self.values = []
+        self.time_points = []
 
     @property
     def timeserie(self):
@@ -162,7 +170,7 @@ class TimeSeries(Timescale, ITimeSeries):
         pass
 
     def set_by_stamp(self, start_stamp=None, end_stamp=None, len=None, values=None):
-        pass
+
 
     def set_by_index(self, start_index=None, end_index=None, len=None, values=None):
         pass
