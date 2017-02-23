@@ -15,6 +15,12 @@ class Storage(IStorage):
 
     dataframe = None
 
+    def __init__(self):
+        if hasattr(self, '_initialized'):
+            return
+        print('A')
+        self._initialized = True
+
     @property
     def data_frame(self):
         return self.data_frame
@@ -64,12 +70,20 @@ class IProject(Storage):
         #provide operation around dataframe
         return projetc_name
 
-
 class IEntity(Storage):
 
-    def _get_variable(self, var_name):
+    def _get_variable(self, ent_path, var_name):
         #provide operation around dataframe
         return var_name
+
+    def _get_variables(self, ent_path):
+        pass
+
+    def _get_childs(self, ent_path):
+        pass
+
+    def _get_parents(self, ent_path):
+        pass
 
     def _add_variable(self, var_name):
         #provide operation around dataframe
