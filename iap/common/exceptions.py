@@ -1,3 +1,9 @@
+from json.decoder import JSONDecodeError
+
+
+class WrongRequestMethod(Exception):
+    pass
+
 class ProjectNotFoundError(Exception):
     pass
 

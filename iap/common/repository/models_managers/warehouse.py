@@ -1,5 +1,6 @@
 from ..models.warehouse import *
-
+from sqlalchemy import create_engine
+import pandas as pd
 
 
 class Warehouse:
@@ -9,7 +10,7 @@ class Warehouse:
     link between data structure. Such as
     Entity, TimeSeries, Variable, Value etc.
     """
-    def __init__(self, ssn_factory):
+    def __init__(self, ssn_factory=None, engine=None):
         """
         Object initialise with session
         And query Entity Root obj
@@ -18,14 +19,29 @@ class Warehouse:
         :type ssn_factory:
         """
 
+
         #TODO add exception if there no root object
+
+        #self.engine = create_engine(engine)
+
         self._ssn = ssn_factory()
-        self._root = self._ssn.query(Entity)\
-            .filter(Entity.name == 'root').one_or_none()
+        self._root = self._ssn.query(Entity).filter(Entity.name == 'root').one_or_none()
+
+
 
     """
     Common WH methods
     """
+    def save_project_data(self, name, df):
+
+        df.to_sql(name, self.engine, if_exists='append')
+
+
+    def get_project_data(self, name):
+
+        df = pd.read_sql_table(name, self.engine)
+        return df
+
 
     def get_root(self):
         """
@@ -146,6 +162,7 @@ class Warehouse:
         entity.children.append(new_child)
         return new_child
 
+
     def get_time_scale(self, ts_name):
         """
         Query TimeScale by given timescale name
@@ -240,6 +257,7 @@ class Warehouse:
         for parent in ent.parents:
             return self._get_ent_root(parent)
         raise ex.NotFoundError('Entity', 'root', 'root', '', '_get_root')
+
 
     def _get_ent_path(self, ent, path):
         """
@@ -430,6 +448,7 @@ class Warehouse:
                                      'get_stamps_by_start_label')
         return timestamps[:length]
 
+
     def get_stamps_for_range(self, timescale, start_point, end_point):
         #TODO get stamp for range
         """
@@ -452,6 +471,7 @@ class Warehouse:
                 'Query result not equals to the filter',
                 'get_stamps_for_range')
         return timestamps
+
 
     #Variable methods
     def get_var_time_series_names(self, var):
@@ -688,3 +708,9 @@ class Warehouse:
 
     def rollback(self):
         self._ssn.rollback()
+
+    def save_entity_df(self, df, schema):
+        df.to_sql('entities', con=self._ssn, schema=schema, if_exists='append')
+
+    def save__df(self, df, schema):
+        df.to_sql('entities', con=self._ssn, schema=schema, if_exists='append')

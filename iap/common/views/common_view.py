@@ -4,16 +4,18 @@ from pyramid import threadlocal
 from pyramid.paster import get_appsettings
 from ...common.helper import send_success_response, send_error_response
 from ...common.tools_config import get_page_config
-from ...common import exceptions as ex
+from ...common.exceptions import *
 from ...common import runtime_storage as rt
 from ...common import persistent_storage as pt
 from ..services import common_info as common_getter
 from ..security import *
 
+
 def index_view(req):
     return render_to_response('iap.common:templates/index.jinja2',
                               {'title': 'Home page'},
                               request=req)
+
 
 def check_logged_in(req):
     """Check user existed
@@ -27,8 +29,11 @@ def check_logged_in(req):
     try:
         user_id = get_user(req)
         session_flag = True#check_session(req)
+    except JSONDecodeError:
+        msg = req.get_error_msg("RequestError")
+        return send_error_response(msg)
     except KeyError:
-        msg = req.get_error_msg("Incorrect Input")
+        msg = req.get_error_msg("RequestError")
         return send_error_response(msg)
     else:
         if user_id != None and session_flag == True:
@@ -56,7 +61,10 @@ def login(req):
         username = req.json_body['data']['username']
         password = req.json_body['data']['password']
     except KeyError:
-        msg = req.get_error_msg("Incorrect Input")
+        msg = req.get_error_msg("RequestError")
+        return send_error_response(msg)
+    except JSONDecodeError:
+        msg = req.get_error_msg("RequestError")
         return send_error_response(msg)
     try:
         session = req.dbsession
@@ -96,7 +104,7 @@ def get_routing_config(req):
     }
     return send_success_response(config)
 
-
+@forbidden_view
 def get_page_configuration(req):
     """
 
@@ -137,7 +145,7 @@ def get_page_configuration(req):
         msg = req.get_error_msg(e, language)
         return send_error_response(msg)
 
-
+@forbidden_view
 def set_language(req):
     """
     View for set language in runtime storage
@@ -161,6 +169,7 @@ def set_language(req):
         return send_error_response(msg)
 
 
+@forbidden_view
 def get_tools_with_projects(req):
     """
     Return all projects and tool information
@@ -191,6 +200,7 @@ def get_tools_with_projects(req):
         return send_error_response(msg)
 
 
+@forbidden_view
 def get_data_for_header(req):
     """
     View for url - get_data_for_header(request)
@@ -214,10 +224,9 @@ def get_data_for_header(req):
     try:
         user_id = req.user
     except KeyError as e:
-        msg = ErrorManager.get_error_msg(e)
+        msg = req.get_error_msg(e)
         return send_error_response(msg)
     try:
-
         header_data = dict()
         lang = rt.get_state(user_id).language
         #TODO change on database access
@@ -226,10 +235,10 @@ def get_data_for_header(req):
         header_data['client'] = common_getter.get_client_info(pt, user_id, lang)
         return send_success_response(header_data)
     except Exception as e:
-        msg = ErrorManager.get_error_msg(e, lang=lang)
+        msg = req.get_error_msg(e, lang=lang)
         return send_error_response(msg)
 
-
+@forbidden_view
 def set_project_selection(req):
     """Set project selector
 

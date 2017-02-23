@@ -5,6 +5,7 @@ from iap.common.repository.models.access import User
 from .exceptions import IncorrectPassword
 from pyramid.interfaces import IAuthorizationPolicy
 from zope.interface import implementer
+from .exceptions import *
 from functools import wraps
 import jwt
 
@@ -21,12 +22,28 @@ def forbidden_view(f):
 
     """
     def deco(request):
-        user_id = get_user(request)
-        if user_id!=None and check_session(request)==True:
-            return f(request)
-        else:
-            return send_error_response('Unauthorised')
+        try:
+            user_id = get_user(request)
+            issession = check_session(request)
+            if user_id!=None and issession==True:
+                return f(request)
+        except WrongRequestMethod:
+            msg = request.get_error_msg('RequestError')
+            return send_error_response(msg)
+        except NoResultFound:
+            msg = request.get_error_msg('NoResultFound')
+            return send_error_response(msg)
+        except KeyError:
+            msg = request.get_error_msg('Unauthorised')
+            return send_error_response(msg)
+        except AttributeError:
+            msg = request.get_error_msg('Unauthorised')
+            return send_error_response(msg)
+        except jwt.exceptions.DecodeError:
+            msg = request.get_error_msg('TokenError')
+            return send_error_response(msg)
     return deco
+
 
 
 def authorise(session, user_name, password):
@@ -38,12 +55,15 @@ def authorise(session, user_name, password):
         user = session.query(User).filter(User.email == user_name).one()
     except NoResultFound:
         raise NoResultFound
+    except AttributeError:
+        raise AttributeError
+    except TypeError:
+        raise TypeError
     else:
         if user.check_password(password):
             return user.id, user.email
         else:
             raise IncorrectPassword
-
 
 
 def check_session(request):
@@ -62,12 +82,15 @@ def check_session(request):
                 return True
             else:
                 return True#TODO change on False
+    except JSONDecodeError:
+        raise WrongRequestMethod
     except AttributeError:
         return True
     except KeyError:
-        return True
+        raise KeyError
     else:
         return True
+
 
 
 def get_user(request):
@@ -87,12 +110,16 @@ def get_user(request):
         login = token_data['login']
         user = request.dbsession.query(User).filter(User.id == user_id and User.email == login).one()
         # user = service.get_user_by_id(request,user_id, login)
+    except JSONDecodeError:
+        raise WrongRequestMethod
     except NoResultFound:
         return 2#TODO change on None
     except jwt.exceptions.DecodeError:
         return 2#TODO change on None
     except KeyError:
-        return None
+        raise KeyError
+    except Exception:
+        raise Exception
     else:
         return 2#TODO change on None user.id
 
