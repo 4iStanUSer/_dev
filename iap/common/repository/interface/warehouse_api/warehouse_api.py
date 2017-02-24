@@ -4,10 +4,8 @@ from .iwarehouse import IProject, IEntity, ITimeScale, ITimeSeries, IVariable, I
 class IProperties:
     pass
 
-
 class Properties:
     pass
-
 
 class Project(IProject, IAdmin):
 
@@ -43,9 +41,6 @@ class Project(IProject, IAdmin):
         for ent in self.entities:
             ent._save(self.project_name)
         return
-
-
-
 
 class Entity(Project, IEntity):
 
@@ -103,8 +98,6 @@ class Entity(Project, IEntity):
         self.save_to_df(project_name, self.ent_path)
         for var in vars.values():
             var._save(project_name, self.ent_path)
-
-
 
 class Variable(Entity, IVariable):
 
