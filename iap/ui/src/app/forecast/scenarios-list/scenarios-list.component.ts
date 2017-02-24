@@ -1,8 +1,7 @@
-import { Component, OnInit, DoCheck } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import {AjaxService} from "../../common/service/ajax.service";
 
 import { ScenariosListComponentService } from './scenarios-list.service';
-// import lowerCase = require("lower-case");
 const moment = require('moment/moment');
 const DATEFORMAT = 'MM.DD.YY';
 
@@ -14,7 +13,7 @@ const DATEFORMAT = 'MM.DD.YY';
 })
 export class ScenariosListComponent implements OnInit {
     scenariosList: any[];
-    user_permissions: any[]; // remove
+    beforeFilterScenariosList: any[];
     userPermissionsData: any[];
     selectedScenarios: any[];
     favoriteList: any;
@@ -30,6 +29,18 @@ export class ScenariosListComponent implements OnInit {
         copy: false,
         delete: false
     };
+
+    //Filters
+    filters: any = {
+        favoriteCount: 0,
+        sharedCount: 0,
+        localCount: 0,
+        finalStatusCount: 0,
+        draftsStatusCount: 0,
+        authorsList: [],
+    };
+    filterCount:any;
+    filterSelect:any = {favorite:[], author:[], shared:[], status:[]};
 
     constructor(private req: AjaxService) { }
 
@@ -56,102 +67,136 @@ export class ScenariosListComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.getScenariosList();
+        this.__getScenariosList();
         this.__loadUserPermissionsData();
         this.selectedScenarios = [];
+        this.__runFilter();
     }
 
     ngDoCheck(): void {
-        // Check permissions
         this.__initUserPermissions();
+        this.__getAuthorsList();
+        this.__updateFilterCount();
     }
 
     // Get scenarios list from server
-    getScenariosList() {
+    __getScenariosList() {
         this.req.post({
             url_id: '/forecast/get_scenario_page',
             data: {'filter': {}},
         }).subscribe((data) => {
             this.scenariosList = data.data;
+            this.beforeFilterScenariosList = data.data;
         });
-        console.log('---getScenariosList');
     }
     // ---------------------------------  Build filter  ----------------------------------//
-    getFavoriteListLength() {
-        try {
-            return this.favoriteList.length;
-        } catch(e) {
-            return 0;
+    __getAuthorsList() {
+        let authorsList = [];
+        if (this.beforeFilterScenariosList !== undefined && this.beforeFilterScenariosList.length > 0) {
+            for (const i in this.beforeFilterScenariosList) {
+                authorsList.push(this.beforeFilterScenariosList[i].author);
+            }
+            authorsList = authorsList.filter((el, i, arr) => arr.indexOf(el) === i);
         }
+        this.filters.authorsList = authorsList;
     }
-    getFavoriteList() {
-        if (this.scenariosList !== undefined && this.scenariosList.length > 0) {
-            this.favoriteList = [];
-            for (let i = 0; i < this.scenariosList.length; i++) {
-                if (this.scenariosList[i].favorite === true) {
-                    this.favoriteList.push(this.scenariosList[i].id);
+
+    __maskCount(item, param){
+        let filterSelectKeys = Object.keys(this.filterSelect);
+        for (let k of filterSelectKeys) {
+            if (k === 'shared' && param === 'shared') {
+                if (this.__getKey(k, item) === 'Yes') {
+                    this.filterCount['shared']++;
+                } else {
+                    this.filterCount['local']++;
+                }
+            }
+            if (k === 'status' && param === 'status') {
+                if (this.__getKey(k, item) === 'Final') {
+                    this.filterCount['final']++;
+                } else {
+                    this.filterCount['drafts']++;
+                }
+            }
+            if (k === 'favorite' && param === 'favorite') {
+                if (this.__getKey(k, item) === 'Yes') {
+                    this.filterCount['favorite']++;
                 }
             }
         }
     }
-    getSharedCount() {
-        if (this.scenariosList !== undefined && this.scenariosList.length > 0) {
-            const sharedList = this.scenariosList.filter((item) => {
-                return item.shared.toLowerCase() === 'yes';
-            });
-            return sharedList.length;
-        } else {
-            return 0;
-        }
-    }
-    getLocalCount() {
-        if (this.scenariosList !== undefined && this.scenariosList.length > 0) {
-            const localList = this.scenariosList.filter((item) => {
-                return item.shared.toLowerCase() === 'no';
-            });
-            return localList.length;
-        } else {
-            return 0;
-        }
-    }
-    getFinalStatusCount() {
-        if (this.scenariosList !== undefined && this.scenariosList.length > 0) {
-            const finalStatusList = this.scenariosList.filter((item) => {
-                return item.status.toLowerCase() == 'final'
-            });
-            return finalStatusList.length;
-        } else {
-            return 0;
-        }
-    }
-    getNewStatusCount() {
-        if (this.scenariosList !== undefined && this.scenariosList.length > 0) {
-            const finalStatusList = this.scenariosList.filter((item) => {
-                return item.status.toLowerCase() == 'new'
-            });
-            return finalStatusList.length;
-        } else {
-            return 0;
-        }
-    }
-    getDraftsStatusCount() {
-        if (this.scenariosList !== undefined && this.scenariosList.length > 0) {
-            const draftsStatusList = this.scenariosList.filter((item) => {
-                return item.status.toLowerCase() == 'draft'
-            });
-            return draftsStatusList.length;
-        } else {
-            return 0;
-        }
-    }
-    getAuthorsList() {
-        let authorsList = [];
-        if (this.scenariosList !== undefined && this.scenariosList.length > 0) {
-            for (const i in this.scenariosList) {
-                authorsList.push(this.scenariosList[i].author);
+
+    __updateFilterCount() {
+        this.filterCount = {favorite:0, shared:0, local:0, drafts:0, final:0};
+        let filterSelectKeys = Object.keys(this.filterSelect);
+        for (let k of filterSelectKeys) {
+            let new_mask = (JSON.parse(JSON.stringify(this.filterSelect)));
+            delete new_mask[k];
+            let list_scenarios:any = [];
+
+            if (Array.isArray(this.beforeFilterScenariosList)) {
+                for (let scenario of this.beforeFilterScenariosList) {
+                    if (this.__maskFilter(scenario, new_mask)) {
+                        list_scenarios.push(scenario);
+                    }
+                }
             }
-            return authorsList.filter((el, i, arr) => arr.indexOf(el) === i);
+            for (let item of list_scenarios) {
+                this.__maskCount(item, k);
+            }
         }
+    }
+
+    __maskFilter(item, mask){
+        let status = true;
+        if (mask !== undefined) {
+            let filterSelectKeys = Object.keys(mask);
+            for (let k of filterSelectKeys) {
+                if (this.__getKey(k, mask).length > 0) {
+                    const ind = this.__getKey(k, mask).indexOf(this.__getKey(k, item));
+                    if (ind === -1) {
+                        status = false;
+                    }
+                }
+            }
+        }
+        return status;
+
+    }
+    __runFilter() {
+        if (this.beforeFilterScenariosList !== undefined && this.beforeFilterScenariosList.length > 0) {
+            this.scenariosList = [];
+            for (let scenario of this.beforeFilterScenariosList) {
+                if (this.__maskFilter(scenario, this.filterSelect)) {
+                    this.scenariosList.push(scenario);
+                }
+            }
+        }
+        // Update Filter Count
+        this.__updateFilterCount();
+    }
+
+    onChangeAuthor(event: any) {
+        const value = event.target.value;
+        this.filterSelect["author"] = [];
+        if (value) {
+            this.filterSelect["author"].push(value);
+        }
+        // Run filter
+        this.__runFilter();
+    }
+
+    onFilter(event: any, param: string, value: string) {
+        if (event.target.checked) {
+            this.filterSelect[param].push(value);
+        } else {
+            const index = this.filterSelect[param].indexOf(value);
+            if (index > -1) {
+                this.filterSelect[param].splice(index, 1);
+            }
+        }
+        // Run filter
+        this.__runFilter();
     }
     // ---------------------------------  Build filter  ----------------------------------//
 
@@ -174,11 +219,11 @@ export class ScenariosListComponent implements OnInit {
                 this.userPermissions.create = true;
             }
             if (this.selectedScenarios.length > 0) {
-                // Check "Create New" permission
-                this.userPermissions.finalize = this.__checkScenariosPermission('change_status');
-                // Check "Create New" permission
+                // Check "Finalize" permission
+                this.__checkScenariosPermission('finalize', true);
+                // Check "Share" permission
                 this.__checkScenariosPermission('share', true);
-                // Check "Create New" permission
+                // Check "Copy" permission
                 this.__checkScenariosPermission('copy', false, true);
                 // Check "Delete" permission
                 this.__checkScenariosPermission('delete');
@@ -198,14 +243,23 @@ export class ScenariosListComponent implements OnInit {
         let curentStatus = false;
         let curentCheckCountStatus = 0;
         const selectedScenariosList = this.__getSelectedScenariosList();
-        const permParamMap = {change_status: 'status', delete: 'delete', copy: 'copy', share: 'share'};
+        const permParamMap = {finalize: 'change_status', delete: 'delete', copy: 'copy', share: 'share'};
         for (const i in selectedScenariosList) {
-            // console.log(perm, this.userPermissions, selectedScenariosList, this.__getKey('scenario_permission', this.__getScenario(selectedScenariosList[i]), {}));
-            if (this.in_array(perm, this.__getKey('scenario_permission', this.__getScenario(selectedScenariosList[i]), {}))) {
+            if (this.in_array(perm, this.__getKey('scenario_permission', this.__getScenario(selectedScenariosList[i]), {})) || this.in_array(permParamMap[perm], this.__getKey('scenario_permission', this.__getScenario(selectedScenariosList[i]), {}))) {
                 if (this.userPermissionsData[perm]) {
                     if (check_item) {
                         if (!this.__getKey(permParamMap[perm], this.__getScenario(selectedScenariosList[i]))) {
-                            curentCheckCountStatus ++;
+                            if (perm === 'share') {
+                                if (this.__getKey('shared', this.__getScenario(selectedScenariosList[i])) === 'No') {
+                                    curentCheckCountStatus ++;
+                                }
+                            } else if (perm === 'finalize') {
+                                if (this.__getKey('status', this.__getScenario(selectedScenariosList[i])) === 'Draft') {
+                                    curentCheckCountStatus ++;
+                                }
+                            } else {
+                                curentCheckCountStatus ++;
+                            }
                         }
                     } else {
                         curentCheckCountStatus ++;
@@ -302,20 +356,15 @@ export class ScenariosListComponent implements OnInit {
     }
     // --------------------------------  Scenario details  -------------------------------//
 
-
-    onChangeAuthor(name: string) {
-        console.log('---onChangeAuthor', name);
-    } /////////////////////////////////////////////////////////////////////
     // ------------------------- ------  Scenario Actions  -------------------------------//
     __getScenario(scenario_id: number) {
         let scenario = {};
         for (const i in this.scenariosList) {
             if (this.scenariosList[i].id == scenario_id) {
                 scenario = this.scenariosList[i];
-                break;
+                return scenario;
             }
         }
-        return scenario;
     }
 
     __createScenario(new_scenario: any, parent_id=null) {
@@ -348,6 +397,8 @@ export class ScenariosListComponent implements OnInit {
                     }
                 }
             }
+            // Update user permissions
+            this.__initUserPermissions();
         });
     }
 
@@ -367,7 +418,7 @@ export class ScenariosListComponent implements OnInit {
 
     __getSelectedScenariosList() {
         let selectedScenarios = [];
-        let allElements = document.querySelectorAll('*[id^="sc-table-check-"]');
+        let allElements:any = document.querySelectorAll('*[id^="sc-table-check-"]');
         for (let i = 0; i < allElements.length; i++) {
             if (allElements[i].checked === true) {
                 selectedScenarios.push(parseInt(allElements[i].attributes['data-id'].value));
@@ -395,15 +446,15 @@ export class ScenariosListComponent implements OnInit {
         }
     }
 
-    onToggleScenario(event: any) {
-        let element = event.target;
+    onToggleScenario(event:any) {
+        let element: any = event.target;
         if (element.checked === true) {
             this.__checkScenario(parseInt(element.attributes['data-id'].value));
         } else {
             this.__uncheckScenario(parseInt(element.attributes['data-id'].value));
         }
 
-        let allCheckScenario = document.getElementById('sc-table-all');
+        let allCheckScenario:any = document.getElementById('sc-table-all');
         if (this.selectedScenarios.length === this.scenariosList.length) {
             allCheckScenario.checked = true;
         } else {
@@ -411,7 +462,7 @@ export class ScenariosListComponent implements OnInit {
         }
     }
 
-    onToggleAllScenarios(event: any) {
+    onToggleAllScenarios(event:any) {
         let element = event.target;
         let checked = false;
         this.selectedScenarios = [];
@@ -419,7 +470,7 @@ export class ScenariosListComponent implements OnInit {
             checked = true;
         }
 
-        let allElements = document.querySelectorAll('*[id^="sc-table-check-"]');
+        let allElements:any = document.querySelectorAll('*[id^="sc-table-check-"]');
         for (let i = 0; i < allElements.length; i++) {
             allElements[i].checked = checked;
             if (checked === true) {
@@ -436,40 +487,66 @@ export class ScenariosListComponent implements OnInit {
         try {
             const scenario_id = event.target.attributes['data-id'].value;
             e_scenarios.push(scenario_id);
-        } catch(e) {
-            e_scenarios = this.selectedScenarios;
+        } catch (e) {
+            if (this.__getKey('share', this.userPermissions) === true) {
+                e_scenarios = this.selectedScenarios;
+            }
         }
-
         if (e_scenarios.length > 0) {
             for (let i = 0; i < e_scenarios.length; i++) {
                 const scenario = this.__getScenario(e_scenarios[i]);
-                if(this.in_array("share", this.__getKey('scenario_permission', scenario))) {
+                if (this.in_array("share", this.__getKey('scenario_permission', scenario))) {
                     let new_shared = this.__getKey('shared', scenario) === 'No' ? 'Yes' : 'No';
-                    edit_scenarios.push({id: this.__getKey('id', scenario), modify:[{value: new_shared, parameter: 'shared'}]});
+                    edit_scenarios.push({
+                        id: this.__getKey('id', scenario),
+                        modify: [{value: new_shared, parameter: 'shared'}]
+                    });
                 }
             }
-            this.__editScenario(edit_scenarios);
+            if (edit_scenarios.length > 0) {
+                this.__editScenario(edit_scenarios);
+            }
         }
     }
 
     onToggleStatusScenario(event: any) {
         event.preventDefault();
         let edit_scenarios = [];
-        const scenario_id = event.target.attributes['data-id'].value;
-        let scenario = this.__getScenario(scenario_id);
-        if(this.in_array("change status", scenario.scenario_permission)) {
-            let new_status = scenario.status == 'Final' ? 'Draft' : 'Final';
-            edit_scenarios.push({id: scenario.id, modify:[{value: new_status, parameter: 'status'}]});
-            this.__editScenario(edit_scenarios);
+        let e_scenarios = [];
+
+        try {
+            const scenario_id = event.target.attributes['data-id'].value;
+            e_scenarios.push(scenario_id);
+        } catch (e) {
+            if (this.__getKey('finalize', this.userPermissions) === true) {
+                e_scenarios = this.selectedScenarios;
+            }
+        }
+
+        if (e_scenarios.length > 0) {
+            for (let i = 0; i < e_scenarios.length; i++) {
+                const scenario = this.__getScenario(e_scenarios[i]);
+                if (this.in_array("change_status", this.__getKey('scenario_permission', scenario))) {
+                    let new_status = this.__getKey('status', scenario) === 'Final' ? 'Draft' : 'Final';
+                    edit_scenarios.push({
+                        id: this.__getKey('id', scenario),
+                        modify: [{value: new_status, parameter: 'status'}]
+                    });
+                }
+            }
+            if (edit_scenarios.length > 0) {
+                this.__editScenario(edit_scenarios);
+            }
         }
     }
 
     onToggleFavoritScenario(event: any) {
+        event.preventDefault();
         const edit_scenarios = [];
         const scenario_id = event.target.attributes['data-id'].value;
         let scenario = this.__getScenario(scenario_id);
-        let new_favorit = scenario.favorite == 'Yes' ? 'No' : 'Yes';
-        edit_scenarios.push({id: scenario.id, modify:[{value: new_favorit, parameter: 'favorite'}]});
+        let new_favorit = this.__getKey('favorite', scenario) === 'Yes' ? 'No' : 'Yes';
+        edit_scenarios.push({id: this.__getKey('id', scenario), modify:[{value: new_favorit, parameter: 'favorite'}]});
         this.__editScenario(edit_scenarios);
     }
 
@@ -479,11 +556,13 @@ export class ScenariosListComponent implements OnInit {
         try {
             scenario_id = event.target.attributes['data-id'].value;
         } catch (e) {
-            scenario_id = this.selectedScenarios[0];
+            if (this.__getKey('copy', this.userPermissions) === true) {
+                scenario_id = this.selectedScenarios[0];
+            }
         }
 
         let scenario = this.__getScenario(scenario_id);
-        if(this.in_array("copy", this.__getKey('scenario_permission', scenario))) {
+        if (scenario) {
             const copyScenario = {
                 name: 'Copy ' + this.__getKey('name', scenario),
                 description: this.__getKey('description', scenario),
@@ -498,12 +577,12 @@ export class ScenariosListComponent implements OnInit {
         this.__clearTableRowSelect();
     }
 
-    onDeleteScenario() {
+    onDeleteScenario(event: any) {
         event.preventDefault();
-        if(this.userPermissions.delete === true) {
+        if(this.__getKey('delete', this.userPermissions) === true) {
             this.__deleteScenario(this.selectedScenarios);
         }
-        // Check permissions
+        // Update user permissions
         this.__initUserPermissions();
     }
     // ------------------------- ------  Scenario Actions  -------------------------------//

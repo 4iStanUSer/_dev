@@ -123,36 +123,40 @@
                             </div>
                             <div class="c-top-filter__item c-top-filter__item--favor">
                               <div class="c-checkbox-filter">
-                                <input class="c-checkbox-filter__input" type="checkbox" id="scenarios-favorites">
-                                <label class="c-checkbox-filter__label" for="scenarios-favorites"><span>Favorites ({{getFavoriteListLength()}})</span></label>
+                                <input *ngIf="filterCount.favorite === 0" (change)="onFilter($event, 'favorite', 'Yes')" class="c-checkbox-filter__input" type="checkbox" id="scenarios-favorites" disabled="disabled">
+                                <input *ngIf="filterCount.favorite !== 0" (change)="onFilter($event, 'favorite', 'Yes')" class="c-checkbox-filter__input" type="checkbox" id="scenarios-favorites">
+                                <label [ngClass]="{'checkbox--disabled': filterCount.favorite === 0}" [ngStyle]="{'color': filterCount.favorite !== 0 ? '' : 'rgba(148,161,181,0.9)', 'cursor': filterCount.favorite !== 0 ? 'pointer' : 'default'}" class="c-checkbox-filter__label" for="scenarios-favorites"><span>Favorites ({{filterCount.favorite}})</span></label>
                               </div>
-                              <select (change)="onChangeAuthor($event.target.value)" class="c-select c-top-filter__author">
-                                    <option *ngFor="let author of getAuthorsList()">{{author}}</option>
+                              <select (change)="onChangeAuthor($event)" class="c-select c-top-filter__author">
+                                    <option value="">---------------------------</option>
+                                    <option *ngFor="let author of filters.authorsList" value="{{author}}">{{author}}</option>
                               </select>
                             </div>
                             <div class="c-top-filter__item c-top-filter__item--checks">
                               <div class="c-checkbox-filter c-top-filter__checks">
-                                <input class="c-checkbox-filter__input" type="checkbox" id="scenarios-shared">
-                                <label class="c-checkbox-filter__label" for="scenarios-shared"><span>Shared ({{getSharedCount()}})</span></label>
+                                  <input *ngIf="filterCount.shared === 0" (change)="onFilter($event, 'shared', 'Yes')" class="c-checkbox-filter__input" type="checkbox" id="scenarios-shared" disabled="disabled">
+                                  <input *ngIf="filterCount.shared !== 0" (change)="onFilter($event, 'shared', 'Yes')" class="c-checkbox-filter__input" type="checkbox" id="scenarios-shared">
+                                <label [ngClass]="{'checkbox--disabled': filterCount.shared === 0}" [ngStyle]="{'color': filterCount.shared !== 0 ? '' : 'rgba(148,161,181,0.9)', 'cursor': filterCount.shared !== 0 ? 'pointer' : 'default'}" class="c-checkbox-filter__label" for="scenarios-shared"><span>Shared ({{filterCount.shared}})</span></label>
                               </div>
                               <div class="c-checkbox-filter c-top-filter__checks">
-                                <input class="c-checkbox-filter__input" type="checkbox" id="scenarios-local">
-                                <label class="c-checkbox-filter__label" for="scenarios-local"><span>Local ({{getLocalCount()}})</span></label>
+                                  <input *ngIf="filterCount.local === 0" (change)="onFilter($event, 'shared', 'No')" class="c-checkbox-filter__input" type="checkbox" id="scenarios-local" disabled="disabled">
+                                  <input *ngIf="filterCount.local !== 0" (change)="onFilter($event, 'shared', 'No')" class="c-checkbox-filter__input" type="checkbox" id="scenarios-local">
+                                <label [ngClass]="{'checkbox--disabled': filterCount.local === 0}" [ngStyle]="{'color': filterCount.local !== 0 ? '' : 'rgba(148,161,181,0.9)', 'cursor': filterCount.local !== 0 ? 'pointer' : 'default'}" class="c-checkbox-filter__label" for="scenarios-local"><span>Local ({{filterCount.local}})</span></label>
                               </div>
-                              <div class="c-checkbox-filter c-top-filter__checks">
-                                <input class="c-checkbox-filter__input" type="checkbox" id="scenarios-drafts">
-                                <label class="c-checkbox-filter__label" for="scenarios-drafts"><span>Drafts ({{getDraftsStatusCount()}})</span></label>
+                            </div>
+                            <div class="c-top-filter__item c-top-filter__item--checks">
+                                <div class="c-checkbox-filter c-top-filter__checks">
+                                  <input *ngIf="filterCount.drafts === 0" (change)="onFilter($event, 'status', 'Draft')" class="c-checkbox-filter__input" type="checkbox" id="scenarios-drafts" disabled="disabled">
+                                  <input *ngIf="filterCount.drafts !== 0" (change)="onFilter($event, 'status', 'Draft')" class="c-checkbox-filter__input" type="checkbox" id="scenarios-drafts">
+                                <label [ngClass]="{'checkbox--disabled': filterCount.drafts === 0}" [ngStyle]="{'color': filterCount.drafts !== 0 ? '' : 'rgba(148,161,181,0.9)', 'cursor': filterCount.drafts !== 0 ? 'pointer' : 'default'}" class="c-checkbox-filter__label" for="scenarios-drafts"><span>Drafts ({{filterCount.drafts}})</span></label>
                               </div>
-                              <div class="c-checkbox-filter c-top-filter__checks">
-                                <input class="c-checkbox-filter__input" type="checkbox" id="scenarios-final">
-                                <label class="c-checkbox-filter__label" for="scenarios-final"><span>Final ({{getFinalStatusCount()}})</span></label>
+                                <div class="c-checkbox-filter c-top-filter__checks">
+                                  <input *ngIf="filterCount.final === 0" (change)="onFilter($event, 'status', 'Final')"  class="c-checkbox-filter__input" type="checkbox" id="scenarios-final" disabled="disabled">
+                                  <input *ngIf="filterCount.final !== 0" (change)="onFilter($event, 'status', 'Final')"  class="c-checkbox-filter__input" type="checkbox" id="scenarios-final">
+                                <label [ngClass]="{'checkbox--disabled': filterCount.final === 0}" [ngStyle]="{'color': filterCount.final !== 0 ? '' : 'rgba(148,161,181,0.9)', 'cursor': filterCount.final !== 0 ? 'pointer' : 'default'}" class="c-checkbox-filter__label" for="scenarios-final"><span>Final ({{filterCount.final}})</span></label>
                               </div>
                             </div>
                             <div class="c-top-filter__item c-top-filter__item--search">
-                              <div class="c-checkbox-filter">
-                                <input class="c-checkbox-filter__input" type="checkbox" id="scenarios-date">
-                                <label class="c-checkbox-filter__label" for="scenarios-date"><span>Favorites ({{getFavoriteListLength()}})</span></label>
-                              </div>
                               <div class="c-select c-top-filter__date" id="scenariosDateSelect">(Q1, 2015 - Q3, 2016)
                                 <!--popup-->
                                 <div class="c-popup c-popup--date">
@@ -204,7 +208,7 @@
                     <a [ngStyle]="{'opacity': userPermissions.create ? '' : '0.4', 'cursor': userPermissions.create ? 'pointer' : 'default'}" class="c-service-pane__item c-service-pane__item--create" href="#">
                         <span class="c-service-pane__border">Create New</span>
                     </a>
-                    <a [ngStyle]="{'opacity': finalizePermissionStatus ? '' : '0.4', 'cursor': finalizePermissionStatus ? 'pointer' : 'default'}" class="c-service-pane__item c-service-pane__item--finalize" href="#">
+                    <a (click)="onToggleStatusScenario($event)" [ngStyle]="{'opacity': userPermissions.finalize ? '' : '0.4', 'cursor': userPermissions.finalize ? 'pointer' : 'default'}" class="c-service-pane__item c-service-pane__item--finalize" href="#">
                         <span class="c-service-pane__border">Finalize</span>
                     </a>
                     <a (click)="onToggleSharedScenario($event)" [ngStyle]="{'opacity': userPermissions.share ? '' : '0.4', 'cursor': userPermissions.share ? 'pointer' : 'default'}" class="c-service-pane__item c-service-pane__item--share" href="#">
@@ -213,7 +217,7 @@
                     <a (click)="onCopyScenario($event)" [ngStyle]="{'opacity': userPermissions.copy ? '' : '0.4', 'cursor': userPermissions.copy ? 'pointer' : 'default'}" class="c-service-pane__item c-service-pane__item--duplicate" href="#">
                         <span class="c-service-pane__border">Duplicate</span>
                     </a>
-                    <a (click)="onDeleteScenario()" [ngStyle]="{'opacity': userPermissions.delete ? '' : '0.4', 'cursor': userPermissions.delete ? 'pointer' : 'default'}" class="c-service-pane__item c-service-pane__item--delete" href="#">
+                    <a (click)="onDeleteScenario($event)" [ngStyle]="{'opacity': userPermissions.delete ? '' : '0.4', 'cursor': userPermissions.delete ? 'pointer' : 'default'}" class="c-service-pane__item c-service-pane__item--delete" href="#">
                         <span class="c-service-pane__border">Delete</span>
                     </a>
                 </div>

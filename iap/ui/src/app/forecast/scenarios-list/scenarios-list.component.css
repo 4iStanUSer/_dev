@@ -338,6 +338,9 @@
   background-color: transparent;
   border: solid 1px #626970;
 }
+.checkbox--disabled:after {
+    background-color: #626970;
+}
 .c-checkbox-filter__label:after--transparent:after {
   background-color: transparent;
 }
@@ -1128,11 +1131,11 @@
   width: 8%;
 }
 .c-top-filter__item--favor {
-  width: 21%;
+  width: 30%;
   min-width: 188px;
 }
 .c-top-filter__item--checks {
-  width: 23%;
+  width: 14%;
   -webkit-flex-wrap: wrap;
       -ms-flex-wrap: wrap;
           flex-wrap: wrap;
@@ -1145,8 +1148,8 @@
   font-size: 14px;
 }
 .c-top-filter__checks {
-  width: 45%;
-  margin-left: 5%;
+  width: 85%;
+  margin: 0 5% 0 10%;
 }
 .c-top-filter__author {
   margin-left: 5px;
