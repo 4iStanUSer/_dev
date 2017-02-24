@@ -18,6 +18,7 @@ user_scenario_table = Table('user_scenarios', Base.metadata,
     Column('user_id', Integer, ForeignKey('users.id'))
 )
 
+
 class Scenario(Base):
 
     __tablename__ = 'scenarios'
