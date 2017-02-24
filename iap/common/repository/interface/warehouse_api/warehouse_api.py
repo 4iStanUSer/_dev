@@ -39,7 +39,12 @@ class Project(IProject, IAdmin):
 
 
     def save(self):
-        pass
+        self.save_to_df(self.project_name)
+        for ent in self.entities:
+            ent._save(self.project_name)
+        return
+
+
 
 
 class Entity(Project, IEntity):
@@ -50,7 +55,6 @@ class Entity(Project, IEntity):
         self.childs = []
         self.parents = []
         self.vars = {}
-
         self._fill_attributes()
 
     def _fill_attributes(self):
@@ -95,6 +99,12 @@ class Entity(Project, IEntity):
     def update_var(self):
         pass
 
+    def _save(self, project_name):
+        self.save_to_df(project_name, self.ent_path)
+        for var in vars.values():
+            var._save(project_name, self.ent_path)
+
+
 
 class Variable(Entity, IVariable):
 
@@ -120,6 +130,11 @@ class Variable(Entity, IVariable):
             del self[time_scale_name]
         return
 
+    def _save(self, project_name, ent_path):
+        self.save_to_df(project_name, ent_path, self.var_name)
+        for time_scale in self.time_scale.values():
+            time_scale._save(project_name, ent_path, self.var_name)
+
 class Timescale(Variable, ITimeScale):
 
     def __init__(self, time_scale_name):
@@ -142,6 +157,10 @@ class Timescale(Variable, ITimeScale):
         if ts_name in self.timeseries.keys():
             del self.timeseries[ts_name]
 
+    def _save(self, project_name, ent_path, var_name):
+        self.save_to_df(project_name, ent_path, var_name, self.time_scale_name)
+        for timeseries in self.timeseries.values():
+            timeseries._save(project_name, ent_path, var_name, self.time_scale_name)
 
 class TimeSeries(Timescale, ITimeSeries):
 
@@ -170,11 +189,13 @@ class TimeSeries(Timescale, ITimeSeries):
         pass
 
     def set_by_stamp(self, start_stamp=None, end_stamp=None, len=None, values=None):
-
+        pass
 
     def set_by_index(self, start_index=None, end_index=None, len=None, values=None):
         pass
 
+    def _save(self, project_name, ent_path, var_name, time_scale_name):
+        self.save_to_df(project_name, ent_path, var_name, time_scale_name, self.name, self.values, self.time_points)
 
 
 
