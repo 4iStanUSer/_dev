@@ -39,8 +39,6 @@ class Project(IProject, IAdmin):
 
 
     def save(self):
-        pass
-
 
 class Entity(Project, IEntity):
 
@@ -50,7 +48,6 @@ class Entity(Project, IEntity):
         self.childs = []
         self.parents = []
         self.vars = {}
-
         self._fill_attributes()
 
     def _fill_attributes(self):

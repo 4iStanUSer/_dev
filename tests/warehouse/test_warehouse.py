@@ -1,12 +1,14 @@
 from iap.common.repository.models_managers.warehouse import Warehouse
+
 import pandas as pd
 from timeit import default_timer as timer
 from sqlalchemy import create_engine
 
+
 path_db_engine = "sqlite:///C:/Users/Alex/Desktop/iap/IAP.sqlite"
+
 path_to_files = "C:/Users/Alex/Desktop/iap/data_storage/data_lake" \
                 "/JJOralCare/JJOralCare_Sales.csv"
-path_to_files = "C:/Users/Alex/Desktop/airbnb_usa_top_cities_by_population.json"
 
 def test_warehouse_write():
 

@@ -13,8 +13,8 @@ class IStorage:
 
 class Storage(IStorage):
 
-    dataframe = pd.DataFrame(project = None, entity=None, variable = None, time_scale = None,
-                             time_series = None, value = None)
+    dataframe = pd.DataFrame(data = dict(Project = None, Entity=None, Variable = None, TimeScale = None,
+                             TimeSeries = None, Value = None))
 
     def __init__(self):
         if hasattr(self, '_initialized'):
@@ -24,8 +24,6 @@ class Storage(IStorage):
     @property
     def data_frame(self):
         return self.data_frame
-
-
 
 
     def _save_data_frame(self, project_name):
@@ -44,109 +42,170 @@ class Storage(IStorage):
 
 class IProject(Storage):
 
-    def _get_entity(self, project_name):
+    def _get_entities(self, project_name):
         #provide operation around dataframe
-        pass
+        # provide operation around dataframe
+        project_info = self.data_frame.loc(lambda df: (df.Project == project_name))
+        return project_info
 
-    def _add_entity(self, project_name):
+    def _update_project(self, project_name):
         #provide operation around dataframe
-        pass
+        project_info = self.data_frame.loc(lambda df: (df.Project == project_name))
+        return project_info
 
-    def _update_entity(self, project_name):
+    def _delete_project(self, project_name):
         #provide operation around dataframe
-        pass
-
-    def _delete_entity(self, projetc_name):
-        #provide operation around dataframe
-        pass
+        project_info = self.data_frame.loc(lambda df: (df.Project == project_name))
+        return project_info
 
 class IEntity(Storage):
 
-    def _get_variable(self, ent_path, var_name):
+
+    def _get_variables(self, entity_path):
+        # provide operation around dataframe
+        variable_info = self.data_frame.loc(lambda df: (df.Enity == entity_path))
+        return variable_info
+
+    def _get_childs(self, entity_path):
+        variable_info = self.data_frame.loc(lambda df: (df.Enity == entity_path))
+        return variable_info
+
+    def _get_parents(self, entity_path):
+        variable_info = self.data_frame.loc(lambda df: (df.Enity == entity_path))
+        return variable_info
+
+    def _add_entity(self, entity_path):
         #provide operation around dataframe
-        return var_name
+        variable_info = self.data_frame.loc(lambda df: (df.Enity == entity_path))
+        return variable_info
 
-    def _get_variables(self, ent_path):
-        pass
-
-    def _get_childs(self, ent_path):
-        pass
-
-    def _get_parents(self, ent_path):
-        pass
-
-    def _add_variable(self, var_name):
+    def _update_entity(self, entity_path):
         #provide operation around dataframe
-        return var_name
+        variable_info = self.data_frame.loc(lambda df: (df.Enity == entity_path))
+        return variable_info
 
-    def _update_variable(self, var_name):
+    def _delete_entity(self, entity_path):
         #provide operation around dataframe
-        return var_name
+        variable_info = self.data_frame.loc(lambda df: (df.Enity == entity_path))
+        return variable_info
 
-    def _delete_variable(self, var_name):
-        #provide operation around dataframe
-        return var_name
 
 class IVariable(Storage):
 
-    def _get_variable(self, var_name):
+    def _get_variable(self, var_name, entity_path):
         #provide operation around dataframe
-        return var_name
+        variable_info = self.data_frame.loc(lambda df:
+                                                (df.Enity == entity_path) &
+                                                (df.Variable == var_name)
+                                            )
 
-    def _add_variable(self, var_name):
-        #provide operation around dataframe
-        return var_name
+        return variable_info
 
-    def _update_variable(self, var_name):
+    def _add_variable(self, var_name, entity_path):
         #provide operation around dataframe
-        return var_name
+        df = pd.DataFrame(data=dict(Entity=entity_path, Variable=var_name))
+        self.data_frame.append(df, ignore_index=True)
+        return
 
-    def _delete_variable(self, var_name):
+    def _update_variable(self, entity_path, var_name, parameter, value):
         #provide operation around dataframe
-        return var_name
+        df = pd.DataFrame(data=dict(Entity=entity_path, Variable=var_name))
+        df.update(parameter, value)
+        #TODO provide updating
+        return
+
+    def _delete_variable(self, entity_path, var_name):
+        #provide operation around dataframe
+        #provide operation around dataframe
+        df = pd.DataFrame(data=dict(Entity=entity_path, Variable=var_name))
+        # TODO provide deleting
+        return
 
 class ITimeScale(Storage):
 
-    def _get_time_scale(self, var_name):
+    def _get_time_scale(self, time_scale_name, var_name, entity_path):
         #provide operation around dataframe
-        return var_name
+        ts_info = self.data_frame.loc(
+                                        lambda df:
+                                             (df.Enity == entity_path) &
+                                             (df.Variable == var_name) &
+                                             (df.TimeScale == time_scale_name)
+                                      )
 
-    def _add_time_scale(self, var_name):
-        #provide operation around dataframe
-        return var_name
+        return ts_info
 
-    def _update_time_scale(self, var_name):
+    def _add_time_scale(self, time_scale_name, var_name, entity_path):
         #provide operation around dataframe
-        return var_name
+        df = pd.DataFrame(data = dict(Entity = entity_path, Variable=var_name, TimeScale =time_scale_name))
+        self.data_frame.append(df, ignore_index=True)
+        return
 
-    def _delete_time_scale(self, var_name):
+    def _update_time_scale(self, time_scale_name, var_name, entity_path, parameter, value):
         #provide operation around dataframe
-        return var_name
+        df = pd.DataFrame(data=dict(Entity=entity_path, Variable=var_name, TimeScale=time_scale_name))
+        df.update(parameter, value)
+        #TODO provide updating
+        return
+
+    def _delete_time_scale(self, time_scale_name, var_name, entity_path, parameter, value):
+        #provide operation around dataframe
+        df = pd.DataFrame(data=dict(Entity=entity_path, Variable=var_name, TimeScale=time_scale_name))
+        df.update(parameter, value)
+        #TODO provide deleting
+        return
+
 
 class ITimeSeries(Storage):
+    """
+    Interface for TimeSeries
+    Object created to communicate with storage dataset
+    For CRUD operation with TimeSeries Obj
+    """
 
-    def _get_time_serie(self, var_name):
+    def get_time_series(self, time_scale_name, variable_name, entity_path):
         #provide operation around dataframe
-        return var_name
 
-    def _add_time_series(self, time_series, time_scale_name, variable_name, entity_path):
+        ts_info = self.data_frame.loc(lambda df: (df.Enity == entity_path) &
+                                                 (df.Variable == variable_name) &
+                                                 (df.Variable == time_scale_name) &
+                                                 (df.Variable == variable_name))
 
-        self.data_frame.
-        self.data_frame.update()
-        #connect toddf
+        return ts_info
 
 
-    def _add_time_series(self, var_name):
+
+    def get_time_serie(self, time_series, time_scale_name, variable_name, entity_path):
+
+        ts_info = self.data_frame.loc(lambda df: (df.Enity == entity_path) &
+                                       (df.Variable == variable_name) &
+                                       (df.Variable == time_scale_name) &
+                                       (df.Variable == variable_name))
+
+        return ts_info
+
+    def _add_time_series(self, time_serie, time_scale_name, variable_name, entity_path):
+
         #provide operation around dataframe
-        return var_name
+        serie = pd.DataFrame(Entity = entity_path, Variable = variable_name, TimeScale = time_scale_name,
+                          TimeSeries = time_serie)
 
-    def _update_time_series(self, var_name):
-        #provide operation around dataframe
-        return var_name
+        self.df.append(serie, ignore_index=True)
+        return
 
-    def _delete_timeseries(self, var_name):
+    def _update_time_serie(self, time_serie, time_scale_name, variable_name, entity_path, property, value):
+
+        serie = self.get_time_serie(time_serie, time_scale_name, variable_name, entity_path)
+        #TODO add update series
+        serie.update(property, value)
+        return
         #provide operation around dataframe
-        return var_name
+
+    def _delete_timeseries(self, time_serie, time_scale_name, variable_name, entity_path, property, value):
+        #provide operation around dataframe
+        serie = self.get_time_serie(time_serie, time_scale_name, variable_name, entity_path)
+        self.data_frame.drop(serie)
+        #TODO add drop
+        return
 
 class IAdmin(Storage):
 
