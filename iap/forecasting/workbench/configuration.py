@@ -98,6 +98,7 @@ class DataConfiguration:
                 elif name == 'view_properties':
                     ent_config.load_view_vars(item)
 
+
     def get_property(self, prop_name, **kwargs):
         ent_options = self._get_entity_config(**kwargs)
         prop_val = ent_options.properties.get(prop_name)
@@ -253,10 +254,10 @@ class Config:
         return
 
     def load_dueton_tree(self, item):
-        if item['dueton'] not in self.duetons:
-            self.dueton[item['dueton']] = []
-        self.dueton[item['dueton']]\
-            .append(tuple([item['dueton'], item['parent_dueton']]))
+        if item['id'] not in self.duetons.keys():
+            self.duetons[item['id']] = []
+        self.duetons[item['id']]\
+            .append(tuple([item['id'], item['parent_id']]))
 
     def load_wh_inputs(self, inputs):
         self.wh_inputs = copy.copy(inputs)

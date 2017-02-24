@@ -7,8 +7,8 @@ from ...common import runtime_storage as rt
 TOOL = 'forecast'
 
 
+@forbidden_view
 def get_dashboard_data(req):
-    # Get parameters from request.
     try:
         user_id = req.user
         lang = rt.language(user_id)
@@ -16,19 +16,20 @@ def get_dashboard_data(req):
         msg = ErrorManager.get_error_msg(e, lang)
         return send_error_response(msg)
     try:
-        lang = rt.get_state(user_id).language
         project = rt.get_state(user_id)._project_id
         wb = rt.get_wb(user_id)
         session = req.dbsession
         permission_tree = build_permission_tree(session, project_name=project)
-        data = data_service.get_entity_data(permission_tree, project, wb.default_container, wb.data_config,
-                                wb.selection, lang)
-        return send_success_response(data)
+        data = data_service.get_entity_data(permission_tree=permission_tree, container=wb.default_container,
+                                        config=wb.data_config, entities_ids=wb.selection, lang=lang)
     except Exception as e:
         msg = req.get_error_msg(e, lang)
         return send_error_response(msg)
+    else:
+        return send_success_response(data)
 
 
+@forbidden_view
 def get_cagrs_for_period(req):
     # Get parameters from request.
     try:
@@ -50,6 +51,7 @@ def get_cagrs_for_period(req):
         return send_error_response(msg)
 
 
+@forbidden_view
 def get_decomposition_for_period(req):
     """
     Return decomposition data for period

@@ -83,21 +83,31 @@ perm_data = {
     "mask": '1,1,1'
 
   },
+ {
+    "out_path": "canada*-*mouthwash",
+    "in_path": "unit_price",
+    "mask": '1,1'
+  },
   {
     "out_path": "canada*-*mouthwash",
-    "in_path": "population-annual-2012:2016",
+    "in_path": "population-annual-2:3",
     "mask": '1,1,1'
 
   },
   {
     "out_path": "canada*-*mouthwash",
-    "in_path": "eq_price-annual-2012:2013",
+    "in_path": "media",
+    "mask": ',1'
+  },
+  {
+    "out_path": "canada*-*mouthwash",
+    "in_path": "eq_price-annual-4:5",
     "mask": '1,1,1'
 
   },
   {
     "out_path": "canada*-*mouthwash",
-    "in_path": "eq_price-annual-2015:2016",
+    "in_path": "eq_price-annual-1:2",
     "mask": '1,1,1'
 
   }

@@ -24,6 +24,7 @@ def jj_oral_care_sales(table, config, warehouse):
     col_var_name = config.getint('col_var_name')
     col_var_metric = config.getint('col_var_metric')
     # Get first time point
+    print(table)
     header = next(table, None)
     text_date = header[col_data_start].strip()
     start_date = datetime.datetime.strptime(text_date, '%Y')
@@ -81,10 +82,13 @@ def jj_oral_care_trends(table, config, warehouse):
         trend_name = row[col_trend_name].strip()
         values = [float(empty_to_zero(row[x].strip()))
                   for x in range(col_data_start, len(row))]
+
+
         # Add data to DB
         entity = warehouse.get_entity([country])
         if entity is None:
             entity = warehouse.add_entity([country], [Meta('Geography', 'Country')])
+
         var = warehouse.get_ent_variable(entity, trend_name)
         #var = entity.get_variable(trend_name)
         if var is None:
@@ -94,3 +98,5 @@ def jj_oral_care_trends(table, config, warehouse):
             time_series = warehouse.force_var_time_series(var, timescale)
         warehouse.set_ts_values(time_series, start_point, values)
     return
+
+

@@ -1,11 +1,11 @@
 from pyramid.session import SignedCookieSessionFactory
 from sqlalchemy.orm.exc import NoResultFound
 from ..common.helper import send_error_response
-from iap.common.repository.models.access import User, DataPermissionAccess, Role, Feature
-from iap.common.repository.models.warehouse import Entity
+from iap.common.repository.models.access import User
+from .exceptions import IncorrectPassword
 from pyramid.interfaces import IAuthorizationPolicy
-from .error_manager import ErrorManager
 from zope.interface import implementer
+from .exceptions import *
 from functools import wraps
 import jwt
 
@@ -22,31 +22,48 @@ def forbidden_view(f):
 
     """
     def deco(request):
-        user_id = get_user(request)
-        print("User id", user_id)
-        if user_id!=None and check_session(request)==True:
-            return f(request)
-        else:
-            return send_error_response('Unauthorised')
+        try:
+            user_id = get_user(request)
+            issession = check_session(request)
+            if user_id!=None and issession==True:
+                return f(request)
+        except WrongRequestMethod:
+            msg = request.get_error_msg('RequestError')
+            return send_error_response(msg)
+        except NoResultFound:
+            msg = request.get_error_msg('NoResultFound')
+            return send_error_response(msg)
+        except KeyError:
+            msg = request.get_error_msg('Unauthorised')
+            return send_error_response(msg)
+        except AttributeError:
+            msg = request.get_error_msg('Unauthorised')
+            return send_error_response(msg)
+        except jwt.exceptions.DecodeError:
+            msg = request.get_error_msg('TokenError')
+            return send_error_response(msg)
     return deco
 
 
-def authorise(req):
+
+def authorise(session, user_name, password):
     """Authorise function that check user existense
         # user.check_password(password)
         # user = service.check_password(login, password)
     """
     try:
-        username = req.json_body['data']['username']
-        password = req.json_body['data']['password']
-        user = req.dbsession.query(User).filter(User.email == username).one()
+        user = session.query(User).filter(User.email == user_name).one()
     except NoResultFound:
-        return None
+        raise NoResultFound
+    except AttributeError:
+        raise AttributeError
+    except TypeError:
+        raise TypeError
     else:
         if user.check_password(password):
-            return user
+            return user.id, user.email
         else:
-            return None
+            raise IncorrectPassword
 
 
 def check_session(request):
@@ -58,13 +75,22 @@ def check_session(request):
     :rtype: int
     """
     #   add exception on non existen  id,login in token
-    session = request.session
-    if 'token' in session:
-        if request.json_body['X-Token'] == session['token']:
-            return True
-        else:
-            return True#TODO change on False
-    return True
+    try:
+        session = request.session
+        if 'token' in session:
+            if request.json_body['X-Token'] == session['token']:
+                return True
+            else:
+                return True#TODO change on False
+    except JSONDecodeError:
+        raise WrongRequestMethod
+    except AttributeError:
+        return True
+    except KeyError:
+        raise KeyError
+    else:
+        return True
+
 
 
 def get_user(request):
@@ -84,12 +110,16 @@ def get_user(request):
         login = token_data['login']
         user = request.dbsession.query(User).filter(User.id == user_id and User.email == login).one()
         # user = service.get_user_by_id(request,user_id, login)
+    except JSONDecodeError:
+        raise WrongRequestMethod
     except NoResultFound:
         return 2#TODO change on None
     except jwt.exceptions.DecodeError:
         return 2#TODO change on None
     except KeyError:
-        return None
+        raise KeyError
+    except Exception:
+        raise Exception
     else:
         return 2#TODO change on None user.id
 

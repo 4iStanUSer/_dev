@@ -3,14 +3,13 @@ from pyramid.renderers import render_to_response
 from pyramid import threadlocal
 from pyramid.paster import get_appsettings
 from ...common.helper import send_success_response, send_error_response
-from ..security import get_user
 from ...common.tools_config import get_page_config
-from ...common.error_manager import ErrorManager
-from ...common import exceptions as ex
+from ...common.exceptions import *
 from ...common import runtime_storage as rt
 from ...common import persistent_storage as pt
 from ..services import common_info as common_getter
 from ..security import *
+
 
 def index_view(req):
     return render_to_response('iap.common:templates/index.jinja2',
@@ -27,14 +26,21 @@ def check_logged_in(req):
     :rtype: Dict[str, bool]
 
     """
-    user_id = get_user(req)
-    session_flag = True#check_session(req)
-
-    if user_id != None and session_flag == True:
-        token = req.create_jwt_token(2, login="default_user")
-        # new_token = req.session['token']
-        return send_success_response(token)
+    try:
+        user_id = get_user(req)
+        session_flag = True#check_session(req)
+    except JSONDecodeError:
+        msg = req.get_error_msg("RequestError")
+        return send_error_response(msg)
+    except KeyError:
+        msg = req.get_error_msg("RequestError")
+        return send_error_response(msg)
     else:
+        if user_id != None and session_flag == True:
+            token = req.create_jwt_token(2, login="default_user")
+            # new_token = req.session['token']
+            return send_success_response(token)
+    finally:
         #msg = req.get_error_msg('default', "NotFound")
         #return send_error_response("Unauthorised_{0}".format(msg))
         #TODO send_error_responce
@@ -51,25 +57,45 @@ def login(req):
     :rtype: Dict[str, str]
 
     """
-    user = authorise(req)
-    if user != None:
-        user_id = user.id
-        login = user.email
+    try:
+        username = req.json_body['data']['username']
+        password = req.json_body['data']['password']
+    except KeyError:
+        msg = req.get_error_msg("RequestError")
+        return send_error_response(msg)
+    except JSONDecodeError:
+        msg = req.get_error_msg("RequestError")
+        return send_error_response(msg)
+    try:
+        session = req.dbsession
+        user_id, login = authorise(session, user_name=username, password=password)
+    except NoResultFound as e:
+        msg = req.get_error_msg("NoResultFound")
+        return send_error_response("Unauthorised_{0}".format(msg))
+    except AttributeError:
+        msg = req.get_error_msg("NotFound")
+        return send_error_response("Unauthorised_{0}".format(msg))
+    except IncorrectPassword:
+        msg = req.get_error_msg("IncorrectPassword")
+        return send_error_response("Unauthorised_{0}".format(msg))
+    else:
         token = req.create_jwt_token(user_id, login=login)
         req.session['token'] = token
         return send_success_response(token)
-    else:
-        msg = req.get_error_msg("NotFound")
-        return send_error_response("Unauthorised_{0}".format(msg))
 
 
 def logout(req):
     """
     Provide mechanism for session leaving
     """
-    if 'token' in req.session:
-        del req.session['token']
-    return send_success_response("Session expired")
+    try:
+        if 'token' in req.session:
+            del req.session['token']
+    except KeyError:
+        msg = req.get_error_msg("NotFound")
+        return send_error_response("Unauthorised_{0}".format(msg))
+    else:
+        return send_success_response("Session expired")
 
 
 def get_routing_config(req):
@@ -78,7 +104,7 @@ def get_routing_config(req):
     }
     return send_success_response(config)
 
-
+@forbidden_view
 def get_page_configuration(req):
     """
 
@@ -119,7 +145,7 @@ def get_page_configuration(req):
         msg = req.get_error_msg(e, language)
         return send_error_response(msg)
 
-
+@forbidden_view
 def set_language(req):
     """
     View for set language in runtime storage
@@ -143,6 +169,7 @@ def set_language(req):
         return send_error_response(msg)
 
 
+@forbidden_view
 def get_tools_with_projects(req):
     """
     Return all projects and tool information
@@ -173,6 +200,7 @@ def get_tools_with_projects(req):
         return send_error_response(msg)
 
 
+@forbidden_view
 def get_data_for_header(req):
     """
     View for url - get_data_for_header(request)
@@ -196,10 +224,9 @@ def get_data_for_header(req):
     try:
         user_id = req.user
     except KeyError as e:
-        msg = ErrorManager.get_error_msg(e)
+        msg = req.get_error_msg(e)
         return send_error_response(msg)
     try:
-
         header_data = dict()
         lang = rt.get_state(user_id).language
         #TODO change on database access
@@ -208,10 +235,10 @@ def get_data_for_header(req):
         header_data['client'] = common_getter.get_client_info(pt, user_id, lang)
         return send_success_response(header_data)
     except Exception as e:
-        msg = ErrorManager.get_error_msg(e, lang=lang)
+        msg = req.get_error_msg(e, lang=lang)
         return send_error_response(msg)
 
-
+@forbidden_view
 def set_project_selection(req):
     """Set project selector
 
