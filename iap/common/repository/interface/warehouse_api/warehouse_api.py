@@ -1,5 +1,8 @@
 import pandas as pd
-from .iwarehouse import IProject, IEntity, ITimeScale, ITimeSeries, IVariable, IAdmin
+from .iwarehouse import IProject, IEntity, ITimeScale, ITimeSeries, IVariable, Storage
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
 
 class IProperties:
     pass
@@ -7,21 +10,16 @@ class IProperties:
 class Properties:
     pass
 
-class Project(IProject, IAdmin):
-
+class Project(Storage):
 
     def __init__(self, name):
-
         self.entities = {}
-        self.project_name=name
-
+        self.project_name = name
 
     def get_entities(self):
-        #return list of entities
         return self.entities
 
     def add_entity(self, entity):
-        #add entity to
         self.entities[entity.path] = entity
 
     def get_entity_by_path(self, ent_path):
@@ -31,26 +29,47 @@ class Project(IProject, IAdmin):
             return None
 
     def delete_entities(self, entity_path):
-        #delete entity from project entity
         if entity_path in self.entities.keys():
             del self.entities[entity_path]
 
+    def read(self):
+        """
+
+        :return:
+        :rtype: None
+        """
+        storage = Storage()
+        storage.read_from_local_storage(self.project_name)
+        ents = storage.process_data_frame(self.project_name)
+        self.entities = ents
 
     def save(self):
-        self.save_to_df(self.project_name)
-        for ent in self.entities:
-            ent._save(self.project_name)
-        return
+        """
 
-class Entity(Project, IEntity):
+        :return:
+        :rtype:
+        """
+        storage = Storage()
+
+
+        for ent_path, ent in self.entities.items():
+            logging.info('Entity Save To DataFrame {0}'.format(ent_path))
+            ent._save(storage, project_name=self.project_name)
+
+        storage.save_to_local_storage(project_name=self.project_name)
+
+class Entity(Project):
 
     def __init__(self, path):
 
-        self.path = path
+        if type(path) is list:
+            self.path = "*".join(path)
+        else:
+            self.path = path
+
         self.childs = []
         self.parents = []
         self.vars = {}
-        self._fill_attributes()
 
     def _fill_attributes(self):
 
@@ -80,6 +99,9 @@ class Entity(Project, IEntity):
     def get_vars(self):
         return self.vars
 
+    def add_var(self, var):
+        self.vars[var.name] = var
+
     def get_var_by_name(self, var_name):
         if var_name in self.vars.keys():
             return self.vars[var_name]
@@ -90,27 +112,41 @@ class Entity(Project, IEntity):
         if var_name in self.vars.keys():
             del self.vars[var_name]
 
-
     def update_var(self):
         pass
 
-    def _save(self, project_name):
-        self.save_to_df(project_name, self.ent_path)
-        for var in vars.values():
-            var._save(project_name, self.ent_path)
+    def _save(self, storage, project_name):
+        """
 
-class Variable(Entity, IVariable):
+        :param storage:
+        :type storage: iap.common.repository.interface.warehouse_api.iwarehouse.Storage
+        :param project_name:
+        :type project_name: str
+        :return:
+        :rtype: None
+        """
 
-    def __init__(self, var_name):
-        self.var_name = var_name
-        self.time_scale = {}
+        if self.vars!=dict():
+            for name, var in self.vars.items():
+                logging.info('Process Variable {0}'.format(name))
+                var._save(storage, project_name=project_name, ent_path=self.path)
+        else:
+            logging.info('Entity Saved To LocalStorage {0}'.format(self.path))
+            storage._save_data_frame(project_name=project_name, entity_path=self.path)
 
-    def add_time_scale(self, time_scale):
-        self.time_scale[time_scale.name] = time_scale
+
+class Variable(Entity):
+
+    def __init__(self, name):
+        self.name = name
+        self.time_series = {}
+
+    def add_time_serie(self, time_serie):
+        self.time_series[time_serie.name] = time_serie
         return
 
     def get_time_scales(self):
-        return self.time_scales
+        return self.time_series
 
     def get_time_scale_by_name(self, ts_name):
         _ts = None
@@ -123,48 +159,22 @@ class Variable(Entity, IVariable):
             del self[time_scale_name]
         return
 
-    def _save(self, project_name, ent_path):
-        self.save_to_df(project_name, ent_path, self.var_name)
-        for time_scale in self.time_scale.values():
-            time_scale._save(project_name, ent_path, self.var_name)
+    def _save(self, storage, project_name, ent_path):
+        if self.time_series!=dict():
+            for time_series_name, time_series in self.time_series.items():
+                logging.info('Time Serie Saved To DataFrame {0}'.format(time_series_name))
+                time_series._save(storage, project_name=project_name, ent_path=ent_path, var_name=self.name)
+        else:
+            logging.info('Entity To DataFrame {0}'.format(ent_path))
+            storage._save_data_frame(project_name=project_name, entity_path=ent_path,  var_name=self.name)
 
-class Timescale(Variable, ITimeScale):
-
-    def __init__(self, time_scale_name):
-        self.time_scale_name = time_scale_name
-        self.timeseries = {}
-
-    def get_time_series(self, ts_name):
-        _ts = None
-        if ts_name in self.timeseries.keys():
-            _ts = self.timeseries[ts_name]
-        return _ts
-
-    def add_time_serie(self, timeserie):
-        self.timeseries[timeserie.name] = timeserie
-
-    def update_time_serie(self):
-        pass
-
-    def delete_update_time_serie(self, ts_name):
-        if ts_name in self.timeseries.keys():
-            del self.timeseries[ts_name]
-
-    def _save(self, project_name, ent_path, var_name):
-        self.save_to_df(project_name, ent_path, var_name, self.time_scale_name)
-        for timeseries in self.timeseries.values():
-            timeseries._save(project_name, ent_path, var_name, self.time_scale_name)
-
-class TimeSeries(Timescale, ITimeSeries):
+class TimeSeries(Variable):
 
     def __init__(self, name):
-        self.name
-        self.values = []
-        self.time_points = []
 
-    @property
-    def timeserie(self):
-        return self.timeserie
+        self.name = name
+        self.timeserie = []
+
 
     def get_time_period(self):
 
@@ -176,7 +186,7 @@ class TimeSeries(Timescale, ITimeSeries):
 
     def get_by_stamp(self, start_stamp=None, end_stamp=None, len=None, values=None):
         if start_stamp and end_stamp:
-
+            pass
 
     def get_by_index(self, start_index=None, end_index=None, len=None, values=None):
         pass
@@ -185,11 +195,15 @@ class TimeSeries(Timescale, ITimeSeries):
         pass
 
     def set_by_index(self, start_index=None, end_index=None, len=None, values=None):
-        pass
+        for i in range(start_index, start_index+len):
+            self.timeserie.append(dict(index = start_index+i, value=values[i], stamp=None))
 
-    def _save(self, project_name, ent_path, var_name, time_scale_name):
-        self.save_to_df(project_name, ent_path, var_name, time_scale_name, self.name, self.values, self.time_points)
 
+    def _save(self, storage, project_name, ent_path, var_name):
+        for timepoint in self.timeserie:
+            storage._save_data_frame(project_name=project_name, entity_path=ent_path, var_name=var_name,
+                                     time_series=self.name, time_point=timepoint['index'], values=timepoint['value'])
+            logging.info('TimePoint Saved To DataFrame')
 
 
 
