@@ -72,8 +72,7 @@ def test_simulator_functionally(web_app, token):
               ]
 
     scenario_id = "test_scenario_3"
-    res = web_app.post_json('/forecast/set_values', {"data": {"tool_id": tool_id,
-                                                              "entity_id": 12, "values": values},
+    res = web_app.post_json('/forecast/set_values', {"data": {"entity_id": 12, "values": values},
                                                      "X-Token": token})
 
     print("Set value for scenario - test_scenario_1")
