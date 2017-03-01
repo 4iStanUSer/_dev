@@ -4,6 +4,7 @@ from ...common import runtime_storage as rt
 from ...common.repository import persistent_storage
 from ...common.repository.models_managers import access_manager
 
+
 def set_values(req):
     """
     Set value for specific variable
@@ -24,7 +25,6 @@ def set_values(req):
         wb = rt.get_wb(user_id)
         session = req.dbsession
         project_name = "JJOralCare"
-
         permission_tree = access_manager.build_permission_tree(session=session,project_name=project_name)
         data_service.set_entity_values(permission_tree=permission_tree, container=wb.current_container,
                                    entity_id=entity_id, values=values)
@@ -53,7 +53,8 @@ def get_simulator_page_data(req):
         #TODO check if there are selected scenario
         wb = rt.get_wb(user_id)
         session = req.dbsession
-        permission_tree = access_manager.build_permission_tree(session, project_name="JJOralCare")
+        project_id = 'JJOralCare'
+        permission_tree = access_manager.build_permission_tree(session, project_name=project_id)
         data = data_service.get_simulator_data(permission_tree=permission_tree, container=wb.current_container,
                                                config=wb.data_config, entity_id=wb.selection, lang=lang)
         default_data = data_service.get_simulator_value_data(permission_tree=permission_tree, container=wb.default_container,
@@ -77,24 +78,24 @@ def get_simulator_custom_data(req):
     :return:
     :rtype:
     """
-    #try:
-    user_id = req.user
-    lang = rt.language(user_id)
-    #except KeyError as e:
-    #msg = req.get_error_message(e, lang)
-    #return send_error_response(msg)
-    #try:
+    try:
+        user_id = req.user
+        lang = rt.language(user_id)
+    except KeyError as e:
+        msg = req.get_error_message(e, lang)
+        return send_error_response(msg)
+    try:
         #TODO check if there are selected scenario
-    wb = rt.get_wb(user_id)
-    session = req.dbsession
-    permission_tree = access_manager.build_permission_tree(session, project_name="JJOralCare")
-    data = data_service.get_simulator_value_data(permission_tree=permission_tree, container=wb.current_container,
+        wb = rt.get_wb(user_id)
+        session = req.dbsession
+        permission_tree = access_manager.build_permission_tree(session, project_name="JJOralCare")
+        data = data_service.get_simulator_value_data(permission_tree=permission_tree, container=wb.current_container,
                                              config=wb.data_config, entity_id=wb.selection, lang=lang)
-    #except Exception as e:
-    #msg = req.get_error_msg(e)
-    #    return send_error_response(msg)
-    #else:
-    return send_success_response(data)
+    except Exception as e:
+        msg = req.get_error_msg(e)
+        return send_error_response(msg)
+    else:
+        return send_success_response(data)
 
 
 def get_simulator_decomposition(req):
@@ -133,14 +134,15 @@ def load_scenario(request):
     try:
         user_id = request.user
         scenario_id = request.json_body['data']['scenario_id']
-        project_id = request.json_body['data']['project_id']
-        tool_id = request.json_body['data']['tool_id']
+
         lang = rt.language(user_id)
     except KeyError as e:
         msg = request.get_error_msg(e, lang)
         return send_error_response(msg)
     try:
         wb = rt.get_wb(user_id)
+        project_id = 'JJOralCare'
+        tool_id = 'forecast'
         backup = persistent_storage.load_backup(user_id, tool_id, project_id, scenario_id)
         wb.load_from_backup(backup, user_access=None, scenario_id=scenario_id)
     except Exception as e:
@@ -163,14 +165,14 @@ def save_scenario(request):
     try:
         user_id = request.user
         scenario_id = request.json_body['data']['scenario_id']
-        project_id = request.json_body['data']['project_id']
-        tool_id = request.json_body['data']['tool_id']
         lang = rt.language(user_id)
     except KeyError as e:
         msg = request.get_error_msg(e, lang)
         return send_error_response(msg)
     try:
         wb = rt.get_wb(user_id)
+        project_id = 'JJOralCare'
+        tool_id = 'forecast'
         # TODO check - if scenario_id in wb.scenario_selection:
         backup = wb.get_backup(cont_type="current")
         persistent_storage.save_backup(user_id, tool_id, project_id, backup, scenario_id)

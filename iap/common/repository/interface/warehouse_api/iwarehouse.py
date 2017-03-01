@@ -4,18 +4,8 @@ from . import warehouse_api
 import logging
 logging.getLogger(__name__)
 
-class IProperties:
-    pass
 
-class Properties:
-    pass
-
-#@singleton
-class IStorage:
-    #there must be path for storing
-    pass
-
-class Storage(IStorage):
+class Storage():
 
     def __init__(self):
         self.dataframe = pd.DataFrame(data=dict(Project=[None], Entity=[None], Variable=[None],
@@ -38,7 +28,7 @@ class Storage(IStorage):
         self.dataframe = pd.concat(frames)
 
     def save_to_local_storage(self, project_name):
-        logging.info("DataFrame {0}".format(self.dataframe))
+        logging.info("DataFrame Saved To Local Storage {0}".format(self.dataframe))
         self.dataframe.to_csv("C:/Users/Alex/Desktop/parser/{0}.csv".format(project_name), index=False)
 
     def read_from_local_storage(self, project_name):
@@ -109,11 +99,10 @@ class Storage(IStorage):
                                     ]
 
         for i in time_points.itertuples():
-            print(i)
             point = i.TimePoint
             value = i.Value
             logging.info("Get timepoint {0}".format(i))
-            time_serie.set_by_index(start_index=int(point), len=1, values=[value])
+            time_serie.set_by_index(start_index=int(point), len=0, values=[value])
         logging.info("Get timepoint {0}".format(time_serie_name))
 
 

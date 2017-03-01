@@ -49,7 +49,7 @@ def test_edit_scenario_view_updates(web_app, token):
     :rtype:
     """
 
-    id = 3
+    id = 2
     new_name = "New Name"
     res = web_app.post_json("/forecast/edit_scenario", {"data":
                                                                [{'id': id, 'modify':[{'parameter': 'name',
