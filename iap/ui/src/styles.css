@@ -138,3 +138,85 @@ body {
     font-style: normal;
 
 }
+.c-button {
+  position: relative;
+  font-family: 'open_sansbold';
+  font-size: 12px;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 26px;
+  text-align: center;
+  color: #44b3c2;
+  border-radius: 4px;
+  background-color: #fff;
+  border: solid 1px #44b3c2;
+}
+.c-button--expand {
+  width: 90px;
+  padding-right: 15px;
+}
+.c-button--expand:after {
+  content: '';
+  display: block;
+  position: absolute;
+  top: 0;
+  right: 12px;
+  width: 10px;
+  height: 100%;
+  background: url("/static/assets/images/icons/ic-expand.svg") no-repeat center;
+  background-size: 10px 13px;
+}
+.c-button--collapse:after {
+  -webkit-transform: rotate(180deg);
+      -ms-transform: rotate(180deg);
+          transform: rotate(180deg);
+}
+.c-button--green {
+  background-color: #44b3c2;
+  color: #fff;
+}
+.c-button--orange {
+  background-color: #f1a94e;
+  color: #fff;
+  border: none;
+}
+.c-button--transparent {
+  background-color: transparent;
+  color: #fff;
+  border: none;
+}
+.c-button--white {
+  background-color: #fff;
+  border-color: transparent;
+  color: #2e3438;
+}
+.c-button--grey {
+  background-color: #d8e0ee;
+  border-color: #d8e0ee;
+  color: #2e3438;
+}
+.c-button--grey-white {
+  background-color: #94a1b5;
+  color: #fff;
+}
+.c-button--blue {
+  background-color: #44b3c2;
+  color: #fff;
+}
+.c-button--90 {
+  display: inline-block;
+  width: 90px;
+}
+.c-button--80 {
+  display: inline-block;
+  width: 80px;
+}
+.c-button--130 {
+  width: 128px;
+}
+.c-button:hover {
+  cursor: pointer;
+}
+.c-button:focus {
+  outline: none;
+}
