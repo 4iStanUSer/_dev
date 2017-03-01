@@ -6,7 +6,6 @@ import re
 import csv
 import pandas as pd
 
-from .config import config as c
 from .exceptions import NonExistedConfig, NonExistedDataSet, CorruptedDataSet, NonExistedProject
 from ..data_loading import loading_lib
 

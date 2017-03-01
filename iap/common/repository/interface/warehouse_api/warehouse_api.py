@@ -1,9 +1,17 @@
 import pandas as pd
+<<<<<<< HEAD
 from .iwarehouse import IProject, IEntity, ITimeScale, ITimeSeries, IVariable, IAdmin
+=======
+from .iwarehouse import IProject, IEntity, ITimeScale, ITimeSeries, IVariable, Storage
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
+>>>>>>> DL_warehouse_api
 
 class IProperties:
     pass
 
+<<<<<<< HEAD
 
 class Properties:
     pass
@@ -24,6 +32,21 @@ class Project(IProject, IAdmin):
 
     def add_entity(self, entity):
         #add entity to
+=======
+class Properties:
+    pass
+
+class Project(Storage):
+
+    def __init__(self, name):
+        self.entities = {}
+        self.project_name = name
+
+    def get_entities(self):
+        return self.entities
+
+    def add_entity(self, entity):
+>>>>>>> DL_warehouse_api
         self.entities[entity.path] = entity
 
     def get_entity_by_path(self, ent_path):
@@ -33,6 +56,7 @@ class Project(IProject, IAdmin):
             return None
 
     def delete_entities(self, entity_path):
+<<<<<<< HEAD
         #delete entity from project entity
         if entity_path in self.entities.keys():
             del self.entities[entity_path]
@@ -49,6 +73,49 @@ class Entity(Project, IEntity):
         self.parents = []
         self.vars = {}
         self._fill_attributes()
+=======
+        if entity_path in self.entities.keys():
+            del self.entities[entity_path]
+
+    def read(self):
+        """
+
+        :return:
+        :rtype: None
+        """
+        storage = Storage()
+        storage.read_from_local_storage(self.project_name)
+        ents = storage.process_data_frame(self.project_name)
+        self.entities = ents
+
+    def save(self):
+        """
+
+        :return:
+        :rtype:
+        """
+        storage = Storage()
+
+
+        for ent_path, ent in self.entities.items():
+            logging.info('Entity Save To DataFrame {0}'.format(ent_path))
+            ent._save(storage, project_name=self.project_name)
+
+        storage.save_to_local_storage(project_name=self.project_name)
+
+class Entity(Project):
+
+    def __init__(self, path):
+
+        if type(path) is list:
+            self.path = "*".join(path)
+        else:
+            self.path = path
+
+        self.childs = []
+        self.parents = []
+        self.vars = {}
+>>>>>>> DL_warehouse_api
 
     def _fill_attributes(self):
 
@@ -78,6 +145,12 @@ class Entity(Project, IEntity):
     def get_vars(self):
         return self.vars
 
+<<<<<<< HEAD
+=======
+    def add_var(self, var):
+        self.vars[var.name] = var
+
+>>>>>>> DL_warehouse_api
     def get_var_by_name(self, var_name):
         if var_name in self.vars.keys():
             return self.vars[var_name]
@@ -88,6 +161,7 @@ class Entity(Project, IEntity):
         if var_name in self.vars.keys():
             del self.vars[var_name]
 
+<<<<<<< HEAD
 
     def update_var(self):
         pass
@@ -105,6 +179,43 @@ class Variable(Entity, IVariable):
 
     def get_time_scales(self):
         return self.time_scales
+=======
+    def update_var(self):
+        pass
+
+    def _save(self, storage, project_name):
+        """
+
+        :param storage:
+        :type storage: iap.common.repository.interface.warehouse_api.iwarehouse.Storage
+        :param project_name:
+        :type project_name: str
+        :return:
+        :rtype: None
+        """
+
+        if self.vars!=dict():
+            for name, var in self.vars.items():
+                logging.info('Process Variable {0}'.format(name))
+                var._save(storage, project_name=project_name, ent_path=self.path)
+        else:
+            logging.info('Entity Saved To LocalStorage {0}'.format(self.path))
+            storage._save_data_frame(project_name=project_name, entity_path=self.path)
+
+
+class Variable(Entity):
+
+    def __init__(self, name):
+        self.name = name
+        self.time_series = {}
+
+    def add_time_serie(self, time_serie):
+        self.time_series[time_serie.name] = time_serie
+        return
+
+    def get_time_scales(self):
+        return self.time_series
+>>>>>>> DL_warehouse_api
 
     def get_time_scale_by_name(self, ts_name):
         _ts = None
@@ -117,6 +228,7 @@ class Variable(Entity, IVariable):
             del self[time_scale_name]
         return
 
+<<<<<<< HEAD
 class Timescale(Variable, ITimeScale):
 
     def __init__(self, time_scale_name):
@@ -150,6 +262,24 @@ class TimeSeries(Timescale, ITimeSeries):
     @property
     def timeserie(self):
         return self.timeserie
+=======
+    def _save(self, storage, project_name, ent_path):
+        if self.time_series!=dict():
+            for time_series_name, time_series in self.time_series.items():
+                logging.info('Time Serie Saved To DataFrame {0}'.format(time_series_name))
+                time_series._save(storage, project_name=project_name, ent_path=ent_path, var_name=self.name)
+        else:
+            logging.info('Entity To DataFrame {0}'.format(ent_path))
+            storage._save_data_frame(project_name=project_name, entity_path=ent_path,  var_name=self.name)
+
+class TimeSeries(Variable):
+
+    def __init__(self, name):
+
+        self.name = name
+        self.timeserie = []
+
+>>>>>>> DL_warehouse_api
 
     def get_time_period(self):
 
@@ -161,7 +291,11 @@ class TimeSeries(Timescale, ITimeSeries):
 
     def get_by_stamp(self, start_stamp=None, end_stamp=None, len=None, values=None):
         if start_stamp and end_stamp:
+<<<<<<< HEAD
 
+=======
+            pass
+>>>>>>> DL_warehouse_api
 
     def get_by_index(self, start_index=None, end_index=None, len=None, values=None):
         pass
@@ -170,9 +304,22 @@ class TimeSeries(Timescale, ITimeSeries):
         pass
 
     def set_by_index(self, start_index=None, end_index=None, len=None, values=None):
+<<<<<<< HEAD
         pass
 
 
+=======
+        for i in range(start_index, start_index+len):
+            self.timeserie.append(dict(index = start_index+i, value=values[i], stamp=None))
+
+
+    def _save(self, storage, project_name, ent_path, var_name):
+
+        for timepoint in self.timeserie:
+            storage._save_data_frame(project_name=project_name, entity_path=ent_path, var_name=var_name,
+                                     time_series=self.name, time_point=timepoint['index'], values=timepoint['value'])
+            logging.info('TimePoint Saved To DataFrame')
+>>>>>>> DL_warehouse_api
 
 
 
