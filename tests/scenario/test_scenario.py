@@ -49,7 +49,7 @@ def test_edit_scenario_view_updates(web_app, token):
     :rtype:
     """
 
-    id = 2
+    id = 1
     new_name = "New Name"
     res = web_app.post_json("/forecast/edit_scenario", {"data":
                                                                [{'id': id, 'modify':[{'parameter': 'name',
@@ -73,8 +73,9 @@ def test_edit_scenario_view_updates(web_app, token):
     keys = ['data', 'user_permission']
     data_keys = ['author', 'id', 'location', 'modify_date', 'name', 'status', 'shared', 'scenario_permission']
     actual = res.json['data']['data']
-    scenario = [i for i in actual if i['id']==id][0]
-    print("Scenario name", scenario['name'])
+    print("Edit Scenario", actual)
+    scenario = [i for i in actual if i['id'] == id][0]
+    print("Scenario name", scenario)
     assert new_name == scenario['name']
     print("Scenario favorite", scenario['favorite'])
     assert new_name == scenario['favorite']
@@ -117,6 +118,33 @@ def test_create_scenario(web_app, token):
     print("Result of  Scenario Creation", actual['favorite'])
 
 
+def test_create_scenario_name_null(web_app, token):
+    """Test for create scenario
+
+    :param web_app:
+    :type web_app:
+    :return:
+    :rtype:
+    """
+    name = "New Scenario"
+    description = "New Scenario Description"
+    criteria = "USA-Main-Weapon"
+
+    scenario_data = {
+                "name": None,
+                "description": "New Scenario Description",
+                "criteria": "USA-Main-Weapon"
+                    }
+
+    res = web_app.post_json("/forecast/create_scenario", {"data": scenario_data, "X-Token": token})
+    expected_error = True
+    print("Error Expected ~ Create Scenario with Null name", res.json)
+    assert res.json['error'] == expected_error
+    actual = res.json['data']
+
+    assert actual == None
+
+
 def test_create_scenario_error_expected(web_app, token):
     """Test for create scenario
 
@@ -133,7 +161,7 @@ def test_create_scenario_error_expected(web_app, token):
                     }
 
     res = web_app.post_json("/forecast/create_scenario", {"error": scenario_data, "X-Token": token})
-    expected = {'data': 'Wrong request', 'error': True}
+    expected = {'data': None, 'error': True}
     actual = res.json
     print("Create Scenario", actual)
     assert expected == actual
@@ -387,7 +415,7 @@ def test_get_scenario_page(web_app, token):
 
 
 
-def test_delete_scenario_error_expected(web_app, token):
+def _test_delete_scenario_error_expected(web_app, token):
     """Test for delete scenario
 
     Temprorary disabled
@@ -415,11 +443,12 @@ def test_copy_scenario_view_updates(web_app, token):
     :return:
     :rtype:
     """
-    res = web_app.post_json("/forecast/get_scenario_page", {'data': {}, 'X-Token': token})
+    res = web_app.post_json("/forecast/get_scenario_page", {'X-Token': token})
     actual = res.json['data']['data']
     print("Get Scenario Page", actual)
     current_length = len(actual)
-    scenario = [i for i in actual if i['id']==1][0]
+    scenario = [i for i in actual if i['id'] == 1][0]
+    print("Scenario", scenario)
     criteria = scenario['criteria']
     description = scenario['description']
     favorite = scenario['favorite']
@@ -447,7 +476,7 @@ def test_copy_scenario_view_updates(web_app, token):
 
 
 
-def test_delete_scenario_view_updates(web_app, token):
+def _test_delete_scenario_view_updates(web_app, token):
     """Test for delete scenario
 
     Temprorary disabled

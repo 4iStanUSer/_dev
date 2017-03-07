@@ -255,6 +255,7 @@ def update_scenario(session, scenario_id, user_id, parameter, value):
     """
     try:
         scenario = scenario_manager.get_scenario_by_id(session, scenario_id=scenario_id, user_id=user_id)
+
         user = access_manager.get_user_by_id(session, user_id)
 
         tool_id = 'forecast'
