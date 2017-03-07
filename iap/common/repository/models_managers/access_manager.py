@@ -513,7 +513,7 @@ def check_scenario_permission(user, scenario, parameter):
     if parameter in ["status", "shared", "name", 'description']:
         if scenario.author == user.email:
             return True
-    elif parameter=="favorite":
+    elif parameter == "favorite":
         return True
     else:
         return False

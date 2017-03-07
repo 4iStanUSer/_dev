@@ -58,7 +58,7 @@ def test_edit_scenario_view_updates(web_app, token):
                                                                                      'value': new_name},
                                                                                     {'parameter': 'shared',
                                                                                      'value': new_name},
-                                                                                    {'parameter': 'status',
+                                                                                    {'parameter': 'description',
                                                                                      'value': new_name}
                                                                                     ]
                                                                  }],
@@ -81,8 +81,8 @@ def test_edit_scenario_view_updates(web_app, token):
     assert new_name == scenario['favorite']
     print("Scenario shared", scenario['shared'])
     assert new_name == scenario['shared']
-    print("Scenario status", scenario['status'])
-    assert new_name == scenario['status']
+    print("Scenario status", scenario['description'])
+    assert new_name == scenario['description']
 
 
 def test_create_scenario(web_app, token):
