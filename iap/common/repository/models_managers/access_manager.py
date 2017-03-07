@@ -510,7 +510,7 @@ def check_scenario_permission(user, scenario, parameter):
     :return:
     :rtype:
     """
-    if parameter in ["status", "shared", "name"]:
+    if parameter in ["status", "shared", "name", 'description']:
         if scenario.author == user.email:
             return True
     elif parameter=="favorite":
