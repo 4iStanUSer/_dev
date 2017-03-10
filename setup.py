@@ -26,7 +26,9 @@ requires = [
     'bcrypt',
     'passlib',
     'pymemcache',
-    'python-memcached'
+    'python-memcached',
+    'pandas',
+    'numpy'
     ]
 
 tests_require = [

@@ -1,14 +1,8 @@
-import pandas as pd
-from .iwarehouse import IProject, IEntity, ITimeScale, ITimeSeries, IVariable, Storage
+import numpy as np
+from .iwarehouse import Storage
 import logging
 
 logging.basicConfig(level=logging.DEBUG)
-
-class IProperties:
-    pass
-
-class Properties:
-    pass
 
 class Project(Storage):
 
@@ -50,8 +44,6 @@ class Project(Storage):
         :rtype:
         """
         storage = Storage()
-
-
         for ent_path, ent in self.entities.items():
             logging.info('Entity Save To DataFrame {0}'.format(ent_path))
             ent._save(storage, project_name=self.project_name)
@@ -134,7 +126,6 @@ class Entity(Project):
             logging.info('Entity Saved To LocalStorage {0}'.format(self.path))
             storage._save_data_frame(project_name=project_name, entity_path=self.path)
 
-
 class Variable(Entity):
 
     def __init__(self, name):
@@ -175,7 +166,6 @@ class TimeSeries(Variable):
         self.name = name
         self.timeserie = []
 
-
     def get_time_period(self):
 
         return list(self.timeserie.keys())
@@ -196,15 +186,17 @@ class TimeSeries(Variable):
 
     def set_by_index(self, start_index=None, end_index=None, len=None, values=None):
         for i in range(start_index, start_index+len):
-            self.timeserie.append(dict(index = start_index+i, value=values[i], stamp=None))
-
+            self.timeserie.append(dict(index=start_index+i, value=values[i], stamp=None))
 
     def _save(self, storage, project_name, ent_path, var_name):
+        if self.timeserie != []:
+            for timepoint in self.timeserie:
 
-        for timepoint in self.timeserie:
-            storage._save_data_frame(project_name=project_name, entity_path=ent_path, var_name=var_name,
-                                     time_series=self.name, time_point=timepoint['index'], values=timepoint['value'])
-            logging.info('TimePoint Saved To DataFrame')
-
-
-
+                storage._save_data_frame(project_name=project_name, entity_path=ent_path,
+                                         var_name=var_name, time_series=self.name, time_point=timepoint['index'],
+                                         values=timepoint['value'])
+                logging.info('TimePoint Saved To DataFrame')
+        else:
+            logging.info('Entity To DataFrame {0}'.format(ent_path))
+            storage._save_data_frame(project_name=project_name, entity_path=ent_path, var_name=self.name,
+                                     time_series=self.name)

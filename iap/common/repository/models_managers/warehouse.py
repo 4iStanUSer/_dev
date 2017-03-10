@@ -10,7 +10,7 @@ class Warehouse:
     link between data structure. Such as
     Entity, TimeSeries, Variable, Value etc.
     """
-    def __init__(self, ssn_factory=None, engine=None):
+    def __init__(self, ssn_factory=None):
         """
         Object initialise with session
         And query Entity Root obj
@@ -22,12 +22,8 @@ class Warehouse:
 
         #TODO add exception if there no root object
 
-        #self.engine = create_engine(engine)
-
         self._ssn = ssn_factory()
         self._root = self._ssn.query(Entity).filter(Entity.name == 'root').one_or_none()
-
-
 
     """
     Common WH methods

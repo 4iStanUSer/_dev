@@ -71,9 +71,12 @@ def main(argv=sys.argv):
 
 
         wh = Warehouse(session_factory)
-        loader = Loader(wh, config=settings)
+
+        config = settings['path.data_lake']
+        config_name = 'JJOralCare'
+        loader = Loader(warehouse=wh, config=config)
         #loader.run_processing('JJLean')
-        loader.run_processing('JJOralCare')
+        loader.run_processing(config_name)
 
         transaction.manager.commit()
 

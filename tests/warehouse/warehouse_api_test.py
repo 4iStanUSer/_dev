@@ -1,9 +1,5 @@
-from iap.common.repository.models_managers.warehouse import Warehouse
-import pandas as pd
-import pytest
-from timeit import default_timer as timer
 import logging
-from iap.common.repository.interface.warehouse_api import warehouse_api, iwarehouse
+from iap.common.repository.interface.warehouse_api import warehouse_api
 import logging.config
 
 
@@ -68,5 +64,9 @@ def test_create_project():
 def test_read_data_from_project():
     project = warehouse_api.Project("JJOLean")
     project.read()
+    print("Project", project)
+    print("Ent", project.entities)
+    print("Ent USA*Mouthwash", project.entities['USA*Mouthwash'].vars)
+    print("Ent USA*Mouthwash", project.entities['USA*Mouthwash'].vars['Dynamics'].time_series['annual'].timeserie)
     project.save()
 
