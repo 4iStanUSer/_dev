@@ -109,22 +109,12 @@ class Loader:
 
 
         # Read main config
-
-        main_config_path = os.path.join(self._source, 'config.ini')
+        #TODO Change self.source
+        main_config_path = os.path.join(self._source, '{0}_config.ini'.format(proj_name))
         main_config = configparser.ConfigParser()
         main_config.read(main_config_path)
-        try:
-            proj_folder = main_config.get(section=proj_name, option='path',
-                                      fallback=None)
-        except Exception:
-            raise NonExistedProject
-        # Read project config
-        else:
-            proj_config_path = os.path.join(self._source, proj_folder,
-                                        proj_name + '_config.ini')
-            proj_config = configparser.ConfigParser()
-            proj_config.read(proj_config_path)
-            return proj_folder, proj_config
+        proj_folder = os.path.join(self._source, main_config['Path']['path'])
+        return proj_folder, main_config
 
     def _load_data_set(self, abs_path, file_name, loader, file_config, proj_path=None):
         """
