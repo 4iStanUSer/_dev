@@ -503,7 +503,6 @@ def check_period_perm(tree, ts_period=None, ts_point=None):
     return correct_ts_period
 
 
-
 def check_scenario_permission(user, scenario, parameter):
     """Boolean function that check whether user have specific
     right for tools  and features
@@ -511,10 +510,10 @@ def check_scenario_permission(user, scenario, parameter):
     :return:
     :rtype:
     """
-    if parameter in ["status", "shared", "name"]:
+    if parameter in ["status", "shared", "name", 'description']:
         if scenario.author == user.email:
             return True
-    elif parameter=="favorite":
+    elif parameter == "favorite":
         return True
     else:
         return False

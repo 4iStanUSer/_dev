@@ -26,7 +26,7 @@ class Scenario(Base):
     id = Column(Integer, primary_key=True)
     parent_id = Column(Integer, ForeignKey('scenarios.id'), nullable=True)
 
-    name = Column(String(length=255))
+    name = Column(String(length=255), nullable=False)
     description = Column(String(length=255))
     date_of_last_modification = Column(String)
 

@@ -84,7 +84,7 @@ def test_simulator_functionally(web_app, token):
 
     #3.View changes
 
-    res = web_app.post_json('/forecast/get_custom_data', {"data": {"project_id": project_id, "tool_id": tool_id},
+    res = web_app.post_json('/forecast/get_custom_data', {"data": {},
                                                           'X-Token': token})
 
     actual = res.json['data']['annual']['eq_price']['values']

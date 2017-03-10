@@ -72,8 +72,7 @@ def test_simulator_functionally(web_app, token):
               ]
 
 
-    res = web_app.post_json('/forecast/set_values', {"data": { "tool_id": tool_id,
-                                                              "entity_id": 12, "values": values},
+    res = web_app.post_json('/forecast/set_values', {"data": { "entity_id": 12, "values": values},
                                                      "X-Token": token})
 
     print("Set value for scenario - test_scenario")
@@ -81,15 +80,14 @@ def test_simulator_functionally(web_app, token):
 
     #3.Save scenario test_scenario
     scenario_id = "test_scenario"
-    res = web_app.post_json('/forecast/save_scenario', {"data": {"scenario_id": scenario_id, "project_id": project_id, "tool_id": tool_id},
+    res = web_app.post_json('/forecast/save_scenario', {"data": {"scenario_id": scenario_id},
                                                         'X-Token': token})
     print("Save scenario - test_scenario")
     print(res.json_body)
 
     #4.Load Scenario test_scenario_1
     scenario_id = "test_scenario_1"
-    res = web_app.post_json('/forecast/load_scenario', {"data": {"scenario_id": scenario_id, "project_id": project_id,
-                                                                 "tool_id": tool_id},
+    res = web_app.post_json('/forecast/load_scenario', {"data": {"scenario_id": scenario_id},
                                                         'X-Token': token})
     print("Load Scenario - test_scenario_1")
     print(res.json_body)
@@ -113,7 +111,7 @@ def test_simulator_functionally(web_app, token):
     #6.Save scenario test_scenario_1
     scenario_id = "test_scenario_1"
     res = web_app.post_json('/forecast/save_scenario',
-                            {"data": {"scenario_id": scenario_id, "project_id": project_id, "tool_id": tool_id},
+                            {"data": {"scenario_id": scenario_id},
                              'X-Token': token})
     print("Save scenario - test_scenario_1")
     print(res.json_body)
@@ -122,8 +120,7 @@ def test_simulator_functionally(web_app, token):
 
     #7.Load Scenario test_scenario
     scenario_id = "test_scenario"
-    res = web_app.post_json('/forecast/load_scenario', {"data": {"scenario_id": scenario_id, "project_id": project_id,
-                                                                 "tool_id": tool_id},
+    res = web_app.post_json('/forecast/load_scenario', {"data": {"scenario_id": scenario_id},
                                                         'X-Token': token})
 
     print("Load Scenario - test_scenario")
@@ -132,7 +129,7 @@ def test_simulator_functionally(web_app, token):
 
     #8.View changes
 
-    res = web_app.post_json('/forecast/get_custom_data', {"data": {"project_id": project_id, "tool_id": tool_id},
+    res = web_app.post_json('/forecast/get_custom_data', {"data": {},
                                                           'X-Token': token})
 
     print("View changes - test_scenario")
@@ -144,15 +141,14 @@ def test_simulator_functionally(web_app, token):
 
     # 9.Load Scenario test_scenario_1
     scenario_id = "test_scenario_1"
-    res = web_app.post_json('/forecast/load_scenario', {"data": {"scenario_id": scenario_id, "project_id": project_id,
-                                                                 "tool_id": tool_id},
+    res = web_app.post_json('/forecast/load_scenario', {"data": {"scenario_id": scenario_id},
                                                         'X-Token': token})
 
     print("Load Scenario - test_scenario_1")
     print(res.json_body)
 
     # 10.Load Scenario test_scenario_1
-    res = web_app.post_json('/forecast/get_custom_data', {"data": {"project_id": project_id, "tool_id": tool_id},
+    res = web_app.post_json('/forecast/get_custom_data', {"data": {},
                                                           'X-Token': token})
 
     print("View changes - test_scenario_1")
