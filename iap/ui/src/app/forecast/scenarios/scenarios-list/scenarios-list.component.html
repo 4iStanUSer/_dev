@@ -101,9 +101,7 @@
                                     </div>
                                   </div>
                             </li>
-                            <li class="c-simple-list__item"><span class="c-simple-list__text">Forecasting with Sports module</span><span class="c-simple-list__date">Sep 27, 2016</span></li>
-                            <li class="c-simple-list__item"> <span class="c-simple-list__text">Reporting Crosses module</span><span class="c-simple-list__date">Sep 27, 2016</span></li>
-                            <li class="c-simple-list__item"> <span class="c-simple-list__text">SGA Comparisson with Nike Ki</span><span class="c-simple-list__date c-simple-list__date--red">Sep 27, 2016</span></li>
+                            <li class="c-simple-list__item" *ngFor="let scenario of work_list"><span class="c-simple-list__text">{{scenario.name}}</span><span class="c-simple-list__date">{{dateParse(scenario.modify_date)}}</span></li>
                         </ul>
                     </div>
                 </div>
@@ -200,24 +198,28 @@
                               </div>
                               <form class="c-search c-top-filter__search">
                                 <input type="submit" value="">
-                                <input type="search" name="search" placeholder="Search" [(ngModel)]="search">
+                                <input (keyup)="onChangeSearch($event)" type="search" name="search" placeholder="Search">
                               </form>
                             </div>
                           </div>
                 <div class="m-scenarios-page__service c-service-pane">
-                    <a [ngStyle]="{'opacity': userPermissions.create ? '' : '0.4', 'cursor': userPermissions.create ? 'pointer' : 'default'}" class="c-service-pane__item c-service-pane__item--create" href="#">
+                    <div class="c-top-filter__item c-top-filter__item--checks" id="multiselect-wrap">
+                        <div class="c-checkbox-filter c-top-filter__checks">
+                            <input (change)="onToggleMultiselect($event)" class="c-checkbox-filter__input" type="checkbox" id="show-multiselect">
+                            <label class="c-checkbox-filter__label" for="show-multiselect"><span>Show multiselect</span></label>
+                        </div>
+                    </div>
+
+                    <a (click)="goToNewScenario($event)" [ngStyle]="{'opacity': userPermissions.create ? '' : '0.4', 'cursor': userPermissions.create ? 'pointer' : 'default'}" style="position:absolute;left:170px;" class="c-service-pane__item c-service-pane__item--create" href="#">
                         <span class="c-service-pane__border">Create New</span>
                     </a>
-                    <a (click)="onToggleStatusScenario($event)" [ngStyle]="{'opacity': userPermissions.finalize ? '' : '0.4', 'cursor': userPermissions.finalize ? 'pointer' : 'default'}" class="c-service-pane__item c-service-pane__item--finalize" href="#">
+                    <a *ngIf="multiselect.active" (click)="onToggleStatusScenario($event)" [ngStyle]="{'opacity': userPermissions.finalize ? '' : '0.4', 'cursor': userPermissions.finalize ? 'pointer' : 'default'}" class="c-service-pane__item c-service-pane__item--finalize" href="#">
                         <span class="c-service-pane__border">Finalize</span>
                     </a>
-                    <a (click)="onToggleSharedScenario($event)" [ngStyle]="{'opacity': userPermissions.share ? '' : '0.4', 'cursor': userPermissions.share ? 'pointer' : 'default'}" class="c-service-pane__item c-service-pane__item--share" href="#">
+                    <a *ngIf="multiselect.active" (click)="onToggleSharedScenario($event)" [ngStyle]="{'opacity': userPermissions.share ? '' : '0.4', 'cursor': userPermissions.share ? 'pointer' : 'default'}" class="c-service-pane__item c-service-pane__item--share" href="#">
                         <span class="c-service-pane__border">Share</span>
                     </a>
-                    <a (click)="onCopyScenario($event)" [ngStyle]="{'opacity': userPermissions.copy ? '' : '0.4', 'cursor': userPermissions.copy ? 'pointer' : 'default'}" class="c-service-pane__item c-service-pane__item--duplicate" href="#">
-                        <span class="c-service-pane__border">Duplicate</span>
-                    </a>
-                    <a (click)="onDeleteScenario($event)" [ngStyle]="{'opacity': userPermissions.delete ? '' : '0.4', 'cursor': userPermissions.delete ? 'pointer' : 'default'}" class="c-service-pane__item c-service-pane__item--delete" href="#">
+                    <a *ngIf="multiselect.active" (click)="onDeleteScenario($event)" [ngStyle]="{'opacity': userPermissions.delete ? '' : '0.4', 'cursor': userPermissions.delete ? 'pointer' : 'default'}" class="c-service-pane__item c-service-pane__item--delete" href="#">
                         <span class="c-service-pane__border">Delete</span>
                     </a>
                 </div>
@@ -228,8 +230,8 @@
                                   <div class="c-scenarios-table__row">
                                     <div class="c-scenarios-table__cell c-scenarios-table__cell--header c-scenarios-table__cell--checks">
                                       <div class="c-scenarios-table__head-cell c-scenarios-table__head-cell--checks">
-                                        <div class="c-check-actions">
-                                          <div class="c-check-actions__item c-checkbox">
+                                        <div class="c-check-actions" [ngStyle]="{'width': multiselect.active ? '100%' : '', 'margin': multiselect.active ? '0 auto' : ''}">
+                                          <div *ngIf="multiselect.active" class="c-check-actions__item c-checkbox">
                                             <input type="checkbox" id="sc-table-all" (change)="onToggleAllScenarios($event)">
                                             <label class="c-checkbox__label c-checkbox__label--transparent" for="sc-table-all"></label>
                                           </div>
@@ -239,25 +241,29 @@
                                         </div>
                                       </div>
                                     </div>
-                                    <div class="c-scenarios-table__cell c-scenarios-table__cell--header c-scenarios-table__cell--name">
+                                    <div (click)="onToggleSort('name')" class="c-scenarios-table__cell c-scenarios-table__cell--header c-scenarios-table__cell--name">
                                       <div class="c-scenarios-table__head-cell c-scenarios-table__head-cell--name">
-                                         Name<a class="c-scenarios-table__sort sort" href="#"></a></div>
+                                         Name<span *ngIf="sorting.field === 'name'" class="c-scenarios-table__sort sort" [ngClass]="{'sort--reverse': !sorting.order}"></span></div>
                                     </div>
-                                    <div class="c-scenarios-table__cell c-scenarios-table__cell--header c-scenarios-table__cell--author">
+                                    <div (click)="onToggleSort('author')" class="c-scenarios-table__cell c-scenarios-table__cell--header c-scenarios-table__cell--author">
                                       <div class="c-scenarios-table__head-cell c-scenarios-table__head-cell--author">
-                                         Author</div>
+                                         Author<span *ngIf="sorting.field === 'author'" class="c-scenarios-table__sort sort" [ngClass]="{'sort--reverse': !sorting.order}"></span></div>
                                     </div>
-                                    <div class="c-scenarios-table__cell c-scenarios-table__cell--header c-scenarios-table__cell--shared">
-                                      <div class="c-scenarios-table__head-cell c-scenarios-table__head-cell--shared">Shared</div>
+                                    <div (click)="onToggleSort('shared')" class="c-scenarios-table__cell c-scenarios-table__cell--header c-scenarios-table__cell--shared">
+                                      <div class="c-scenarios-table__head-cell c-scenarios-table__head-cell--shared">
+                                          Shared<span *ngIf="sorting.field === 'shared'" class="c-scenarios-table__sort sort" [ngClass]="{'sort--reverse': !sorting.order}"></span></div>
                                     </div>
-                                    <div class="c-scenarios-table__cell c-scenarios-table__cell--header c-scenarios-table__cell--description">
-                                      <div class="c-scenarios-table__head-cell c-scenarios-table__head-cell--description">Description</div>
+                                    <div (click)="onToggleSort('description')" class="c-scenarios-table__cell c-scenarios-table__cell--header c-scenarios-table__cell--description">
+                                      <div class="c-scenarios-table__head-cell c-scenarios-table__head-cell--description">
+                                          Description<span *ngIf="sorting.field === 'description'" class="c-scenarios-table__sort sort" [ngClass]="{'sort--reverse': !sorting.order}"></span></div>
                                     </div>
-                                    <div class="c-scenarios-table__cell c-scenarios-table__cell--header c-scenarios-table__cell--modified">
-                                      <div class="c-scenarios-table__head-cell c-scenarios-table__head-cell--modified">Modified</div>
+                                    <div (click)="onToggleSort('modify_date')" class="c-scenarios-table__cell c-scenarios-table__cell--header c-scenarios-table__cell--modified">
+                                      <div class="c-scenarios-table__head-cell c-scenarios-table__head-cell--modified">
+                                          Modified<span *ngIf="sorting.field === 'modify_date'" class="c-scenarios-table__sort sort" [ngClass]="{'sort--reverse': !sorting.order}"></span></div>
                                     </div>
-                                    <div class="c-scenarios-table__cell c-scenarios-table__cell--header c-scenarios-table__cell--status">
-                                      <div class="c-scenarios-table__head-cell c-scenarios-table__head-cell--status">Status</div>
+                                    <div (click)="onToggleSort('status')" class="c-scenarios-table__cell c-scenarios-table__cell--header c-scenarios-table__cell--status">
+                                      <div class="c-scenarios-table__head-cell c-scenarios-table__head-cell--status">
+                                          Status<span *ngIf="sorting.field === 'status'" class="c-scenarios-table__sort sort" [ngClass]="{'sort--reverse': !sorting.order}"></span></div>
                                     </div>
                                     <div class="c-scenarios-table__cell c-scenarios-table__cell--header c-scenarios-table__cell--actions">
                                       <div class="c-scenarios-table__head-cell c-scenarios-table__head-cell--actions"></div>
@@ -267,8 +273,8 @@
                                 <div class="c-scenarios-table__tbody">
                                   <div [attr.data-id]="scenario.id" *ngFor="let scenario of scenariosList" (click)="onSelectPreview($event)" class="c-scenarios-table__row">
                                     <div class="c-scenarios-table__cell c-scenarios-table__cell--checks">
-                                      <div class="c-check-actions">
-                                        <div class="c-check-actions__item c-checkbox">
+                                      <div class="c-check-actions" [ngStyle]="{'width': multiselect.active ? '100%' : '16px', 'margin': multiselect.active ? '0 auto' : '0 auto'}">
+                                        <div *ngIf="multiselect.active" class="c-check-actions__item c-checkbox">
                                           <input (change)="onToggleScenario($event)" type="checkbox" id="sc-table-check-{{scenario.id}}" [attr.data-id]="scenario.id">
                                           <label class="c-checkbox__label c-checkbox__label--transparent" for="sc-table-check-{{scenario.id}}"></label>
                                         </div>
@@ -284,25 +290,25 @@
                                     <div class="c-scenarios-table__cell c-scenarios-table__cell--name">{{scenario.name}}</div>
                                     <div class="c-scenarios-table__cell c-scenarios-table__cell--author">{{scenario.author}}</div>
                                     <div class="c-scenarios-table__cell c-scenarios-table__cell--shared">
-                                        <a (click)="onToggleSharedScenario($event)" [attr.data-id]="scenario.id" [ngStyle]="{'opacity': in_array('share', scenario.scenario_permission) ? '' : '0.4'}" *ngIf="scenario.shared === 'Yes'" class="shared" href="#"></a>
-                                        <span (click)="onToggleSharedScenario($event)" [attr.data-id]="scenario.id" [ngStyle]="{'color': in_array('share', scenario.scenario_permission) ? '' : 'rgba(148,161,181,0.5)'}" *ngIf="scenario.shared === 'No'">Local</span>
+                                        <a (click)="onToggleSharedScenario($event)" [attr.data-id]="scenario.id" [ngStyle]="{'opacity': in_array('share', scenario.scenario_permission) && !multiselect.active ? '' : '0.4'}" *ngIf="scenario.shared === 'Yes'" class="shared" href="#"></a>
+                                        <span (click)="onToggleSharedScenario($event)" [attr.data-id]="scenario.id" [ngStyle]="{'color': in_array('share', scenario.scenario_permission) && !multiselect.active ? '' : 'rgba(148,161,181,0.5)'}" *ngIf="scenario.shared === 'No'">Local</span>
                                     </div>
                                     <div class="c-scenarios-table__cell c-scenarios-table__cell--description">{{scenario.description}}</div>
                                     <div class="c-scenarios-table__cell c-scenarios-table__cell--modified">{{dateParse(scenario.modify_date)}}</div>
                                     <div class="c-scenarios-table__cell c-scenarios-table__cell--status">
-                                        <div (click)="onToggleStatusScenario($event)" [attr.data-id]="scenario.id" [ngStyle]="{'color': in_array('change_status', scenario.scenario_permission) ? '' : 'rgba(148,161,181,0.5)'}" *ngIf="scenario.status !== 'Final'" class="status">{{scenario.status}}</div>
-                                        <div (click)="onToggleStatusScenario($event)" [attr.data-id]="scenario.id" [ngStyle]="{'background-color': in_array('change_status', scenario.scenario_permission) ? '' : '#c4c6c9'}" *ngIf="scenario.status === 'Final'" class="status status--final">{{scenario.status}}</div>
+                                        <div (click)="onToggleStatusScenario($event)" [attr.data-id]="scenario.id" [ngStyle]="{'color': in_array('change_status', scenario.scenario_permission) && !multiselect.active ? '' : 'rgba(148,161,181,0.5)'}" *ngIf="scenario.status !== 'Final'" class="status">{{scenario.status}}</div>
+                                        <div (click)="onToggleStatusScenario($event)" [attr.data-id]="scenario.id" [ngStyle]="{'background-color': in_array('change_status', scenario.scenario_permission) && !multiselect.active ? '' : '#c4c6c9'}" *ngIf="scenario.status === 'Final'" class="status status--final">{{scenario.status}}</div>
                                     </div>
                                     <div class="c-scenarios-table__cell c-scenarios-table__cell--actions">
                                         <div class="c-actions">
-                                            <a (click)="onCopyScenario($event)" [attr.data-id]="scenario.id" [ngStyle]="{'opacity': in_array('copy', scenario.scenario_permission) ? '' : '0.4'}" class="c-tooltip c-tooltip c-actions__item c-actions__item--copy" href="#">
-                                                <div *ngIf="in_array('copy', scenario.scenario_permission)" class="c-tooltip__text c-tooltip__text--bottom">Copy</div>
+                                            <a (click)="onCopyScenario($event)" [attr.data-id]="scenario.id" [ngStyle]="{'opacity': in_array('copy', scenario.scenario_permission) && !multiselect.active ? '' : '0.4'}" class="c-tooltip c-tooltip c-actions__item c-actions__item--copy" href="#">
+                                                <div *ngIf="in_array('copy', scenario.scenario_permission) && !multiselect.active" class="c-tooltip__text c-tooltip__text--bottom">Copy</div>
                                             </a>
-                                            <a [ngStyle]="{'opacity': in_array('edit', scenario.scenario_permission) ? '' : '0.4'}" class="c-tooltip c-actions__item c-actions__item--edit" href="#">
-                                                <div *ngIf="in_array('edit', scenario.scenario_permission)" class="c-tooltip__text c-tooltip__text--bottom">Edit</div>
+                                            <a (click)="goToEditScenario($event)" [attr.data-id]="scenario.id" [ngStyle]="{'opacity': in_array('edit', scenario.scenario_permission) && !multiselect.active ? '' : '0.4'}" class="c-tooltip c-actions__item c-actions__item--edit" href="#">
+                                                <div *ngIf="in_array('edit', scenario.scenario_permission) && !multiselect.active" class="c-tooltip__text c-tooltip__text--bottom">Edit</div>
                                             </a>
-                                            <a class="c-tooltip c-actions__item c-actions__item--play" href="#">
-                                                <div class="c-tooltip__text c-tooltip__text--go c-tooltip__text--bottom">Go Scenario</div>
+                                            <a (click)="goToSimulator($event)" [attr.data-id]="scenario.id" [ngStyle]="{'opacity': !multiselect.active ? '' : '0.4'}" class="c-tooltip c-actions__item c-actions__item--play" href="#">
+                                                <div *ngIf="!multiselect.active" class="c-tooltip__text c-tooltip__text--go c-tooltip__text--bottom">Go Scenario</div>
                                             </a>
                                         </div>
                                     </div>
@@ -311,164 +317,55 @@
                         </div>
                     </div>
                 </div><!---------------- m-scenarios-page__table ---------------->
-                <div class="m-scenarios-page__preview" [ngClass]="{'m-scenarios-page__preview--active': selectScenario}">
+                <div *ngIf="selectScenario" class="m-scenarios-page__preview" [ngClass]="{'m-scenarios-page__preview--active': selectScenario}">
                             <div class="m-scenarios-page__close" (click)="onCloseScenariosPreview()"></div>
                             <div class="c-scenarios-preview">
-                              <ul class="c-scenarios-preview__item c-preview-list">
-                                <li class="c-preview-list__item c-preview-list__item--region"><span class="c-preview-list__text">United States, Texas, Dallas</span></li>
-                                <li class="c-preview-list__item c-preview-list__item--channel"><span class="c-preview-list__text">United States, Texas, Dallas</span></li>
-                                <li class="c-preview-list__item c-preview-list__item--type"><span class="c-preview-list__text">United States, Texas, Dallas</span></li>
-                                <li class="c-preview-list__item c-preview-list__item--brand"><span class="c-preview-list__text">United States, Texas, Dallas</span></li>
+                              <ul *ngIf="selectScenario.selectors.length" class="c-scenarios-preview__item c-preview-list">
+                                  <li *ngFor="let item of selectScenario.selectors" class="c-preview-list__item c-preview-list__item--{{item.key}}"><span class="c-preview-list__text">{{item.values}}</span></li>
                               </ul>
-                              <div class="c-scenarios-preview__item c-preview-table">
-                                <div class="c-preview-table__scroll">
-                                  <table class="c-preview-table__main">
-                                    <thead class="c-preview-table__thead">
-                                      <tr class="c-preview-table__row">
-                                        <th class="c-preview-table__cell c-preview-table__cell--th">
+                              <div *ngIf="selectScenario.table.length" class="c-scenarios-preview__item c-preview-table">
+                                  <div class="c-preview-table__scroll">
+                                      <div class="c-preview-table__main">
+                                        <div class="c-preview-table__thead">
+                                      <div class="c-preview-table__row">
+                                        <div class="c-preview-table__cell c-preview-table__cell--th">
                                           <div class="c-preview-table__head-cell">Drivers</div>
-                                        </th>
-                                        <th class="c-preview-table__cell c-preview-table__cell--th">
-                                          <div class="c-preview-table__head-cell">Growth, 2015-22</div>
-                                        </th>
-                                        <th class="c-preview-table__cell c-preview-table__cell--th">
+                                        </div>
+                                        <div class="c-preview-table__cell c-preview-table__cell--th">
+                                          <div class="c-preview-table__head-cell">Growth, {{dateParse(selectScenario.modify_date)}}</div>
+                                        </div>
+                                        <div class="c-preview-table__cell c-preview-table__cell--th">
                                           <div class="c-preview-table__head-cell">Drivers</div>
-                                        </th>
-                                        <th class="c-preview-table__cell c-preview-table__cell--th">
-                                          <div class="c-preview-table__head-cell">Growth, 2015-22</div>
-                                        </th>
-                                      </tr>
-                                    </thead>
-                                    <tbody class="c-preview-table__tbody">
-                                      <tr class="c-preview-table__row">
-                                        <td class="c-preview-table__cell">
-                                          <div class="c-preview-table__inner">Macroeconomic </div>
-                                        </td>
-                                        <td class="c-preview-table__cell c-preview-table__cell--drivers">
-                                          <div class="c-preview-table__inner">Optimistic</div>
-                                        </td>
-                                        <td class="c-preview-table__cell">
-                                          <div class="c-preview-table__inner">Media Activity</div>
-                                        </td>
-                                        <td class="c-preview-table__cell c-preview-table__cell--drivers">
-                                          <div class="c-preview-table__inner">-0.7%</div>
-                                        </td>
-                                      </tr>
-                                      <tr class="c-preview-table__row">
-                                        <td class="c-preview-table__cell">
-                                          <div class="c-preview-table__inner">Coverage</div>
-                                        </td>
-                                        <td class="c-preview-table__cell c-preview-table__cell--drivers">
-                                          <div class="c-preview-table__inner">0.0%</div>
-                                        </td>
-                                        <td class="c-preview-table__cell">
-                                          <div class="c-preview-table__inner">Price-on-Volume</div>
-                                        </td>
-                                        <td class="c-preview-table__cell c-preview-table__cell--drivers">
-                                          <div class="c-preview-table__inner">-2.0%</div>
-                                        </td>
-                                      </tr>
-                                      <tr class="c-preview-table__row">
-                                        <td class="c-preview-table__cell">
-                                          <div class="c-preview-table__inner">Distribution</div>
-                                        </td>
-                                        <td class="c-preview-table__cell c-preview-table__cell--drivers">
-                                          <div class="c-preview-table__inner">-2.5%</div>
-                                        </td>
-                                        <td class="c-preview-table__cell">
-                                          <div class="c-preview-table__inner">Retail Price</div>
-                                        </td>
-                                        <td class="c-preview-table__cell c-preview-table__cell--drivers">
-                                          <div class="c-preview-table__inner">-1.1%</div>
-                                        </td>
-                                      </tr>
-                                      <tr class="c-preview-table__row">
-                                        <td class="c-preview-table__cell">
-                                          <div class="c-preview-table__inner">Product Launch</div>
-                                        </td>
-                                        <td class="c-preview-table__cell c-preview-table__cell--drivers">
-                                          <div class="c-preview-table__inner">0.5%</div>
-                                        </td>
-                                        <td class="c-preview-table__cell">
-                                          <div class="c-preview-table__inner">Additional</div>
-                                        </td>
-                                        <td class="c-preview-table__cell c-preview-table__cell--drivers">
-                                          <div class="c-preview-table__inner">0.0%</div>
-                                        </td>
-                                      </tr>
-                                      <tr class="c-preview-table__row">
-                                        <td class="c-preview-table__cell">
-                                          <div class="c-preview-table__inner">Macroeconomic </div>
-                                        </td>
-                                        <td class="c-preview-table__cell c-preview-table__cell--drivers">
-                                          <div class="c-preview-table__inner">Optimistic</div>
-                                        </td>
-                                        <td class="c-preview-table__cell">
-                                          <div class="c-preview-table__inner">Media Activity</div>
-                                        </td>
-                                        <td class="c-preview-table__cell c-preview-table__cell--drivers">
-                                          <div class="c-preview-table__inner">-0.7%</div>
-                                        </td>
-                                      </tr>
-                                      <tr class="c-preview-table__row">
-                                        <td class="c-preview-table__cell">
-                                          <div class="c-preview-table__inner">Coverage</div>
-                                        </td>
-                                        <td class="c-preview-table__cell c-preview-table__cell--drivers">
-                                          <div class="c-preview-table__inner">0.0%</div>
-                                        </td>
-                                        <td class="c-preview-table__cell">
-                                          <div class="c-preview-table__inner">Price-on-Volume</div>
-                                        </td>
-                                        <td class="c-preview-table__cell c-preview-table__cell--drivers">
-                                          <div class="c-preview-table__inner">-2.0%</div>
-                                        </td>
-                                      </tr>
-                                      <tr class="c-preview-table__row">
-                                        <td class="c-preview-table__cell">
-                                          <div class="c-preview-table__inner">Distribution</div>
-                                        </td>
-                                        <td class="c-preview-table__cell c-preview-table__cell--drivers">
-                                          <div class="c-preview-table__inner">-2.5%</div>
-                                        </td>
-                                        <td class="c-preview-table__cell">
-                                          <div class="c-preview-table__inner">Retail Price</div>
-                                        </td>
-                                        <td class="c-preview-table__cell c-preview-table__cell--drivers">
-                                          <div class="c-preview-table__inner">-1.1%</div>
-                                        </td>
-                                      </tr>
-                                      <tr class="c-preview-table__row">
-                                        <td class="c-preview-table__cell">
-                                          <div class="c-preview-table__inner">Product Launch</div>
-                                        </td>
-                                        <td class="c-preview-table__cell c-preview-table__cell--drivers">
-                                          <div class="c-preview-table__inner">0.5%</div>
-                                        </td>
-                                        <td class="c-preview-table__cell">
-                                          <div class="c-preview-table__inner">Additional</div>
-                                        </td>
-                                        <td class="c-preview-table__cell c-preview-table__cell--drivers">
-                                          <div class="c-preview-table__inner">0.0%</div>
-                                        </td>
-                                      </tr>
-                                    </tbody>
-                                  </table>
+                                        </div>
+                                        <div class="c-preview-table__cell c-preview-table__cell--th">
+                                          <div class="c-preview-table__head-cell">Growth, {{dateParse(selectScenario.modify_date)}}</div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                        <div class="c-preview-table__tbody">
+                                            <div *ngFor="let item of selectScenario.table; let even = even; let odd = odd" class="c-preview-table__row">
+                                                <div *ngIf="odd" class="c-preview-table__cell">
+                                                  <div class="c-preview-table__inner">{{item.drivers}}</div>
+                                                </div>
+                                                <div *ngIf="odd" class="c-preview-table__cell c-preview-table__cell--drivers">
+                                                  <div class="c-preview-table__inner">{{item.growth}}</div>
+                                                </div>
+                                                <div *ngIf="even" class="c-preview-table__cell c-preview-table__cell__first">
+                                                  <div class="c-preview-table__inner">{{item.drivers}}</div>
+                                                </div>
+                                                <div *ngIf="even" class="c-preview-table__cell c-preview-table__cell--drivers">
+                                                  <div class="c-preview-table__inner">{{item.growth}}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                     </div>
                                 </div>
                               </div>
-                              <ul class="c-scenarios-preview__item c-preview-info">
-                                <li class="c-preview-info__item">
-                                  <div class="c-preview-info__title">Growth Rate</div>
-                                  <div class="c-preview-info__value c-preview-info__value--green">+1.3%</div>
-                                </li>
-                                <li class="c-preview-info__item">
-                                  <div class="c-preview-info__title">Sales Value</div>
-                                  <div class="c-preview-info__value">3345</div>
-                                </li>
-                                <li class="c-preview-info__item">
-                                  <div class="c-preview-info__title">Long-Term</div>
-                                  <div class="c-preview-info__value c-preview-info__value--red">-2.3%</div>
-                                </li>
+                              <ul *ngIf="selectScenario.main_info.length" class="c-scenarios-preview__item c-preview-info">
+                                  <li *ngFor="let item of selectScenario.main_info" class="c-preview-info__item">
+                                      <div class="c-preview-info__title">{{item.name}}</div>
+                                      <div class="c-preview-info__value" [ngClass]="{'c-preview-info__value--green': item.value.startsWith('+'), 'c-preview-info__value--red': item.value.startsWith('-')}">{{item.value}}</div>
+                                  </li>
                               </ul>
                             </div>
                           </div><!---------------- m-scenarios-page__preview ---------------->

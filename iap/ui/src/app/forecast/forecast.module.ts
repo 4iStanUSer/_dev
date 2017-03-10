@@ -20,7 +20,10 @@ import {SimulatorPageComponent} from "./simulator-page/simulator-page.component"
 import {SimulatorPageDataManagerService} from "./simulator-page/simulator-page-data-manager.service";
 
 import {ForecastComponent} from "./forecast.component";
-import {ScenariosListComponent} from "./scenarios-list/scenarios-list.component";
+import {ScenariosComponent} from "./scenarios/scenarios.component";
+import {ScenarioService} from "./scenarios/scenario.service";
+import {ScenariosListComponent} from "./scenarios/scenarios-list/scenarios-list.component";
+import {NewScenarioComponent} from "./scenarios/new-scenario/new-scenario.component";
 
 // import {SelectorsComponent} from './dashboard/selectors/selectors.component';
 // import {FlatSelectorComponent} from './dashboard/selectors/flat-selector/flat-selector.component';
@@ -74,7 +77,9 @@ import {EditPageComponent} from "./edit-page/edit-page.component";
         FlatSelectorComponent,
         HierarchicalSelectorComponent,
 
+        ScenariosComponent,
         ScenariosListComponent,
+        NewScenarioComponent,
         SimulatorPageComponent,
 
         DonutChartComponent,
@@ -95,7 +100,7 @@ import {EditPageComponent} from "./edit-page/edit-page.component";
     ],
     providers: [
         CommonServicesModule,
-
+        ScenarioService,
         DataManagerService, // TODO Rename (VL)
         SimulatorPageDataManagerService,
         LandingPageService

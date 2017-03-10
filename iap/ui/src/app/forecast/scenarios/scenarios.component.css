@@ -1124,6 +1124,13 @@
   color: #fff;
   border-right: 1px solid #fff;
 }
+#multiselect-wrap {
+    position: absolute;
+    height: 20px;
+    width: 160px;
+    left: 5px;
+    border-right: none;
+}
 .c-top-filter__item:last-child {
   border-right: none;
 }
@@ -1166,6 +1173,7 @@
   background-color: #fff;
 }
 .c-service-pane {
+    position: relative;
   height: 31px;
   margin-bottom: 8px;
   display: -webkit-flex;
@@ -1247,8 +1255,8 @@
   height: 28px;
   width: 9%;
   top: 0;
-  margin-left: -14px;
-  padding: 0 14px;
+  margin-left: -8px;
+  padding: 0 8px;
   color: #626970;
   font-size: 10px;
   background-color: #d8e0ee;
@@ -1260,36 +1268,35 @@
           justify-content: center;
 }
 .c-scenarios-table__head-cell--status {
-  width: calc(7.8% - 27px);
-  margin-left: 0;
+  width: calc(10% - 16px);
   -webkit-justify-content: center;
       -ms-flex-pack: center;
           justify-content: center;
 }
 .c-scenarios-table__head-cell--shared {
-  width: calc(8% - 27px);
+  width: calc(9% - 16px);
   text-align: center;
   -webkit-justify-content: center;
       -ms-flex-pack: center;
           justify-content: center;
 }
 .c-scenarios-table__head-cell--name {
-  width: calc(17% - 27px);
+  width: calc(17% - 16px);
 }
 .c-scenarios-table__head-cell--author {
-  width: calc(14% - 27px);
+  width: calc(14% - 16px);
 }
 .c-scenarios-table__head-cell--checks {
-  width: calc(9% - 27px);
+  width: calc(7.6% - 16px);
 }
 .c-scenarios-table__head-cell--actions {
   width: calc(15% - 14px);
 }
 .c-scenarios-table__head-cell--description {
-  width: calc(19.8% - 27px);
+  width: calc(19.8% - 16px);
 }
 .c-scenarios-table__head-cell--modified {
-  width: calc(9.5% - 27px);
+  width: calc(11% - 16px);
 }
 .c-scenarios-table__head-cell:after {
   content: '';
@@ -1329,7 +1336,7 @@
 .c-scenarios-table__cell {
   display: table-cell;
   height: 34px;
-  padding: 0 14px;
+  padding: 0 8px;
   vertical-align: middle;
   border-right: 1px solid #d8e0ee;
   border-bottom: 1px solid #d8e0ee;
@@ -1345,16 +1352,15 @@
   color: rgba(148,161,181,0.5);
 }
 .c-scenarios-table__cell--shared {
-  width: 8%;
+  width: 9%;
   text-align: center;
 }
 .c-scenarios-table__cell--modified {
-  width: 9.4%;
+  width: 11%;
   text-align: center;
 }
 .c-scenarios-table__cell--status {
-  width: 78px;
-  padding: 0;
+  width: 10%;
   text-align: center;
 }
 .c-scenarios-table__cell--name {
@@ -1364,10 +1370,11 @@
   width: 14%;
 }
 .c-scenarios-table__cell--checks {
-  width: 9%;
+    width: 7.6%;
 }
 .c-scenarios-table__cell--actions {
-  width: 15%;
+    width: 10%;
+    cursor: default;
 }
 .c-scenarios-table__cell--header {
   height: 0;
@@ -1461,6 +1468,7 @@
 .c-check-actions {
   display: -webkit-flex;
   display: -ms-flexbox;
+    margin: 0 auto;
   display: flex;
   -webkit-justify-content: space-around;
       -ms-flex-pack: distribute;
@@ -1556,6 +1564,7 @@
 .c-preview-table__cell {
   width: 25%;
   height: 39px;
+  line-height: 39px;
   padding: 0;
   font-family: 'open_sansregular';
   font-size: 14px;
@@ -1564,15 +1573,16 @@
   text-align: center;
   white-space: nowrap;
   border-left: none;
-  border-right: 1px solid #d8e0ee;
+  border-left: 1px solid #d8e0ee;
   border-bottom: 1px solid #d8e0ee;
   background-color: #f9fafd;
+  float:left;box-sizing:border-box;
 }
 .c-preview-table__cell--drivers {
   font-family: 'open_sanssemibold';
 }
-.c-preview-table__cell:last-child {
-  border-right: none;
+.c-preview-table__cell__first{
+  border-left: none;
 }
 .c-preview-table__cell--th {
   height: 0;

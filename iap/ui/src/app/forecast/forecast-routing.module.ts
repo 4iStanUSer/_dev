@@ -5,7 +5,9 @@ import {AuthGuard} from "../common/module/login/auth-guard";
 
 import {ForecastComponent} from "./forecast.component";
 import {DashboardComponent} from "./dashboard/dashboard.component";
-import {ScenariosListComponent} from "./scenarios-list/scenarios-list.component";
+import {ScenariosComponent} from "./scenarios/scenarios.component";
+import {ScenariosListComponent} from "./scenarios/scenarios-list/scenarios-list.component";
+import {NewScenarioComponent} from "./scenarios/new-scenario/new-scenario.component";
 import {SimulatorPageComponent} from "./simulator-page/simulator-page.component";
 import {GeneralComponent} from "./dashboard/general/general.component";
 import {DriverSummaryComponent} from "./dashboard/driver-summary/driver-summary.component";
@@ -60,7 +62,27 @@ import {EditPageComponent} from "./edit-page/edit-page.component";
                     },
                     {
                         path: 'scenarios',
-                        component: ScenariosListComponent
+                        component: ScenariosComponent,
+
+                        children: [
+                            {
+                                path: '',
+                                redirectTo: 'scenarios-list',
+                                pathMatch: 'full'
+                            },
+                            {
+                                path: 'scenarios-list',
+                                component: ScenariosListComponent,
+                            },
+                            {
+                                path: 'new-scenario',
+                                component: NewScenarioComponent,
+                            },
+                            {
+                                path: 'edit-scenario/:id',
+                                component: NewScenarioComponent,
+                            }
+                        ]
                     },
                     {
                         path: 'simulator',

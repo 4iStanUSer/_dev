@@ -1,33 +1,49 @@
 import { Component, OnInit} from '@angular/core';
-import {AjaxService} from "../../common/service/ajax.service";
+import { Router, ActivatedRoute } from '@angular/router';
 
-import { ScenariosListComponentService } from './scenarios-list.service';
+
+import {AjaxService} from "../../../common/service/ajax.service";
+import {ScenarioDetailsModel, ScenarioModel} from "../scenario.model";
+import {ScenarioService} from "../scenario.service";
+
+
 const moment = require('moment/moment');
+const MIN_SEARCH_LENGTH = 3;
 const DATEFORMAT = 'MM.DD.YY';
+const SORTING_FIELD = 'name';
+const SORTING_ORDER = true; //true == 'ASC', false == 'DESC'
 
 
 @Component({
     templateUrl: './scenarios-list.component.html',
-    styleUrls: ['./scenarios-list.component.css'],
-    providers: [ScenariosListComponentService]
+    styleUrls: ['../scenarios.component.css'],
 })
+
 export class ScenariosListComponent implements OnInit {
     scenariosList: any[];
     beforeFilterScenariosList: any[];
     userPermissionsData: any[];
     selectedScenarios: any[];
+    work_list: any[];
     favoriteList: any;
     selectElement: any;
-    selectScenario: any;
-    search: string;
+    selectScenario: ScenarioDetailsModel;
+    sorting: any = {field: SORTING_FIELD, order: SORTING_ORDER};
 
     //Permissions
     userPermissions: any = {
         create: false,
         finalize: false,
         share: false,
+        edit: false,
         copy: false,
         delete: false
+    };
+
+    // Multiselect
+    multiselect: any = {
+        active: false,
+        selected: []
     };
 
     //Filters
@@ -39,10 +55,15 @@ export class ScenariosListComponent implements OnInit {
         draftsStatusCount: 0,
         authorsList: [],
     };
-    filterCount:any;
-    filterSelect:any = {favorite:[], author:[], shared:[], status:[]};
+    filterCount:any = {favorite:0, shared:0, local:0, drafts:0, final:0};
+    filterSelect:any = {favorite:[], author:[], shared:[], status:[], search: ''};
 
-    constructor(private req: AjaxService) { }
+    constructor(
+        private router: Router,
+        private req: AjaxService,
+        private route: ActivatedRoute,
+        private scenarioService: ScenarioService
+    ) { }
 
     // Parse date 2017-02-10 14:00:13.990018 to DATEFORMAT
     dateParse(dateString: string) {
@@ -59,6 +80,29 @@ export class ScenariosListComponent implements OnInit {
         return value;
     }
 
+    __sortByKey() {
+        const self = this;
+        console.log('--------------------__sortByKey', self.sorting);
+        if (self.scenariosList !== undefined && self.scenariosList.length > 0) {
+            return self.scenariosList.sort(function (a, b) {
+                let x = a[self.sorting.field];
+                let y = b[self.sorting.field];
+
+                if (typeof x == "string") {
+                    x = x.toLowerCase();
+                }
+                if (typeof y == "string") {
+                    y = y.toLowerCase();
+                }
+                if (self.sorting.order === true) {
+                    return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+                } else {
+                    return ((x > y) ? -1 : ((x < y) ? 1 : 0));
+                }
+            });
+        }
+    }
+
     in_array(what, where) {
         for(var i=0; i<where.length; i++)
             if(what === where[i])
@@ -67,16 +111,16 @@ export class ScenariosListComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        // First load data
         this.__getScenariosList();
+        // Update user permissions
         this.__loadUserPermissionsData();
         this.selectedScenarios = [];
-        this.__runFilter();
     }
 
     ngDoCheck(): void {
         this.__initUserPermissions();
         this.__getAuthorsList();
-        this.__updateFilterCount();
     }
 
     // Get scenarios list from server
@@ -87,7 +131,24 @@ export class ScenariosListComponent implements OnInit {
         }).subscribe((data) => {
             this.scenariosList = data.data;
             this.beforeFilterScenariosList = data.data;
+            // Get work list
+            this.__getWorkList();
+            // First filter scenarios
+            this.__runFilter();
+            // Update filter count
+            this.__updateFilterCount();
+            // First sorting scenarios
+            this.__sortByKey();
         });
+    }
+
+    // Get work list
+    __getWorkList() {
+        let work_list = [];
+        if (this.beforeFilterScenariosList !== undefined && this.beforeFilterScenariosList.length > 0) {
+            work_list = this.beforeFilterScenariosList.filter(item => this.__getKey('favorite', item) === 'Yes');
+        }
+        this.work_list = work_list;
     }
     // ---------------------------------  Build filter  ----------------------------------//
     __getAuthorsList() {
@@ -127,6 +188,7 @@ export class ScenariosListComponent implements OnInit {
     }
 
     __updateFilterCount() {
+        console.log('--------------------__updateFilterCount', this.filterSelect);
         this.filterCount = {favorite:0, shared:0, local:0, drafts:0, final:0};
         let filterSelectKeys = Object.keys(this.filterSelect);
         for (let k of filterSelectKeys) {
@@ -153,9 +215,15 @@ export class ScenariosListComponent implements OnInit {
             let filterSelectKeys = Object.keys(mask);
             for (let k of filterSelectKeys) {
                 if (this.__getKey(k, mask).length > 0) {
-                    const ind = this.__getKey(k, mask).indexOf(this.__getKey(k, item));
-                    if (ind === -1) {
-                        status = false;
+                    if (k === 'search') {
+                        if (this.__getKey('name', item).toLowerCase().search(this.__getKey(k, mask)) === -1 && this.__getKey('description', item).toLowerCase().search(this.__getKey(k, mask)) === -1) {
+                            status = false;
+                        }
+                    } else {
+                        const ind = this.__getKey(k, mask).indexOf(this.__getKey(k, item));
+                        if (ind === -1) {
+                            status = false;
+                        }
                     }
                 }
             }
@@ -164,6 +232,7 @@ export class ScenariosListComponent implements OnInit {
 
     }
     __runFilter() {
+        console.log('--------------------__runFilter', this.filterSelect);
         if (this.beforeFilterScenariosList !== undefined && this.beforeFilterScenariosList.length > 0) {
             this.scenariosList = [];
             for (let scenario of this.beforeFilterScenariosList) {
@@ -172,8 +241,6 @@ export class ScenariosListComponent implements OnInit {
                 }
             }
         }
-        // Update Filter Count
-        this.__updateFilterCount();
     }
 
     onChangeAuthor(event: any) {
@@ -182,8 +249,21 @@ export class ScenariosListComponent implements OnInit {
         if (value) {
             this.filterSelect["author"].push(value);
         }
-        // Run filter
         this.__runFilter();
+        this.__updateFilterCount();
+        this.__sortByKey();
+    }
+
+    onChangeSearch(event: any) {
+        const value = event.target.value;
+        if (MIN_SEARCH_LENGTH <= value.length) {
+            this.filterSelect["search"] = value.toLowerCase();
+        } else {
+            this.filterSelect["search"] = '';
+        }
+        this.__runFilter();
+        this.__updateFilterCount();
+        this.__sortByKey();
     }
 
     onFilter(event: any, param: string, value: string) {
@@ -195,8 +275,9 @@ export class ScenariosListComponent implements OnInit {
                 this.filterSelect[param].splice(index, 1);
             }
         }
-        // Run filter
         this.__runFilter();
+        this.__updateFilterCount();
+        this.__sortByKey();
     }
     // ---------------------------------  Build filter  ----------------------------------//
 
@@ -215,8 +296,13 @@ export class ScenariosListComponent implements OnInit {
         this.__clearUserPermissions();
         if (this.scenariosList !== undefined) {
             // Check "Create New" permission
-            if (this.userPermissionsData !== undefined && this.__getKey('create', this.userPermissionsData)) {
-                this.userPermissions.create = true;
+            if (this.userPermissionsData !== undefined ) {
+                if (this.__getKey('create', this.userPermissionsData) === true) {
+                    this.userPermissions.create = true;
+                }
+                if (this.__getKey('edit', this.userPermissionsData) === true) {
+                    this.userPermissions.edit = true;
+                }
             }
             if (this.selectedScenarios.length > 0) {
                 // Check "Finalize" permission
@@ -291,68 +377,64 @@ export class ScenariosListComponent implements OnInit {
     }
 
     // Get scenario from server
-    __getScenarioDetails(scenario_id: number) {
-        this.req.post({
-            url_id: '/forecast/get_scenario_details',
-            data: {'id': scenario_id},
-        }).subscribe((data) => {
-            this.selectScenario = data;
-        });
+    __getScenarioDetails(scenario_id: number): void {
+        this.selectScenario = this.scenarioService.getScenarioDetails(scenario_id);
+        console.log('--------------__getScenarioDetails', this.selectScenario);
     }
 
     onSelectPreview(event: any) {
-        if (this.in_array('c-scenarios-table__row', event.target.classList) || this.in_array('c-scenarios-table__row', event.target.parentNode.classList)) {
-            if (this.in_array('c-scenarios-table__row', event.target.classList)) {
-                this.selectElement = event.target;
-            } else {
-                this.selectElement = event.target.parentNode;
-            }
-
-            if (this.in_array('c-scenarios-table__row--active', this.selectElement.classList)) {
-                this.selectElement.classList.remove("c-scenarios-table__row--active");
-                this.selectScenario = null;
-            } else {
-                this.__clearTableRowSelect();
-                this.selectElement.classList.add("c-scenarios-table__row--active");
-                let scenario_id = parseInt(this.selectElement.attributes['data-id'].value);
-
-                // Get scenario from server
-                this.__getScenarioDetails(scenario_id);
-
-                // Scroll to active scenario
-                const selectElementHeight = this.selectElement.clientHeight;
-                const selectElementPosition = this.selectElement.offsetTop;
-                let tableWindowsHeight = document.getElementsByClassName('m-scenarios-page__scroll')[0].clientHeight;
-                let scenariosPreview = document.getElementsByClassName('c-scenarios-preview')[0].clientHeight;
-                let tableScroll = document.getElementsByClassName('m-scenarios-page__scroll')[0].scrollTop;
-                tableWindowsHeight = scenariosPreview === 0 ? tableWindowsHeight - 224 : tableWindowsHeight;
-
-                if (tableScroll > selectElementPosition - selectElementHeight) {
-                    document.getElementsByClassName('m-scenarios-page__scroll')[0].scrollTop = tableScroll - selectElementHeight;
+        event.stopPropagation();
+        if (!this.multiselect.active) {
+            if (this.in_array('c-scenarios-table__row', event.target.classList) || this.in_array('c-scenarios-table__row', event.target.parentNode.classList)) {
+                if (this.in_array('c-scenarios-table__row', event.target.classList)) {
+                    this.selectElement = event.target;
+                } else {
+                    this.selectElement = event.target.parentNode;
                 }
 
-                if (selectElementPosition + selectElementHeight - tableScroll > tableWindowsHeight) {
-                    if (selectElementPosition > tableWindowsHeight + tableScroll) {
-                        document.getElementsByClassName('m-scenarios-page__scroll')[0].scrollTop = tableScroll + 224;
-                    } else {
-                    document.getElementsByClassName('m-scenarios-page__scroll')[0].scrollTop = tableScroll + (selectElementPosition + selectElementHeight - tableScroll - tableWindowsHeight);
+                if (this.in_array('c-scenarios-table__row--active', this.selectElement.classList)) {
+                    this.selectElement.classList.remove("c-scenarios-table__row--active");
+                    this.selectScenario = null;
+                } else {
+                    this.__clearTableRowSelect();
+                    this.selectElement.classList.add("c-scenarios-table__row--active");
+                    let scenario_id = parseInt(this.selectElement.attributes['data-id'].value);
+
+                    // Get scenario from server
+                    this.__getScenarioDetails(scenario_id);
+
+                    // Scroll to active scenario
+                    const selectElementHeight = this.selectElement.clientHeight;
+                    const selectElementPosition = this.selectElement.offsetTop;
+                    let tableWindowsHeight = document.getElementsByClassName('m-scenarios-page__scroll')[0].clientHeight;
+                    let scenariosPreview = document.getElementsByClassName('c-scenarios-preview')[0].clientHeight;
+                    let tableScroll = document.getElementsByClassName('m-scenarios-page__scroll')[0].scrollTop;
+                    tableWindowsHeight = scenariosPreview === 0 ? tableWindowsHeight - 224 : tableWindowsHeight;
+
+                    if (tableScroll > selectElementPosition - selectElementHeight) {
+                        document.getElementsByClassName('m-scenarios-page__scroll')[0].scrollTop = tableScroll - selectElementHeight;
                     }
+
+                    if (selectElementPosition + selectElementHeight - tableScroll > tableWindowsHeight) {
+                        if (selectElementPosition > tableWindowsHeight + tableScroll) {
+                            document.getElementsByClassName('m-scenarios-page__scroll')[0].scrollTop = tableScroll + 224;
+                        } else {
+                        document.getElementsByClassName('m-scenarios-page__scroll')[0].scrollTop = tableScroll + (selectElementPosition + selectElementHeight - tableScroll - tableWindowsHeight);
+                        }
+                    }
+
+                    /*
+                    console.log(
+                        'selectElementHeight', selectElementHeight,
+                        'selectElementPosition', selectElementPosition,
+                        'tableWindowsHeight', tableWindowsHeight,
+                        'scenariosPreview', scenariosPreview,
+                        'tableScroll', tableScroll
+                    );
+                    */
                 }
-
-                /*
-                console.log(
-                    'selectElementHeight', selectElementHeight,
-                    'selectElementPosition', selectElementPosition,
-                    'tableWindowsHeight', tableWindowsHeight,
-                    'scenariosPreview', scenariosPreview,
-                    'tableScroll', tableScroll
-                );
-                */
             }
-        } else {
-            event.stopPropagation();
         }
-
     }
     // --------------------------------  Scenario details  -------------------------------//
 
@@ -397,8 +479,17 @@ export class ScenariosListComponent implements OnInit {
                     }
                 }
             }
+            // Update scenarios list
+            this.__getScenariosList();
+
             // Update user permissions
             this.__initUserPermissions();
+
+            // Update filter count
+            this.__updateFilterCount();
+
+            //
+            // this.__runFilter();
         });
     }
 
@@ -414,6 +505,18 @@ export class ScenariosListComponent implements OnInit {
                 this.selectScenario = null;
             }
         });
+
+        // Update scenarios list
+        this.__getScenariosList();
+
+        // Run filter
+        this.__runFilter();
+
+        // Update user permissions
+        this.__initUserPermissions();
+
+        // Update filter count
+        this.__updateFilterCount();
     }
 
     __getSelectedScenariosList() {
@@ -462,6 +565,14 @@ export class ScenariosListComponent implements OnInit {
         }
     }
 
+    onToggleMultiselect(event:any) {
+        let element = event.target;
+        element.checked = !this.multiselect.active;
+        this.multiselect.active = !this.multiselect.active;
+        this.selectedScenarios = [];
+        this.onCloseScenariosPreview();
+    }
+
     onToggleAllScenarios(event:any) {
         let element = event.target;
         let checked = false;
@@ -481,63 +592,79 @@ export class ScenariosListComponent implements OnInit {
 
     onToggleSharedScenario(event: any) {
         event.preventDefault();
-        let edit_scenarios = [];
-        let e_scenarios = [];
+        if (!this.multiselect.active) {
+            let edit_scenarios = [];
+            let e_scenarios = [];
 
-        try {
-            const scenario_id = event.target.attributes['data-id'].value;
-            e_scenarios.push(scenario_id);
-        } catch (e) {
-            if (this.__getKey('share', this.userPermissions) === true) {
-                e_scenarios = this.selectedScenarios;
-            }
-        }
-        if (e_scenarios.length > 0) {
-            for (let i = 0; i < e_scenarios.length; i++) {
-                const scenario = this.__getScenario(e_scenarios[i]);
-                if (this.in_array("share", this.__getKey('scenario_permission', scenario))) {
-                    let new_shared = this.__getKey('shared', scenario) === 'No' ? 'Yes' : 'No';
-                    edit_scenarios.push({
-                        id: this.__getKey('id', scenario),
-                        modify: [{value: new_shared, parameter: 'shared'}]
-                    });
+            try {
+                const scenario_id = event.target.attributes['data-id'].value;
+                e_scenarios.push(scenario_id);
+            } catch (e) {
+                if (this.__getKey('share', this.userPermissions) === true) {
+                    e_scenarios = this.selectedScenarios;
                 }
             }
-            if (edit_scenarios.length > 0) {
-                this.__editScenario(edit_scenarios);
+            if (e_scenarios.length > 0) {
+                for (let i = 0; i < e_scenarios.length; i++) {
+                    const scenario = this.__getScenario(e_scenarios[i]);
+                    if (this.in_array("share", this.__getKey('scenario_permission', scenario))) {
+                        let new_shared = this.__getKey('shared', scenario) === 'No' ? 'Yes' : 'No';
+                        edit_scenarios.push({
+                            id: this.__getKey('id', scenario),
+                            modify: [{value: new_shared, parameter: 'shared'}]
+                        });
+                    }
+                }
+                if (edit_scenarios.length > 0) {
+                    this.__editScenario(edit_scenarios);
+                }
             }
         }
     }
 
     onToggleStatusScenario(event: any) {
         event.preventDefault();
-        let edit_scenarios = [];
-        let e_scenarios = [];
+        if (!this.multiselect.active) {
+            let edit_scenarios = [];
+            let e_scenarios = [];
 
-        try {
-            const scenario_id = event.target.attributes['data-id'].value;
-            e_scenarios.push(scenario_id);
-        } catch (e) {
-            if (this.__getKey('finalize', this.userPermissions) === true) {
-                e_scenarios = this.selectedScenarios;
-            }
-        }
-
-        if (e_scenarios.length > 0) {
-            for (let i = 0; i < e_scenarios.length; i++) {
-                const scenario = this.__getScenario(e_scenarios[i]);
-                if (this.in_array("change_status", this.__getKey('scenario_permission', scenario))) {
-                    let new_status = this.__getKey('status', scenario) === 'Final' ? 'Draft' : 'Final';
-                    edit_scenarios.push({
-                        id: this.__getKey('id', scenario),
-                        modify: [{value: new_status, parameter: 'status'}]
-                    });
+            try {
+                const scenario_id = event.target.attributes['data-id'].value;
+                e_scenarios.push(scenario_id);
+            } catch (e) {
+                if (this.__getKey('finalize', this.userPermissions) === true) {
+                    e_scenarios = this.selectedScenarios;
                 }
             }
-            if (edit_scenarios.length > 0) {
-                this.__editScenario(edit_scenarios);
+
+            if (e_scenarios.length > 0) {
+                for (let i = 0; i < e_scenarios.length; i++) {
+                    const scenario = this.__getScenario(e_scenarios[i]);
+                    if (this.in_array("change_status", this.__getKey('scenario_permission', scenario))) {
+                        let new_status = this.__getKey('status', scenario) === 'Final' ? 'Draft' : 'Final';
+                        edit_scenarios.push({
+                            id: this.__getKey('id', scenario),
+                            modify: [{value: new_status, parameter: 'status'}]
+                        });
+                    }
+                }
+                if (edit_scenarios.length > 0) {
+                    this.__editScenario(edit_scenarios);
+                }
             }
         }
+    }
+
+    onToggleSort(field: string) {
+        if (field !== this.sorting.field) {
+            this.sorting['field'] = field;
+            this.sorting['order'] = true;
+        } else {
+            this.sorting.order = !this.sorting.order;
+        }
+
+        // Run new sorting
+        this.__sortByKey();
     }
 
     onToggleFavoritScenario(event: any) {
@@ -552,23 +679,25 @@ export class ScenariosListComponent implements OnInit {
 
     onCopyScenario(event: any) {
         event.preventDefault();
-        let scenario_id: number;
-        try {
-            scenario_id = event.target.attributes['data-id'].value;
-        } catch (e) {
-            if (this.__getKey('copy', this.userPermissions) === true) {
-                scenario_id = this.selectedScenarios[0];
+        if (!this.multiselect.active) {
+            let scenario_id: number;
+            try {
+                scenario_id = event.target.attributes['data-id'].value;
+            } catch (e) {
+                if (this.__getKey('copy', this.userPermissions) === true) {
+                    scenario_id = this.selectedScenarios[0];
+                }
             }
-        }
 
-        let scenario = this.__getScenario(scenario_id);
-        if (scenario) {
-            const copyScenario = {
-                name: 'Copy ' + this.__getKey('name', scenario),
-                description: this.__getKey('description', scenario),
-                criteria: this.__getKey('criteriathis', scenario)
-            };
-            this.__createScenario(copyScenario, this.__getKey('id', scenario));
+            let scenario = this.__getScenario(scenario_id);
+            if (scenario) {
+                const copyScenario = {
+                    name: 'Copy ' + this.__getKey('name', scenario),
+                    description: this.__getKey('description', scenario),
+                    criteria: this.__getKey('criteriathis', scenario)
+                };
+                this.__createScenario(copyScenario, this.__getKey('id', scenario));
+            }
         }
     }
 
@@ -582,8 +711,35 @@ export class ScenariosListComponent implements OnInit {
         if(this.__getKey('delete', this.userPermissions) === true) {
             this.__deleteScenario(this.selectedScenarios);
         }
-        // Update user permissions
-        this.__initUserPermissions();
+    }
+
+    goToEditScenario(event: any) {
+        event.preventDefault();
+        if (!this.multiselect.active) {
+            if (this.__getKey('edit', this.userPermissions) === true) {
+                const scenario_id = event.target.attributes['data-id'].value;
+                const scenario = this.__getScenario(scenario_id);
+                if (this.in_array("edit", this.__getKey('scenario_permission', scenario))) {
+                    this.router.navigate(["../edit-scenario", this.__getKey('id', scenario)], {relativeTo: this.route});
+                }
+            }
+        }
+    }
+
+    goToSimulator(event: any) {
+        event.preventDefault();
+        if (!this.multiselect.active) {
+            // TODO Add run simulator
+            const scenario_id = event.target.attributes['data-id'].value;
+            this.router.navigate(["../../simulator"], {relativeTo: this.route});
+        }
+    }
+
+    goToNewScenario(event: any) {
+        event.preventDefault();
+        if(this.__getKey('create', this.userPermissions) === true) {
+            this.router.navigate(["../new-scenario"], { relativeTo: this.route });
+        }
     }
     // ------------------------- ------  Scenario Actions  -------------------------------//
 }
