@@ -1,5 +1,7 @@
 from ..models.warehouse import *
+from ..models.access import Project
 from sqlalchemy import create_engine
+
 import pandas as pd
 
 
@@ -23,11 +25,16 @@ class Warehouse:
         #TODO add exception if there no root object
 
         self._ssn = ssn_factory()
-        self._root = self._ssn.query(Entity).filter(Entity.name == 'root').one_or_none()
+        self._root = \
+            self._ssn.query(Entity).filter(Entity.name == 'root').one_or_none()
 
     """
     Common WH methods
     """
+
+    def add_project(self, project_name):
+        pass
+
     def save_project_data(self, name, df):
 
         df.to_sql(name, self.engine, if_exists='append')
@@ -47,7 +54,7 @@ class Warehouse:
         """
         return self._root
 
-    def add_entity(self, path, meta):
+    def add_entity(self, path, meta, project_name=None):
         """
         Add Entity by path and meta
         Set new Entiy object as child of root
@@ -60,7 +67,7 @@ class Warehouse:
         :rtype:
         """
         entity = self._root
-        return self._add_node_by_path(entity, path, meta, 0)
+        return self._add_node_by_path(entity, path, meta, 0, project_name)
 
     def get_entity_by_id(self, entity_id):
         """
@@ -90,7 +97,7 @@ class Warehouse:
         entity = self._root
         return self._find_node_by_path(entity, path, 0)
 
-    def _add_node_by_path(self, entity, path, meta, depth):
+    def _add_node_by_path(self, entity, path, meta, depth, project_name=None):
         """
         Private method of WH
 
@@ -115,7 +122,8 @@ class Warehouse:
         if node is None:
             node = self.add_child(entity, path[depth], meta[depth])
         if depth != len(path) - 1:
-            return self._add_node_by_path(node, path, meta, depth + 1)
+            return self._add_node_by_path(node, path, meta, depth + 1,
+                                          project_name)
         else:
             return node
 
@@ -136,7 +144,7 @@ class Warehouse:
                 return child
         return None
 
-    def add_child(self, entity, name, meta):
+    def add_child(self, entity, name, meta, project_name=None):
         """
         Add child to input entity
         with  input name and meta
@@ -154,7 +162,8 @@ class Warehouse:
         for child in entity.children:
             if child.name == name:
                 return child
-        new_child = Entity(_name=name, _dimension_name=meta[0], _layer=meta[1])
+        new_child = Entity(_name=name, _dimension_name=meta[0], _layer=meta[1],
+                           project=project_name)
         entity.children.append(new_child)
         return new_child
 
@@ -323,6 +332,20 @@ class Warehouse:
             if var.name == name:
                 return var
         return None
+
+    def add_ent_variable(self, ent, var_name):
+        """
+        Add entity variable
+        :param ent:
+        :type ent:
+        :param var_name:
+        :type var_name:
+        :return:
+        :rtype:
+        """
+        new_var = Variable(_name=var_name)
+        ent._variables.append(new_var)
+        
 
     def force_ent_variable(self, ent, name, data_type, default_value=None):
         """

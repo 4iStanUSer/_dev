@@ -270,3 +270,22 @@ def set_project_selection(req):
         msg = req.get_error_msg(e, lang)
         return send_error_response(msg)
 
+
+def process_data(req):
+    """
+    View for data processing
+
+    :param req:
+    :type req:
+    :return:
+    :rtype:
+    """
+    try:
+        config_name = req.json_body['config_name']
+    except KeyError:
+        from iap.data_loading.data_loader import Loader
+        import logging
+        settings = ""
+        loader = Loader()
+        loader.run_processing(config_name)
+        return  send_success_response()

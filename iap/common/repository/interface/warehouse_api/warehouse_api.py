@@ -1,8 +1,8 @@
-import numpy as np
+from ...models_managers.warehouse import Warehouse
 from .iwarehouse import Storage
 import logging
-
 logging.basicConfig(level=logging.DEBUG)
+
 
 class Project(Storage):
 
@@ -26,16 +26,37 @@ class Project(Storage):
         if entity_path in self.entities.keys():
             del self.entities[entity_path]
 
-    def read(self):
+    def read(self, df=None):
         """
 
         :return:
         :rtype: None
         """
+
         storage = Storage()
-        storage.read_from_local_storage(self.project_name)
+        storage.read_from_df(df)
         ents = storage.process_data_frame(self.project_name)
         self.entities = ents
+
+    def save_sql(self, db_config):
+        """
+        Data Loader save to sql
+
+        :param db_config:
+        :type db_config:
+        :param warehouse:
+        :type warehouse:
+        :return:
+        :rtype:
+        """
+        warehouse = Warehouse(db_config)
+        warehouse.add_project(self.project_name)
+        for ent_path, ent in self.entities.items():
+            warehouse.add_entity(self.project_name, entity=ent_path)
+            for var in ent.variables:
+                warehouse.add_variable(self.project_name,
+                                     entity=ent_path, var=var)
+
 
     def save(self):
         """
@@ -48,7 +69,8 @@ class Project(Storage):
             logging.info('Entity Save To DataFrame {0}'.format(ent_path))
             ent._save(storage, project_name=self.project_name)
 
-        storage.save_to_local_storage(project_name=self.project_name)
+        storage.save_to_local_storage()
+
 
 class Entity(Project):
 
@@ -107,6 +129,30 @@ class Entity(Project):
     def update_var(self):
         pass
 
+
+    def _save_to_sql(self, storage, project_name):
+        """
+
+        :param storage:
+        :type storage: iap.common.repository.interface.warehouse_api.iwarehouse.Storage
+        :param project_name:
+        :type project_name: str
+        :return:
+        :rtype: None
+        """
+
+        if self.vars!=dict():
+            for name, var in self.vars.items():
+
+                logging.info('Process Variable {0}'.format(name))
+                var._save(storage, project_name=project_name,
+                          ent_path=self.path)
+        else:
+            logging.info('Entity Saved To LocalStorage {0}'.format(self.path))
+            storage._save_data_frame(project_name=project_name,
+                                     entity_path=self.path)
+
+
     def _save(self, storage, project_name):
         """
 
@@ -120,11 +166,14 @@ class Entity(Project):
 
         if self.vars!=dict():
             for name, var in self.vars.items():
+
                 logging.info('Process Variable {0}'.format(name))
-                var._save(storage, project_name=project_name, ent_path=self.path)
+                var._save(storage, project_name=project_name,
+                          ent_path=self.path)
         else:
             logging.info('Entity Saved To LocalStorage {0}'.format(self.path))
-            storage._save_data_frame(project_name=project_name, entity_path=self.path)
+            storage._save_data_frame(project_name=project_name,
+                                     entity_path=self.path)
 
 class Variable(Entity):
 
@@ -158,6 +207,7 @@ class Variable(Entity):
         else:
             logging.info('Entity To DataFrame {0}'.format(ent_path))
             storage._save_data_frame(project_name=project_name, entity_path=ent_path,  var_name=self.name)
+
 
 class TimeSeries(Variable):
 

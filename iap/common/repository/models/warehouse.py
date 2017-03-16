@@ -74,6 +74,7 @@ class Entity(Base):
     _name = Column(String(length=255))
     _layer = Column(String(length=255))
     _dimension_name = Column(String(length=255))
+    project = Column(String(length=255), nullable=True)
     children = relationship('Entity',
                             secondary=entities_edge,
                             primaryjoin=_id == entities_edge.c.parent_id,

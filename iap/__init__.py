@@ -23,35 +23,61 @@ def common_routing(config):
                            cache_max_age=3600)
 
     config.add_route('common_views.index', '/')
-    config.add_view(common_views.index_view, route_name='common_views.index')
+    config.add_view(common_views.index_view,
+                    route_name='common_views.index')
 
     config.add_route('common_views.get_routing_config', '/routing_config')
     config.add_view(common_views.get_routing_config,
-                    route_name='common_views.get_routing_config', renderer='json')
+                    route_name='common_views.get_routing_config',
+                    renderer='json')
 
     config.add_route('common_views.check_logged_in', '/check_auth')
-    config.add_view(common_views.check_logged_in, route_name='common_views.check_logged_in', renderer='json')
+    config.add_view(common_views.check_logged_in,
+                    route_name='common_views.check_logged_in',
+                    renderer='json')
+
     config.add_route('common_views.login', '/login')
-    config.add_view(common_views.login, route_name='common_views.login',renderer='json')
+    config.add_view(common_views.login,
+                    route_name='common_views.login',
+                    renderer='json')
+
     config.add_route('common_views.logout', 'logout')
-    config.add_view(common_views.logout, route_name='common_views.logout', renderer='json')
+    config.add_view(common_views.logout,
+                    route_name='common_views.logout',
+                    renderer='json')
 
     config.add_route('common_views.get_page_configuration',
                      '/get_page_configuration')
-    config.add_view(common_views.get_page_configuration, route_name='common_views.get_page_configuration',renderer='json')
+    config.add_view(common_views.get_page_configuration,
+                    route_name='common_views.get_page_configuration',
+                    renderer='json')
 
     config.add_route('common_views.get_data_for_header', '/get_header_data')
-    config.add_view(common_views.get_data_for_header, route_name='common_views.get_data_for_header',renderer='json')
+    config.add_view(common_views.get_data_for_header,
+                    route_name='common_views.get_data_for_header',
+                    renderer='json')
 
     config.add_route('common_views.set_language', '/set_language')
-    config.add_view(common_views.set_language, route_name='common_views.set_language',renderer='json')
+    config.add_view(common_views.set_language,
+                    route_name='common_views.set_language',
+                    renderer='json')
 
     config.add_route('common_views.get_tools_with_projects',
                      '/get_tools_with_projects')
-    config.add_view(common_views.get_tools_with_projects, route_name='common_views.get_tools_with_projects',renderer='json')
+    config.add_view(common_views.get_tools_with_projects,
+                    route_name='common_views.get_tools_with_projects',
+                    renderer='json')
 
     config.add_route('common_views.select_project', '/select_project')
-    config.add_view(common_views.set_project_selection, route_name='common_views.select_project',renderer='json')
+    config.add_view(common_views.set_project_selection,
+                    route_name='common_views.select_project',
+                    renderer='json')
+
+    config.add_route("common_views.process_data", '/process_data')
+    config.add_view(common_views.process_data,
+                    route_name="common_views.process_data",
+                    renderer="json"
+                    )
 
     #config.set_authorization_policy(ACLAuthorizationPolicy())
     #config.set_authorization_policy(AccessManager())

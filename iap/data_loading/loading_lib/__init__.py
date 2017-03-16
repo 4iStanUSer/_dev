@@ -17,6 +17,15 @@ from .jj_lean import (
 )
 from .jj_oral_care import (
     jj_oral_care_init,
+    loader,
     jj_oral_care_sales,
     jj_oral_care_trends
 )
+
+
+def process(config, df):
+    from .. import data_processing_lib as dp_api
+    states = dp_api.collect_data_xls(config['ZIP'])
+    states = next(states).rename(columns={'Postal Code': 'zip_code'})
+    result = df.merge(states, how='left', on=['zip_code'])
+    return result

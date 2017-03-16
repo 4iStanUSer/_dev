@@ -1,8 +1,6 @@
 from pyramid.paster import get_appsettings
-from sqlalchemy.orm.exc import NoResultFound
 import pytest
 import os
-import json
 from iap import main
 
 ABS_PATH = os.path.abspath('../')

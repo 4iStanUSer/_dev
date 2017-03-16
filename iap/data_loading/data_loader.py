@@ -1,13 +1,15 @@
 import os
 import io
 import xlrd
-import configparser
 import re
+import json
 import csv
 import pandas as pd
-
-from .exceptions import NonExistedConfig, NonExistedDataSet, CorruptedDataSet, NonExistedProject
+import logging
+from .exceptions import  NonExistedDataSet, CorruptedDataSet
 from ..data_loading import loading_lib
+from ..common.repository.interface.warehouse_api import warehouse_api as wh_api
+import configparser
 
 
 class Loader:
@@ -21,21 +23,13 @@ class Loader:
         warehouse - interface for db interaction and data structure
                     behavior
     """
-    def __init__(self, config=None, warehouse=None):
+    def __init__(self):
+        settings =\
+            {'path': "C:/Users/Alex/Desktop/dev/iap/data_storage/data_lake"}
+        self.setting = settings
 
-        self._warehouse = warehouse
-        self._source = config
 
-        print("Source File", self._source)
-
-    def set_config(self, **kwargs):
-
-        pass
-        #TODO set path from configuration
-        #self._source = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
-        #                            'data_storage', 'data_lake')
-
-    def run_processing(self, proj_name):
+    def run_processing(self, config_name):
         """
         The main method of Loader object
 
@@ -50,52 +44,95 @@ class Loader:
         :return:
         :rtype:
         """
+        configs = self._get_proj_info(config_name)
         # Get project folder and config
-        folder, config = self._get_proj_info(proj_name)
+
+        for section_name in configs.sections():
+
+            regime = configs.get(section_name, 'regime')
+            if regime == 'indy':
+                try:
+                    int(configs[section_name]['chunk_size'])
+                except ValueError:
+                    self._run_indy_processing(configs, section_name)
+                else:
+                    self._run_indy_chunk_processing(configs, section_name)
+            else:
+                self._run_warehouse_processing(configs, section_name)
+
+    def _run_warehouse_processing(self, config, section_name):
+
+        project_name = config[section_name]['project_name']
+        self.project = wh_api.Project(project_name)
+
         # Run pre loading function if it is defined
-        preloader_name = config.get('DEFAULT', 'preloading_function',
+        preloader_name = config.get(section_name, 'preloading_function',
                                     fallback=None)
         if preloader_name is not None:
             preloader = getattr(loading_lib, preloader_name)
-            preloader(config['DEFAULT'], self._warehouse)
+            preloader(config, self.project)
 
-        # Search files in project folder
-        proj_path = os.path.join(self._source, folder)
-        for filename in os.listdir(proj_path):
-            file_config = None
-            for sect_name in config.sections():
-                if re.fullmatch(re.compile(sect_name), filename) is not None:
-                    file_config = config[sect_name]
-                    break
-            if file_config is None:
-                raise NonExistedConfig
-            if file_config.getboolean('ignore', fallback=False):
-                continue
-
-            # Loading function.
-            loader = getattr(loading_lib, file_config['loader_function'])
-
-            # Open file and run loading function.
-            try:
-                file_name = file_config['file_name']
-                abs_path = file_config['abs_path']
-            except KeyError:
-                raise NonExistedDataSet
-            else:
-                self._load_data_set(abs_path=abs_path, file_name=file_name,
-                                    loader=loader, file_config=file_config, proj_path=proj_path)
+        # Loading function.
+        loader_name = config.get(section_name, 'loader_function',
+                                    fallback=None)
+        if loader_name is not None:
+            loader = getattr(loading_lib, loader_name)
+            loader(config, self.project)
 
         # Run post loading function if it is defined
-        postloader_name = config.get('DEFAULT', 'postloading_function',
+        postloader_name = config.get(section_name, 'postloading_function',
                                      fallback=None)
         if postloader_name is not None:
             postloader = getattr(loading_lib, postloader_name)
-            postloader(config['DEFAULT'], self._warehouse)
-        # Commit changes
-        self._warehouse.commit()
+            postloader(config, self.project)
+
+    def _run_indy_processing(self, configs, section_name):
+
+        try:
+            processor = getattr(loading_lib, configs.get(section_name,
+                                                        'process'))
+        except AttributeError:
+            processor = None
+
+        except KeyError:
+            processor =None
+        try:
+            out_processor = getattr(loading_lib, configs.get(section_name,
+                                                  'out_put_processor'))
+        except AttributeError:
+            out_processor = None
+        except KeyError:
+            out_processor = None
+
+        df = []
+        for df in self.collect_data(configs[section_name]):
+            df.append(df)
+
+        if processor:
+            df = processor(config=configs, df=df)
+        if out_processor:
+            df = out_processor(configs, df)
+        self.save_data(df, configs[section_name])
 
 
-    def _get_proj_info(self, proj_name):
+    def _run_indy_chunk_processing(self, config, section_name):
+
+        try:
+            processor = getattr(loading_lib, config.get(section_name,
+                                                         'process'))
+        except AttributeError:
+            processor = None
+
+        except KeyError:
+            processor = None
+
+        for df in self.collect_data(config[section_name]):
+            if processor:
+                df = processor(config=config, df=df)
+            self.save_data(df, config[section_name])
+
+
+    def _get_proj_info(self, config_name):
         """
         Private function that called in run_processing
         Get config file, parse it and read it. Extract required
@@ -107,16 +144,16 @@ class Loader:
         :rtype:
         """
 
-
         # Read main config
-        #TODO Change self.source
-        main_config_path = os.path.join(self._source, '{0}_config.ini'.format(proj_name))
-        main_config = configparser.ConfigParser()
-        main_config.read(main_config_path)
-        proj_folder = os.path.join(self._source, main_config['Path']['path'])
-        return proj_folder, main_config
+        source = self.setting['path']
+        main_config_path = os.path.join(source,
+                                        '{0}.ini'.format(config_name))
+        config = configparser.ConfigParser()
+        config.read(main_config_path)
+        return config
 
-    def _load_data_set(self, abs_path, file_name, loader, file_config, proj_path=None):
+    def _load_data_set(self, abs_path, file_name, loader, file_config,
+                       proj_path=None):
         """
         Function read data set.
         And call processing function.
@@ -155,61 +192,13 @@ class Loader:
     def _post_load_function(self, ):
         pass
 
-    @staticmethod
-    def _read_file(extension, file):
-        """
-        Read file and reaturn raw data
 
-        :param extension:
-        :type extension:
-        :param file:
-        :type file:
-        :return:
-        :rtype:
-        """
-        if extension == '.csv':
-            # reader = InsDictReader(io.TextIOWrapper(file))
-            reader = csv.reader(io.TextIOWrapper(file))
-            return reader
-        elif extension == '.xlsx':
-            wb = xlrd.open_workbook(file_contents=file.read())
-            return wb
-        elif extension=="json":
-            pass
-        return None
-
-    @staticmethod
-    def _read_file_pd(extension, file_path):
-        """Read file and transform it into pandas DataFrame
-
-        :param extension:
-        :type extension:
-        :param file_path:
-        :type file_path:
-        :return:
-        :rtype:
-        """
-        if extension == '.csv':
-            # reader = InsDictReader(io.TextIOWrapper(file))
-            df = pd.read_csv(file_path)
-            return df
-        elif extension == '.xlsx':
-            df = pd.read_excel(file_path)
-            return df
-        elif extension=="json":
-            df = pd.read_json(file_path)
-            return df
-        return None
-
-    """"
-    Fucntions from new API
-    """
     def collects_data(self, config):
         """"
             Collect data from external storage into DataFrame
         """
-
         format = config['format']
+
         if format in ['csv', 'txt']:
             return self.collect_data(config)
         elif format == 'excel':
@@ -219,7 +208,6 @@ class Loader:
         else:
             pass
 
-
     def collect_from_hdf(self, config):
         """
         Read from hdf storage and get Dataframe
@@ -228,59 +216,100 @@ class Loader:
             storage_path = config['storage_path']
             table_name = config['table_name']
         except KeyError:
-            print("wrong input file")
+            logging.info("Wrong Input File")
             raise Exception
         else:
-            format = config['format']
             columns = config['columns']
             chunk_size = config['chunk_size']
+            format = config['format']
             where = config['where']
-
         if format == 'hdf':
             with pd.HDFStore(storage_path) as store:
-                for chunk in store.select(table_name, columns=columns, auto_close=True, where=where,
+                for chunk in store.select(table_name, columns=columns,
+                                          auto_close=True, where=where,
                                           chunksize=chunk_size):
+                    logging.info(
+                        "Data Collected - storage_path: {0} - Table {1} - Chunk {2}".
+                            format(storage_path, table_name, chunk_size))
                     yield chunk
         else:
             return None
+
+
+    def preprocess(self, file, col_to_read, columns, sep):
+
+        try:
+            row = pd.read_table(file, sep=sep, nrows=1)
+            if set(columns) > set(col_to_read) and \
+                            len(columns) == len(row.columns):
+                return True
+            else:
+                return False
+        except Exception:
+            return False
+
 
     def collect_data(self, config):
         """"
         Collect data from external storage into DataFrame
         """
+
         try:
             data_path = config['data_folder']
             filename_mask = config['file_mask']
         except KeyError:
-            print("wrong input file")
+            logging.info("wrong input file")
             raise Exception
 
-        columns = config['columns']
-        chunk_size = config['chunk_size']
+        columns = config['columns'].split(",")
+        try:
+            chunk_size = int(config['chunk_size'])
+        except ValueError:
+            chunk_size = None
+
         sep = config['sep']
         header = config['header']
 
         try:
             cols_props = config['columns_properties']
+            with open(cols_props) as f:
+                cols_props = json.load(f)
             col_to_read = [i['col_name'] for i in cols_props]
         except KeyError:
             index_cols = None
             col_to_read = columns
         else:
-            index_cols = [ind for ind, x in enumerate(cols_props) if x['col_type'] == 'index']
+            index_cols = [ind for ind, x in enumerate(cols_props)
+                          if x['col_type'] == 'index']
             if index_cols == []:
                 index_cols = None
-
         filenames = self.scan_folder(data_path, filename_mask)
 
         for file in filenames:
-            if header:
-                for chunk in pd.read_table(file, header=0, usecols=col_to_read, chunksize=chunk_size, sep=sep):
+            preprocess_result = self.preprocess(file, col_to_read=col_to_read,
+                                           columns=columns, sep=sep)
+
+            if header and preprocess_result:
+                for chunk in pd.read_table(file, header=0, usecols=col_to_read,
+                                           iterator=True,
+                                           chunksize=chunk_size, sep=sep):
+                    logging.info("Data Collected - File: {0} - Chunk {1}".
+                                 format(file, chunk_size))
+                    yield chunk
+
+            elif preprocess_result and not header:
+                for chunk in pd.read_table(file, header=None,
+                                           usecols=col_to_read, iterator=True,
+                                           names=columns, chunksize=chunk_size,
+                                           sep=sep, index_col=index_cols):
+                    logging.info("Data Collected - File {0} - Chunk {1}".
+                                 format(file, chunk_size))
                     yield chunk
             else:
-                for chunk in pd.read_table(file, header=0, usecols=col_to_read, names=columns, chunksize=chunk_size,
-                                           sep=sep, index_col=index_cols):
-                    yield chunk
+                logging.info(
+                    "No valid format of input columns - {0}".format(file))
+                raise Exception
+
 
     def collect_data_xls(self, config):
         """"
@@ -290,23 +319,23 @@ class Loader:
             data_path = config['data_folder']
             filename_mask = config['file_mask']
         except KeyError:
-            print("wrong input file")
+            logging.info("Wrong Input File")
             raise Exception
 
         columns = config['columns']
         format = config['format']
         sep = config['sep']
-
         filenames = self.scan_folder(data_path, filename_mask)
 
         for path in filenames:
             if format == 'xls':
                 xls = pd.ExcelFile(path)
                 df = xls.parse(header=0, sep=sep, usecols=columns)
+                logging.info("Data Collected - {0}".format(path))
                 yield df
 
 
-    def collect_to_hdf(config, processor):
+    def collect_to_hdf(self, df, config):
         """
         Reading from .csv file and saving to hdf
         """
@@ -315,29 +344,31 @@ class Loader:
             storage_path = config['storage']
             mode = config['mode']
         except KeyError:
-            print("wrong input file")
+            logging.info("wrong input file-{0}-{1}".
+                         format(table_name, storage_path))
             raise Exception
-        cols_props = config['columns_properties']
 
-        data_cols = [x['col_name'] for x in cols_props if x['is_index_data_col']]
+        cols_props = config['columns_properties']
+        with open(cols_props) as f:
+            cols_props = json.load(f)
+        data_cols = [x['col_name'] for x in cols_props if
+                     x['is_index_data_col']]
+
         with pd.HDFStore(storage_path, mode='a') as store:
             if mode == 'w' and table_name in store.keys():
                 store.remove(table_name)
-            else:
-                pass
-            for df in collects_data(config):
-                print(df.head(2))
-                if processor:
-                    result = processor(df)
-                    result = process_types(result, cols_props)
-                else:
-                    result = process_types(df, cols_props)
-                    print("result", result)
-                store.append(table_name, result, data_columns=data_cols, min_itemsize=100)
-                print('File: {0}'.format(storage_path))
+            result = self.process_types(df, cols_props)
+
+            result.to_hdf(storage_path, table_name, append=True,
+                              format='t',
+                              min_itemsize=100)
+            logging.info("Stored to Hdf: Storage - {0} Table - {1}"
+                             .format(storage_path, table_name))
+            store.create_table_index(table_name, columns=data_cols,
+                                     kind='full')
 
 
-    def scan_folder(path, mask):
+    def scan_folder(self, path, mask):
         f_names = []
         compiled_mask = re.compile(mask)
         for filename in os.listdir(path):
@@ -348,7 +379,7 @@ class Loader:
         return f_names
 
 
-    def process_types(df, cols_props):
+    def process_types(self, df, cols_props):
         for col_item in cols_props:
             c_name = col_item['col_name']
             if col_item['col_type'] == 'numeric':
@@ -370,7 +401,7 @@ class Loader:
         return df
 
 
-    def out_process_data(df, variables, time_stamp_column):
+    def out_process_data_var_col(self, df, variables, time_stamp_column):
         """
         Process data into output format - Variable: var_1, var_ var_3
                                           TimeStamp_1: 2, 203, 13
@@ -382,13 +413,15 @@ class Loader:
             for time_stamp in time_stamps:
                 col_name = var + "_" + str(time_stamp)
                 df[col_name] = None
-                df[col_name][(df[time_line] == time_stamp)] = df[var][(df[time_line] == time_stamp)].apply(lambda x: x)
+                df[col_name][(df[time_stamp_column] == time_stamp)] = \
+                    df[var][(df[time_stamp_column] == time_stamp)]. \
+                        apply(lambda x: x)
             del df[var]
             df.drop_duplicates()
         return df
 
 
-    def out_process_data_2(self, df, variables, time_stamp_column):
+    def out_process_data_var_ts_col(self, df, variables, time_stamp_column):
         """
         Output processing into format Time_Stamp_1_Var: 1,1,2
                                       Time_Stamp_2_Var: 1,2,3
@@ -408,7 +441,8 @@ class Loader:
             for time_stamp in time_stamps:
                 df[time_stamp] = None
                 df[time_stamp][(df['variable'] == var_name)] = \
-                    df[(df[time_stamp_column] == time_stamp)][var_name].apply(lambda x: x)
+                    df[(df[time_stamp_column] == time_stamp)][var_name]. \
+                        apply(lambda x: x)
 
             df.drop_duplicates()
             frames.append(df)
@@ -419,17 +453,27 @@ class Loader:
         return df
 
 
-    def write(self, df, path, format, sep=',', mode='w'):
+    def save_data(self, df, config):
 
-        """
-        Save to external storage Csv or XLS
-        """
-        if format == 'csv':
+        try:
+            format = config['output_format']
+        except KeyError:
+            raise Exception
+
+        if format == "csv":
+            path = config['output_path']
+            sep = config['sep']
+            mode = config['mode']
             df.to_csv(path + '.csv', sep=sep, mode=mode)
-            print("File Save  %s" % path)
         elif format == 'xls':
+            path = config['output_path']
+            sep = config['sep']
+            mode = config['mode']
             df.to_excel(path, sep=sep, mode=mode)
-            print("File Save  %s" % path)
+        elif format == "hdf":
+            self.collect_to_hdf(df, config)
+        else:
+            pass
 
 
 class InsDictReader(csv.DictReader):
@@ -437,3 +481,5 @@ class InsDictReader(csv.DictReader):
     def fieldnames(self):
         return [field.strip().lower() for field in super(InsDictReader, self)
                 .fieldnames]
+
+

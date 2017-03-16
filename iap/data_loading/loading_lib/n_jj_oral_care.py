@@ -1,34 +1,16 @@
 import datetime
-
+from .. import data_processing_lib as dp_api
 from .. import timeline_lib as t_lib
 from ...common.helper import Meta
 from .common import empty_to_zero
-from .. import data_processing_lib as dp_api
 
 
 def jj_oral_care_init(config, project):
-    """
-    Initialisation
-    :param config:
-    :type config:
-    :param project:
-    :type project:
-    :return:
-    :rtype:
-    """
-    for df in dp_api.collect_data(config['JJOralCare_Sales']):
-        project_name = config['JJOralCare_Sales']['project_name']
-        df = df[['Market', 'Fact']]
-        df.rename(columns={'Market': "Entity", 'Fact': "Variable"},
-                       inplace=True)
-        df['Project'] = project_name
+
+    for df in dp_api.collects_data(config['JJOralCare_Sales']):
+        df = df[['Market', 'Fact']].rename(["Entity", "Variables"])
         project.read(df)
 
-
-def loader(config, project):
-    db_config = config['JJOralCare_Sales']['db_config']
-    table_name = config['JJOralCare_Sales']['table_name']
-    project.save(db_config, table_name)
 
 
 def jj_oral_care_sales(table, config, warehouse):
@@ -40,6 +22,7 @@ def jj_oral_care_sales(table, config, warehouse):
     col_var_name = config.getint('col_var_name')
     col_var_metric = config.getint('col_var_metric')
     # Get first time point
+    print(table)
     header = next(table, None)
     text_date = header[col_data_start].strip()
     start_date = datetime.datetime.strptime(text_date, '%Y')

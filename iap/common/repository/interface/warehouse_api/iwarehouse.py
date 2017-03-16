@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 from . import warehouse_api
+import sqlalchemy
 import logging
 logging.getLogger(__name__)
 
@@ -12,6 +13,8 @@ class Storage():
                                        TimeSeries=[None], TimePoint=[None], Value=[None]),
                              columns=['Project', 'Entity', 'Variable', 'TimeSeries', 'TimePoint', 'Value']
                              )
+
+        self.config = dict(in_path=None, out_path=None)
 
     def _save_data_frame(self, project_name=None, entity_path=None, var_name=None,
                          time_series=None, time_point=None, values=None):
@@ -27,12 +30,16 @@ class Storage():
         frames = [serie, self.dataframe]
         self.dataframe = pd.concat(frames)
 
-    def save_to_local_storage(self, project_name):
-        logging.info("DataFrame Saved To Local Storage {0}".format(self.dataframe))
-        self.dataframe = self.dataframe.dropna(how='all')
-        self.dataframe.to_csv("C:/Users/Alex/Desktop/{0}.csv".format(project_name), index=False)
+    def save_to_local_storage(self, db_config=None, table_name=None):
 
-    def read_from_local_storage(self, project_name):
+        logging.info("DataFrame Saved To Local Storage {0}".format(self.dataframe))
+
+        self.dataframe = self.dataframe.dropna(how='all')
+        engine = sqlalchemy.create_engine(db_config)
+        self.dataframe.to_sql(con=engine, name=table_name,
+                              if_exists='append')
+
+    def read_from_df(self, df=None):
         """
         Read dataframe from local file
 
@@ -41,8 +48,9 @@ class Storage():
         :return:
         :rtype: None
         """
-        self.dataframe = pd.read_csv("C:/Users/Alex/Desktop/{0}.csv".format(project_name))
-        self.dataframe = self.dataframe.dropna(how='all')
+        if df is not None:
+            self.dataframe = self.dataframe.append(df)
+            self.dataframe = self.dataframe.dropna(how='all')
 
     def process_data_frame(self, project_name):
         """
