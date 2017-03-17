@@ -25,6 +25,7 @@
     "highcharts-more-node": "1.0.2",
     "lodash": "^4.15.0",
     "moment": "^2.17.1",
+    "mydaterangepicker": "^1.4.1",
     "rxjs": "5.0.0-beta.12",
     "ts-helpers": "^1.1.1",
     "zone.js": "^0.6.23"

@@ -11,4 +11,9 @@ export class ScenarioService {
       console.log('---getScenarioDetails', id);
       return ScenarioDetails;
   }
+  /*
+  getScenarios(): ScenarioModel[] {
+      return Scenarios;
+  }
+  */
 }

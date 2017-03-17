@@ -404,6 +404,12 @@
 .c-search input[type="search"]:focus {
   outline: none;
 }
+.c-search input[type="search"]::-webkit-search-decoration,
+.c-search input[type="search"]::-webkit-search-cancel-button,
+.c-search input[type="search"]::-webkit-search-results-button,
+.c-search input[type="search"]::-webkit-search-results-decoration {
+  display: none;
+}
 .c-search input[type="search"]::-webkit-input-placeholder {
   font-family: 'open_sansbold';
   font-size: 11px;
@@ -2205,4 +2211,9 @@
 .c-edit-form__buttons .c-button {
   width: 48%;
   margin-bottom: 12px;
+}
+.mydp {
+    width: 0;
+    right: 0;
+    position: absolute;
 }

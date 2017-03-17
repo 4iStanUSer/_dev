@@ -1,5 +1,6 @@
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import {IMyOptions, IMyDateRangeModel} from 'mydaterangepicker';
 
 
 import {AjaxService} from "../../../common/service/ajax.service";
@@ -9,14 +10,16 @@ import {ScenarioService} from "../scenario.service";
 
 const moment = require('moment/moment');
 const MIN_SEARCH_LENGTH = 3;
-const DATEFORMAT = 'MM.DD.YY';
+const DATEFORMAT = 'MM.DD.YYYY';
+const DATEPICKERFORMAT = 'mm.dd.yyyy';
 const SORTING_FIELD = 'name';
 const SORTING_ORDER = true; //true == 'ASC', false == 'DESC'
-
+const NOT_FOUND_CRITERIA_SCENARIOS_MESSAGE = 'No records found satisfying your criteria';
+const NOT_FOUND_SCENARIOS_MESSAGE = 'Not found scenarios';
 
 @Component({
     templateUrl: './scenarios-list.component.html',
-    styleUrls: ['../scenarios.component.css'],
+    styleUrls: ['../scenarios.component.css']
 })
 
 export class ScenariosListComponent implements OnInit {
@@ -56,7 +59,24 @@ export class ScenariosListComponent implements OnInit {
         authorsList: [],
     };
     filterCount:any = {favorite:0, shared:0, local:0, drafts:0, final:0};
-    filterSelect:any = {favorite:[], author:[], shared:[], status:[], search: ''};
+    filterSelect:any = {favorite:[], author:[], shared:[], status:[], search: '', date:[]};
+
+    // Messages
+    not_found_criteria_scenarios_message = NOT_FOUND_CRITERIA_SCENARIOS_MESSAGE;
+    not_found_scenarios_message = NOT_FOUND_SCENARIOS_MESSAGE;
+
+    // work list params
+    workListParams: any = {
+        limitCountShow: 10,
+        criticalDayChangeStatus: 2,
+        defaultDaysToDeadline: 10
+    };
+
+    private myDateFilterOptions: IMyOptions = {
+        // other options...
+        dateFormat: DATEPICKERFORMAT,
+        alignSelectorRight: true
+    };
 
     constructor(
         private router: Router,
@@ -80,13 +100,11 @@ export class ScenariosListComponent implements OnInit {
         return value;
     }
 
-    __sortByKey() {
-        const self = this;
-        console.log('--------------------__sortByKey', self.sorting);
-        if (self.scenariosList !== undefined && self.scenariosList.length > 0) {
-            return self.scenariosList.sort(function (a, b) {
-                let x = a[self.sorting.field];
-                let y = b[self.sorting.field];
+    __sortByKey(sort_list:any=this.scenariosList, field:string=this.sorting.field, order:boolean=this.sorting.order) {
+        if (sort_list !== undefined && sort_list.length > 0) {
+            return sort_list.sort(function (a, b) {
+                let x = a[field];
+                let y = b[field];
 
                 if (typeof x == "string") {
                     x = x.toLowerCase();
@@ -94,7 +112,7 @@ export class ScenariosListComponent implements OnInit {
                 if (typeof y == "string") {
                     y = y.toLowerCase();
                 }
-                if (self.sorting.order === true) {
+                if (order === true) {
                     return ((x < y) ? -1 : ((x > y) ? 1 : 0));
                 } else {
                     return ((x > y) ? -1 : ((x < y) ? 1 : 0));
@@ -142,14 +160,17 @@ export class ScenariosListComponent implements OnInit {
         });
     }
 
+    // -----------------------------------  Work list  -----------------------------------//
     // Get work list
     __getWorkList() {
         let work_list = [];
         if (this.beforeFilterScenariosList !== undefined && this.beforeFilterScenariosList.length > 0) {
             work_list = this.beforeFilterScenariosList.filter(item => this.__getKey('favorite', item) === 'Yes');
         }
-        this.work_list = work_list;
+        this.__sortByKey(work_list, 'modify_date', false);
+        this.work_list = work_list.slice(0, this.workListParams['limitCountShow']);
     }
+    // -----------------------------------  Work list  -----------------------------------//
     // ---------------------------------  Build filter  ----------------------------------//
     __getAuthorsList() {
         let authorsList = [];
@@ -215,7 +236,15 @@ export class ScenariosListComponent implements OnInit {
             let filterSelectKeys = Object.keys(mask);
             for (let k of filterSelectKeys) {
                 if (this.__getKey(k, mask).length > 0) {
-                    if (k === 'search') {
+                    if (k === 'date') {
+                        const firstDate = this.__getKey(k, mask)[0];
+                        const lastDate = this.__getKey(k, mask)[1];
+                        const check_date = this.dateParse(this.__getKey('modify_date', item));
+                        console.log(firstDate, lastDate, check_date);
+                        if((check_date > lastDate || check_date < firstDate)) {
+                            status = false;
+                        }
+                    } else if (k === 'search') {
                         if (this.__getKey('name', item).toLowerCase().search(this.__getKey(k, mask)) === -1 && this.__getKey('description', item).toLowerCase().search(this.__getKey(k, mask)) === -1) {
                             status = false;
                         }
@@ -231,6 +260,7 @@ export class ScenariosListComponent implements OnInit {
         return status;
 
     }
+
     __runFilter() {
         console.log('--------------------__runFilter', this.filterSelect);
         if (this.beforeFilterScenariosList !== undefined && this.beforeFilterScenariosList.length > 0) {
@@ -274,6 +304,20 @@ export class ScenariosListComponent implements OnInit {
             if (index > -1) {
                 this.filterSelect[param].splice(index, 1);
             }
+        }
+        this.__runFilter();
+        this.__updateFilterCount();
+        this.__sortByKey();
+    }
+
+    onDateFilter(event: IMyDateRangeModel) {
+        console.log(event);
+        if (event.beginJsDate === null || event.endJsDate === null) {
+            this.filterSelect['date'] = [];
+        } else {
+            const date_list = event.formatted.split(' - ');
+            this.filterSelect['date'][0] = date_list[0];
+            this.filterSelect['date'][1] = date_list[1];
         }
         this.__runFilter();
         this.__updateFilterCount();
@@ -404,6 +448,7 @@ export class ScenariosListComponent implements OnInit {
                     this.__getScenarioDetails(scenario_id);
 
                     // Scroll to active scenario
+                    /*
                     const selectElementHeight = this.selectElement.clientHeight;
                     const selectElementPosition = this.selectElement.offsetTop;
                     let tableWindowsHeight = document.getElementsByClassName('m-scenarios-page__scroll')[0].clientHeight;
@@ -422,7 +467,7 @@ export class ScenariosListComponent implements OnInit {
                         document.getElementsByClassName('m-scenarios-page__scroll')[0].scrollTop = tableScroll + (selectElementPosition + selectElementHeight - tableScroll - tableWindowsHeight);
                         }
                     }
-
+                    */
                     /*
                     console.log(
                         'selectElementHeight', selectElementHeight,
@@ -479,6 +524,8 @@ export class ScenariosListComponent implements OnInit {
                     }
                 }
             }
+            this.selectScenario = null;
+
             // Update scenarios list
             this.__getScenariosList();
 
@@ -487,9 +534,6 @@ export class ScenariosListComponent implements OnInit {
 
             // Update filter count
             this.__updateFilterCount();
-
-            //
-            // this.__runFilter();
         });
     }
 
@@ -501,7 +545,7 @@ export class ScenariosListComponent implements OnInit {
             const listStatus = new Set(Object.keys(data));
             const newScenariosList = this.scenariosList.filter(obj => !(listStatus.has(String(obj.id)) && data[String(obj.id)] === "Deleted"));
             this.scenariosList = newScenariosList;
-            if (listStatus.has(String(this.selectScenario.id))) {
+            if (listStatus.has(String(this.selectScenario['id']))) {
                 this.selectScenario = null;
             }
         });
@@ -550,6 +594,7 @@ export class ScenariosListComponent implements OnInit {
     }
 
     onToggleScenario(event:any) {
+        console.log('---onToggleScenario', this.multiselect.active);
         let element: any = event.target;
         if (element.checked === true) {
             this.__checkScenario(parseInt(element.attributes['data-id'].value));
@@ -568,8 +613,8 @@ export class ScenariosListComponent implements OnInit {
     onToggleMultiselect(event:any) {
         let element = event.target;
         element.checked = !this.multiselect.active;
-        this.multiselect.active = !this.multiselect.active;
         this.selectedScenarios = [];
+        this.multiselect.active = !this.multiselect.active;
         this.onCloseScenariosPreview();
     }
 
@@ -592,19 +637,18 @@ export class ScenariosListComponent implements OnInit {
 
     onToggleSharedScenario(event: any) {
         event.preventDefault();
-        if (!this.multiselect.active) {
-            let edit_scenarios = [];
-            let e_scenarios = [];
+        let edit_scenarios = [];
+        let e_scenarios = [];
 
-            try {
-                const scenario_id = event.target.attributes['data-id'].value;
-                e_scenarios.push(scenario_id);
-            } catch (e) {
-                if (this.__getKey('share', this.userPermissions) === true) {
-                    e_scenarios = this.selectedScenarios;
-                }
+        if (!this.multiselect.active) {
+            const scenario_id = event.target.attributes['data-id'].value;
+            e_scenarios.push(scenario_id);
+        } else {
+            if (this.__getKey('share', this.userPermissions) === true) {
+                e_scenarios = this.selectedScenarios;
             }
-            if (e_scenarios.length > 0) {
+        }
+        if (e_scenarios.length > 0) {
                 for (let i = 0; i < e_scenarios.length; i++) {
                     const scenario = this.__getScenario(e_scenarios[i]);
                     if (this.in_array("share", this.__getKey('scenario_permission', scenario))) {
@@ -619,25 +663,23 @@ export class ScenariosListComponent implements OnInit {
                     this.__editScenario(edit_scenarios);
                 }
             }
-        }
+        this.selectedScenarios = [];
     }
 
     onToggleStatusScenario(event: any) {
         event.preventDefault();
+        let edit_scenarios = [];
+        let e_scenarios = [];
+
         if (!this.multiselect.active) {
-            let edit_scenarios = [];
-            let e_scenarios = [];
-
-            try {
-                const scenario_id = event.target.attributes['data-id'].value;
-                e_scenarios.push(scenario_id);
-            } catch (e) {
-                if (this.__getKey('finalize', this.userPermissions) === true) {
-                    e_scenarios = this.selectedScenarios;
-                }
+            const scenario_id = event.target.attributes['data-id'].value;
+            e_scenarios.push(scenario_id);
+        } else {
+            if (this.__getKey('finalize', this.userPermissions) === true) {
+                e_scenarios = this.selectedScenarios;
             }
-
-            if (e_scenarios.length > 0) {
+        }
+        if (e_scenarios.length > 0) {
                 for (let i = 0; i < e_scenarios.length; i++) {
                     const scenario = this.__getScenario(e_scenarios[i]);
                     if (this.in_array("change_status", this.__getKey('scenario_permission', scenario))) {
@@ -652,7 +694,7 @@ export class ScenariosListComponent implements OnInit {
                     this.__editScenario(edit_scenarios);
                 }
             }
-        }
+        this.selectedScenarios = [];
     }
 
     onToggleSort(field: string) {

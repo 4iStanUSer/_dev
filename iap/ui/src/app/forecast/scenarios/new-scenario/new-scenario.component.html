@@ -4,65 +4,41 @@
     <div class="scenarios__main">
         <div class="scenarios__left">
                 <div class="c-left-sidebar c-left-sidebar--create c-left-sidebar--active">
-                  <form class="c-edit-form" (ngSubmit)="onSaveClose($event)">
-                      <div *ngIf="scenario === undefinde" class="c-left-sidebar__item c-left-sidebar__item--create">
-                      <div class="c-left-sidebar__pane c-left-sidebar__pane--create">
-                        <h3>Create New Scenario</h3>
-                      </div>
-                      <div class="c-edit-form__formgroup c-edit-form__formgroup--first c-left-sidebar__content">
-                        <div class="c-edit-form__item c-text-field">
-                            <input class="c-text-field__input" type="text" [(ngModel)]="new_scenario.name" name="name" placeholder="Scenario Name" required>
-                            <div (click)="onClear('name')" *ngIf="new_scenario.name" class="c-text-field__delete"></div>
+                  <form class="c-edit-form" #saveForm="ngForm" (ngSubmit)="onSaveClose($event)">
+                      <div class="c-left-sidebar__item c-left-sidebar__item--create">
+                          <div *ngIf="scenario == undefinde" class="c-left-sidebar__pane c-left-sidebar__pane--create">
+                            <h3>Create New Scenario</h3>
+                          </div>
+                          <div *ngIf="scenario != undefinde" class="c-left-sidebar__pane c-left-sidebar__pane--edit">
+                            <h3>Edit Scenario {{scenario.name}}</h3>
+                          </div>
+                          <div class="c-edit-form__formgroup c-edit-form__formgroup--first c-left-sidebar__content">
+                            <div class="c-edit-form__item c-text-field">
+                                <input class="c-text-field__input" type="text" [(ngModel)]="new_scenario.name" (keyup)="onChangeForm($event)" (change)="onChangeForm($event)" name="name" placeholder="Scenario Name">
+                                <div (click)="onClear('name')" *ngIf="new_scenario.name" class="c-text-field__delete"></div>
+                            </div>
+                            <p *ngIf="form_status.messages.name">{{form_status.messages.name}}</p>
+                            <div class="c-edit-form__item c-text-field c-edit-form__item--textarea">
+                                <textarea class="c-text-field__textarea" [(ngModel)]="new_scenario.description" (keyup)="onChangeForm($event)" (change)="onChangeForm($event)" name="description" placeholder="Description"></textarea>
+                                <div (click)="onClear('description')" *ngIf="new_scenario.description" class="c-text-field__delete"></div>
+                            </div>
+                            <p *ngIf="form_status.messages.description">{{form_status.messages.description}}</p>
+                          </div>
                         </div>
-                        <div class="c-edit-form__item c-text-field c-edit-form__item--textarea">
-                            <textarea class="c-text-field__textarea" [(ngModel)]="new_scenario.description" name="description" placeholder="Description" required></textarea>
-                            <div (click)="onClear('description')" *ngIf="new_scenario.description" class="c-text-field__delete"></div>
-                        </div>
-                      </div>
-                    </div>
-                      <div *ngIf="scenario !== undefinde" class="c-left-sidebar__item c-left-sidebar__item--edit">
-                      <div class="c-left-sidebar__pane c-left-sidebar__pane--edit">
-                        <h3>Edit Scenario {{scenario.name}}</h3>
-                      </div>
-                      <div class="c-edit-form__formgroup c-edit-form__formgroup--first c-left-sidebar__content">
-                        <div class="c-edit-form__item c-text-field">
-                          <input class="c-text-field__input c-text-field__input--bold" type="text" [(ngModel)]="scenario.name" name="name" placeholder="Scenario Name" required>
-                          <div (click)="onClear('name')" *ngIf="scenario.name" class="c-text-field__delete"></div>
-                        </div>
-                        <div class="c-edit-form__item c-text-field c-edit-form__item--textarea">
-                          <textarea class="c-text-field__textarea" [(ngModel)]="scenario.description" name="description" placeholder="Description" required></textarea>
-                          <div (click)="onClear('description')" *ngIf="scenario.description" class="c-text-field__delete"></div>
-                        </div>
-                      </div>
-                    </div>
                     <div class="c-left-sidebar__item c-left-sidebar__item--predifined">
                       <div class="c-left-sidebar__pane c-left-sidebar__pane--predifined">
                         <h3>Predifined Drivers</h3>
                       </div>
                       <div class="c-edit-form__formgroup c-left-sidebar__content">
-                        <div class="c-edit-form__item">
-                          <label class="c-edit-form__label">Climate</label>
-                          <select class="c-edit-form__select c-select">
-                            <option>Global Warming</option>
-                            <option>Option 2</option>
-                            <option>Option 3</option>
-                          </select>
-                        </div>
-                        <div class="c-edit-form__item">
-                          <label class="c-edit-form__label">Macroeconomic</label>
-                          <select class="c-edit-form__select c-select">
-                            <option>Optimistic</option>
-                            <option>Option 2</option>
-                            <option>Option 3</option>
-                          </select>
-                        </div>
-                        <div class="c-edit-form__item">
-                          <label class="c-edit-form__label">Health &amp; Welness</label>
-                          <select class="c-edit-form__select c-select">
-                            <option>High-Protein-Dieting</option>
-                            <option>Option 2</option>
-                            <option>Option 3</option>
-                          </select>
+                        <div *ngIf="predifined_drivers">
+                            <div *ngFor="let predifined_driver of predifined_drivers" class="c-edit-form__item">
+                              <label class="c-edit-form__label" for="driver_{{predifined_driver.name}}">{{predifined_driver.label}}</label>
+                              <select (change)="onChangeForm($event)" id="driver_{{predifined_driver.name}}" class="c-edit-form__select c-select" name="{{predifined_driver.name}}">
+                                  <option *ngIf="!scenario" value="" selected>------</option>
+                                  <option *ngFor="let option of predifined_driver.options" value="{{option.value}}">{{option.name}}</option>
+                              </select>
+                              <p *ngIf="form_status.messages[predifined_driver.name]">{{form_status.messages[predifined_driver.name]}}</p>
+                            </div>
                         </div>
                         <div class="c-edit-form__buttons">
                           <button (click)="onSaveGo($event)" class="c-button c-button--blue">Save and GO</button>

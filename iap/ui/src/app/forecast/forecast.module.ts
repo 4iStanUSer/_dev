@@ -1,6 +1,7 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import {CommonServicesModule} from "../common/module/common-services.module";
 import {ForecastRoutingModule} from "./forecast-routing.module";
@@ -49,6 +50,7 @@ import {HierarchicalSelectorComponent} from "./selectors/hierarchical-selector/h
 import {RegionSelectorComponent} from "./selectors/region-selector/region-selector.component";
 //for now this page is used for development & minor components testing
 import {EditPageComponent} from "./edit-page/edit-page.component";
+import { MyDateRangePickerModule } from 'mydaterangepicker';
 
 // import {SelectorsComponent} from "../common/cmp/selectors/selectors.component";
 // import {FlatSelectorComponent} from "../common/cmp/selectors/flat-selector/flat-selector.component";
@@ -60,10 +62,11 @@ import {EditPageComponent} from "./edit-page/edit-page.component";
     imports: [
         CommonModule,
         FormsModule,
+        ReactiveFormsModule,
         ForecastRoutingModule,
-
         CommonServicesModule,
         ChartModule,
+        MyDateRangePickerModule
     ],
     declarations: [
         ForecastComponent,

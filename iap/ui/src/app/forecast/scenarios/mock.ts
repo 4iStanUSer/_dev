@@ -1,4 +1,4 @@
-import { ScenarioDetailsModel } from './scenario.model';
+import { ScenarioModel, ScenarioDetailsModel } from './scenario.model';
 
 
 export const ScenarioDetails: ScenarioDetailsModel = {
@@ -33,3 +33,18 @@ export const ScenarioDetails: ScenarioDetailsModel = {
         {name: 'Long-Term', value: '+7.3%'}
     ]
 };
+
+/*
+export const Scenarios: ScenarioModel[] = [
+    {
+        author:"user@mail.com", criteria:"USA-iPhone-Main", description:"Dynamics of Price Growth in USA",
+        favorite:"No", id:10, modify_date:"2017-03-10 10:31:48.063205", deadline:"",
+        name:"Price Growth Dynamics JJLean", scenario_permission:["copy"], shared:"No", status: "Draft"
+    },
+    {
+        author:"user@mail.com", criteria:"USA-iPhone-Main", description:"Dynamics of Price Growth in USA",
+        favorite:"No", id:11, modify_date:"2017-03-10 10:31:48.063205", deadline:"",
+        name:"Price Growth Dynamics JJLean", scenario_permission:["copy"], shared:"No", status: "Draft"
+    }
+];
+*/

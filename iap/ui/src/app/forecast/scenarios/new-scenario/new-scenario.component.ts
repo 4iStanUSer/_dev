@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import {AjaxService} from "../../../common/service/ajax.service";
-import { Location } from '@angular/common';
+import { AjaxService } from "../../../common/service/ajax.service";
 
 import { ScenarioModel } from "../scenario.model";
 
@@ -14,7 +13,35 @@ export class NewScenarioComponent implements OnInit {
     save_status: boolean = false;
     scenario_id_param: number;
     scenario: ScenarioModel;
-    new_scenario: any = {name: null, description: null};
+    new_scenario: any = {name: '', description: ''};
+    form_status: any = {
+        valid: false,
+        messages: {
+            name: 'Field is required',
+            description: 'Field is required'
+        }
+    };
+
+    predifined_drivers:any = [
+        {
+            label: 'Climate',
+            name: 'climate',
+            options: [
+                {name: '1', value: '1a'},
+                {name: '2', value: '2a'},
+                {name: '3', value: '3a'},
+            ]
+        },
+        {
+            label: 'Macroeconomic',
+            name: 'macroeconomic',
+            options: [
+                {name: '3', value: '3a'},
+                {name: '4', value: '4a'},
+                {name: '5', value: '5a'},
+            ]
+        }
+    ];
 
     constructor(
         private router: Router,
@@ -27,10 +54,11 @@ export class NewScenarioComponent implements OnInit {
             this.req.post({url_id: '/forecast/get_scenario_details', data: {'id': this.scenario_id_param}})
                 .subscribe(
                     (data) => {
-                        this.scenario = new ScenarioModel(
-                            data.id, data.author, data.criteria, data.name, data.description,
-                            data.favorite, data.modify_date, data.shared, data.status, data.scenario_permission
-                        );
+                        this.new_scenario.name = data.name;
+                        this.new_scenario.description = data.description;
+                        this.scenario = data;
+                        this.form_status.valid = true;
+                        this.form_status.messages = {};
                     }
                 );
         }
@@ -57,7 +85,7 @@ export class NewScenarioComponent implements OnInit {
             data: {
                 'name': this.new_scenario.name,
                 'description': this.new_scenario.description,
-                'status': 'New',
+                'status': 'Draft',
                 'shared': 'No',
                 'criteria': this.__getCriteria()
             },
@@ -75,8 +103,8 @@ export class NewScenarioComponent implements OnInit {
         this.req.post({
             url_id: '/forecast/edit_scenario',
             data: [{id: this.scenario_id_param, 'modify':[
-                {parameter:'name', value: this.scenario.name},
-                {parameter:'description', value: this.scenario.description},
+                {parameter:'name', value: this.new_scenario.name},
+                {parameter:'description', value: this.new_scenario.description},
                 ]
             }],
         }).subscribe((data) => {
@@ -97,6 +125,26 @@ export class NewScenarioComponent implements OnInit {
         }
     }
 
+    onChangeForm(event:any) {
+        this.new_scenario[event.target.name] = event.target.value;
+        this.__checkFormValid(event.target.name, event.target.value);
+    }
+
+    __checkFormValid(field, value) {
+        if (!value) {
+            this.form_status.messages[field] = 'Field is required';
+        } else {
+            delete this.form_status.messages[field];
+        }
+
+        if (Object.keys(this.form_status.messages).length > 0) {
+            this.form_status.valid = false;
+        } else {
+            this.form_status.valid = true;
+        }
+        console.log(this.form_status.messages, this.form_status.valid);
+    }
+
     ngOnInit(): void {
         this.route.params.subscribe(params => {
             if (params['id']) {
@@ -114,11 +162,18 @@ export class NewScenarioComponent implements OnInit {
 
         // Check permissions
         this.__checkPermission();
+
+
+        for (let i in this.predifined_drivers) {
+            console.log(this.predifined_drivers[i]);
+            this.new_scenario[this.predifined_drivers[i].name] = '';
+            this.__checkFormValid(this.predifined_drivers[i].name, false);
+        }
     }
 
     onClear(param: string) {
-        this.new_scenario[param] = null;
-        this.scenario[param] = null;
+        this.new_scenario[param] = '';
+        this.__checkFormValid(param, false);
     }
 
     onCancel() {
@@ -130,27 +185,31 @@ export class NewScenarioComponent implements OnInit {
     }
 
     onSaveGo(event: any) {
-        event.preventDefault();
-        this.save_status = false;
-        this.__saveScenario();
-        setTimeout(() => {
-            // TODO Add run simulator
-            if (this.scenario_id_param !== 0) {
-                this.router.navigate(["../../../simulator"], { relativeTo: this.route });
-            } else {
-                this.router.navigate(["../../simulator"], { relativeTo: this.route });
-            }
-        }, 300);
+        if (this.form_status.valid) {
+            event.preventDefault();
+            this.save_status = false;
+            this.__saveScenario();
+            setTimeout(() => {
+                // TODO Add run simulator
+                if (this.scenario_id_param !== 0) {
+                    this.router.navigate(["../../../simulator"], { relativeTo: this.route });
+                } else {
+                    this.router.navigate(["../../simulator"], { relativeTo: this.route });
+                }
+            }, 300);
+        }
     }
 
     onSaveClose(event: any) {
-        event.preventDefault();
-        this.save_status = false;
-        this.__saveScenario();
-        setTimeout(() => {
-            if (this.save_status) {
-                this.onCancel();
-            }
-        }, 300);
+        if (this.form_status.valid) {
+            event.preventDefault();
+            this.save_status = false;
+            this.__saveScenario();
+            setTimeout(() => {
+                if (this.save_status) {
+                    this.onCancel();
+                }
+            }, 300);
+        }
     }
 }

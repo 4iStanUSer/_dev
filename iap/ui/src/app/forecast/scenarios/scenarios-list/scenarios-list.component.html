@@ -28,80 +28,9 @@
                         <h3>Work List</h3>
                     </div>
                     <div class="c-left-sidebar__content">
+                        <p>datepicker</p>
                         <ul class="c-simple-list">
-                            <li class="c-simple-list__item"> <span class="c-simple-list__text">Copy of Scenario Fav Scenario</span><a class="c-simple-list__date c-simple-list__date--empty c-tooltip" href="#">
-                                    <div class="c-tooltip__text c-tooltip__text--calendar c-tooltip__text--bottom">Calendar</div></a>
-                                <div class="c-datepicker">
-                                    <div class="c-datepicker__header"><a class="c-datepicker__nav c-datepicker__nav--prev"></a>
-                                      <div class="c-datepicker__title"><span class="c-datepicker__month">February, </span><span class="c-datepicker__year">2016</span></div><a class="c-datepicker__nav c-datepicker__nav--next"></a>
-                                    </div>
-                                    <table class="c-datepicker__calendar">
-                                      <thead>
-                                        <tr class="c-datepicker__row">
-                                          <th class="c-datepicker__day c-datepicker__day--week-day c-datepicker__week-end"><span title="Sunday">Sun</span></th>
-                                          <th class="c-datepicker__day c-datepicker__day--week-day"><span title="Monday">Mon</span></th>
-                                          <th class="c-datepicker__day c-datepicker__day--week-day"><span title="Tuesday">Tue</span></th>
-                                          <th class="c-datepicker__day c-datepicker__day--week-day"><span title="Wednesday">Wed</span></th>
-                                          <th class="c-datepicker__day c-datepicker__day--week-day"><span title="Thursday">Thu</span></th>
-                                          <th class="c-datepicker__day c-datepicker__day--week-day"><span title="Friday">Fri</span></th>
-                                          <th class="c-datepicker__day c-datepicker__day--week-day c-datepicker__week-end"><span title="Saturday">Sat</span></th>
-                                        </tr>
-                                      </thead>
-                                      <tbody>
-                                        <tr class="c-datepicker__row">
-                                          <td class="c-datepicker__day c-datepicker__week-end"><span>28</span></td>
-                                          <td class="c-datepicker__day"><span>29</span></td>
-                                          <td class="c-datepicker__day"><span>30</span></td>
-                                          <td class="c-datepicker__day"><span>31</span></td>
-                                          <td class="c-datepicker__day"><span>1</span></td>
-                                          <td class="c-datepicker__day"> <span>2</span></td>
-                                          <td class="c-datepicker__day c-datepicker__week-end"><span>3</span></td>
-                                        </tr>
-                                        <tr class="c-datepicker__row">
-                                          <td class="c-datepicker__day c-datepicker__week-end"><span>4</span></td>
-                                          <td class="c-datepicker__day"><span>5</span></td>
-                                          <td class="c-datepicker__day"><span>6</span></td>
-                                          <td class="c-datepicker__day"><span>7</span></td>
-                                          <td class="c-datepicker__day"><span>8</span></td>
-                                          <td class="c-datepicker__day"><span>9</span></td>
-                                          <td class="c-datepicker__day c-datepicker__week-end"><span>10 </span></td>
-                                        </tr>
-                                        <tr class="c-datepicker__row">
-                                          <td class="c-datepicker__day c-datepicker__week-end"><span>11</span></td>
-                                          <td class="c-datepicker__day"><span>12</span></td>
-                                          <td class="c-datepicker__day"><span>13</span></td>
-                                          <td class="c-datepicker__day"><span>14</span></td>
-                                          <td class="c-datepicker__day"><span>15</span></td>
-                                          <td class="c-datepicker__day"> <span>16</span></td>
-                                          <td class="c-datepicker__day c-datepicker__week-end"><span>17</span></td>
-                                        </tr>
-                                        <tr class="c-datepicker__row">
-                                          <td class="c-datepicker__day c-datepicker__week-end"><span>18</span></td>
-                                          <td class="c-datepicker__day"><span>19</span></td>
-                                          <td class="c-datepicker__day"><span>20</span></td>
-                                          <td class="c-datepicker__day"><span>21</span></td>
-                                          <td class="c-datepicker__day"><span>22</span></td>
-                                          <td class="c-datepicker__day"> <span>23</span></td>
-                                          <td class="c-datepicker__day c-datepicker__week-end"><span>24  </span></td>
-                                        </tr>
-                                        <tr class="c-datepicker__row">
-                                          <td class="c-datepicker__day c-datepicker__week-end"><span>25</span></td>
-                                          <td class="c-datepicker__day"><span>26</span></td>
-                                          <td class="c-datepicker__day"><span>27</span></td>
-                                          <td class="c-datepicker__day"><span>28</span></td>
-                                          <td class="c-datepicker__day"><span>1</span></td>
-                                          <td class="c-datepicker__day"> <span>2</span></td>
-                                          <td class="c-datepicker__day c-datepicker__week-end"><span>3  </span></td>
-                                        </tr>
-                                      </tbody>
-                                    </table>
-                                    <div class="c-datepicker__bottom">
-                                      <div class="c-datepicker__button c-button c-button--blue">OK</div>
-                                      <div class="c-datepicker__button c-datepicker__button--cancel c-button c-button--white">Cancel</div>
-                                    </div>
-                                  </div>
-                            </li>
-                            <li class="c-simple-list__item" *ngFor="let scenario of work_list"><span class="c-simple-list__text">{{scenario.name}}</span><span class="c-simple-list__date">{{dateParse(scenario.modify_date)}}</span></li>
+                            <li (click)="onShowDatepicker($event)" class="c-simple-list__item" *ngFor="let scenario of work_list"><span class="c-simple-list__text">{{scenario.name}}</span><span class="c-simple-list__date">{{dateParse(scenario.modify_date)}}</span></li>
                         </ul>
                     </div>
                 </div>
@@ -121,9 +50,8 @@
                             </div>
                             <div class="c-top-filter__item c-top-filter__item--favor">
                               <div class="c-checkbox-filter">
-                                <input *ngIf="filterCount.favorite === 0" (change)="onFilter($event, 'favorite', 'Yes')" class="c-checkbox-filter__input" type="checkbox" id="scenarios-favorites" disabled="disabled">
-                                <input *ngIf="filterCount.favorite !== 0" (change)="onFilter($event, 'favorite', 'Yes')" class="c-checkbox-filter__input" type="checkbox" id="scenarios-favorites">
-                                <label [ngClass]="{'checkbox--disabled': filterCount.favorite === 0}" [ngStyle]="{'color': filterCount.favorite !== 0 ? '' : 'rgba(148,161,181,0.9)', 'cursor': filterCount.favorite !== 0 ? 'pointer' : 'default'}" class="c-checkbox-filter__label" for="scenarios-favorites"><span>Favorites ({{filterCount.favorite}})</span></label>
+                                <input (change)="onFilter($event, 'favorite', 'Yes')" class="c-checkbox-filter__input" type="checkbox" id="scenarios-favorites">
+                                <label class="c-checkbox-filter__label" for="scenarios-favorites"><span>Favorites ({{filterCount.favorite}})</span></label>
                               </div>
                               <select (change)="onChangeAuthor($event)" class="c-select c-top-filter__author">
                                     <option value="">---------------------------</option>
@@ -132,80 +60,37 @@
                             </div>
                             <div class="c-top-filter__item c-top-filter__item--checks">
                               <div class="c-checkbox-filter c-top-filter__checks">
-                                  <input *ngIf="filterCount.shared === 0" (change)="onFilter($event, 'shared', 'Yes')" class="c-checkbox-filter__input" type="checkbox" id="scenarios-shared" disabled="disabled">
-                                  <input *ngIf="filterCount.shared !== 0" (change)="onFilter($event, 'shared', 'Yes')" class="c-checkbox-filter__input" type="checkbox" id="scenarios-shared">
-                                <label [ngClass]="{'checkbox--disabled': filterCount.shared === 0}" [ngStyle]="{'color': filterCount.shared !== 0 ? '' : 'rgba(148,161,181,0.9)', 'cursor': filterCount.shared !== 0 ? 'pointer' : 'default'}" class="c-checkbox-filter__label" for="scenarios-shared"><span>Shared ({{filterCount.shared}})</span></label>
+                                  <input (change)="onFilter($event, 'shared', 'Yes')" class="c-checkbox-filter__input" type="checkbox" id="scenarios-shared">
+                                <label class="c-checkbox-filter__label" for="scenarios-shared"><span>Shared ({{filterCount.shared}})</span></label>
                               </div>
                               <div class="c-checkbox-filter c-top-filter__checks">
-                                  <input *ngIf="filterCount.local === 0" (change)="onFilter($event, 'shared', 'No')" class="c-checkbox-filter__input" type="checkbox" id="scenarios-local" disabled="disabled">
-                                  <input *ngIf="filterCount.local !== 0" (change)="onFilter($event, 'shared', 'No')" class="c-checkbox-filter__input" type="checkbox" id="scenarios-local">
-                                <label [ngClass]="{'checkbox--disabled': filterCount.local === 0}" [ngStyle]="{'color': filterCount.local !== 0 ? '' : 'rgba(148,161,181,0.9)', 'cursor': filterCount.local !== 0 ? 'pointer' : 'default'}" class="c-checkbox-filter__label" for="scenarios-local"><span>Local ({{filterCount.local}})</span></label>
+                                  <input (change)="onFilter($event, 'shared', 'No')" class="c-checkbox-filter__input" type="checkbox" id="scenarios-local">
+                                <label class="c-checkbox-filter__label" for="scenarios-local"><span>Local ({{filterCount.local}})</span></label>
                               </div>
                             </div>
                             <div class="c-top-filter__item c-top-filter__item--checks">
                                 <div class="c-checkbox-filter c-top-filter__checks">
-                                  <input *ngIf="filterCount.drafts === 0" (change)="onFilter($event, 'status', 'Draft')" class="c-checkbox-filter__input" type="checkbox" id="scenarios-drafts" disabled="disabled">
-                                  <input *ngIf="filterCount.drafts !== 0" (change)="onFilter($event, 'status', 'Draft')" class="c-checkbox-filter__input" type="checkbox" id="scenarios-drafts">
-                                <label [ngClass]="{'checkbox--disabled': filterCount.drafts === 0}" [ngStyle]="{'color': filterCount.drafts !== 0 ? '' : 'rgba(148,161,181,0.9)', 'cursor': filterCount.drafts !== 0 ? 'pointer' : 'default'}" class="c-checkbox-filter__label" for="scenarios-drafts"><span>Drafts ({{filterCount.drafts}})</span></label>
+                                  <input (change)="onFilter($event, 'status', 'Draft')" class="c-checkbox-filter__input" type="checkbox" id="scenarios-drafts">
+                                <label class="c-checkbox-filter__label" for="scenarios-drafts"><span>Drafts ({{filterCount.drafts}})</span></label>
                               </div>
                                 <div class="c-checkbox-filter c-top-filter__checks">
-                                  <input *ngIf="filterCount.final === 0" (change)="onFilter($event, 'status', 'Final')"  class="c-checkbox-filter__input" type="checkbox" id="scenarios-final" disabled="disabled">
-                                  <input *ngIf="filterCount.final !== 0" (change)="onFilter($event, 'status', 'Final')"  class="c-checkbox-filter__input" type="checkbox" id="scenarios-final">
-                                <label [ngClass]="{'checkbox--disabled': filterCount.final === 0}" [ngStyle]="{'color': filterCount.final !== 0 ? '' : 'rgba(148,161,181,0.9)', 'cursor': filterCount.final !== 0 ? 'pointer' : 'default'}" class="c-checkbox-filter__label" for="scenarios-final"><span>Final ({{filterCount.final}})</span></label>
+                                  <input (change)="onFilter($event, 'status', 'Final')"  class="c-checkbox-filter__input" type="checkbox" id="scenarios-final">
+                                <label class="c-checkbox-filter__label" for="scenarios-final"><span>Final ({{filterCount.final}})</span></label>
                               </div>
                             </div>
                             <div class="c-top-filter__item c-top-filter__item--search">
-                              <div class="c-select c-top-filter__date" id="scenariosDateSelect">(Q1, 2015 - Q3, 2016)
-                                <!--popup-->
-                                <div class="c-popup c-popup--date">
-                                  <div class="c-popup__changer">
-                                    <div class="c-triple-changer">
-                                      <div class="c-triple-changer__item">monthly</div>
-                                      <div class="c-triple-changer__item c-triple-changer__item--active">quaterly</div>
-                                      <div class="c-triple-changer__item">annual</div>
-                                    </div>
-                                  </div>
-                                  <div class="c-popup__slider">
-                                    <div class="c-range-slider">
-                                      <div class="c-range-slider__inputs">
-                                        <input class="c-range-slider__input" id="rangeDateFirst" value="Q1, 2015"><span>- </span>
-                                        <input class="c-range-slider__input c-range-slider__input--active" id="rangeDateSecond" value="Q3, 2016"><span>- </span>
-                                        <input class="c-range-slider__input" id="rangeDateThird" value="Q4, 2017">
-                                      </div>
-                                      <div class="c-range-slider__center">
-                                        <div class="c-range-slider__line">
-                                          <div class="c-range-slider__item">
-                                            <div class="c-range-slider__marker c-range-slider__marker--start"></div>
-                                            <div class="c-range-slider__label c-range-slider__label--start">Q1, 2015</div>
-                                          </div>
-                                          <div class="c-range-slider__item c-range-slider__item--active">
-                                            <div class="c-range-slider__marker c-range-slider__marker--middle"></div>
-                                            <div class="c-range-slider__label c-range-slider__label--middle">Q3, 2016</div>
-                                          </div>
-                                          <div class="c-range-slider__item">
-                                            <div class="c-range-slider__marker c-range-slider__marker--end"></div>
-                                            <div class="c-range-slider__label c-range-slider__label--end">Q4, 2017</div>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div class="c-range-slider__buttons">
-                                        <button class="c-button c-button--green c-button--90">Apply</button>
-                                        <button class="c-button c-button--white c-button--90">Cancel</button>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                              <form class="c-search c-top-filter__search">
+                                <my-date-range-picker [options]="myDateFilterOptions" (dateRangeChanged)="onDateFilter($event)"></my-date-range-picker>
+                                <form class="c-search c-top-filter__search">
                                 <input type="submit" value="">
                                 <input (keyup)="onChangeSearch($event)" type="search" name="search" placeholder="Search">
                               </form>
                             </div>
                           </div>
-                <div class="m-scenarios-page__service c-service-pane">
+                <div *ngIf="scenariosList !== undefined && scenariosList.length > 0" class="m-scenarios-page__service c-service-pane">
                     <div class="c-top-filter__item c-top-filter__item--checks" id="multiselect-wrap">
                         <div class="c-checkbox-filter c-top-filter__checks">
-                            <input (change)="onToggleMultiselect($event)" class="c-checkbox-filter__input" type="checkbox" id="show-multiselect">
+                            <input *ngIf="multiselect.active === false" (change)="onToggleMultiselect($event)" class="c-checkbox-filter__input" type="checkbox" id="show-multiselect">
+                            <input *ngIf="multiselect.active === true" (change)="onToggleMultiselect($event)" class="c-checkbox-filter__input" type="checkbox" id="show-multiselect" checked>
                             <label class="c-checkbox-filter__label" for="show-multiselect"><span>Show multiselect</span></label>
                         </div>
                     </div>
@@ -223,7 +108,7 @@
                         <span class="c-service-pane__border">Delete</span>
                     </a>
                 </div>
-                <div class="m-scenarios-page__table" [ngClass]="{'m-scenarios-page__table--preview': selectScenario}">
+                <div *ngIf="scenariosList !== undefined && scenariosList.length > 0" class="m-scenarios-page__table" [ngClass]="{'m-scenarios-page__table--preview': selectScenario}">
                     <div class="m-scenarios-page__scroll">
                         <div class="c-scenarios-table">
                             <div class="c-scenarios-table__thead">
@@ -317,6 +202,15 @@
                         </div>
                     </div>
                 </div><!---------------- m-scenarios-page__table ---------------->
+
+                <div *ngIf="beforeFilterScenariosList !== undefined && beforeFilterScenariosList.length > 0 && scenariosList.length === 0">
+                    {{not_found_criteria_scenarios_message}}
+                </div>
+
+                <div *ngIf="beforeFilterScenariosList !== undefined && beforeFilterScenariosList.length === 0">
+                    {{not_found_scenarios_message}}
+                </div>
+
                 <div *ngIf="selectScenario" class="m-scenarios-page__preview" [ngClass]="{'m-scenarios-page__preview--active': selectScenario}">
                             <div class="m-scenarios-page__close" (click)="onCloseScenariosPreview()"></div>
                             <div class="c-scenarios-preview">
