@@ -23,9 +23,8 @@ from .jj_oral_care import (
 )
 
 
-def process(config, df):
-    from .. import data_processing_lib as dp_api
-    states = dp_api.collect_data_xls(config['ZIP'])
-    states = next(states).rename(columns={'Postal Code': 'zip_code'})
-    result = df.merge(states, how='left', on=['zip_code'])
+def process(config, dfs):
+
+    state = dfs[2].rename(columns={'Postal Code': 'zip_code'})
+    result = dfs[0].merge(state, how='left', on=['zip_code'])
     return result

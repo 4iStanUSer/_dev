@@ -1,5 +1,5 @@
 import datetime
-
+import pandas as pd
 from .. import timeline_lib as t_lib
 from ...common.helper import Meta
 from .common import empty_to_zero
@@ -25,10 +25,18 @@ def jj_oral_care_init(config, project):
         project.read(df)
 
 
-def loader(config, project):
-    db_config = config['JJOralCare_Sales']['db_config']
-    table_name = config['JJOralCare_Sales']['table_name']
-    project.save(db_config, table_name)
+def loader(config, store, project):
+    project_name = config['General']['project_name']
+    df = pd.concat(store)
+    df = df[['Market', 'Fact', 'Value', 'TimePoint']]
+    df.rename(columns={'Market': "Entity", 'Fact': "Variable"},
+              inplace=True)
+    df['Project'] = project_name
+    df['TimeSeries'] = 'annual'
+    df['TimePoint'] = df['TimePoint']
+    df['Value'] = df['Value']
+    project.read(df)
+    project.save_sql(config)
 
 
 def jj_oral_care_sales(table, config, warehouse):

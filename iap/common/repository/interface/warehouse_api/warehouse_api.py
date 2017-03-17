@@ -1,6 +1,8 @@
 from ...models_managers.warehouse import Warehouse
 from .iwarehouse import Storage
 import logging
+import time
+
 logging.basicConfig(level=logging.DEBUG)
 
 
@@ -38,7 +40,7 @@ class Project(Storage):
         ents = storage.process_data_frame(self.project_name)
         self.entities = ents
 
-    def save_sql(self, db_config):
+    def save_sql(self, config):
         """
         Data Loader save to sql
 
@@ -49,13 +51,42 @@ class Project(Storage):
         :return:
         :rtype:
         """
+        db_config = config['General']['db_config']
+        start_time = time.time()
         warehouse = Warehouse(db_config)
         warehouse.add_project(self.project_name)
+        print("--- %s seconds ---" % (time.time() - start_time))
+        start_time = time.time()
+        self.dataframe = self.save()
+        print("--- %s seconds ---" % (time.time() - start_time))
+        self.dataframe['Var_Id'] = None
         for ent_path, ent in self.entities.items():
-            warehouse.add_entity(self.project_name, entity=ent_path)
-            for var in ent.variables:
-                warehouse.add_variable(self.project_name,
-                                     entity=ent_path, var=var)
+            ent_path = ent.path
+            node = warehouse.add_IEntity(ent, project_name=self.project_name)
+            for var_name, variable in ent.vars.items():
+                var = warehouse.add_IVariable(ent=node, var_name=var_name)
+                warehouse.flush()
+
+                self.dataframe[
+                    (self.dataframe.Project == self.project_name) &
+                    (self.dataframe.Entity == ent_path[0]) &
+                    (self.dataframe.Variable == var_name)]['Var_Id'] = var._id
+
+        print("--- %s seconds ---" % (time.time() - start_time))
+        warehouse.commit()
+        print("--- %s seconds ---" % (time.time() - start_time))
+
+        variables = self.dataframe[
+                    ['TimePoint', 'TimeSeries', 'Value', 'Var_Id']]
+        variables = variables.rename(columns={'TimeSeries':'_name',
+                                         'TimePoint':'_time_stamp',
+                                         'Value':'_value',
+                                         'Var_Id':'variable_id'})
+
+        warehouse.add_ITimeSerie(variables.to_dict(orient='records'))
+        print("--- %s seconds ---" % (time.time() - start_time))
+        warehouse.commit()
+        print("--- %s seconds ---" % (time.time() - start_time))
 
 
     def save(self):
@@ -68,19 +99,16 @@ class Project(Storage):
         for ent_path, ent in self.entities.items():
             logging.info('Entity Save To DataFrame {0}'.format(ent_path))
             ent._save(storage, project_name=self.project_name)
-
-        storage.save_to_local_storage()
+        return storage.dataframe
+        #storage.save_to_local_storage()
 
 
 class Entity(Project):
 
-    def __init__(self, path):
-
-        if type(path) is list:
-            self.path = "*".join(path)
-        else:
-            self.path = path
-
+    def __init__(self, path=["root"], meta=[(None, None)]):
+        self.name = path[-1]
+        self.path = path
+        self.meta = meta
         self.childs = []
         self.parents = []
         self.vars = {}
@@ -129,7 +157,6 @@ class Entity(Project):
     def update_var(self):
         pass
 
-
     def _save_to_sql(self, storage, project_name):
         """
 
@@ -152,7 +179,6 @@ class Entity(Project):
             storage._save_data_frame(project_name=project_name,
                                      entity_path=self.path)
 
-
     def _save(self, storage, project_name):
         """
 
@@ -169,11 +195,12 @@ class Entity(Project):
 
                 logging.info('Process Variable {0}'.format(name))
                 var._save(storage, project_name=project_name,
-                          ent_path=self.path)
+                          ent_path=self.name)
         else:
             logging.info('Entity Saved To LocalStorage {0}'.format(self.path))
             storage._save_data_frame(project_name=project_name,
-                                     entity_path=self.path)
+                                     entity_path=self.name)
+
 
 class Variable(Entity):
 
@@ -202,11 +229,16 @@ class Variable(Entity):
     def _save(self, storage, project_name, ent_path):
         if self.time_series!=dict():
             for time_series_name, time_series in self.time_series.items():
-                logging.info('Time Serie Saved To DataFrame {0}'.format(time_series_name))
-                time_series._save(storage, project_name=project_name, ent_path=ent_path, var_name=self.name)
+                logging.info('Time Serie Saved To DataFrame {0}'
+                             .format(time_series_name))
+                time_series._save(storage,
+                                  project_name=project_name,
+                                  ent_path=ent_path, var_name=self.name)
         else:
             logging.info('Entity To DataFrame {0}'.format(ent_path))
-            storage._save_data_frame(project_name=project_name, entity_path=ent_path,  var_name=self.name)
+            storage._save_data_frame(project_name=project_name,
+                                     entity_path=ent_path,
+                                     var_name=self.name)
 
 
 class TimeSeries(Variable):
@@ -242,11 +274,16 @@ class TimeSeries(Variable):
         if self.timeserie != []:
             for timepoint in self.timeserie:
 
-                storage._save_data_frame(project_name=project_name, entity_path=ent_path,
-                                         var_name=var_name, time_series=self.name, time_point=timepoint['index'],
+                storage._save_data_frame(project_name=project_name,
+                                         entity_path=ent_path,
+                                         var_name=var_name,
+                                         time_series=self.name,
+                                         time_point=timepoint['index'],
                                          values=timepoint['value'])
                 logging.info('TimePoint Saved To DataFrame')
         else:
             logging.info('Entity To DataFrame {0}'.format(ent_path))
-            storage._save_data_frame(project_name=project_name, entity_path=ent_path, var_name=self.name,
+            storage._save_data_frame(project_name=project_name,
+                                     entity_path=ent_path,
+                                     var_name=self.name,
                                      time_series=self.name)

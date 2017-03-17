@@ -9,9 +9,13 @@ logging.getLogger(__name__)
 class Storage():
 
     def __init__(self):
-        self.dataframe = pd.DataFrame(data=dict(Project=[None], Entity=[None], Variable=[None],
-                                       TimeSeries=[None], TimePoint=[None], Value=[None]),
-                             columns=['Project', 'Entity', 'Variable', 'TimeSeries', 'TimePoint', 'Value']
+        self.dataframe = pd.DataFrame(
+            data=
+            dict(Project=[None], Entity=[None], Variable=[None],
+                    TimeSeries=[None], TimePoint=[None], Value=[None]),
+            columns=
+            ['Project', 'Entity', 'Variable', 'TimeSeries',
+             'TimePoint', 'Value']
                              )
 
         self.config = dict(in_path=None, out_path=None)
@@ -19,10 +23,21 @@ class Storage():
     def _save_data_frame(self, project_name=None, entity_path=None, var_name=None,
                          time_series=None, time_point=None, values=None):
 
-        serie = pd.DataFrame(data=dict(Project=[project_name], Entity=[entity_path], Variable=[var_name],
-                                       TimeSeries=[time_series], TimePoint=[time_point], Value=[values]),
-                             columns=['Project', 'Entity', 'Variable', 'TimeSeries', 'TimePoint', 'Value']
-                             )
+        serie = pd.DataFrame(data=
+                    dict(Project=[project_name],
+                         Entity=[entity_path],
+                         Variable=[var_name],
+                         TimeSeries=[time_series],
+                         TimePoint=[time_point],
+                         Value=[values]),
+                    columns=
+                        ['Project',
+                         'Entity',
+                         'Variable',
+                         'TimeSeries',
+                         'TimePoint',
+                         'Value']
+                         )
 
         serie.reset_index(drop=True, inplace=True)
         self.dataframe.reset_index(drop=True, inplace=True)
@@ -68,12 +83,14 @@ class Storage():
 
     def process_entity(self, project_name):
         ent_info = {}
-        ent_names = self.dataframe[self.dataframe.Project == project_name].Entity.unique()
-        for entity_path in ent_names:
-            logging.info("Get entities {0}".format(entity_path))
-            entity = warehouse_api.Entity(path=entity_path)
-            ent_info[entity_path] = entity
-            self.process_variable(project_name, entity, entity_path)
+        ent_names = self.dataframe[self.dataframe.Project == project_name]\
+            .Entity.unique()
+        for entity_name in ent_names:
+            logging.info("Get entities {0}".format(entity_name))
+            entity = warehouse_api.Entity(path=[entity_name],
+                                          meta=[(None, None)])
+            ent_info[entity_name] = entity
+            self.process_variable(project_name, entity, entity_name)
         return ent_info
 
     def process_variable(self, project_name, entity, entity_path):
@@ -94,12 +111,18 @@ class Storage():
                                      (self.dataframe.Entity == entity_path) &
                                      (self.dataframe.Variable == var_name)
                                     ].TimeSeries.unique()
+
         for time_serie_name in time_series:
-            if time_serie_name is not np.nan:
+            if time_serie_name is not np.nan or None:
                 logging.info("Get timeseries {0}".format(time_serie_name))
                 time_serie = warehouse_api.TimeSeries(name=time_serie_name)
                 var.add_time_serie(time_serie)
-                self.process_time_point(project_name, entity_path, var_name, time_serie_name, time_serie)
+                self.process_time_point(
+                    project_name,
+                    entity_path,
+                    var_name,
+                    time_serie_name,
+                    time_serie)
 
     def process_time_point(self, project_name, entity_path, var_name, time_serie_name, time_serie):
 

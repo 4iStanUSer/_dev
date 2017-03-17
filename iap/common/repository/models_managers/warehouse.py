@@ -1,6 +1,8 @@
 from ..models.warehouse import *
 from ..models.access import Project
 from sqlalchemy import create_engine
+from sqlalchemy.orm.session import sessionmaker
+import logging
 
 import pandas as pd
 
@@ -12,7 +14,7 @@ class Warehouse:
     link between data structure. Such as
     Entity, TimeSeries, Variable, Value etc.
     """
-    def __init__(self, ssn_factory=None):
+    def __init__(self, config):
         """
         Object initialise with session
         And query Entity Root obj
@@ -21,27 +23,33 @@ class Warehouse:
         :type ssn_factory:
         """
 
-
-        #TODO add exception if there no root object
-
-        self._ssn = ssn_factory()
-        self._root = \
-            self._ssn.query(Entity).filter(Entity.name == 'root').one_or_none()
+        self.engine = create_engine(config)
+        _ssn = sessionmaker(bind=self.engine)
+        self._ssn = _ssn()
+        self._root = self._ssn.query(Entity).filter(Entity.name == 'root').\
+            one_or_none()
 
     """
     Common WH methods
     """
 
     def add_project(self, project_name):
-        pass
+        """
+        Add Project
+        """
+        pr = Project(name=project_name)
 
     def save_project_data(self, name, df):
-
+        """
+        Save project data
+        """
         df.to_sql(name, self.engine, if_exists='append')
 
 
     def get_project_data(self, name):
-
+        """
+        Get Project Data
+        """
         df = pd.read_sql_table(name, self.engine)
         return df
 
@@ -49,12 +57,34 @@ class Warehouse:
     def get_root(self):
         """
         Return root Entity
-        :return:
-        :rtype:
+
         """
         return self._root
 
-    def add_entity(self, path, meta, project_name=None):
+    def add_IEntity(self, ent, project_name):
+        """
+        Add interface Entity
+        """
+        ent_path = ent.path
+        meta = ent.meta
+        ent = self.add_entity(ent_path, meta=meta, project_name=project_name)
+        return ent
+
+    def add_IVariable(self, ent, var_name):
+        """
+        Add Interface Variable
+        """
+        var = Variable(_name=var_name)
+        ent._variables.append(var)
+        return var
+
+    def add_ITimeSerie(self, variables):
+
+        self._ssn.bulk_insert_mappings(
+            TimeSerie, variables)
+        self._ssn.commit()
+
+    def add_entity(self, path, meta=None, project_name=None ):
         """
         Add Entity by path and meta
         Set new Entiy object as child of root
@@ -144,7 +174,7 @@ class Warehouse:
                 return child
         return None
 
-    def add_child(self, entity, name, meta, project_name=None):
+    def add_child(self, entity, name, meta=None, project_name=None):
         """
         Add child to input entity
         with  input name and meta
@@ -345,7 +375,7 @@ class Warehouse:
         """
         new_var = Variable(_name=var_name)
         ent._variables.append(new_var)
-        
+
 
     def force_ent_variable(self, ent, name, data_type, default_value=None):
         """
@@ -733,3 +763,7 @@ class Warehouse:
 
     def save__df(self, df, schema):
         df.to_sql('entities', con=self._ssn, schema=schema, if_exists='append')
+
+    def flush(self):
+
+        self._ssn.flush()

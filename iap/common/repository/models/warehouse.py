@@ -68,6 +68,8 @@ entities_edge = Table(
 )
 
 
+
+
 class Entity(Base):
     __tablename__ = 'entities'
     _id = Column(Integer, primary_key=True)
@@ -124,7 +126,7 @@ class Variable(Base):
     _name = Column(String(length=255))
     _data_type = Column(Integer)
     _entity = relationship('Entity', back_populates='_variables')
-    _time_series = relationship('TimeSeries', back_populates='_variable')
+    _time_series = relationship('TimeSerie', back_populates='_variable')
     _default_value = Column(String(length=255), default=None)
 
     @property
@@ -140,6 +142,18 @@ class Variable(Base):
         return self._default_value
 
 
+class TimeSerie(Base):
+
+    __tablename__ = 'timeseries'
+
+    id = Column(Integer, primary_key=True)
+    _name = Column(String(length=255))
+    _time_stamp = Column(String(length=255))
+    _value = Column(Float, nullable=True)
+    variable_id = Column(Integer, ForeignKey('variables._id'))
+    _variable = relationship("Variable", back_populates="_time_series")
+
+"""
 class TimeSeries(Base):
     __tablename__ = 'time_series'
     _id = Column(Integer, primary_key=True)
@@ -175,6 +189,6 @@ class Value(Base):
     float_value = Column(Float(precision=53), server_default=None)
     int_value = Column(Integer, server_default=None)
     text_value = Column(String(length=255), server_default=None)
-
+"""
 
 

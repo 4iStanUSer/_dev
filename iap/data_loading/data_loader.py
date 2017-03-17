@@ -1,14 +1,13 @@
 import os
-import io
-import xlrd
 import re
 import json
 import csv
 import pandas as pd
 import logging
-from .exceptions import  NonExistedDataSet, CorruptedDataSet
+from .exceptions import NonExistedDataSet, CorruptedDataSet
 from ..data_loading import loading_lib
 from ..common.repository.interface.warehouse_api import warehouse_api as wh_api
+from pyramid.threadlocal import get_current_registry
 import configparser
 
 
@@ -17,19 +16,24 @@ class Loader:
     Starting point of Load
 
     Attr:
-        config - path to configuration file with all
-                neccessary settings
+        configs - path to storage with configuration
 
-        warehouse - interface for db interaction and data structure
-                    behavior
     """
-    def __init__(self):
-        settings =\
-            {'path': "C:/Users/Alex/Desktop/dev/iap/data_storage/data_lake"}
-        self.setting = settings
+    def __init__(self, settings=None, db_config=None):
 
+        self.setting = {}
+        try:
+            iap_config = get_current_registry().settings
+            self.setting['db_config'] = \
+                iap_config['sqlalchemy.url']
+            self.setting['path.data_lake'] = \
+                iap_config['path.data_lake']
+        except TypeError:
+            self.setting['path'] = settings
+            self.setting['db_config'] = db_config
 
     def run_processing(self, config_name):
+
         """
         The main method of Loader object
 
@@ -38,81 +42,76 @@ class Loader:
         Read dataset, and process it by predefined
         instruction
 
-        :param proj_name:
-        :type proj_name:
+        Args:
+            name of configuration
 
+        """
+        configs = self._get_proj_info(config_name)
+        regime = configs.get("General", 'regime')
+        is_chunk = configs['General']['ischunk']
+
+        if regime == 'indy':
+            if is_chunk:
+                self._run_indy_processing(configs)
+            else:
+                self._run_indy_chunk_processing(configs)
+        else:
+            project_name = configs['General']['project_name']
+            self._run_warehouse_processing(configs, project_name)
+
+    def _run_warehouse_processing(self, configs, project_name):
+        """
+        Run warehouse processing
+
+        :param configs:
+        :type configs:
         :return:
         :rtype:
         """
-        configs = self._get_proj_info(config_name)
-        # Get project folder and config
 
-        for section_name in configs.sections():
+        store = []
+        for section_name in [i for i in configs.sections() if i != "General"]:
+            # Loading function.
+            loader_name = configs.get(section_name, 'pre_loader_function',
+                                      fallback=None)
 
-            regime = configs.get(section_name, 'regime')
-            if regime == 'indy':
-                try:
-                    int(configs[section_name]['chunk_size'])
-                except ValueError:
-                    self._run_indy_processing(configs, section_name)
-                else:
-                    self._run_indy_chunk_processing(configs, section_name)
-            else:
-                self._run_warehouse_processing(configs, section_name)
-
-    def _run_warehouse_processing(self, config, section_name):
-
-        project_name = config[section_name]['project_name']
-        self.project = wh_api.Project(project_name)
-
-        # Run pre loading function if it is defined
-        preloader_name = config.get(section_name, 'preloading_function',
-                                    fallback=None)
-        if preloader_name is not None:
-            preloader = getattr(loading_lib, preloader_name)
-            preloader(config, self.project)
+            for df in self.collects_data(configs[section_name]):
+                if loader_name is not None:
+                    loader = getattr(loading_lib, loader_name)
+                    df = loader(configs[section_name], self.project)
+                store.append(df)
 
         # Loading function.
-        loader_name = config.get(section_name, 'loader_function',
-                                    fallback=None)
+        loader_name = configs.get('General', 'process', fallback=None)
+
+        configs['General']['db_config'] = self.setting['db_config']
+
+        project = wh_api.Project(project_name)
         if loader_name is not None:
             loader = getattr(loading_lib, loader_name)
-            loader(config, self.project)
+            loader(configs, store, project)
 
-        # Run post loading function if it is defined
-        postloader_name = config.get(section_name, 'postloading_function',
-                                     fallback=None)
-        if postloader_name is not None:
-            postloader = getattr(loading_lib, postloader_name)
-            postloader(config, self.project)
+    def _run_indy_processing(self, configs):
 
-    def _run_indy_processing(self, configs, section_name):
+        dfs = []
+        for section_name in \
+                [i for i in configs.sections() if i != "General"]:
 
+            for df in self.collects_data(configs[section_name]):
+                dfs.append(df)
         try:
-            processor = getattr(loading_lib, configs.get(section_name,
-                                                        'process'))
+            processor = getattr(loading_lib,
+                                configs.get('General', 'process'))
         except AttributeError:
             processor = None
 
         except KeyError:
-            processor =None
-        try:
-            out_processor = getattr(loading_lib, configs.get(section_name,
-                                                  'out_put_processor'))
-        except AttributeError:
-            out_processor = None
-        except KeyError:
-            out_processor = None
-
-        df = []
-        for df in self.collect_data(configs[section_name]):
-            df.append(df)
+            processor = None
 
         if processor:
-            df = processor(config=configs, df=df)
-        if out_processor:
-            df = out_processor(configs, df)
-        self.save_data(df, configs[section_name])
+            dfs = processor(config=configs, dfs=dfs)
+
+        self.save_data(dfs, configs['General'])
 
 
     def _run_indy_chunk_processing(self, config, section_name):
@@ -126,7 +125,7 @@ class Loader:
         except KeyError:
             processor = None
 
-        for df in self.collect_data(config[section_name]):
+        for df in self.collects_data(config[section_name]):
             if processor:
                 df = processor(config=config, df=df)
             self.save_data(df, config[section_name])
@@ -151,6 +150,7 @@ class Loader:
         config = configparser.ConfigParser()
         config.read(main_config_path)
         return config
+
 
     def _load_data_set(self, abs_path, file_name, loader, file_config,
                        proj_path=None):
@@ -189,19 +189,18 @@ class Loader:
 
         return data
 
+
     def _post_load_function(self, ):
         pass
-
 
     def collects_data(self, config):
         """"
             Collect data from external storage into DataFrame
         """
         format = config['format']
-
         if format in ['csv', 'txt']:
             return self.collect_data(config)
-        elif format == 'excel':
+        elif format == 'xls':
             return self.collect_data_xls(config)
         elif format == 'hdf':
             self.collect_from_hdf(config)
@@ -240,7 +239,7 @@ class Loader:
 
         try:
             row = pd.read_table(file, sep=sep, nrows=1)
-            if set(columns) > set(col_to_read) and \
+            if set(columns) >= set(col_to_read) and \
                             len(columns) == len(row.columns):
                 return True
             else:
@@ -322,7 +321,7 @@ class Loader:
             logging.info("Wrong Input File")
             raise Exception
 
-        columns = config['columns']
+        columns = config['columns'].split(',')
         format = config['format']
         sep = config['sep']
         filenames = self.scan_folder(data_path, filename_mask)
@@ -335,7 +334,7 @@ class Loader:
                 yield df
 
 
-    def collect_to_hdf(self, df, config):
+    def collect_to_hdf(self, config):
         """
         Reading from .csv file and saving to hdf
         """

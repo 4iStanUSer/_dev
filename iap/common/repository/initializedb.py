@@ -5,18 +5,22 @@ import transaction
 from pyramid.paster import (get_appsettings, setup_logging)
 from pyramid.scripts.common import parse_vars
 from templates.access_rights_data import perm_data
-from templates.dev_template import dev_template_JJOralCare, dev_template_JJLean
-from iap.common.repository.models_managers.admin_manager import IManageAccess
-from iap.common.repository.models_managers import scenario_manager as scenario_manager
+from templates.dev_template import dev_template_JJOralCare, \
+    dev_template_JJLean
+from iap.common.repository.models_managers.admin_manager import \
+    IManageAccess
+from iap.common.repository.models_managers import \
+    scenario_manager as scenario_manager
 from iap.common.repository.models.access import Role
 from iap.common.repository.models.warehouse import Entity
 from iap.common.repository.models_managers.warehouse import Warehouse
 from iap.data_loading.data_loader import Loader
-from iap.common.repository.db import (get_engine, get_session_factory, get_tm_session)
+from iap.common.repository.db import \
+    (get_engine, get_session_factory, get_tm_session)
 from iap.common.repository.db.meta import Base
 from iap.common.repository import persistent_storage
 from iap.forecasting.workbench import Workbench
-
+from pyramid.threadlocal import get_current_registry
 
 def usage(argv):
     cmd = os.path.basename(argv[0])
@@ -35,7 +39,8 @@ def load_dev_templates(settings, project_name):
     """
     #Load json file
     base_path = settings['path.templates']
-    template_path = os.path.join(base_path, "{0}.json".format(project_name)).replace("\\", "/")
+    template_path = os.path.join(base_path,
+                    "{0}.json".format(project_name)).replace("\\", "/")
     file = open(template_path).read()
     template = json.loads(file)
 
@@ -69,13 +74,11 @@ def main(argv=sys.argv):
 
         transaction.manager.commit()
 
-
-        wh = Warehouse(session_factory)
-
+        db_config = settings['sqlalchemy.url']
+        wh = Warehouse(db_config)
         config = settings['path.data_lake']
-        config_name = 'JJOralCare'
-        loader = Loader(warehouse=wh, config=config)
-        #loader.run_processing('JJLean')
+        config_name = 'JJOralCare_config'
+        loader = Loader(config, db_config)
         loader.run_processing(config_name)
 
         transaction.manager.commit()
