@@ -17,6 +17,14 @@ from .jj_lean import (
 )
 from .jj_oral_care import (
     jj_oral_care_init,
+    loader,
     jj_oral_care_sales,
     jj_oral_care_trends
 )
+
+
+def process(config, dfs):
+
+    state = dfs[2].rename(columns={'Postal Code': 'zip_code'})
+    result = dfs[0].merge(state, how='left', on=['zip_code'])
+    return result

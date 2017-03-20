@@ -1,191 +1,571 @@
-Market,Manufacturer,Brand,Channel,Fact,metric,2012,2013,2014,2015
-Australia,Total,Total,Total,Value Sales,Dollars,0,92248.33988,89389.456,90012.07058
-Australia,Total,Total,Total,Volume Sales,Liters,0,8400.21161,8430.574173,8814.320829
-Australia,Total,Total,Total,Avg Price per EQ,Dollar per Liter,,10.98166858,10.60300926,10.21202567
-Australia,Total,Total,Total,TDP,,,3436.009783,3400.969827,3530.403539
-Brazil,Total,Total,Total,Value Sales,Dollars,0,246073.82,267141.26,281568.006
-Brazil,Total,Total,Total,Volume Sales,Liters,0,22298.54,22531.8,21732.60754
-Brazil,Total,Total,Total,Avg Price per EQ,Dollar per Liter,,11.03542295,11.85618814,12.95601577
-Brazil,Total,Total,Total,TDP,,,4044,4071.666667,3534.875179
-Canada,Total,Total,Total,Value Sales,Dollars,105471.3921,108945.1056,113579.4369,114357.7847
-Canada,Total,Total,Total,Volume Sales,Liters,18998.892,19602.325,20339.046,19844.96598
-Canada,Total,Total,Total,Avg Price per EQ,Dollar per Liter,5.551449635,5.557764482,5.584305031,5.762558868
-Canada,Total,Total,Total,TDP,,3304.53,3529.751667,3776.236667,4085.230469
-Germany,Total,Total,Total,Value Sales,Dollars,0,237288.8064,245366.2606,241606.5798
-Germany,Total,Total,Total,Volume Sales,Liters,0,28293.6806,30136.8716,31455.34679
-Germany,Total,Total,Total,Avg Price per EQ,Dollar per Liter,,8.386636215,8.141729635,7.680938359
-Germany,Total,Total,Total,TDP,,,2817.679167,2812.516667,2959.427069
-Italy,Total,Total,Total,Value Sales,Dollars,0,98035.00088,100091.0594,107615.049
-Italy,Total,Total,Total,Volume Sales,Liters,0,11083.8676,11841.0299,13023.00825
-Italy,Total,Total,Total,Avg Price per EQ,Dollar per Liter,,8.844836876,8.452901498,8.26345549
-Italy,Total,Total,Total,TDP,,,1934.920833,2106.029167,2238.985627
-Mexico,Total,Total,Total,Value Sales,Dollars,0,86597.02187,87790.94958,94608.74623
-Mexico,Total,Total,Total,Volume Sales,Liters,0,8588.64,8620.96,9116.615632
-Mexico,Total,Total,Total,Avg Price per EQ,Dollar per Liter,,10.08273974,10.1834308,10.3776171
-Mexico,Total,Total,Total,TDP,,,4141.166667,4032,3981.145621
-Spain,Total,Total,Total,Value Sales,Dollars,0,104343.7528,102417.2895,105425.614
-Spain,Total,Total,Total,Volume Sales,Liters,0,14713.38,14641.65,15222.88392
-Spain,Total,Total,Total,Avg Price per EQ,Dollar per Liter,,7.091759524,6.994928133,6.925469218
-Spain,Total,Total,Total,TDP,,,1722.3625,1751.054167,1881.533338
-UK,Total,Total,Total,Value Sales,Dollars,0,227389.295,222638.4502,222773.7828
-UK,Total,Total,Total,Volume Sales,Liters,0,30604.974,29063.5781,28996.79923
-UK,Total,Total,Total,Avg Price per EQ,Dollar per Liter,,7.429815004,7.660393687,7.68270253
-UK,Total,Total,Total,TDP,,,2855.9375,2892.116667,2922.138404
-US,Total,Total,Total,Value Sales,Dollars,1337211.004,1373399.588,1407775.677,1431823.337
-US,Total,Total,Total,Volume Sales,Liters,256563.4923,257807.1808,260303.1265,257000.1752
-US,Total,Total,Total,Avg Price per EQ,Dollar per Liter,5.212008114,5.327235586,5.408216549,5.571293232
-US,Total,Total,Total,TDP,,5341.772917,5864.48225,6173.098667,6296.102167
-Japan,Total,Total,Total,Value Sales,Dollars,0,241567.9754,253686.6755,271241.0231
-Japan,Total,Total,Total,Volume Sales,Liters,0,30064.665,32199.371,34494.06555
-Japan,Total,Total,Total,Avg Price per EQ,Dollar per Liter,,8.03494652,7.878622084,7.86341125
-Japan,Total,Total,Total,TDP,,,4000,4050,4188.274881
-Australia,Total,Total,Total,Unit Sales,,0,17.09719252,16.72473308,17.21423004
-Brazil,Total,Total,Total,Unit Sales,,0,68.8298,68.9092,64.69124056
-Canada,Total,Total,Total,Unit Sales,,24.1344421,25.1364868,26.1299233,25.5095269
-Germany,Total,Total,Total,Unit Sales,,0,75.7083758,79.9210301,81.17736128
-Italy,Total,Total,Total,Unit Sales,,0,23.220374,25.121671,27.69870681
-Mexico,Total,Total,Total,Unit Sales,,0,26.15743361,25.75262018,26.33227004
-Spain,Total,Total,Total,Unit Sales,,0,30.47892,29.50321,31.08257701
-UK,Total,Total,Total,Unit Sales,,0,70.2888174,66.3965985,66.12198998
-US,Total,Total,Total,Unit Sales,,310.7730915,318.6073781,324.3439504,324.7270797
-Japan,Total,Total,Total,Unit Sales,,0,53.997,55.969,59.09
-Australia,Total,Total,Total,Premiumization,index,,1,0.986677625,0.979421258
-Brazil,Total,Total,Total,Premiumization,index,,1,1.000622617,0.997643001
-Canada,Total,Total,Total,Premiumization,index,0.949138126,1,1.032893563,1.049006814
-Germany,Total,Total,Total,Premiumization,index,,1,0.994448796,0.983935894
-Italy,Total,Total,Total,Premiumization,index,,1,1.016739758,1.016220658
-Mexico,Total,Total,Total,Premiumization,index,,1,0.988156578,0.975453006
-Spain,Total,Total,Total,Premiumization,index,,1,1.025252408,1.006134656
-UK,Total,Total,Total,Premiumization,index,,1,1.016537306,1.031784248
-US,Total,Total,Total,Premiumization,index,0.988195045,1,1.014212867,1.0250089
-Japan,Total,Total,Total,Premiumization,index,,1,0.997395455,0.985779076
-Australia,Total,Total,Total,Media Spend,Dollars,5960.082,6725.483,3195.908,4308.959
-Brazil,Total,Total,Total,Media Spend,Dollars,71137.51692,125579.3911,247115.8023,273201.977
-Canada,Total,Total,Total,Media Spend,Dollars,9653.9,10483.993,9097.982,8036.421125
-Germany,Total,Total,Total,Media Spend,Dollars,0,48195.8222,47651.25748,45410.61262
-Italy,Total,Total,Total,Media Spend,Dollars,0,0,0,0
-Mexico,Total,Total,Total,Media Spend,Dollars,0,25433.86373,25480.39423,24451.35685
-Spain,Total,Total,Total,Media Spend,Dollars,0,0,0,0
-UK,Total,Total,Total,Media Spend,Dollars,23121.7716,25032.99215,22211.66779,24807.83735
-US,Total,Total,Total,Media Spend,Dollars,106680.3,129305.6,166074.1,188852.8444
-Japan,Total,Total,Total,Media Spend,Dollars,22088.02169,27995.14722,30828.33152,28264.99924
-Australia,Total,Total,Total,Avg % Discount,%,,0.325276243,0.324164475,0.33311198
-Brazil,Total,Total,Total,Avg % Discount,%,,,,
-Canada,Total,Total,Total,Avg % Discount,%,,0.244008218,0.215737578,0.218979342
-Germany,Total,Total,Total,Avg % Discount,%,,0.15672912,0.124825838,0.021315367
-Italy,Total,Total,Total,Avg % Discount,%,,0.234697223,0.198954125,0.193164733
-Mexico,Total,Total,Total,Avg % Discount,%,,,,
-Spain,Total,Total,Total,Avg % Discount,%,,0.056202967,0.053783349,0.036186787
-UK,Total,Total,Total,Avg % Discount,%,,0.315364216,0.347107582,0.34337722
-US,Total,Total,Total,Avg % Discount,%,0.101714319,0.095616293,0.09901779,0.114346403
-Japan,Total,Total,Total,Avg % Discount,%,,,,
-Australia,Total,Total,Total,Avg % Promo Support,%,,0.164202547,0.203411879,0.217593784
-Brazil,Total,Total,Total,Avg % Promo Support,%,,,,
-Canada,Total,Total,Total,Avg % Promo Support,%,,0.288449645,0.316062687,0.301475084
-Germany,Total,Total,Total,Avg % Promo Support,%,,0.067045178,0.076185237,0.125144696
-Italy,Total,Total,Total,Avg % Promo Support,%,,0.135000649,0.164149759,0.174134848
-Mexico,Total,Total,Total,Avg % Promo Support,%,,,,
-Spain,Total,Total,Total,Avg % Promo Support,%,,0.143712465,0.148802214,0.174307246
-UK,Total,Total,Total,Avg % Promo Support,%,,0.282607154,0.297829384,0.297559761
-US,Total,Total,Total,Avg % Promo Support,%,0.235214367,0.247130013,0.250878702,0.211691979
-Japan,Total,Total,Total,Avg % Promo Support,%,,,,
-Australia,Total,Total,Total,Avg % Volume sold as Promo,%,,0.368495343,0.463382327,0.512757364
-Brazil,Total,Total,Total,Avg % Volume sold as Promo,%,,,,
-Canada,Total,Total,Total,Avg % Volume sold as Promo,%,,0.575428986,0.596572524,0.584996417
-Germany,Total,Total,Total,Avg % Volume sold as Promo,%,,0.142749047,0.156890702,0.192484476
-Italy,Total,Total,Total,Avg % Volume sold as Promo,%,,0.297752012,0.331213923,0.358258399
-Mexico,Total,Total,Total,Avg % Volume sold as Promo,%,,,,
-Spain,Total,Total,Total,Avg % Volume sold as Promo,%,,0.204588613,0.237383082,0.254720722
-UK,Total,Total,Total,Avg % Volume sold as Promo,%,,0.566275567,0.603933831,0.611711348
-US,Total,Total,Total,Avg % Volume sold as Promo,%,0.305267809,0.318699493,0.320345353,0.277925764
-Japan,Total,Total,Total,Avg % Volume sold as Promo,%,,,,
-Australia,Total,Total,Total,Penetration,%,,,0.3078012,0.305145743
-Brazil,Total,Total,Total,Penetration,%,,,,
-Canada,Total,Total,Total,Penetration,%,,,,
-Germany,Total,Total,Total,Penetration,%,,,,
-Italy,Total,Total,Total,Penetration,%,,,,
-Mexico,Total,Total,Total,Penetration,%,,,,
-Spain,Total,Total,Total,Penetration,%,,,,
-UK,Total,Total,Total,Penetration,%,,,,
-US,Total,Total,Total,Penetration,%,,0.51900319,,
-Japan,Total,Total,Total,Penetration,%,,,0.2596,0.2509
-Australia,Total,Total,Total,Base Value Sales,Dollars,,78564048,69788319,67421362
-Brazil,Total,Total,Total,Base Value Sales,Dollars,,,,
-Canada,Total,Total,Total,Base Value Sales,Dollars,76633770,76069673,78267947,78464895
-Germany,Total,Total,Total,Base Value Sales,Dollars,,219114082,225432069,224145121
-Italy,Total,Total,Total,Base Value Sales,Dollars,,84951379,84754988,88342736
-Mexico,Total,Total,Total,Base Value Sales,Dollars,,,,
-Spain,Total,Total,Total,Base Value Sales,Dollars,,97443504,91893443,95806789
-UK,Total,Total,Total,Base Value Sales,Dollars,,160882526,150107540,147538891
-US,Total,Total,Total,Base Value Sales,Dollars,1265105193,1292275301,1329448271,1360922801
-Japan,Total,Total,Total,Base Value Sales,Dollars,,,,
-Australia,Total,Total,Total,Base Volume Sales,Liters,,6346960,5679216,5489109
-Brazil,Total,Total,Total,Base Volume Sales,Liters,,,,
-Canada,Total,Total,Total,Base Volume Sales,Liters,11933831,11696402,11997196,11790175
-Germany,Total,Total,Total,Base Volume Sales,Liters,,25997813,27504082,29034151
-Italy,Total,Total,Total,Base Volume Sales,Liters,,8998416,9474324,10119577
-Mexico,Total,Total,Total,Base Volume Sales,Liters,,,,
-Spain,Total,Total,Total,Base Volume Sales,Liters,,13667360,13117950,13740341
-UK,Total,Total,Total,Base Volume Sales,Liters,,18503286,16393594,16028592
-US,Total,Total,Total,Base Volume Sales,Liters,233452764,233584008,236920506,236031990
-Japan,Total,Total,Total,Base Volume Sales,Liters,,,,
-Australia,Total,Total,Total,Promo Value Sales,Dollars,,27313759,34849525,37418757
-Brazil,Total,Total,Total,Promo Value Sales,Dollars,,,,
-Canada,Total,Total,Total,Promo Value Sales,Dollars,,54397569,58702981,59036068
-Germany,Total,Total,Total,Promo Value Sales,Dollars,,37225723,40383829,45141150
-Italy,Total,Total,Total,Promo Value Sales,Dollars,,25208081,30370365,36234200
-Mexico,Total,Total,Total,Promo Value Sales,Dollars,,,,
-Spain,Total,Total,Total,Promo Value Sales,Dollars,,22357216,25891035,26782469
-UK,Total,Total,Total,Promo Value Sales,Dollars,,118912782,126371713,127409429
-US,Total,Total,Total,Promo Value Sales,Dollars,362194752,395307001,408747650,379329712
-Japan,Total,Total,Total,Promo Value Sales,Dollars,,,,
-Australia,Total,Total,Total,Promo Volume Sales,Liters,,3095439,3906579,4519608
-Brazil,Total,Total,Total,Promo Volume Sales,Liters,,,,
-Canada,Total,Total,Total,Promo Volume Sales,Liters,,11279746,12133716,11609234
-Germany,Total,Total,Total,Promo Volume Sales,Liters,,4038896,4728195,6054666
-Italy,Total,Total,Total,Promo Volume Sales,Liters,,3300244,3921914,4665602
-Mexico,Total,Total,Total,Promo Volume Sales,Liters,,,,
-Spain,Total,Total,Total,Promo Volume Sales,Liters,,3010190,3475680,3877584
-UK,Total,Total,Total,Promo Volume Sales,Liters,,17330849,17552478,17737671
-US,Total,Total,Total,Promo Volume Sales,Liters,78320575,82163018,83386897,71426970
-Japan,Total,Total,Total,Promo Volume Sales,Liters,,,,
-Australia,Total,Total,Total,Base Promo Volume,Liters,,1042187,1155220,1194396
-Brazil,Total,Total,Total,Base Promo Volume,Liters,,,,
-Canada,Total,Total,Total,Base Promo Volume,Liters,,3373823,3791866,3554444
-Germany,Total,Total,Total,Base Promo Volume,Liters,,1743028,2095405,3633470
-Italy,Total,Total,Total,Base Promo Volume,Liters,,1214792,1555208,1762171
-Mexico,Total,Total,Total,Base Promo Volume,Liters,,,,
-Spain,Total,Total,Total,Base Promo Volume,Liters,,1964170,1951980,2395041
-UK,Total,Total,Total,Base Promo Volume,Liters,,5229161,4882494,4769464
-US,Total,Total,Total,Base Promo Volume,Liters,54911444,57725619,59438309,49966079
-Japan,Total,Total,Total,Base Promo Volume,Liters,,,,
-Australia,Total,Total,Total,Innovation Volume share,%,,0.014891262,0.026389679,0.037769479
-Brazil,Total,Total,Total,Innovation Volume share,%,,0.020719003,0.020719003,0.018664327
-Canada,Total,Total,Total,Innovation Volume share,%,0.019499208,0.060548638,0.060843513,0.037131151
-Germany,Total,Total,Total,Innovation Volume share,%,,0.017026857,0.008014083,0.054905485
-Italy,Total,Total,Total,Innovation Volume share,%,,0.037100255,0.067475966,0.042195496
-Mexico,Total,Total,Total,Innovation Volume share,%,,0.038630664,0.038630664,0.034525198
-Spain,Total,Total,Total,Innovation Volume share,%,,0.009604647,0.013496638,0.019654523
-UK,Total,Total,Total,Innovation Volume share,%,,0.037471308,0.009909331,0.02037876
-US,Total,Total,Total,Innovation Volume share,%,0.065361565,0.078189669,0.05586692,0.037610552
-Japan,Total,Total,Total,Innovation Volume share,%,,0.038419229,0.05767988,0.051867396
-Australia,Total,Total,Total,Innovation TDP share,%,,0.036675605,0.02495027,0.064157133
-Brazil,Total,Total,Total,Innovation TDP share,%,,0.040911896,0.040911896,0.031822565
-Canada,Total,Total,Total,Innovation TDP share,%,0.042764368,0.069719487,0.072179339,0.082427004
-Germany,Total,Total,Total,Innovation TDP share,%,,0.041534083,0.025890229,0.051369726
-Italy,Total,Total,Total,Innovation TDP share,%,,0.038597777,0.069199982,0.070385748
-Mexico,Total,Total,Total,Innovation TDP share,%,,0.048342427,0.048342427,0.0523443
-Spain,Total,Total,Total,Innovation TDP share,%,,0.045522501,0.034784118,0.05696253
-UK,Total,Total,Total,Innovation TDP share,%,,0.06565373,0.039074017,0.032427598
-US,Total,Total,Total,Innovation TDP share,%,0.086841065,0.103674156,0.078665274,0.075079798
-Japan,Total,Total,Total,Innovation TDP share,%,,0.065760385,0.10171952,0.086741072
-Australia,Total,Total,Total,Innovation SKU share,%,,0.021613073,0.019775521,0.027371101
-Brazil,Total,Total,Total,Innovation SKU share,%,,0.073863636,0.073863636,0.044247788
-Canada,Total,Total,Total,Innovation SKU share,%,0.058252427,0.116716867,0.120667522,0.131509267
-Germany,Total,Total,Total,Innovation SKU share,%,,0.050765512,0.051136364,0.096204766
-Italy,Total,Total,Total,Innovation SKU share,%,,0.117374005,0.145772595,0.093037585
-Mexico,Total,Total,Total,Innovation SKU share,%,,0.078984485,0.078984485,0.0625
-Spain,Total,Total,Total,Innovation SKU share,%,,0.110227875,0.080645161,0.08700502
-UK,Total,Total,Total,Innovation SKU share,%,,0.067218201,0.103909465,0.082508251
-US,Total,Total,Total,Innovation SKU share,%,0.058516638,0.079389651,0.065092251,0.048168355
-Japan,Total,Total,Total,Innovation SKU share,%,,0.082087072,0.120010235,0.118797845
+Market;Manufacturer;Brand;Channel;Fact;metric;TimePoint;Value
+Australia;Total;Total;Total;Value Sales;Dollars;2012;92248.33988
+Australia;Total;Total;Total;Volume Sales;Liters;2012;8400.21161
+Australia;Total;Total;Total;Avg Price per EQ;Dollar per Liter;2012;10.98166858
+Australia;Total;Total;Total;TDP;;2012;3436.009783
+Brazil;Total;Total;Total;Value Sales;Dollars;2012;246073.82
+Brazil;Total;Total;Total;Volume Sales;Liters;2012;22298.54
+Brazil;Total;Total;Total;Avg Price per EQ;Dollar per Liter;2012;11.03542295
+Brazil;Total;Total;Total;TDP;;2012;4044
+Canada;Total;Total;Total;Value Sales;Dollars;2012;108945.1056
+Canada;Total;Total;Total;Volume Sales;Liters;2012;19602.325
+Canada;Total;Total;Total;Avg Price per EQ;Dollar per Liter;2012;5.557764482
+Canada;Total;Total;Total;TDP;;2012;3529.751667
+Germany;Total;Total;Total;Value Sales;Dollars;2012;237288.8064
+Germany;Total;Total;Total;Volume Sales;Liters;2012;28293.6806
+Germany;Total;Total;Total;Avg Price per EQ;Dollar per Liter;2012;8.386636215
+Germany;Total;Total;Total;TDP;;2012;2817.679167
+Italy;Total;Total;Total;Value Sales;Dollars;2012;98035.00088
+Italy;Total;Total;Total;Volume Sales;Liters;2012;11083.8676
+Italy;Total;Total;Total;Avg Price per EQ;Dollar per Liter;2012;8.844836876
+Italy;Total;Total;Total;TDP;;2012;1934.920833
+Mexico;Total;Total;Total;Value Sales;Dollars;2012;86597.02187
+Mexico;Total;Total;Total;Volume Sales;Liters;2012;8588.64
+Mexico;Total;Total;Total;Avg Price per EQ;Dollar per Liter;2012;10.08273974
+Mexico;Total;Total;Total;TDP;;2012;4141.166667
+Spain;Total;Total;Total;Value Sales;Dollars;2012;104343.7528
+Spain;Total;Total;Total;Volume Sales;Liters;2012;14713.38
+Spain;Total;Total;Total;Avg Price per EQ;Dollar per Liter;2012;7.091759524
+Spain;Total;Total;Total;TDP;;2012;1722.3625
+UK;Total;Total;Total;Value Sales;Dollars;2012;227389.295
+UK;Total;Total;Total;Volume Sales;Liters;2012;30604.974
+UK;Total;Total;Total;Avg Price per EQ;Dollar per Liter;2012;7.429815004
+UK;Total;Total;Total;TDP;;2012;2855.9375
+US;Total;Total;Total;Value Sales;Dollars;2012;1373399.588
+US;Total;Total;Total;Volume Sales;Liters;2012;257807.1808
+US;Total;Total;Total;Avg Price per EQ;Dollar per Liter;2012;5.327235586
+US;Total;Total;Total;TDP;;2012;5864.48225
+Japan;Total;Total;Total;Value Sales;Dollars;2012;241567.9754
+Japan;Total;Total;Total;Volume Sales;Liters;2012;30064.665
+Japan;Total;Total;Total;Avg Price per EQ;Dollar per Liter;2012;8.03494652
+Japan;Total;Total;Total;TDP;;2012;4000
+Australia;Total;Total;Total;Unit Sales;;2012;17.09719252
+Brazil;Total;Total;Total;Unit Sales;;2012;68.8298
+Canada;Total;Total;Total;Unit Sales;;2012;25.1364868
+Germany;Total;Total;Total;Unit Sales;;2012;75.7083758
+Italy;Total;Total;Total;Unit Sales;;2012;23.220374
+Mexico;Total;Total;Total;Unit Sales;;2012;26.15743361
+Spain;Total;Total;Total;Unit Sales;;2012;30.47892
+UK;Total;Total;Total;Unit Sales;;2012;70.2888174
+US;Total;Total;Total;Unit Sales;;2012;318.6073781
+Japan;Total;Total;Total;Unit Sales;;2012;53.997
+Australia;Total;Total;Total;Premiumization;index;2012;1
+Brazil;Total;Total;Total;Premiumization;index;2012;1
+Canada;Total;Total;Total;Premiumization;index;2012;1
+Germany;Total;Total;Total;Premiumization;index;2012;1
+Italy;Total;Total;Total;Premiumization;index;2012;1
+Mexico;Total;Total;Total;Premiumization;index;2012;1
+Spain;Total;Total;Total;Premiumization;index;2012;1
+UK;Total;Total;Total;Premiumization;index;2012;1
+US;Total;Total;Total;Premiumization;index;2012;1
+Japan;Total;Total;Total;Premiumization;index;2012;1
+Australia;Total;Total;Total;Media Spend;Dollars;2012;6725.483
+Brazil;Total;Total;Total;Media Spend;Dollars;2012;125579.3911
+Canada;Total;Total;Total;Media Spend;Dollars;2012;10483.993
+Germany;Total;Total;Total;Media Spend;Dollars;2012;48195.8222
+Italy;Total;Total;Total;Media Spend;Dollars;2012;0
+Mexico;Total;Total;Total;Media Spend;Dollars;2012;25433.86373
+Spain;Total;Total;Total;Media Spend;Dollars;2012;0
+UK;Total;Total;Total;Media Spend;Dollars;2012;25032.99215
+US;Total;Total;Total;Media Spend;Dollars;2012;129305.6
+Japan;Total;Total;Total;Media Spend;Dollars;2012;27995.14722
+Australia;Total;Total;Total;Avg % Discount;%;2012;0.325276243
+Brazil;Total;Total;Total;Avg % Discount;%;2012;
+Canada;Total;Total;Total;Avg % Discount;%;2012;0.244008218
+Germany;Total;Total;Total;Avg % Discount;%;2012;0.15672912
+Italy;Total;Total;Total;Avg % Discount;%;2012;0.234697223
+Mexico;Total;Total;Total;Avg % Discount;%;2012;
+Spain;Total;Total;Total;Avg % Discount;%;2012;0.056202967
+UK;Total;Total;Total;Avg % Discount;%;2012;0.315364216
+US;Total;Total;Total;Avg % Discount;%;2012;0.095616293
+Japan;Total;Total;Total;Avg % Discount;%;2012;
+Australia;Total;Total;Total;Avg % Promo Support;%;2012;0.164202547
+Brazil;Total;Total;Total;Avg % Promo Support;%;2012;
+Canada;Total;Total;Total;Avg % Promo Support;%;2012;0.288449645
+Germany;Total;Total;Total;Avg % Promo Support;%;2012;0.067045178
+Italy;Total;Total;Total;Avg % Promo Support;%;2012;0.135000649
+Mexico;Total;Total;Total;Avg % Promo Support;%;2012;
+Spain;Total;Total;Total;Avg % Promo Support;%;2012;0.143712465
+UK;Total;Total;Total;Avg % Promo Support;%;2012;0.282607154
+US;Total;Total;Total;Avg % Promo Support;%;2012;0.247130013
+Japan;Total;Total;Total;Avg % Promo Support;%;2012;
+Australia;Total;Total;Total;Avg % Volume sold as Promo;%;2012;0.368495343
+Brazil;Total;Total;Total;Avg % Volume sold as Promo;%;2012;
+Canada;Total;Total;Total;Avg % Volume sold as Promo;%;2012;0.575428986
+Germany;Total;Total;Total;Avg % Volume sold as Promo;%;2012;0.142749047
+Italy;Total;Total;Total;Avg % Volume sold as Promo;%;2012;0.297752012
+Mexico;Total;Total;Total;Avg % Volume sold as Promo;%;2012;
+Spain;Total;Total;Total;Avg % Volume sold as Promo;%;2012;0.204588613
+UK;Total;Total;Total;Avg % Volume sold as Promo;%;2012;0.566275567
+US;Total;Total;Total;Avg % Volume sold as Promo;%;2012;0.318699493
+Japan;Total;Total;Total;Avg % Volume sold as Promo;%;2012;
+Australia;Total;Total;Total;Penetration;%;2012;
+Brazil;Total;Total;Total;Penetration;%;2012;
+Canada;Total;Total;Total;Penetration;%;2012;
+Germany;Total;Total;Total;Penetration;%;2012;
+Italy;Total;Total;Total;Penetration;%;2012;
+Mexico;Total;Total;Total;Penetration;%;2012;
+Spain;Total;Total;Total;Penetration;%;2012;
+UK;Total;Total;Total;Penetration;%;2012;
+US;Total;Total;Total;Penetration;%;2012;0.51900319
+Japan;Total;Total;Total;Penetration;%;2012;
+Australia;Total;Total;Total;Base Value Sales;Dollars;2012;78564048
+Brazil;Total;Total;Total;Base Value Sales;Dollars;2012;
+Canada;Total;Total;Total;Base Value Sales;Dollars;2012;76069673
+Germany;Total;Total;Total;Base Value Sales;Dollars;2012;219114082
+Italy;Total;Total;Total;Base Value Sales;Dollars;2012;84951379
+Mexico;Total;Total;Total;Base Value Sales;Dollars;2012;
+Spain;Total;Total;Total;Base Value Sales;Dollars;2012;97443504
+UK;Total;Total;Total;Base Value Sales;Dollars;2012;160882526
+US;Total;Total;Total;Base Value Sales;Dollars;2012;1292275301
+Japan;Total;Total;Total;Base Value Sales;Dollars;2012;
+Australia;Total;Total;Total;Base Volume Sales;Liters;2012;6346960
+Brazil;Total;Total;Total;Base Volume Sales;Liters;2012;
+Canada;Total;Total;Total;Base Volume Sales;Liters;2012;11696402
+Germany;Total;Total;Total;Base Volume Sales;Liters;2012;25997813
+Italy;Total;Total;Total;Base Volume Sales;Liters;2012;8998416
+Mexico;Total;Total;Total;Base Volume Sales;Liters;2012;
+Spain;Total;Total;Total;Base Volume Sales;Liters;2012;13667360
+UK;Total;Total;Total;Base Volume Sales;Liters;2012;18503286
+US;Total;Total;Total;Base Volume Sales;Liters;2012;233584008
+Japan;Total;Total;Total;Base Volume Sales;Liters;2012;
+Australia;Total;Total;Total;Promo Value Sales;Dollars;2012;27313759
+Brazil;Total;Total;Total;Promo Value Sales;Dollars;2012;
+Canada;Total;Total;Total;Promo Value Sales;Dollars;2012;54397569
+Germany;Total;Total;Total;Promo Value Sales;Dollars;2012;37225723
+Italy;Total;Total;Total;Promo Value Sales;Dollars;2012;25208081
+Mexico;Total;Total;Total;Promo Value Sales;Dollars;2012;
+Spain;Total;Total;Total;Promo Value Sales;Dollars;2012;22357216
+UK;Total;Total;Total;Promo Value Sales;Dollars;2012;118912782
+US;Total;Total;Total;Promo Value Sales;Dollars;2012;395307001
+Japan;Total;Total;Total;Promo Value Sales;Dollars;2012;
+Australia;Total;Total;Total;Promo Volume Sales;Liters;2012;3095439
+Brazil;Total;Total;Total;Promo Volume Sales;Liters;2012;
+Canada;Total;Total;Total;Promo Volume Sales;Liters;2012;11279746
+Germany;Total;Total;Total;Promo Volume Sales;Liters;2012;4038896
+Italy;Total;Total;Total;Promo Volume Sales;Liters;2012;3300244
+Mexico;Total;Total;Total;Promo Volume Sales;Liters;2012;
+Spain;Total;Total;Total;Promo Volume Sales;Liters;2012;3010190
+UK;Total;Total;Total;Promo Volume Sales;Liters;2012;17330849
+US;Total;Total;Total;Promo Volume Sales;Liters;2012;82163018
+Japan;Total;Total;Total;Promo Volume Sales;Liters;2012;
+Australia;Total;Total;Total;Base Promo Volume;Liters;2012;1042187
+Brazil;Total;Total;Total;Base Promo Volume;Liters;2012;
+Canada;Total;Total;Total;Base Promo Volume;Liters;2012;3373823
+Germany;Total;Total;Total;Base Promo Volume;Liters;2012;1743028
+Italy;Total;Total;Total;Base Promo Volume;Liters;2012;1214792
+Mexico;Total;Total;Total;Base Promo Volume;Liters;2012;
+Spain;Total;Total;Total;Base Promo Volume;Liters;2012;1964170
+UK;Total;Total;Total;Base Promo Volume;Liters;2012;5229161
+US;Total;Total;Total;Base Promo Volume;Liters;2012;57725619
+Japan;Total;Total;Total;Base Promo Volume;Liters;2012;
+Australia;Total;Total;Total;Innovation Volume share;%;2012;0.014891262
+Brazil;Total;Total;Total;Innovation Volume share;%;2012;0.020719003
+Canada;Total;Total;Total;Innovation Volume share;%;2012;0.060548638
+Germany;Total;Total;Total;Innovation Volume share;%;2012;0.017026857
+Italy;Total;Total;Total;Innovation Volume share;%;2012;0.037100255
+Mexico;Total;Total;Total;Innovation Volume share;%;2012;0.038630664
+Spain;Total;Total;Total;Innovation Volume share;%;2012;0.009604647
+UK;Total;Total;Total;Innovation Volume share;%;2012;0.037471308
+US;Total;Total;Total;Innovation Volume share;%;2012;0.078189669
+Japan;Total;Total;Total;Innovation Volume share;%;2012;0.038419229
+Australia;Total;Total;Total;Innovation TDP share;%;2012;0.036675605
+Brazil;Total;Total;Total;Innovation TDP share;%;2012;0.040911896
+Canada;Total;Total;Total;Innovation TDP share;%;2012;0.069719487
+Germany;Total;Total;Total;Innovation TDP share;%;2012;0.041534083
+Italy;Total;Total;Total;Innovation TDP share;%;2012;0.038597777
+Mexico;Total;Total;Total;Innovation TDP share;%;2012;0.048342427
+Spain;Total;Total;Total;Innovation TDP share;%;2012;0.045522501
+UK;Total;Total;Total;Innovation TDP share;%;2012;0.06565373
+US;Total;Total;Total;Innovation TDP share;%;2012;0.103674156
+Japan;Total;Total;Total;Innovation TDP share;%;2012;0.065760385
+Australia;Total;Total;Total;Innovation SKU share;%;2012;0.021613073
+Brazil;Total;Total;Total;Innovation SKU share;%;2012;0.073863636
+Canada;Total;Total;Total;Innovation SKU share;%;2012;0.116716867
+Germany;Total;Total;Total;Innovation SKU share;%;2012;0.050765512
+Italy;Total;Total;Total;Innovation SKU share;%;2012;0.117374005
+Mexico;Total;Total;Total;Innovation SKU share;%;2012;0.078984485
+Spain;Total;Total;Total;Innovation SKU share;%;2012;0.110227875
+UK;Total;Total;Total;Innovation SKU share;%;2012;0.067218201
+US;Total;Total;Total;Innovation SKU share;%;2012;0.079389651
+Japan;Total;Total;Total;Innovation SKU share;%;2012;0.082087072
+Australia;Total;Total;Total;Value Sales;Dollars;2013;89389.456
+Australia;Total;Total;Total;Volume Sales;Liters;2013;8430.574173
+Australia;Total;Total;Total;Avg Price per EQ;Dollar per Liter;2013;10.60300926
+Australia;Total;Total;Total;TDP;;2013;3400.969827
+Brazil;Total;Total;Total;Value Sales;Dollars;2013;267141.26
+Brazil;Total;Total;Total;Volume Sales;Liters;2013;22531.8
+Brazil;Total;Total;Total;Avg Price per EQ;Dollar per Liter;2013;11.85618814
+Brazil;Total;Total;Total;TDP;;2013;4071.666667
+Canada;Total;Total;Total;Value Sales;Dollars;2013;113579.4369
+Canada;Total;Total;Total;Volume Sales;Liters;2013;20339.046
+Canada;Total;Total;Total;Avg Price per EQ;Dollar per Liter;2013;5.584305031
+Canada;Total;Total;Total;TDP;;2013;3776.236667
+Germany;Total;Total;Total;Value Sales;Dollars;2013;245366.2606
+Germany;Total;Total;Total;Volume Sales;Liters;2013;30136.8716
+Germany;Total;Total;Total;Avg Price per EQ;Dollar per Liter;2013;8.141729635
+Germany;Total;Total;Total;TDP;;2013;2812.516667
+Italy;Total;Total;Total;Value Sales;Dollars;2013;100091.0594
+Italy;Total;Total;Total;Volume Sales;Liters;2013;11841.0299
+Italy;Total;Total;Total;Avg Price per EQ;Dollar per Liter;2013;8.452901498
+Italy;Total;Total;Total;TDP;;2013;2106.029167
+Mexico;Total;Total;Total;Value Sales;Dollars;2013;87790.94958
+Mexico;Total;Total;Total;Volume Sales;Liters;2013;8620.96
+Mexico;Total;Total;Total;Avg Price per EQ;Dollar per Liter;2013;10.1834308
+Mexico;Total;Total;Total;TDP;;2013;4032
+Spain;Total;Total;Total;Value Sales;Dollars;2013;102417.2895
+Spain;Total;Total;Total;Volume Sales;Liters;2013;14641.65
+Spain;Total;Total;Total;Avg Price per EQ;Dollar per Liter;2013;6.994928133
+Spain;Total;Total;Total;TDP;;2013;1751.054167
+UK;Total;Total;Total;Value Sales;Dollars;2013;222638.4502
+UK;Total;Total;Total;Volume Sales;Liters;2013;29063.5781
+UK;Total;Total;Total;Avg Price per EQ;Dollar per Liter;2013;7.660393687
+UK;Total;Total;Total;TDP;;2013;2892.116667
+US;Total;Total;Total;Value Sales;Dollars;2013;1407775.677
+US;Total;Total;Total;Volume Sales;Liters;2013;260303.1265
+US;Total;Total;Total;Avg Price per EQ;Dollar per Liter;2013;5.408216549
+US;Total;Total;Total;TDP;;2013;6173.098667
+Japan;Total;Total;Total;Value Sales;Dollars;2013;253686.6755
+Japan;Total;Total;Total;Volume Sales;Liters;2013;32199.371
+Japan;Total;Total;Total;Avg Price per EQ;Dollar per Liter;2013;7.878622084
+Japan;Total;Total;Total;TDP;;2013;4050
+Australia;Total;Total;Total;Unit Sales;;2013;16.72473308
+Brazil;Total;Total;Total;Unit Sales;;2013;68.9092
+Canada;Total;Total;Total;Unit Sales;;2013;26.1299233
+Germany;Total;Total;Total;Unit Sales;;2013;79.9210301
+Italy;Total;Total;Total;Unit Sales;;2013;25.121671
+Mexico;Total;Total;Total;Unit Sales;;2013;25.75262018
+Spain;Total;Total;Total;Unit Sales;;2013;29.50321
+UK;Total;Total;Total;Unit Sales;;2013;66.3965985
+US;Total;Total;Total;Unit Sales;;2013;324.3439504
+Japan;Total;Total;Total;Unit Sales;;2013;55.969
+Australia;Total;Total;Total;Premiumization;index;2013;0.986677625
+Brazil;Total;Total;Total;Premiumization;index;2013;1.000622617
+Canada;Total;Total;Total;Premiumization;index;2013;1.032893563
+Germany;Total;Total;Total;Premiumization;index;2013;0.994448796
+Italy;Total;Total;Total;Premiumization;index;2013;1.016739758
+Mexico;Total;Total;Total;Premiumization;index;2013;0.988156578
+Spain;Total;Total;Total;Premiumization;index;2013;1.025252408
+UK;Total;Total;Total;Premiumization;index;2013;1.016537306
+US;Total;Total;Total;Premiumization;index;2013;1.014212867
+Japan;Total;Total;Total;Premiumization;index;2013;0.997395455
+Australia;Total;Total;Total;Media Spend;Dollars;2013;3195.908
+Brazil;Total;Total;Total;Media Spend;Dollars;2013;247115.8023
+Canada;Total;Total;Total;Media Spend;Dollars;2013;9097.982
+Germany;Total;Total;Total;Media Spend;Dollars;2013;47651.25748
+Italy;Total;Total;Total;Media Spend;Dollars;2013;0
+Mexico;Total;Total;Total;Media Spend;Dollars;2013;25480.39423
+Spain;Total;Total;Total;Media Spend;Dollars;2013;0
+UK;Total;Total;Total;Media Spend;Dollars;2013;22211.66779
+US;Total;Total;Total;Media Spend;Dollars;2013;166074.1
+Japan;Total;Total;Total;Media Spend;Dollars;2013;30828.33152
+Australia;Total;Total;Total;Avg % Discount;%;2013;0.324164475
+Brazil;Total;Total;Total;Avg % Discount;%;2013;
+Canada;Total;Total;Total;Avg % Discount;%;2013;0.215737578
+Germany;Total;Total;Total;Avg % Discount;%;2013;0.124825838
+Italy;Total;Total;Total;Avg % Discount;%;2013;0.198954125
+Mexico;Total;Total;Total;Avg % Discount;%;2013;
+Spain;Total;Total;Total;Avg % Discount;%;2013;0.053783349
+UK;Total;Total;Total;Avg % Discount;%;2013;0.347107582
+US;Total;Total;Total;Avg % Discount;%;2013;0.09901779
+Japan;Total;Total;Total;Avg % Discount;%;2013;
+Australia;Total;Total;Total;Avg % Promo Support;%;2013;0.203411879
+Brazil;Total;Total;Total;Avg % Promo Support;%;2013;
+Canada;Total;Total;Total;Avg % Promo Support;%;2013;0.316062687
+Germany;Total;Total;Total;Avg % Promo Support;%;2013;0.076185237
+Italy;Total;Total;Total;Avg % Promo Support;%;2013;0.164149759
+Mexico;Total;Total;Total;Avg % Promo Support;%;2013;
+Spain;Total;Total;Total;Avg % Promo Support;%;2013;0.148802214
+UK;Total;Total;Total;Avg % Promo Support;%;2013;0.297829384
+US;Total;Total;Total;Avg % Promo Support;%;2013;0.250878702
+Japan;Total;Total;Total;Avg % Promo Support;%;2013;
+Australia;Total;Total;Total;Avg % Volume sold as Promo;%;2013;0.463382327
+Brazil;Total;Total;Total;Avg % Volume sold as Promo;%;2013;
+Canada;Total;Total;Total;Avg % Volume sold as Promo;%;2013;0.596572524
+Germany;Total;Total;Total;Avg % Volume sold as Promo;%;2013;0.156890702
+Italy;Total;Total;Total;Avg % Volume sold as Promo;%;2013;0.331213923
+Mexico;Total;Total;Total;Avg % Volume sold as Promo;%;2013;
+Spain;Total;Total;Total;Avg % Volume sold as Promo;%;2013;0.237383082
+UK;Total;Total;Total;Avg % Volume sold as Promo;%;2013;0.603933831
+US;Total;Total;Total;Avg % Volume sold as Promo;%;2013;0.320345353
+Japan;Total;Total;Total;Avg % Volume sold as Promo;%;2013;
+Australia;Total;Total;Total;Penetration;%;2013;0.3078012
+Brazil;Total;Total;Total;Penetration;%;2013;
+Canada;Total;Total;Total;Penetration;%;2013;
+Germany;Total;Total;Total;Penetration;%;2013;
+Italy;Total;Total;Total;Penetration;%;2013;
+Mexico;Total;Total;Total;Penetration;%;2013;
+Spain;Total;Total;Total;Penetration;%;2013;
+UK;Total;Total;Total;Penetration;%;2013;
+US;Total;Total;Total;Penetration;%;2013;
+Japan;Total;Total;Total;Penetration;%;2013;0.2596
+Australia;Total;Total;Total;Base Value Sales;Dollars;2013;69788319
+Brazil;Total;Total;Total;Base Value Sales;Dollars;2013;
+Canada;Total;Total;Total;Base Value Sales;Dollars;2013;78267947
+Germany;Total;Total;Total;Base Value Sales;Dollars;2013;225432069
+Italy;Total;Total;Total;Base Value Sales;Dollars;2013;84754988
+Mexico;Total;Total;Total;Base Value Sales;Dollars;2013;
+Spain;Total;Total;Total;Base Value Sales;Dollars;2013;91893443
+UK;Total;Total;Total;Base Value Sales;Dollars;2013;150107540
+US;Total;Total;Total;Base Value Sales;Dollars;2013;1329448271
+Japan;Total;Total;Total;Base Value Sales;Dollars;2013;
+Australia;Total;Total;Total;Base Volume Sales;Liters;2013;5679216
+Brazil;Total;Total;Total;Base Volume Sales;Liters;2013;
+Canada;Total;Total;Total;Base Volume Sales;Liters;2013;11997196
+Germany;Total;Total;Total;Base Volume Sales;Liters;2013;27504082
+Italy;Total;Total;Total;Base Volume Sales;Liters;2013;9474324
+Mexico;Total;Total;Total;Base Volume Sales;Liters;2013;
+Spain;Total;Total;Total;Base Volume Sales;Liters;2013;13117950
+UK;Total;Total;Total;Base Volume Sales;Liters;2013;16393594
+US;Total;Total;Total;Base Volume Sales;Liters;2013;236920506
+Japan;Total;Total;Total;Base Volume Sales;Liters;2013;
+Australia;Total;Total;Total;Promo Value Sales;Dollars;2013;34849525
+Brazil;Total;Total;Total;Promo Value Sales;Dollars;2013;
+Canada;Total;Total;Total;Promo Value Sales;Dollars;2013;58702981
+Germany;Total;Total;Total;Promo Value Sales;Dollars;2013;40383829
+Italy;Total;Total;Total;Promo Value Sales;Dollars;2013;30370365
+Mexico;Total;Total;Total;Promo Value Sales;Dollars;2013;
+Spain;Total;Total;Total;Promo Value Sales;Dollars;2013;25891035
+UK;Total;Total;Total;Promo Value Sales;Dollars;2013;126371713
+US;Total;Total;Total;Promo Value Sales;Dollars;2013;408747650
+Japan;Total;Total;Total;Promo Value Sales;Dollars;2013;
+Australia;Total;Total;Total;Promo Volume Sales;Liters;2013;3906579
+Brazil;Total;Total;Total;Promo Volume Sales;Liters;2013;
+Canada;Total;Total;Total;Promo Volume Sales;Liters;2013;12133716
+Germany;Total;Total;Total;Promo Volume Sales;Liters;2013;4728195
+Italy;Total;Total;Total;Promo Volume Sales;Liters;2013;3921914
+Mexico;Total;Total;Total;Promo Volume Sales;Liters;2013;
+Spain;Total;Total;Total;Promo Volume Sales;Liters;2013;3475680
+UK;Total;Total;Total;Promo Volume Sales;Liters;2013;17552478
+US;Total;Total;Total;Promo Volume Sales;Liters;2013;83386897
+Japan;Total;Total;Total;Promo Volume Sales;Liters;2013;
+Australia;Total;Total;Total;Base Promo Volume;Liters;2013;1155220
+Brazil;Total;Total;Total;Base Promo Volume;Liters;2013;
+Canada;Total;Total;Total;Base Promo Volume;Liters;2013;3791866
+Germany;Total;Total;Total;Base Promo Volume;Liters;2013;2095405
+Italy;Total;Total;Total;Base Promo Volume;Liters;2013;1555208
+Mexico;Total;Total;Total;Base Promo Volume;Liters;2013;
+Spain;Total;Total;Total;Base Promo Volume;Liters;2013;1951980
+UK;Total;Total;Total;Base Promo Volume;Liters;2013;4882494
+US;Total;Total;Total;Base Promo Volume;Liters;2013;59438309
+Japan;Total;Total;Total;Base Promo Volume;Liters;2013;
+Australia;Total;Total;Total;Innovation Volume share;%;2013;0.026389679
+Brazil;Total;Total;Total;Innovation Volume share;%;2013;0.020719003
+Canada;Total;Total;Total;Innovation Volume share;%;2013;0.060843513
+Germany;Total;Total;Total;Innovation Volume share;%;2013;0.008014083
+Italy;Total;Total;Total;Innovation Volume share;%;2013;0.067475966
+Mexico;Total;Total;Total;Innovation Volume share;%;2013;0.038630664
+Spain;Total;Total;Total;Innovation Volume share;%;2013;0.013496638
+UK;Total;Total;Total;Innovation Volume share;%;2013;0.009909331
+US;Total;Total;Total;Innovation Volume share;%;2013;0.05586692
+Japan;Total;Total;Total;Innovation Volume share;%;2013;0.05767988
+Australia;Total;Total;Total;Innovation TDP share;%;2013;0.02495027
+Brazil;Total;Total;Total;Innovation TDP share;%;2013;0.040911896
+Canada;Total;Total;Total;Innovation TDP share;%;2013;0.072179339
+Germany;Total;Total;Total;Innovation TDP share;%;2013;0.025890229
+Italy;Total;Total;Total;Innovation TDP share;%;2013;0.069199982
+Mexico;Total;Total;Total;Innovation TDP share;%;2013;0.048342427
+Spain;Total;Total;Total;Innovation TDP share;%;2013;0.034784118
+UK;Total;Total;Total;Innovation TDP share;%;2013;0.039074017
+US;Total;Total;Total;Innovation TDP share;%;2013;0.078665274
+Japan;Total;Total;Total;Innovation TDP share;%;2013;0.10171952
+Australia;Total;Total;Total;Innovation SKU share;%;2013;0.019775521
+Brazil;Total;Total;Total;Innovation SKU share;%;2013;0.073863636
+Canada;Total;Total;Total;Innovation SKU share;%;2013;0.120667522
+Germany;Total;Total;Total;Innovation SKU share;%;2013;0.051136364
+Italy;Total;Total;Total;Innovation SKU share;%;2013;0.145772595
+Mexico;Total;Total;Total;Innovation SKU share;%;2013;0.078984485
+Spain;Total;Total;Total;Innovation SKU share;%;2013;0.080645161
+UK;Total;Total;Total;Innovation SKU share;%;2013;0.103909465
+US;Total;Total;Total;Innovation SKU share;%;2013;0.065092251
+Japan;Total;Total;Total;Innovation SKU share;%;2013;0.120010235
+Australia;Total;Total;Total;Value Sales;Dollars;2014;90012.07058
+Australia;Total;Total;Total;Volume Sales;Liters;2014;8814.320829
+Australia;Total;Total;Total;Avg Price per EQ;Dollar per Liter;2014;10.21202567
+Australia;Total;Total;Total;TDP;;2014;3530.403539
+Brazil;Total;Total;Total;Value Sales;Dollars;2014;281568.006
+Brazil;Total;Total;Total;Volume Sales;Liters;2014;21732.60754
+Brazil;Total;Total;Total;Avg Price per EQ;Dollar per Liter;2014;12.95601577
+Brazil;Total;Total;Total;TDP;;2014;3534.875179
+Canada;Total;Total;Total;Value Sales;Dollars;2014;114357.7847
+Canada;Total;Total;Total;Volume Sales;Liters;2014;19844.96598
+Canada;Total;Total;Total;Avg Price per EQ;Dollar per Liter;2014;5.762558868
+Canada;Total;Total;Total;TDP;;2014;4085.230469
+Germany;Total;Total;Total;Value Sales;Dollars;2014;241606.5798
+Germany;Total;Total;Total;Volume Sales;Liters;2014;31455.34679
+Germany;Total;Total;Total;Avg Price per EQ;Dollar per Liter;2014;7.680938359
+Germany;Total;Total;Total;TDP;;2014;2959.427069
+Italy;Total;Total;Total;Value Sales;Dollars;2014;107615.049
+Italy;Total;Total;Total;Volume Sales;Liters;2014;13023.00825
+Italy;Total;Total;Total;Avg Price per EQ;Dollar per Liter;2014;8.26345549
+Italy;Total;Total;Total;TDP;;2014;2238.985627
+Mexico;Total;Total;Total;Value Sales;Dollars;2014;94608.74623
+Mexico;Total;Total;Total;Volume Sales;Liters;2014;9116.615632
+Mexico;Total;Total;Total;Avg Price per EQ;Dollar per Liter;2014;10.3776171
+Mexico;Total;Total;Total;TDP;;2014;3981.145621
+Spain;Total;Total;Total;Value Sales;Dollars;2014;105425.614
+Spain;Total;Total;Total;Volume Sales;Liters;2014;15222.88392
+Spain;Total;Total;Total;Avg Price per EQ;Dollar per Liter;2014;6.925469218
+Spain;Total;Total;Total;TDP;;2014;1881.533338
+UK;Total;Total;Total;Value Sales;Dollars;2014;222773.7828
+UK;Total;Total;Total;Volume Sales;Liters;2014;28996.79923
+UK;Total;Total;Total;Avg Price per EQ;Dollar per Liter;2014;7.68270253
+UK;Total;Total;Total;TDP;;2014;2922.138404
+US;Total;Total;Total;Value Sales;Dollars;2014;1431823.337
+US;Total;Total;Total;Volume Sales;Liters;2014;257000.1752
+US;Total;Total;Total;Avg Price per EQ;Dollar per Liter;2014;5.571293232
+US;Total;Total;Total;TDP;;2014;6296.102167
+Japan;Total;Total;Total;Value Sales;Dollars;2014;271241.0231
+Japan;Total;Total;Total;Volume Sales;Liters;2014;34494.06555
+Japan;Total;Total;Total;Avg Price per EQ;Dollar per Liter;2014;7.86341125
+Japan;Total;Total;Total;TDP;;2014;4188.274881
+Australia;Total;Total;Total;Unit Sales;;2014;17.21423004
+Brazil;Total;Total;Total;Unit Sales;;2014;64.69124056
+Canada;Total;Total;Total;Unit Sales;;2014;25.5095269
+Germany;Total;Total;Total;Unit Sales;;2014;81.17736128
+Italy;Total;Total;Total;Unit Sales;;2014;27.69870681
+Mexico;Total;Total;Total;Unit Sales;;2014;26.33227004
+Spain;Total;Total;Total;Unit Sales;;2014;31.08257701
+UK;Total;Total;Total;Unit Sales;;2014;66.12198998
+US;Total;Total;Total;Unit Sales;;2014;324.7270797
+Japan;Total;Total;Total;Unit Sales;;2014;59.09
+Australia;Total;Total;Total;Premiumization;index;2014;0.979421258
+Brazil;Total;Total;Total;Premiumization;index;2014;0.997643001
+Canada;Total;Total;Total;Premiumization;index;2014;1.049006814
+Germany;Total;Total;Total;Premiumization;index;2014;0.983935894
+Italy;Total;Total;Total;Premiumization;index;2014;1.016220658
+Mexico;Total;Total;Total;Premiumization;index;2014;0.975453006
+Spain;Total;Total;Total;Premiumization;index;2014;1.006134656
+UK;Total;Total;Total;Premiumization;index;2014;1.031784248
+US;Total;Total;Total;Premiumization;index;2014;1.0250089
+Japan;Total;Total;Total;Premiumization;index;2014;0.985779076
+Australia;Total;Total;Total;Media Spend;Dollars;2014;4308.959
+Brazil;Total;Total;Total;Media Spend;Dollars;2014;273201.977
+Canada;Total;Total;Total;Media Spend;Dollars;2014;8036.421125
+Germany;Total;Total;Total;Media Spend;Dollars;2014;45410.61262
+Italy;Total;Total;Total;Media Spend;Dollars;2014;0
+Mexico;Total;Total;Total;Media Spend;Dollars;2014;24451.35685
+Spain;Total;Total;Total;Media Spend;Dollars;2014;0
+UK;Total;Total;Total;Media Spend;Dollars;2014;24807.83735
+US;Total;Total;Total;Media Spend;Dollars;2014;188852.8444
+Japan;Total;Total;Total;Media Spend;Dollars;2014;28264.99924
+Australia;Total;Total;Total;Avg % Discount;%;2014;0.33311198
+Brazil;Total;Total;Total;Avg % Discount;%;2014;
+Canada;Total;Total;Total;Avg % Discount;%;2014;0.218979342
+Germany;Total;Total;Total;Avg % Discount;%;2014;0.021315367
+Italy;Total;Total;Total;Avg % Discount;%;2014;0.193164733
+Mexico;Total;Total;Total;Avg % Discount;%;2014;
+Spain;Total;Total;Total;Avg % Discount;%;2014;0.036186787
+UK;Total;Total;Total;Avg % Discount;%;2014;0.34337722
+US;Total;Total;Total;Avg % Discount;%;2014;0.114346403
+Japan;Total;Total;Total;Avg % Discount;%;2014;
+Australia;Total;Total;Total;Avg % Promo Support;%;2014;0.217593784
+Brazil;Total;Total;Total;Avg % Promo Support;%;2014;
+Canada;Total;Total;Total;Avg % Promo Support;%;2014;0.301475084
+Germany;Total;Total;Total;Avg % Promo Support;%;2014;0.125144696
+Italy;Total;Total;Total;Avg % Promo Support;%;2014;0.174134848
+Mexico;Total;Total;Total;Avg % Promo Support;%;2014;
+Spain;Total;Total;Total;Avg % Promo Support;%;2014;0.174307246
+UK;Total;Total;Total;Avg % Promo Support;%;2014;0.297559761
+US;Total;Total;Total;Avg % Promo Support;%;2014;0.211691979
+Japan;Total;Total;Total;Avg % Promo Support;%;2014;
+Australia;Total;Total;Total;Avg % Volume sold as Promo;%;2014;0.512757364
+Brazil;Total;Total;Total;Avg % Volume sold as Promo;%;2014;
+Canada;Total;Total;Total;Avg % Volume sold as Promo;%;2014;0.584996417
+Germany;Total;Total;Total;Avg % Volume sold as Promo;%;2014;0.192484476
+Italy;Total;Total;Total;Avg % Volume sold as Promo;%;2014;0.358258399
+Mexico;Total;Total;Total;Avg % Volume sold as Promo;%;2014;
+Spain;Total;Total;Total;Avg % Volume sold as Promo;%;2014;0.254720722
+UK;Total;Total;Total;Avg % Volume sold as Promo;%;2014;0.611711348
+US;Total;Total;Total;Avg % Volume sold as Promo;%;2014;0.277925764
+Japan;Total;Total;Total;Avg % Volume sold as Promo;%;2014;
+Australia;Total;Total;Total;Penetration;%;2014;0.305145743
+Brazil;Total;Total;Total;Penetration;%;2014;
+Canada;Total;Total;Total;Penetration;%;2014;
+Germany;Total;Total;Total;Penetration;%;2014;
+Italy;Total;Total;Total;Penetration;%;2014;
+Mexico;Total;Total;Total;Penetration;%;2014;
+Spain;Total;Total;Total;Penetration;%;2014;
+UK;Total;Total;Total;Penetration;%;2014;
+US;Total;Total;Total;Penetration;%;2014;
+Japan;Total;Total;Total;Penetration;%;2014;0.2509
+Australia;Total;Total;Total;Base Value Sales;Dollars;2014;67421362
+Brazil;Total;Total;Total;Base Value Sales;Dollars;2014;
+Canada;Total;Total;Total;Base Value Sales;Dollars;2014;78464895
+Germany;Total;Total;Total;Base Value Sales;Dollars;2014;224145121
+Italy;Total;Total;Total;Base Value Sales;Dollars;2014;88342736
+Mexico;Total;Total;Total;Base Value Sales;Dollars;2014;
+Spain;Total;Total;Total;Base Value Sales;Dollars;2014;95806789
+UK;Total;Total;Total;Base Value Sales;Dollars;2014;147538891
+US;Total;Total;Total;Base Value Sales;Dollars;2014;1360922801
+Japan;Total;Total;Total;Base Value Sales;Dollars;2014;
+Australia;Total;Total;Total;Base Volume Sales;Liters;2014;5489109
+Brazil;Total;Total;Total;Base Volume Sales;Liters;2014;
+Canada;Total;Total;Total;Base Volume Sales;Liters;2014;11790175
+Germany;Total;Total;Total;Base Volume Sales;Liters;2014;29034151
+Italy;Total;Total;Total;Base Volume Sales;Liters;2014;10119577
+Mexico;Total;Total;Total;Base Volume Sales;Liters;2014;
+Spain;Total;Total;Total;Base Volume Sales;Liters;2014;13740341
+UK;Total;Total;Total;Base Volume Sales;Liters;2014;16028592
+US;Total;Total;Total;Base Volume Sales;Liters;2014;236031990
+Japan;Total;Total;Total;Base Volume Sales;Liters;2014;
+Australia;Total;Total;Total;Promo Value Sales;Dollars;2014;37418757
+Brazil;Total;Total;Total;Promo Value Sales;Dollars;2014;
+Canada;Total;Total;Total;Promo Value Sales;Dollars;2014;59036068
+Germany;Total;Total;Total;Promo Value Sales;Dollars;2014;45141150
+Italy;Total;Total;Total;Promo Value Sales;Dollars;2014;36234200
+Mexico;Total;Total;Total;Promo Value Sales;Dollars;2014;
+Spain;Total;Total;Total;Promo Value Sales;Dollars;2014;26782469
+UK;Total;Total;Total;Promo Value Sales;Dollars;2014;127409429
+US;Total;Total;Total;Promo Value Sales;Dollars;2014;379329712
+Japan;Total;Total;Total;Promo Value Sales;Dollars;2014;
+Australia;Total;Total;Total;Promo Volume Sales;Liters;2014;4519608
+Brazil;Total;Total;Total;Promo Volume Sales;Liters;2014;
+Canada;Total;Total;Total;Promo Volume Sales;Liters;2014;11609234
+Germany;Total;Total;Total;Promo Volume Sales;Liters;2014;6054666
+Italy;Total;Total;Total;Promo Volume Sales;Liters;2014;4665602
+Mexico;Total;Total;Total;Promo Volume Sales;Liters;2014;
+Spain;Total;Total;Total;Promo Volume Sales;Liters;2014;3877584
+UK;Total;Total;Total;Promo Volume Sales;Liters;2014;17737671
+US;Total;Total;Total;Promo Volume Sales;Liters;2014;71426970
+Japan;Total;Total;Total;Promo Volume Sales;Liters;2014;
+Australia;Total;Total;Total;Base Promo Volume;Liters;2014;1194396
+Brazil;Total;Total;Total;Base Promo Volume;Liters;2014;
+Canada;Total;Total;Total;Base Promo Volume;Liters;2014;3554444
+Germany;Total;Total;Total;Base Promo Volume;Liters;2014;3633470
+Italy;Total;Total;Total;Base Promo Volume;Liters;2014;1762171
+Mexico;Total;Total;Total;Base Promo Volume;Liters;2014;
+Spain;Total;Total;Total;Base Promo Volume;Liters;2014;2395041
+UK;Total;Total;Total;Base Promo Volume;Liters;2014;4769464
+US;Total;Total;Total;Base Promo Volume;Liters;2014;49966079
+Japan;Total;Total;Total;Base Promo Volume;Liters;2014;
+Australia;Total;Total;Total;Innovation Volume share;%;2014;0.037769479
+Brazil;Total;Total;Total;Innovation Volume share;%;2014;0.018664327
+Canada;Total;Total;Total;Innovation Volume share;%;2014;0.037131151
+Germany;Total;Total;Total;Innovation Volume share;%;2014;0.054905485
+Italy;Total;Total;Total;Innovation Volume share;%;2014;0.042195496
+Mexico;Total;Total;Total;Innovation Volume share;%;2014;0.034525198
+Spain;Total;Total;Total;Innovation Volume share;%;2014;0.019654523
+UK;Total;Total;Total;Innovation Volume share;%;2014;0.02037876
+US;Total;Total;Total;Innovation Volume share;%;2014;0.037610552
+Japan;Total;Total;Total;Innovation Volume share;%;2014;0.051867396
+Australia;Total;Total;Total;Innovation TDP share;%;2014;0.064157133
+Brazil;Total;Total;Total;Innovation TDP share;%;2014;0.031822565
+Canada;Total;Total;Total;Innovation TDP share;%;2014;0.082427004
+Germany;Total;Total;Total;Innovation TDP share;%;2014;0.051369726
+Italy;Total;Total;Total;Innovation TDP share;%;2014;0.070385748
+Mexico;Total;Total;Total;Innovation TDP share;%;2014;0.0523443
+Spain;Total;Total;Total;Innovation TDP share;%;2014;0.05696253
+UK;Total;Total;Total;Innovation TDP share;%;2014;0.032427598
+US;Total;Total;Total;Innovation TDP share;%;2014;0.075079798
+Japan;Total;Total;Total;Innovation TDP share;%;2014;0.086741072
+Australia;Total;Total;Total;Innovation SKU share;%;2014;0.027371101
+Brazil;Total;Total;Total;Innovation SKU share;%;2014;0.044247788
+Canada;Total;Total;Total;Innovation SKU share;%;2014;0.131509267
+Germany;Total;Total;Total;Innovation SKU share;%;2014;0.096204766
+Italy;Total;Total;Total;Innovation SKU share;%;2014;0.093037585
+Mexico;Total;Total;Total;Innovation SKU share;%;2014;0.0625
+Spain;Total;Total;Total;Innovation SKU share;%;2014;0.08700502
+UK;Total;Total;Total;Innovation SKU share;%;2014;0.082508251
+US;Total;Total;Total;Innovation SKU share;%;2014;0.048168355
+Japan;Total;Total;Total;Innovation SKU share;%;2014;0.118797845

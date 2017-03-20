@@ -1,0 +1,37 @@
+[{
+"col_name":"camp",
+"col_type":"numeric",
+"is_index_data_col":false
+},
+    {
+"col_name":"rep_acct",
+"col_type": "index",
+"is_index_data_col":false
+
+},
+    {
+"col_name":"zip_code",
+"col_type":"string",
+"is_index_data_col":false},
+    {
+"col_name":"tier",
+"col_type": "string",
+"is_index_data_col":false
+
+},
+    {
+"col_name":"netsales",
+"col_type":"numeric",
+"is_index_data_col":false
+
+},
+    {
+"col_name":"cost",
+"col_type": "numeric",
+"is_index_data_col": false
+},
+    {
+"col_name": "cpsales",
+"col_type": "numeric",
+"is_index_data_col": false
+}]

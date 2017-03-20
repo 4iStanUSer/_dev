@@ -1,5 +1,9 @@
 from ..models.warehouse import *
+from ..models.access import Project
 from sqlalchemy import create_engine
+from sqlalchemy.orm.session import sessionmaker
+import logging
+
 import pandas as pd
 
 
@@ -10,7 +14,7 @@ class Warehouse:
     link between data structure. Such as
     Entity, TimeSeries, Variable, Value etc.
     """
-    def __init__(self, ssn_factory=None, engine=None):
+    def __init__(self, config):
         """
         Object initialise with session
         And query Entity Root obj
@@ -19,39 +23,80 @@ class Warehouse:
         :type ssn_factory:
         """
 
-
-        #TODO add exception if there no root object
-
-        #self.engine = create_engine(engine)
-
-        self._ssn = ssn_factory()
-        self._root = self._ssn.query(Entity).filter(Entity.name == 'root').one_or_none()
-
-
+        self.engine = create_engine(config)
+        _ssn = sessionmaker(bind=self.engine)
+        self._ssn = _ssn()
+        self._root = self._ssn.query(Entity).filter(Entity.name == 'root').\
+            one_or_none()
 
     """
     Common WH methods
     """
-    def save_project_data(self, name, df):
 
+    def add_project(self, project_name):
+        """
+        Add Project
+        """
+        pr = Project(name=project_name)
+
+    def save_project_data(self, name, df):
+        """
+        Save project data
+        """
         df.to_sql(name, self.engine, if_exists='append')
 
 
     def get_project_data(self, name):
+        """
+        Get Project Data
+        """
 
-        df = pd.read_sql_table(name, self.engine)
-        return df
+        query = "SELECT entities._name, variables._name, entities.project, " \
+                "timeseries._name, timeseries._time_stamp, timeseries._value "\
+                "FROM entities "\
+                "JOIN variables "\
+                "ON entities._id = variables._entity_id "\
+                "JOIN timeseries "\
+                "ON variables._id = timeseries.variable_id "\
+                "WHERE entities.project = '%s' " %name
+
+
+        entities = pd.read_sql_query(query, self.engine)
+        return entities
 
 
     def get_root(self):
         """
         Return root Entity
-        :return:
-        :rtype:
+
         """
         return self._root
 
-    def add_entity(self, path, meta):
+    def add_IEntity(self, ent, project_name):
+        """
+        Add interface Entity
+        """
+        ent_path = ent.path
+        meta = ent.meta
+        ent = self.add_entity(ent_path, meta=meta, project_name=project_name)
+        return ent
+
+    def add_IVariable(self, ent, var_name):
+        """
+        Add Interface Variable
+        """
+        var = Variable(_name=var_name)
+        ent._variables.append(var)
+        self.flush()
+        return var
+
+    def add_ITimeSerie(self, variables):
+
+        self._ssn.bulk_insert_mappings(
+            TimeSerie, variables)
+        self._ssn.commit()
+
+    def add_entity(self, path, meta=None, project_name=None ):
         """
         Add Entity by path and meta
         Set new Entiy object as child of root
@@ -64,7 +109,7 @@ class Warehouse:
         :rtype:
         """
         entity = self._root
-        return self._add_node_by_path(entity, path, meta, 0)
+        return self._add_node_by_path(entity, path, meta, 0, project_name)
 
     def get_entity_by_id(self, entity_id):
         """
@@ -94,7 +139,7 @@ class Warehouse:
         entity = self._root
         return self._find_node_by_path(entity, path, 0)
 
-    def _add_node_by_path(self, entity, path, meta, depth):
+    def _add_node_by_path(self, entity, path, meta, depth, project_name=None):
         """
         Private method of WH
 
@@ -117,9 +162,11 @@ class Warehouse:
                 node = child
                 break
         if node is None:
-            node = self.add_child(entity, path[depth], meta[depth])
+            node = self.add_child(entity, path[depth], meta[depth],
+                                  project_name=project_name)
         if depth != len(path) - 1:
-            return self._add_node_by_path(node, path, meta, depth + 1)
+            return self._add_node_by_path(node, path, meta, depth + 1,
+                                          project_name)
         else:
             return node
 
@@ -140,7 +187,8 @@ class Warehouse:
                 return child
         return None
 
-    def add_child(self, entity, name, meta):
+
+    def add_child(self, entity, name, meta=None, project_name=None):
         """
         Add child to input entity
         with  input name and meta
@@ -158,7 +206,8 @@ class Warehouse:
         for child in entity.children:
             if child.name == name:
                 return child
-        new_child = Entity(_name=name, _dimension_name=meta[0], _layer=meta[1])
+        new_child = Entity(_name=name, _dimension_name=meta[0], _layer=meta[1],
+                           project=project_name)
         entity.children.append(new_child)
         return new_child
 
@@ -327,6 +376,20 @@ class Warehouse:
             if var.name == name:
                 return var
         return None
+
+    def add_ent_variable(self, ent, var_name):
+        """
+        Add entity variable
+        :param ent:
+        :type ent:
+        :param var_name:
+        :type var_name:
+        :return:
+        :rtype:
+        """
+        new_var = Variable(_name=var_name)
+        ent._variables.append(new_var)
+
 
     def force_ent_variable(self, ent, name, data_type, default_value=None):
         """
@@ -714,3 +777,13 @@ class Warehouse:
 
     def save__df(self, df, schema):
         df.to_sql('entities', con=self._ssn, schema=schema, if_exists='append')
+
+    def flush(self):
+        self._ssn.flush()
+
+    def refresh(self, obj):
+        self._ssn.refresh(obj)
+
+    def expire(self, obj):
+        self._ssn.expire(obj)
+
