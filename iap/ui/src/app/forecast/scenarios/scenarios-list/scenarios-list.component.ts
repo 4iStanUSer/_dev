@@ -143,6 +143,7 @@ export class ScenariosListComponent implements OnInit {
 
     // Get scenarios list from server
     __getScenariosList() {
+        console.log('--------------------__getScenariosList');
         this.req.post({
             url_id: '/forecast/get_scenario_page',
             data: {'filter': {}},
@@ -163,6 +164,7 @@ export class ScenariosListComponent implements OnInit {
     // -----------------------------------  Work list  -----------------------------------//
     // Get work list
     __getWorkList() {
+        console.log('--------------------__getWorkList');
         let work_list = [];
         if (this.beforeFilterScenariosList !== undefined && this.beforeFilterScenariosList.length > 0) {
             work_list = this.beforeFilterScenariosList.filter(item => this.__getKey('favorite', item) === 'Yes');
@@ -549,18 +551,25 @@ export class ScenariosListComponent implements OnInit {
                 this.selectScenario = null;
             }
         });
+        setTimeout(() => {
+                // Update scenarios list
+                this.__getScenariosList();
 
-        // Update scenarios list
-        this.__getScenariosList();
+                // Run filter
+                this.__runFilter();
 
-        // Run filter
-        this.__runFilter();
+                // Update user permissions
+                this.__initUserPermissions();
 
-        // Update user permissions
-        this.__initUserPermissions();
+                // Update filter count
+                this.__updateFilterCount();
 
-        // Update filter count
-        this.__updateFilterCount();
+                // Get work list
+                this.__getWorkList();
+
+                // First sorting scenarios
+                this.__sortByKey();
+            }, 300);
     }
 
     __getSelectedScenariosList() {

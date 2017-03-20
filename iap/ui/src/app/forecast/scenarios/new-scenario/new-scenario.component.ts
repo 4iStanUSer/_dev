@@ -212,4 +212,21 @@ export class NewScenarioComponent implements OnInit {
             }, 300);
         }
     }
+
+    onSaveNew(event: any) {
+        if (this.form_status.valid) {
+            event.preventDefault();
+            this.save_status = false;
+
+            //Create new scenario
+            this.new_scenario.name = 'New '.concat(new Date().getTime().toString(), ' ', this.scenario.name);
+            this.new_scenario.description = this.scenario.description;
+            this.__createScenario();
+            setTimeout(() => {
+                if (this.save_status) {
+                    this.onCancel();
+                }
+            }, 300);
+        }
+    }
 }
