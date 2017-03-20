@@ -21,15 +21,24 @@ def web_app():
     return testapp
 
 
-def test_data_loader_indy_regime():
+def test_data_loader_without_regime():
     from iap.data_loading.data_loader import Loader
     loader = Loader()
+    loader.run_processing("JJOralCare_config")
+
+
+def test_data_loader_indy_regime():
+    from iap.data_loading.data_loader import Loader
+    settings = "C:/Users\Alex/Desktop/dev/iap/data_storage/data_lake"
+    loader = Loader(settings)
     loader.run_processing("Avon_MMM")
 
 
 def test_data_loader_warehouse_regime():
     from iap.data_loading.data_loader import Loader
-    loader = Loader()
+    db_config = "sqlite:///C:/Users/Alex/Desktop/dev/iap/IAP.sqlite"
+    settings = "C:/Users\Alex/Desktop/dev/iap/data_storage/data_lake"
+    loader = Loader(settings, db_config)
     loader.run_processing("JJOralCare_config")
 
 

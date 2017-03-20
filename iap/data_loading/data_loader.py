@@ -19,7 +19,7 @@ There are two mode of data loader and data processor workflow:
 
     warehouse - work with IAP, process objects serialised from dataframe
                 see- warehouse_api
-                can store inforamtion into iap database
+                can store information into iap database
 
     indy - work independently, process dataframes
            information cna be saved into any storage
