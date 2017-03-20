@@ -29,7 +29,7 @@ class Loader:
             iap_config = get_current_registry().settings
             self.setting['db_config'] = \
                 iap_config['sqlalchemy.url']
-            self.setting['path.data_lake'] = \
+            self.setting['path'] = \
                 iap_config['path.data_lake']
         except TypeError:
             self.setting['path'] = settings
@@ -286,6 +286,9 @@ class Loader:
                           if x['col_type'] == 'index']
             if index_cols == []:
                 index_cols = None
+        if not os.path.isdir(data_path):
+            data_path = os.path.join(self.setting['path'], data_path)
+
         filenames = self.scan_folder(data_path, filename_mask)
 
         for file in filenames:
