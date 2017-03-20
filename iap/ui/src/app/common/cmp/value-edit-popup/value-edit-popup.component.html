@@ -7,7 +7,7 @@
             <div class="c-sim-popup__text">{{ lang['increase_decrease_amount'] }}</div>
             <div class="c-sim-popup__content">
                 <div class="c-sim-popup__label">{{ lang['abs'] }}</div>
-                <input #absolute_value (keypress)="validKeypress($event.target)" (blur)="changeUserValue($event.target.value)" (focus)="clearUserValue($event.target.value)" [(ngModel)]="current_absolute_value_formated" class="c-sim-popup__input" type="text">
+                <input #absolute_value (keypress)="validKeypress($event)" (blur)="changeUserValue($event)" (focus)="clearUserValue($event)" [(ngModel)]="current_absolute_value_formated" class="c-sim-popup__input" type="text">
                 <div class="c-sim-popup__pl-minus">
                     <div class="c-sim-popup__plus c-sim-popup__plus--minus c-sim-popup__plus--left" (click)="minusAbsoluteValue()"></div>
                     <div class="c-sim-popup__plus c-sim-popup__plus--right" (click)="plusAbsoluteValue()"></div>
@@ -18,7 +18,7 @@
             <div class="c-sim-popup__text">{{ lang['increase_decrease_%'] }}</div>
             <div class="c-sim-popup__content">
                 <div class="c-sim-popup__label">%</div>
-                <input #percent_value (keypress)="validKeypress($event.target)" (blur)="changeUserPercent($event.target.value)" (focus)="clearUserPercent($event.target.value)" [(ngModel)]="current_percent_value_formated" class="c-sim-popup__input" type="text">
+                <input #percent_value (keypress)="validKeypress($event)" (blur)="changeUserPercent($event.target.value)" (focus)="clearUserPercent($event.target.value)" [(ngModel)]="current_percent_value_formated" class="c-sim-popup__input" type="text">
                 <div class="c-sim-popup__pl-minus">
                     <div class="c-sim-popup__plus c-sim-popup__plus--minus c-sim-popup__plus--left" (click)="minusPercentValue()"></div>
                     <div class="c-sim-popup__plus c-sim-popup__plus--right" (click)="plusPercentValue()"></div>

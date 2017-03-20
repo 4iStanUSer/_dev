@@ -21,7 +21,7 @@ export class EditPageComponent{
   default_value = 50.66666;
   curent_data: any;
 
-  showPopup(event: EventTarget): void {
+  showPopup(event: any): void {
       let curent_element = event.target.innerHTML;
 
       if (!isNaN(curent_element)) {

@@ -52,8 +52,8 @@ export class ValueEditPopupComponent implements OnChanges {
     }
 
     // valid value after change percent if user change it manual
-    validKeypress(target: any) {
-        let cursor_position = this._getCursorPosition(target);
+    validKeypress(event: any) {
+        let cursor_position = this._getCursorPosition(event.target);
         let reg;
         if (this.current_percent_value_formated.length === 0 || (cursor_position === 0 && this.current_percent_value_formated.substring(0,1) !== '-')) {
             reg = /[0-9]|[-]/;
@@ -87,7 +87,7 @@ export class ValueEditPopupComponent implements OnChanges {
     ngOnChanges(ch: SimpleChanges) {
         if (ch['inputData']) {
             this.data = ch['inputData']['currentValue'];
-            if (typeof this.data == "object" && this.data != 'null') {
+            if (typeof this.data == "object" && this.data !== null) {
 
                 // Update popup`s current values and show its
                 if (this.inputData['type_popup'] !== undefined) {
@@ -150,8 +150,9 @@ export class ValueEditPopupComponent implements OnChanges {
     }
 
     // change value if user change it manual
-    changeUserValue(value: string) {
-        let val = value.trim();
+    changeUserValue(event: any) {
+        const value = event.target.value;
+        let val = value.toString().trim();
         if (val.length !== 0 && !isNaN(val)) {
             this.current_absolute_value = this.setABSFormatValue(val);
         } else {
@@ -166,7 +167,8 @@ export class ValueEditPopupComponent implements OnChanges {
     }
 
     // remove symbol from value input is user focused it
-    clearUserValue(value: string) {
+    clearUserValue(event: any) {
+        const value = event.target.value;
         let val = value.replace(/[^.0-9^-]/g, '');
         this.current_absolute_value_formated = val;
     }
