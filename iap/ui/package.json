@@ -32,8 +32,11 @@
   },
   "devDependencies": {
     "@angular/compiler-cli": "2.2.1",
+    "@types/highcharts": "4.2.37",
     "@types/jasmine": "2.5.38",
+    "@types/lodash": "^4.14.33",
     "@types/node": "^6.0.42",
+    "@types/selenium-webdriver": "^2.53.36",
     "angular-cli": "1.0.0-beta.21",
     "codelyzer": "~1.0.0-beta.3",
     "jasmine-core": "2.5.2",
@@ -47,8 +50,6 @@
     "ts-node": "1.2.1",
     "tslint": "3.13.0",
     "typescript": "~2.0.3",
-    "webdriver-manager": "10.2.5",
-    "@types/highcharts": "4.2.37",
-    "@types/lodash": "^4.14.33"
+    "webdriver-manager": "10.2.5"
   }
 }

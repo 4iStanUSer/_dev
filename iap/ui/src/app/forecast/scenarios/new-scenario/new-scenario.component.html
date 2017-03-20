@@ -43,7 +43,7 @@
                         <div class="c-edit-form__buttons">
                           <button (click)="onSaveGo($event)" class="c-button c-button--blue">Save and GO</button>
                           <button (click)="onSaveClose($event)" class="c-button c-button--blue">Save and Close</button>
-                          <button class="c-button c-button--blue">Save as New</button>
+                          <button *ngIf="scenario" (click)="onSaveNew($event)" class="c-button c-button--blue">Save as New</button>
                           <button (click)="onCancel()" class="c-button c-button--grey">Cancel</button>
                         </div>
                       </div>
