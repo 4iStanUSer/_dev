@@ -8,30 +8,63 @@ logging.basicConfig(level=logging.DEBUG)
 
 
 class Project(Storage):
+    """
+    Project allows to get information from database,
+    any external dataframe serialise it in objects,
+    save it to database.
+    Also Provide all neccessary methods for objects hierarchy
 
+    """
     def __init__(self, name):
         self.entities = {}
         self.project_name = name
 
     def get_entities(self):
+        """
+        Return dict of ent_path: entity
+        :return:
+        :rtype:
+        """
         return self.entities
 
     def add_entity(self, entity):
+        """
+        Add entity
+        :param entity:
+        :type entity:
+        :return:
+        :rtype:
+        """
         self.entities[entity.path] = entity
 
     def get_entity_by_path(self, ent_path):
+        """
+        Return Entity by path
+        :param ent_path:
+        :type ent_path:
+        :return:
+        :rtype:
+        """
         if ent_path in self.entities.keys():
             return self.entities[ent_path]
         else:
             return None
 
     def delete_entities(self, entity_path):
+        """
+        Delete entitie with entity_path
+        :param entity_path:
+        :type entity_path:
+        :return:
+        :rtype:
+        """
         if entity_path in self.entities.keys():
             del self.entities[entity_path]
 
     def read(self, df=None):
         """
-
+        Read dataframe and  transform it into objective hierarchy
+        Project-Entity-Variable-TimeSerie
         :return:
         :rtype: None
         """
@@ -44,6 +77,8 @@ class Project(Storage):
     def save_sql(self, config):
         """
         Data Loader save to sql
+        Args:
+            config
 
         :param db_config:
         :type db_config:
@@ -83,6 +118,7 @@ class Project(Storage):
 
     def save(self):
         """
+        Serialise object hierarchy to dataframe
 
         :return:
         :rtype:
@@ -95,7 +131,8 @@ class Project(Storage):
 
     def collect_df_from_db(self, config):
         """
-
+        Collect all data from datavae that correspond for project_name
+        and transform it into dataframe
         :param config:
         :type config:
         :return:
@@ -109,7 +146,9 @@ class Project(Storage):
 
 
 class Entity(Project):
-
+    """
+    Entity object is
+    """
     def __init__(self, path=["root"], meta=[(None, None)]):
         self.name = path[-1]
         self.path = path

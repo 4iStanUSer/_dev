@@ -88,7 +88,6 @@ class Warehouse:
         var = Variable(_name=var_name)
         ent._variables.append(var)
         self.flush()
-        print('Var', var._id)
         return var
 
     def add_ITimeSerie(self, variables):

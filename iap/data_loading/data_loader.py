@@ -4,13 +4,33 @@ import json
 import logging
 import os
 import re
-
+import ast
 import pandas as pd
 from pyramid.threadlocal import get_current_registry
 
 from iap.data_loading.loading_lib import warehouse_api as wh_api
 from .exceptions import CorruptedDataSet
 from ..data_loading import loading_lib
+
+"""
+There are two mode of data loader and data processor workflow:
+
+    Both can be read information from external storage and process it.
+
+    warehouse - work with IAP, process objects serialised from dataframe
+                see- warehouse_api
+                can store inforamtion into iap database
+
+    indy - work independently, process dataframes
+           information cna be saved into any storage
+           Indy regime of processing can be performed in chunk and
+           chukless mode.
+
+           First - read whole file and process list of dataframe for all section
+                   at one time
+           Second - read file by chunk and process list of chunk per section
+
+"""
 
 
 class Loader:
@@ -52,7 +72,7 @@ class Loader:
         configs = self._get_proj_info(config_name)
 
         regime = configs.get("General", 'regime')
-        is_chunk = configs['General']['ischunk']
+        is_chunk = ast.literal_eval(configs['General']['ischunk'])
 
         if regime == 'indy':
             if is_chunk:
@@ -96,7 +116,14 @@ class Loader:
             loader(configs, store, project)
 
     def _run_indy_processing(self, configs):
+        """
+        Process in Indy mode, read whole dataframe
 
+        :param configs:
+        :type configs:
+        :return:
+        :rtype:
+        """
         dfs = []
         for section_name in \
                 [i for i in configs.sections() if i != "General"]:
@@ -118,21 +145,34 @@ class Loader:
         self.save_data(dfs, configs['General'])
 
 
-    def _run_indy_chunk_processing(self, config, section_name):
+    def _run_indy_chunk_processing(self, configs):
+        """
+        Indy mode of processing.Process dataframe by chunk
 
-        try:
-            processor = getattr(loading_lib, config.get(section_name,
-                                                         'process'))
-        except AttributeError:
-            processor = None
+        :param config:
+        :type config:
+        :param section_name:
+        :type section_name:
+        :return:
+        :rtype:
+        """
 
-        except KeyError:
-            processor = None
+        for section_name in \
+                [i for i in configs.sections() if i != "General"]:
+            dfs = []
+            try:
+                processor = getattr(loading_lib,
+                                    configs.get('General', 'process'))
+            except AttributeError:
+                processor = None
 
-        for df in self.collects_data(config[section_name]):
-            if processor:
-                df = processor(config=config, df=df)
-            self.save_data(df, config[section_name])
+            except KeyError:
+                processor = None
+            for df in self.collects_data(configs[section_name]):
+                if processor:
+                    df = processor(config=configs, dfs=df)
+            dfs.append(df)
+            self.save_data(dfs, configs[section_name])
 
 
     def _get_proj_info(self, config_name):
@@ -186,7 +226,6 @@ class Loader:
             base_name, extension = os.path.splitext(file_name)
             with open(file_path, 'rb') as file:
                 data = self._read_file(extension, file)
-                #data=self._read_file_pd(file_path=file_path,extension=extension)
                 loader(data, file_config, self._warehouse)
         else:
             raise CorruptedDataSet
@@ -255,6 +294,8 @@ class Loader:
     def collect_data(self, config):
         """"
         Collect data from external storage into DataFrame
+        Args: config
+        Read csv or txt file's and return dataframe
         """
 
         try:
@@ -343,7 +384,7 @@ class Loader:
 
     def collect_to_hdf(self, config):
         """
-        Reading from .csv file and saving to hdf
+        Collect data from hdf storage and return dataframe
         """
         try:
             table_name = config['table_name']
@@ -375,6 +416,16 @@ class Loader:
 
 
     def scan_folder(self, path, mask):
+        """
+        Scan folder on file with specific mask
+        Return list of files name
+        :param path:
+        :type path:
+        :param mask:
+        :type mask:
+        :return:
+        :rtype:
+        """
         f_names = []
         compiled_mask = re.compile(mask)
         for filename in os.listdir(path):
@@ -386,6 +437,17 @@ class Loader:
 
 
     def process_types(self, df, cols_props):
+        """
+        Process dataframe according to columns properties
+        Return DataFrame
+
+        :param df:
+        :type df:
+        :param cols_props:
+        :type cols_props:
+        :return:
+        :rtype:
+        """
         for col_item in cols_props:
             c_name = col_item['col_name']
             if col_item['col_type'] == 'numeric':
@@ -460,6 +522,16 @@ class Loader:
 
 
     def save_data(self, df, config):
+        """
+        Save data to specific file foramt
+
+        :param df:
+        :type df:
+        :param config:
+        :type config:
+        :return:
+        :rtype:
+        """
 
         try:
             format = config['output_format']
