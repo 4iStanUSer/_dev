@@ -83,6 +83,8 @@ def main(argv=sys.argv):
 
         transaction.manager.commit()
 
+        project = wh.get_project_data("JJOralCare")
+
         imanage_access = IManageAccess(ssn=ssn)
 
         #Add Tool

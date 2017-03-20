@@ -1,0 +1,105 @@
+
+[General]
+    Common section of configuration
+regime = indy if process file independent Warehouse api
+               warehouse if process file with
+    'Example' : 'indy'
+ischunk:process file with chunk or without(Bool value)
+    'Example' - True
+project_name :name of project that is the same as in database
+    'Example': JJOralCare
+process : name of function processer
+    Put function here - iap\data_loading\loading_lib\__init__.py
+    'Example': loader
+
+["Name of config"]
+    Section of configuration for particular data set
+
+storage: "Path to hdf storage"
+			    Example:"C:/Users/Alex/Desktop/Saracen/saracen",
+
+table_name: "Name of table in hdf storage"
+            Example:"saracen/saracen",
+
+mode: "Mode of saving data"
+            'a' - append
+            'w' - write
+
+header:False,
+            True - structure data (with header)
+            False - without header
+
+format:
+        format of input dataset: txt, csv, xls
+
+columns:
+        list of columns to use
+            Example: ['CREDIT_SCORE', 'FIRST_PAYMENT_DATE']
+
+chunk_size: (int) chunk size to use
+            Example: 50000,
+
+data_folder: Path to folder with input data
+            Example: 'C:/Users/Alex/Desktop/Saracen',
+
+
+file_mask: File mask or file name
+            Example: 'historical_data1_Q([1-4])(\d\d\d\d).txt',
+
+preloading_function - function name for preprocessing
+            Default: None
+            Put function here - iap\data_loading\loading_lib\__init__.py
+
+process : name of function processer for one dataset
+            Default: None
+            Put function here - iap\data_loading\loading_lib\__init__.py
+sep:
+            symbol of separation
+            Example: '|',
+columns_properties:
+                    Path for json that contain
+
+                    List of dictionary with keys:
+                    'col_name' - column name
+                    'col_type' - column type (numeric, object, date, categorical)
+                    'format - only if 'col_type' is date, format of datetime
+                    'options' - only in case categorical data, list of possible values in columns
+                    'is_index_data_col' - Bool. Is column index of dataframe
+                    Example:
+                    [
+                        {
+                            'col_name': 'CREDIT_SCORE',
+                            'col_type': 'numeric',
+                            'is_index_data_col': True
+                        },
+                        {
+                            'col_name': 'FIRST_PAYMENT_DATE',
+                            'col_type': 'index',
+                            'is_index_data_col': False
+                        }
+                    ]
+}
+
+
+
+***********************
+In order to add logging
+before using api function put
+import logging
+logging.basicConfig(filename='Path To Config', level=logging.INFO)
+
+***********************
+
+#IN IAP MODE USE
+l = Loader()
+l.run_processing('config_name')
+
+
+#IN ANOTHER CASE USE
+l = LOADER(settings, db_config)
+       settings - path_for_folder_with_configs
+       default:None
+       db_config - database_path
+       default:None
+
+l.run_processing(config_name)

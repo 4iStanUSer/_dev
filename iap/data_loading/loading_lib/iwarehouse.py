@@ -1,8 +1,11 @@
-import pandas as pd
-import numpy as np
-from . import warehouse_api
-import sqlalchemy
 import logging
+
+import numpy as np
+import pandas as pd
+import sqlalchemy
+
+from iap.data_loading.loading_lib import warehouse_api
+
 logging.getLogger(__name__)
 
 

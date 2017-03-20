@@ -1,7 +1,8 @@
-from ...models_managers.warehouse import Warehouse
-from .iwarehouse import Storage
 import logging
 import time
+
+from iap.common.repository.models_managers.warehouse import Warehouse
+from iap.data_loading.loading_lib.iwarehouse import Storage
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -52,42 +53,33 @@ class Project(Storage):
         :rtype:
         """
         db_config = config['General']['db_config']
-        start_time = time.time()
+
         warehouse = Warehouse(db_config)
         warehouse.add_project(self.project_name)
-        print("--- %s seconds ---" % (time.time() - start_time))
-        start_time = time.time()
         self.dataframe = self.save()
-        print("--- %s seconds ---" % (time.time() - start_time))
-        self.dataframe['Var_Id'] = None
+        self.dataframe['variable_id'] = None
         for ent_path, ent in self.entities.items():
             ent_path = ent.path
             node = warehouse.add_IEntity(ent, project_name=self.project_name)
             for var_name, variable in ent.vars.items():
                 var = warehouse.add_IVariable(ent=node, var_name=var_name)
-                warehouse.flush()
 
-                self.dataframe[
+                self.dataframe.loc[
                     (self.dataframe.Project == self.project_name) &
                     (self.dataframe.Entity == ent_path[0]) &
-                    (self.dataframe.Variable == var_name)]['Var_Id'] = var._id
+                    (self.dataframe.Variable == var_name), 'variable_id'] = var._id
 
-        print("--- %s seconds ---" % (time.time() - start_time))
         warehouse.commit()
-        print("--- %s seconds ---" % (time.time() - start_time))
+
 
         variables = self.dataframe[
-                    ['TimePoint', 'TimeSeries', 'Value', 'Var_Id']]
+                    ['TimePoint', 'TimeSeries', 'Value', 'variable_id']]
         variables = variables.rename(columns={'TimeSeries':'_name',
                                          'TimePoint':'_time_stamp',
-                                         'Value':'_value',
-                                         'Var_Id':'variable_id'})
+                                         'Value':'_value'})
 
         warehouse.add_ITimeSerie(variables.to_dict(orient='records'))
-        print("--- %s seconds ---" % (time.time() - start_time))
         warehouse.commit()
-        print("--- %s seconds ---" % (time.time() - start_time))
-
 
     def save(self):
         """
@@ -100,7 +92,20 @@ class Project(Storage):
             logging.info('Entity Save To DataFrame {0}'.format(ent_path))
             ent._save(storage, project_name=self.project_name)
         return storage.dataframe
-        #storage.save_to_local_storage()
+
+    def collect_df_from_db(self, config):
+        """
+
+        :param config:
+        :type config:
+        :return:
+        :rtype:
+        """
+
+        db_config = config['General']['db_config']
+        warehouse = Warehouse(db_config)
+        project = warehouse.get_project_data(self.project_name)
+        return project
 
 
 class Entity(Project):

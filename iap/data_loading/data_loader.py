@@ -1,14 +1,16 @@
+import configparser
+import csv
+import json
+import logging
 import os
 import re
-import json
-import csv
+
 import pandas as pd
-import logging
-from .exceptions import NonExistedDataSet, CorruptedDataSet
-from ..data_loading import loading_lib
-from ..common.repository.interface.warehouse_api import warehouse_api as wh_api
 from pyramid.threadlocal import get_current_registry
-import configparser
+
+from iap.data_loading.loading_lib import warehouse_api as wh_api
+from .exceptions import CorruptedDataSet
+from ..data_loading import loading_lib
 
 
 class Loader:
@@ -17,6 +19,7 @@ class Loader:
 
     Attr:
         configs - path to storage with configuration
+        db_config - path to storage database
 
     """
     def __init__(self, settings=None, db_config=None):
@@ -37,7 +40,7 @@ class Loader:
         """
         The main method of Loader object
 
-        Read input name of project.
+        Read input name of configuration file.
         Get required configuration from config file
         Read dataset, and process it by predefined
         instruction
@@ -47,6 +50,7 @@ class Loader:
 
         """
         configs = self._get_proj_info(config_name)
+
         regime = configs.get("General", 'regime')
         is_chunk = configs['General']['ischunk']
 

@@ -1,6 +1,7 @@
 import logging
-from iap.common.repository.interface.warehouse_api import warehouse_api
 import logging.config
+
+from iap.data_loading.loading_lib import warehouse_api
 
 
 def test_create_project():
@@ -44,7 +45,7 @@ def test_create_project():
     logger.info("Added entity {1} to new project {0}".
                 format(name, ['USA', 'Mouthwash']))
 
-    variable_2 = warehouse_api.Variable(name = "Dynamics")
+    variable_2 = warehouse_api.Variable(name ="Dynamics")
     entity_2.add_var(var=variable_2)
 
     time_serie = warehouse_api.TimeSeries(name="annual")

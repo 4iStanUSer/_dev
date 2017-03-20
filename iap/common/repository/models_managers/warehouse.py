@@ -50,8 +50,19 @@ class Warehouse:
         """
         Get Project Data
         """
-        df = pd.read_sql_table(name, self.engine)
-        return df
+
+        query = "SELECT entities._name, variables._name, entities.project, " \
+                "timeseries._name, timeseries._time_stamp, timeseries._value "\
+                "FROM entities "\
+                "JOIN variables "\
+                "ON entities._id = variables._entity_id "\
+                "JOIN timeseries "\
+                "ON variables._id = timeseries.variable_id "\
+                "WHERE entities.project = '%s' " %name
+
+
+        entities = pd.read_sql_query(query, self.engine)
+        return entities
 
 
     def get_root(self):
@@ -76,6 +87,8 @@ class Warehouse:
         """
         var = Variable(_name=var_name)
         ent._variables.append(var)
+        self.flush()
+        print('Var', var._id)
         return var
 
     def add_ITimeSerie(self, variables):
@@ -150,7 +163,8 @@ class Warehouse:
                 node = child
                 break
         if node is None:
-            node = self.add_child(entity, path[depth], meta[depth])
+            node = self.add_child(entity, path[depth], meta[depth],
+                                  project_name=project_name)
         if depth != len(path) - 1:
             return self._add_node_by_path(node, path, meta, depth + 1,
                                           project_name)
@@ -173,6 +187,7 @@ class Warehouse:
             if child.name == name:
                 return child
         return None
+
 
     def add_child(self, entity, name, meta=None, project_name=None):
         """
@@ -765,5 +780,11 @@ class Warehouse:
         df.to_sql('entities', con=self._ssn, schema=schema, if_exists='append')
 
     def flush(self):
-
         self._ssn.flush()
+
+    def refresh(self, obj):
+        self._ssn.refresh(obj)
+
+    def expire(self, obj):
+        self._ssn.expire(obj)
+

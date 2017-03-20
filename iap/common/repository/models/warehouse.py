@@ -121,7 +121,7 @@ class Entity(Base):
 
 class Variable(Base):
     __tablename__ = 'variables'
-    _id = Column(Integer, primary_key=True)
+    _id = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
     _entity_id = Column(Integer, ForeignKey('entities._id'))
     _name = Column(String(length=255))
     _data_type = Column(Integer)
