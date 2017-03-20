@@ -42,6 +42,15 @@ export class HierarchicalSelectorComponent implements OnInit, OnChanges {
             this.itemsToShow = this.getFilteredItems(this.searchText);
         }
     }
+    ngAfterViewChecked(){
+        //console.log("ngAfterViewChecked HierarchicalSelectorComponent");
+        //add variable to pass if changes were done and only in that case call the following
+        //this method is being called too often
+        this.rootLevelItems = this.model.getFirstLevelItems();
+        this.items = this.model.getFlatListItems();
+        this.itemsToShow = this.getFilteredItems(this.searchText);
+    }
+
 
     private getFilteredItems(searchText: string = null) {
 
@@ -78,15 +87,48 @@ export class HierarchicalSelectorComponent implements OnInit, OnChanges {
     }
 
     private onItemClick(item: SelectorItemModel) {
-        if (item.isSelected) {
-            this.model.deselect([item.id]);
-        } else {
-            this.model.select([item.id]);
+        let totalId = "*";
+        if(item.id == totalId){
+            //var result = objArray.map(function(a) {return a.foo;});
+            let idsArray = this.items.map(function(a) {return a.id;});
+            if (item.isSelected) {
+                this.model.deselect(idsArray);
+            }
+            else {
+                this.model.select(idsArray);
+            }
         }
+        else {
+            if (item.isSelected) {
+                this.model.deselect([item.id]);
+                if ( (this.model.flatListItems.length - this.model.selected.length) == 1 ){
+                    this.model.deselect([totalId]);
+                }
+            } else {
+                this.model.select([item.id]);
+                if ( (this.model.flatListItems.length - this.model.selected.length) == 1 ){
+                    this.model.select([totalId]);
+                }
+            }
+        }
+        console.log("click - selected items", this.model.selected.length);
+
     }
 
     private onDeselectItemClick(item_id: string) {
-        this.model.deselect([item_id]);
+        let totalId = "*";
+        if(item_id == totalId){
+            //var result = objArray.map(function(a) {return a.foo;});
+            let idsArray = this.items.map(function(a) {return a.id;});
+            this.model.deselect(idsArray);
+        }
+        else {
+            this.model.deselect([item_id]);
+            if ( (this.model.flatListItems.length - this.model.selected.length) == 1 ){
+                this.model.deselect([totalId]);
+            }
+        }
+        console.log("desel - selected items", this.model.selected.length);
     }
 
     private onSearchTextChange(text: string) {
