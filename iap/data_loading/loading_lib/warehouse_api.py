@@ -256,24 +256,62 @@ class Variable(Entity):
         self.time_series = {}
 
     def add_time_serie(self, time_serie):
+        """
+        Add time serie for variable
+        :param time_serie:
+        :type time_serie:
+        :return:
+        :rtype:
+        """
         self.time_series[time_serie.name] = time_serie
         return
 
     def get_time_scales(self):
+        """
+        Return dictionary of timeseries
+        :return:
+        :rtype:
+        """
         return self.time_series
 
     def get_time_scale_by_name(self, ts_name):
+        """
+        Return timeseries by name
+        :param ts_name:
+        :type ts_name:
+        :return:
+        :rtype:
+        """
         _ts = None
         if ts_name in  self.get_time_scales().keys():
             _ts = self[ts_name]
         return _ts
 
     def delete_time_scale(self, time_scale_name):
+        """
+        Delete timeseries by name
+        :param time_scale_name:
+        :type time_scale_name:
+        :return:
+        :rtype:
+        """
         if time_scale_name in self.get_time_scales().keys():
             del self[time_scale_name]
         return
 
     def _save(self, storage, project_name, ent_path):
+        """
+        Serialise Variable object into dataframe
+        and initialise serialising all TimeSerie
+        :param storage:
+        :type storage:
+        :param project_name:
+        :type project_name:
+        :param ent_path:
+        :type ent_path:
+        :return:
+        :rtype:
+        """
         if self.time_series!=dict():
             for time_series_name, time_series in self.time_series.items():
                 logging.info('Time Serie Saved To DataFrame {0}'
@@ -291,31 +329,96 @@ class Variable(Entity):
 class TimeSeries(Variable):
 
     def __init__(self, name):
-
+        """
+        Initialise TimeSerie Object
+        :param name:
+        :type name:
+        """
         self.name = name
         self.timeserie = []
 
     def get_time_period(self):
+        """
 
-        return list(self.timeserie.keys())
+        Return
+        :return:
+        :rtype:
+        """
+        return [i['stamp'] for i in self.timeserie]
 
     def get_time_period_values(self):
 
-        return list(self.timeserie.keys())
+        return [i['value'] for i in self.timeserie]
 
-    def get_by_stamp(self, start_stamp=None, end_stamp=None, len=None, values=None):
+    def get_by_stamp(self, start_stamp=None, end_stamp=None,
+                     len=None, values=None):
+        """
+        Get by stamp TimeSerie Values
+        :param start_stamp:
+        :type start_stamp:
+        :param end_stamp:
+        :type end_stamp:
+        :param len:
+        :type len:
+        :param values:
+        :type values:
+        :return:
+        :rtype:
+        """
         if start_stamp and end_stamp:
             pass
 
-    def get_by_index(self, start_index=None, end_index=None, len=None, values=None):
+    def get_by_index(self, start_index=None, end_index=None,
+                     len=None):
+        """
+        Get by index TimeSerie Values
+        :param start_index:
+        :type start_index:
+        :param end_index:
+        :type end_index:
+        :param len:
+        :type len:
+        :param values:
+        :type values:
+        :return:
+        :rtype:
+        """
         pass
 
-    def set_by_stamp(self, start_stamp=None, end_stamp=None, len=None, values=None):
+    def set_by_stamp(self, start_stamp=None, end_stamp=None, len=None):
+        """
+        Set TimeSerie Values by stamp
+        :param start_stamp:
+        :type start_stamp:
+        :param end_stamp:
+        :type end_stamp:
+        :param len:
+        :type len:
+        :param values:
+        :type values:
+        :return:
+        :rtype:
+        """
         pass
 
-    def set_by_index(self, start_index=None, end_index=None, len=None, values=None):
+    def set_by_index(self, start_index=None,
+                     end_index=None, len=None, values=None):
+        """
+        Set TimeSerie by index
+        :param start_index:
+        :type start_index:
+        :param end_index:
+        :type end_index:
+        :param len:
+        :type len:
+        :param values:
+        :type values:
+        :return:
+        :rtype:
+        """
         for i in range(start_index, start_index+len):
-            self.timeserie.append(dict(index=start_index+i, value=values[i], stamp=None))
+            self.timeserie.append(dict(index=start_index+i,
+                                       value=values[i], stamp=None))
 
     def _save(self, storage, project_name, ent_path, var_name):
         if self.timeserie != []:
