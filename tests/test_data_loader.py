@@ -3,7 +3,7 @@ import pytest
 import os
 from iap import main
 
-ABS_PATH = os.path.abspath('../')
+ABS_PATH = os.path.abspath('./')
 
 
 @pytest.fixture
@@ -29,15 +29,21 @@ def test_data_loader_without_regime():
 
 def test_data_loader_indy_regime():
     from iap.data_loading.data_loader import Loader
-    settings = "C:/Users\Alex/Desktop/dev/iap/data_storage/data_lake"
+    db_config = "sqlite:///" + os.path.join(ABS_PATH,
+                                            'IAP.sqlite')
+    settings = os.path.join(ABS_PATH, 'data_storage/data_lake')
     loader = Loader(settings)
     loader.run_processing("Avon_MMM")
 
 
 def test_data_loader_warehouse_regime():
     from iap.data_loading.data_loader import Loader
-    db_config = "sqlite:///C:/Users/Alex/Desktop/dev/iap/IAP.sqlite"
-    settings = "C:/Users\Alex/Desktop/dev/iap/data_storage/data_lake"
+
+    db_config = "sqlite:///" + os.path.join(ABS_PATH,
+                                           'IAP.sqlite')
+    print(db_config)
+    settings = os.path.join(ABS_PATH, 'data_storage/data_lake')
+    print(settings)
     loader = Loader(settings, db_config)
     loader.run_processing("JJOralCare_config")
 
