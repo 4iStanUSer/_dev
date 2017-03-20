@@ -11,16 +11,16 @@ import {BarChartComponent} from "../common/cmp/bar-chart/bar-chart.component";
 import {WaterfallChartComponent} from "../common/cmp/waterfall-chart/waterfall-chart.component";
 import {TimeSelectorComponent} from '../common/cmp/time-selector/time-selector.component';
 import {RangeSliderComponent} from "../common/cmp/time-selector/range-slider/range-slider.component";
-import { ValueEditPopupComponent } from "../common/cmp/value-edit-popup/value-edit-popup.component";
+//import { ValueEditPopupComponent } from "../common/cmp/value-edit-popup/value-edit-popup.component";
 
 import {DashboardComponent} from "./dashboard/dashboard.component";
 import {DataManagerService} from "./dashboard/data-manager.service";
 
-import {SimulatorPageComponent} from "./simulator-page/simulator-page.component";
-import {SimulatorPageDataManagerService} from "./simulator-page/simulator-page-data-manager.service";
+//import {SimulatorPageComponent} from "./simulator-page/simulator-page.component";
+//import {SimulatorPageDataManagerService} from "./simulator-page/simulator-page-data-manager.service";
 
 import {ForecastComponent} from "./forecast.component";
-import {ScenariosListComponent} from "./scenarios-list/scenarios-list.component";
+//import {ScenariosListComponent} from "./scenarios-list/scenarios-list.component";
 
 // import {SelectorsComponent} from './dashboard/selectors/selectors.component';
 // import {FlatSelectorComponent} from './dashboard/selectors/flat-selector/flat-selector.component';
@@ -45,7 +45,7 @@ import {FlatSelectorComponent} from "./selectors/flat-selector/flat-selector.com
 import {HierarchicalSelectorComponent} from "./selectors/hierarchical-selector/hierarchical-selector.component";
 import {RegionSelectorComponent} from "./selectors/region-selector/region-selector.component";
 //for now this page is used for development & minor components testing
-import {EditPageComponent} from "./edit-page/edit-page.component";
+//import {EditPageComponent} from "./edit-page/edit-page.component";
 
 // import {SelectorsComponent} from "../common/cmp/selectors/selectors.component";
 // import {FlatSelectorComponent} from "../common/cmp/selectors/flat-selector/flat-selector.component";
@@ -74,8 +74,8 @@ import {EditPageComponent} from "./edit-page/edit-page.component";
         FlatSelectorComponent,
         HierarchicalSelectorComponent,
 
-        ScenariosListComponent,
-        SimulatorPageComponent,
+//        ScenariosListComponent,
+//        SimulatorPageComponent,
 
         DonutChartComponent,
         BarChartComponent,
@@ -90,14 +90,14 @@ import {EditPageComponent} from "./edit-page/edit-page.component";
         LanguageSelectorComponent,
         LandingPageComponent,
 
-        EditPageComponent,
-        ValueEditPopupComponent
+//        EditPageComponent,
+//        ValueEditPopupComponent
     ],
     providers: [
         CommonServicesModule,
 
         DataManagerService, // TODO Rename (VL)
-        SimulatorPageDataManagerService,
+        //SimulatorPageDataManagerService,
         LandingPageService
     ]
 })
