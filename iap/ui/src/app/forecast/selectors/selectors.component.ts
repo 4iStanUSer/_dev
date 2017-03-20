@@ -69,6 +69,7 @@ export class SelectorsComponent implements OnInit { //, OnChanges
 
         this.getConfig();
         this.getData();
+        //console.log("init SelectorsComponent");
     }
 
     getConfig() {
@@ -101,6 +102,7 @@ export class SelectorsComponent implements OnInit { //, OnChanges
         }).subscribe((data) => {
             console.log('data sent');
             this.changed.emit();
+            this.initData(data);
         });
     }
 
@@ -147,6 +149,7 @@ export class SelectorsComponent implements OnInit { //, OnChanges
     }
 
     initData(d) {
+        //console.log("initDATA in SelectorsComponent");
         if (this.configured) {
             for (let i = 0; i < this.selectorsOrder.length; i++) {
                 try {
@@ -219,7 +222,7 @@ export class SelectorsComponent implements OnInit { //, OnChanges
                 });
         }
         if (changed) {
-            console.log('-->SELECTORS changed', output);
+            //console.log('-->SELECTORS changed', output);
             //this.setData(output);
             this.getData(output);
         }
@@ -258,7 +261,7 @@ export class SelectorsComponent implements OnInit { //, OnChanges
                 });
         }
         if (changed) {
-            console.log('-->SELECTORS changed', output);
+            //console.log('-->SELECTORS changed', output);
             this.setData(output);// TODO Test reselecting
         }
     }
