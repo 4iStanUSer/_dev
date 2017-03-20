@@ -146,9 +146,7 @@ class Project(Storage):
 
 
 class Entity(Project):
-    """
-    Entity object is
-    """
+
     def __init__(self, path=["root"], meta=[(None, None)]):
         self.name = path[-1]
         self.path = path
@@ -249,6 +247,11 @@ class Entity(Project):
 class Variable(Entity):
 
     def __init__(self, name):
+        """
+        Create Var by name
+        :param name:
+        :type name:
+        """
         self.name = name
         self.time_series = {}
 

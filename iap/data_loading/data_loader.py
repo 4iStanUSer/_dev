@@ -24,11 +24,14 @@ There are two mode of data loader and data processor workflow:
     indy - work independently, process dataframes
            information cna be saved into any storage
            Indy regime of processing can be performed in chunk and
-           chukless mode.
+           chukless mode. Depending of configuration flag *ischunk*
 
-           First - read whole file and process list of dataframe for all section
+           First - read whole file and process list of dataframe for
+           all section
                    at one time
            Second - read file by chunk and process list of chunk per section
+
+    All preprocess/process function contains in loading_lib.
 
 """
 
