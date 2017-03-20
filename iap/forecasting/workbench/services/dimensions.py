@@ -262,8 +262,7 @@ def fill_options(keys_list, selected_items):
         data=[],
         selected=[JOIN_SYMBOL.join(x) for x in selected_items if x!=('total',)]
     )
-    print("Key List", keys_list)
-    print("options", options)
+
     for item in keys_list:
         if item[0] == 'total':
             pass
