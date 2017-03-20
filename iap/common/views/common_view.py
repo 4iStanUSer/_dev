@@ -1,5 +1,7 @@
 from iap.common.repository.models.access import Tool, User, Feature, UserGroup, Role, Project
 from pyramid.renderers import render_to_response
+from pyramid.threadlocal import get_current_registry
+
 from pyramid import threadlocal
 from pyramid.paster import get_appsettings
 from ...common.helper import send_success_response, send_error_response
@@ -58,6 +60,8 @@ def login(req):
 
     """
     try:
+        print("Registry", get_current_registry().settings)
+
         username = req.json_body['data']['username']
         password = req.json_body['data']['password']
     except KeyError:
@@ -270,3 +274,22 @@ def set_project_selection(req):
         msg = req.get_error_msg(e, lang)
         return send_error_response(msg)
 
+
+def process_data(req):
+    """
+    View for data processing
+
+    :param req:
+    :type req:
+    :return:
+    :rtype:
+    """
+    try:
+        config_name = req.json_body['config_name']
+    except KeyError:
+        from iap.data_loading.data_loader import Loader
+        import logging
+        settings = ""
+        loader = Loader()
+        loader.run_processing(config_name)
+        return  send_success_response()
