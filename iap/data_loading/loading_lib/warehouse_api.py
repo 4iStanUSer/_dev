@@ -383,7 +383,10 @@ class TimeSeries(Variable):
         :return:
         :rtype:
         """
-        pass
+        if len:
+            return sorted(self.timeserie,
+                          key=lambda x: x['index'])[start_index:len-start_index]
+
 
     def set_by_stamp(self, start_stamp=None, end_stamp=None, len=None):
         """
