@@ -7,7 +7,9 @@ import {
 import {
     SelectorItemInput, SelectorModel, SelectorConfigInput, SelectorItemModel
 } from "./selector.model";
+// import {saticData} from "./default-static.content";
 import {AjaxService} from "../../common/service/ajax.service";
+import {StaticConfigModel} from "./static.config.model";
 
 /*
  * Notice-Requirements:*
@@ -43,6 +45,9 @@ export class SelectorsComponent implements OnInit { //, OnChanges
     private configured: boolean = false;
     private hasData: boolean = false;
 
+    //private static: Object;
+    private staticConfig: StaticConfigModel = this.setStaticConfig(new StaticConfigModel());
+
     private config: SelectorsConfigInput = null;
     private data: SelectorsDataInput = null;
 
@@ -70,6 +75,19 @@ export class SelectorsComponent implements OnInit { //, OnChanges
         this.getConfig();
         this.getData();
         //console.log("init SelectorsComponent");
+    }
+
+    private setStaticConfig(staticConfig:StaticConfigModel){
+
+        //request to get static data
+        this.req.post({
+            url_id: 'forecast/get_selectors_static_config',
+            data: {}
+        }).subscribe((data) => {
+            Object.assign(staticConfig['fields'], data);
+                return staticConfig;
+        });
+        return staticConfig;
     }
 
     getConfig() {
@@ -129,6 +147,8 @@ export class SelectorsComponent implements OnInit { //, OnChanges
                     model.type = config['type'];
                     model.icon = config['icon'];
                     model.disabled = !!config['disabled'];
+
+                    model.staticConfig = this.staticConfig;
 
                     this.selectors[selKey] = {
                         model: model,
