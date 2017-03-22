@@ -1,3 +1,7 @@
+import {
+    StaticConfigModel
+} from "./static.config.model";
+
 /**
  * Data Interface for describing one item in any selector
  */
@@ -134,6 +138,7 @@ export class SelectorModel {
     multiple: boolean;
     type: string; // flat | hierarchical | region
     disabled: boolean;
+    //isAnythingSelected: boolean = true;
 
     items: {[item_id: string]: SelectorItemModel};
 
@@ -142,6 +147,8 @@ export class SelectorModel {
     selected: Array<string> = []; // SelectorItemModel
 
     rootItems: Array<string> = [];
+
+    staticConfig: StaticConfigModel = null;
 
     constructor() {
     }

@@ -12,6 +12,20 @@ def index_view(req):
                               request=req)
 
 
+def get_selectors_static_config(req):
+    #TODO implement function
+    mock = {
+        'items_title': 'Categories',
+        'search_title': 'Search',
+        'search_placeholder': 'Type here',
+        'search_clear': 'Clear search',
+        'selected_title': 'Selected',
+        'not_found_items': 'Not found items',
+        'apply_button': 'Apply',
+        'cancel_button': 'Cancel'
+    }
+    return send_success_response(mock)
+
 def get_entity_selectors_config(req):
     """
     Get entity selector configuration

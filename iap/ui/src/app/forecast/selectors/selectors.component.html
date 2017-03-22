@@ -17,19 +17,6 @@
             </span>
         </div>
     </div>
-
-    <!--?<div class="c-top-info__item">
-      <div class="c-top-info__inner c-top-info__inner--location"><span>United States, Texas, Dallas</span></div>
-    </div>
-    <div class="c-top-info__item">
-      <div class="c-top-info__inner c-top-info__inner--channel"><span>Channel1, Channel2, Categ</span></div>
-    </div>
-    <div class="c-top-info__item">
-      <div class="c-top-info__inner c-top-info__inner--type"><span>Training pants, women’s s</span></div>
-    </div>
-    <div class="c-top-info__item">
-      <div class="c-top-info__inner c-top-info__inner--brand"><span>Nike, Puma, New Balance</span></div>
-    </div>-->
 </div>
 
 <!--?<div class="wrapper">-->
@@ -87,8 +74,12 @@
          </div>
 
          <div class="l-cat-popup__buttons">
-             <a class="c-button c-button--90 c-button--orange" (click)="onApplyClick()">Apply</a>
-             <a class="c-button c-button--90 c-button--transparent" (click)="onCancelClick()">Cancel</a>
+             <a class="c-button c-button--90 c-button--orange" (click)="onApplyClick()">
+                 {{staticConfig.fields['apply_button']}}
+             </a>
+             <a class="c-button c-button--90 c-button--transparent" (click)="onCancelClick()">
+                 {{staticConfig.fields['cancel_button']}}
+             </a>
          </div>
      </div>
 

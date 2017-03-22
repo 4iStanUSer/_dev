@@ -189,6 +189,9 @@ def forecast_routing(config):
     config.add_route('forecast.get_entity_selectors_config', '/get_entity_selectors_config')
     config.add_view(f_common.get_entity_selectors_config, route_name='forecast.get_entity_selectors_config', renderer='json')
 
+    config.add_route('forecast.get_selectors_static_config', '/get_selectors_static_config')
+    config.add_view(f_common.get_selectors_static_config, route_name='forecast.get_selectors_static_config', renderer='json')
+
     """
     Simulator routing
     """
