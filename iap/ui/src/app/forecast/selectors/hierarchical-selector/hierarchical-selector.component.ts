@@ -89,7 +89,7 @@ export class HierarchicalSelectorComponent implements OnInit, OnChanges {
     }
 
     private onItemClick(item: SelectorItemModel) {
-        let totalId = "*";
+        let totalId = "all";
         if(item.id == totalId){
             //var result = objArray.map(function(a) {return a.foo;});
             let idsArray = this.items.map(function(a) {return a.id;});
@@ -121,7 +121,7 @@ export class HierarchicalSelectorComponent implements OnInit, OnChanges {
     }
 
     private onDeselectItemClick(item_id: string) {
-        let totalId = "*";
+        let totalId = "all";
         if(item_id == totalId){
             //var result = objArray.map(function(a) {return a.foo;});
             let idsArray = this.items.map(function(a) {return a.id;});
