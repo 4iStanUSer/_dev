@@ -283,6 +283,8 @@ def fill_options(keys_list, selected_items):
 
     if options['selected'] == []:
         options['selected'].append('all')
+        options['data'].append(
+            dict(name=name, id=item_id, disabled=False, parent_id=parent_id))
     else:
         options['data'].append(dict(name="all", id="all",
                                 disabled=False, parent_id=None))
