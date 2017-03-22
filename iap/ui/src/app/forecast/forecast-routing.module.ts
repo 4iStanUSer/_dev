@@ -5,9 +5,7 @@ import {AuthGuard} from "../common/module/login/auth-guard";
 
 import {ForecastComponent} from "./forecast.component";
 import {DashboardComponent} from "./dashboard/dashboard.component";
-import {ScenariosComponent} from "./scenarios/scenarios.component";
-import {ScenariosListComponent} from "./scenarios/scenarios-list/scenarios-list.component";
-import {NewScenarioComponent} from "./scenarios/new-scenario/new-scenario.component";
+import {ScenariosListComponent} from "./scenarios-list/scenarios-list.component";
 import {SimulatorPageComponent} from "./simulator-page/simulator-page.component";
 import {GeneralComponent} from "./dashboard/general/general.component";
 import {DriverSummaryComponent} from "./dashboard/driver-summary/driver-summary.component";
