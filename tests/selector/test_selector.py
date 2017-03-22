@@ -5,7 +5,7 @@ import os
 import json
 from iap import main
 
-ABS_PATH = os.path.abspath('../')
+ABS_PATH = os.path.abspath('./')
 
 
 @pytest.fixture
