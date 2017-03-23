@@ -124,8 +124,8 @@ ul.selectors-tabs li.active {
           justify-content: space-around;
   position: absolute;
   left: 0;
-  top: 85px;
-  /*top: 0;*/
+  /*top: 85px;*/
+  top: 0;
   z-index: 95;
   min-width: 974px;
   max-width: 998px;
@@ -304,3 +304,7 @@ ul.selectors-tabs li.active {
 
 
 /*popup end*/
+.show-in-content {
+    position: relative;
+    box-shadow: none;
+}

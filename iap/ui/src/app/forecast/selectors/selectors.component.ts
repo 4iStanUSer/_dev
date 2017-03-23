@@ -2,12 +2,12 @@ import {
     Component,
     Output,
     OnInit,
-    EventEmitter
+    Input,
+    EventEmitter,
 } from '@angular/core';
 import {
     SelectorItemInput, SelectorModel, SelectorConfigInput, SelectorItemModel
 } from "./selector.model";
-// import {saticData} from "./default-static.content";
 import {AjaxService} from "../../common/service/ajax.service";
 import {StaticConfigModel} from "./static.config.model";
 
@@ -42,6 +42,7 @@ interface SelectorsChangedOutput {
 })
 export class SelectorsComponent implements OnInit { //, OnChanges
 
+    @Input() position: string; //top|inside
     private configured: boolean = false;
     private hasData: boolean = false;
 
@@ -50,7 +51,6 @@ export class SelectorsComponent implements OnInit { //, OnChanges
 
     private config: SelectorsConfigInput = null;
     private data: SelectorsDataInput = null;
-
 
     @Output() changed = new EventEmitter();
 
@@ -71,12 +71,29 @@ export class SelectorsComponent implements OnInit { //, OnChanges
     }
 
     ngOnInit() {
-
-        this.getConfig();
-        this.getData();
+        if (this.position == "inContent"){
+            this.setModeDetails();
+            this.getConfig();
+            this.getData();
+        }
+        else {
+            this.getConfig();
+            this.getData();
+        }
         //console.log("init SelectorsComponent");
     }
 
+
+    private setModeDetails(){
+        this.setActiveTab("geography");
+        this.state['isExpanded'] = true;
+
+        // this.setActiveTab(key);
+        // this.state['isExpanded'] = true;
+        this.changeTabDataUpdate();
+
+
+    }
     private setStaticConfig(staticConfig:StaticConfigModel){
 
         //request to get static data
@@ -296,4 +313,5 @@ export class SelectorsComponent implements OnInit { //, OnChanges
             this.selectors[selKey]['model'].forceSelect(sel);
         }, this);
     }
+
 }
