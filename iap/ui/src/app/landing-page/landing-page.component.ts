@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
-
 import {AjaxService} from "../common/service/ajax.service";
 import {AuthService} from "../common/service/auth.service";
 import {LanguageItem, User, Client} from "../app.model";
@@ -17,7 +16,8 @@ export class LandingPageComponent implements OnInit {
     private client: Client;
     private langsList: LanguageItem[] = [];
 
-    constructor(private router: Router, private req: AjaxService, private auth: AuthService) {
+    constructor(private router: Router, private req: AjaxService,
+                private auth: AuthService, ) {
     }
 
     ngOnInit() {

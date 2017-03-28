@@ -1,40 +1,29 @@
 ﻿import {NgModule}     from '@angular/core';
 import {RouterModule} from '@angular/router';
-
-//import {LandingPageComponent} from "./common/pages/landing-page/landing-page.component";
-import {AuthGuard} from "./common/module/login/auth-guard";
+import {AuthGuard} from "./login-page/auth.guard";
 import {LandingPageComponent} from "./landing-page/landing-page.component";
-import {LoginComponent} from "./common/module/login/login/login.component";
+import {LoginPageComponent} from "./login-page/login-page.component";
+import {TestComponent} from './login-page/notification/test.components'
 @NgModule({
     imports: [
         RouterModule.forRoot([
-            /*
-            {
-                path: '',
-                pathMatch: 'full',
-                redirectTo: '/landing',
-            },
-
-            {
-                path: 'landing',
-                component: LandingPageComponent,
-                canActivate: [AuthGuard],
-            }
-            */
             {
                 path:'',
                 pathMatch: 'full',
-                redirectTo:'/login'
+                redirectTo:'/login_page'
             },
             {
-                path: 'login',
-                component: LoginComponent,
-                canActivate: [AuthGuard],
+                path: 'login_page',
+                component: LoginPageComponent,
             },
              {
                 path: 'landing',
                 component: LandingPageComponent,
                 canActivate: [AuthGuard],
+            },
+            {
+                path:'notification',
+                component: TestComponent,
             }
         ])
     ],

@@ -1,0 +1,11 @@
+<div [ngStyle]="style" id="{{type}}" class="dialog_window">
+    <div *ngIf="header" class="dialog_title">{{header}}</div>
+    <div *ngIf="body" class="dialog_body">{{body}}</div>
+    <ul>
+        <li *ngFor="let button  of buttons">
+        <button (click)="callBack($event.target.textContent)">{{button}}</button>
+        </li>
+    </ul>
+</div>
+
+

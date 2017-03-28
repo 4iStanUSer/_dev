@@ -59,11 +59,13 @@ def login(req):
     :rtype: Dict[str, str]
 
     """
+    print("Registry", get_current_registry().settings)
+    print(req)
     try:
         print("Registry", get_current_registry().settings)
 
-        username = req.json_body['data']['username']
-        password = req.json_body['data']['password']
+        username = req.json_body['username']
+        password = req.json_body['password']
     except KeyError:
         msg = req.get_error_msg("RequestError")
         return send_error_response(msg)
@@ -92,6 +94,7 @@ def logout(req):
     """
     Provide mechanism for session leaving
     """
+    print(req)
     try:
         if 'token' in req.session:
             del req.session['token']
@@ -242,7 +245,7 @@ def get_data_for_header(req):
         msg = req.get_error_msg(e, lang=lang)
         return send_error_response(msg)
 
-@forbidden_view
+#@forbidden_view
 def set_project_selection(req):
     """Set project selector
 
