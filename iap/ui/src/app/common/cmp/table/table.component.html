@@ -1,0 +1,27 @@
+<div class="table">
+  <div class="table-header">
+    <div *ngFor="let item of current_options.header_rows"
+         class="table-header-row"
+         [ngClass]="{'table-header-row--sort-row': item.sort}"
+         (click)="onToggleSort(item.name)"
+         [style.width]="item.width+'%'">
+      {{item.label}}
+      <span class="sort" [ngClass]="{'sort--reverse': current_options['default_sort']['order'] === false, 'hide': !item.sort || item.name !== current_options['default_sort']['field_name']}"></span>
+    </div>
+  </div>
+  <div *ngIf="(current_filter | json) != '[]'" class="table-filter">
+    <div *ngFor="let item of current_options.header_rows" class="table-filter-row" [style.width]="item.width+'%'">
+      <input *ngIf="item.filter" name="{{item.name}}" type="text" (keyup)="onFilter($event)">
+    </div>
+  </div>
+  <div *ngIf="(current_data | json) != '{}'" class="table-body">
+    <div *ngFor="let row of current_data" class="table-body-row" [attr.data-id]="row.id" (click)="onSelect($event)">
+      <div *ngFor="let item of current_options.header_rows" class="table-body-colum" [style.width]="item.width+'%'">
+        {{row[item.name]}}
+      </div>
+    </div>
+  </div>
+  <div *ngIf="(current_data | json) == '[]'" class="no-result">
+    <p>{{current_options.no_result_message}}</p>
+  </div>
+</div>

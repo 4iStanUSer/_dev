@@ -5,8 +5,13 @@ import {AuthGuard} from "../common/module/login/auth-guard";
 
 import {ForecastComponent} from "./forecast.component";
 import {DashboardComponent} from "./dashboard/dashboard.component";
+
 import {ScenariosComponent} from "./scenarios/scenarios.component";
 import {ScenariosListComponent} from "./scenarios/scenarios-list/scenarios-list.component";
+
+import {UsersComponent} from "./users/users.component";
+import {UsersListComponent} from "./users/users-list/users-list.component";
+
 import {NewScenarioComponent} from "./scenarios/new-scenario/new-scenario.component";
 import {SimulatorPageComponent} from "./simulator-page/simulator-page.component";
 import {GeneralComponent} from "./dashboard/general/general.component";
@@ -82,6 +87,22 @@ import {EditPageComponent} from "./edit-page/edit-page.component";
                                 path: 'edit-scenario/:id',
                                 component: NewScenarioComponent,
                             }
+                        ]
+                    },
+                    {
+                        path: 'users',
+                        component: UsersComponent,
+
+                        children: [
+                            {
+                                path: '',
+                                redirectTo: 'users-list',
+                                pathMatch: 'full'
+                            },
+                            {
+                                path: 'users-list',
+                                component: UsersListComponent,
+                            },
                         ]
                     },
                     {

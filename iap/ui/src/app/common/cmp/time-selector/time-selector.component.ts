@@ -183,7 +183,6 @@ export class TimeSelectorComponent implements OnInit, OnChanges {
     @Input() selected: TimeSelectorSelectedData = null;
     @Input() static: Object = null;
 
-
     @Output() changed = new EventEmitter(); //: EventEmitter<TimePeriodInput>
 
     ngOnChanges(ch: SimpleChanges) {
