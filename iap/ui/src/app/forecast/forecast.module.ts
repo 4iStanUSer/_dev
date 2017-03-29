@@ -13,6 +13,7 @@ import {WaterfallChartComponent} from "../common/cmp/waterfall-chart/waterfall-c
 import {TimeSelectorComponent} from '../common/cmp/time-selector/time-selector.component';
 import {RangeSliderComponent} from "../common/cmp/time-selector/range-slider/range-slider.component";
 import { ValueEditPopupComponent } from "../common/cmp/value-edit-popup/value-edit-popup.component";
+import { TableComponent } from "../common/cmp/table/table.component";
 
 import {DashboardComponent} from "./dashboard/dashboard.component";
 import {DataManagerService} from "./dashboard/data-manager.service";
@@ -25,6 +26,9 @@ import {ScenariosComponent} from "./scenarios/scenarios.component";
 import {ScenarioService} from "./scenarios/scenario.service";
 import {ScenariosListComponent} from "./scenarios/scenarios-list/scenarios-list.component";
 import {NewScenarioComponent} from "./scenarios/new-scenario/new-scenario.component";
+
+import {UsersComponent} from "./users/users.component";
+import {UsersListComponent} from "./users/users-list/users-list.component";
 
 // import {SelectorsComponent} from './dashboard/selectors/selectors.component';
 // import {FlatSelectorComponent} from './dashboard/selectors/flat-selector/flat-selector.component';
@@ -52,6 +56,8 @@ import {RegionSelectorComponent} from "./selectors/region-selector/region-select
 import {EditPageComponent} from "./edit-page/edit-page.component";
 import { MyDateRangePickerModule } from 'mydaterangepicker';
 
+import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect';
+
 // import {SelectorsComponent} from "../common/cmp/selectors/selectors.component";
 // import {FlatSelectorComponent} from "../common/cmp/selectors/flat-selector/flat-selector.component";
 // import {HierarchicalSelectorComponent} from "../common/cmp/selectors/hierarchical-selector/hierarchical-selector.component";
@@ -66,7 +72,8 @@ import { MyDateRangePickerModule } from 'mydaterangepicker';
         ForecastRoutingModule,
         CommonServicesModule,
         ChartModule,
-        MyDateRangePickerModule
+        MyDateRangePickerModule,
+        MultiselectDropdownModule
     ],
     declarations: [
         ForecastComponent,
@@ -85,6 +92,9 @@ import { MyDateRangePickerModule } from 'mydaterangepicker';
         NewScenarioComponent,
         SimulatorPageComponent,
 
+        UsersComponent,
+        UsersListComponent,
+
         DonutChartComponent,
         BarChartComponent,
         WaterfallChartComponent,
@@ -99,7 +109,8 @@ import { MyDateRangePickerModule } from 'mydaterangepicker';
         LandingPageComponent,
 
         EditPageComponent,
-        ValueEditPopupComponent
+        ValueEditPopupComponent,
+        TableComponent
     ],
     providers: [
         CommonServicesModule,

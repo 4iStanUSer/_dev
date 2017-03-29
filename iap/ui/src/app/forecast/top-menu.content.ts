@@ -30,5 +30,11 @@ export const TOP_MENU_CONTENT: MenuItem[] = [
         name: 'Simulator',
         disabled: false,
         path: '/forecast/simulator'
+    },
+    {
+        key: 'users',
+        name: 'Users',
+        disabled: false,
+        path: '/forecast/users'
     }
 ];
