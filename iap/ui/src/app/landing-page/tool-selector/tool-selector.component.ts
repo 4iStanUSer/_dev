@@ -1,24 +1,26 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, AfterViewInit} from '@angular/core';
 import {Router} from "@angular/router";
-import { AuthHttp} from 'angular2-jwt';
+//import { AuthHttp} from 'angular2-jwt';
 import { Http } from '@angular/http';
 import {Tool, Project} from "../../app.model"
-import { AuthService } from '../common/login-page/auth.service';
+import { AuthService } from '../../common/login-page/auth.service';
+import { AjaxService } from "../../common/service/ajax.service";
 
 @Component({
   selector: 'tool-selector',
   templateUrl: './tool-selector.component.html',
   styleUrls: ['./tool-selector.component.css']
 })
-export class ToolSelectorComponent implements OnInit {
+export class ToolSelectorComponent implements AfterViewInit {
 
     private forecastingTool: Tool = new Tool();
     private pptTool: Tool = new Tool();
     private mmTool: Tool = new Tool();
 
-    constructor(private router: Router, private auth_http: AuthHttp, private http: Http,  private auth: AuthService) {}
+    constructor(private router: Router, private auth_http: AjaxService,
+                private http: Http,  private auth: AuthService) {}
 
-    ngOnInit() {
+    ngAfterViewInit() {
 
         this.forecastingTool.id = "forecast";
         this.pptTool.id = "ppt";
@@ -27,18 +29,16 @@ export class ToolSelectorComponent implements OnInit {
 
         if(this.auth.isLoggedIn()) {
 
-            this.auth_http.post('get_tools_with_projects', {'data': {}})
+            this.auth_http
+                .post({
+                    'url_id': 'get_tools_with_projects',
+                    'data': {}
+                })
                 .subscribe((d) => {
                     this.processInputs(d);
-            });
+                });
         }
-        else{
 
-            this.http.post('get_tools_with_projects', {'data': {}})
-                .subscribe((d) => {
-                    this.processInputs(d);
-            });
-        }
     }
 
     processInputs(inputs: Object) {
@@ -85,29 +85,17 @@ export class ToolSelectorComponent implements OnInit {
 
     if(this.auth.isLoggedIn()) {
 
-            this.http.post('select_project',
-            {
+            this.auth_http.post({
+                'url_id': 'select_project',
                 'data': {
                     'tool_id': toolId,
                     'project_id': projectId
                 }
-            }
-            ).subscribe((tools) => {this.router.navigate([toolId]);})
-        }
-        else{
-
-            this.http.post('select_project',
-                        {'data': {
-                            'tool_id': toolId,
-                            'project_id': projectId
-                        }}
-                        ).subscribe((tools) => {
+            })
+            .subscribe((tools) => {
             this.router.navigate([toolId]);
-                        })
+        });
         }
-
-
-
     }
 
 
