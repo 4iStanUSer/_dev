@@ -44,7 +44,8 @@ export class AuthService {
      */
     login(username: string, password: string) {
         console.log("Login module");
-        return this.http.post('http://127.0.0.1:6543/login',
+        // return this.http.post('http://127.0.0.1:6543/login',
+        return this.http.post('http://localhost:6543/login',
             JSON.stringify({ username: username, password: password }))
             .map(res => res.json())
             .subscribe(
@@ -63,7 +64,7 @@ export class AuthService {
      * @returns {Observable<boolean>}
      */
     logout() {
-        this.authHttp.post('http://127.0.0.1:6543/logout', '')
+        this.authHttp.post('http://localhost:6543/logout', '')
         .subscribe(
             data => console.log(data),
             err => console.log(err),

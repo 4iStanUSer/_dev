@@ -111,7 +111,7 @@ import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect';
 
         EditPageComponent,
         ValueEditPopupComponent,
-        TableComponent
+        TableComponent,
         SelectorsWrapperComponent
     ],
     providers: [
