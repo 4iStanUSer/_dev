@@ -1,4 +1,4 @@
-<div>
+<div *ngIf="!auth.isLoggedIn()">
     <h2>Login</h2>
     <form name="form" (ngSubmit)="f.form.valid && login()" #f="ngForm" novalidate>
         <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !username.valid }">
@@ -19,6 +19,6 @@
         </div>
     </form>
 </div>
-<button (click)="logout()" class="logout">Logout</button>
+<button (click)="logout()" class="logout" *ngIf="auth.isLoggedIn()">Logout</button>
 
 

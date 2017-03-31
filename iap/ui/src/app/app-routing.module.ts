@@ -1,16 +1,17 @@
 ﻿import {NgModule}     from '@angular/core';
 import {RouterModule} from '@angular/router';
-import {AuthGuard} from "./login-page/auth.guard";
-import {LandingPageComponent} from "./landing-page/landing-page.component";
-import {LoginPageComponent} from "./login-page/login-page.component";
-import {TestComponent} from './login-page/notification/test.components'
+import {AuthGuard} from "./common/login-page/auth.guard";
+import {LoginPageComponent} from "./common/login-page/page/login-page.component";
+import {TestComponent} from './common/notification/test.components';
+import {LandingPageComponent} from  './landing-page/landing-page.component';
+
 @NgModule({
     imports: [
         RouterModule.forRoot([
             {
                 path:'',
                 pathMatch: 'full',
-                redirectTo:'/login_page'
+                redirectTo:'/landing'
             },
             {
                 path: 'login_page',
@@ -19,12 +20,14 @@ import {TestComponent} from './login-page/notification/test.components'
              {
                 path: 'landing',
                 component: LandingPageComponent,
-                canActivate: [AuthGuard],
+
             },
             {
                 path:'notification',
                 component: TestComponent,
-            }
+                canActivate: [AuthGuard],
+            },
+
         ])
     ],
     exports: [

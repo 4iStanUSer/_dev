@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {Router} from "@angular/router";
-import {AjaxService} from "../../common/service/ajax.service";
-
+import { AuthHttp} from 'angular2-jwt';
+import { Http } from '@angular/http';
 import {Tool, Project} from "../../app.model"
 
 @Component({
@@ -15,20 +15,28 @@ export class ToolSelectorComponent implements OnInit {
     private pptTool: Tool = new Tool();
     private mmTool: Tool = new Tool();
 
-    constructor(private router: Router, private req: AjaxService) {}
-
+    constructor(private router: Router, private auth_http: AuthHttp, private http: Http) {}
     ngOnInit() {
+
         this.forecastingTool.id = "forecast";
         this.pptTool.id = "ppt";
         this.mmTool.id = "mm";
-        this.req
-            .post({
-                'url_id': 'get_tools_with_projects',
-                'data': {}
-            })
-            .subscribe((d) => {
-                this.processInputs(d);
+
+
+        if(this.auth.isLoggedIn()) {
+
+            this.auth_http.post('get_tools_with_projects', {'data': {}})
+                .subscribe((d) => {
+                    this.processInputs(d);
             });
+        }
+        else{
+
+            this.http.post('get_tools_with_projects', {'data': {}})
+                .subscribe((d) => {
+                    this.processInputs(d);
+            });
+        }
     }
 
     processInputs(inputs: Object) {
@@ -72,13 +80,14 @@ export class ToolSelectorComponent implements OnInit {
     }
 
     goToTool(toolId: string, projectId: string) {
-        this.req.post({ // TODO Make post query
-            'url_id': 'select_project',
-            'data': {
-                'tool_id': toolId,
-                'project_id': projectId
+        this.http.post('select_project',
+            {
+                'data': {
+                    'tool_id': toolId,
+                    'project_id': projectId
+                }
             }
-        }).subscribe((tools) => {
+       ).subscribe((tools) => {
             this.router.navigate([toolId]);
         });
     }

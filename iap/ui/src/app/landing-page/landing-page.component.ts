@@ -1,10 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
-import {AjaxService} from "../common/service/ajax.service";
-import {AuthService} from "../common/service/auth.service";
 import {LanguageItem, User, Client} from "../app.model";
-
-
+import { AuthHttp} from 'angular2-jwt';
+import { Http } from '@angular/http';
+import { AuthService } from '../common/login-page/auth.service';
 
 @Component({
     templateUrl: './landing-page.component.html',
@@ -16,23 +14,29 @@ export class LandingPageComponent implements OnInit {
     private client: Client;
     private langsList: LanguageItem[] = [];
 
-    constructor(private router: Router, private req: AjaxService,
-                private auth: AuthService, ) {
+    constructor(private auth_http: AuthHttp, private http: Http, private auth: AuthService) {
     }
 
     ngOnInit() {
 
-        this.req.post({
-            url_id: 'get_header_data',
-            data: {}
-        }).subscribe(
-            (d) => {
-                this.proceedHeaderInputs(d);
-            }
-        );
+        if(this.auth.isLoggedIn()) {
+
+            this.auth_http.post('get_header_data', {}).subscribe(
+                (d) => {
+                    this.proceedHeaderInputs(d);
+                }
+            );
+        }
+        else{
+
+            this.http.post('get_header_data', {}).subscribe(
+                (d) => {
+                    this.proceedHeaderInputs(d);
+                }
+            );
+        }
 
     }
-
     private proceedHeaderInputs(inputs: Object): void {
         if (inputs['client']) {
             this.client = new Client();
@@ -52,29 +56,25 @@ export class LandingPageComponent implements OnInit {
     }
 
     languageChanged(newLangId: string) {
-        this.req.get({
-            url_id: 'set_language',
-            data: { 'lang': newLangId }
-        }).subscribe(
+
+        if(this.auth.isLoggedIn()) {
+
+            this.auth_http.post('set_language', {'data': { 'lang': newLangId }}).subscribe(
             (d) => {
                 console.log('lang_changed');
-            }
-        );
-    }
+                 }
+            );
+        }
+        else{
 
-    onClickLogout() {
-        this.auth.logout()
-            .subscribe(
-                () => {
-                    this.router.navigate(['/']);
-                },
-                (e) => {
-                    console.log(e);
-                },
-                () => {
-                    console.log('Complete!');
+            this.http.post('set_language', {'data': { 'lang': newLangId }}).subscribe(
+            (d) => {
+                console.log('lang_changed');
                 }
             );
+        }
     }
 
 }
+
+

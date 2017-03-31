@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
+import { AuthHttp, AuthConfig } from 'angular2-jwt';
 
-import {AjaxService} from "./../../service/ajax.service";
 
 
 interface ToolsAndProjectsInput {
@@ -24,16 +24,12 @@ export class LandingPageComponent implements OnInit {
     private currTool: string = null;
     private currProject: Object = null;
 
-    constructor(private router: Router, private req: AjaxService) {
+    constructor(private router: Router, private http: AuthHttp) {
     }
 
     ngOnInit() {
-        this.req
-            .post({
-                'url_id': 'landing',
-                'data': {}
-}
-            )
+        this.http
+            .post('landing',{'data': {}})
             .subscribe((tools: Object) => {
                 console.log('LandingPageComponent->ngOnInit', tools);
                 this.tools = tools;
@@ -45,9 +41,8 @@ export class LandingPageComponent implements OnInit {
     }
 
     goToTool(toolKey: string, projectId: string) {
-        this.req.post({ // TODO Make post query
-            'url_id': 'set_tool_selection',
-            'data': {
+        this.http.post('set_tool_selection',
+            {'data': {
                 'tool_id': toolKey,
                 'project_id': projectId
             }

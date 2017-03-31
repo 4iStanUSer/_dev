@@ -15,7 +15,6 @@ export class NotificationService {
   }
 
 
-
   getMessage(): Observable<any> {
       return this.subject.asObservable();
 
