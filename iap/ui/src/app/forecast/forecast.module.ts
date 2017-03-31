@@ -51,6 +51,7 @@ import {RegionSelectorComponent} from "./selectors/region-selector/region-select
 //for now this page is used for development & minor components testing
 import {EditPageComponent} from "./edit-page/edit-page.component";
 import { MyDateRangePickerModule } from 'mydaterangepicker';
+import { SelectorsWrapperComponent } from './selectors-wrapper/selectors-wrapper.component';
 
 // import {SelectorsComponent} from "../common/cmp/selectors/selectors.component";
 // import {FlatSelectorComponent} from "../common/cmp/selectors/flat-selector/flat-selector.component";
@@ -99,7 +100,8 @@ import { MyDateRangePickerModule } from 'mydaterangepicker';
         LandingPageComponent,
 
         EditPageComponent,
-        ValueEditPopupComponent
+        ValueEditPopupComponent,
+        SelectorsWrapperComponent
     ],
     providers: [
         CommonServicesModule,

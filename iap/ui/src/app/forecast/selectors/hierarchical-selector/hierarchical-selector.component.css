@@ -289,3 +289,16 @@
     background-position: center center;
     background-size: 7px;
 }
+
+
+.empty-list{
+    background: #fceedc;
+    margin: 20px;
+    border-radius: 0 0 4px 4px;
+}
+.empty-list_text {
+    color: #2e3438;
+    font-size: 14px;
+    margin: 20px;
+    font-family: 'open_sanssemibold';
+}

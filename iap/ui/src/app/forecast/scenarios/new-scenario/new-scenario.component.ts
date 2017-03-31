@@ -169,6 +169,10 @@ export class NewScenarioComponent implements OnInit {
             this.new_scenario[this.predifined_drivers[i].name] = '';
             this.__checkFormValid(this.predifined_drivers[i].name, false);
         }
+        //selectors things start
+        this.getSelectorsConfig();
+        this.getSelectorsDefaultSelection();
+        //selectors things end
     }
 
     onClear(param: string) {
@@ -229,4 +233,53 @@ export class NewScenarioComponent implements OnInit {
             }, 300);
         }
     }
+
+    //selectors things start
+    selectorsConfigObject: Object = null;
+    selectorsDefaultSelection: Object = null;
+    getSelectorsConfig() {
+        let mockConfigObject = {
+            'order': ["geography", "products", "market"],
+            'selectors': {
+                'geography': {
+                    'disabled':false,
+                    'icon':"location",
+                    'multiple':"1",
+                    'name':"geography",
+                    'placeholder':"geography",
+                    'type':"hierarchical"
+                },
+                'market': {
+                    'disabled':false,
+                    'icon':"location",
+                    'multiple':"1",
+                    'name':"market",
+                    'placeholder':"market",
+                    'type':"hierarchical"
+                },
+                'products': {
+                    'disabled':false,
+                    'icon':"location",
+                    'multiple':"1",
+                    'name':"products",
+                    'placeholder':"products",
+                    'type':"hierarchical"
+                }
+            }
+        };
+        this.selectorsConfigObject = mockConfigObject;
+    }
+
+    getSelectorsDefaultSelection(){
+        let mockDefaultSelection = {
+            'geography': ["canada", "italy"],
+            'market': ["all"],
+            'products': ["mouthwash"]
+        }
+        this.selectorsDefaultSelection = mockDefaultSelection;
+    }
+    //selectors things end
+
+
+
 }

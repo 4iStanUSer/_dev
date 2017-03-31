@@ -8,6 +8,7 @@ export class StaticConfigModel {
         'selected_title': 'Selected',
         'not_found_items': 'Not found items',
         'apply_button': 'Apply',
+        'do_not_proceed': 'You need to select something to proceed',
         'cancel_button': 'Cancel'
     };
     constructor(){}

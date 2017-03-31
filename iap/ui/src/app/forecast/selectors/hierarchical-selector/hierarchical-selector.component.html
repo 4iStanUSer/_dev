@@ -69,11 +69,14 @@
         <div class="c-cat-block c-cat-block--selected c-cat-block--selected-large">
             <div class="c-cat-block__pane">{{ model.staticConfig.fields['selected_title'] }}</div>
             <div class="c-cat-block__area">
-                <div class="c-select-list">
+                <div
+                        class="c-select-list"
+                        [class.empty-list]="model.selected.length == 0">
                     <div class="c-select-list__item" *ngFor="let item_id of model.selected" >
                         <span>{{ model['items'][item_id]['name'] }}</span>
                         <div (click)="onDeselectItemClick(item_id)" class="c-select-list__close"></div>
                     </div>
+                    <div class="empty-list_text" *ngIf="model.selected.length == 0" >{{ model.staticConfig.fields['do_not_proceed'] }}</div>
                 </div>
             </div>
         </div>
