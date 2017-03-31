@@ -3,6 +3,7 @@ import {Router} from "@angular/router";
 import { AuthHttp} from 'angular2-jwt';
 import { Http } from '@angular/http';
 import {Tool, Project} from "../../app.model"
+import { AuthService } from '../common/login-page/auth.service';
 
 @Component({
   selector: 'tool-selector',
@@ -15,7 +16,8 @@ export class ToolSelectorComponent implements OnInit {
     private pptTool: Tool = new Tool();
     private mmTool: Tool = new Tool();
 
-    constructor(private router: Router, private auth_http: AuthHttp, private http: Http) {}
+    constructor(private router: Router, private auth_http: AuthHttp, private http: Http,  private auth: AuthService) {}
+
     ngOnInit() {
 
         this.forecastingTool.id = "forecast";
@@ -80,15 +82,33 @@ export class ToolSelectorComponent implements OnInit {
     }
 
     goToTool(toolId: string, projectId: string) {
-        this.http.post('select_project',
+
+    if(this.auth.isLoggedIn()) {
+
+            this.http.post('select_project',
             {
                 'data': {
                     'tool_id': toolId,
                     'project_id': projectId
                 }
             }
-       ).subscribe((tools) => {
+            ).subscribe((tools) => {this.router.navigate([toolId]);})
+        }
+        else{
+
+            this.http.post('select_project',
+                        {'data': {
+                            'tool_id': toolId,
+                            'project_id': projectId
+                        }}
+                        ).subscribe((tools) => {
             this.router.navigate([toolId]);
-        });
+                        })
+        }
+
+
+
     }
+
+
 }
