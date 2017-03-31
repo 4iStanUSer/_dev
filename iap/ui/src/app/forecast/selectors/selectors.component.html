@@ -1,119 +1,34 @@
-<div class="c-top-info">
-
-    <div class="c-top-info__item" *ngFor="let sel of selectorsOrder | iterateObjectByOrder: selectors; let i = index" >
-        <div
-                class="c-top-info__inner c-top-info__inner--{{ sel['model']['icon'] }}"
-                (click)="onPreviewClick(selectorsOrder[i], $event)"
-        >
-            <span *ngIf="sel['selected'] && sel['selected'].length > 0">
-                <span *ngFor="let s of sel['selected']">
-                    {{ s.name }}
-                    <span>,&nbsp;</span>
-                </span>
-
-            </span>
-            <span *ngIf="!sel['selected'] || sel['selected'].length == 0">
-                {{ sel['model']['placeholder'] }}
-            </span>
-        </div>
-    </div>
-</div>
-
-<!--?<div class="wrapper">-->
-
-    <!--?<ul class="selectors">
-        <li *ngFor="let sel of selectorsOrder | iterateObjectByOrder: selectors; let i = index">
-
-            <div class="selector-preview" (click)="onPreviewClick(selectorsOrder[i], $event)">
-
-                <span *ngIf="sel['selected'] && sel['selected'].length > 0">
-                    <span *ngFor="let s of sel['selected']">
-                        {{ s.name }}
-                    </span>
-                </span>
-                <span *ngIf="!sel['selected'] || sel['selected'].length == 0">
-                    {{ sel['model']['placeholder'] }}
-                </span>
-
-            </div>
-
-        </li>
-    </ul>-->
-
-     <div class="l-cat-popup" *ngIf="state['isExpanded']" >
-         <div class="l-cat-popup__tabs">
-             <div class="c-cat-tabs">
-                 <div
-                         *ngFor="let sel of selectorsOrder | iterateObjectByOrder: selectors; let i = index"
-                         [class.c-cat-tabs__item--active]="selectorsOrder[i] == state['activeTab']"
-                         (click)="setActiveTab(selectorsOrder[i])"
-                         class="c-cat-tabs__item c-cat-tabs__item--{{ sel['model']['icon'] }}">
-                     <a class="c-cat-tabs__inner" (click)="onPreviewClick(i, $event)">
-                         <div class="c-cat-tabs__title">{{ sel['model']['name'] }}</div>
-                         <ul class="c-cat-tabs__checked" *ngIf="sel['selected'] && sel['selected'].length > 0" >
-                             <li  *ngFor="let s of sel['selected']">{{ s.name }}<span>,</span></li>
-                         </ul>
-                     </a>
-                 </div>
-             </div>
-         </div>
-
+ <div class="l-cat-popup__tabs">
+     <div class="c-cat-tabs">
          <div
-                 *ngIf="selectors[state['activeTab']]"
-                 name="blockBrands"
-         >
-             <div [ngSwitch]="selectors[state['activeTab']]['model']['type']" class="selector-container">
-
-                <flat-selector *ngSwitchCase="'flat'" [model]="selectors[state['activeTab']]['model']"></flat-selector>
-
-                <hierarchical-selector *ngSwitchCase="'hierarchical'" [model]="selectors[state['activeTab']]['model']"></hierarchical-selector>
-
-                <region-selector *ngSwitchCase="'region'" [model]="selectors[state['activeTab']]['model']"></region-selector>
-
-            </div>
-         </div>
-
-         <div class="l-cat-popup__buttons">
-             <a class="c-button c-button--90 c-button--orange" (click)="onApplyClick()">
-                 {{staticConfig.fields['apply_button']}}
-             </a>
-             <a class="c-button c-button--90 c-button--transparent" (click)="onCancelClick()">
-                 {{staticConfig.fields['cancel_button']}}
+                 *ngFor="let sel of selectorsOrder | iterateObjectByOrder: selectors; let i = index"
+                 [class.c-cat-tabs__item--active]="selectorsOrder[i] == state['activeTab']"
+                 [class.deactivated]="deactivate"
+                 (click)="setActiveTab(selectorsOrder[i])"
+                 class="c-cat-tabs__item c-cat-tabs__item--{{ sel['model']['icon'] }}">
+             <a class="c-cat-tabs__inner" (click)="onPreviewClick(i, $event)">
+                 <div class="c-cat-tabs__title">{{ sel['model']['name'] }}</div>
+                 <ul class="c-cat-tabs__checked" *ngIf="sel['selected'] && sel['selected'].length > 0" >
+                     <li  *ngFor="let s of sel['selected']">{{ s.name }}<span>,</span></li>
+                 </ul>
              </a>
          </div>
      </div>
+ </div>
 
+ <div
+         *ngIf="selectors[state['activeTab']]"
+         name="blockBrands" >
+     <div [ngSwitch]="selectors[state['activeTab']]['model']['type']" class="selector-container">
 
-    <!--?<div *ngIf="state['isExpanded']" class="expanded-block">
+        <flat-selector *ngSwitchCase="'flat'" [model]="selectors[state['activeTab']]['model']"></flat-selector>
 
-        <ul class="selectors-tabs">
-            <li *ngFor="let sel of selectorsOrder | iterateObjectByOrder: selectors; let i = index" [class.active]="selectorsOrder[i] == state['activeTab']" (click)="setActiveTab(selectorsOrder[i])">
+        <hierarchical-selector
+                *ngSwitchCase="'hierarchical'"
+                (nothingSelected)="onNothingSelected($event)"
+                [model]="selectors[state['activeTab']]['model']"></hierarchical-selector>
 
-                <div class="selector-preview" (click)="onPreviewClick(i, $event)">
-                    {{ sel['model']['name'] }}
-                </div>
+        <region-selector *ngSwitchCase="'region'" [model]="selectors[state['activeTab']]['model']"></region-selector>
 
-            </li>
-        </ul>
-
-        <div *ngIf="selectors[state['activeTab']]" >
-
-            <div [ngSwitch]="selectors[state['activeTab']]['model']['type']" class="selector-container">
-
-                <flat-selector *ngSwitchCase="'flat'" [model]="selectors[state['activeTab']]['model']"></flat-selector>
-
-                <hierarchical-selector *ngSwitchCase="'hierarchical'" [model]="selectors[state['activeTab']]['model']"></hierarchical-selector>
-
-                <region-selector *ngSwitchCase="'region'" [model]="selectors[state['activeTab']]['model']"></region-selector>
-
-            </div>
-
-        </div>
-
-        <button (click)="onApplyClick()">Apply</button>
-        <button (click)="onCancelClick()">Cancel</button>
-    </div>-->
-
-<!--?
-</div>
--->
+    </div>
+ </div>

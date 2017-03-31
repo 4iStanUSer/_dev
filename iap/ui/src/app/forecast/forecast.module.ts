@@ -55,6 +55,7 @@ import {RegionSelectorComponent} from "./selectors/region-selector/region-select
 //for now this page is used for development & minor components testing
 import {EditPageComponent} from "./edit-page/edit-page.component";
 import { MyDateRangePickerModule } from 'mydaterangepicker';
+import { SelectorsWrapperComponent } from './selectors-wrapper/selectors-wrapper.component';
 
 import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect';
 
@@ -111,6 +112,7 @@ import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect';
         EditPageComponent,
         ValueEditPopupComponent,
         TableComponent
+        SelectorsWrapperComponent
     ],
     providers: [
         CommonServicesModule,
