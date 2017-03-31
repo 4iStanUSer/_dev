@@ -149,7 +149,7 @@ export class DataManagerService {
      */
     init() {
         if (!this.initResolver) {
-            this.initResolver = new Subject();
+            this.initResolver = new Subject<number>();
             this.initDynamicData();
             this.initStaticData();
             this.initResolver.subscribe(() => {
@@ -421,7 +421,7 @@ export class DataManagerService {
                          timepoints_ids: Array<string>,
                          variable_id: string,
                          cagrsPeriod: Period = null): Subject<VariableData> {
-        let subject = new Subject();
+        let subject = new Subject<VariableData>();
 
         let periodsToLoad = [];
         for (let i=0;i<timepoints_ids.length - 1; i++) {
@@ -575,7 +575,7 @@ export class DataManagerService {
                               timescale_id: string,
                               start: string,
                               end: string): Subject<DecompositionTypeData> {
-        let subject = new Subject();
+        let subject = new Subject<DecompositionTypeData>();
 
         if (!this.dataModel.hasDecomposition(timescale_id, start, end)) {
             this.req.post({

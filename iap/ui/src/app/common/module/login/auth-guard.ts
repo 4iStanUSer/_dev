@@ -41,9 +41,10 @@ export class AuthGuard implements CanActivate, CanActivateChild {
                     return true;
                 }
                 else {
-                 this.auth.redirectUrl = url;
-                 this.router.navigate(['/login']);
-                 return Observable.of(false);
+                    return false;
+                 // this.auth.redirectUrl = url;
+                 // this.router.navigate(['/login']);
+                 // return Observable.of(false);
                 }
             });
             // .catch(() => {
@@ -59,3 +60,5 @@ export class AuthGuard implements CanActivate, CanActivateChild {
         return this.canActivate(route, state);
     }
 }
+
+//: Observable<boolean>|Promise<boolean>|boolean

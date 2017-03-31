@@ -18,7 +18,7 @@ export class LanguageSelectorComponent implements OnChanges {
 
     private currLangId: string = null;
     @Input() languages: LanguageItem[] = [];
-    @Output() changed: EventEmitter<string> = new EventEmitter();
+    @Output() changed= new EventEmitter<string>();
 
     constructor() {
     }

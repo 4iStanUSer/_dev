@@ -28,6 +28,8 @@ import {NotificationService} from
     "./common/service/notification.service"
 
 import {MenuWidgetComponent} from "./forecast/menu-widget/menu-widget.component"
+import {ForecastComponent} from "./forecast/forecast.component";
+import {ForecastModule} from "./forecast/forecast.module";
 
 
 function authHttpServiceFactory(http: Http, options: RequestOptions) {
@@ -47,7 +49,8 @@ function authHttpServiceFactory(http: Http, options: RequestOptions) {
         AppRoutingModule,
         CommonServicesModule,
         HttpModule,
-        LandingPageModule
+        LandingPageModule,
+        ForecastModule
     ],
     declarations: [
         AppComponent,
@@ -55,7 +58,8 @@ function authHttpServiceFactory(http: Http, options: RequestOptions) {
         LoginPageComponent,
         TestComponent,
         NotificationComponent,
-        MenuWidgetComponent
+        MenuWidgetComponent,
+        ForecastComponent
 
     ],
     entryComponents:

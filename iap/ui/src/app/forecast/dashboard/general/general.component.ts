@@ -158,7 +158,7 @@ export class GeneralComponent implements OnInit {
         }
     }
     private getForecastTabsAbsData(): Subject<ForecastTabsAbsData> {
-        let subject = new Subject();
+        let subject = new Subject<ForecastTabsAbsData>();
 
         let outputVars = this.dm.dataModel.getVariablesByType('output');
         let period = this.dm.getPeriod('main');

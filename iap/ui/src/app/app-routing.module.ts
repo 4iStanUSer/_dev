@@ -4,6 +4,7 @@ import {AuthGuard} from "./common/login-page/auth.guard";
 import {LoginPageComponent} from "./common/login-page/page/login-page.component";
 import {TestComponent} from './common/notification/test.components';
 import {LandingPageComponent} from  './landing-page/landing-page.component';
+import {ForecastComponent} from "./forecast/forecast.component";
 
 @NgModule({
     imports: [
@@ -20,7 +21,11 @@ import {LandingPageComponent} from  './landing-page/landing-page.component';
              {
                 path: 'landing',
                 component: LandingPageComponent,
-
+            },
+             {
+                path: 'forecast',
+                component: ForecastComponent,
+                canActivate: [AuthGuard],
             },
             {
                 path:'notification',
