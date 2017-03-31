@@ -18,7 +18,6 @@ export class AuthService {
      * Wrapper to get send request with token attached.
      * @type {AuthHttp}
      */
-    //public authHttp: AuthHttp;
 
     /**
      * Key to get token from local storage.
@@ -64,14 +63,15 @@ export class AuthService {
      * @returns {Observable<boolean>}
      */
     logout() {
-        console.log('logout');
         this.authHttp.post('http://127.0.0.1:6543/logout', '')
         .subscribe(
             data => console.log(data),
             err => console.log(err),
-            () => console.log('Request Complete')
+            () => console.log('Logout Complete')
+
         );
 
+        localStorage.removeItem(this.tokenName);
     }
 
     /**

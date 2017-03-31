@@ -25,6 +25,10 @@
 }
 
 .dialog_window {
+    padding: 0 0;
+    margin: 0 0;
+    position: absolute;
+    margin-left: 40%;
     width: 280px;
     height: 140px;
 }
@@ -43,3 +47,7 @@
 .dialog_window  ul li {
             display: inline-block;
             margin-left: 20px;}
+
+#notrealised{
+    display: none;
+}

@@ -1,11 +1,11 @@
 import { Component, Input, OnDestroy } from '@angular/core';
-import { NotificationService } from './notification.service';
+import { NotificationService } from '../service/notification.service';
 import { Subscription }   from 'rxjs/Subscription';
 
 @Component({
   selector: 'notification',
-  templateUrl: './notification.component.html',
-  styleUrls: ['./notification.style.css']
+  templateUrl: 'notification.component.html',
+  styleUrls: ['notification.style.css']
 })
 
 export class NotificationComponent implements OnDestroy{
@@ -15,7 +15,7 @@ export class NotificationComponent implements OnDestroy{
     body:string;
     buttons:any[];
     subscription: Subscription;
-    type:string = "default";
+    type:string = "notrealised";
     style:any;
 
     constructor(private notificationService: NotificationService){
@@ -34,7 +34,7 @@ export class NotificationComponent implements OnDestroy{
                    else if (config['style']){
 
                        this.style = config['style'];
-                       console.log(this.style);
+                       this.style = "default";
                    }
 
 
@@ -44,10 +44,15 @@ export class NotificationComponent implements OnDestroy{
 
     };
 
-    callBack(button){
-        this.notificationService.setResponse(button);
-    }
+    callBack(button) {
+        if (button = "Skip"){
+            this.type="notrealised";
+           }
+        else {
+            this.notificationService.setResponse(button);
 
+        }
+    }
 
     ngOnDestroy() {
     this.subscription.unsubscribe();
