@@ -1,0 +1,87 @@
+.table,
+.table-header,
+.table-body {
+  width: 100%;
+}
+.table-filter-row,
+.table-header-row {
+  border-left: 1px solid #fff;
+  border-top: 1px solid #fff;
+  border-bottom: 1px solid #fff;
+  height: 30px;
+  line-height: 30px;
+  background-color: #d8e0ee;
+}
+.table-header-row {
+    box-sizing: border-box;
+    border-top: none;
+    padding: 0 8px;
+}
+.table-filter-row {
+  border-top: none;
+  text-align: center;
+}
+.table-header .table-header-row:last-child,
+.table-filter .table-filter-row:last-child {
+  border-right: 1px solid #fff;
+}
+.table-header-row--sort-row {
+  cursor: pointer;
+}
+.table-header-row,
+.table-filter-row,
+.table-body-colum {
+  float: left;
+  position: relative;
+  box-sizing: border-box;
+}
+.table-filter-row input {
+    width: -webkit-calc(100% - 10px);
+    width:    -moz-calc(100% - 10px);
+    width:         calc(100% - 10px);
+    font-family: 'open_sanssemibold';
+    font-size: 13px;
+    color: #2e3438;
+    padding: 0 5px;
+    border: none;
+    outline: none;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+.table-body-row{
+  display: inline-block;
+  box-sizing: border-box;
+  width: 100%;
+  cursor: pointer;
+    height: 32px;
+    padding-left: 19px;
+    border-bottom: 1px solid #ecf0f7;
+    line-height: 32px;
+}
+.table-body-row.active{
+  background-color: #f1a94e;
+}
+.hide {
+  display: none !important;
+}
+.no-result {
+  width: 100%;
+  text-align: center;
+  display: inline-block;
+}
+.no-result p{
+  padding: 50px 0;
+}
+.sort {
+    display: block;
+    width: 10px;
+    height: 13px;
+    background: url("/static/assets/images/icons/ic-sort.svg") no-repeat center;
+    background-size: 100%;
+    position: absolute;
+    right: 5px;
+    top: 7px;
+}
+.sort--reverse {
+    transform: rotate(180deg);
+}

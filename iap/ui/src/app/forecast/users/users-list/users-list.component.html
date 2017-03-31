@@ -1,0 +1,97 @@
+<section class="l-app__main">
+<div class="c-eclipse"></div>
+<div class="users">
+    <div class="users__main">
+        <div class="users__left">
+            <div class="c-left-sidebar c-left-sidebar--main c-left-sidebar--active">
+                <div class="c-left-sidebar__item c-left-sidebar__item--recent">
+                    <div class="c-left-sidebar__pane c-left-sidebar__pane--recent">
+                        <h3>{{config.users_list_title}}</h3>
+                    </div>
+                    <div class="c-left-sidebar__content">
+                        <table [data]="users" [options]="options" (current_id)="getCurrentId($event)"></table>
+                    </div>
+                </div>
+            </div><!---------------- c-left-sidebar c-left-sidebar--main ---------------->
+        </div><!---------------- scenarios__left ---------------->
+        <div class="users__right">
+            <div class="m-scenarios-page m-scenarios-page--active">
+                <div class="m-scenarios-page__service c-service-pane">
+                    <a class="c-service-pane__item c-service-pane__item--create" href="#" (click)="onShowCreateNewUser($event)">
+                        <span class="c-service-pane__border">{{config.create_user_label}}</span>
+                    </a>
+                </div><!----------------- c-service-pane ----------------->
+                <div *ngIf="!current_user && !show_create_new_user" class="c-service-pane__item" style="text-align:center;padding:300px 100px;">{{config.user_is_not_selected_message}}</div>
+                <div *ngIf="current_user && !show_create_new_user" class="m-scenarios-page__table">
+                    <div class="user-details">
+                        <h3>{{config.edit_user_label}}</h3>
+                        <br>
+                        <form (ngSubmit)="onSubmit()" [formGroup]="userForm">
+                            <input type="hidden" name="id" [value]="current_user.id">
+                            <div class="edit_field">
+                                <span (click)="onShowInput($event)" class="c-edit-form__label">{{current_user.first_name}}</span>
+                                <input class="c-text-field__input hide" name="first_name" formControlName="first_name" [value]="current_user.first_name" (blur)="onHideInput($event, 'first_name')" placeholder="First name" required>
+                            </div>
+                            <br>
+                            <div class="edit_field">
+                                <span (click)="onShowInput($event)" class="c-edit-form__label">{{current_user.last_name}}</span>
+                                <input class="c-text-field__input hide" name="last_name" formControlName="last_name" [value]="current_user.last_name" (blur)="onHideInput($event, 'last_name')" placeholder="Last name" required>
+                            </div>
+                            <br>
+                            <div class="edit_field">
+                                <span (click)="onShowInput($event)" class="c-edit-form__label">{{current_user.email}}</span>
+                                <input class="c-text-field__input hide" name="email" formControlName="email" type="email" [value]="current_user.email" (blur)="onHideInput($event, 'email')" placeholder="Email" required>
+                            </div>
+                            <br>
+                            <label class="c-edit-form__label" for="roles">Roles</label>
+                            <ss-multiselect-dropdown [options]="optionsRoles" [texts]="myTexts" [settings]="mySettings" formControlName="roles"></ss-multiselect-dropdown>
+                            <br>
+                            <div class="c-check-actions__item c-checkbox">
+                                <label class="c-edit-form__label" for="active" style="float:left;">Active</label>
+                                <input type="checkbox" id="active" formControlName="active" [(ngModel)]="current_user.active" style="margin-top:0 !important;">
+                            </div>
+                            <br>
+                            <button (click)="onDeleteUser($event)" class="c-button c-button--blue">{{config.delete_user_button}}</button>
+                            <button (click)="onResetPassword($event)" class="c-button c-button--blue">{{config.reset_user_password_button}}</button>
+                            <button type="submit" class="c-button c-button--blue">{{config.edit_user_form_button}}</button>
+                        </form>
+                    </div>
+                </div>
+                <div *ngIf="show_create_new_user" class="m-scenarios-page__table">
+                    <div class="user-details">
+                        <h3>{{config.create_user_label}}</h3>
+                        <br>
+                        <form (ngSubmit)="onSubmit()" [formGroup]="userForm">
+                            <input type="hidden" name="id" [value]="current_user.id">
+                            <div class="edit_field">
+                                <span (click)="onShowInput($event)" class="c-edit-form__label">{{current_user.first_name}}</span>
+                                <input class="c-text-field__input" name="first_name" [ngClass]="{'hide': current_user.first_name}" formControlName="first_name" [value]="current_user.first_name" (blur)="onHideInput($event, 'first_name')" placeholder="First name" required>
+                            </div>
+                            <br>
+                            <div class="edit_field">
+                                <span (click)="onShowInput($event)" class="c-edit-form__label">{{current_user.last_name}}</span>
+                                <input class="c-text-field__input" name="last_name"  [ngClass]="{'hide': current_user.last_name}" formControlName="last_name" [value]="current_user.last_name" (blur)="onHideInput($event, 'last_name')" placeholder="Last name" required>
+                            </div>
+                            <br>
+                            <div class="edit_field">
+                                <span (click)="onShowInput($event)" class="c-edit-form__label">{{current_user.email}}</span>
+                                <input class="c-text-field__input" name="email"  [ngClass]="{'hide': current_user.email}" formControlName="email" type="email" [value]="current_user.email" (blur)="onHideInput($event, 'email')" placeholder="Email" required>
+                            </div>
+                            <br>
+                            <label class="c-edit-form__label" for="roles">Roles</label>
+                            <ss-multiselect-dropdown [options]="optionsRoles" [texts]="myTexts" [settings]="mySettings" formControlName="roles"></ss-multiselect-dropdown>
+                            <br>
+                            <div class="c-check-actions__item c-checkbox">
+                                <label class="c-edit-form__label" for="active" style="float:left;">Active</label>
+                                <input type="checkbox" id="active" formControlName="active" [(ngModel)]="current_user.active" style="margin-top:0 !important;">
+                            </div>
+                            <br>
+                            <button type="submit" class="c-button c-button--blue">{{config.add_user_form_button}}</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div><!---------------- scenarios__right ---------------->
+    </div><!---------------- scenarios__main ---------------->
+</div><!---------------- scenarios ---------------->
+</section>
