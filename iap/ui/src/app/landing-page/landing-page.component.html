@@ -1,36 +1,22 @@
-<header class="lp-header">
-    <ul class="lp-menu">
-        <li>
-            <a href="#">
-                Home
-            </a>
-        </li>
-        <li>
-            <a href="#">
-                Demo
-            </a>
-        </li>
-        <li>
-            <a href="#">
-                Blog
-            </a>
-        </li>
-        <li>
-            <a href="#">
-                Help
-            </a>
-        </li>
-    </ul>
-<div>
-    <img class="logo_4i" src="/static/assets/images/4i_logo.jpg">
-</div>
-<div class="lp-logout">
-    <button (click)="onClickLogout()">Logout</button>
-</div>
+<new_header></new_header>
 
-</header>
 <language-selector
         *ngIf="langsList.length>0"
         [languages]="langsList"
         (changed)="languageChanged($event)"></language-selector>
-<tool-selector></tool-selector>
+
+
+<tool-selector *ngIf="auth.isLoggedIn()"></tool-selector>
+
+<div class="carusel" *ngIf="!auth.isLoggedIn()">
+    <div  class="row lp-tool-item">
+        <div class="col-sm-6">
+            <h2>"Forecasting"</h2>
+            <p>""Sales4Cast™ forecasts account level sales based on objective sales plans and statistical
+                response curves. Sales4Cast allows you to understand how each of your brands or business lines
+                will contribute to your overall sales within a specific account; and how each of your accounts
+                will contribute to your overall sales. Identify and manage risks and opportunities early on to
+                act upon them</p>
+        </div>
+    </div>
+</div>
