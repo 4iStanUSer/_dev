@@ -26,10 +26,6 @@ export class HeaderComponent implements  AfterViewInit{
     {
 
 
-        if (this.auth.isLoggedIn()){
-            /*
-            If user authorised render this component
-             */
 
             let UserMenu_componentFactory =
                 this._componentFactoryResolver.resolveComponentFactory(UserMenu);
@@ -39,18 +35,7 @@ export class HeaderComponent implements  AfterViewInit{
                 this._componentFactoryResolver.resolveComponentFactory(LoginPageComponent);
             this.login = this.adLogin.createComponent(LoginPageComponent_componentFactory);
 
-        }
-        else{
 
-            /*
-            If user unauthorised render this component
-             */
-            let _componentFactory =
-                this._componentFactoryResolver.resolveComponentFactory(LoginPageComponent);
-            this.login = this.adLogin.createComponent(_componentFactory);
-
-
-        }
 
     }
 
