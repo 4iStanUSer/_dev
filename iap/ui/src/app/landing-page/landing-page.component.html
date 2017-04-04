@@ -1,4 +1,6 @@
-<new_header></new_header>
+<header></header>
+
+
 
 <language-selector
         *ngIf="langsList.length>0"
@@ -7,6 +9,7 @@
 
 
 <tool-selector *ngIf="auth.isLoggedIn()"></tool-selector>
+
 
 <div class="carusel" *ngIf="!auth.isLoggedIn()">
     <div  class="row lp-tool-item">
@@ -20,3 +23,6 @@
         </div>
     </div>
 </div>
+
+
+

@@ -8,8 +8,8 @@ interface SwitchSelectorValue {
 
 @Component({
     selector: 'switch-selector',
-    templateUrl: './switch-selector.component.html',
-    styleUrls: ['./switch-selector.component.css']
+    templateUrl: 'switch-selector.component.html',
+    styleUrls: ['switch-selector.component.css']
 })
 export class SwitchSelectorComponent implements OnInit {
 

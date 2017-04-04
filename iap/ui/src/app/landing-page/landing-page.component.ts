@@ -4,11 +4,13 @@ import { AuthHttp} from 'angular2-jwt';
 import { Http } from '@angular/http';
 import { AuthService } from '../common/login-page/auth.service';
 
+
+
 @Component({
     templateUrl: './landing-page.component.html',
     styleUrls: ['./landing-page.component.css']
 })
-export class LandingPageComponent implements OnInit {
+export class  LandingPageComponent implements OnInit {
 
     private user: User;
     private client: Client;

@@ -4,8 +4,8 @@ import {TableModel} from "../../model/table.model";
 
 @Component({
     selector: 'accordion-table',
-    templateUrl: './accordion-table.component.html',
-    styleUrls: ['./accordion-table.component.css']
+    templateUrl: 'accordion-table.component.html',
+    styleUrls: ['accordion-table.component.css']
 })
 export class AccordionTableComponent implements OnInit, AfterViewChecked {
 

@@ -1,2 +1,5 @@
 ul {list-style: none;}
 ul li {display: inline-block;}
+img {width:32px; height: 32px;}
+.login{float: right}
+.notification{float: right}

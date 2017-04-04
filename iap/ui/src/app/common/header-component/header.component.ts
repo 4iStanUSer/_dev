@@ -1,16 +1,13 @@
 import {Component, AfterViewInit, ComponentFactoryResolver, ViewChild, ViewContainerRef, ComponentRef} from '@angular/core';
-import { TestComponent } from '../notification/test.components';
+import { UserMenu } from '../notification/user.components';
 import { LoginPageComponent } from '../login-page/page/login-page.component'
-import { MenuWidgetComponent } from '../../forecast/menu-widget/menu-widget.component';
-import { AuthHttp } from 'angular2-jwt';
-import { Http } from '@angular/http';
 import { AuthService } from '../../common/login-page/auth.service';
 
 @Component({
-    selector: 'new_header',
+    selector: 'header',
     templateUrl: 'header.component.html',
     styleUrls: ['header.style.css'],
-    entryComponents: [TestComponent, LoginPageComponent, MenuWidgetComponent]
+    entryComponents: [UserMenu, LoginPageComponent]
 })
 
 export class HeaderComponent implements  AfterViewInit{
@@ -23,7 +20,7 @@ export class HeaderComponent implements  AfterViewInit{
 
 
     constructor(private _componentFactoryResolver: ComponentFactoryResolver,
-                private auth:AuthService, private auth_http: AuthHttp, private http: Http) { }
+                private auth:AuthService) { }
 
     ngAfterViewInit ( )
     {
@@ -33,11 +30,14 @@ export class HeaderComponent implements  AfterViewInit{
             /*
             If user authorised render this component
              */
-            let componentFactory =
+
+            let UserMenu_componentFactory =
+                this._componentFactoryResolver.resolveComponentFactory(UserMenu);
+            this.widget = this.adHost.createComponent(UserMenu_componentFactory);
+
+            let LoginPageComponent_componentFactory =
                 this._componentFactoryResolver.resolveComponentFactory(LoginPageComponent);
-            this.widget = this.adHost.createComponent(componentFactory);
-
-
+            this.login = this.adLogin.createComponent(LoginPageComponent_componentFactory);
 
         }
         else{
@@ -45,18 +45,11 @@ export class HeaderComponent implements  AfterViewInit{
             /*
             If user unauthorised render this component
              */
-            this.http.post('/get_header_data', {}).subscribe((d) => {console.log(d)});
-
             let _componentFactory =
                 this._componentFactoryResolver.resolveComponentFactory(LoginPageComponent);
             this.login = this.adLogin.createComponent(_componentFactory);
 
 
-            let componentFactory =
-                this._componentFactoryResolver.resolveComponentFactory(TestComponent);
-
-
-            this.widget = this.adHost.createComponent(componentFactory);
         }
 
     }

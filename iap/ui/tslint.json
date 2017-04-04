@@ -11,11 +11,14 @@
     "curly": true,
     "eofline": true,
     "forin": true,
+    "import-blacklist": [true, "rxjs"],
+    "import-spacing": true,
     "indent": [
       true,
       "spaces"
     ],
     "label-position": true,
+    "interface-over-type-literal": true,
     "label-undefined": true,
     "max-line-length": [
       true,
@@ -43,7 +46,7 @@
     "no-duplicate-variable": true,
     "no-empty": false,
     "no-eval": true,
-    "no-inferrable-types": true,
+    "no-inferrable-types": [true, "ignore-params"],
     "no-shadowed-variable": true,
     "no-string-literal": false,
     "no-switch-case-fall-through": true,
@@ -83,6 +86,8 @@
         "variable-declaration": "nospace"
       }
     ],
+    "typeof-compare": true,
+    "unified-signatures": true,
     "variable-name": false,
     "whitespace": [
       true,
@@ -93,12 +98,8 @@
       "check-type"
     ],
 
-    "directive-selector-prefix": [true, "app"],
-    "component-selector-prefix": [true, "app"],
-    "directive-selector-name": [true, "camelCase"],
-    "component-selector-name": [true, "kebab-case"],
-    "directive-selector-type": [true, "attribute"],
-    "component-selector-type": [true, "element"],
+    "directive-selector": [true, "attribute", "app", "camelCase"],
+    "component-selector": [true, "element", "app", "kebab-case"],
     "use-input-property-decorator": true,
     "use-output-property-decorator": true,
     "use-host-property-decorator": true,

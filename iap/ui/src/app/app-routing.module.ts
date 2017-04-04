@@ -1,10 +1,8 @@
 ﻿import {NgModule}     from '@angular/core';
 import {RouterModule} from '@angular/router';
 import {AuthGuard} from "./common/login-page/auth.guard";
-import {LoginPageComponent} from "./common/login-page/page/login-page.component";
-import {TestComponent} from './common/notification/test.components';
-import {LandingPageComponent} from  './landing-page/landing-page.component';
 import {ForecastComponent} from "./forecast/forecast.component";
+import {LandingPageComponent} from "./landing-page/landing-page.component";
 
 @NgModule({
     imports: [
@@ -14,23 +12,14 @@ import {ForecastComponent} from "./forecast/forecast.component";
                 pathMatch: 'full',
                 redirectTo:'/landing'
             },
-            {
-                path: 'login_page',
-                component: LoginPageComponent,
-            },
-             {
-                path: 'landing',
-                component: LandingPageComponent,
-            },
              {
                 path: 'forecast',
                 component: ForecastComponent,
                 canActivate: [AuthGuard],
             },
             {
-                path:'notification',
-                component: TestComponent,
-                canActivate: [AuthGuard],
+                path:'landing',
+                component: LandingPageComponent,
             },
 
         ])

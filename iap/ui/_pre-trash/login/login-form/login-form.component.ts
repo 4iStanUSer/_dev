@@ -4,8 +4,8 @@ import {AjaxService} from "../../../service/ajax.service";
 
 @Component({
     selector: 'login-form',
-    templateUrl: './login-form.component.html',
-    styleUrls: ['./login-form.component.css']
+    templateUrl: 'login-form.component.html',
+    styleUrls: ['login-form.component.css']
 })
 
 export class LoginFormComponent implements OnInit {

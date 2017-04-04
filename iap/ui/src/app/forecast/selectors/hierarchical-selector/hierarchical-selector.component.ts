@@ -1,10 +1,9 @@
-import {Component, OnInit, OnChanges, Input, SimpleChanges, EventEmitter} from '@angular/core';
+import {Component, OnInit, OnChanges, Input, SimpleChanges, EventEmitter, Output} from '@angular/core';
 import {
     SelectorModel,
     SelectorItemModel
 } from "./../selector.model";
 import {Helper} from "../../../common/helper";
-import {Output} from "@angular/core/src/metadata/directives";
 
 @Component({
     selector: 'hierarchical-selector',

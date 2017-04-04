@@ -8,7 +8,7 @@ export class IndexPageService {
 
     public get_index_page_data(selection){
         return this.req.post({
-            url: '/forecast/get_index_page_data',
+            url_id: '/forecast/get_index_page_data',
             data: selection
         });
     }

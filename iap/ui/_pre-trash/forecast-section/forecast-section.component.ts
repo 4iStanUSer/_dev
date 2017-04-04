@@ -28,8 +28,8 @@ interface PeriodsInput {
 
 @Component({
     selector: 'forecast-section',
-    templateUrl: './forecast-section.component.html',
-    styleUrls: ['./forecast-section.component.css']
+    templateUrl: 'forecast-section.component.html',
+    styleUrls: ['forecast-section.component.css']
 })
 export class ForecastSectionComponent implements OnInit, OnChanges {
 

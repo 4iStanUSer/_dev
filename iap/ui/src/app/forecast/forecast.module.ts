@@ -17,7 +17,6 @@ import { TableComponent } from "../common/cmp/table/table.component";
 
 import {DashboardComponent} from "./dashboard/dashboard.component";
 import {DataManagerService} from "./dashboard/data-manager.service";
-
 import {SimulatorPageComponent} from "./simulator-page/simulator-page.component";
 import {SimulatorPageDataManagerService} from "./simulator-page/simulator-page-data-manager.service";
 
