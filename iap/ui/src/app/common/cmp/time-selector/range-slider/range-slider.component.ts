@@ -98,10 +98,15 @@ export class RangeSliderComponent implements OnInit, OnChanges {
     @Input() data: Array<Point>;
     @Input() selected: Sliders;
 
-    @Output() changed: EventEmitter<{
+    // @Output() changed: EventEmitter<{
+    //     slider: string,
+    //     value: Point
+    // }>= new EventEmitter();
+
+    @Output() changed = new EventEmitter<{
         slider: string,
         value: Point
-    }>= new EventEmitter();
+    }>();
 
     constructor(private elRef: ElementRef, private renderer: Renderer) {
         this.element = elRef.nativeElement;

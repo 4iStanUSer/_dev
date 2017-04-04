@@ -27,7 +27,7 @@ export class LandingPageService {
 
     getProjectInfo(): Subject<ProjectInfo> {
         if (this.projectInfo) {
-            let subject = new Subject();
+            let subject = new Subject<ProjectInfo>();
             subject.subscribe(() => {
                 return this.projectInfo;
             });
@@ -35,7 +35,7 @@ export class LandingPageService {
             return subject;
         }
         else {
-            let subject = new Subject();
+            let subject = new Subject<ProjectInfo>();
             subject.subscribe((d) => {
                 this.projectInfo = <ProjectInfo>d;
                 return this.projectInfo;
@@ -56,7 +56,7 @@ export class LandingPageService {
     }
 
     getRecentActions(): Subject<UserAction[]> {
-        let subject = new Subject();
+        let subject = new Subject<UserAction[]>();
         subject.subscribe((d) => {
             return USERACTIONS;
         });

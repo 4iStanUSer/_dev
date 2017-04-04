@@ -1,5 +1,6 @@
 <div class="l-app">
     <div class="l-app__wrapper">
+
 <header class="l-app__header">
   <div class="c-top-pane">
     <div class="c-top-pane__item c-top-pane__item--domik">
@@ -12,9 +13,7 @@
       </div>
     </div>
     <div class="c-top-pane__item c-top-pane__item--nav">
-        <menu-widget
-    *ngIf="menuItems"
-    [menu]="menuItems"></menu-widget>
+        <menu-widget *ngIf="menuItems" [menu]="menuItems"></menu-widget>
     </div>
     <div class="c-top-pane__item c-top-pane__item--info">
       <div class="c-info">
@@ -49,8 +48,9 @@
     *ngIf="topMenuData"
     [data]="topMenuData"></menu-widget>-->
 
-         <div class="l-dash-area__top">
-                    <selectors></selectors>
+         <!--?<div class="l-dash-area__top">-->
+            <!--?<selectors [position]="'top'"></selectors>-->
+         <!--?</div>-->
                     <!--?<div class="c-top-info">
                         <div class="c-top-info__item">
                           <div class="c-top-info__inner c-top-info__inner--location"><span>United States, Texas, Dallas</span></div>
@@ -65,7 +65,7 @@
                           <div class="c-top-info__inner c-top-info__inner--brand"><span>Nike, Puma, New Balance</span></div>
                         </div>
                     </div>-->
-                </div>
+
 
 
         <router-outlet></router-outlet>

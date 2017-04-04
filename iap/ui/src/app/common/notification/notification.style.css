@@ -1,0 +1,53 @@
+#warning{
+    background-color:#F79F81;
+    color:black;
+    border:solid black ;
+
+}
+#info{
+    background-color:#CED8F6;
+    color:black;
+    border:solid black ;
+
+}
+#error{
+    background-color:#F3F781;
+    color:black;
+    border:solid black ;
+}
+
+#default{
+    width: 400px;
+    position: relative;
+    margin: 10% auto;
+    padding: 2rem;
+    background: #fff;
+}
+
+.dialog_window {
+    padding: 0 0;
+    margin: 0 0;
+    position: absolute;
+    margin-left: 40%;
+    width: 280px;
+    height: 140px;
+}
+.dialog_title{
+    padding: 12px 54px 0;
+    margin: 0;
+    font-size: 1.5rem;
+    color: black;
+}
+.dialog_body{
+    padding: 20px 24px 24px 24px;
+    color: rgba(0,0,0, 0.54);
+}
+
+.dialog_window  ul {list-style: none}
+.dialog_window  ul li {
+            display: inline-block;
+            margin-left: 20px;}
+
+#notrealised{
+    display: none;
+}

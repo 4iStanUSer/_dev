@@ -59,8 +59,6 @@ def login(req):
     :rtype: Dict[str, str]
 
     """
-    print("Registry", get_current_registry().settings)
-    print(req)
     try:
         print("Registry", get_current_registry().settings)
 

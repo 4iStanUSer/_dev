@@ -17,11 +17,10 @@ import { TableComponent } from "../common/cmp/table/table.component";
 
 import {DashboardComponent} from "./dashboard/dashboard.component";
 import {DataManagerService} from "./dashboard/data-manager.service";
-
 import {SimulatorPageComponent} from "./simulator-page/simulator-page.component";
 import {SimulatorPageDataManagerService} from "./simulator-page/simulator-page-data-manager.service";
 
-import {ForecastComponent} from "./forecast.component";
+//import {ForecastComponent} from "./forecast.component";
 import {ScenariosComponent} from "./scenarios/scenarios.component";
 import {ScenarioService} from "./scenarios/scenario.service";
 import {ScenariosListComponent} from "./scenarios/scenarios-list/scenarios-list.component";
@@ -42,7 +41,7 @@ import {InsightsComponent} from './dashboard/insights/insights.component';
 
 import {ButtonsGroupComponent} from './../common/cmp/buttons-group/buttons-group.component';
 import {TableWidgetComponent} from "../common/cmp/table-widget/table-widget.component";
-import { MenuWidgetComponent } from './menu-widget/menu-widget.component';
+//import { MenuWidgetComponent } from './menu-widget/menu-widget.component';
 import { LanguageSelectorComponent } from './language-selector/language-selector.component';
 
 import { LandingPageComponent } from './landing-page/landing-page.component';
@@ -55,6 +54,7 @@ import {RegionSelectorComponent} from "./selectors/region-selector/region-select
 //for now this page is used for development & minor components testing
 import {EditPageComponent} from "./edit-page/edit-page.component";
 import { MyDateRangePickerModule } from 'mydaterangepicker';
+import { SelectorsWrapperComponent } from './selectors-wrapper/selectors-wrapper.component';
 
 import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect';
 
@@ -76,7 +76,7 @@ import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect';
         MultiselectDropdownModule
     ],
     declarations: [
-        ForecastComponent,
+        //ForecastComponent,
 
         DashboardComponent,
         GeneralComponent,
@@ -104,13 +104,14 @@ import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect';
         RegionSelectorComponent,
         ButtonsGroupComponent,
         TableWidgetComponent,
-        MenuWidgetComponent,
+        //MenuWidgetComponent,
         LanguageSelectorComponent,
         LandingPageComponent,
 
         EditPageComponent,
         ValueEditPopupComponent,
-        TableComponent
+        TableComponent,
+        SelectorsWrapperComponent
     ],
     providers: [
         CommonServicesModule,

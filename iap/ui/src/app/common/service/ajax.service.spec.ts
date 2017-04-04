@@ -1,6 +1,6 @@
 /* tslint:disable:no-unused-variable */
 
-import { addProviders, inject, async } from '@angular/core/testing';
+import { TestBed, inject, async } from '@angular/core/testing';
 import {MockBackend} from '@angular/http/testing';
 import {ReflectiveInjector} from '@angular/core';
 import {
@@ -22,7 +22,7 @@ import {Observable}     from 'rxjs/Observable';
 
 import {LoadingService} from './loading.service';
 import {AjaxService} from './ajax.service';
-import {MockConnection} from "@angular/http/testing/mock_backend";
+import {MockConnection} from "@angular/http/testing";
 
 
 class MockLoadingService extends LoadingService { }
@@ -74,7 +74,7 @@ describe('Service: Ajax', () => {
 
     beforeEach(() => {
         //jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
-        addProviders([
+         TestBed.configureTestingModule([
             AjaxService,
             MockBackend,
             BaseRequestOptions,

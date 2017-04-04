@@ -1,4 +1,4 @@
-import {Component, OnInit, OnChanges, Input, SimpleChanges} from '@angular/core';
+import {Component, OnInit, OnChanges, Input, SimpleChanges, EventEmitter, Output} from '@angular/core';
 import {
     SelectorModel,
     SelectorItemModel
@@ -13,6 +13,7 @@ import {Helper} from "../../../common/helper";
 export class HierarchicalSelectorComponent implements OnInit, OnChanges {
 
     @Input() model: SelectorModel;
+    @Output() nothingSelected =  new EventEmitter<boolean>();
 
     private rootLevelItems: Array<SelectorItemModel> = [];
     private items: Array<SelectorItemModel> = [];
@@ -20,39 +21,23 @@ export class HierarchicalSelectorComponent implements OnInit, OnChanges {
 
     private searchText: string = null;
 
-    // private lang: Object = {
-    //     'items_title': 'Categories',
-    //     'search_title': 'Search',
-    //     'search_placeholder': 'Type here',
-    //     'search_clear': 'Clear search',
-    //     'selected_title': 'Selected',
-    //     'not_found_items': 'Not found items',
-    //     'apply_button': 'Apply',
-    //     'cancel_button': 'Cancel'
-    // };
-
     constructor() {
     }
 
     ngOnInit() {
+        // console.log('hie selectors init started');
+        // console.log(this.model);
+        // console.log('hie selectors init ended');
     }
 
     ngOnChanges(ch: SimpleChanges) {
         if (ch['model']) {
+            //console.log("ngOnChanges HierarchicalSelectorComponent");
             this.rootLevelItems = this.model.getFirstLevelItems();
             this.items = this.model.getFlatListItems();
             this.itemsToShow = this.getFilteredItems(this.searchText);
         }
     }
-    ngAfterViewChecked(){
-        //console.log("ngAfterViewChecked HierarchicalSelectorComponent");
-        //add variable to pass if changes were done and only in that case call the following
-        //this method is being called too often
-        this.rootLevelItems = this.model.getFirstLevelItems();
-        this.items = this.model.getFlatListItems();
-        this.itemsToShow = this.getFilteredItems(this.searchText);
-    }
-
 
     private getFilteredItems(searchText: string = null) {
 
@@ -95,11 +80,9 @@ export class HierarchicalSelectorComponent implements OnInit, OnChanges {
             let idsArray = this.items.map(function(a) {return a.id;});
             if (item.isSelected) {
                 this.model.deselect(idsArray);
-                //this.model.isAnythingSelected = false;
             }
             else {
                 this.model.select(idsArray);
-                //this.model.isAnythingSelected = true;
             }
         }
         else {
@@ -116,7 +99,14 @@ export class HierarchicalSelectorComponent implements OnInit, OnChanges {
                 }
             }
         }
-        console.log("click - selected items", this.model.selected.length);
+        this.selectionChangedEmit();
+        // if (this.model.selected.length == 0){
+        //     this.nothingSelected.emit(true);
+        // }
+        // else{
+        //     this.nothingSelected.emit(false);
+        // }
+        //console.log("click - selected items", this.model.selected.length);
 
     }
 
@@ -133,7 +123,17 @@ export class HierarchicalSelectorComponent implements OnInit, OnChanges {
                 this.model.deselect([totalId]);
             }
         }
-        console.log("desel - selected items", this.model.selected.length);
+        this.selectionChangedEmit();
+        //console.log("desel - selected items", this.model.selected.length);
+    }
+
+    private selectionChangedEmit(){
+        if (this.model.selected.length == 0){
+            this.nothingSelected.emit(true);
+        }
+        else{
+            this.nothingSelected.emit(false);
+        }
     }
 
     private onSearchTextChange(text: string) {

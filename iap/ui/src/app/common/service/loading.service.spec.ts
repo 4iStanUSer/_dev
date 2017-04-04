@@ -1,11 +1,11 @@
 /* tslint:disable:no-unused-variable */
 
-import {addProviders, async, inject} from '@angular/core/testing';
+import {TestBed , async, inject} from '@angular/core/testing';
 import {LoadingService} from './loading.service';
 
 describe('Service: Loading', () => {
     beforeEach(() => {
-        addProviders([LoadingService]);
+        TestBed.configureTestingModule([LoadingService]);
     });
 
     it('should inject it dependencies',

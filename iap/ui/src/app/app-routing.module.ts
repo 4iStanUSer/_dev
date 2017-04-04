@@ -1,30 +1,27 @@
 ﻿import {NgModule}     from '@angular/core';
 import {RouterModule} from '@angular/router';
-import {AuthGuard} from "./login-page/auth.guard";
+import {AuthGuard} from "./common/login-page/auth.guard";
+import {ForecastComponent} from "./forecast/forecast.component";
 import {LandingPageComponent} from "./landing-page/landing-page.component";
-import {LoginPageComponent} from "./login-page/login-page.component";
-import {TestComponent} from './login-page/notification/test.components'
+
 @NgModule({
     imports: [
         RouterModule.forRoot([
             {
                 path:'',
                 pathMatch: 'full',
-                redirectTo:'/login_page'
-            },
-            {
-                path: 'login_page',
-                component: LoginPageComponent,
+                redirectTo:'/landing'
             },
              {
-                path: 'landing',
-                component: LandingPageComponent,
+                path: 'forecast',
+                component: ForecastComponent,
                 canActivate: [AuthGuard],
             },
             {
-                path:'notification',
-                component: TestComponent,
-            }
+                path:'landing',
+                component: LandingPageComponent,
+            },
+
         ])
     ],
     exports: [

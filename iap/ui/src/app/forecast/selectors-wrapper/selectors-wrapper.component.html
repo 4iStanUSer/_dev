@@ -1,0 +1,56 @@
+<div class="c-top-info">
+
+    <div class="c-top-info__item" *ngFor="let sel of wConfigObject['order'] | iterateObjectByOrder: wConfigObject['selectors']; let i = index" >
+        <div
+                class="c-top-info__inner c-top-info__inner--{{ sel['icon'] }}"
+                (click)="showPopUpClick(wConfigObject['order'][i], $event)"
+        >
+            <span>{{currentSelection[wConfigObject['order'][i]]}}</span>
+            <!--?<span *ngIf="currentSelection[wConfigObject['order'][i]] && currentSelection[wConfigObject['order'][i]].length > 0">-->
+                <!--?<span *ngFor="let s of currentSelection[wConfigObject['order'][i]]">-->
+                    <!--?{{ s.name }}-->
+                    <!--?<span>,&nbsp;</span>-->
+                <!--?</span>-->
+
+            <!--?</span>-->
+<!--
+            <span *ngIf="!sel['selected'] || sel['selected'].length == 0">
+                {{ sel['model']['placeholder'] }}
+            </span>
+            -->
+            <!--?<span>-->
+                <!--?{{ sel['placeholder'] }}-->
+            <!--?</span>-->
+        </div>
+    </div>
+</div>
+
+<div
+             class="l-cat-popup"
+             *ngIf="isExpanded" >
+
+
+<selectors
+        [defaultSelection]="wDefaultSelection"
+        [configObject]="wConfigObject"
+        [tabToActivate]="clickedTab"
+        #selectorsRef
+></selectors>
+
+<div class="l-cat-popup__buttons">
+             <a class="c-button c-button--90 c-button--orange"
+                [class.deactivated]="selectorsRef.deactivate"
+                (click)="onApplyClick(selectorsRef.getSelection())"
+             >
+                 <!--?{{staticConfig.fields['apply_button']}}-->
+                 apply
+             </a>
+             <!--?<a class="c-button c-button--90 c-button--orange" (click)="getSelection()">-->
+                 <!--?test getSel-->
+             <!--?</a>-->
+             <a class="c-button c-button--90 c-button--transparent" (click)="onCancelClick()">
+                 <!--?{{staticConfig.fields['cancel_button']}}-->
+                 cancel
+             </a>
+         </div>
+     </div>
