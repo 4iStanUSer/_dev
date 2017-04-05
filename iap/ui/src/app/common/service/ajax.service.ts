@@ -409,7 +409,7 @@ export class AjaxService {
      */
     private handleSiteError(res: ServerResponse, blackBox: Subject<any>) {
         // TODO Show error at view
-        console.log(res)
+        console.log(res);
 
         if (res.isAuthError() && this.auth) {
             console.log("App data:" + res.getData());

@@ -2,8 +2,10 @@ import {NgModule} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {
     CommonModule,
+    Location,
     LocationStrategy,
-    HashLocationStrategy
+    HashLocationStrategy,
+    PathLocationStrategy,
 } from '@angular/common';
 import { AuthHttp, AuthConfig } from 'angular2-jwt';
 import { Http, HttpModule, RequestOptions} from '@angular/http';
@@ -13,22 +15,17 @@ import {AppRoutingModule} from './app-routing.module'
 import {AppComponent} from './app.component';
 import {AuthGuard} from
     "./common/login-page/auth.guard"
-
 import {CommonServicesModule} from
     "./common/module/common-services.module";
 import {LandingPageModule} from
     "./landing-page/landing-page.module";
-
 import {NotificationComponent} from
     "./common/notification/notification.component"
-
 import {NotificationService} from
     "./common/service/notification.service"
-
 import {MenuWidgetComponent} from "./forecast/menu-widget/menu-widget.component"
 import {ForecastComponent} from "./forecast/forecast.component";
 import {ForecastModule} from "./forecast/forecast.module";
-
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     return new AuthHttp(new AuthConfig({
@@ -61,9 +58,8 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
         [AppComponent],
 
     providers: [
-        {
-            provide: LocationStrategy, useClass: HashLocationStrategy
-        },
+        Location,
+        {provide: LocationStrategy, useClass: HashLocationStrategy},
         AuthService,
         NotificationService,
         AuthGuard,
