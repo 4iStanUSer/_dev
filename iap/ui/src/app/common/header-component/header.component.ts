@@ -26,7 +26,6 @@ export class HeaderComponent implements  AfterViewInit{
     {
 
 
-
             let UserMenu_componentFactory =
                 this._componentFactoryResolver.resolveComponentFactory(UserMenu);
             this.widget = this.adHost.createComponent(UserMenu_componentFactory);

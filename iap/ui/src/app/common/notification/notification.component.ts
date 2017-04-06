@@ -22,6 +22,7 @@ export class NotificationComponent implements OnDestroy{
 
         this.subscription = this.notificationService.getMessage().subscribe(
         config => {
+                   console.log("Config Received");
                    this.header = config['header'];
                    this.body = config['body'];
                    this.buttons = config['buttons'];

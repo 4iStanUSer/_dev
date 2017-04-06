@@ -4,7 +4,7 @@ import {
     CanActivateChild,
     Router,
     ActivatedRouteSnapshot,
-    RouterStateSnapshot
+    RouterStateSnapshot,
 } from '@angular/router';
 
 import {Observable} from 'rxjs/Observable';
@@ -32,7 +32,7 @@ export class AuthGuard implements CanActivate, CanActivateChild {
      * @returns {Observable<boolean>}
      */
     canActivate(route: ActivatedRouteSnapshot,
-                state: RouterStateSnapshot): Observable<boolean> {
+                    state: RouterStateSnapshot): Observable<boolean> {
         console.log('AuthGuard#canActivate called');
         let url: string = state.url;
         console.log(state.url);

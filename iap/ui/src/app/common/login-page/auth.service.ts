@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import { Http, Response} from '@angular/http';
-
+import {Location} from '@angular/common';
 import {Observable} from 'rxjs/Rx';
 import { AuthHttp } from 'angular2-jwt';
 import { tokenNotExpired } from 'angular2-jwt';
@@ -30,7 +30,7 @@ export class AuthService {
      * @type {jwtHelper}
      */
 
-    constructor(private http: Http, public authHttp: AuthHttp) {
+    constructor(private http: Http, public authHttp: AuthHttp, private location:Location) {
 
         this.tokenName = "token";
     }
@@ -43,9 +43,8 @@ export class AuthService {
      * @returns {Observable<boolean>}
      */
     login(username: string, password: string) {
-        console.log("Login module");
         // return this.http.post('http://127.0.0.1:6543/login',
-        return this.http.post('http://localhost:6543/login',
+        return this.http.post('/login',
             JSON.stringify({ username: username, password: password }))
             .map(res => res.json())
             .subscribe(
@@ -64,7 +63,7 @@ export class AuthService {
      * @returns {Observable<boolean>}
      */
     logout() {
-        this.authHttp.post('http://localhost:6543/logout', '')
+        this.authHttp.post('logout', '')
         .subscribe(
             data => console.log(data),
             err => console.log(err),
