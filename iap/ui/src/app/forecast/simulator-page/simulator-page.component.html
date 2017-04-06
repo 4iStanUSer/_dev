@@ -1,13 +1,475 @@
-<div class="container-fluid">
-    Queue: {{ queueToSave | json }}
+<section class="l-app__main">
+<div class="c-eclipse"></div>
+<div class="simulator">
+    <div class="simulator__main">
+        <div class="simulator__left">
+            <div class="m-scenarios-page m-scenarios-page--active">
+                <selectors-wrapper></selectors-wrapper>
+                <div class="simulator__left__content">
+                    <div class="l-dash-area__main">
+                      <div class="c-board">
+                        <!--left sidebar-->
+                        <div class="c-board__aside">
+                          <ul class="c-aside-tabs">
+                              {{isRouteActive(['./forecast-results'])}}
+                            <li class="c-aside-tabs__item" routerLinkActive="c-aside-tabs__item--active">
+                                <a routerLink="./forecast-results"><span>Forecast Results</span></a>
+                            </li>
+                            <li class="c-aside-tabs__item" routerLinkActive="c-aside-tabs__item--active">
+                                <a routerLink="./drivers-summary"><span>Driver's Summary</span></a>
+                            </li>
+                            <li class="c-aside-tabs__item" routerLinkActive="c-aside-tabs__item--active">
+                                <a routerLink="./drivers-details"><span>Driver's Details</span></a>
+                            </li>
+                            <li class="c-aside-tabs__item" routerLinkActive="c-aside-tabs__item--active">
+                                <a routerLink="./scenario-insights"><span>Scenario Insights</span></a>
+                            </li>
+                          </ul>
+                        </div>
+                        <div class="c-board__diag">
+                            <div class="c-sim c-sim--active" name="moduleSimDetails">
+                                <router-outlet></router-outlet>
+                            </div>
+                        </div>
+                      </div>
+                    </div>
+                </div><!---------------- simulator__right__content ---------------->
+            </div><!---------------- m-scenarios-page ---------------->
+        </div><!---------------- simulator__left ---------------->
+        <div class="simulator__right">
+              <div class="sidebar-sim-sum" name="sidebarSummary">
+                <div class="sidebar-sim-sum__item c-sidebar-block">
+                  <div class="c-sidebar-block__pane">
+                    <h4 class="c-sidebar-block__title">Display</h4>
+                  </div>
+                  <div class="c-sidebar-block__content">
+                    <h5 class="c-sidebar-block__title c-sidebar-block__title--subtitle">Baseline Scenario</h5>
+                    <div class="c-sidebar-block__line">
+                      <select class="c-select h-width-150">
+                        <option>Current</option>
+                      </select>
+                      <div class="c-triple-changer c-triple-changer--sim c-triple-changer--double-icon h-width-auto">
+                        <div class="c-triple-changer__item c-triple-changer__item--icon c-triple-changer__item--delivery c-triple-changer__item--active"></div>
+                        <div class="c-triple-changer__item c-triple-changer__item--icon c-triple-changer__item--purchase"></div>
+                      </div>
+                    </div>
+                    <div class="c-sidebar-block__line">
+                      <div class="c-triple-changer c-triple-changer--sim c-triple-changer--double-icon">
+                        <div class="c-triple-changer__item c-triple-changer__item--icon c-triple-changer__item--abs c-triple-changer__item--active"></div>
+                        <div class="c-triple-changer__item c-triple-changer__item--icon c-triple-changer__item--growth"> </div>
+                      </div>
+                      <div class="c-triple-changer c-triple-changer--sim c-triple-changer--triple-icon">
+                        <div class="c-triple-changer__item c-triple-changer__item--icon c-triple-changer__item--value c-triple-changer__item--active"> </div>
+                        <div class="c-triple-changer__item c-triple-changer__item--icon c-triple-changer__item--volume"></div>
+                        <div class="c-triple-changer__item c-triple-changer__item--icon c-triple-changer__item--price"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="sidebar-sim-sum__item c-sidebar-block">
+                  <div class="c-sidebar-block__pane">
+                    <h4 class="c-sidebar-block__title">Scenarios actions</h4>
+                  </div>
+                  <div class="c-sidebar-block__content">
+                    <ul class="c-sidebar-block__line c-actions-list">
+                      <li class="c-actions-list__item c-actions-list__item--save"></li>
+                      <li class="c-actions-list__item c-actions-list__item--save-as"></li>
+                      <li class="c-actions-list__item c-actions-list__item--print">
+                        <ul class="c-actions-list__dropdown">
+                          <li class="c-actions-list__dropdown-item">Print</li>
+                          <li class="c-actions-list__dropdown-item">Save as PDF</li>
+                          <li class="c-actions-list__dropdown-item">Generate XLS report</li>
+                        </ul>
+                      </li>
+                      <li class="c-actions-list__item c-actions-list__item--export"></li>
+                      <li class="c-actions-list__item c-actions-list__item--reset"></li>
+                      <li class="c-actions-list__item c-actions-list__item--share"></li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="sidebar-sim-sum__item c-sidebar-block">
+                  <div class="c-sidebar-block__pane c-sidebar-block__pane--blue">
+                    <h4 class="c-sidebar-block__title">Forecast</h4>
+                    <div class="c-sidebar-block__pane-triangle c-sidebar-block__pane-triangle--collapse"></div>
+                  </div>
+                  <div class="c-sidebar-block__content">
+                    <div class="c-sidebar-block__line c-sidebar-cagr">
+                      <h4 class="c-sidebar-cagr__title">Growth (CAGR)</h4>
+                      <div class="c-sidebar-cagr__value"><span class="c-sidebar-cagr__value-sub c-sidebar-cagr__value-sub--top c-sidebar-cagr__value-sub--orange">13/15</span><span class="c-sidebar-cagr__value-sub c-sidebar-cagr__value-sub--orange">-4%</span></div>
+                      <div class="c-sidebar-cagr__value"><span class="c-sidebar-cagr__value-sub c-sidebar-cagr__value-sub--top">15/16F/20F</span><span class="c-sidebar-cagr__value-sub">+11%</span></div>
+                    </div>
+                    <div class="c-sidebar-block__line c-sidebar-diag"><img class="h-test-img" src="../assets/img/test/ic-high-charts.svg"></div>
+                  </div>
+                </div>
+                <div class="sidebar-sim-sum__item sidebar-sim-sum__item--decomp c-sidebar-block">
+                  <div class="c-sidebar-block__pane c-sidebar-block__pane--blue">
+                    <h4 class="c-sidebar-block__title">Decomposition:</h4>
+                    <div class="c-sidebar-block__pane-triangle c-sidebar-block__pane-triangle--collapse"></div>
+                  </div>
+                  <div class="c-sidebar-block__content">
+                    <div class="c-sidebar-block__line c-sidebar-block__line--center">
+                      <div class="c-select c-select-date c-select--170">(Q1, 2015 - Q3, 2016)
+                        <!--popup-->
+                        <div class="c-popup c-popup--date c-popup--sidebar">
+                          <div class="c-popup__changer">
+                            <div class="c-triple-changer">
+                              <div class="c-triple-changer__item">monthly</div>
+                              <div class="c-triple-changer__item c-triple-changer__item--active">quaterly</div>
+                              <div class="c-triple-changer__item">annual</div>
+                            </div>
+                          </div>
+                          <div class="c-popup__slider">
+                            <div class="c-range-slider">
+                              <div class="c-range-slider__inputs">
+                                <input class="c-range-slider__input" id="rangeDateFirst" value="Q1, 2015"><span>- </span>
+                                <input class="c-range-slider__input c-range-slider__input--active" id="rangeDateSecond" value="Q3, 2016"><span>- </span>
+                                <input class="c-range-slider__input" id="rangeDateThird" value="Q4, 2017">
+                              </div>
+                              <div class="c-range-slider__center">
+                                <div class="c-range-slider__line">
+                                  <div class="c-range-slider__item">
+                                    <div class="c-range-slider__marker c-range-slider__marker--start"></div>
+                                    <div class="c-range-slider__label c-range-slider__label--start">Q1, 2015</div>
+                                  </div>
+                                  <div class="c-range-slider__item c-range-slider__item--active">
+                                    <div class="c-range-slider__marker c-range-slider__marker--middle"></div>
+                                    <div class="c-range-slider__label c-range-slider__label--middle">Q3, 2016</div>
+                                  </div>
+                                  <div class="c-range-slider__item">
+                                    <div class="c-range-slider__marker c-range-slider__marker--end"></div>
+                                    <div class="c-range-slider__label c-range-slider__label--end">Q4, 2017</div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="c-range-slider__buttons">
+                                <button class="c-button c-button--green c-button--90">Apply</button>
+                                <button class="c-button c-button--white c-button--90">Cancel</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="c-sidebar-block__line c-sidebar-table">
+                      <div class="c-sidebar-table__scroll">
+                        <div class="c-sidebar-table__table">
+                          <div class="c-sidebar-table__thead">
+                            <div class="c-sidebar-table__tr">
+                              <div class="c-sidebar-table__th c-sidebar-table__th--mega">
+                                <div class="c-sidebar-table__th-inner c-sidebar-table__th-inner--first c-sidebar-table__th-inner--mega">Mega-Drivers</div>
+                              </div>
+                              <div class="c-sidebar-table__th c-sidebar-table__th--sim">
+                                <div class="c-sidebar-table__th-inner c-sidebar-table__th-inner--sim">Simulation</div>
+                              </div>
+                              <div class="c-sidebar-table__th c-sidebar-table__th--base">
+                                <div class="c-sidebar-table__th-inner c-sidebar-table__th-inner--base">Baseline</div>
+                              </div>
+                              <div class="c-sidebar-table__th c-sidebar-table__th--dif">
+                                <div class="c-sidebar-table__th-inner c-sidebar-table__th-inner--last c-sidebar-table__th-inner--dif">Difference</div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="c-sidebar-table__tbody">
+                            <div class="c-sidebar-table__tr">
+                              <div class="c-sidebar-table__td c-sidebar-table__td--first c-sidebar-table__td--mega">
+                                <div class="c-sidebar-table__td-inner">Macroeconomic</div>
+                              </div>
+                              <div class="c-sidebar-table__td c-sidebar-table__td--sim c-sidebar-table__td--red">16.3</div>
+                              <div class="c-sidebar-table__td c-sidebar-table__td--base">
+                                 15.3</div>
+                              <div class="c-sidebar-table__td c-sidebar-table__td--dif c-sidebar-table__td--down">5236</div>
+                            </div>
+                            <div class="c-sidebar-table__tr">
+                              <div class="c-sidebar-table__td c-sidebar-table__td--first c-sidebar-table__td--mega">
+                                <div class="c-sidebar-table__td-inner">Media Stand</div>
+                              </div>
+                              <div class="c-sidebar-table__td c-sidebar-table__td--sim">
+                                 16.3</div>
+                              <div class="c-sidebar-table__td c-sidebar-table__td--base c-sidebar-table__td--red">25.1</div>
+                              <div class="c-sidebar-table__td c-sidebar-table__td--dif c-sidebar-table__td--up">
+                                 2865</div>
+                            </div>
+                            <div class="c-sidebar-table__tr">
+                              <div class="c-sidebar-table__td c-sidebar-table__td--first c-sidebar-table__td--mega">
+                                <div class="c-sidebar-table__td-inner">Macroeconomic</div>
+                              </div>
+                              <div class="c-sidebar-table__td c-sidebar-table__td--sim c-sidebar-table__td--red">16.3</div>
+                              <div class="c-sidebar-table__td c-sidebar-table__td--base">
+                                 15.3</div>
+                              <div class="c-sidebar-table__td c-sidebar-table__td--dif c-sidebar-table__td--down">5236</div>
+                            </div>
+                            <div class="c-sidebar-table__tr">
+                              <div class="c-sidebar-table__td c-sidebar-table__td--first c-sidebar-table__td--mega">
+                                <div class="c-sidebar-table__td-inner">Media Stand</div>
+                              </div>
+                              <div class="c-sidebar-table__td c-sidebar-table__td--sim">
+                                 16.3</div>
+                              <div class="c-sidebar-table__td c-sidebar-table__td--base c-sidebar-table__td--red">25.1</div>
+                              <div class="c-sidebar-table__td c-sidebar-table__td--dif c-sidebar-table__td--up">
+                                 2865</div>
+                            </div>
+                            <div class="c-sidebar-table__tr">
+                              <div class="c-sidebar-table__td c-sidebar-table__td--first c-sidebar-table__td--mega">
+                                <div class="c-sidebar-table__td-inner">Macroeconomic</div>
+                              </div>
+                              <div class="c-sidebar-table__td c-sidebar-table__td--sim c-sidebar-table__td--red">16.3</div>
+                              <div class="c-sidebar-table__td c-sidebar-table__td--base">
+                                 15.3</div>
+                              <div class="c-sidebar-table__td c-sidebar-table__td--dif c-sidebar-table__td--down">5236</div>
+                            </div>
+                            <div class="c-sidebar-table__tr">
+                              <div class="c-sidebar-table__td c-sidebar-table__td--first c-sidebar-table__td--mega">
+                                <div class="c-sidebar-table__td-inner">Media Stand</div>
+                              </div>
+                              <div class="c-sidebar-table__td c-sidebar-table__td--sim">
+                                 16.3</div>
+                              <div class="c-sidebar-table__td c-sidebar-table__td--base c-sidebar-table__td--red">25.1</div>
+                              <div class="c-sidebar-table__td c-sidebar-table__td--dif c-sidebar-table__td--up">
+                                 2865</div>
+                            </div>
+                            <div class="c-sidebar-table__tr">
+                              <div class="c-sidebar-table__td c-sidebar-table__td--first c-sidebar-table__td--mega">
+                                <div class="c-sidebar-table__td-inner">Macroeconomic</div>
+                              </div>
+                              <div class="c-sidebar-table__td c-sidebar-table__td--sim c-sidebar-table__td--red">16.3</div>
+                              <div class="c-sidebar-table__td c-sidebar-table__td--base">
+                                 15.3</div>
+                              <div class="c-sidebar-table__td c-sidebar-table__td--dif c-sidebar-table__td--down">5236</div>
+                            </div>
+                            <div class="c-sidebar-table__tr">
+                              <div class="c-sidebar-table__td c-sidebar-table__td--first c-sidebar-table__td--mega">
+                                <div class="c-sidebar-table__td-inner">Media Stand</div>
+                              </div>
+                              <div class="c-sidebar-table__td c-sidebar-table__td--sim">
+                                 16.3</div>
+                              <div class="c-sidebar-table__td c-sidebar-table__td--base c-sidebar-table__td--red">25.1</div>
+                              <div class="c-sidebar-table__td c-sidebar-table__td--dif c-sidebar-table__td--up">
+                                 2865</div>
+                            </div>
+                            <div class="c-sidebar-table__tr">
+                              <div class="c-sidebar-table__td c-sidebar-table__td--first c-sidebar-table__td--mega">
+                                <div class="c-sidebar-table__td-inner">Macroeconomic</div>
+                              </div>
+                              <div class="c-sidebar-table__td c-sidebar-table__td--sim c-sidebar-table__td--red">16.3</div>
+                              <div class="c-sidebar-table__td c-sidebar-table__td--base">
+                                 15.3</div>
+                              <div class="c-sidebar-table__td c-sidebar-table__td--dif c-sidebar-table__td--down">5236</div>
+                            </div>
+                            <div class="c-sidebar-table__tr">
+                              <div class="c-sidebar-table__td c-sidebar-table__td--first c-sidebar-table__td--mega">
+                                <div class="c-sidebar-table__td-inner">Media Stand</div>
+                              </div>
+                              <div class="c-sidebar-table__td c-sidebar-table__td--sim">
+                                 16.3</div>
+                              <div class="c-sidebar-table__td c-sidebar-table__td--base c-sidebar-table__td--red">25.1</div>
+                              <div class="c-sidebar-table__td c-sidebar-table__td--dif c-sidebar-table__td--up">
+                                 2865</div>
+                            </div>
+                            <div class="c-sidebar-table__tr">
+                              <div class="c-sidebar-table__td c-sidebar-table__td--first c-sidebar-table__td--mega">
+                                <div class="c-sidebar-table__td-inner">Macroeconomic</div>
+                              </div>
+                              <div class="c-sidebar-table__td c-sidebar-table__td--sim c-sidebar-table__td--red">16.3</div>
+                              <div class="c-sidebar-table__td c-sidebar-table__td--base">
+                                 15.3</div>
+                              <div class="c-sidebar-table__td c-sidebar-table__td--dif c-sidebar-table__td--down">5236</div>
+                            </div>
+                            <div class="c-sidebar-table__tr">
+                              <div class="c-sidebar-table__td c-sidebar-table__td--first c-sidebar-table__td--mega">
+                                <div class="c-sidebar-table__td-inner">Media Stand</div>
+                              </div>
+                              <div class="c-sidebar-table__td c-sidebar-table__td--sim">
+                                 16.3</div>
+                              <div class="c-sidebar-table__td c-sidebar-table__td--base c-sidebar-table__td--red">25.1</div>
+                              <div class="c-sidebar-table__td c-sidebar-table__td--dif c-sidebar-table__td--up">
+                                 2865</div>
+                            </div>
+                            <div class="c-sidebar-table__tr">
+                              <div class="c-sidebar-table__td c-sidebar-table__td--first c-sidebar-table__td--mega">
+                                <div class="c-sidebar-table__td-inner">Macroeconomic</div>
+                              </div>
+                              <div class="c-sidebar-table__td c-sidebar-table__td--sim c-sidebar-table__td--red">16.3</div>
+                              <div class="c-sidebar-table__td c-sidebar-table__td--base">
+                                 15.3</div>
+                              <div class="c-sidebar-table__td c-sidebar-table__td--dif c-sidebar-table__td--down">5236</div>
+                            </div>
+                            <div class="c-sidebar-table__tr">
+                              <div class="c-sidebar-table__td c-sidebar-table__td--first c-sidebar-table__td--mega">
+                                <div class="c-sidebar-table__td-inner">Media Stand</div>
+                              </div>
+                              <div class="c-sidebar-table__td c-sidebar-table__td--sim">
+                                 16.3</div>
+                              <div class="c-sidebar-table__td c-sidebar-table__td--base c-sidebar-table__td--red">25.1</div>
+                              <div class="c-sidebar-table__td c-sidebar-table__td--dif c-sidebar-table__td--up">
+                                 2865</div>
+                            </div>
+                            <div class="c-sidebar-table__tr">
+                              <div class="c-sidebar-table__td c-sidebar-table__td--first c-sidebar-table__td--mega">
+                                <div class="c-sidebar-table__td-inner">Macroeconomic</div>
+                              </div>
+                              <div class="c-sidebar-table__td c-sidebar-table__td--sim c-sidebar-table__td--red">16.3</div>
+                              <div class="c-sidebar-table__td c-sidebar-table__td--base">
+                                 15.3</div>
+                              <div class="c-sidebar-table__td c-sidebar-table__td--dif c-sidebar-table__td--down">5236</div>
+                            </div>
+                            <div class="c-sidebar-table__tr">
+                              <div class="c-sidebar-table__td c-sidebar-table__td--first c-sidebar-table__td--mega">
+                                <div class="c-sidebar-table__td-inner">Media Stand</div>
+                              </div>
+                              <div class="c-sidebar-table__td c-sidebar-table__td--sim">
+                                 16.3</div>
+                              <div class="c-sidebar-table__td c-sidebar-table__td--base c-sidebar-table__td--red">25.1</div>
+                              <div class="c-sidebar-table__td c-sidebar-table__td--dif c-sidebar-table__td--up">
+                                 2865</div>
+                            </div>
+                            <div class="c-sidebar-table__tr">
+                              <div class="c-sidebar-table__td c-sidebar-table__td--first c-sidebar-table__td--mega">
+                                <div class="c-sidebar-table__td-inner">Macroeconomic</div>
+                              </div>
+                              <div class="c-sidebar-table__td c-sidebar-table__td--sim c-sidebar-table__td--red">16.3</div>
+                              <div class="c-sidebar-table__td c-sidebar-table__td--base">
+                                 15.3</div>
+                              <div class="c-sidebar-table__td c-sidebar-table__td--dif c-sidebar-table__td--down">5236</div>
+                            </div>
+                            <div class="c-sidebar-table__tr">
+                              <div class="c-sidebar-table__td c-sidebar-table__td--first c-sidebar-table__td--mega">
+                                <div class="c-sidebar-table__td-inner">Media Stand</div>
+                              </div>
+                              <div class="c-sidebar-table__td c-sidebar-table__td--sim">
+                                 16.3</div>
+                              <div class="c-sidebar-table__td c-sidebar-table__td--base c-sidebar-table__td--red">25.1</div>
+                              <div class="c-sidebar-table__td c-sidebar-table__td--dif c-sidebar-table__td--up">
+                                 2865</div>
+                            </div>
+                            <div class="c-sidebar-table__tr">
+                              <div class="c-sidebar-table__td c-sidebar-table__td--first c-sidebar-table__td--mega">
+                                <div class="c-sidebar-table__td-inner">Macroeconomic</div>
+                              </div>
+                              <div class="c-sidebar-table__td c-sidebar-table__td--sim c-sidebar-table__td--red">16.3</div>
+                              <div class="c-sidebar-table__td c-sidebar-table__td--base">
+                                 15.3</div>
+                              <div class="c-sidebar-table__td c-sidebar-table__td--dif c-sidebar-table__td--down">5236</div>
+                            </div>
+                            <div class="c-sidebar-table__tr">
+                              <div class="c-sidebar-table__td c-sidebar-table__td--first c-sidebar-table__td--mega">
+                                <div class="c-sidebar-table__td-inner">Media Stand</div>
+                              </div>
+                              <div class="c-sidebar-table__td c-sidebar-table__td--sim">
+                                 16.3</div>
+                              <div class="c-sidebar-table__td c-sidebar-table__td--base c-sidebar-table__td--red">25.1</div>
+                              <div class="c-sidebar-table__td c-sidebar-table__td--dif c-sidebar-table__td--up">
+                                 2865</div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="sidebar-sim-sum sidebar-sim-sum--active" name="sidebarResults">
+                <div class="sidebar-sim-sum__item c-sidebar-block">
+                  <div class="c-sidebar-block__pane">
+                    <h4 class="c-sidebar-block__title">Display</h4>
+                  </div>
+                  <div class="c-sidebar-block__content">
+                    <h5 class="c-sidebar-block__title c-sidebar-block__title--subtitle">Baseline Scenario</h5>
+                    <div class="c-sidebar-block__line">
+                      <select class="c-select h-width-150">
+                        <option>Current</option>
+                      </select>
+                      <div class="c-triple-changer c-triple-changer--sim c-triple-changer--double-icon h-width-auto">
+                        <div class="c-triple-changer__item c-triple-changer__item--icon c-triple-changer__item--delivery c-triple-changer__item--active"></div>
+                        <div class="c-triple-changer__item c-triple-changer__item--icon c-triple-changer__item--purchase"></div>
+                      </div>
+                    </div>
+                    <div class="c-sidebar-block__line">
+                      <div class="c-triple-changer c-triple-changer--sim c-triple-changer--double-icon">
+                        <div class="c-triple-changer__item c-triple-changer__item--icon c-triple-changer__item--abs c-triple-changer__item--active"></div>
+                        <div class="c-triple-changer__item c-triple-changer__item--icon c-triple-changer__item--growth"> </div>
+                      </div>
+                      <div class="c-triple-changer c-triple-changer--sim c-triple-changer--triple-icon">
+                        <div class="c-triple-changer__item c-triple-changer__item--icon c-triple-changer__item--value c-triple-changer__item--active"> </div>
+                        <div class="c-triple-changer__item c-triple-changer__item--icon c-triple-changer__item--volume"></div>
+                        <div class="c-triple-changer__item c-triple-changer__item--icon c-triple-changer__item--price"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="sidebar-sim-sum__item c-sidebar-block">
+                  <div class="c-sidebar-block__pane">
+                    <h4 class="c-sidebar-block__title">Scenarios actions</h4>
+                  </div>
+                  <div class="c-sidebar-block__content">
+                    <ul class="c-sidebar-block__line c-actions-list">
+                      <li class="c-actions-list__item c-actions-list__item--save"></li>
+                      <li class="c-actions-list__item c-actions-list__item--save-as"></li>
+                      <li class="c-actions-list__item c-actions-list__item--print">
+                        <ul class="c-actions-list__dropdown">
+                          <li class="c-actions-list__dropdown-item">Print</li>
+                          <li class="c-actions-list__dropdown-item">Save as PDF</li>
+                          <li class="c-actions-list__dropdown-item">Generate XLS report</li>
+                        </ul>
+                      </li>
+                      <li class="c-actions-list__item c-actions-list__item--share"></li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="sidebar-sim-sum__item sidebar-sim-sum__item--worklist c-sidebar-block">
+                  <div class="c-sidebar-block__pane c-sidebar-block__pane--blue c-sidebar-block__pane--icon">
+                    <h4 class="c-sidebar-block__title c-sidebar-block__title--icon c-sidebar-block__title--worklist">Work List</h4>
+                  </div>
+                  <div class="c-sidebar-block__content c-sidebar-block__content--icon">
+                      <p>Datepicker</p>
+                    <ul class="c-simple-list">
+                      <li class="c-simple-list__item"><span class="c-simple-list__text">New Important Scenario</span><span class="c-simple-list__date">Sep 27, 2016</span></li>
+                      <li class="c-simple-list__item"><span class="c-simple-list__text">New Important Scenario</span><span class="c-simple-list__date">Sep 27, 2016</span></li>
+                      <li class="c-simple-list__item"> <span class="c-simple-list__text">Fav Scenario 2016</span><span class="c-simple-list__date c-simple-list__date--red">Sep 27, 2016</span></li>
+                      <li class="c-simple-list__item"><span class="c-simple-list__text">New Important Scenario</span><span class="c-simple-list__date">Sep 27, 2016</span></li>
+                      <li class="c-simple-list__item"><span class="c-simple-list__text">New Important Scenario</span><span class="c-simple-list__date">Sep 27, 2016</span></li>
+                      <li class="c-simple-list__item"> <span class="c-simple-list__text">Fav Scenario 2016</span><span class="c-simple-list__date c-simple-list__date--red">Sep 27, 2016</span></li>
+                      <li class="c-simple-list__item"><span class="c-simple-list__text">New Important Scenario</span><span class="c-simple-list__date">Sep 27, 2016</span></li>
+                      <li class="c-simple-list__item"><span class="c-simple-list__text">New Important Scenario</span><span class="c-simple-list__date">Sep 27, 2016</span></li>
+                      <li class="c-simple-list__item"> <span class="c-simple-list__text">Fav Scenario 2016</span><span class="c-simple-list__date c-simple-list__date--red">Sep 27, 2016</span></li>
+                      <li class="c-simple-list__item"><span class="c-simple-list__text">New Important Scenario</span><span class="c-simple-list__date">Sep 27, 2016</span></li>
+                      <li class="c-simple-list__item"><span class="c-simple-list__text">New Important Scenario</span><span class="c-simple-list__date">Sep 27, 2016</span></li>
+                      <li class="c-simple-list__item"> <span class="c-simple-list__text">Fav Scenario 2016</span><span class="c-simple-list__date c-simple-list__date--red">Sep 27, 2016</span></li>
+                      <li class="c-simple-list__item"><span class="c-simple-list__text">New Important Scenario</span><span class="c-simple-list__date">Sep 27, 2016</span></li>
+                      <li class="c-simple-list__item"><span class="c-simple-list__text">New Important Scenario</span><span class="c-simple-list__date">Sep 27, 2016</span></li>
+                      <li class="c-simple-list__item"> <span class="c-simple-list__text">Fav Scenario 2016</span><span class="c-simple-list__date c-simple-list__date--red">Sep 27, 2016</span></li>
+                      <li class="c-simple-list__item"><span class="c-simple-list__text">New Important Scenario</span><span class="c-simple-list__date">Sep 27, 2016</span></li>
+                      <li class="c-simple-list__item"><span class="c-simple-list__text">New Important Scenario</span><span class="c-simple-list__date">Sep 27, 2016</span></li>
+                      <li class="c-simple-list__item"> <span class="c-simple-list__text">Fav Scenario 2016</span><span class="c-simple-list__date c-simple-list__date--red">Sep 27, 2016</span></li>
+                      <li class="c-simple-list__item"><span class="c-simple-list__text">New Important Scenario</span><span class="c-simple-list__date">Sep 27, 2016</span></li>
+                      <li class="c-simple-list__item"><span class="c-simple-list__text">New Important Scenario</span><span class="c-simple-list__date">Sep 27, 2016</span></li>
+                      <li class="c-simple-list__item"> <span class="c-simple-list__text">Fav Scenario 2016</span><span class="c-simple-list__date c-simple-list__date--red">Sep 27, 2016</span></li>
+                      <li class="c-simple-list__item"><span class="c-simple-list__text">New Important Scenario</span><span class="c-simple-list__date">Sep 27, 2016</span></li>
+                      <li class="c-simple-list__item"><span class="c-simple-list__text">New Important Scenario</span><span class="c-simple-list__date">Sep 27, 2016</span></li>
+                      <li class="c-simple-list__item"> <span class="c-simple-list__text">Fav Scenario 2016</span><span class="c-simple-list__date c-simple-list__date--red">Sep 27, 2016</span></li>
+                      <li class="c-simple-list__item"><span class="c-simple-list__text">New Important Scenario</span><span class="c-simple-list__date">Sep 27, 2016</span></li>
+                      <li class="c-simple-list__item"><span class="c-simple-list__text">New Important Scenario</span><span class="c-simple-list__date">Sep 27, 2016</span></li>
+                      <li class="c-simple-list__item"> <span class="c-simple-list__text">Fav Scenario 2016</span><span class="c-simple-list__date c-simple-list__date--red">Sep 27, 2016</span></li>
+                      <li class="c-simple-list__item"><span class="c-simple-list__text">New Important Scenario</span><span class="c-simple-list__date">Sep 27, 2016</span></li>
+                      <li class="c-simple-list__item"><span class="c-simple-list__text">New Important Scenario</span><span class="c-simple-list__date">Sep 27, 2016</span></li>
+                      <li class="c-simple-list__item"> <span class="c-simple-list__text">Fav Scenario 2016</span><span class="c-simple-list__date c-simple-list__date--red">Sep 27, 2016</span></li>
+                      <li class="c-simple-list__item"><span class="c-simple-list__text">New Important Scenario</span><span class="c-simple-list__date">Sep 27, 2016</span></li>
+                      <li class="c-simple-list__item"><span class="c-simple-list__text">New Important Scenario</span><span class="c-simple-list__date">Sep 27, 2016</span></li>
+                      <li class="c-simple-list__item"> <span class="c-simple-list__text">Fav Scenario 2016</span><span class="c-simple-list__date c-simple-list__date--red">Sep 27, 2016</span></li>
+                      <li class="c-simple-list__item"><span class="c-simple-list__text">New Important Scenario</span><span class="c-simple-list__date">Sep 27, 2016</span></li>
+                      <li class="c-simple-list__item"><span class="c-simple-list__text">New Important Scenario</span><span class="c-simple-list__date">Sep 27, 2016</span></li>
+                      <li class="c-simple-list__item"> <span class="c-simple-list__text">Fav Scenario 2016</span><span class="c-simple-list__date c-simple-list__date--red">Sep 27, 2016</span></li>
+                      <li class="c-simple-list__item"><span class="c-simple-list__text">New Important Scenario</span><span class="c-simple-list__date">Sep 27, 2016</span></li>
+                      <li class="c-simple-list__item"><span class="c-simple-list__text">New Important Scenario</span><span class="c-simple-list__date">Sep 27, 2016</span></li>
+                      <li class="c-simple-list__item"> <span class="c-simple-list__text">Fav Scenario 2016</span><span class="c-simple-list__date c-simple-list__date--red">Sep 27, 2016</span></li>
+                      <li class="c-simple-list__item"><span class="c-simple-list__text">New Important Scenario</span><span class="c-simple-list__date">Sep 27, 2016</span></li>
+                      <li class="c-simple-list__item"><span class="c-simple-list__text">New Important Scenario</span><span class="c-simple-list__date">Sep 27, 2016</span></li>
+                      <li class="c-simple-list__item"> <span class="c-simple-list__text">Fav Scenario 2016</span><span class="c-simple-list__date c-simple-list__date--red">Sep 27, 2016</span></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+        </div><!---------------- simulator__right ---------------->
+    </div><!---------------- simulator__main ---------------->
+</div><!---------------- simulator ---------------->
+</section>
 
-    <!--<accordion-table-->
-        <!--#acc_table-->
-        <!--*ngIf="tableData"-->
-        <!--[data]="tableData"-->
-        <!--[config]="{'isEditable': true}"-->
-        <!--(changed)="onTableDataChanged($event)"-->
-        <!--&gt;</accordion-table>-->
-
-    <button *ngIf="queueToSave.length > 0" (click)="recalculate()">Calculate</button>
-</div>

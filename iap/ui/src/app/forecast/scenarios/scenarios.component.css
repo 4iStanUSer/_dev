@@ -2144,7 +2144,7 @@
   z-index: 10;
   width: 256px;
   height: 100%;
-  box-shadow: 0px 0px 22px 0px rgba(0,0,0,0.5);
+  box-shadow: 0 0 22px 0 rgba(0,0,0,0.5);
 }
 .scenarios__right {
   width: calc(100% - 256px);

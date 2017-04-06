@@ -13,7 +13,13 @@ import {UsersComponent} from "./users/users.component";
 import {UsersListComponent} from "./users/users-list/users-list.component";
 
 import {NewScenarioComponent} from "./scenarios/new-scenario/new-scenario.component";
+
 import {SimulatorPageComponent} from "./simulator-page/simulator-page.component";
+import {ForecastResultsComponent} from "./simulator-page/forecast-results/forecast-results.component";
+import {DriversSummaryComponent} from "./simulator-page/drivers-summary/drivers-summary.component";
+import {DriversDetailsComponent} from "./simulator-page/drivers-details/drivers-details.component";
+import {ScenarioInsightsComponent} from "./simulator-page/scenario-insights/scenario-insights.component";
+
 import {GeneralComponent} from "./dashboard/general/general.component";
 import {DriverSummaryComponent} from "./dashboard/driver-summary/driver-summary.component";
 import {DriverDetailComponent} from "./dashboard/driver-detail/driver-detail.component";
@@ -107,7 +113,31 @@ import {EditPageComponent} from "./edit-page/edit-page.component";
                     },
                     {
                         path: 'simulator',
-                        component: SimulatorPageComponent
+                        component: SimulatorPageComponent,
+
+                        children: [
+                            {
+                                path: '',
+                                redirectTo: 'forecast-results',
+                                pathMatch: 'full'
+                            },
+                            {
+                                path: 'forecast-results',
+                                component: ForecastResultsComponent,
+                            },
+                            {
+                                path: 'drivers-summary',
+                                component: DriversSummaryComponent,
+                            },
+                            {
+                                path: 'drivers-details',
+                                component: DriversDetailsComponent,
+                            },
+                            {
+                                path: 'scenario-insights',
+                                component: ScenarioInsightsComponent,
+                            }
+                        ]
                     },
                     {
                         path: 'edit-page',

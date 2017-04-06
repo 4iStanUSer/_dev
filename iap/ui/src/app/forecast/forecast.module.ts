@@ -2,6 +2,7 @@ import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
+import {AuthGuard} from "../common/module/login/auth-guard";
 
 import {CommonServicesModule} from "../common/module/common-services.module";
 import {ForecastRoutingModule} from "./forecast-routing.module";
@@ -17,7 +18,13 @@ import { TableComponent } from "../common/cmp/table/table.component";
 
 import {DashboardComponent} from "./dashboard/dashboard.component";
 import {DataManagerService} from "./dashboard/data-manager.service";
+
 import {SimulatorPageComponent} from "./simulator-page/simulator-page.component";
+import {ForecastResultsComponent} from "./simulator-page/forecast-results/forecast-results.component";
+import {DriversSummaryComponent} from "./simulator-page/drivers-summary/drivers-summary.component";
+import {DriversDetailsComponent} from "./simulator-page/drivers-details/drivers-details.component";
+import {ScenarioInsightsComponent} from "./simulator-page/scenario-insights/scenario-insights.component";
+
 import {SimulatorPageDataManagerService} from "./simulator-page/simulator-page-data-manager.service";
 
 //import {ForecastComponent} from "./forecast.component";
@@ -77,7 +84,6 @@ import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect';
     ],
     declarations: [
         //ForecastComponent,
-
         DashboardComponent,
         GeneralComponent,
         DriverDetailComponent,
@@ -90,7 +96,12 @@ import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect';
         ScenariosComponent,
         ScenariosListComponent,
         NewScenarioComponent,
+
         SimulatorPageComponent,
+        ForecastResultsComponent,
+        DriversSummaryComponent,
+        DriversDetailsComponent,
+        ScenarioInsightsComponent,
 
         UsersComponent,
         UsersListComponent,
@@ -114,6 +125,7 @@ import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect';
         SelectorsWrapperComponent
     ],
     providers: [
+        AuthGuard,
         CommonServicesModule,
         ScenarioService,
         DataManagerService, // TODO Rename (VL)
