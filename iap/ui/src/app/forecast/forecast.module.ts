@@ -53,7 +53,7 @@ import { LanguageSelectorComponent } from './language-selector/language-selector
 
 import { LandingPageComponent } from './landing-page/landing-page.component';
 import { LandingPageService } from './landing-page/landing-page.service';
-import {AuthGuard} from "../common/module/login/auth-guard";
+// import {AuthGuard} from "../common/module/login/auth-guard";
 import {SelectorsComponent} from "./selectors/selectors.component";
 import {FlatSelectorComponent} from "./selectors/flat-selector/flat-selector.component";
 import {HierarchicalSelectorComponent} from "./selectors/hierarchical-selector/hierarchical-selector.component";

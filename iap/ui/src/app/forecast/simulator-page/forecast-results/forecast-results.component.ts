@@ -1,17 +1,18 @@
-import {Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+
+
 import { SimulatorService } from '../simulator.service';
 
 
 @Component({
     templateUrl: './forecast-results.component.html',
+    styleUrls: ['./../simulator-page.component.css'],
     providers: [SimulatorService]
 })
-export class ForecastResultsComponent implements OnInit {
-    constructor(private __simulatorService: SimulatorService) { }
+export class ForecastResultsComponent {
 
-    ngOnInit() {
-        console.log('---ngOnInit ForecastResultsComponent', this.__simulatorService.getData());
-    }
+
+
 }
 
 
