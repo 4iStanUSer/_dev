@@ -52,6 +52,7 @@ def get_page_config(tool_id, page_name, language):
     registry = threadlocal.get_current_registry()
     #get config folder
     config_folder = registry.settings['path.config']
+    print(config_folder, tool_id)
     tool_folder = os.path.join(config_folder, tool_id)
     lang_file = os.path.join(tool_folder, language + '_' + page_name + '.ini')
     conf_file = os.path.join(tool_folder,
