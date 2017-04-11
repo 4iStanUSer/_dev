@@ -1,21 +1,20 @@
-import {Component, OnInit} from '@angular/core';
-import { Router } from '@angular/router';
+import {Component} from '@angular/core';
+
+
+import {SimulatorService} from './simulator.service';
 
 
 @Component({
     templateUrl: './simulator-page.component.html',
-    styleUrls: ['./simulator-page.component.css']
+    styleUrls: ['./simulator-page.component.css'],
+    providers: [SimulatorService]
 })
-export class SimulatorPageComponent implements OnInit {
-    constructor(
-        private router: Router
-    ) {}
+export class SimulatorPageComponent {
+    simulator_data: Object = {};
 
-    ngOnInit() {
-    }
+    constructor(private __simulatorService: SimulatorService) { }
 
-    isRouteActive(route: any) {
-        // this.router.navigate(route);
-        console.log(this.router);
+    getSimulatorData(): void {
+        this.__simulatorService.getSimulatorData().then(data => this.simulator_data = data);
     }
 }
