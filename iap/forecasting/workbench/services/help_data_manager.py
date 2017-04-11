@@ -43,20 +43,15 @@ def get_time_series_values(permission_tree, ent,  ts_borders, var, periods_data,
         ts = var.get_time_series(ts_name)
 
         ts_period = [str(i) for i in range(int(float(ts_period[0])), int(float(ts_period[1]))+1,1)]
-        index_ts_period = ['0', str(len(ts_period)-1)]
 
-        item_path = ["*-*".join(ent.path), var_info['id'], ts_name, index_ts_period]
+        #item_path = ["*-*".join(ent.path), var_info['id'], ts_name, index_ts_period]
         values = []
-        stamps = []
 
-        mask = access_manager.check_permission(permission_tree, item_path, pointer=0)
-        if mask == "Unavailable":
-            continue
-        else:
-            time_indexes = access_manager.check_period_perm(mask['tree'], ts_period=index_ts_period)
-            stamps = [ts_period[i] for i in time_indexes]
-            for time_stamp in stamps:
-                values.append(ts.get_value(time_stamp)[0])
+        #mask = access_manager.check_permission(permission_tree, item_path, pointer=0)
+
+        stamps = ts_period
+        for time_stamp in stamps:
+            values.append(ts.get_value(time_stamp)[0])
 
         ps = var.get_periods_series(ts_name)
         # check ps
@@ -72,6 +67,39 @@ def get_time_series_values(permission_tree, ent,  ts_borders, var, periods_data,
         periods_data[ts_name][var_info['id']] = \
             [dict(abs=0, rate=ps.get_value(p), start=p[0], end=p[1])
              for p in gr_periods[ts_name]]
+
+
+def _get_time_series_values(permission_tree, ent,  ts_borders, var, periods_data, time_series_data, var_info, gr_periods):
+
+    print("Time Series Data", time_series_data)
+    for ts_name, ts_period in ts_borders.items():
+
+        ts = var.get_time_series(ts_name)
+
+        ts_period = [str(i) for i in range(int(float(ts_period[0])), int(float(ts_period[1]))+1,1)]
+        index_ts_period = ['0', str(len(ts_period)-1)]
+
+        item_path = ["*-*".join(ent.path), var_info['id'], ts_name, index_ts_period]
+        values = []
+        stamps = []
+
+        mask = access_manager.check_permission(permission_tree, item_path, pointer=0)
+        if mask == "Unavailable":
+            continue
+        else:
+            time_indexes = access_manager.check_period_perm(mask['tree'], ts_period=index_ts_period)
+            stamps = [ts_period[i] for i in time_indexes]
+            for time_stamp in stamps:
+                values.append(ts.get_value(time_stamp)[0])
+                time_series_data[time_stamp]['values'].append({'variable': var_info['id'], 'value' :ts.get_value(time_stamp)[0]})
+
+        ps = var.get_periods_series(ts_name)
+        # check ps
+
+        periods_data[ts_name][var_info['id']] = \
+            [dict(abs=0, rate=ps.get_value(p), start=p[0], end=p[1])
+             for p in gr_periods[ts_name]]
+
 
 
 def get_var_view_prop(config, vars_ids, lang, vars_types, vars_view_props):

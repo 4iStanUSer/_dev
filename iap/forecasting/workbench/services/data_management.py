@@ -66,8 +66,8 @@ def get_entity_data(permission_tree, container, config, entities_ids, lang):
         config=None
     )
     # Get requested entities.
-    entity_id = entities_ids[0]
-    #TODO realise for all entities
+
+    entity_id = 12
     ent = container.get_entity_by_id(entity_id)
 
     # Define default selector for time periods.
@@ -448,33 +448,42 @@ def get_simulator_value_data(permission_tree, container, config, entity_id, lang
     ts_tree, ts_borders = data__service.get_ts_tree_and_ts_border(config=config, container=container)
 
     # Get variables to view. Values, growth rates, CAGRS.
-    time_series_data = dict([(x, dict()) for x in ts_borders.keys()])
+
     periods_data = dict([(x, dict()) for x in ts_borders.keys()])
 
     time_labels, gr_periods = data__service.get_growth_period_and_time_label(ts_borders=ts_borders, container=container)
 
+    #TODO add hierarchical data
+    time_series_data = dict([(x, dict(values=[])) for x in time_labels['annual']])
+
     try:
         items_view_props = config.get_vars_for_view(meta=ent.meta, path=ent.path)
+
     except Exception:
         return None
     else:
+        variables = []
         for item in items_view_props:
+
             # Get entity to get variables from.
             curr_ent = container.get_entity_by_filter(ent, item['filter'])
 
             # Collect variables data.
             absent_vars_ids = []
             for var_info in item['variables']:
+                variables.append(var_info)
                 var = curr_ent.get_variable(var_info['id'])
                 if var is None:
                     absent_vars_ids.append(var_info['id'])
                     continue
 
-                data__service.get_time_series_values(permission_tree=permission_tree, ent=ent,ts_borders=ts_borders,
+                data__service._get_time_series_values(permission_tree=permission_tree, ent=ent, ts_borders=ts_borders,
                                                      var=var, periods_data=periods_data, time_series_data=time_series_data,
                                                      var_info=var_info, gr_periods=gr_periods)
 
         custom_data = time_series_data
+
+        print("Custom Data", custom_data)
 
         return custom_data
 
