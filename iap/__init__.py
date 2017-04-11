@@ -36,6 +36,12 @@ def common_routing(config):
                     route_name='common_views.check_logged_in',
                     renderer='json')
 
+    config.add_route('common_views.get_config', '/get_config')
+    config.add_view(common_views.get_config,
+                    route_name='common_views.get_config',
+                    renderer='json')
+
+
     config.add_route('common_views.login', '/login')
     config.add_view(common_views.login,
                     route_name='common_views.login',
@@ -215,6 +221,8 @@ def forecast_routing(config):
     config.add_route('forecast.get_simulator_custom_data', '/get_custom_data')
     config.add_view(f_simulator.get_simulator_custom_data, route_name='forecast.get_simulator_custom_data',
                                                             renderer='json')
+
+
 
 
 def main(global_config, **settings):
