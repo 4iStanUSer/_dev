@@ -332,7 +332,9 @@ class ItemConfig:
         if self.lang_specific_props == {}:
             return [copy.copy(self.general_props)]
 
-        return [copy.copy(self.general_props),lang_spec_prop]
+        else:
+            lang_extracted = get_lang_spec_prop(lang, lang_spec_prop)
+        return [dict(lang_extracted, **copy.copy(self.general_props))]
 
     def get_for_save(self):
 
@@ -342,3 +344,13 @@ class ItemConfig:
 
 
 
+def get_lang_spec_prop(lang,lang_spec_prop):
+
+    lang_extracted = {}
+
+    for key in lang_spec_prop.keys():
+        if key.split("-")[1]==lang:
+            _key = key.split("-")[-1]
+            lang_extracted[_key] = lang_spec_prop[key]
+
+    return lang_extracted

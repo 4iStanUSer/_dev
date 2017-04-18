@@ -84,10 +84,10 @@
   cursor: pointer;
 }
 .c-changer--main {
-  min-width: 165px;
+  min-width: 90px;
 }
 .c-changer--main .c-changer__item {
-  width: 53px;
+  width: 45px;
   height: 26px;
   float: left;
   padding: 0;

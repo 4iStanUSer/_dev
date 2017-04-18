@@ -1,0 +1,555 @@
+.c-sim-parts {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-justify-content: space-between;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+.c-sim-parts__title {
+  width: 100%;
+  margin: 0 0 5px;
+  font-family: 'open_sansbold';
+  font-size: 13px;
+  color: #626970;
+}
+.c-sim-parts__diag {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  height: calc(100% - 23px);
+  width: 100%;
+}
+.c-sim-parts__diag--cagr {
+  width: calc(100% - 109px);
+}
+.c-sim-parts__item {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-wrap: wrap;
+      -ms-flex-wrap: wrap;
+          flex-wrap: wrap;
+  height: 193px;
+}
+.c-sim-parts__item:first-child {
+  padding-right: 20px;
+  border-right: 1px solid #d8e0ee;
+}
+.c-sim-parts__item:last-child {
+  padding-left: 20px;
+}
+.c-sim-parts__item--detailed {
+  width: calc(51% - 20px);
+}
+.c-sim-parts__item--growth {
+  width: calc(49% - 20px);
+}
+.c-sim-parts__item--simulation {
+  width: calc(50% - 20px);
+}
+.c-sim-parts__item--scenario {
+  width: calc(50% - 20px);
+}
+.c-sim-parts__cagr {
+  width: 97px;
+  margin-top: -23px;
+  padding: 0 6px;
+  box-shadow: none;
+}
+.c-changer__item a {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.c-graph-tabs {
+  background-color: #fff;
+  border-radius: 4px;
+}
+.c-graph-tabs__item {
+  display: none;
+}
+.c-graph-tabs__item.c-graph-tabs__item--active {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+}
+
+.c-sim-parts__diag > div{
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-justify-content: center;
+    -ms-flex-pack: center;
+      justify-content: center;
+  -webkit-align-items: center;
+    -ms-flex-align: center;
+      align-items: center;
+}
+.c-sim-parts__diag--cagr {
+  padding: 0 24px 0 10px;
+  box-sizing: border-box;
+}
+
+
+.chart-container {
+  width: 100%;
+  height: 100%;
+  margin-top: 2px;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+}
+.chart-container .axis {
+  display: block;
+  padding-right: 8px;
+  width: 82px;
+  height: 100%;
+}
+.chart-container > div {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-justify-content: center;
+    -ms-flex-pack: center;
+      justify-content: center;
+  -webkit-align-items: center;
+    -ms-flex-align: center;
+      align-items: center;
+}
+
+.chart-container-divider {
+  width: 100%;
+  height: 100%;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-align-items: center;
+    -ms-flex-align: center;
+      align-items: center;
+}
+.chart-container-divider img{
+  -webkit-align-items: center;
+    -ms-flex-align: center;
+      align-items: center;
+}
+.chart-container-divider .axis {
+  display: block;
+  padding: 0;
+  min-width: 82px;
+  width: 82px;
+  height: 100%;
+  margin-right: 15px;
+}
+.chart-container-divider .axis .bottomAxis {
+  bottom: 10px;
+}
+
+.chart-container-divider > div {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  padding: 0 20px;
+  -webkit-justify-content: center;
+    -ms-flex-pack: center;
+      justify-content: center;
+  -webkit-align-items: center;
+    -ms-flex-align: center;
+      align-items: center;
+}
+
+.chart-container-wide {
+    width: 100%;
+    height: 100%;
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-align-items: center;
+      -ms-flex-align: center;
+        align-items: center;
+}
+.chart-container-wide img{
+  -webkit-align-items: center;
+    -ms-flex-align: center;
+      align-items: center;
+}
+.chart-container-wide .axis {
+  display: block;
+  padding: 0;
+  padding-left: 5px;
+  min-width: 105px;
+  width: 105px;
+  height: 100%;
+  margin-right: 10px;
+}
+.chart-container-wide > div {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-justify-content: center;
+    -ms-flex-pack: center;
+      justify-content: center;
+  -webkit-align-items: center;
+    -ms-flex-align: center;
+      align-items: center;
+}
+
+.chart-container-group {
+  width: 100%;
+  height: 100%;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-justify-content: space-between;
+    -ms-flex-pack: justify;
+      justify-content: space-between;
+}
+.chart-container-group .axis {
+  display: block;
+  min-width: 82px;
+  width: 82px;
+  height: 100%;
+}
+
+.chart-container-group > div{
+  max-width: 222px;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-align-items: center;
+    -ms-flex-align: center;
+      align-items: center;
+  -webkit-justify-content: space-between;
+    -ms-flex-pack: justify;
+      justify-content: space-between;
+  margin-top: -2px;
+}
+
+.chart-container-group > div:last-child {
+  margin-right: 3.4%;
+}
+
+.axis {
+  position: relative;
+  text-align: right;
+  font-family: 'open_sansbold';
+  font-size: 12.5px;
+  color: #626970;
+}
+.axis .opacity {
+  opacity: 0.5;
+  font-size: 10.5px;
+}
+.axis .topAxis {
+  width: 100%;
+  position: absolute;
+  top: 20px;
+}
+.axis .bottomAxis {
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+}
+
+/*-------------------Line-compare---------------------*/
+.line-compare .highcharts-navigator-outline {
+  display: none;
+}
+
+/* -------------------Waterfall----------------------- */
+.waterfall .highcharts-text-outline {
+  display: none;
+}
+.waterfall .labels {
+  text-align: center;
+  font-size: 11px;
+  font-family: 'open_sanssemibold';
+  color: #2e3438;
+  height: 65px;
+}
+.waterfall .labels.slim {
+  height: 30px;
+  max-width: 46px;
+  word-wrap: break-word;
+  white-space: pre-line;
+}
+
+.waterfall .labels.outside{
+  color: #44b3c2;
+  font-family: 'open_sansbold';
+  font-size: 12px;
+}
+.waterfall .labels .growing {
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  width: 50px;
+  z-index: -1;
+  padding: 5px 0;
+  font-size: 12px;
+  font-family: 'open_sansbold';
+  background-color: #ecf0f7;
+  border-radius: 3px;
+}
+.waterfall .labels .growing .plusSymbol{
+  font-family: sans-serif;
+  font-weight: 600;
+}
+
+.waterfall .labels .growing.plus {
+  background-color: #e6f6f0;
+  color: #55c398;
+}
+.waterfall .labels .growing.minus {
+  background-color: #fdf2e5;
+  color: #f1a94e;
+}
+.waterfall .highcharts-series {
+  padding: 0 40px;
+}
+.waterfall .highcharts-tick {
+  stroke-dasharray: 2;
+}
+.waterfall .highcharts-tick:nth-last-child(3), .highcharts-tick:nth-last-child(2){
+  opacity: 0;
+}
+
+/* ------------------Gistogram------------------- */
+.gistogram .highcharts-graph {
+  stroke-width: 0;
+}
+.gistogram .highcharts-markers {
+  visibility: hidden;
+}
+.gistogram .labels {
+  position: relative;
+  text-align: center;
+  font-size: 12px;
+  font-family: 'open_sansbold';
+  top: -6px;
+}
+
+.gistogram .labels .growing {
+  width: 50px;
+  position: absolute;
+  bottom: -38px;
+  padding: 5px 0;
+  font-size: 12px;
+  font-family: 'open_sansbold';
+  border-radius: 3px;
+}
+.gistogram .labels .growing .plusSymbol{
+  font-family: sans-serif;
+  font-weight: 600;
+}
+.gistogram .labels .growing.plus {
+  background-color: #e6f6f0;
+  color: #55c398;
+}
+.gistogram .labels .growing.minus {
+  background-color: #fdf2e5;
+  color: #f1a94e;
+}
+
+.gistogram .highcharts-tick {
+  stroke-dasharray: 2;
+}
+.gistogram .highcharts-tick:nth-last-child(3), .highcharts-tick:nth-last-child(2){
+  opacity: 0;
+}
+.gistogram .highcharts-text-outline {
+  display: none;
+}
+
+/* ------------------------------------------------- */
+.gistogram-growthrate .highcharts-markers {
+  visibility: hidden;
+}
+.gistogram-growthrate .highcharts-text-outline {
+  display: none;
+}
+
+.gistogram-growthrate .highcharts-graph {
+  stroke-width: 0;
+}
+.gistogram-growthrate .labels {
+  position: relative;
+  text-align: center;
+  font-size: 12px;
+  font-family: 'open_sansbold';
+  top: 10px;
+}
+
+.gistogram-growthrate .labels .growing {
+  position: absolute;
+  bottom: 14px;
+  font-size: 12px;
+  font-family: 'open_sansbold';
+  z-index: -1;
+  padding: 5px 0;
+  width: 50px;
+  background-color: #ecf0f7;
+  border-radius: 3px;
+}
+.gistogram-growthrate .labels .growing .plusSymbol{
+  font-family: sans-serif;
+  font-weight: 600;
+}
+
+.gistogram-growthrate .labels .growing.plus {
+  background-color: #e6f6f0;
+  color: #55c398;
+}
+.gistogram-growthrate .labels .growing.minus {
+  background-color: #fdf2e5;
+  color: #f1a94e;
+}
+
+.gistogram-growthrate .highcharts-tick {
+  stroke-dasharray: 2;
+}
+
+/*  ------------------Gistogram Arrows-------------- */
+.gistogram-growthrate .arrow, .gistogram-divider-growthrate .arrow {
+  position: relative;
+}
+.gistogram-growthrate .arrow .label, .gistogram-divider-growthrate .arrow .label{
+  position: absolute;
+  left: -14px;
+  font-weight: 600;
+}
+.gistogram-growthrate .top.arrow .label, .gistogram-divider-growthrate .top.arrow .label{
+  top: -26px;
+  color: #55c398;
+}
+.gistogram-growthrate .bottom.arrow .label, .gistogram-divider-growthrate .bottom.arrow .label{
+  top: 10px;
+  color: #e45641;
+}
+.gistogram-growthrate .arrow .after, .gistogram-divider-growthrate .arrow .after {
+  position: absolute;
+  left: -12px;
+  border: 12px solid transparent;
+  border-right: 12px solid #fff;
+  border-top: 12px solid #fff;
+}
+.gistogram-growthrate .top.arrow .after, .gistogram-divider-growthrate .top.arrow .after {
+  bottom: -20px;
+  transform: rotate(-45deg);
+}
+.gistogram-growthrate .bottom.arrow .after, .gistogram-divider-growthrate .bottom.arrow .after {
+  top: -20px;
+  transform: rotate(135deg);
+}
+
+/* --------------------Gistogram-divider------------------------- */
+.gistogram-divider .highcharts-text-outline {
+  display: none;
+}
+.gistogram-divider .labels {
+  text-align: center;
+  font-size: 12px;
+  font-family: 'open_sansbold';
+  position: relative;
+  top: -7px;
+}
+.gistogram-divider .labels .growing {
+  position: absolute;
+  z-index: -1;
+  bottom: -40px;
+  padding: 5px 0;
+  width: 50px;
+  font-size: 12px;
+  font-family: 'open_sansbold';
+  background-color: #ecf0f7;
+  border-radius: 3px;
+}
+.gistogram-divider .labels .growing .plusSymbol{
+  font-family: sans-serif;
+  font-weight: 600;
+}
+.gistogram-divider .labels .growing.plus {
+  background-color: #e6f6f0;
+  color: #55c398;
+}
+.gistogram-divider .labels .growing.minus {
+  background-color: #fdf2e5;
+  color: #f1a94e;
+}
+
+.gistogram-divider .highcharts-tick {
+  stroke-dasharray: 2;
+}
+
+.gistogram-divider .highcharts-tick:nth-last-child(3), .highcharts-tick:nth-last-child(2){
+  opacity: 0;
+}
+.highcharts-container {
+  overflow: visible;
+}
+.gistogram-divider {
+  overflow: visible !important;
+}
+
+
+/* ----------------gistogram-divider-growthrate--------------- */
+.gistogram-divider-growthrate {
+  overflow: visible !important;
+}
+
+.gistogram-divider-growthrate .labels {
+  position: relative;
+  text-align: center;
+  font-size: 12px;
+  font-family: 'open_sansbold';
+  top: 5px;
+}
+
+/* ----------------divider-border-labels------------- */
+.gistogram-divider .border-label, .gistogram-divider-growthrate .border-label {
+  width: 65px;
+  border-radius: 5px 5px 0 0;
+  padding: 4px 0;
+  position: absolute;
+  font-family: 'open_sansregular';
+  font-size: 11px;
+  text-align: center;
+  top: 40px;
+  color: #888e95;
+}
+.gistogram-divider .border-label.left, .gistogram-divider-growthrate .border-label.left  {
+  left: -42px;
+  transform: rotate(-90deg);
+  background-color: #cfd5de;
+}
+.gistogram-divider .border-label.right, .gistogram-divider-growthrate .border-label.right {
+  right: -42px;
+  transform: rotate(90deg);
+  background-color: #f9ddb8;
+}

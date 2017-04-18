@@ -68,6 +68,7 @@ import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect';
 // import {FlatSelectorComponent} from "../common/cmp/selectors/flat-selector/flat-selector.component";
 // import {HierarchicalSelectorComponent} from "../common/cmp/selectors/hierarchical-selector/hierarchical-selector.component";
 // import {RegionSelectorComponent} from "../common/cmp/selectors/region-selector/region-selector.component";
+import { LocalStorageModule } from 'angular-2-local-storage';
 
 
 @NgModule({
@@ -79,7 +80,11 @@ import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect';
         CommonServicesModule,
         ChartModule,
         MyDateRangePickerModule,
-        MultiselectDropdownModule
+        MultiselectDropdownModule,
+        LocalStorageModule.withConfig({
+            prefix: 'forecast',
+            storageType: 'localStorage'
+        })
     ],
     declarations: [
         //ForecastComponent,

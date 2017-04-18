@@ -36,12 +36,6 @@ def common_routing(config):
                     route_name='common_views.check_logged_in',
                     renderer='json')
 
-    config.add_route('common_views.get_config', '/get_config')
-    config.add_view(common_views.get_config,
-                    route_name='common_views.get_config',
-                    renderer='json')
-
-
     config.add_route('common_views.login', '/login')
     config.add_view(common_views.login,
                     route_name='common_views.login',
