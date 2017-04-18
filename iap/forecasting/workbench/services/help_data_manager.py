@@ -1,5 +1,6 @@
 from ....common.helper import dicts_left_join
 from ....common.repository.models_managers import access_manager
+import math
 
 def _get_var_view_prop(config, ent, lang):
     vars_view_props = []
@@ -60,8 +61,8 @@ def get_time_series_values(permission_tree, ent,  ts_borders, var, periods_data,
         time_series_data[ts_name][var_info['id']]['stamps'] = stamps
         time_series_data[ts_name][var_info['id']]['values'] = values
         # TODO fill abs_growth, relative growth, cagrs
-        time_series_data[ts_name][var_info['id']]['abs_growth'] = [None]
-        time_series_data[ts_name][var_info['id']]['relative_growth'] = [None]
+        time_series_data[ts_name][var_info['id']]['abs_growth'] = a_growth_rate(values)
+        time_series_data[ts_name][var_info['id']]['relative_growth'] = r_growth_rate(values)
         time_series_data[ts_name][var_info['id']]['cagrs'] = [None]
 
         periods_data[ts_name][var_info['id']] = \
@@ -71,7 +72,6 @@ def get_time_series_values(permission_tree, ent,  ts_borders, var, periods_data,
 
 def _get_time_series_values(permission_tree, ent,  ts_borders, var, periods_data, time_series_data, var_info, gr_periods):
 
-    print("Time Series Data", time_series_data)
     for ts_name, ts_period in ts_borders.items():
 
         ts = var.get_time_series(ts_name)
@@ -117,9 +117,10 @@ def get_var_view_prop(config, vars_ids, lang, vars_types, vars_view_props):
             format=None,
             hint=''
         )
-        dicts_left_join(view_props, v_props)
+        dicts_left_join(view_props, v_props[0])
         view_props['type'] = vars_types[index]
         vars_view_props.append(view_props)
+
 
 def get_growth_period_and_time_label(ts_borders, container):
 
@@ -147,3 +148,33 @@ def get_ts_tree_and_ts_border(config, container):
         .timeline.get_timeline_tree(top_ts, bottom_ts, top_ts_period)
 
     return  ts_tree, ts_borders
+
+def r_growth_rate(val):
+
+    growth_rate = []
+    for i in range(0, len(val)):
+        if i == 0:
+            v = val[i]
+        else:
+            v = (val[i]-val[i-1])
+
+        growth_rate.append(v)
+    return growth_rate
+
+def a_growth_rate(val):
+
+    growth_rate = []
+    for i in range(0, len(val)):
+        try:
+            if i==0:
+                v = math.log(val[i])
+            else:
+                v = (math.log(val[i]) - math.log(val[i - 1]))
+        except ValueError:
+            v = None
+
+        growth_rate.append(v)
+    return growth_rate
+
+def cagr(values):
+    pass

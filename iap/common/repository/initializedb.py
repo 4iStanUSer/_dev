@@ -157,6 +157,7 @@ def main(argv=sys.argv):
 
 
         for data in perm_data["JJOralCare"]:
+
             data_permission = imanage_access.create_data_permision(project="JJOralCare",
                                                                    in_path=data['in_path'],
                                                                    out_path=data['out_path'],
@@ -181,6 +182,7 @@ def main(argv=sys.argv):
         for i in range(0,5):
             scenario = scenario_manager.create_scenario(ssn, user=None, input_data=input_data_1)
             scenario.users = [user_1, user_2]
+
         for i in range(0, 5):
             scenario = scenario_manager.create_scenario(ssn, user=None, input_data=input_data_2)
             scenario.users = [user_1, user_2]

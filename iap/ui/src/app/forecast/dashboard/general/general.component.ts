@@ -161,6 +161,7 @@ export class GeneralComponent implements OnInit {
         let subject = new Subject<ForecastTabsAbsData>();
 
         let outputVars = this.dm.dataModel.getVariablesByType('output');
+        console.log("Output", outputVars);
         let period = this.dm.getPeriod('main');
         if (period) {
             let timescale = period.timescale;

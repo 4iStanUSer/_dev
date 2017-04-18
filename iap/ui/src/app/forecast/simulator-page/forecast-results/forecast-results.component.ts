@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-
+import { DataService } from '../data.service'
 
 import { SimulatorService } from '../simulator.service';
 
@@ -11,7 +11,10 @@ import { SimulatorService } from '../simulator.service';
 })
 export class ForecastResultsComponent {
 
+    constructor(private data_manager:DataService){
+        this.data_manager.getSimulatorData();
 
+    }
 
 }
 

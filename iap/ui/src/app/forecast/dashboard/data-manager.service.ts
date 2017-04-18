@@ -200,6 +200,7 @@ export class DataManagerService {
                 'project_id':1// TODO Replace
             }
         }).subscribe((data)=> {
+                console.log(data);
                 this.isData['dynamic']['received'] = true;
 
                 let d = data['data'];
@@ -220,6 +221,7 @@ export class DataManagerService {
                     c['decomp_period']['start'],
                     c['decomp_period']['end']
                 );
+
 
 
                 this.dataModel = new DashboardDataModel(
@@ -340,6 +342,9 @@ export class DataManagerService {
 
         pointsValue = this.dataModel.getPointsValue(timescale_id, variable_id,
             timepoints_ids);
+        console.log(l);
+        console.log(pointsValue);
+        console.log(timescale_id, variable_id, timepoints_ids);
         for (let i = 0; i < l; i++) {
             // timepoints[i] - TODO get full_name
             output.abs.push({
