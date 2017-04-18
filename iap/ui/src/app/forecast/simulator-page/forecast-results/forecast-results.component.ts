@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 import { Component, OnInit } from '@angular/core';
 
+=======
+import { Component } from '@angular/core';
+import { DataService } from '../data.service'
+>>>>>>> b35c9e44565db04967ff5097454affc31fcc415a
 
 import { SimulatorService } from '../simulator.service';
 import { NewSimulatorService } from '../new_simulator.service';
@@ -20,6 +25,7 @@ export class ForecastResultsComponent implements OnInit {
         forecast_expand_button_title: 'Expand'
     };
 
+<<<<<<< HEAD
     /**
      * Current config for page
      * @type {Object}
@@ -31,6 +37,12 @@ export class ForecastResultsComponent implements OnInit {
      * @type {Object}
      */
     private state: Object = {};
+=======
+    constructor(private data_manager:DataService){
+        this.data_manager.getSimulatorData();
+
+    }
+>>>>>>> b35c9e44565db04967ff5097454affc31fcc415a
 
 
     constructor (

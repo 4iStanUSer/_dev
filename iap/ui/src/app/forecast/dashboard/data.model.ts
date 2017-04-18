@@ -3,6 +3,7 @@ type TimescalesInput = Array<Timescale>;
 type TimelablesInput = Array<Timelabel>;
 type VariablesInput = Array<Variable>;
 type DecompTypesInput = Array<DecompType>;
+
 type VariableValuesInput = {
     [timescale_id: string]: {
         [variable_id: string]: {
@@ -15,6 +16,7 @@ type ChangesOverPeriodInput = {
         [variable_id: string]: Array<ChangeOverPeriod>;
     }
 };
+
 type DecompInput = {
     [timescale_id: string]: {
         [decomp_type_id: string]: Array<Decomposition>
@@ -36,6 +38,7 @@ type Timescale = {
     short_name: string;
     lag: number;
 };
+
 type Timelabel = {
     id: string;
     full_name: string;
@@ -43,6 +46,7 @@ type Timelabel = {
     parent_index: number;
     timescale: string;
 };
+
 export type Variable = {
     id: string;
     full_name: string;
@@ -52,17 +56,20 @@ export type Variable = {
     format: string;
     hint: string;
 };
+
 type DecompType = {
     id: string;
     full_name: string;
     short_name: string;
 }
+
 type ChangeOverPeriod = {
     start: string;
     end: string;
     abs: number;
     rate: number;
 };
+
 type Decomposition = {
     start: string;
     end: string;
@@ -72,6 +79,7 @@ type Decomposition = {
         rate: number;
     }>
 }
+
 type FactorDriver = {
     factor: string; // variable_id
     driver: string; // variable_id
@@ -184,12 +192,15 @@ export class DashboardDataModel {
                    timelabel_ids: Array<string>): Array<number> {
 
         let output = [];
+
         let l = (timelabel_ids && timelabel_ids.length)
             ? timelabel_ids.length : 0;
+        console.log(l);
         for (let i = 0; i < l; i++) {
             try {
                 let tl_id = timelabel_ids[i];
-                let val = this.varValues[timescale_id][variable_id][tl_id];
+                //TODO Question update value structure from backend
+                let val = this.varValues[timescale_id][variable_id]['values'][i];
                 output.push(val);
             } catch (e) {
                 output.push(null);
@@ -250,6 +261,7 @@ export class DashboardDataModel {
     getGrowthRate(variable_id: string, start_timelabel_id: string,
                   end_timelabel_id: string, timescale_id: string): number {
         try {
+            console.log("getGrowthRate", this.changes);
             let l = this.changes[timescale_id][variable_id].length;
             for (let i = 0; i < l; i++) {
                 let change = this.changes[timescale_id][variable_id][i];
@@ -257,6 +269,7 @@ export class DashboardDataModel {
                     change.start == start_timelabel_id
                     && change.end == end_timelabel_id
                 ) {
+                    console.log("Growth Rate for",variable_id, start_timelabel_id, end_timelabel_id, change.abs);
                     return change.abs; // TODO Question: Absolute|Rate OR Update
                 }
             }

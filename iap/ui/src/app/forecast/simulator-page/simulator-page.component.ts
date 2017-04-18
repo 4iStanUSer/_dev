@@ -12,7 +12,6 @@ import {forecastValueRateData} from './../dashboard/data';
 
 import {ButtonsGroupDataInput} from "./../../common/cmp/buttons-group/buttons-group.component";
 
-
 @Component({
     templateUrl: './simulator-page.component.html',
     styleUrls: ['./simulator-page.component.css'],
@@ -55,11 +54,17 @@ export class SimulatorPageComponent {
     @ViewChild(ForecastResultsComponent) forecastResultsComponent: ForecastResultsComponent;
 
 
+<<<<<<< HEAD
     constructor(
         private __localStorageService: LocalStorageService,
         private __simulatorService: SimulatorService,
         private __newSimulatorService: NewSimulatorService,
     ) { }
+=======
+    constructor(private __simulatorService: SimulatorService) {
+
+    }
+>>>>>>> b35c9e44565db04967ff5097454affc31fcc415a
 
     getSimulatorData(): void {
         this.__simulatorService.getSimulatorData().then(data => this.simulator_data = data);

@@ -171,7 +171,11 @@ def get_entity_data(permission_tree, container, config, entities_ids, lang):
                 format=None,
                 hint=''
             )
+<<<<<<< HEAD
             dicts_left_join(view_props, v_props[0])
+=======
+            dicts_left_join(view_props, v_props[0]) #TODO change format of input of dicts_left_join hint:without [0]
+>>>>>>> b35c9e44565db04967ff5097454affc31fcc415a
             view_props['type'] = vars_types[index]
             vars_view_props.append(view_props)
     entity_data['data']['variable_values'] = time_series_data
@@ -260,7 +264,7 @@ def get_decomposition(container, config, entities_ids, timescales_periods):
                     decomp_data.append(
                         dict(ts_name=ts_name, dec_type=var_info['type'],
                              start=p[0], end=p[1], var_id=var_info['id'],
-                             abs=0, rate=ps.get_value(p))
+                             abs=10, rate=4)#rate=ps.get_value(p)
                     )
     return decomp_data
 
@@ -370,17 +374,21 @@ def get_simulator_data(permission_tree, container, config, entity_id, lang):
     #1.1 Load variable properties
 
     ##Start of get_var_view_prop
-    vars_view_props = data__service._get_var_view_prop(config, ent, lang=lang)
-    simulator_data['properties']['variables'] = vars_view_props
+    #vars_view_props = data__service.get_var_view_prop(config, ent, lang=lang)
+    #TODO fix var view values
+    #simulator_data['properties']['variables'] = vars_view_props
 
     #1.2 Load decomposition properties
     dec_types_props = config.get_objects_properties('decomposition', ['value', 'volume'], lang)
+    #TODO fix decomposition and decomposition type properties
     simulator_data['properties']['decomposition'] = dec_types_props
 
 
     #1.3 Load label properties
 
     ts_tree, ts_borders = data__service.get_ts_tree_and_ts_border(config, container)
+    #TS TREE - [{'shot_name':2014,'full_name':2014,'timescale':annual, 'parent_index':None, 'id':2014]
+    #TS BORDER - ['annual':{2013:2016}]
     simulator_data['hierarchy']['timelable_tree'] = ts_tree
 
 
@@ -431,6 +439,7 @@ def get_simulator_data(permission_tree, container, config, entity_id, lang):
         data__service.\
             get_var_view_prop(config, vars_ids, lang, vars_types, vars_view_props)
 
+    simulator_data['properties']['variables'] = vars_view_props
     simulator_data['data']['values']['custom'] = time_series_data
 
     #4.Load user pemission
@@ -457,7 +466,7 @@ def get_simulator_value_data(permission_tree, container, config, entity_id, lang
     time_labels, gr_periods = data__service.get_growth_period_and_time_label(ts_borders=ts_borders, container=container)
 
     #TODO add hierarchical data
-    time_series_data = dict([(x, dict(values=[])) for x in time_labels['annual']])
+    time_series_data = dict([(x, dict()) for x in ts_borders.keys()])
 
     try:
         items_view_props = config.get_vars_for_view(meta=ent.meta, path=ent.path)
@@ -480,7 +489,7 @@ def get_simulator_value_data(permission_tree, container, config, entity_id, lang
                     absent_vars_ids.append(var_info['id'])
                     continue
 
-                data__service._get_time_series_values(permission_tree=permission_tree, ent=ent, ts_borders=ts_borders,
+                data__service.get_time_series_values(permission_tree=permission_tree, ent=ent, ts_borders=ts_borders,
                                                      var=var, periods_data=periods_data, time_series_data=time_series_data,
                                                      var_info=var_info, gr_periods=gr_periods)
 

@@ -57,7 +57,7 @@ export class BarChartComponent implements OnInit {
 
     @Input() set data(data: BarChartDataInput) {
         console.info('BarChartComponent: set data');
-
+        console.log(data);
         let dataToPush = [];
         for (let i = 0; i < data.length; i++) {
             dataToPush.push([

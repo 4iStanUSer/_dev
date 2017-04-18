@@ -72,7 +72,6 @@ def get_time_series_values(permission_tree, ent,  ts_borders, var, periods_data,
 
 def _get_time_series_values(permission_tree, ent,  ts_borders, var, periods_data, time_series_data, var_info, gr_periods):
 
-    print("Time Series Data", time_series_data)
     for ts_name, ts_period in ts_borders.items():
 
         ts = var.get_time_series(ts_name)
@@ -118,9 +117,10 @@ def get_var_view_prop(config, vars_ids, lang, vars_types, vars_view_props):
             format=None,
             hint=''
         )
-        dicts_left_join(view_props, v_props)
+        dicts_left_join(view_props, v_props[0])
         view_props['type'] = vars_types[index]
         vars_view_props.append(view_props)
+
 
 def get_growth_period_and_time_label(ts_borders, container):
 

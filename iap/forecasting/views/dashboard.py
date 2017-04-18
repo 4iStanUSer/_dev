@@ -15,18 +15,18 @@ def get_dashboard_data(req):
     except KeyError as e:
         msg = ErrorManager.get_error_msg(e, lang)
         return send_error_response(msg)
-    try:
-        project = rt.get_state(user_id)._project_id
-        wb = rt.get_wb(user_id)
-        session = req.dbsession
-        permission_tree = build_permission_tree(session, project_name=project)
-        data = data_service.get_entity_data(permission_tree=permission_tree, container=wb.default_container,
+    #try:
+    project = rt.get_state(user_id)._project_id
+    wb = rt.get_wb(user_id)
+    session = req.dbsession
+    permission_tree = build_permission_tree(session, project_name=project)
+    data = data_service.get_entity_data(permission_tree=permission_tree, container=wb.default_container,
                                         config=wb.data_config, entities_ids=wb.selection, lang=lang)
-    except Exception as e:
-        msg = req.get_error_msg(e, lang)
-        return send_error_response(msg)
-    else:
-        return send_success_response(data)
+    #except Exception as e:
+    #msg = req.get_error_msg(e, lang)
+    #return send_error_response(msg)
+    #else:
+    return send_success_response(data)
 
 
 @forbidden_view

@@ -15,6 +15,7 @@ def init_load_container(dev_template, wh, container, config):
 
     top_ts_points = [dict(name_full=i['name_full'], name_short=i['name_short'], children=[])
                      for i in timelines_info]
+    #TODO add children points
     #4.Load Time Line's
     container.timeline.load_timelines(properties,
                                       alias,
