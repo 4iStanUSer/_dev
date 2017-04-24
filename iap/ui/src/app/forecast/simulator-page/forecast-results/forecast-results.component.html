@@ -1,65 +1,6 @@
-<div class="c-sim c-sim--active" *ngIf="state.forecast_collapse_expand === 'collapse'">
-    <div class="c-sim__pane">
-        <h3 class="c-sim__title">{{config.header_title_collapse}}</h3>
-        <div (click)="onSwitcherForecastCollapseExpandButton()" class="c-sim__collapse c-button c-button--expand c-button--90">
-            {{ ((state.forecast_collapse_expand == 'collapse') ? config.forecast_expand_button_title : config.forecast_collapse_button_title) }}
-        </div>
-    </div>
-    <div class="c-sim__top-parts c-sim-parts">
-                          <div class="c-sim-parts__item c-sim-parts__item--simulation">
-                            <h4 class="c-sim-parts__title">Simulation</h4>
-                            asd
-                          </div>
-                          <div class="c-sim-parts__item c-sim-parts__item--scenario">
-                            <h4 class="c-sim-parts__title">Baseline scenario</h4>
-                            asd
-                          </div>
-                        </div>
-    <div class="c-sim__pane c-sim__pane--bottom">
-                          <h4 class="c-sim__title c-sim__title--sub">Forecast data</h4>
-                          <div class="c-sim__link c-sim__link--expand"><span>Expand all</span></div>
-                          <div class="c-sim__link c-sim__link--collapse"><span>Collapse all</span></div>
-                        </div>
-                        <div class="c-sim__table-bottom c-data-table">
-                          <div class="c-data-table__scroll">
-                            <div class="c-data-table__table">
-                              asd
-                            </div>
-                          </div>
-                        </div>
+<div class="c-sim c-sim--active">
+    ForecastResultsComponent
+
+    <bar-chart-divider [data]="BarChartData"></bar-chart-divider>
 </div>
 
-
-<div class="c-sim c-sim--active" *ngIf="state.forecast_collapse_expand === 'expand'">
-    <div class="c-sim__pane">
-        <h3 class="c-sim__title">{{config.header_title_expand}}</h3>
-        <div (click)="onSwitcherForecastCollapseExpandButton()" class="c-sim__collapse c-button c-button--expand c-button--90 c-button--collapse">
-            {{ ((state.forecast_collapse_expand == 'collapse') ? config.forecast_expand_button_title : config.forecast_collapse_button_title) }}
-        </div>
-    </div>
-    <div class="c-sim__top-parts c-sim-parts">
-                          <div class="c-sim-parts__item c-sim-parts__item--detailed">
-                              asd
-                          </div>
-                          <div class="c-sim-parts__item c-sim-parts__item--growth">
-                            <h4 class="c-sim-parts__title">Annual growth rate</h4>
-                            asd
-                          </div>
-                        </div>
-    <div class="c-sim__pane c-sim__pane--bottom">
-                          <h4 class="c-sim__title c-sim__title--sub">Forecast data</h4>
-                          <div class="c-sim__link c-sim__link--expand"><span>Expand all</span></div>
-                          <div class="c-sim__link c-sim__link--collapse"><span>Expand all</span></div>
-                          <div class="c-sim__changer c-triple-changer c-triple-changer--sim">
-                            <div class="c-triple-changer__item c-triple-changer__item--active">monthly</div>
-                            <div class="c-triple-changer__item">quaterly</div>
-                            <div class="c-triple-changer__item">annual</div>
-                          </div>
-                        </div>
-    <div class="c-sim__table-bottom c-table-sum c-table-sum--sales">
-                          <div class="c-table-sum__table">
-                            <!--table header-->
-                            asd
-                          </div>
-                        </div>
-</div>

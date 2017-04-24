@@ -4,9 +4,7 @@ import {Component, ViewChild} from '@angular/core';
 import {ForecastResultsComponent} from './forecast-results/forecast-results.component';
 
 
-import {LocalStorageService} from 'angular-2-local-storage';
 import {SimulatorService} from './simulator.service';
-import { NewSimulatorService } from './new_simulator.service';
 import {forecastValueRateData} from './../dashboard/data';
 
 
@@ -15,7 +13,7 @@ import {ButtonsGroupDataInput} from "./../../common/cmp/buttons-group/buttons-gr
 @Component({
     templateUrl: './simulator-page.component.html',
     styleUrls: ['./simulator-page.component.css'],
-    providers: [SimulatorService, NewSimulatorService]
+    providers: [SimulatorService]
 })
 export class SimulatorPageComponent {
     /**
@@ -54,24 +52,16 @@ export class SimulatorPageComponent {
     @ViewChild(ForecastResultsComponent) forecastResultsComponent: ForecastResultsComponent;
 
 
-<<<<<<< HEAD
-    constructor(
-        private __localStorageService: LocalStorageService,
-        private __simulatorService: SimulatorService,
-        private __newSimulatorService: NewSimulatorService,
-    ) { }
-=======
+
     constructor(private __simulatorService: SimulatorService) {
 
     }
->>>>>>> b35c9e44565db04967ff5097454affc31fcc415a
 
     getSimulatorData(): void {
         this.__simulatorService.getSimulatorData().then(data => this.simulator_data = data);
     }
 
     public forecastResultsComponentUpdateState() {
-        this.forecastResultsComponent.updateState();
     }
 
     // Load global config and merge with local config
@@ -84,10 +74,7 @@ export class SimulatorPageComponent {
         this.config = this.__getConfig(this.default_config);
 
         // Update localStorage
-        this.__localStorageService.set('simulator_forecast_absolute_rate', this.config['forecast_absolute_rate']);
-        this.__localStorageService.set('simulator_forecast_value_volume_price', this.config['forecast_value_volume_price']);
-        this.__localStorageService.set('simulator_base_scenario', this.baseScenario);
-
+        this.config['forecast_value_volume_price'];
         this.collectData();
     }
 
@@ -96,9 +83,9 @@ export class SimulatorPageComponent {
         this.valueVolumePriceSwitcherData = this.getValueVolumePriceSwitcherData();
 
 
-        this.scenariosList = this.__newSimulatorService.getScenariosList();
-        this.baseScenario = this.__newSimulatorService.getBaselineScenario();
-        this.simulationScenario = this.__newSimulatorService.getSimulationScenario();
+        this.scenariosList = this.__simulatorService.getScenariosListData();
+        //this.baseScenario = this.__simulatorService.getBaselineScenario();
+        //this.simulationScenario = this.__simulatorService.getSimulationScenario();
     }
 
     private getAbsRateSwitcherData(): ButtonsGroupDataInput {
@@ -107,7 +94,7 @@ export class SimulatorPageComponent {
         for (let i = 0; i < forecastValueRateData.length; i++) {
             name = (forecastValueRateData[i]['id'] == 'absolute')
                 ? this.config['value_title'] : this.config['growth_rate_title'];
-            sel = (this.__localStorageService.get('simulator_forecast_absolute_rate')
+            sel = (this.config['simulator_forecast_absolute_rate']
                     == forecastValueRateData[i]['id']) ? true : false;
             let opt = {
                 'id': forecastValueRateData[i]['id'],
@@ -120,7 +107,7 @@ export class SimulatorPageComponent {
     }
 
     private getValueVolumePriceSwitcherData(): ButtonsGroupDataInput {
-        const defVal = this.__localStorageService.get('simulator_forecast_value_volume_price').toString();
+        const defVal = this.config['simulator_forecast_value_volume_price'];
         return this.__getDecompTypesSwitcherData(defVal);
     }
 
@@ -159,19 +146,19 @@ export class SimulatorPageComponent {
 
     private onChangedAbsRateState(changes: Object): void {
         console.log('---onChangedAbsRateState');
-        this.__localStorageService.set('simulator_forecast_absolute_rate', changes['id']);
+        this.default_config['simulator_forecast_absolute_rate'] =  changes['id'];
         this.forecastResultsComponentUpdateState();
     }
 
     private onChangedValueVolumePriceSwitcherData(changes: Object): void {
         console.log('---onChangedValueVolumePriceSwitcherData');
-        this.__localStorageService.set('simulator_forecast_value_volume_price', changes['id']);
+        this.default_config['simulator_forecast_value_volume_price'] =  changes['id'];
         this.forecastResultsComponentUpdateState();
     }
 
     private onChangedBaselineScenario(event:any): void {
         console.log('---onChangedBaselineScenario', event.target.value);
-        this.__localStorageService.set('simulator_base_scenario', event.target.value);
+        this.default_config['simulator_forecast_value_volume_price'] =  event.target.value;
         this.forecastResultsComponentUpdateState();
     }
 }

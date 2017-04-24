@@ -46,10 +46,12 @@ export class NotificationComponent implements OnDestroy{
     };
 
     callBack(button) {
-        if (button = "Skip"){
+        console.log(button);
+        if (button == "Skip"){
             this.type="notrealised";
            }
         else {
+            console.log(button);
             this.notificationService.setResponse(button);
 
         }

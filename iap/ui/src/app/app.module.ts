@@ -13,6 +13,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {AuthService} from './common/login-page/auth.service'
 import {AppRoutingModule} from './app-routing.module'
 import {AppComponent} from './app.component';
+import {ConfigurationService} from "./common/service/configuration.service";
 import {AuthGuard} from
     "./common/login-page/auth.guard"
 import {CommonServicesModule} from
@@ -62,6 +63,7 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
         {provide: LocationStrategy, useClass: HashLocationStrategy},
         AuthService,
         NotificationService,
+        ConfigurationService,
         AuthGuard,
         {
             provide: AuthHttp,

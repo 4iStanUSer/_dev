@@ -171,11 +171,7 @@ def get_entity_data(permission_tree, container, config, entities_ids, lang):
                 format=None,
                 hint=''
             )
-<<<<<<< HEAD
             dicts_left_join(view_props, v_props[0])
-=======
-            dicts_left_join(view_props, v_props[0]) #TODO change format of input of dicts_left_join hint:without [0]
->>>>>>> b35c9e44565db04967ff5097454affc31fcc415a
             view_props['type'] = vars_types[index]
             vars_view_props.append(view_props)
     entity_data['data']['variable_values'] = time_series_data

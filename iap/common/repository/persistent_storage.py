@@ -2,7 +2,7 @@ import os
 import pickle
 import datetime
 from ...common import exceptions as ex
-from os import getcwd, getcwdb
+from os import getcwd
 
 FILE_EXTENSION = '.pickle'
 STORAGE_FOLDER_PATH = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))

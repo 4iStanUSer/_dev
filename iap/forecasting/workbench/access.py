@@ -9,7 +9,7 @@ class Access:
     _features = None
     entities = {}
     #sctructure = {"features":[], "entities":[{'path_e':[], "path_c":[], "name":[],"mask":[], "node_type":[]}]}
-    def load(self, permissions: dict, container: Container):
+    def load(self, permissions, container):
         self._features = permissions['features']
         #get features
         permissions_data = permissions['entities']
@@ -47,13 +47,13 @@ class Access:
                         elif element['node_type'] == 'tp':
                             var['ts']['tp'][element['name']] = element.get('mask', var['ts']['mask'])
 
-    def get_var_access(self, entity_id: id, var_name: str, time_scale: str) -> int:
+    def get_var_access(self, entity_id, var_name, time_scale):
         """Checking for particular entity"""
 
         for var in self.entities['entity_id_{}'.format(entity_id)]['vars']:
             if var['name'] == var_name:
                 return var['ts']['tp'][time_scale]
 
-    def check_feature_availability(self, feature_name: str) -> bool:
+    def check_feature_availability(self, feature_name):
         """Checking rights for feature"""
         return feature_name in [features['name'] for features in self._features]

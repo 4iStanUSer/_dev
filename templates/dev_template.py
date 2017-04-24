@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 dev_template_JJLean = {
     'tool_id': 1,
     'configuration': {

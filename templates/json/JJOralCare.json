@@ -255,6 +255,51 @@
     {
       "driver": "premiumization",
       "filter": [
+        "geography",
+        "country"
+      ],
+      "factor": "dec_val_premiumization",
+      "main_factor": "dec_val_premiumization"
+    },
+    {
+      "driver": "premiumization",
+      "filter": [
+        "products",
+        "category"
+      ],
+      "factor": "dec_val_premiumization",
+      "main_factor": "dec_val_premiumization"
+    },
+    {
+      "driver": "premiumization",
+      "filter": [
+        "products",
+        "category"
+      ],
+      "factor": "dec_val_premiumization",
+      "main_factor": "dec_val_premiumization"
+    },
+    {
+      "driver": "premiumization",
+      "filter": [
+        "products",
+        "category"
+      ],
+      "factor": "dec_val_premiumization",
+      "main_factor": "dec_val_premiumization"
+    },
+    {
+      "driver": "premiumization",
+      "filter": [
+        "products",
+        "category"
+      ],
+      "factor": "dec_val_premiumization",
+      "main_factor": "dec_val_premiumization"
+    },
+    {
+      "driver": "premiumization",
+      "filter": [
         "products",
         "category"
       ],
@@ -3925,6 +3970,36 @@
       ],
       "start": "",
       "slot": "2"
+    },
+    {
+      "values": [
+        240.837675,
+        245.68995,
+        251.19865
+      ],
+      "var_id": "cpi",
+      "timescale": "annual",
+      "path": [
+        "canada",
+        "mouthwash"
+      ],
+      "start": "2012",
+      "slot": "1"
+    },
+    {
+      "values": [
+        540.837675,
+        545.68995,
+        551.19865
+      ],
+      "var_id": "cpi",
+      "timescale": "annual",
+      "path": [
+        "canada",
+        "mouthwash"
+      ],
+      "start": "2012",
+      "slot": "1"
     },
     {
       "values": [

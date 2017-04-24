@@ -1,4 +1,4 @@
-from json.decoder import JSONDecodeError
+from json.decoder import *
 
 
 class WrongRequestMethod(Exception):

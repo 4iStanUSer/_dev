@@ -50,6 +50,24 @@ def check_logged_in(req):
         return send_success_response(token)
 
 
+def get_config(req):
+    config = {'Landing_Page':
+                 {'selector':{'items_title': 'Categories',
+    'search_title': 'Search',
+ 'search_placeholder': 'Type here',
+ 'search_clear': 'Clear search'
+ },
+                 'forecast_page':{'items_title': 'Categories',
+                 'search_title': 'Search',
+                 'search_placeholder': 'Type here',
+                 'search_clear': 'Clear search',
+                 'selected_title': 'Selected',
+                 'not_found_items': 'Not found items',
+                 'apply_button': 'Apply',
+                'do_not_proceed': 'You need to select something to proceed'}}
+             }
+    return config
+
 def login(req):
     """View function for login
 
@@ -134,21 +152,21 @@ def get_page_configuration(req):
     :rtype:
     """
     # Get parameters from request.
-    try:
-        user_id = req.user
-        page_name = req.json_body['data']['page']
-    except KeyError as e:
-        msg = req.get_error_msg(e)
-        return send_error_response(msg)
-    try:
-        state = rt.get_state(user_id)
-        tool_id = state.tool_id
-        language = state.language
-        config = get_page_config(tool_id, page_name, language)
-        return send_success_response(config)
-    except Exception as e:
-        msg = req.get_error_msg(e, language)
-        return send_error_response(msg)
+    #try:
+    user_id = req.user
+    page_name = req.json_body['data']['page']
+    #except KeyError as e:
+    #msg = req.get_error_msg(e)
+    #return send_error_response(msg)
+    #try:
+    state = rt.get_state(user_id)
+    tool_id = state.tool_id
+    language = state.language
+    config = get_page_config(tool_id, page_name, language)
+    return send_success_response(config)
+    #except Exception as e:
+    #msg = req.get_error_msg(e, language)
+    #return send_error_response(msg)
 
 @forbidden_view
 def set_language(req):
@@ -269,7 +287,9 @@ def set_project_selection(req):
         #TODO Change accesss for project selector
         #TODO Check That project existed
         lang = rt.get_state(user_id).language
+        print("Set project selection", project_id, tool_name)
         rt.update_state(user_id, tool_id=tool_name, project_id=project_id)
+        print("Set project selection", project_id, tool_name)
         return send_success_response(project_id)
     except Exception as e:
         msg = req.get_error_msg(e, lang)

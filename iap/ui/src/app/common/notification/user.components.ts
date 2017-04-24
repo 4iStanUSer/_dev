@@ -5,15 +5,14 @@ import {AuthService} from "../login-page/auth.service";
 @Component({
     templateUrl: 'user_menu.html',
     selector: 'user_menu',
-    providers: [NotificationService]
 })
 
 export class UserMenu{
 
     constructor(private notificationService: NotificationService, private auth: AuthService) {
 
-        notificationService.getResponse().subscribe(
-            button=>{console.log(button)
+        this.notificationService.getResponse().subscribe(
+            button=>{console.log(button);
 
             }
         )

@@ -1,6 +1,5 @@
 
 export class Helper {
-
     /**
      * Returns property which value equals to variable 'value'
      * @param obj
@@ -44,4 +43,7 @@ export class Helper {
         }
         return result;
     };
+
 }
+
+

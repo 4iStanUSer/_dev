@@ -16,7 +16,6 @@ export class Chart {
             this.options.series = [];
         }
     }
-
     addSerie(serie: ChartSerie): void {
         // init data array if not set
         if (!serie.data) {

@@ -3,10 +3,9 @@ import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import {AuthGuard} from "../common/module/login/auth-guard";
-
 import {CommonServicesModule} from "../common/module/common-services.module";
 import {ForecastRoutingModule} from "./forecast-routing.module";
-
+import {BarChartDividerComponent} from "../common/cmp/bar-chart-divider/bar-chart-divider.component";
 import {ChartModule} from '../common/module/chart/';
 import {DonutChartComponent} from "../common/cmp/donut-chart/donut-chart.component";
 import {BarChartComponent} from "../common/cmp/bar-chart/bar-chart.component";
@@ -15,7 +14,6 @@ import {TimeSelectorComponent} from '../common/cmp/time-selector/time-selector.c
 import {RangeSliderComponent} from "../common/cmp/time-selector/range-slider/range-slider.component";
 import { ValueEditPopupComponent } from "../common/cmp/value-edit-popup/value-edit-popup.component";
 import { TableComponent } from "../common/cmp/table/table.component";
-
 import {DashboardComponent} from "./dashboard/dashboard.component";
 import {DataManagerService} from "./dashboard/data-manager.service";
 
@@ -68,7 +66,6 @@ import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect';
 // import {FlatSelectorComponent} from "../common/cmp/selectors/flat-selector/flat-selector.component";
 // import {HierarchicalSelectorComponent} from "../common/cmp/selectors/hierarchical-selector/hierarchical-selector.component";
 // import {RegionSelectorComponent} from "../common/cmp/selectors/region-selector/region-selector.component";
-import { LocalStorageModule } from 'angular-2-local-storage';
 
 
 @NgModule({
@@ -80,11 +77,7 @@ import { LocalStorageModule } from 'angular-2-local-storage';
         CommonServicesModule,
         ChartModule,
         MyDateRangePickerModule,
-        MultiselectDropdownModule,
-        LocalStorageModule.withConfig({
-            prefix: 'forecast',
-            storageType: 'localStorage'
-        })
+        MultiselectDropdownModule
     ],
     declarations: [
         //ForecastComponent,
@@ -112,6 +105,7 @@ import { LocalStorageModule } from 'angular-2-local-storage';
 
         DonutChartComponent,
         BarChartComponent,
+        BarChartDividerComponent,
         WaterfallChartComponent,
 
         RangeSliderComponent,

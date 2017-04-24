@@ -103,7 +103,9 @@ export class GeneralComponent implements OnInit {
 
         let forecastObj = this.getForecastTabsAbsData();
         if (forecastObj) {
-            forecastObj.subscribe((d) => { this.fTabsAbsData = d; });
+            forecastObj.subscribe((d) => { this.fTabsAbsData = d;
+            console.log("Bar Chart Abs Data", d);
+            });
         }
         this.fPeriodSelectorData = this.getMainPeriodSelectorData();
 

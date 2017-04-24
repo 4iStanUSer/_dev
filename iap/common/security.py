@@ -9,6 +9,7 @@ from .exceptions import *
 from functools import wraps
 import jwt
 
+
 my_session_factory = SignedCookieSessionFactory('itsaseekreet')
 
 

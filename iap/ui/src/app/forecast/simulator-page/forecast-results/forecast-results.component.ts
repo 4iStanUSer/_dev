@@ -1,84 +1,32 @@
-<<<<<<< HEAD
-import { Component, OnInit } from '@angular/core';
-
-=======
 import { Component } from '@angular/core';
 import { DataService } from '../data.service'
->>>>>>> b35c9e44565db04967ff5097454affc31fcc415a
-
 import { SimulatorService } from '../simulator.service';
-import { NewSimulatorService } from '../new_simulator.service';
-import { LocalStorageService } from 'angular-2-local-storage';
-
+import {BarChartDataInput} from "../../../common/cmp/bar-chart/bar-chart.component";
 
 @Component({
     templateUrl: './forecast-results.component.html',
     styleUrls: ['./../simulator-page.component.css'],
-    providers: [SimulatorService, NewSimulatorService]
+    providers: [SimulatorService]
 })
-export class ForecastResultsComponent implements OnInit {
-    default_config: Object = {
-        header_title_collapse: 'Forecasted Results --local',
-        header_title_expand: 'Forecasted Sales --local',
-        forecast_collapse_expand: 'collapse',
-        forecast_collapse_button_title: 'Collapse',
-        forecast_expand_button_title: 'Expand'
-    };
-
-<<<<<<< HEAD
-    /**
-     * Current config for page
-     * @type {Object}
-     */
-    private config: Object = {};
+export class ForecastResultsComponent {
 
     /**
-     * Current state for page
-     * @type {Object}
+     * Variable contain for Bar Chart
+     *
      */
-    private state: Object = {};
-=======
+    public BarChartData:BarChartDataInput=[];
+
     constructor(private data_manager:DataService){
         this.data_manager.getSimulatorData();
+        this.BarChartData = [
+            {'name':'2015', 'value':1.000},
+            {'name':'2016', 'value':2.000},
+            {'name':'2017', 'value':3.000},
+            {'name':'2017', 'value':4.000}
+        ];
 
     }
->>>>>>> b35c9e44565db04967ff5097454affc31fcc415a
 
-
-    constructor (
-        private __localStorageService: LocalStorageService,
-        private __newSimulatorService: NewSimulatorService,
-    ) {}
-
-
-    // Load global config and merge with local config
-    __getConfig(default_congig:Object) {
-        return default_congig;
-    }
-
-    private __getCurrentState():void {
-        this.state['forecast_collapse_expand'] = (
-            this.__localStorageService.get('simulator_forecast_collapse_expand')
-        ) ? this.__localStorageService.get('simulator_forecast_collapse_expand') : this.config['forecast_collapse_expand'];
-        this.state['forecast_absolute_rate'] = this.__localStorageService.get('simulator_forecast_absolute_rate');
-    }
-
-    ngOnInit() {
-        console.log('---ngOnInit ForecastResultsComponent');
-        this.config = this.__getConfig(this.default_config);
-        this.__getCurrentState();
-    }
-
-    public updateState():void  {
-        this.__getCurrentState();
-    }
-
-    private onSwitcherForecastCollapseExpandButton() {
-        let now = this.state['forecast_collapse_expand'];
-        let newState = (now == 'collapse') ? 'expand' : 'collapse';
-        this.state['forecast_collapse_expand'] = newState;
-        this.__localStorageService.set('simulator_forecast_collapse_expand', newState);
-    }
 }
 
 

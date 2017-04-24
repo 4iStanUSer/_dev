@@ -11,7 +11,6 @@ import {HeaderComponent} from "../common/header-component/header.component";
 
 
 
-
 @NgModule({
     imports: [
         CommonModule,

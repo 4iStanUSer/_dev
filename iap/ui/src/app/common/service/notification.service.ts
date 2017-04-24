@@ -7,8 +7,7 @@ import { Observable } from 'rxjs/Observable';
 export class NotificationService {
 
   private subject= new Subject<any>();
-  private response = new Subject<any>();
-
+  private response= new Subject<any>();
 
   setHeader(config: any): void {
     return this.subject.next(config);

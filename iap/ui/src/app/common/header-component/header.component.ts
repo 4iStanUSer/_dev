@@ -2,7 +2,7 @@ import {Component, AfterViewInit, ComponentFactoryResolver, ViewChild, ViewConta
 import { UserMenu } from '../notification/user.components';
 import { LoginPageComponent } from '../login-page/page/login-page.component'
 import { AuthService } from '../../common/login-page/auth.service';
-
+import {ConfigurationService} from "../service/configuration.service";
 @Component({
     selector: 'header',
     templateUrl: 'header.component.html',
@@ -20,11 +20,15 @@ export class HeaderComponent implements  AfterViewInit{
 
 
     constructor(private _componentFactoryResolver: ComponentFactoryResolver,
-                private auth:AuthService) { }
+                private auth:AuthService, private conf:ConfigurationService) { }
 
     ngAfterViewInit ( )
     {
 
+            this.conf._get_config();
+            let config = {'search_clear':'Some Value','items_title':'Categories'};
+            this.conf.update_config('Landing_Page','selector',config);
+            console.log();
 
             let UserMenu_componentFactory =
                 this._componentFactoryResolver.resolveComponentFactory(UserMenu);
