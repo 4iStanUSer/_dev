@@ -1,0 +1,88 @@
+landing:
+  top_menu:
+    landing: Главная
+    dashboard: Дашборд
+    comparison: Сравнение
+    scenarios: Сценарии
+    simulator: Симулятор
+    help: Справка
+  logout:
+    label: Выйти
+dashboard:	
+  selector:
+    items_title: Категории
+    search_title: Поиск
+    search_placeholder: Type here
+    search_clear: Clear search
+    selected_title: Выбранный 
+    not_found_items: Не найдены
+    apply_button: Применить
+    do_not_proceed: Для продолжения нучно что то выбрать
+    cancel_button: Отмена
+  general:
+    forecast_block: Прогноз
+    decomposition_block: Декомпозиция
+    insights_block: Insights
+    drivers_summary_block: Drivers Summary
+    dashboard_tab: Dashboard
+    drivers_summary_tab: Drivers Summary
+    drivers_details_tab: Driver\s Details
+    value: Значение
+    growth_rate: Growth rate
+    collapse: Collapse
+    expand: Expand
+    explore: Explore
+    tab_all: Все
+    absolute: Absolute
+    growth_cagr: Growth (CAGR)
+    driver_contribution: Driver Contribution to Sales Growth
+    driver_change_cagr: Driver Change (CAGR)
+    driver: Driver
+    metric: Metric
+    cagr: CAGR
+    sub_drivers_dynamic: Sub-driver\s dynamic
+    sub_drivers_impact: Sub-driver\s impact
+    fact: Fact
+
+admin:
+  admin_tools:
+    create_user_label: Создать пользователя 
+    edit_user_label: Показать / Изменить пользователя 
+    delete_user_button: Удалить пользователя 
+    reset_user_password_button: Сбросить пароль 
+    add_user_form_button: Создать пользователя 
+    edit_user_form_button: Изменить пользователя 
+    user_is_not_selected_message: Пользователь не выбран 
+    users_list_title: Список пользователей
+  
+scenarios:  
+  scenarios:
+    recent_actions_header_name: Последние действия
+    work_list_header_name: Рабочий список
+    filter_section_name: Фильтры
+    filter_section_favorites_label: Закладки
+    filter_section_shared_label: Shared
+    filter_section_local_label: Local
+    filter_section_drafts_label: Drafts
+    filter_section_final_label: Final
+    search_input_placeholder: Поиск
+    show_multiselect_label: Show multiselect
+    create_new_scenario_label: Создать новый
+    finalize_scenario_label: Finalize
+    share_scenario_label: Share
+    delete_scenario_label: Удалить
+    table_name_row: Название
+    table_author_row: Автор
+    table_shared_row: Shared
+    table_shared_local_value: Local
+    table_description_row: Описание
+    table_modified_row: Modified
+    table_status_row: Статус
+    table_worklist_tooltip: Worklist
+    table_add_to_favorites_tooltip: Добавить в закладки
+    table_remove_from_favorites_tooltip: Убрать из закладок
+    table_copy_tooltip: Копировать
+    table_edit_tooltip: Редактировать
+    table_go_scenario_tooltip: Go Scenario
+    not_found_criteria_scenarios_message: No records found satisfying your criteria
+    not_found_scenarios_message: Not found scenarios

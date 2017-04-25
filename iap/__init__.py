@@ -22,6 +22,7 @@ def common_routing(config):
     config.add_static_view(name='images', path='iap.ui:images',
                            cache_max_age=3600)
 
+
     config.add_route('common_views.index', '/')
     config.add_view(common_views.index_view,
                     route_name='common_views.index')
@@ -50,6 +51,12 @@ def common_routing(config):
                      '/get_page_configuration')
     config.add_view(common_views.get_page_configuration,
                     route_name='common_views.get_page_configuration',
+                    renderer='json')
+
+    config.add_route('common_views.get_config',
+                     '/get_config')
+    config.add_view(common_views.get_config,
+                    route_name='common_views.get_config',
                     renderer='json')
 
     config.add_route('common_views.get_data_for_header', '/get_header_data')
