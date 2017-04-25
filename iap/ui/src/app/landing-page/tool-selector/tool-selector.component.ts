@@ -1,6 +1,7 @@
 import { Component, AfterViewInit} from '@angular/core';
+
 import {Router} from "@angular/router";
-//import { AuthHttp} from 'angular2-jwt';
+import { AuthHttp} from 'angular2-jwt';
 import { Http } from '@angular/http';
 import {Tool, Project} from "../../app.model"
 import { AuthService } from '../../common/login-page/auth.service';
@@ -17,7 +18,7 @@ export class ToolSelectorComponent implements AfterViewInit {
     private pptTool: Tool = new Tool();
     private mmTool: Tool = new Tool();
 
-    constructor(private router: Router, private auth_http: AjaxService,
+    constructor(private router: Router, private auth_http: AuthHttp,
                 private http: Http,  private auth: AuthService) {}
 
     ngAfterViewInit() {
@@ -30,10 +31,7 @@ export class ToolSelectorComponent implements AfterViewInit {
         if(this.auth.isLoggedIn()) {
 
             this.auth_http
-                .post({
-                    'url_id': 'get_tools_with_projects',
-                    'data': {}
-                })
+                .post('get_tools_with_projects',"")
                 .subscribe((d) => {
                     this.processInputs(d);
                 });
@@ -44,7 +42,6 @@ export class ToolSelectorComponent implements AfterViewInit {
     processInputs(inputs: Object) {
         let tools_data = inputs['tools'];
         if (tools_data) {
-            console.log('tools in inputs');
             let l = tools_data.length;
             for (let i = 0; i < l; i++) {
                 let row = tools_data[i];
@@ -85,13 +82,12 @@ export class ToolSelectorComponent implements AfterViewInit {
 
     if(this.auth.isLoggedIn()) {
 
-            this.auth_http.post({
-                'url_id': 'select_project',
-                'data': {
+            this.auth_http.post('select_project',
+                {'data': {
                     'tool_id': toolId,
                     'project_id': projectId
-                }
-            })
+                        }
+                })
             .subscribe((tools) => {
             this.router.navigate([toolId]);
         });

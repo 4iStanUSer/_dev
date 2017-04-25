@@ -47,6 +47,7 @@ export class NewScenarioComponent implements OnInit {
         private router: Router,
         private req: AjaxService,
         private route: ActivatedRoute
+        private AjaxService
     ) {}
 
     __getScenario() {

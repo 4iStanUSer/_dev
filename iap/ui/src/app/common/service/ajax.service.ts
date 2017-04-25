@@ -8,6 +8,7 @@ import {Subject} from 'rxjs/Subject';
 import * as _ from 'lodash';
 import {LoadingService} from './loading.service';
 import {AuthService} from "./auth.service";
+import { AuthHttp} from 'angular2-jwt';
 
 /**
  * Any server response wrap by this class.

@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {AjaxService} from "../common/service/ajax.service";
-
+import { AuthHttp} from 'angular2-jwt';
 import {TOP_MENU_CONTENT} from "./top-menu.content"
 import {Client, User, MenuItem, LanguageItem} from "../app.model"
 
@@ -22,21 +22,19 @@ export class ForecastComponent implements OnInit {
     constructor(
         private req: AjaxService,
         private auth: AuthService,
-        public router: Router
+        public router: Router,
+        public auth_http: AuthHttp,
     ) {}
 
     ngOnInit() {
-        this.req.post({
-            url_id: 'get_page_configuration',
-            data: {'page': 'common'}
-        }).subscribe(
+        this.auth_http.post('get_page_configuration',
+            {'data': {'page': 'common'}}).subscribe(
             (d) => {
                 this.proceedPageConfig(d);
             }
         );
-        this.req.post({
-            url_id: 'get_header_data',
-            data: {}
+        this.auth_http.post('get_header_data',
+            {'data': {}
         }).subscribe(
             (d) => {
                 this.proceedHeaderInputs(d);
@@ -76,10 +74,11 @@ export class ForecastComponent implements OnInit {
     }
 
     languageChanged(newLangId: string) {
-        this.req.post({
-            url_id: 'set_language',
-            data: { 'lang': newLangId }
-        }).subscribe(
+        this.auth_http.post('set_language',
+                            {
+                                'data': { 'lang': newLangId }
+                            }
+                        ).subscribe(
             (d) => {
                 console.log('lang_changed');
             }

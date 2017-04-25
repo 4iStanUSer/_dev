@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-
+import { AuthHttp} from 'angular2-jwt';
 import {Subject} from 'rxjs/Subject';
 
 import {
@@ -137,7 +137,8 @@ export class DataManagerService {
 
 
     constructor(private req: AjaxService,
-                private sds: StaticDataService) {
+                private sds: StaticDataService,
+                public auth_http:AuthHttp) {
     }
 
     /**
@@ -192,9 +193,8 @@ export class DataManagerService {
         this.isData['dynamic']['sent'] = true;
         this.isData['dynamic']['received'] = false;
 
-        this.req.post({
-            'url_id': 'forecast/get_dashboard_data',
-            'data': {
+        this.auth_http.post('forecast/get_dashboard_data',
+            {'data': {
                 'entities_ids': [2],
                 'tool_id':1,
                 'project_id':1// TODO Replace
@@ -271,9 +271,9 @@ export class DataManagerService {
                 'state': defaultState,
                 'config': dashboardConfig
             };
-            this.req.post({
-                'url_id': 'get_page_configuration',
-                'data': {
+            this.auth_http.post('get_page_configuration',
+                {
+                    'data': {
                     'page': this.pageName
                 }
             }).subscribe((d)=> {
@@ -401,9 +401,9 @@ export class DataManagerService {
      */
     loadChangesOverPeriod(timescale_id: string,
                           periods: Array<{start: string, end: string}>) {
-        return this.req.post({
-            url_id: 'forecast/get_changes_for_period',
-            data: {
+        return this.auth_http.post('forecast/get_changes_for_period',
+            {
+            'data': {
                 'timescale': timescale_id,
                 'periods': periods
             }
@@ -443,8 +443,8 @@ export class DataManagerService {
         }
 
         if (periodsToLoad.length > 0) {
-            this.req.post({
-                url_id: 'forecast/get_changes_for_period',
+            this.auth_http.post('forecast/get_changes_for_period',
+                {
                 data: periodsToLoad
             }).subscribe(
                 (data) => {
@@ -583,8 +583,8 @@ export class DataManagerService {
         let subject = new Subject<DecompositionTypeData>();
 
         if (!this.dataModel.hasDecomposition(timescale_id, start, end)) {
-            this.req.post({
-                url_id: 'forecast/get_decomposition_for_period',
+            this.auth_http.post('forecast/get_decomposition_for_period',
+                {
                 data: {
                     timescale: timescale_id,
                     start: start,

@@ -8,6 +8,7 @@ import {LanguageSelectorComponent} from "./language-selector/language-selector.c
 import { UserMenu } from  "../common/notification/user.components";
 import { LoginPageComponent} from "../common/login-page/page/login-page.component";
 import {HeaderComponent} from "../common/header-component/header.component";
+import { AuthHttp} from 'angular2-jwt';
 
 
 
