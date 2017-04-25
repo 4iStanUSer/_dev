@@ -8,7 +8,7 @@ from zope.interface import implementer
 from .exceptions import *
 from functools import wraps
 import jwt
-
+import pyramid.httpexceptions as http_exc
 
 my_session_factory = SignedCookieSessionFactory('itsaseekreet')
 
@@ -29,17 +29,21 @@ def forbidden_view(f):
             if user_id!=None and issession==True:
                 return f(request)
         except WrongRequestMethod:
-            msg = request.get_error_msg('RequestError')
-            return send_error_response(msg)
+            raise http_exc.HTTPBadRequest()
+            # msg = request.get_error_msg('RequestError')
+            # return send_error_response(msg)
         except NoResultFound:
-            msg = request.get_error_msg('NoResultFound')
-            return send_error_response(msg)
+            raise http_exc.HTTPNotFound()
+            # msg = request.get_error_msg('NoResultFound')
+            # return send_error_response(msg)
         except KeyError:
-            msg = request.get_error_msg('Unauthorised')
-            return send_error_response(msg)
+            raise http_exc.HTTPUnauthorized()
+            # msg = request.get_error_msg('Unauthorised')
+            # return send_error_response(msg)
         except AttributeError:
-            msg = request.get_error_msg('Unauthorised')
-            return send_error_response(msg)
+            raise http_exc.HTTPUnauthorized()
+            # msg = request.get_error_msg('Unauthorised')
+            # return send_error_response(msg)
         except jwt.exceptions.DecodeError:
             msg = request.get_error_msg('TokenError')
             return send_error_response(msg)
@@ -79,7 +83,7 @@ def check_session(request):
     try:
         session = request.session
         if 'token' in session:
-            if request.json_body['X-Token'] == session['token']:
+            if request.headers.get('X-Token') == session['token']:  # request.json['X-Token']
                 return True
             else:
                 return True#TODO change on False
@@ -105,10 +109,13 @@ def get_user(request):
     """
     #add exception on non existen  id,login in token
     try:
-        token = request.json_body['X-Token']
+        token = request.headers.get('X-Token').split()  # request.json['X-Token']
+        if len(token) > 1:
+            token = token[1]
         token_data = jwt.decode(token, 'secret', algorithms=['HS512'])
-        user_id = int(token_data['sub'])
-        login = token_data['login']
+
+        user_id = int(token_data['sub'])  # int(request.jwt_claims['sub'])
+        login = token_data['login']  # request.jwt_claims['login']
         user = request.dbsession.query(User).filter(User.id == user_id and User.email == login).one()
         # user = service.get_user_by_id(request,user_id, login)
     except JSONDecodeError:
