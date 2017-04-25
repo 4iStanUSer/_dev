@@ -30,8 +30,10 @@ import {ForecastModule} from "./forecast/forecast.module";
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     return new AuthHttp(new AuthConfig({
+        headerName: "X-Token",
+        headerPrefix: null,
         tokenName: 'token',
-        noJwtError:true,
+        noJwtError: true,
         tokenGetter: (() => localStorage.getItem('token')),
 		globalHeaders: [{'Content-Type':'application/json'}]
 	}), http, options);
