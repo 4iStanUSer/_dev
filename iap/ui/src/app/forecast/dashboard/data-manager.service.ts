@@ -203,8 +203,8 @@ export class DataManagerService {
                 console.log(data);
                 this.isData['dynamic']['received'] = true;
 
-                let d = data['data'];
-                let c = data['config'];
+                let d = data.json()['data']['data'];
+                let c = data.json()['data']['config'];
 
                 this.ddConfig = c;
 
@@ -277,7 +277,7 @@ export class DataManagerService {
                     'page': this.pageName
                 }
             }).subscribe((d)=> {
-                    this.sds.addPage(this.pageName, frontData, d);
+                    this.sds.addPage(this.pageName, frontData, d.json()['data']);
                     this.proceedStaticData();
                 },
                 (e)=> {
@@ -448,7 +448,7 @@ export class DataManagerService {
                 'data': periodsToLoad
             }).subscribe(
                 (data) => {
-                    this.dataModel.addChangesOverPeriod(data.json());
+                    this.dataModel.addChangesOverPeriod(data.json()['data']);
                     let varData = this.getVariableData(
                         timescale_id,
                         timepoints_ids,
@@ -593,7 +593,7 @@ export class DataManagerService {
             }).subscribe(
                 (data) => {
 
-                    this.dataModel.addDecomposition(data.json());
+                    this.dataModel.addDecomposition(data.json()['data']);
                     let decData = this.getDecompositionData(
                         decomp_type_id,
                         timescale_id,

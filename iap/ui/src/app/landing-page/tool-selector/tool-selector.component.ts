@@ -33,7 +33,8 @@ export class ToolSelectorComponent implements AfterViewInit {
             this.auth_http
                 .post('get_tools_with_projects',"")
                 .subscribe((d) => {
-                    this.processInputs(d);
+                    console.log(d);
+                    this.processInputs(d.json()['data']);
                 });
         }
 
