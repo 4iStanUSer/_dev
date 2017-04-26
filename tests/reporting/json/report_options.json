@@ -1,0 +1,1315 @@
+{
+    "period": [
+        "2012",
+        "2018"
+    ],
+    "primary_only": 1,
+    "scenarios": [
+        {
+            "author": "default_user",
+            "criteria": "USA-iPhone-Main",
+            "description": "Dynamics of Price Growth in USA",
+            "details": {
+                "description": "Dynamics of Price Growth in USA",
+                "driver_change": [
+                    {
+                        "name": "",
+                        "value": ""
+                    }
+                ],
+                "driver_group": [
+                    {
+                        "name": "",
+                        "value": ""
+                    }
+                ],
+                "growth_period": "",
+                "id": 18,
+                "meta": null,
+                "metrics": [
+                    {
+                        "format": "",
+                        "name": "",
+                        "value": ""
+                    }
+                ],
+                "name": "Price Growth Dynamics JJLean",
+                "recent_actions": [
+                    {
+                        "action_id": "",
+                        "action_name": "",
+                        "date": "",
+                        "entity_id": "",
+                        "entity_name": ""
+                    }
+                ],
+                "status": "Draft",
+                "worklist": [
+                    {
+                        "date": "2017_3_30_16_10",
+                        "id": 18,
+                        "name": "Price Growth Dynamics JJLean"
+                    }
+                ]
+            },
+            "favorite": "No",
+            "id": 18,
+            "modify_date": "2017-03-20 11:10:12.055658",
+            "name": "Price Growth Dynamics JJLean",
+            "scenario_permission": [
+                "share",
+                "change_status",
+                "copy",
+                "delete",
+                "edit"
+            ],
+            "shared": "No",
+            "status": "Draft"
+        },
+        {
+            "author": "user@mail.com",
+            "criteria": "Brazil-Nike-Main",
+            "description": "Dynamics of Price Growth in Brazil",
+            "details": {
+                "description": "Dynamics of Price Growth in Brazil",
+                "driver_change": [
+                    {
+                        "name": "",
+                        "value": ""
+                    }
+                ],
+                "driver_group": [
+                    {
+                        "name": "",
+                        "value": ""
+                    }
+                ],
+                "growth_period": "",
+                "id": 13,
+                "meta": null,
+                "metrics": [
+                    {
+                        "format": "",
+                        "name": "",
+                        "value": ""
+                    }
+                ],
+                "name": "Price Growth Dynamics JJOralCare",
+                "recent_actions": [
+                    {
+                        "action_id": "",
+                        "action_name": "",
+                        "date": "",
+                        "entity_id": "",
+                        "entity_name": ""
+                    }
+                ],
+                "status": "Final",
+                "worklist": [
+                    {
+                        "date": "2017_3_30_16_10",
+                        "id": 13,
+                        "name": "Price Growth Dynamics JJOralCare"
+                    }
+                ]
+            },
+            "favorite": "No",
+            "id": 13,
+            "modify_date": "2017-03-20 11:10:12.055658",
+            "name": "Price Growth Dynamics JJOralCare",
+            "scenario_permission": [
+                "copy"
+            ],
+            "shared": "Yes",
+            "status": "Final"
+        },
+        {
+            "author": "user@mail.com",
+            "criteria": "Brazil-Nike-Main",
+            "description": "Dynamics of Price Growth in Brazil",
+            "details": {
+                "description": "Dynamics of Price Growth in Brazil",
+                "driver_change": [
+                    {
+                        "name": "",
+                        "value": ""
+                    }
+                ],
+                "driver_group": [
+                    {
+                        "name": "",
+                        "value": ""
+                    }
+                ],
+                "growth_period": "",
+                "id": 1,
+                "meta": null,
+                "metrics": [
+                    {
+                        "format": "",
+                        "name": "",
+                        "value": ""
+                    }
+                ],
+                "name": "Price Growth Dynamics JJOralCare",
+                "recent_actions": [
+                    {
+                        "action_id": "",
+                        "action_name": "",
+                        "date": "",
+                        "entity_id": "",
+                        "entity_name": ""
+                    }
+                ],
+                "status": "Final",
+                "worklist": [
+                    {
+                        "date": "2017_3_30_16_10",
+                        "id": 1,
+                        "name": "Price Growth Dynamics JJOralCare"
+                    }
+                ]
+            },
+            "favorite": "No",
+            "id": 1,
+            "modify_date": "2017-03-20 11:10:12.055658",
+            "name": "Price Growth Dynamics JJOralCare",
+            "scenario_permission": [
+                "copy"
+            ],
+            "shared": "Yes",
+            "status": "Final"
+        },
+        {
+            "author": "user@mail.com",
+            "criteria": "Brazil-Nike-Main",
+            "description": "Dynamics of Price Growth in Brazil",
+            "details": {
+                "description": "Dynamics of Price Growth in Brazil",
+                "driver_change": [
+                    {
+                        "name": "",
+                        "value": ""
+                    }
+                ],
+                "driver_group": [
+                    {
+                        "name": "",
+                        "value": ""
+                    }
+                ],
+                "growth_period": "",
+                "id": 3,
+                "meta": null,
+                "metrics": [
+                    {
+                        "format": "",
+                        "name": "",
+                        "value": ""
+                    }
+                ],
+                "name": "Price Growth Dynamics JJOralCare",
+                "recent_actions": [
+                    {
+                        "action_id": "",
+                        "action_name": "",
+                        "date": "",
+                        "entity_id": "",
+                        "entity_name": ""
+                    }
+                ],
+                "status": "Final",
+                "worklist": [
+                    {
+                        "date": "2017_3_30_16_10",
+                        "id": 3,
+                        "name": "Price Growth Dynamics JJOralCare"
+                    }
+                ]
+            },
+            "favorite": "No",
+            "id": 3,
+            "modify_date": "2017-03-20 11:10:12.055658",
+            "name": "Price Growth Dynamics JJOralCare",
+            "scenario_permission": [
+                "copy"
+            ],
+            "shared": "Yes",
+            "status": "Final"
+        },
+        {
+            "author": "default_user",
+            "criteria": "USA-iPhone-Main",
+            "description": "Dynamics of Price Growth in USA",
+            "details": {
+                "description": "Dynamics of Price Growth in USA",
+                "driver_change": [
+                    {
+                        "name": "",
+                        "value": ""
+                    }
+                ],
+                "driver_group": [
+                    {
+                        "name": "",
+                        "value": ""
+                    }
+                ],
+                "growth_period": "",
+                "id": 6,
+                "meta": null,
+                "metrics": [
+                    {
+                        "format": "",
+                        "name": "",
+                        "value": ""
+                    }
+                ],
+                "name": "Price Growth Dynamics JJLean",
+                "recent_actions": [
+                    {
+                        "action_id": "",
+                        "action_name": "",
+                        "date": "",
+                        "entity_id": "",
+                        "entity_name": ""
+                    }
+                ],
+                "status": "Draft",
+                "worklist": [
+                    {
+                        "date": "2017_3_30_16_10",
+                        "id": 6,
+                        "name": "Price Growth Dynamics JJLean"
+                    }
+                ]
+            },
+            "favorite": "No",
+            "id": 6,
+            "modify_date": "2017-03-20 11:10:12.055658",
+            "name": "Price Growth Dynamics JJLean",
+            "scenario_permission": [
+                "share",
+                "change_status",
+                "copy",
+                "delete",
+                "edit"
+            ],
+            "shared": "No",
+            "status": "Draft"
+        },
+        {
+            "author": "default_user",
+            "criteria": "USA-iPhone-Main",
+            "description": "Dynamics of Price Growth in USA",
+            "details": {
+                "description": "Dynamics of Price Growth in USA",
+                "driver_change": [
+                    {
+                        "name": "",
+                        "value": ""
+                    }
+                ],
+                "driver_group": [
+                    {
+                        "name": "",
+                        "value": ""
+                    }
+                ],
+                "growth_period": "",
+                "id": 16,
+                "meta": null,
+                "metrics": [
+                    {
+                        "format": "",
+                        "name": "",
+                        "value": ""
+                    }
+                ],
+                "name": "Price Growth Dynamics JJLean",
+                "recent_actions": [
+                    {
+                        "action_id": "",
+                        "action_name": "",
+                        "date": "",
+                        "entity_id": "",
+                        "entity_name": ""
+                    }
+                ],
+                "status": "Draft",
+                "worklist": [
+                    {
+                        "date": "2017_3_30_16_10",
+                        "id": 16,
+                        "name": "Price Growth Dynamics JJLean"
+                    }
+                ]
+            },
+            "favorite": "No",
+            "id": 16,
+            "modify_date": "2017-03-20 11:10:12.055658",
+            "name": "Price Growth Dynamics JJLean",
+            "scenario_permission": [
+                "share",
+                "change_status",
+                "copy",
+                "delete",
+                "edit"
+            ],
+            "shared": "No",
+            "status": "Draft"
+        },
+        {
+            "author": "user@mail.com",
+            "criteria": "Brazil-Nike-Main",
+            "description": "Dynamics of Price Growth in Brazil",
+            "details": {
+                "description": "Dynamics of Price Growth in Brazil",
+                "driver_change": [
+                    {
+                        "name": "",
+                        "value": ""
+                    }
+                ],
+                "driver_group": [
+                    {
+                        "name": "",
+                        "value": ""
+                    }
+                ],
+                "growth_period": "",
+                "id": 5,
+                "meta": null,
+                "metrics": [
+                    {
+                        "format": "",
+                        "name": "",
+                        "value": ""
+                    }
+                ],
+                "name": "Price Growth Dynamics JJOralCare",
+                "recent_actions": [
+                    {
+                        "action_id": "",
+                        "action_name": "",
+                        "date": "",
+                        "entity_id": "",
+                        "entity_name": ""
+                    }
+                ],
+                "status": "Final",
+                "worklist": [
+                    {
+                        "date": "2017_3_30_16_10",
+                        "id": 5,
+                        "name": "Price Growth Dynamics JJOralCare"
+                    }
+                ]
+            },
+            "favorite": "No",
+            "id": 5,
+            "modify_date": "2017-03-20 11:10:12.055658",
+            "name": "Price Growth Dynamics JJOralCare",
+            "scenario_permission": [
+                "copy"
+            ],
+            "shared": "Yes",
+            "status": "Final"
+        },
+        {
+            "author": "user@mail.com",
+            "criteria": "Brazil-Nike-Main",
+            "description": "Dynamics of Price Growth in Brazil",
+            "details": {
+                "description": "Dynamics of Price Growth in Brazil",
+                "driver_change": [
+                    {
+                        "name": "",
+                        "value": ""
+                    }
+                ],
+                "driver_group": [
+                    {
+                        "name": "",
+                        "value": ""
+                    }
+                ],
+                "growth_period": "",
+                "id": 9,
+                "meta": null,
+                "metrics": [
+                    {
+                        "format": "",
+                        "name": "",
+                        "value": ""
+                    }
+                ],
+                "name": "Price Growth Dynamics JJOralCare",
+                "recent_actions": [
+                    {
+                        "action_id": "",
+                        "action_name": "",
+                        "date": "",
+                        "entity_id": "",
+                        "entity_name": ""
+                    }
+                ],
+                "status": "Final",
+                "worklist": [
+                    {
+                        "date": "2017_3_30_16_10",
+                        "id": 9,
+                        "name": "Price Growth Dynamics JJOralCare"
+                    }
+                ]
+            },
+            "favorite": "No",
+            "id": 9,
+            "modify_date": "2017-03-20 11:10:12.055658",
+            "name": "Price Growth Dynamics JJOralCare",
+            "scenario_permission": [
+                "copy"
+            ],
+            "shared": "Yes",
+            "status": "Final"
+        },
+        {
+            "author": "user@mail.com",
+            "criteria": "Brazil-Nike-Main",
+            "description": "Dynamics of Price Growth in Brazil",
+            "details": {
+                "description": "Dynamics of Price Growth in Brazil",
+                "driver_change": [
+                    {
+                        "name": "",
+                        "value": ""
+                    }
+                ],
+                "driver_group": [
+                    {
+                        "name": "",
+                        "value": ""
+                    }
+                ],
+                "growth_period": "",
+                "id": 7,
+                "meta": null,
+                "metrics": [
+                    {
+                        "format": "",
+                        "name": "",
+                        "value": ""
+                    }
+                ],
+                "name": "Price Growth Dynamics JJOralCare",
+                "recent_actions": [
+                    {
+                        "action_id": "",
+                        "action_name": "",
+                        "date": "",
+                        "entity_id": "",
+                        "entity_name": ""
+                    }
+                ],
+                "status": "Final",
+                "worklist": [
+                    {
+                        "date": "2017_3_30_16_10",
+                        "id": 7,
+                        "name": "Price Growth Dynamics JJOralCare"
+                    }
+                ]
+            },
+            "favorite": "No",
+            "id": 7,
+            "modify_date": "2017-03-20 11:10:12.055658",
+            "name": "Price Growth Dynamics JJOralCare",
+            "scenario_permission": [
+                "copy"
+            ],
+            "shared": "Yes",
+            "status": "Final"
+        },
+        {
+            "author": "default_user",
+            "criteria": "USA-iPhone-Main",
+            "description": "Dynamics of Price Growth in USA",
+            "details": {
+                "description": "Dynamics of Price Growth in USA",
+                "driver_change": [
+                    {
+                        "name": "",
+                        "value": ""
+                    }
+                ],
+                "driver_group": [
+                    {
+                        "name": "",
+                        "value": ""
+                    }
+                ],
+                "growth_period": "",
+                "id": 12,
+                "meta": null,
+                "metrics": [
+                    {
+                        "format": "",
+                        "name": "",
+                        "value": ""
+                    }
+                ],
+                "name": "Price Growth Dynamics JJLean",
+                "recent_actions": [
+                    {
+                        "action_id": "",
+                        "action_name": "",
+                        "date": "",
+                        "entity_id": "",
+                        "entity_name": ""
+                    }
+                ],
+                "status": "Draft",
+                "worklist": [
+                    {
+                        "date": "2017_3_30_16_10",
+                        "id": 12,
+                        "name": "Price Growth Dynamics JJLean"
+                    }
+                ]
+            },
+            "favorite": "No",
+            "id": 12,
+            "modify_date": "2017-03-20 11:10:12.055658",
+            "name": "Price Growth Dynamics JJLean",
+            "scenario_permission": [
+                "share",
+                "change_status",
+                "copy",
+                "delete",
+                "edit"
+            ],
+            "shared": "No",
+            "status": "Draft"
+        },
+        {
+            "author": "default_user",
+            "criteria": "USA-iPhone-Main",
+            "description": "Dynamics of Price Growth in USA",
+            "details": {
+                "description": "Dynamics of Price Growth in USA",
+                "driver_change": [
+                    {
+                        "name": "",
+                        "value": ""
+                    }
+                ],
+                "driver_group": [
+                    {
+                        "name": "",
+                        "value": ""
+                    }
+                ],
+                "growth_period": "",
+                "id": 8,
+                "meta": null,
+                "metrics": [
+                    {
+                        "format": "",
+                        "name": "",
+                        "value": ""
+                    }
+                ],
+                "name": "Price Growth Dynamics JJLean",
+                "recent_actions": [
+                    {
+                        "action_id": "",
+                        "action_name": "",
+                        "date": "",
+                        "entity_id": "",
+                        "entity_name": ""
+                    }
+                ],
+                "status": "Draft",
+                "worklist": [
+                    {
+                        "date": "2017_3_30_16_10",
+                        "id": 8,
+                        "name": "Price Growth Dynamics JJLean"
+                    }
+                ]
+            },
+            "favorite": "No",
+            "id": 8,
+            "modify_date": "2017-03-20 11:10:12.055658",
+            "name": "Price Growth Dynamics JJLean",
+            "scenario_permission": [
+                "share",
+                "change_status",
+                "copy",
+                "delete",
+                "edit"
+            ],
+            "shared": "No",
+            "status": "Draft"
+        },
+        {
+            "author": "user@mail.com",
+            "criteria": "Brazil-Nike-Main",
+            "description": "Dynamics of Price Growth in Brazil",
+            "details": {
+                "description": "Dynamics of Price Growth in Brazil",
+                "driver_change": [
+                    {
+                        "name": "",
+                        "value": ""
+                    }
+                ],
+                "driver_group": [
+                    {
+                        "name": "",
+                        "value": ""
+                    }
+                ],
+                "growth_period": "",
+                "id": 21,
+                "meta": null,
+                "metrics": [
+                    {
+                        "format": "",
+                        "name": "",
+                        "value": ""
+                    }
+                ],
+                "name": "Price Growth Dynamics JJOralCare",
+                "recent_actions": [
+                    {
+                        "action_id": "",
+                        "action_name": "",
+                        "date": "",
+                        "entity_id": "",
+                        "entity_name": ""
+                    }
+                ],
+                "status": "Final",
+                "worklist": [
+                    {
+                        "date": "2017_3_30_16_10",
+                        "id": 21,
+                        "name": "Price Growth Dynamics JJOralCare"
+                    }
+                ]
+            },
+            "favorite": "No",
+            "id": 21,
+            "modify_date": "2017-03-20 11:10:12.055658",
+            "name": "Price Growth Dynamics JJOralCare",
+            "scenario_permission": [
+                "copy"
+            ],
+            "shared": "Yes",
+            "status": "Final"
+        },
+        {
+            "author": "default_user",
+            "criteria": "USA-iPhone-Main",
+            "description": "Dynamics of Price Growth in USA",
+            "details": {
+                "description": "Dynamics of Price Growth in USA",
+                "driver_change": [
+                    {
+                        "name": "",
+                        "value": ""
+                    }
+                ],
+                "driver_group": [
+                    {
+                        "name": "",
+                        "value": ""
+                    }
+                ],
+                "growth_period": "",
+                "id": 14,
+                "meta": null,
+                "metrics": [
+                    {
+                        "format": "",
+                        "name": "",
+                        "value": ""
+                    }
+                ],
+                "name": "Price Growth Dynamics JJLean",
+                "recent_actions": [
+                    {
+                        "action_id": "",
+                        "action_name": "",
+                        "date": "",
+                        "entity_id": "",
+                        "entity_name": ""
+                    }
+                ],
+                "status": "Draft",
+                "worklist": [
+                    {
+                        "date": "2017_3_30_16_10",
+                        "id": 14,
+                        "name": "Price Growth Dynamics JJLean"
+                    }
+                ]
+            },
+            "favorite": "No",
+            "id": 14,
+            "modify_date": "2017-03-20 11:10:12.055658",
+            "name": "Price Growth Dynamics JJLean",
+            "scenario_permission": [
+                "share",
+                "change_status",
+                "copy",
+                "delete",
+                "edit"
+            ],
+            "shared": "No",
+            "status": "Draft"
+        },
+        {
+            "author": "default_user",
+            "criteria": "USA-iPhone-Main",
+            "description": "Dynamics of Price Growth in USA",
+            "details": {
+                "description": "Dynamics of Price Growth in USA",
+                "driver_change": [
+                    {
+                        "name": "",
+                        "value": ""
+                    }
+                ],
+                "driver_group": [
+                    {
+                        "name": "",
+                        "value": ""
+                    }
+                ],
+                "growth_period": "",
+                "id": 20,
+                "meta": null,
+                "metrics": [
+                    {
+                        "format": "",
+                        "name": "",
+                        "value": ""
+                    }
+                ],
+                "name": "Price Growth Dynamics JJLean",
+                "recent_actions": [
+                    {
+                        "action_id": "",
+                        "action_name": "",
+                        "date": "",
+                        "entity_id": "",
+                        "entity_name": ""
+                    }
+                ],
+                "status": "Draft",
+                "worklist": [
+                    {
+                        "date": "2017_3_30_16_10",
+                        "id": 20,
+                        "name": "Price Growth Dynamics JJLean"
+                    }
+                ]
+            },
+            "favorite": "No",
+            "id": 20,
+            "modify_date": "2017-03-20 11:10:12.055658",
+            "name": "Price Growth Dynamics JJLean",
+            "scenario_permission": [
+                "share",
+                "change_status",
+                "copy",
+                "delete",
+                "edit"
+            ],
+            "shared": "No",
+            "status": "Draft"
+        },
+        {
+            "author": "default_user",
+            "criteria": "USA-iPhone-Main",
+            "description": "Dynamics of Price Growth in USA",
+            "details": {
+                "description": "Dynamics of Price Growth in USA",
+                "driver_change": [
+                    {
+                        "name": "",
+                        "value": ""
+                    }
+                ],
+                "driver_group": [
+                    {
+                        "name": "",
+                        "value": ""
+                    }
+                ],
+                "growth_period": "",
+                "id": 4,
+                "meta": null,
+                "metrics": [
+                    {
+                        "format": "",
+                        "name": "",
+                        "value": ""
+                    }
+                ],
+                "name": "Price Growth Dynamics JJLean",
+                "recent_actions": [
+                    {
+                        "action_id": "",
+                        "action_name": "",
+                        "date": "",
+                        "entity_id": "",
+                        "entity_name": ""
+                    }
+                ],
+                "status": "Draft",
+                "worklist": [
+                    {
+                        "date": "2017_3_30_16_10",
+                        "id": 4,
+                        "name": "Price Growth Dynamics JJLean"
+                    }
+                ]
+            },
+            "favorite": "No",
+            "id": 4,
+            "modify_date": "2017-03-20 11:10:12.055658",
+            "name": "Price Growth Dynamics JJLean",
+            "scenario_permission": [
+                "share",
+                "change_status",
+                "copy",
+                "delete",
+                "edit"
+            ],
+            "shared": "No",
+            "status": "Draft"
+        },
+        {
+            "author": "user@mail.com",
+            "criteria": "Brazil-Nike-Main",
+            "description": "Dynamics of Price Growth in Brazil",
+            "details": {
+                "description": "Dynamics of Price Growth in Brazil",
+                "driver_change": [
+                    {
+                        "name": "",
+                        "value": ""
+                    }
+                ],
+                "driver_group": [
+                    {
+                        "name": "",
+                        "value": ""
+                    }
+                ],
+                "growth_period": "",
+                "id": 17,
+                "meta": null,
+                "metrics": [
+                    {
+                        "format": "",
+                        "name": "",
+                        "value": ""
+                    }
+                ],
+                "name": "Price Growth Dynamics JJOralCare",
+                "recent_actions": [
+                    {
+                        "action_id": "",
+                        "action_name": "",
+                        "date": "",
+                        "entity_id": "",
+                        "entity_name": ""
+                    }
+                ],
+                "status": "Final",
+                "worklist": [
+                    {
+                        "date": "2017_3_30_16_10",
+                        "id": 17,
+                        "name": "Price Growth Dynamics JJOralCare"
+                    }
+                ]
+            },
+            "favorite": "No",
+            "id": 17,
+            "modify_date": "2017-03-20 11:10:12.055658",
+            "name": "Price Growth Dynamics JJOralCare",
+            "scenario_permission": [
+                "copy"
+            ],
+            "shared": "Yes",
+            "status": "Final"
+        },
+        {
+            "author": "user@mail.com",
+            "criteria": "Brazil-Nike-Main",
+            "description": "Dynamics of Price Growth in Brazil",
+            "details": {
+                "description": "Dynamics of Price Growth in Brazil",
+                "driver_change": [
+                    {
+                        "name": "",
+                        "value": ""
+                    }
+                ],
+                "driver_group": [
+                    {
+                        "name": "",
+                        "value": ""
+                    }
+                ],
+                "growth_period": "",
+                "id": 19,
+                "meta": null,
+                "metrics": [
+                    {
+                        "format": "",
+                        "name": "",
+                        "value": ""
+                    }
+                ],
+                "name": "Price Growth Dynamics JJOralCare",
+                "recent_actions": [
+                    {
+                        "action_id": "",
+                        "action_name": "",
+                        "date": "",
+                        "entity_id": "",
+                        "entity_name": ""
+                    }
+                ],
+                "status": "Final",
+                "worklist": [
+                    {
+                        "date": "2017_3_30_16_10",
+                        "id": 19,
+                        "name": "Price Growth Dynamics JJOralCare"
+                    }
+                ]
+            },
+            "favorite": "No",
+            "id": 19,
+            "modify_date": "2017-03-20 11:10:12.055658",
+            "name": "Price Growth Dynamics JJOralCare",
+            "scenario_permission": [
+                "copy"
+            ],
+            "shared": "Yes",
+            "status": "Final"
+        },
+        {
+            "author": "user@mail.com",
+            "criteria": "Brazil-Nike-Main",
+            "description": "Dynamics of Price Growth in Brazil",
+            "details": {
+                "description": "Dynamics of Price Growth in Brazil",
+                "driver_change": [
+                    {
+                        "name": "",
+                        "value": ""
+                    }
+                ],
+                "driver_group": [
+                    {
+                        "name": "",
+                        "value": ""
+                    }
+                ],
+                "growth_period": "",
+                "id": 15,
+                "meta": null,
+                "metrics": [
+                    {
+                        "format": "",
+                        "name": "",
+                        "value": ""
+                    }
+                ],
+                "name": "Price Growth Dynamics JJOralCare",
+                "recent_actions": [
+                    {
+                        "action_id": "",
+                        "action_name": "",
+                        "date": "",
+                        "entity_id": "",
+                        "entity_name": ""
+                    }
+                ],
+                "status": "Final",
+                "worklist": [
+                    {
+                        "date": "2017_3_30_16_10",
+                        "id": 15,
+                        "name": "Price Growth Dynamics JJOralCare"
+                    }
+                ]
+            },
+            "favorite": "No",
+            "id": 15,
+            "modify_date": "2017-03-20 11:10:12.055658",
+            "name": "Price Growth Dynamics JJOralCare",
+            "scenario_permission": [
+                "copy"
+            ],
+            "shared": "Yes",
+            "status": "Final"
+        },
+        {
+            "author": "default_user",
+            "criteria": "USA-iPhone-Main",
+            "description": "Dynamics of Price Growth in USA",
+            "details": {
+                "description": "Dynamics of Price Growth in USA",
+                "driver_change": [
+                    {
+                        "name": "",
+                        "value": ""
+                    }
+                ],
+                "driver_group": [
+                    {
+                        "name": "",
+                        "value": ""
+                    }
+                ],
+                "growth_period": "",
+                "id": 10,
+                "meta": null,
+                "metrics": [
+                    {
+                        "format": "",
+                        "name": "",
+                        "value": ""
+                    }
+                ],
+                "name": "Price Growth Dynamics JJLean",
+                "recent_actions": [
+                    {
+                        "action_id": "",
+                        "action_name": "",
+                        "date": "",
+                        "entity_id": "",
+                        "entity_name": ""
+                    }
+                ],
+                "status": "Draft",
+                "worklist": [
+                    {
+                        "date": "2017_3_30_16_10",
+                        "id": 10,
+                        "name": "Price Growth Dynamics JJLean"
+                    }
+                ]
+            },
+            "favorite": "No",
+            "id": 10,
+            "modify_date": "2017-03-20 11:10:12.055658",
+            "name": "Price Growth Dynamics JJLean",
+            "scenario_permission": [
+                "share",
+                "change_status",
+                "copy",
+                "delete",
+                "edit"
+            ],
+            "shared": "No",
+            "status": "Draft"
+        },
+        {
+            "author": "default_user",
+            "criteria": "USA-iPhone-Main",
+            "description": "Dynamics of Price Growth in USA",
+            "details": {
+                "description": "Dynamics of Price Growth in USA",
+                "driver_change": [
+                    {
+                        "name": "",
+                        "value": ""
+                    }
+                ],
+                "driver_group": [
+                    {
+                        "name": "",
+                        "value": ""
+                    }
+                ],
+                "growth_period": "",
+                "id": 2,
+                "meta": null,
+                "metrics": [
+                    {
+                        "format": "",
+                        "name": "",
+                        "value": ""
+                    }
+                ],
+                "name": "Price Growth Dynamics JJLean",
+                "recent_actions": [
+                    {
+                        "action_id": "",
+                        "action_name": "",
+                        "date": "",
+                        "entity_id": "",
+                        "entity_name": ""
+                    }
+                ],
+                "status": "Draft",
+                "worklist": [
+                    {
+                        "date": "2017_3_30_16_10",
+                        "id": 2,
+                        "name": "Price Growth Dynamics JJLean"
+                    }
+                ]
+            },
+            "favorite": "No",
+            "id": 2,
+            "modify_date": "2017-03-20 11:10:12.055658",
+            "name": "Price Growth Dynamics JJLean",
+            "scenario_permission": [
+                "share",
+                "change_status",
+                "copy",
+                "delete",
+                "edit"
+            ],
+            "shared": "No",
+            "status": "Draft"
+        },
+        {
+            "author": "default_user",
+            "criteria": "USA-iPhone-Main",
+            "description": "Dynamics of Price Growth in USA",
+            "details": {
+                "description": "Dynamics of Price Growth in USA",
+                "driver_change": [
+                    {
+                        "name": "",
+                        "value": ""
+                    }
+                ],
+                "driver_group": [
+                    {
+                        "name": "",
+                        "value": ""
+                    }
+                ],
+                "growth_period": "",
+                "id": 22,
+                "meta": null,
+                "metrics": [
+                    {
+                        "format": "",
+                        "name": "",
+                        "value": ""
+                    }
+                ],
+                "name": "Price Growth Dynamics JJLean",
+                "recent_actions": [
+                    {
+                        "action_id": "",
+                        "action_name": "",
+                        "date": "",
+                        "entity_id": "",
+                        "entity_name": ""
+                    }
+                ],
+                "status": "Draft",
+                "worklist": [
+                    {
+                        "date": "2017_3_30_16_10",
+                        "id": 22,
+                        "name": "Price Growth Dynamics JJLean"
+                    }
+                ]
+            },
+            "favorite": "No",
+            "id": 22,
+            "modify_date": "2017-03-20 11:10:12.055658",
+            "name": "Price Growth Dynamics JJLean",
+            "scenario_permission": [
+                "share",
+                "change_status",
+                "copy",
+                "delete",
+                "edit"
+            ],
+            "shared": "No",
+            "status": "Draft"
+        },
+        {
+            "author": "user@mail.com",
+            "criteria": "Brazil-Nike-Main",
+            "description": "Dynamics of Price Growth in Brazil",
+            "details": {
+                "description": "Dynamics of Price Growth in Brazil",
+                "driver_change": [
+                    {
+                        "name": "",
+                        "value": ""
+                    }
+                ],
+                "driver_group": [
+                    {
+                        "name": "",
+                        "value": ""
+                    }
+                ],
+                "growth_period": "",
+                "id": 11,
+                "meta": null,
+                "metrics": [
+                    {
+                        "format": "",
+                        "name": "",
+                        "value": ""
+                    }
+                ],
+                "name": "Price Growth Dynamics JJOralCare",
+                "recent_actions": [
+                    {
+                        "action_id": "",
+                        "action_name": "",
+                        "date": "",
+                        "entity_id": "",
+                        "entity_name": ""
+                    }
+                ],
+                "status": "Final",
+                "worklist": [
+                    {
+                        "date": "2017_3_30_16_10",
+                        "id": 11,
+                        "name": "Price Growth Dynamics JJOralCare"
+                    }
+                ]
+            },
+            "favorite": "No",
+            "id": 11,
+            "modify_date": "2017-03-20 11:10:12.055658",
+            "name": "Price Growth Dynamics JJOralCare",
+            "scenario_permission": [
+                "copy"
+            ],
+            "shared": "Yes",
+            "status": "Final"
+        }
+    ],
+    "timescales": {
+        "annual": {
+            "coefficients": 1,
+            "forecast": 1,
+            "value_decomposition": 1,
+            "volume_decomposition": 1
+        }
+    }
+}
