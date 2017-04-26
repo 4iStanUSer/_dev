@@ -29,7 +29,9 @@ requires = [
     'python-memcached',
     'pandas',
     'numpy',
-    'trafaret_config'
+    'trafaret_config',
+    'openpyxl',
+    'Sphinx'
     ]
 
 tests_require = [
