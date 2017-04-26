@@ -445,10 +445,10 @@ export class DataManagerService {
         if (periodsToLoad.length > 0) {
             this.auth_http.post('forecast/get_changes_for_period',
                 {
-                data: periodsToLoad
+                'data': periodsToLoad
             }).subscribe(
                 (data) => {
-                    this.dataModel.addChangesOverPeriod(data);
+                    this.dataModel.addChangesOverPeriod(data.json());
                     let varData = this.getVariableData(
                         timescale_id,
                         timepoints_ids,
@@ -585,14 +585,15 @@ export class DataManagerService {
         if (!this.dataModel.hasDecomposition(timescale_id, start, end)) {
             this.auth_http.post('forecast/get_decomposition_for_period',
                 {
-                data: {
-                    timescale: timescale_id,
-                    start: start,
-                    end: end
+                'data': {
+                    'timescale': timescale_id,
+                    'start': start,
+                    'end': end
                 }
             }).subscribe(
                 (data) => {
-                    this.dataModel.addDecomposition(data);
+
+                    this.dataModel.addDecomposition(data.json());
                     let decData = this.getDecompositionData(
                         decomp_type_id,
                         timescale_id,
