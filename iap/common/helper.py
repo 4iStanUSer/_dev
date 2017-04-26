@@ -63,3 +63,15 @@ def dicts_left_join(d1, d2):
         if key in d2:
             d1[key] = d2[key]
 
+
+def dicts_merge(d1, d2):
+    result = {}
+    for item, value in d1.items():
+        if item in d2:
+            if isinstance(d2[item], dict):
+                result[item] = dicts_merge(value, d2.pop(item))
+        else:
+            result[item] = value
+    for item, value in d2.items():
+        result[item] = value
+    return result

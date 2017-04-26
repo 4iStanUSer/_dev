@@ -1,0 +1,19 @@
+dashboard:
+  default_state:
+    forecast_timescale: annual 
+    forecast_absolute_rate: absolute 
+    forecast_collapse_expand: collapse 
+    forecast_active_tab: all 
+    forecast_tab: all 
+    decomp_value_volume_price: value 
+    d_summary_table_collapsed_expanded: expanded
+    d_details_table_collapsed_expanded: expanded
+    d_details_selected_factor: null
+scenarios:
+  scenarios:
+    work_list_show_limit: 5
+    min_search_input_length: 3
+    sorting_field: name
+    sorting_order: true  #true == 'ASC', false == 'DESC'
+    dateformat: MM.DD.YYYY
+  

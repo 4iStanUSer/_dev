@@ -1,11 +1,13 @@
 from iap.common.repository.models.access import Tool, User, Feature, UserGroup, Role, Project
 from pyramid.renderers import render_to_response
 from pyramid.threadlocal import get_current_registry
+from pyramid.response import Response
+import json
 
 from pyramid import threadlocal
 from pyramid.paster import get_appsettings
 from ...common.helper import send_success_response, send_error_response
-from ...common.tools_config import get_page_config
+from ...common.tools_config import get_page_config, get_config as tools_config_get_config
 from ...common.exceptions import *
 from ...common import runtime_storage as rt
 from ...common import persistent_storage as pt
@@ -51,22 +53,20 @@ def check_logged_in(req):
 
 
 def get_config(req):
-    config = {'Landing_Page':
-                 {'selector':{'items_title': 'Categories',
-    'search_title': 'Search',
- 'search_placeholder': 'Type here',
- 'search_clear': 'Clear search'
- },
-                 'forecast_page':{'items_title': 'Categories',
-                 'search_title': 'Search',
-                 'search_placeholder': 'Type here',
-                 'search_clear': 'Clear search',
-                 'selected_title': 'Selected',
-                 'not_found_items': 'Not found items',
-                 'apply_button': 'Apply',
-                'do_not_proceed': 'You need to select something to proceed'}}
-             }
-    return config
+    """
+    get configuration from .yaml
+    """
+    try:
+        user_id = req.user
+    except KeyError as e:
+        msg = req.get_error_msg(e)
+        return send_error_response(msg)
+    try:
+        config = tools_config_get_config(req)
+    except Exception:
+        raise http_exc.HTTPClientError()
+    else:
+        return Response(json_body=json.dumps(config), content_type='application/json')
 
 def login(req):
     """View function for login
