@@ -28,7 +28,8 @@ requires = [
     'pymemcache',
     'python-memcached',
     'pandas',
-    'numpy'
+    'numpy',
+    'trafaret_config'
     ]
 
 tests_require = [
