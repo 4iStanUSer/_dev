@@ -12,6 +12,7 @@ from .forecasting.views import dashboard as f_dashboard
 from .forecasting.views import common as f_common
 from .forecasting.views import scenarios as f_scenarios
 from .forecasting.views import simulator as f_simulator
+from .forecasting.views import reporting as f_reporting
 
 
 def common_routing(config):
@@ -223,7 +224,15 @@ def forecast_routing(config):
     config.add_view(f_simulator.get_simulator_custom_data, route_name='forecast.get_simulator_custom_data',
                                                             renderer='json')
 
-
+    """
+    Reporting routing
+    """
+    config.add_route('forecast.get_report_options', '/get_report_options')
+    config.add_view(f_reporting.get_report_options,
+                    route_name='forecast.get_report_options', renderer='json')
+    config.add_route('forecast.generate_report', '/generate_report')
+    config.add_view(f_reporting.generate_report,
+                    route_name='forecast.generate_report', renderer='json')
 
 
 def main(global_config, **settings):

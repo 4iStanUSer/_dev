@@ -207,15 +207,20 @@ def get_page_config(tool_id, page_name, language):
     return _merge_and_flatten_configurations(configurations)
 
 
-def get_config(req):
+def get_config(request):
     """
-    Get configuration from yaml
+    Get configuration from config.yaml, en_config.yaml
+
+    :param request:
+    :type request: pyramid.util.Request
+    :return:
+    :rtype Dict
     """
     ap_config_gen = argparse.ArgumentParser()
     commandline.standard_argparse_options(ap_config_gen, default_config='config/config.yaml')
     options_config_gen = ap_config_gen.parse_args('')
     config_gen = commandline.config_from_options(options_config_gen, TRAFARET)
-
+    # TODO languages from request
     ap_config_lan = argparse.ArgumentParser()
     commandline.standard_argparse_options(ap_config_lan, default_config='config/en_config.yaml')
     options_config_lan = ap_config_lan.parse_args('')
