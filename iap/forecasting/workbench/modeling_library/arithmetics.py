@@ -6,7 +6,11 @@ from .base import CalculationBase
 
 
 class CM_Sum(CalculationBase):
-    # TODO add description
+    """
+    Return an accurate floating point sum of values in input
+    :return:
+    :rtype: float
+    """
 
     @property
     def out_size(self):
@@ -19,7 +23,11 @@ class CM_Sum(CalculationBase):
 
 
 class CM_Multiply(CalculationBase):
-    # TODO add description
+    """
+    Return an accurate floating point product of values in input
+    :return:
+    :rtype: float
+    """
 
     @property
     def out_size(self):
@@ -32,7 +40,11 @@ class CM_Multiply(CalculationBase):
 
 
 class CM_Divide(CalculationBase):
-    # TODO add description
+    """
+    Return result of division of first value on second value from input
+    :return:
+    :rtype:
+    """
 
     @property
     def out_size(self):

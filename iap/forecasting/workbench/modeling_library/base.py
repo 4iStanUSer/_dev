@@ -1,5 +1,8 @@
 class CalculationBase:
-    # TODO add description
+    """
+    Base class for modules
+    """
+
     def __new__(cls, *args, **kwargs):
         obj = super(CalculationBase, cls).__new__(cls)
         obj._input = None
@@ -12,11 +15,13 @@ class CalculationBase:
         pass
 
     def set_input_buffer(self, buffer, indxs):
-        # TODO add description
+        """ Marking input indexes in buffer
+        """
         self._input = RelativeBuffer(buffer, indxs)
 
     def set_output_buffer(self, buffer, indxs):
-        # TODO add description
+        """ Marking output indexes in buffer
+        """
         self._output = RelativeBuffer(buffer, indxs)
 
     @property
@@ -57,7 +62,8 @@ class CalculationBase:
 
 
 class RelativeBuffer:
-    # TODO add description
+    """ Work with buffer
+    """
     def __init__(self, buffer, indxs):
         self._buffer = buffer
         self._indxs = list(indxs)
@@ -72,4 +78,6 @@ class RelativeBuffer:
         return len(self._indxs)
 
     def get_all(self):
+        """ Return list of values from buffer by indexes
+        """
         return [self._buffer[x] for x in self._indxs]

@@ -9,6 +9,8 @@ from .container import  cont_interface
 class CalculationKernel:
     """
     Claculation Kernel
+        contains:
+            queues - dictionary of queues to perform calculations on
     """
     # TODO Add description.
     def __init__(self):
@@ -66,7 +68,7 @@ class CalculationKernel:
             Perform a calculation
             Looping through necessary entities
             Args:
-                (Container): containre
+                (Container): container
                 (Timeline)
                 (string) queue name
                 (Entity) - top entity
@@ -282,7 +284,7 @@ class CalculationKernel:
 
     def calculate_growth_rate(self, vars):
         """
-        Function for calculation kernel
+        Function for calculating growth rate
         :param container:
         :type container:
         :param project_name:
@@ -300,7 +302,7 @@ class CalculationKernel:
 
     def calculate_cagr(self, container, project_name):
         """
-        Function for calculating frowth rate
+        Function for calculating cagr
         :param container:
         :type container:
         :param project_name:
@@ -405,7 +407,6 @@ class Queue:
         Fill template attribute
         And initialise setup of calculation
         instruction.
-
 
         :param template:
         :type template:
@@ -633,9 +634,10 @@ class Queue:
     def get_output(self):
         """
         Get output's
+        returns list of output values if all output modules execute with result
 
         :return:
-        :rtype:
+        :rtype: list
         """
         # TODO add description
         #max_delay = max(self._calc_order[x] for x in self._out_modules)
@@ -650,6 +652,7 @@ class Queue:
     def run(self):
         """
         Run calc kernel
+        execute modules from calc_instructions one by one
 
         :return:
         :rtype:
@@ -723,7 +726,7 @@ class Queue:
 
     def init_modules(self):
         """
-        Initialise module
+        Initialise modules
         :return:
         :rtype:
         """
