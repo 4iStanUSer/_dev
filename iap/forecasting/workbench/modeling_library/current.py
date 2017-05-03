@@ -255,12 +255,16 @@ class CM_JJOralCare_DistributionImpact(CalculationBase):
             parameters.get('sensitivity_innovations')
 
     def run(self):
-        self.output[0] = self._sensitivity_regular * \
-                         ((self.input[0] * (1 - self.input[2]) -
-                           self.input[1] * (1 - self.input[3])) / self.input[1])
-        self.output[1] = self._sensitivity_innovations * \
-                         ((self.input[0] * self.input[2] -
-                           self.input[1] * self.input[3]) / self.input[1])
+        try:
+            self.output[0] = self._sensitivity_regular * \
+                             ((self.input[0] * (1 - self.input[2]) -
+                               self.input[1] * (1 - self.input[3])) / self.input[1])
+            self.output[1] = self._sensitivity_innovations * \
+                             ((self.input[0] * self.input[2] -
+                               self.input[1] * self.input[3]) / self.input[1])
+        except ZeroDivisionError:
+            self.output[0] = 0
+            self.output[1] = 0
         return super().run()
 
 
@@ -283,7 +287,10 @@ class CM_JJOralCare_PriceImpact(CalculationBase):
 
     def run(self):
 
-        price_change = self.input[0] / self.input[1] - 1
+        try:
+            price_change = self.input[0] / self.input[1] - 1
+        except ZeroDivisionError:
+            price_change = 0
         try:
             premium = self.input[2] / self.input[3] - 1
         except ZeroDivisionError:

@@ -134,6 +134,17 @@ class CalculationKernel:
                     except Exception:
                         coefficients.append(0)
 
+            # Fix list of lists to list of coefficients
+            try:
+                if isinstance(coefficients[0], list):
+                    for i in range(len(coefficients)):
+                        try:
+                            coefficients[i] = coefficients[i][0]
+                        except Exception as e:
+                            pass
+            except IndexError:
+                pass
+
             # Collect data.
             inputs = []
             for req in queue.inp_requirements:
@@ -183,15 +194,16 @@ class CalculationKernel:
                 var_name = item[0]
                 slot_type = item[1]
                 var = entity.get_variable(var_name)
-                if slot_type & SlotType.time_series:
-                    ts = var.get_time_series(queue.out_ts_name)
-                    ts.set_values_from([x[ind] for x in output],
-                                       first_out_date)
-                elif slot_type & SlotType.period_series:
-                    ps = var.get_periods_series(queue.out_ts_name)
-                    ps.set_value(period, output[0][ind])
-                else:
-                    raise Exception
+                if var is not None:  # Fix not found var
+                    if slot_type & SlotType.time_series:
+                        ts = var.get_time_series(queue.out_ts_name)
+                        ts.set_values_from([x[ind] for x in output],
+                                           first_out_date)
+                    elif slot_type & SlotType.period_series:
+                        ps = var.get_periods_series(queue.out_ts_name)
+                        ps.set_value(period, output[0][ind])
+                    else:
+                        raise Exception
         return
 
     def _get_entities_to_run(self, container, input_item_info, top_ent):

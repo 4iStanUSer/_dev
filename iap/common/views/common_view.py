@@ -61,11 +61,11 @@ def get_config(req):
     :return:
     :rtype pyramid.response.Response
     """
-    try:
-        user_id = req.user
-    except KeyError as e:
-        msg = req.get_error_msg(e)
-        return send_error_response(msg)
+    #try:
+    #    user_id = req.user
+    #except KeyError as e:
+    #    msg = req.get_error_msg(e)
+    #    return send_error_response(msg)
     try:
         config = tools_config_get_config(req)
     except Exception:

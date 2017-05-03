@@ -18,7 +18,11 @@ class CM_Sum(CalculationBase):
 
     def run(self):
         # TODO add description
-        self.output[0] = fsum(self.input.get_all())
+        try:
+            self.output[0] = fsum(self.input.get_all())
+        except:
+            # TODO handle complex values
+            self.output[0] = 0
         return super().run()
 
 
@@ -55,5 +59,7 @@ class CM_Divide(CalculationBase):
         try:
             self.output[0] = self.input[0]/self.input[1]
         except ZeroDivisionError as e:
-            raise e
+            # TODO handle division by zero
+            # raise e
+            self.output[0] = 0
         return super().run()

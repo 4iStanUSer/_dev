@@ -10,13 +10,6 @@ from pyramid.response import Response
 
 @forbidden_view
 def get_report_options(request):
-    """Get report options for user
-
-    :param request:
-    :type request:
-    :return:
-    :rtype:
-    """
     try:
         user_id = request.user
     except KeyError:
@@ -25,6 +18,8 @@ def get_report_options(request):
         # project = rt.get_state(user_id)._project_id
         wb = rt.get_wb(user_id)
         session = request.dbsession
+        # permission_tree = build_permission_tree(session, project_name=project)
+        # filters = {'authors': ['default_user'], 'period': [], 'criteria': []}
         scenarios = get_scenarios(session, user_id, None)
         for scenario in scenarios:
             scenario['details'] = get_scenario_details(session, user_id, scenario['id'])
@@ -38,13 +33,6 @@ def get_report_options(request):
 
 @forbidden_view
 def generate_report(request):
-    """Generate report and save it to specified address
-
-    :param request: request.json_body['data']['file_name']
-    :type request:
-    :return:
-    :rtype:
-    """
     try:
         user_id = request.user
         lang = rt.language(user_id)

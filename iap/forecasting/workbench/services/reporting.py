@@ -25,7 +25,8 @@ def dicts_left_join_list(d1, d2):
 
 
 def get_options_data(config, scenarios):
-    """ Returns options for report
+    """
+    Returns options for report
     :param config:
     :type config: work_bench.data_config
     :param scenarios:
@@ -64,8 +65,8 @@ def get_options_data(config, scenarios):
 
 
 def collect_report_data(options, permission_tree, container, config, entities_ids, lang):
-    """Returns data for report
-
+    """
+    Returns data for report
     :param options:
     :type options: dict
     :param permission_tree:
@@ -75,7 +76,7 @@ def collect_report_data(options, permission_tree, container, config, entities_id
     :param config:
     :type config: work_bench.data_config
     :param lang:
-    :type lang: str
+    :type lang:
     :return:
     :rtype: dict
     """
@@ -368,7 +369,7 @@ def data_to_table(section, time_labels, variable_values, variables):
                     line = [var_info['full_name'], var_info['metric']]
                     for num in range(2, len(mask)):
                         line.append(0)
-                        if mask[num] in table:
+                        if mask[num] in table and var_info['multiplier'] != '':
                             line[num] = table[mask[num]]*float(var_info['multiplier'])
                     result_table['rows'].append(line)
                     result_table['format'].append(var_info['format'].replace(",", ".").replace("'", ""))
@@ -397,20 +398,8 @@ EXCEL part
 
 
 def styled_row(sheet, data, number_format=None, bold=False, color=None, color_txt=None):
-    """Add styles to row data before writing
+    """ Adds styles to row data before writing
 
-    :param sheet: the name of the worksheet
-    :type sheet: str
-    :param data:
-    :type data: list
-    :param number_format:
-    :type number_format: str (example '0.#%')
-    :param bold:
-    :type bold: bool
-    :param color:
-    :type color: hex number
-    :param color_txt:
-    :type color_txt: hex number
     """
     for cell in data:
         cell = Cell(sheet, column="A", row=1, value=cell)
@@ -426,12 +415,8 @@ def styled_row(sheet, data, number_format=None, bold=False, color=None, color_tx
 
 
 def create_report(file_name, report_data_list):
-    """Generate report and save it to specified adress
+    """ Generates xlsx report to file_name
 
-    :param file_name:
-    :type file_name: str (example "~/Desktop/sample.xlsx")
-    :param report_data_list:
-    :type report_data_list: list
     """
     if file_name is None:
         file_name = os.path.expanduser("~/Desktop/sample.xlsx")
