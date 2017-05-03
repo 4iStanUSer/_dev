@@ -27,6 +27,7 @@ def dicts_left_join_list(d1, d2):
 def get_options_data(config, scenarios):
     """
     Returns options for report
+
     :param config:
     :type config: work_bench.data_config
     :param scenarios:
@@ -67,6 +68,7 @@ def get_options_data(config, scenarios):
 def collect_report_data(options, permission_tree, container, config, entities_ids, lang):
     """
     Returns data for report
+
     :param options:
     :type options: dict
     :param permission_tree:

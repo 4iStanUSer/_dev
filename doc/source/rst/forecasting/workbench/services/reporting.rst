@@ -1,7 +1,7 @@
-Calculation Kernel
+Reporting
 *************************************************************
 
-.. automodule:: iap.forecasting.workbench.calculation_kernel
+.. automodule:: iap.forecasting.workbench.services.reporting
    	:members:
 	:undoc-members:
 	:show-inheritance:

@@ -10,7 +10,7 @@ class CalculationKernel:
     """
     Claculation Kernel
         contains:
-            queues - dictionary of queues to perform calculations on
+        queues - dictionary of queues to perform calculations on
     """
     # TODO Add description.
     def __init__(self):
@@ -23,6 +23,7 @@ class CalculationKernel:
 
     def get_backup(self):
         """Get backup
+
         :return:
         :rtype:
         """
@@ -34,6 +35,7 @@ class CalculationKernel:
 
     def load_from_backup(self, backup):
         """Load from backup
+
         :param backup:
         :type backup:
         :return:
@@ -67,11 +69,12 @@ class CalculationKernel:
         """Execute calculation for specific queue
             Perform a calculation
             Looping through necessary entities
-            Args:
-                (Container): container
-                (Timeline)
-                (string) queue name
-                (Entity) - top entity
+
+        Args:
+            (Container): container
+            (Timeline)
+            (string) queue name
+            (Entity) - top entity
 
         :param cont:
         :type cont:
@@ -275,6 +278,7 @@ class CalculationKernel:
     def aggregate(self, container, entities_id):
         """
         Aggregate entities
+
         :param entities_id:
         :type entities_id:
         :return:
@@ -297,6 +301,7 @@ class CalculationKernel:
     def calculate_growth_rate(self, vars):
         """
         Function for calculating growth rate
+
         :param container:
         :type container:
         :param project_name:
@@ -315,6 +320,7 @@ class CalculationKernel:
     def calculate_cagr(self, container, project_name):
         """
         Function for calculating cagr
+
         :param container:
         :type container:
         :param project_name:
@@ -382,6 +388,7 @@ class Queue:
 
     def get_backup(self):
         """Get backup
+
         :return:
         :rtype:
         """
@@ -623,6 +630,7 @@ class Queue:
     def set_inputs(self, tact_inputs):
         """
         Set tact input in the bufffer
+
         :param tact_inputs:
         :type tact_inputs:
         :return:
@@ -727,6 +735,7 @@ class Queue:
     def clean(self):
         """
         Clean buffer from temprorary data
+
         :return:
         :rtype:
         """
@@ -739,6 +748,7 @@ class Queue:
     def init_modules(self):
         """
         Initialise modules
+
         :return:
         :rtype:
         """

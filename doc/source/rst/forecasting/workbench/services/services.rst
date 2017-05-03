@@ -6,6 +6,7 @@ Services
   exchange
   initial_load
   data_management
+  reporting
 
 
 
