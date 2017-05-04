@@ -121,15 +121,15 @@ def get_user(request):
     except JSONDecodeError:
         raise WrongRequestMethod
     except NoResultFound:
-        return 2#TODO change on None
+        raise http_exc.HTTPNotFound
     except jwt.exceptions.DecodeError:
-        return 2#TODO change on None
+        raise http_exc.HTTPNotFound
     except KeyError:
         raise KeyError
     except Exception:
         raise Exception
     else:
-        return 2#TODO change on None user.id
+        return user.id
 
 
 def requires_roles(*roles):
