@@ -1,7 +1,6 @@
 Data Loading
 *************************************************************
 .. toctree::
-  config
   data_loader
   data_processing_lib
   exceptions

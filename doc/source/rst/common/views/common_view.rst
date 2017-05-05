@@ -1,12 +1,7 @@
-Services
+Common View
 *************************************************************
 
-.. automodule:: iap.common.views.dev_template
+.. automodule:: iap.common.views.common_view
    	:members:
 	:undoc-members:
 	:show-inheritance:
-
-
-
-
-

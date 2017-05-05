@@ -1,7 +1,7 @@
-Calc Instructions
+Tree
 *************************************************************
 
-.. automodule:: iap.common.views.calc_instuctions
+.. automodule:: iap.common.tree
    	:members:
 	:undoc-members:
 	:show-inheritance:

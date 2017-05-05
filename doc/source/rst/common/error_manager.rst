@@ -1,7 +1,7 @@
 Error Manager
 *************************************************************
 
-.. automodule:: iap.common.views.errro_manager
+.. automodule:: iap.common.error_manager
    	:members:
 	:undoc-members:
 	:show-inheritance:

@@ -7,6 +7,7 @@ from pyramid.response import Response
 def send_success_response(data=None):
     """
     Help function that set template answer in case of success responce
+
     :param data:
     :type data: Union[bool, None, List[Dict[str, str]], str, Dict[str, Dict[str, str]], List[Dict[str, str]], Dict[str, Dict[str, bool]]]
     :return:
@@ -17,6 +18,7 @@ def send_success_response(data=None):
 def send_error_response(data):
     """
     Help function that set template answer in case of error responce
+
     :param data:
     :type data: str
     :return:
@@ -28,6 +30,7 @@ def send_error_response(data):
 def is_equal_path(path1, path2):
     """
     Check if path is equal
+
     :param path1:
     :type path1:
     :param path2:
@@ -46,6 +49,7 @@ def is_equal_path(path1, path2):
 def is_equal_meta(meta1, meta2):
     """
     Check if meta data is equal
+
     :param meta1:
     :type meta1: iap.common.helper.Meta
     :param meta2:

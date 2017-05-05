@@ -152,6 +152,7 @@ def get_page_config(tool_id, page_name, language):
     """
     Get page configuration for particular tool
     with language specification
+
     :param tool_id:
     :type tool_id:
     :param page_name:
@@ -179,6 +180,7 @@ def get_page_config(tool_id, page_name, language):
     def _merge_and_flatten_configurations(configs):
         """
         Transform config in file {section_name + '***' + par_name :par_value}
+
         :param configs:
         :type configs:
         :return:

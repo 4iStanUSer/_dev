@@ -1,9 +1,7 @@
-Config
+Landing Page
 *************************************************************
 
-.. automodule:: iap.data_loading.config
+.. automodule:: iap.common.views.landing_page
    	:members:
 	:undoc-members:
 	:show-inheritance:
-
-

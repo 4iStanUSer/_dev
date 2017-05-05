@@ -5,7 +5,7 @@ class Tree:
         self.tree = {}
         self.root = None
 
-    def build_in_breath(self, dict=None, path, order=0):
+    def build_in_breath(self,  path, dict=None, order=0):
         """
             Fill tree
 
@@ -31,7 +31,7 @@ class Tree:
     def build_in_depth(self, path, oder):
         pass
 
-    def get_by_path(self,root=None, path, order=0):
+    def get_by_path(self, path, root=None, order=0):
 
         if root==None:
             root = self.tree

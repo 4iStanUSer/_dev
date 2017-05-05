@@ -69,16 +69,16 @@ def collect_report_data(options, permission_tree, container, config, entities_id
     """
     Returns data for report
 
-    :param options:
+    :param options: report options from user
     :type options: dict
     :param permission_tree:
     :type permission_tree: dict
-    :param container:
+    :param container: from user's workbench
     :type container: work_bench.default_container
-    :param config:
+    :param config: from user's workbench
     :type config: work_bench.data_config
-    :param lang:
-    :type lang:
+    :param lang: language
+    :type lang: str
     :return:
     :rtype: dict
     """
