@@ -1,10 +1,7 @@
-
-Container
+Default
 *************************************************************
 
-.. automodule:: iap.forecasting.workbench.container.entity_data
+.. automodule:: iap.common.views.default
    	:members:
 	:undoc-members:
 	:show-inheritance:
-
-

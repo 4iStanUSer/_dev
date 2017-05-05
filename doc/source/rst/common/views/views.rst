@@ -1,8 +1,7 @@
-Forecasting
+Views
 *************************************************************
 .. toctree::
-  views/views
-  workbench/workbench
-  
-
+  common_view
+  default
+  landing_page
 

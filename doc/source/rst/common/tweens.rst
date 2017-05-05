@@ -1,7 +1,7 @@
 Tweens
 *************************************************************
 
-.. automodule:: iap.forecasting.workbench.container.tweens
+.. automodule:: iap.common.tweens
    	:members:
 	:undoc-members:
 	:show-inheritance:

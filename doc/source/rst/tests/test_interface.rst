@@ -1,7 +1,7 @@
 Test Inteface
 *************************************************************
 
-.. automodule:: test.test_interface
+.. automodule:: tests.test_interface
    	:members:
 	:undoc-members:
 	:show-inheritance:

@@ -1,7 +1,7 @@
 Runtime Storage
 *************************************************************
 
-.. automodule:: iap.common.views.runtime_storage
+.. automodule:: iap.common.runtime_storage
    	:members:
 	:undoc-members:
 	:show-inheritance:

@@ -54,12 +54,12 @@ def check_logged_in(req):
 
 def get_config(req):
     """
-    get all configuration from .yaml
+    Get all configuration from .yaml
 
     :param req:
     :type req: pyramid.util.Request
     :return:
-    :rtype pyramid.response.Response
+    :rtype: pyramid.response.Response
     """
     #try:
     #    user_id = req.user

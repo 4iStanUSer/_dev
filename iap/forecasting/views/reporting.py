@@ -10,6 +10,9 @@ from pyramid.response import Response
 
 @forbidden_view
 def get_report_options(request):
+    """Returns options for report
+
+    """
     try:
         user_id = request.user
     except KeyError:
@@ -33,6 +36,9 @@ def get_report_options(request):
 
 @forbidden_view
 def generate_report(request):
+    """Generates xlsx report
+
+    """
     try:
         user_id = request.user
         lang = rt.language(user_id)

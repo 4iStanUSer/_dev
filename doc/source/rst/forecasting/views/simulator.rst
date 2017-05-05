@@ -1,7 +1,7 @@
 Simulator
 *************************************************************
 
-.. automodule:: iap.forecasting.workbench.views.simulator   
+.. automodule:: iap.forecasting.views.simulator
    	:members:
 	:undoc-members:
 	:show-inheritance:

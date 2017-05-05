@@ -3,6 +3,7 @@ from iap.common.repository.models.access import Tool, Project
 
 def get_tools_info(req, lang):
     """Get tool's and project
+
     :param req:
     :type req: pyramid.util.Request
     :param lang:
@@ -26,6 +27,7 @@ def get_projects_info(req, lang):
     """
     Get projects info from db
     ToDo - set check acccess for data
+
     :param req:
     :type req:
     :return:

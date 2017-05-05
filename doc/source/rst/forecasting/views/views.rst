@@ -1,8 +1,13 @@
-Forecasting
+Views
 *************************************************************
 .. toctree::
-  views/views
-  workbench/workbench
-  
+  common
+  dashboard
+  reporting
+  scenarios
+  simulator
+
+
+
 
 

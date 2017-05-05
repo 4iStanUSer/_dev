@@ -1,9 +1,7 @@
-Interface
+Common Info
 *************************************************************
 
-.. automodule:: iap.forecasting.workbench.container.interface
+.. automodule:: iap.common.services.common_info
    	:members:
 	:undoc-members:
 	:show-inheritance:
-
-

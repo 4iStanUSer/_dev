@@ -1,8 +1,8 @@
-from .helper_lib import send_success_response, send_error_response
-from ..run_time_storage import State
+from ..helper import send_success_response, send_error_response
+from ..runtime_storage import State
 from ..error_manager import ErrorManager
 from ...common import exceptions as ex
-from ...common import rt_storage
+#from ...common import rt_storage
 
 from pyramid.renderers import render_to_response
 
@@ -26,7 +26,7 @@ def set_tool_selection(req):
         msg = ErrorManager.get_error_message(ex.InvalidRequestParametersError)
         return send_error_response(msg)
     try:
-        rt_storage.set_state(state)
+        #rt_storage.set_state(state)
         return send_success_response()
     except Exception as e:
         msg = ErrorManager.get_error_message(e)

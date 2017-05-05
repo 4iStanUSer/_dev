@@ -1,7 +1,7 @@
 Exceptions
 *************************************************************
 
-.. automodule:: iap.common.views.exceptions
+.. automodule:: iap.common.exceptions
    	:members:
 	:undoc-members:
 	:show-inheritance:

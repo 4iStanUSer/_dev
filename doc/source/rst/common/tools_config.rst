@@ -1,7 +1,7 @@
 Tool Config
 *************************************************************
 
-.. automodule:: iap.forecasting.workbench.container.tool_config
+.. automodule:: iap.common.tools_config
    	:members:
 	:undoc-members:
 	:show-inheritance:

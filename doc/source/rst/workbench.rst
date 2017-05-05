@@ -4,7 +4,6 @@ IAP
   common/common
   data_loading/data_loading
   forecasting/forecasting
-  pyramid/pyramid
   tests/tests
 
 
