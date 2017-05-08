@@ -7,6 +7,7 @@ from .common import security
 from .common.security import set_manager
 from .common.error_manager import create_error_manager
 from .common.views import common_view as common_views
+from .common.views import admin_manager as common_admin
 
 from .forecasting.views import dashboard as f_dashboard
 from .forecasting.views import common as f_common
@@ -86,6 +87,24 @@ def common_routing(config):
                     route_name="common_views.process_data",
                     renderer="json"
                     )
+    """
+    Admin manager Routing
+
+    """
+    config.add_route('common_views.get_users', '/get_users')
+    config.add_view(common_admin.get_users, route_name='common_views.get_users', renderer='json')
+
+    config.add_route('common_views.get_user_details', '/get_user_details')
+    config.add_view(common_admin.get_user_details, route_name='common_views.get_user_details', renderer='json')
+
+    config.add_route('common_views.reset_password', '/reset_password')
+    config.add_view(common_admin.reset_password, route_name='common_views.reset_password', renderer='json')
+
+    config.add_route('common_views.add_user', '/add_user')
+    config.add_view(common_admin.add_user, route_name='common_views.add_user', renderer='json')
+
+    config.add_route('common_views.edit_user', '/edit_user')
+    config.add_view(common_admin.edit_user, route_name='common_views.edit_user', renderer='json')
 
     #config.set_authorization_policy(ACLAuthorizationPolicy())
     #config.set_authorization_policy(AccessManager())

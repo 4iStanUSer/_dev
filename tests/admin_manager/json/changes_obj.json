@@ -1,0 +1,9 @@
+{
+        "password": "test_chenge",
+        "first_name": "Mr. test_chenge first_name",
+        "last_name": "Mr. test_chenge last_name",
+        "roles": [
+			1, 
+			4
+		]
+    }

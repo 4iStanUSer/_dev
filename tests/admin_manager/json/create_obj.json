@@ -1,0 +1,12 @@
+{
+        "login": "test_add_user_1",
+        "password": "",
+        "first_name": "Mr. test_add_user first_name",
+        "last_name": "Mr. test_add_user last_name",
+        "email": "test@test420_1.ua",
+        "roles": [
+			2, 
+			3
+		],
+        "avatar": ""
+    }

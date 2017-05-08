@@ -1,40 +1,28 @@
-from pyramid.paster import get_appsettings
 import pytest
 import os
 import json
+import pyramid.httpexceptions as httpexc
+from pyramid.paster import get_appsettings
 from iap import main
+
 ABS_PATH = os.path.abspath('./')
+
 
 @pytest.fixture
 def web_app():
-    """
-    Fixture for server preparation
-
-    :return:
-    :rtype: webtest.app.TestApp
-    """
     settings = get_appsettings(os.path.join(ABS_PATH, 'test.ini'), name='main')
     app = main(global_config=None, **settings)
     from webtest import TestApp
-    testapp = TestApp(app)
-    return testapp
+    test_app = TestApp(app)
+    return test_app
+
 
 @pytest.fixture
 def token(web_app):
-    """
-    Fixture produce token for authentification
-
-    :param web_app:
-    :type web_app: webtest.app.TestApp
-    :return:
-    :rtype: str
-    """
-
     login = "default_user"
     password = "123456"
     res = web_app.post_json('/login', {'data': {"username": login, 'password': password}})
     token = str(res.json_body['data'])
-
     return token
 
 
@@ -99,4 +87,55 @@ def test_get_config(web_app, token):
                                           'edit_user_label': 'Show / Edit user', 'delete_user_button': 'Delete User',
                                           'user_is_not_selected_message': 'User is not selected',
                                           'reset_user_password_button': 'Reset Password'}}}
+    assert actual == expected
+
+
+def test_get_users(web_app, token):
+    data = web_app.post_json("/get_users", headers={'X-Token': token})
+    actual = json.loads(data.json)
+    expected = json.loads(open('tests/admin_manager/json/users_list.json').read())
+    assert actual == expected
+
+
+def test_get_user_details(web_app, token):
+    data = web_app.post_json("/get_user_details", {'data': {"user_id": 1}}, headers={'X-Token': token})
+    actual = json.loads(data.json)
+    expected = json.loads(open('tests/admin_manager/json/user_details.json').read())
+    assert actual == expected
+
+
+def test_reset_password(web_app, token):
+    data = web_app.post_json("/reset_password", {'data': {"user_id": 4}}, headers={'X-Token': token})
+    actual = json.loads(data.json)
+    expected = 'Success'
+    assert actual == expected
+
+
+def test_add_user(web_app, token):
+    create_obj = json.loads(open('tests/admin_manager/json/create_obj.json').read())
+    data = web_app.post_json("/add_user", {'data': {'create_obj': create_obj}}, headers={'X-Token': token})
+    actual = json.loads(data.json)
+    expected = json.loads(open('tests/admin_manager/json/out_create_obj.json').read())
+    assert actual == expected
+
+
+def test_add_user_exception_409(web_app, token):
+    """User already exists
+
+    """
+    with pytest.raises(Exception) as exc_info:
+        create_obj = json.loads(open('tests/admin_manager/json/create_obj.json').read())
+        web_app.post_json("/add_user", {'data': {'create_obj': create_obj}}, headers={'X-Token': token})
+    actual = exc_info.value.args[0]
+    expected = httpexc.HTTPConflict().status
+    assert expected in actual
+
+
+def test_edit_user(web_app, token):
+    changes_obj = json.loads(open('tests/admin_manager/json/changes_obj.json').read())
+    data = web_app.post_json("/edit_user",
+                             {'data': {"user_id": 6, 'changes_obj': changes_obj}},
+                             headers={'X-Token': token})
+    actual = json.loads(data.json)
+    expected = json.loads(open('tests/admin_manager/json/out_changes_obj.json').read())
     assert actual == expected
