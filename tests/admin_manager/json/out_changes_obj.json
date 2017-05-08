@@ -1,0 +1,12 @@
+{
+	"user_id": 6,
+    "active": true,
+    "avatar": "",
+    "email": "test@test420_1.ua",
+    "roles": [
+		2,
+		3,
+        1,
+		4
+    ]
+}

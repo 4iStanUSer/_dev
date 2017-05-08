@@ -85,8 +85,8 @@ def login(req):
     try:
         print("Registry", get_current_registry().settings)
 
-        username = req.json_body['username']
-        password = req.json_body['password']
+        username = req.json_body['data']['username']
+        password = req.json_body['data']['password']
     except KeyError:
         msg = req.get_error_msg("RequestError")
         return send_error_response(msg)

@@ -1,0 +1,11 @@
+{
+    "active": true,
+    "avatar": "",
+    "email": "user@mail.com",
+    "first_name": "Mr. Nice",
+    "id": 1,
+    "last_name": "Mr. Nice",
+    "roles": [
+        1
+    ]
+}

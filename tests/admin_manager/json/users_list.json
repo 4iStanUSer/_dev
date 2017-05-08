@@ -1,0 +1,37 @@
+[
+    {
+        "active": true,
+        "email": "user@mail.com",
+        "first_name": "Mr. Nice",
+        "id": 1,
+        "last_name": "Mr. Nice"
+    },
+    {
+        "active": true,
+        "email": "default_user",
+        "first_name": "Mr. Nice",
+        "id": 2,
+        "last_name": "Mr. Nice"
+    },
+    {
+        "active": true,
+        "email": "user_2",
+        "first_name": "Mr. Nice",
+        "id": 3,
+        "last_name": "Mr. Nice"
+    },
+    {
+        "active": true,
+        "email": "jj_admin@gmail.com",
+        "first_name": "Mr. Nice",
+        "id": 4,
+        "last_name": "Mr. Nice"
+    },
+    {
+        "active": true,
+        "email": "jj_manager@gmail.com",
+        "first_name": "Mr. Nice",
+        "id": 5,
+        "last_name": "Mr. Nice"
+    }
+]

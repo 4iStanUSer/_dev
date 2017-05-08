@@ -112,6 +112,8 @@ def get_user(request):
         token = request.headers.get('X-Token').split()  # request.json['X-Token']
         if len(token) > 1:
             token = token[1]
+        if isinstance(token, list) and len(token) == 1:
+            token = token[0]
         token_data = jwt.decode(token, 'secret', algorithms=['HS512'])
 
         user_id = int(token_data['sub'])  # int(request.jwt_claims['sub'])
